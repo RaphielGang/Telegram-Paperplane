@@ -18,7 +18,7 @@ WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 client = TelegramClient('session_name', api_id, api_hash).start()
 client.start()
-@client.on(events.NewMessage(outgoing=True, pattern='/delmsg'))
+@client.on(events.NewMessage(outgoing=True, pattern='.delmsg'))
 async def delmsg(event):
     i=1
     async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -26,7 +26,7 @@ async def delmsg(event):
             break
         i=i+1
         await message.delete()
-@client.on(events.NewMessage(outgoing=True, pattern='/purgeme'))
+@client.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 async def purgeme(event):
     message=await client.get_messages(event.chat_id)
     count = int(message[0].message[9:])
@@ -42,7 +42,7 @@ async def mention_afk(event):
     if event.message.mentioned:
         if ISAFK:
             await event.reply('Sorry! I am currently AFK! Will look into the message as soon as I return😉')
-@client.on(events.NewMessage(outgoing=True, pattern='/editme'))
+@client.on(events.NewMessage(outgoing=True, pattern='.editme'))
 async def editme(event):
     message=await client.get_messages(event.chat_id)
     string = str(message[0].message[8:])
@@ -53,7 +53,7 @@ async def editme(event):
             await event.delete()
             break
         i=i+1
-@client.on(events.NewMessage(outgoing=True, pattern='/iamafk'))
+@client.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 async def set_afk(event):
             global ISAFK
             ISAFK=True
@@ -62,7 +62,7 @@ async def set_afk(event):
 async def evaluate(event):    
     evaluation = eval(event.text[4:])
     await event.edit("```Query: \n```"+event.text[4:]+'\n```Result: \n```'+str(evaluation))
-@client.on(events.NewMessage(outgoing=True, pattern=r'/exec pycmd (.*)'))
+@client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
  code = event.raw_text[12:]
  creator='written by [Twit](tg://user?id=234480941) and copied by [blank](tg://user?id=214416808) (piece of shit)'
@@ -73,21 +73,21 @@ async def run(event):
  result = await locals()['__ex'](event)
  if result:
   await event.reply(str(result))
-@client.on(events.NewMessage(outgoing=True, pattern='/pingme'))
+@client.on(events.NewMessage(outgoing=True, pattern='.pingme'))
 async def pingme(event):
     start = datetime.now()
     await event.edit('Pong!')
     end = datetime.now()
     ms = (end - start).microseconds / 1000
     await event.edit('Pong!\n%sms' % (ms))
-@client.on(events.NewMessage(outgoing=True, pattern='/spam'))
+@client.on(events.NewMessage(outgoing=True, pattern='.spam'))
 async def spammer(event):
     message=await client.get_messages(event.chat_id)
     counter=int(message[0].message[6:8])
     spam_message=str(event.text[8:])
     await asyncio.wait([event.respond(spam_message) for i in range(counter)])
     await event.delete()
-@client.on(events.NewMessage(outgoing=True, pattern='/translator'))
+@client.on(events.NewMessage(outgoing=True, pattern='.trt'))
 async def translator(event):     
     textx=await event.get_reply_message()
     message = await client.get_messages(event.chat_id) 
@@ -103,7 +103,7 @@ async def translator(event):
     reply_text="```Source: ```\n"+text+"```Translation: ```\n"+reply_text
     await client.send_message(event.chat_id,reply_text)
     await event.delete()
-@client.on(events.NewMessage(outgoing=True, pattern='/stretch'))
+@client.on(events.NewMessage(outgoing=True, pattern='.str'))
 async def stretch(event):
     textx=await event.get_reply_message()
     message = await client.get_messages(event.chat_id)
@@ -121,7 +121,7 @@ async def afk_on_pm(event):
     if event.is_private:
         if ISAFK:
             await event.reply("Sorry! But I am currently AFK! Would look into the message soon😉")
-@client.on(events.NewMessage(outgoing=True, pattern='/copypasta'))   
+@client.on(events.NewMessage(outgoing=True, pattern='.cp'))   
 async def copypasta(event):
     textx=await event.get_reply_message()
     if textx:
@@ -148,12 +148,12 @@ async def copypasta(event):
                 reply_text += c.lower()
     reply_text += random.choice(emojis)
     await event.edit(reply_text)
-@client.on(events.NewMessage(outgoing=True, pattern='/notafk'))
+@client.on(events.NewMessage(outgoing=True, pattern='.notafk'))
 async def not_afk(event):
             global ISAFK
             ISAFK=False
             await event.edit("Hi Guys! I am back!")
-@client.on(events.NewMessage(outgoing=True, pattern='/vapor'))  
+@client.on(events.NewMessage(outgoing=True, pattern='.vapor'))  
 async def vapor(event):
     textx=await event.get_reply_message()
     message = await client.get_messages(event.chat_id)
@@ -168,7 +168,7 @@ async def vapor(event):
         data = ''    
     reply_text = str(data).translate(WIDE_MAP)
     await event.edit(reply_text)
-@client.on(events.NewMessage(outgoing=True, pattern='/fastpurge'))  
+@client.on(events.NewMessage(outgoing=True, pattern='.fastpurge'))  
 async def fastpurge(event):
    chat = await event.get_input_chat()
    msgs = []
