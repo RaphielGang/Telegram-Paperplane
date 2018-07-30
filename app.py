@@ -6,13 +6,24 @@ import random, re
 import asyncio
 from async_generator import aclosing
 import pytest
-from datetime import datetime
 import os
+from gtts import gTTS
+import time
+import urbandict
+from telethon.tl.functions.users import GetFullUserRequest
+import gsearch
+import subprocess
+from datetime import datetime
+from datetime import datetime
 from requests import get
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
 global ISAFK
 ISAFK=False
+global USERS
+USERS={}
+global COUNT_MSG
+COUNT_MSG=0
 api_hash=os.environ['API_HASH']
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
@@ -39,9 +50,23 @@ async def purgeme(event):
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages.")
 @client.on(events.NewMessage(incoming=True))
 async def mention_afk(event):
+    global COUNT_MSG
+    global USERS
+    global ISAFK
     if event.message.mentioned:
         if ISAFK:
-            await event.reply('Sorry! I am currently AFK! Will look into the message as soon as I return😉')
+            if event.chat_id not in USERS:
+                  await event.reply("Sorry! The person you have mentioned is away! Would ping him to look into the message soon😉")
+                  USERS.update({event.chat_id:1})
+                  COUNT_MSG=COUNT_MSG+1
+            elif event.chat_id in USERS:
+                 if USERS[event.chat_id] % 5 == 0:
+                      await event.reply("Sorry! But he's still not here. Try to ping him a little later. I am sorry😖")
+                      USERS[event.chat_id]=USERS[event.chat_id]+1
+                      COUNT_MSG=COUNT_MSG+1
+                 else:
+                   USERS[event.chat_id]=USERS[event.chat_id]+1
+                   COUNT_MSG=COUNT_MSG+1
 @client.on(events.NewMessage(outgoing=True, pattern='.editme'))
 async def editme(event):
     message=await client.get_messages(event.chat_id)
@@ -53,6 +78,12 @@ async def editme(event):
             await event.delete()
             break
         i=i+1
+@client.on(events.NewMessage(outgoing=True,pattern=r'.google (.*)'))
+async def gsearch(event):
+        match = event.pattern_match.group(1)
+        result_=subprocess.run(['gsearch', match], stdout=subprocess.PIPE)
+        result=str(result_.stdout.decode())
+        await client.send_message(await client.get_input_entity(event.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
 @client.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 async def set_afk(event):
             global ISAFK
@@ -95,7 +126,7 @@ async def translator(event):
          message = textx
          text = str(message.message)
     else:
-        text = str(message[0].message[13:]) 
+        text = str(message[0].message[4:]) 
     base_url = 'https://translate.yandex.net/api/v1.5/tr.json/translate'
     yandex_api= 'trnsl.1.1.20180723T180146Z.fb4f04f5bf768a5c.729c7aabff6ceb6ff52235b5568de97f24e54444'
     translation = get(f'{base_url}?key={yandex_api}&text={text}&lang=en').json()
@@ -111,16 +142,29 @@ async def stretch(event):
          message = textx
          message = str(message.message)
     else:
-        
-        message = str(message[0].message[8:])
+        message = str(message[0].message[5:])
     count = random.randint(3, 10)
     reply_text = re.sub(r'([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])', (r'\1' * count), message)
     await event.edit(reply_text)
 @client.on(events.NewMessage(incoming=True))
 async def afk_on_pm(event):
+    global ISAFK
+    global USERS
+    global COUNT_MSG
     if event.is_private:
         if ISAFK:
-            await event.reply("Sorry! But I am currently AFK! Would look into the message soon😉")
+            if event.chat_id not in USERS:
+                  await event.reply("Sorry! But I am currently away! Would look into the message soon😅")
+                  USERS.update({event.chat_id:1})
+                  COUNT_MSG=COUNT_MSG+1
+            elif   event.chat_id in USERS:
+                   if USERS[event.chat_id] % 5 == 0:
+                     await event.reply("Sorry! But he's still not here. Try to ping him a little later. I am sorry😖")
+                     USERS[event.chat_id]=USERS[event.chat_id]+1
+                     COUNT_MSG=COUNT_MSG+1
+                   else:
+                    USERS[event.chat_id]=USERS[event.chat_id]+1
+                    COUNT_MSG=COUNT_MSG+1
 @client.on(events.NewMessage(outgoing=True, pattern='.cp'))   
 async def copypasta(event):
     textx=await event.get_reply_message()
@@ -129,7 +173,7 @@ async def copypasta(event):
          message = str(message.message)
     else:
         message = await client.get_messages(event.chat_id)
-        message = str(message[0].message[10:])
+        message = str(message[0].message[3:])
     emojis = ["😂", "😂", "👌", "✌", "💞", "👍", "👌", "💯", "🎶", "👀", "😂", "👓", "👏", "👐", "🍕", "💥", "🍴", "💦", "💦", "🍑", "🍆", "😩", "😏", "👉👌", "👀", "👅", "😩", "🚰"]
     reply_text = random.choice(emojis)
     b_char = random.choice(message).lower() # choose a random character in the message to be substituted with 🅱️
@@ -151,8 +195,12 @@ async def copypasta(event):
 @client.on(events.NewMessage(outgoing=True, pattern='.notafk'))
 async def not_afk(event):
             global ISAFK
+            global COUNT_MSG
             ISAFK=False
             await event.edit("Hi Guys! I am back!")
+            await event.respond("You had recieved "+str(COUNT_MSG)+" messages while you were away")
+            await client.send_message(518221376,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away") 
+            COUNT_MSG=0
 @client.on(events.NewMessage(outgoing=True, pattern='.vapor'))  
 async def vapor(event):
     textx=await event.get_reply_message()
@@ -183,4 +231,38 @@ async def fastpurge(event):
    if msgs:
     await client.delete_messages(chat, msgs)
    await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages.")
+@client.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
+async def ud(event):
+  await event.edit("Processing...")
+  str = event.pattern_match.group(1)
+  mean = urbandict.define(str)
+  if len(mean) >= 0:
+    await event.edit('Text: **'+str+'**\n\nMeaning: **'+mean[0]['def']+'**\n\n'+'Example: \n__'+mean[0]['example']+'__')
+  else:
+    await event.edit("No result found for **"+str+"**")
+@client.on(events.NewMessage(outgoing=True, pattern='.tts'))  
+async def tts(event):
+    textx=await event.get_reply_message()
+    replye = await client.get_messages(event.chat_id)
+    if textx:
+         replye = textx
+         replye = str(replye.message)
+    else:
+        replye = str(replye[0].message[5:])
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
+    lang="en"
+    tts = gTTS(replye, lang)
+    tts.save("k.mp3")
+    with open("k.mp3", "rb") as f:
+        linelist = list(f)
+        linecount = len(linelist)
+    if linecount == 1:
+        lang = "en"
+        tts = gTTS(replyes, lang)
+        tts.save("k.mp3")
+    with open("k.mp3", "r") as speech:  
+        await client.send_file(event.chat_id,speech,voice_note=True)
+        os.remove("k.mp3")
+
 client.run_until_disconnected()
