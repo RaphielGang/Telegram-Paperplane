@@ -1,3 +1,5 @@
-telethon===1.1
+telethon===1.1.1
 requests==2.18.4
 pytest==3.6.3
+gtts==2.0.1
+urbandict==0.5
