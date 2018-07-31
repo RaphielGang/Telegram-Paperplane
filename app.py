@@ -107,7 +107,7 @@ async def run(event):
  result = await locals()['__ex'](event)
  if result:
   await event.edit("```Query: \n```"+event.text[5:]+'\n```Executed Result: \n```'+str(result))
-else:
+ else:
   await event.edit("```Query: \n```"+event.text[5:]+'\n```Executed Result: \n```'+'No result')
 @client.on(events.NewMessage(outgoing=True, pattern='.pingme'))
 async def pingme(event):
