@@ -95,7 +95,7 @@ async def evaluate(event):
     await event.edit("```Query: \n```"+event.text[4:]+'\n```Result: \n```'+str(evaluation))
 @client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
- code = event.raw_text[12:]
+ code = event.raw_text[5:]
  creator='written by [Twit](tg://user?id=234480941) and copied by [blank](tg://user?id=214416808) (piece of shit)'
  exec(
   f'async def __ex(event): ' +
