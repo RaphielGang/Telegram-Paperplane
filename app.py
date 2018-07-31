@@ -92,7 +92,10 @@ async def set_afk(event):
 @client.on(events.NewMessage(outgoing=True, pattern='Eval'))
 async def evaluate(event):    
     evaluation = eval(event.text[4:])
-    await event.edit("```Query: \n```"+event.text[4:]+'\n```Result: \n```'+str(evaluation))
+    if evaluation:
+      await event.edit("```Query: \n```"+event.text[4:]+'\n```Result: \n```'+str(evaluation))
+    else:
+      await event.edit("```Query: \n```"+event.text[5:]+'\n```Result: \n```'+'No result')
 @client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
  code = event.raw_text[5:]
@@ -103,7 +106,9 @@ async def run(event):
  )
  result = await locals()['__ex'](event)
  if result:
-  await event.reply(str(result))
+  await event.edit("```Query: \n```"+event.text[5:]+'\n```Executed Result: \n```'+str(result))
+else:
+  await event.edit("```Query: \n```"+event.text[5:]+'\n```Executed Result: \n```'+'No result')
 @client.on(events.NewMessage(outgoing=True, pattern='.pingme'))
 async def pingme(event):
     start = datetime.now()
