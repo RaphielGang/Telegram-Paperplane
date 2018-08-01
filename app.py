@@ -51,11 +51,8 @@ async def purgeme(event):
         await message.delete()
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages. _This auto-generated message shall be self destructed in 2 seconds._")
     time.sleep(2)
-    async for message in client.iter_messages(event.chat_id,from_user='me'):
-                if i>1:
-                    break
-                i=i+1
-                await message.delete()
+    message=client.get_messages(event.chat_id)
+    await message.delete()
 @client.on(events.NewMessage(incoming=True))
 async def spam_tracker(event):
     global SPAM
@@ -242,8 +239,8 @@ async def not_afk(event):
             global AFKREASON
             ISAFK=False
             await event.edit("I have returned from AFK mode.")
-            await event.respond("```You had recieved "+str(COUNT_MSG)+" messages while you were away. Check PM for more details. This auto-generated message shall be self destructed in 5 seconds.```")
-            time.sleep(5)
+            await event.respond("```You had recieved "+str(COUNT_MSG)+" messages while you were away. Check PM for more details. This auto-generated message shall be self destructed in 2 seconds.```")
+            time.sleep(2)
             async for message in client.iter_messages(event.chat_id,from_user='me'):
                 if i>2:
                     break
@@ -286,11 +283,19 @@ async def fastpurge(event):
     await client.delete_messages(chat, msgs)
    await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages. _This auto-generated message shall be self destructed in 2 seconds._")
    time.sleep(2)
-   async for message in client.iter_messages(event.chat_id,from_user='me'):
-                if i>1:
-                    break
-                i=i+1
-                await message.delete()
+   message=client.get_messages(event.chat_id)
+   await message.delete()
+@client.on(events.NewMessage(outgoing=True, pattern='.sd'))
+async def selfdestruct(event):
+    message=await client.get_messages(event.chat_id)
+    counter=int(message[0].message[3:5])
+    text=str(event.text[5:])
+    text=text+"```This message shall be self-destructed in "+str(counter)+" seconds```"
+    await event.delete()
+    await client.send_message(event_chat.id,text)
+    time.sleep(counter)
+    message=client.get_messages(event.chat_id)
+    await message.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 async def ud(event):
   await event.edit("Processing...")
