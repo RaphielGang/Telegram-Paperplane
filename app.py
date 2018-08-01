@@ -200,7 +200,7 @@ async def afk_on_pm(event):
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉")
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif   event.chat_id in USERS:
+            elif event.chat_id in USERS:
                    if USERS[event.chat_id] % 5 == 0:
                      await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```")
                      USERS[event.chat_id]=USERS[event.chat_id]+1
@@ -245,8 +245,9 @@ async def not_afk(event):
             await event.edit("I have returned from AFK mode.")
             await event.respond("```You had recieved "+str(COUNT_MSG)+" messages while you were away. Check PM for more details. This auto-generated message shall be self destructed in 2 seconds.```")
             time.sleep(2)
+            i=1
             async for message in client.iter_messages(event.chat_id,from_user='me'):
-                if i>2:
+                if i>1:
                     break
                 i=i+1
                 await message.delete()
