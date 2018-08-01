@@ -329,5 +329,4 @@ async def tts(event):
     with open("k.mp3", "r") as speech:  
         await client.send_file(event.chat_id,speech,voice_note=True)
         os.remove("k.mp3")
-
 client.run_until_disconnected()
