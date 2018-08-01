@@ -88,9 +88,9 @@ async def mention_afk(event):
             elif event.chat_id in USERS:
                  if USERS[event.chat_id] % 5 == 0:
                       await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
-                         time.sleep(15)
-                         i=1
-                         async for message in client.iter_messages(event.chat_id,from_user='me'):
+                      time.sleep(15)
+                      i=1
+                      async for message in client.iter_messages(event.chat_id,from_user='me'):
                                if i>1:
                                    break
                                i=i+1
