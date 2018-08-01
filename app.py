@@ -74,7 +74,7 @@ async def mention_afk(event):
     global ISAFK
     if event.message.mentioned:
         if ISAFK:
-            if event.chat_id not in USERS:
+            if event.sender.username not in USERS:
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.**This message shall be self destructed in 15 seconds**")
                   time.sleep(15)
                   i=1
@@ -83,7 +83,7 @@ async def mention_afk(event):
                            break
                         i=i+1
                         await message.delete()
-                  USERS.update({event.chat_id:1})
+                  USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
             elif event.sender.username in USERS:
                  if USERS[event.sender.username] % 5 == 0:
@@ -210,7 +210,7 @@ async def afk_on_pm(event):
     global COUNT_MSG
     if event.is_private:
         if ISAFK:
-            if event.chat_id not in USERS:
+            if event.sender.username not in USERS:
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
                   time.sleep(15)
                   i=1
