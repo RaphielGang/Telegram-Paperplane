@@ -49,6 +49,14 @@ async def purgeme(event):
         await message.delete()
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages.")
 @client.on(events.NewMessage(incoming=True))
+async def antispam(event):
+    checkspam=str(event.raw_text)
+    spamscore=str(antispam.score(checkspam))
+    spambool=str(antispam.is_spam(checkspam))
+    if spambool==True:
+         await event.reply('Spam Message Detected')
+         await event.reply('Spam results for `' + checkspam + '`\nScore: ' + spamscore + '\nIs Spam: ' + spambool)
+@client.on(events.NewMessage(incoming=True))
 async def mention_afk(event):
     global COUNT_MSG
     global USERS
