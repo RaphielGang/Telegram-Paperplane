@@ -51,7 +51,7 @@ async def purgeme(event):
         await message.delete()
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages.")
 @client.on(events.NewMessage(incoming=True))
-async def antispam(event):
+async def spam_tracker(event):
     global SPAM
     if SPAM==True:
        checkspam=str(event.raw_text)
