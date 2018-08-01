@@ -21,7 +21,7 @@ SPAM=False
 global ISAFK
 ISAFK=False
 global AFKREASON
-AFKREASON=None
+AFKREASON="No Reason"
 global USERS
 USERS={}
 global COUNT_MSG
@@ -85,8 +85,8 @@ async def mention_afk(event):
                         await message.delete()
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.chat_id in USERS:
-                 if USERS[event.chat_id] % 5 == 0:
+            elif event.sender.username in USERS:
+                 if USERS[event.sender.username] % 5 == 0:
                       await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
                       time.sleep(15)
                       i=1
@@ -95,10 +95,10 @@ async def mention_afk(event):
                                    break
                                i=i+1
                                await message.delete()
-                      USERS[event.chat_id]=USERS[event.chat_id]+1
+                      USERS[event.sender.username]=USERS[event.sender.username]+1
                       COUNT_MSG=COUNT_MSG+1
                  else:
-                   USERS[event.chat_id]=USERS[event.chat_id]+1
+                   USERS[event.sender.username]=USERS[event.senser.username]+1
                    COUNT_MSG=COUNT_MSG+1
 @client.on(events.NewMessage(outgoing=True, pattern='.editme'))
 async def editme(event):
@@ -219,10 +219,10 @@ async def afk_on_pm(event):
                            break
                         i=i+1
                         await message.delete()
-                  USERS.update({event.chat_id:1})
+                  USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.chat_id in USERS:
-                   if USERS[event.chat_id] % 5 == 0:
+            elif event.sender.username in USERS:
+                   if USERS[event.sender.username] % 5 == 0:
                      await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
                      time.sleep(15)
                      i=1
@@ -231,10 +231,10 @@ async def afk_on_pm(event):
                            break
                         i=i+1
                         await message.delete()
-                     USERS[event.chat_id]=USERS[event.chat_id]+1
+                     USERS[event.sender.username]=USERS[event.sender.username]+1
                      COUNT_MSG=COUNT_MSG+1
                    else:
-                    USERS[event.chat_id]=USERS[event.chat_id]+1
+                    USERS[event.sender.username]=USERS[event.sender.username]+1
                     COUNT_MSG=COUNT_MSG+1
 @client.on(events.NewMessage(outgoing=True, pattern='.cp'))   
 async def copypasta(event):
@@ -284,7 +284,7 @@ async def not_afk(event):
                 await client.send_message(518221376,str(i)+" sent you "+"```"+str(USERS[i])+" messages```")
             COUNT_MSG=0
             USERS={}
-            AFKREASON=None
+            AFKREASON="No reason"
 @client.on(events.NewMessage(outgoing=True, pattern='.vapor'))  
 async def vapor(event):
     textx=await event.get_reply_message()
