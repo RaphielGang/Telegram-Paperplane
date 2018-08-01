@@ -61,12 +61,12 @@ async def purgeme(event):
 async def spam_tracker(event):
     global SPAM
     if SPAM==True:
-       checkspam=str(event.raw_text)
-       spamscore=antispam.score(checkspam)
-       spambool=antispam.is_spam(checkspam)
+       ch=str(event.raw_text)
+       spamscore=antispam.score(ch)
+       spambool=antispam.is_spam(ch)
        if spambool==True:
          await event.reply('Spam Message Detected')
-         await event.reply('Spam results for `' + checkspam + '`\nScore: ' + spamscore + '\nIs Spam: ' + spambool)
+         await event.reply('Spam results for `' + ch + '`\nScore: ' + spamscore + '\nIs Spam: ' + spambool)
 @client.on(events.NewMessage(incoming=True))
 async def mention_afk(event):
     global COUNT_MSG
@@ -75,12 +75,26 @@ async def mention_afk(event):
     if event.message.mentioned:
         if ISAFK:
             if event.chat_id not in USERS:
-                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.**This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
+                  i=1
+                  async for message in client.iter_messages(event.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
             elif event.chat_id in USERS:
                  if USERS[event.chat_id] % 5 == 0:
-                      await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```")
+                      await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                         time.sleep(15)
+                         i=1
+                         async for message in client.iter_messages(event.chat_id,from_user='me'):
+                               if i>1:
+                                   break
+                               i=i+1
+                               await message.delete()
                       USERS[event.chat_id]=USERS[event.chat_id]+1
                       COUNT_MSG=COUNT_MSG+1
                  else:
@@ -197,12 +211,26 @@ async def afk_on_pm(event):
     if event.is_private:
         if ISAFK:
             if event.chat_id not in USERS:
-                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
+                  i=1
+                  async for message in client.iter_messages(event.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
             elif event.chat_id in USERS:
                    if USERS[event.chat_id] % 5 == 0:
-                     await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```")
+                     await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                     time.sleep(15)
+                     i=1
+                     async for message in client.iter_messages(event.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
                      USERS[event.chat_id]=USERS[event.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
                    else:
