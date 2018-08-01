@@ -302,8 +302,12 @@ async def selfdestruct(event):
     await event.delete()
     await client.send_message(event.chat_id,text)
     time.sleep(counter)
-    message=await client.get_messages(event.chat_id)
-    await message.delete()
+    i=1
+    async for message in client.iter_messages(event.chat_id,from_user='me'):
+        if i>1:
+            break
+        i=i+1
+        await message.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 async def ud(event):
   await event.edit("Processing...")
