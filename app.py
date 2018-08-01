@@ -4,15 +4,12 @@ import time
 import logging
 import random, re
 import asyncio
-from async_generator import aclosing
-import pytest
 import os
 from gtts import gTTS
 import time
 import urbandict
 import gsearch
 import subprocess
-from datetime import datetime
 from datetime import datetime
 from requests import get
 import wikipedia
