@@ -18,6 +18,8 @@ from datetime import datetime
 from requests import get
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
+global SPAM
+SPAM=False
 global ISAFK
 ISAFK=False
 global USERS
@@ -50,10 +52,12 @@ async def purgeme(event):
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages.")
 @client.on(events.NewMessage(incoming=True))
 async def antispam(event):
-    checkspam=str(event.raw_text)
-    spamscore=str(antispam.score(checkspam))
-    spambool=str(antispam.is_spam(checkspam))
-    if spambool==True:
+    global SPAM
+    if SPAM==True:
+       checkspam=str(event.raw_text)
+       spamscore=str(antispam.score(checkspam))
+       spambool=str(antispam.is_spam(checkspam))
+       if spambool==True:
          await event.reply('Spam Message Detected')
          await event.reply('Spam results for `' + checkspam + '`\nScore: ' + spamscore + '\nIs Spam: ' + spambool)
 @client.on(events.NewMessage(incoming=True))
@@ -97,6 +101,16 @@ async def set_afk(event):
             global ISAFK
             ISAFK=True
             await event.edit("I am now AFK!")
+@client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
+async def set_asm(event):
+            global SPAM
+            SPAM=True
+            await event.edit("Spam Tracking turned on!")
+@client.on(events.NewMessage(outgoing=True, pattern='.asmoff'))
+async def set_asm_off(event):
+            global SPAM
+            SPAM=False
+            await event.edit("Spam Tracking turned off!")
 @client.on(events.NewMessage(outgoing=True, pattern='Eval'))
 async def evaluate(event):    
     evaluation = eval(event.text[4:])
