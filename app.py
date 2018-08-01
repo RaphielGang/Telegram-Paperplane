@@ -20,6 +20,8 @@ global SPAM
 SPAM=False
 global ISAFK
 ISAFK=False
+global AFKREASON
+AFKREASON=None
 global USERS
 USERS={}
 global COUNT_MSG
@@ -47,14 +49,20 @@ async def purgeme(event):
             break
         i=i+1
         await message.delete()
-    await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages.")
+    await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages. _This auto-generated message shall be self destructed in 2 seconds._")
+    time.sleep(2)
+    async for message in client.iter_messages(event.chat_id,from_user='me'):
+                if i>1:
+                    break
+                i=i+1
+                await message.delete()
 @client.on(events.NewMessage(incoming=True))
 async def spam_tracker(event):
     global SPAM
     if SPAM==True:
        checkspam=str(event.raw_text)
-       spamscore=str(antispam.score(checkspam))
-       spambool=str(antispam.is_spam(checkspam))
+       spamscore=antispam.score(checkspam)
+       spambool=antispam.is_spam(checkspam)
        if spambool==True:
          await event.reply('Spam Message Detected')
          await event.reply('Spam results for `' + checkspam + '`\nScore: ' + spamscore + '\nIs Spam: ' + spambool)
@@ -66,12 +74,12 @@ async def mention_afk(event):
     if event.message.mentioned:
         if ISAFK:
             if event.chat_id not in USERS:
-                  await event.reply("Sorry! The person you have mentioned is away! Would ping him to look into the message soon😉")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉")
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
             elif event.chat_id in USERS:
                  if USERS[event.chat_id] % 5 == 0:
-                      await event.reply("Sorry! But he's still not here. Try to ping him a little later. I am sorry😖")
+                      await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```")
                       USERS[event.chat_id]=USERS[event.chat_id]+1
                       COUNT_MSG=COUNT_MSG+1
                  else:
@@ -101,9 +109,13 @@ async def wiki(event):
         await client.send_message(await client.get_input_entity(event.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
 @client.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 async def set_afk(event):
+            message=await client.get_messages(event.chat_id)
+            string = str(message[0].message[8:])
             global ISAFK
+            global AFKREASON
             ISAFK=True
             await event.edit("I am now AFK!")
+            AFKREASON=string
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 async def set_asm(event):
             global SPAM
@@ -184,12 +196,12 @@ async def afk_on_pm(event):
     if event.is_private:
         if ISAFK:
             if event.chat_id not in USERS:
-                  await event.reply("Sorry! But I am currently away! Would look into the message soon😅")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉")
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
             elif   event.chat_id in USERS:
                    if USERS[event.chat_id] % 5 == 0:
-                     await event.reply("Sorry! But he's still not here. Try to ping him a little later. I am sorry😖")
+                     await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```")
                      USERS[event.chat_id]=USERS[event.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
                    else:
@@ -226,11 +238,23 @@ async def copypasta(event):
 async def not_afk(event):
             global ISAFK
             global COUNT_MSG
+            global USERS
+            global AFKREASON
             ISAFK=False
-            await event.edit("Hi Guys! I am back!")
-            await event.respond("You had recieved "+str(COUNT_MSG)+" messages while you were away")
+            await event.edit("I have returned from AFK mode.")
+            await event.respond("```You had recieved "+str(COUNT_MSG)+" messages while you were away. Check PM for more details. This auto-generated message shall be self destructed in 5 seconds.```")
+            time.sleep(5)
+            async for message in client.iter_messages(event.chat_id,from_user='me'):
+                if i>2:
+                    break
+                i=i+1
+                await message.delete()
             await client.send_message(518221376,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away") 
+            for i in USERS:
+                await client.send_message(518221376,str(i)+" sent you "+"```"+str(USERS[i])+" messages```")
             COUNT_MSG=0
+            USERS={}
+            AFKREASON=None
 @client.on(events.NewMessage(outgoing=True, pattern='.vapor'))  
 async def vapor(event):
     textx=await event.get_reply_message()
@@ -260,7 +284,13 @@ async def fastpurge(event):
             msgs = []
    if msgs:
     await client.delete_messages(chat, msgs)
-   await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages.")
+   await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages. _This auto-generated message shall be self destructed in 2 seconds._")
+   time.sleep(2)
+   async for message in client.iter_messages(event.chat_id,from_user='me'):
+                if i>1:
+                    break
+                i=i+1
+                await message.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 async def ud(event):
   await event.edit("Processing...")
