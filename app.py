@@ -292,7 +292,7 @@ async def selfdestruct(event):
     text=str(event.text[5:])
     text=text+"```This message shall be self-destructed in "+str(counter)+" seconds```"
     await event.delete()
-    await client.send_message(event_chat.id,text)
+    await client.send_message(event.chat_id,text)
     time.sleep(counter)
     message=client.get_messages(event.chat_id)
     await message.delete()
