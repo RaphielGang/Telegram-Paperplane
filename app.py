@@ -16,6 +16,7 @@ import wikipedia
 import antispam
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
+api_hash=os.environ['API_HASH']
 global SPAM
 SPAM=False
 global ISAFK
@@ -26,7 +27,6 @@ global USERS
 USERS={}
 global COUNT_MSG
 COUNT_MSG=0
-api_hash=os.environ['API_HASH']
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 client = TelegramClient('session_name', api_id, api_hash).start()
@@ -75,7 +75,8 @@ async def mention_afk(event):
     global AFKREASON
     if event.message.mentioned:
         if ISAFK:
-            if event.sender.username not in USERS:
+            if event.sender.username:
+               if event.sender.username not in USERS:
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.**This message shall be self destructed in 15 seconds**")
                   time.sleep(15)
                   i=1
@@ -101,6 +102,32 @@ async def mention_afk(event):
                  else:
                    USERS[event.sender.username]=USERS[event.senser.username]+1
                    COUNT_MSG=COUNT_MSG+1
+            else:
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
+                  i=1
+                  async for message in client.iter_messages(event.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
+                  USERS.update({event.sender.first_name:1})
+                  COUNT_MSG=COUNT_MSG+1
+                  if event.sender.first_name in USERS:
+                   if USERS[event.sender.first_name] % 5 == 0:
+                     await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                     time.sleep(15)
+                     i=1
+                     async for message in client.iter_messages(event.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
+                     USERS[event.sender.first_name]=USERS[event.sender.first_name]+1
+                     COUNT_MSG=COUNT_MSG+1
+                   else:
+                    USERS[event.sender.first_name]=USERS[event.sender.first_name]+1
+                    COUNT_MSG=COUNT_MSG+1
 @client.on(events.NewMessage(outgoing=True, pattern='.editme'))
 async def editme(event):
     message=await client.get_messages(event.chat_id)
@@ -131,7 +158,8 @@ async def set_afk(event):
             global AFKREASON
             ISAFK=True
             await event.edit("I am now AFK!")
-            AFKREASON=string
+            if string!="":
+                AFKREASON=string
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 async def set_asm(event):
             global SPAM
@@ -212,7 +240,8 @@ async def afk_on_pm(event):
     global AFKREASON
     if event.is_private:
         if ISAFK:
-            if event.sender.username not in USERS:
+            if event.sender.username:
+              if event.sender.username not in USERS:
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
                   time.sleep(15)
                   i=1
@@ -237,6 +266,32 @@ async def afk_on_pm(event):
                      COUNT_MSG=COUNT_MSG+1
                    else:
                     USERS[event.sender.username]=USERS[event.sender.username]+1
+                    COUNT_MSG=COUNT_MSG+1
+            else:
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
+                  i=1
+                  async for message in client.iter_messages(event.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
+                  USERS.update({event.sender.first_name:1})
+                  COUNT_MSG=COUNT_MSG+1
+                  if event.sender.first_name in USERS:
+                   if USERS[event.sender.first_name] % 5 == 0:
+                     await event.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                     time.sleep(15)
+                     i=1
+                     async for message in client.iter_messages(event.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
+                     USERS[event.sender.first_name]=USERS[event.sender.first_name]+1
+                     COUNT_MSG=COUNT_MSG+1
+                   else:
+                    USERS[event.sender.first_name]=USERS[event.sender.first_name]+1
                     COUNT_MSG=COUNT_MSG+1
 @client.on(events.NewMessage(outgoing=True, pattern='.cp'))   
 async def copypasta(event):
