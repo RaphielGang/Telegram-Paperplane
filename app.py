@@ -72,6 +72,7 @@ async def mention_afk(event):
     global COUNT_MSG
     global USERS
     global ISAFK
+    global AFKREASON
     if event.message.mentioned:
         if ISAFK:
             if event.sender.username not in USERS:
@@ -208,6 +209,7 @@ async def afk_on_pm(event):
     global ISAFK
     global USERS
     global COUNT_MSG
+    global AFKREASON
     if event.is_private:
         if ISAFK:
             if event.sender.username not in USERS:
