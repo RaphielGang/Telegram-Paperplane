@@ -96,11 +96,13 @@ async def gsearch(event):
         result_=subprocess.run(['gsearch', match], stdout=subprocess.PIPE)
         result=str(result_.stdout.decode())
         await client.send_message(await client.get_input_entity(event.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
+        await event.delete()
 @client.on(events.NewMessage(outgoing=True,pattern=r'.wiki (.*)'))
 async def wiki(event):
         match = event.pattern_match.group(1)
         result=wikipedia.summary(match)
         await client.send_message(await client.get_input_entity(event.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
+        await event.delete()        
 @client.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 async def set_afk(event):
             global ISAFK
