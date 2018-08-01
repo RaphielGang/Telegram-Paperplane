@@ -49,9 +49,9 @@ async def purgeme(event):
             break
         i=i+1
         await message.delete()
-    await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages. _This auto-generated message shall be self destructed in 2 seconds._")
+    await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
     time.sleep(2)
-    message=client.get_messages(event.chat_id)
+    message=await client.get_messages(event.chat_id)
     await message.delete()
 @client.on(events.NewMessage(incoming=True))
 async def spam_tracker(event):
@@ -281,9 +281,9 @@ async def fastpurge(event):
             msgs = []
    if msgs:
     await client.delete_messages(chat, msgs)
-   await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages. _This auto-generated message shall be self destructed in 2 seconds._")
+   await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
    time.sleep(2)
-   message=client.get_messages(event.chat_id)
+   message=await client.get_messages(event.chat_id)
    await message.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='.sd'))
 async def selfdestruct(event):
@@ -294,7 +294,7 @@ async def selfdestruct(event):
     await event.delete()
     await client.send_message(event.chat_id,text)
     time.sleep(counter)
-    message=client.get_messages(event.chat_id)
+    message=await client.get_messages(event.chat_id)
     await message.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 async def ud(event):
