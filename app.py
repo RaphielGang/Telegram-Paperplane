@@ -296,8 +296,8 @@ async def fastpurge(event):
 @client.on(events.NewMessage(outgoing=True, pattern='.sd'))
 async def selfdestruct(event):
     message=await client.get_messages(event.chat_id)
-    counter=int(message[0].message[3:5])
-    text=str(event.text[5:])
+    counter=int(message[0].message[4:6])
+    text=str(event.text[6:])
     text=text+"```This message shall be self-destructed in "+str(counter)+" seconds```"
     await event.delete()
     await client.send_message(event.chat_id,text)
