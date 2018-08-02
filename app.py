@@ -180,7 +180,7 @@ async def evaluate(event):
     if evaluation:
       await event.edit("**Query: **\n```"+event.text[4:]+'```\n**Result: **\n```'+str(evaluation)+'```')
     else:
-      aawait event.edit("**Query: **\n```"+event.text[4:]+'```\n**Result: **\n```No Result Returned/False```')
+      await event.edit("**Query: **\n```"+event.text[4:]+'```\n**Result: **\n```No Result Returned/False```')
 @client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
  code = event.raw_text[5:]
