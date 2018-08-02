@@ -174,6 +174,8 @@ async def set_asm_off(event):
 @client.on(events.NewMessage(outgoing=True, pattern='Eval'))
 async def evaluate(event):    
     evaluation = eval(event.text[4:])
+    if inspect.isawaitable(evaluation):
+       evaluation = await evaluation
     if evaluation:
       await event.edit("```Query: \n```"+event.text[4:]+'\n```Result: \n```'+str(evaluation))
     else:
