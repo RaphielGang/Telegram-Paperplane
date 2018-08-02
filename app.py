@@ -193,7 +193,7 @@ async def run(event):
  if result:
   await event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+str(result)+'```')
  else:
-  aawait event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+'No Result Returned/False'+'```')
+  await event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+'No Result Returned/False'+'```')
 @client.on(events.NewMessage(outgoing=True, pattern='.pingme'))
 async def pingme(event):
     start = datetime.now()
