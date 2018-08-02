@@ -14,6 +14,7 @@ from datetime import datetime
 from requests import get
 import wikipedia
 import antispam
+import inspect
 import platform
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
