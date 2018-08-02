@@ -174,7 +174,7 @@ async def set_asm_off(event):
             await event.edit("Spam Tracking turned off!")
 @client.on(events.NewMessage(outgoing=True, pattern='.eval'))
 async def evaluate(event):    
-    evaluation = eval(event.text[4:])
+    evaluation = eval(event.text[5:])
     if inspect.isawaitable(evaluation):
        evaluation = await evaluation
     if evaluation:
