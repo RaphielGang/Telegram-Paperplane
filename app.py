@@ -172,15 +172,15 @@ async def set_asm_off(event):
             global SPAM
             SPAM=False
             await event.edit("Spam Tracking turned off!")
-@client.on(events.NewMessage(outgoing=True, pattern='Eval'))
+@client.on(events.NewMessage(outgoing=True, pattern='.eval'))
 async def evaluate(event):    
     evaluation = eval(event.text[4:])
     if inspect.isawaitable(evaluation):
        evaluation = await evaluation
     if evaluation:
-      await event.edit("```Query: \n```"+event.text[4:]+'\n```Result: \n```'+str(evaluation))
+      await event.edit("**Query: **\n```"+event.text[4:]+'```\n**Result: **\n```'+str(evaluation)+'```')
     else:
-      await event.edit("```Query: \n```"+event.text[5:]+'\n```Result: \n```'+'No result')
+      aawait event.edit("**Query: **\n```"+event.text[4:]+'```\n**Result: **\n```No Result Returned/False```')
 @client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
  code = event.raw_text[5:]
@@ -191,9 +191,9 @@ async def run(event):
  )
  result = await locals()['__ex'](event)
  if result:
-  await event.edit("```Query: \n```"+event.text[5:]+'\n```Executed Result: \n```'+str(result))
+  await event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+str(result)+'```')
  else:
-  await event.edit("```Query: \n```"+event.text[5:]+'\n```Executed Result: \n```'+'No result')
+  aawait event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+'No Result Returned/False'+'```')
 @client.on(events.NewMessage(outgoing=True, pattern='.pingme'))
 async def pingme(event):
     start = datetime.now()
