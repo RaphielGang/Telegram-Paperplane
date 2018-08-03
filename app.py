@@ -174,13 +174,13 @@ async def set_asm_off(event):
             await event.edit("Spam Tracking turned off!")
 @client.on(events.NewMessage(outgoing=True, pattern='.eval'))
 async def evaluate(event):    
-    evaluation = eval(event.text[5:])
+    evaluation = eval(event.text[6:])
     if inspect.isawaitable(evaluation):
        evaluation = await evaluation
     if evaluation:
-      await event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+str(evaluation)+'```')
+      await event.edit("**Query: **\n```"+event.text[6:]+'```\n**Result: **\n```'+str(evaluation)+'```')
     else:
-      await event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```No Result Returned/False```')
+      await event.edit("**Query: **\n```"+event.text[6:]+'```\n**Result: **\n```No Result Returned/False```')
 @client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
  code = event.raw_text[5:]
