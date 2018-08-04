@@ -17,6 +17,7 @@ import wikipedia
 import antispam
 import inspect
 import platform
+from googletrans import Translator
 from random import randint
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
@@ -211,18 +212,16 @@ async def spammer(event):
     await asyncio.wait([event.respond(spam_message) for i in range(counter)])
     await event.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='.trt'))
-async def translator(event):     
+async def translateme(event):     
+    translator=Translator()
     textx=await event.get_reply_message()
     message = await client.get_messages(event.chat_id) 
     if textx:
          message = textx
          text = str(message.message)
     else:
-        text = str(message[0].message[4:]) 
-    base_url = 'https://translate.yandex.net/api/v1.5/tr.json/translate'
-    yandex_api= 'trnsl.1.1.20180723T180146Z.fb4f04f5bf768a5c.729c7aabff6ceb6ff52235b5568de97f24e54444'
-    translation = get(f'{base_url}?key={yandex_api}&text={text}&lang=en').json()
-    reply_text = f"Language: {translation['lang']}\nText: {translation['text'][0]}"
+        text = str(message[0].message[4:])
+    reply_text=translator.translate(text, dest='en').text
     reply_text="```Source: ```\n"+text+"```Translation: ```\n"+reply_text
     await client.send_message(event.chat_id,reply_text)
     await event.delete()
