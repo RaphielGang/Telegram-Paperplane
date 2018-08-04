@@ -1,7 +1,8 @@
-telethon===1.1.1
+telethon==1.1.1
 requests==2.18.4
 gtts==2.0.1
 urbandict==0.5
 gsearch==1.6.0
 antispam==0.0.10
 wikipedia==1.4.0
+googletrans==2.3.0
