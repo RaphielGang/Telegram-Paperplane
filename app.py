@@ -19,8 +19,8 @@ import inspect
 import platform
 from random import randint
 logging.basicConfig(level=logging.DEBUG)
-api_id=390698
-api_hash='4588acb113b0b2924119c885df2ea4e0'
+api_id=os.environ['API_KEY']
+api_hash=os.environ['API_HASH']
 global SPAM
 SPAM=False
 global ISAFK
