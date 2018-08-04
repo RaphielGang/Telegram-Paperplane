@@ -22,15 +22,10 @@ from random import randint
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
 api_hash=os.environ['API_HASH']
-global SPAM
 SPAM=False
-global ISAFK
 ISAFK=False
-global AFKREASON
 AFKREASON="No Reason"
-global USERS
 USERS={}
-global COUNT_MSG
 COUNT_MSG=0
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
