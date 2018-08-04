@@ -55,6 +55,7 @@ async def purgeme(event):
         i=i+1
         await message.delete()
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
+    await client.send_message(event.chat_id,"Purge of "+str(count)+" messages done successfully.")
     time.sleep(2)
     i=1
     async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -144,17 +145,20 @@ async def editme(event):
             await event.delete()
             break
         i=i+1
+    await client.send_message(-1001200493978,"Edit query was executed successfully")
 @client.on(events.NewMessage(outgoing=True,pattern=r'.google (.*)'))
 async def gsearch(event):
         match = event.pattern_match.group(1)
         result_=subprocess.run(['gsearch', match], stdout=subprocess.PIPE)
         result=str(result_.stdout.decode())
         await client.send_message(await client.get_input_entity(event.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
+        await client.send_message(-1001200493978,"Google Search query "+match+" was executed successfully")
 @client.on(events.NewMessage(outgoing=True,pattern=r'.wiki (.*)'))
 async def wiki(event):
         match = event.pattern_match.group(1)
         result=wikipedia.summary(match)
         await client.send_message(await client.get_input_entity(event.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
+        await client.send_message(-1001200493978,"Wiki query "+match+" was executed successfully")
 @client.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 async def set_afk(event):
             message=await client.get_messages(event.chat_id)
@@ -184,6 +188,7 @@ async def evaluate(event):
       await event.edit("**Query: **\n```"+event.text[6:]+'```\n**Result: **\n```'+str(evaluation)+'```')
     else:
       await event.edit("**Query: **\n```"+event.text[6:]+'```\n**Result: **\n```No Result Returned/False```')
+    await client.send_message(-1001200493978,"Eval query "+event.text[6:]+" was executed successfully")
 @client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
  code = event.raw_text[5:]
@@ -197,6 +202,7 @@ async def run(event):
   await event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+str(result)+'```')
  else:
   await event.edit("**Query: **\n```"+event.text[5:]+'```\n**Result: **\n```'+'No Result Returned/False'+'```')
+ await client.send_message(-1001200493978,"Exec query "+event.text[5:]+" was executed successfully") 
 @client.on(events.NewMessage(outgoing=True, pattern='.pingme'))
 async def pingme(event):
     start = datetime.now()
@@ -225,6 +231,7 @@ async def translateme(event):
     reply_text="```Source: ```\n"+text+"```Translation: ```\n"+reply_text
     await client.send_message(event.chat_id,reply_text)
     await event.delete()
+    await client.send_message(-1001200493978,"Translate query "+message+" was executed successfully")
 @client.on(events.NewMessage(outgoing=True, pattern='.str'))
 async def stretch(event):
     textx=await event.get_reply_message()
@@ -333,7 +340,7 @@ async def not_afk(event):
             global AFKREASON
             ISAFK=False
             await event.edit("I have returned from AFK mode.")
-            await event.respond("```You had recieved "+str(COUNT_MSG)+" messages while you were away. Check PM for more details. This auto-generated message shall be self destructed in 2 seconds.```")
+            await event.respond("```You had recieved "+str(COUNT_MSG)+" messages while you were away. Check log for more details. This auto-generated message shall be self destructed in 2 seconds.```")
             time.sleep(2)
             i=1
             async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -341,9 +348,9 @@ async def not_afk(event):
                     break
                 i=i+1
                 await message.delete()
-            await client.send_message(518221376,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away") 
+            await client.send_message(-1001200493978,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away") 
             for i in USERS:
-                await client.send_message(518221376,str(i)+" sent you "+"```"+str(USERS[i])+" messages```")
+                await client.send_message(-1001200493978,str(i)+" sent you "+"```"+str(USERS[i])+" messages```")
             COUNT_MSG=0
             USERS={}
             AFKREASON="No reason"
@@ -396,6 +403,7 @@ async def fastpurge(event):
    if msgs:
     await client.delete_messages(chat, msgs)
    await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
+   await client.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
    time.sleep(2)
    i=1
    async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -418,6 +426,7 @@ async def selfdestruct(event):
             break
         i=i+1
         await message.delete()
+        await client.send_message(-1001200493978,"sd query done successfully")
 @client.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 async def ud(event):
   await event.edit("Processing...")
@@ -425,6 +434,7 @@ async def ud(event):
   mean = urbandict.define(str)
   if len(mean) >= 0:
     await event.edit('Text: **'+str+'**\n\nMeaning: **'+mean[0]['def']+'**\n\n'+'Example: \n__'+mean[0]['example']+'__')
+    await client.send_message(-1001200493978,"ud query "+str+"executed successfully.")
   else:
     await event.edit("No result found for **"+str+"**")
 @client.on(events.NewMessage(outgoing=True, pattern='.tts'))  
