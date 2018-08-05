@@ -20,7 +20,7 @@ import inspect
 import platform
 from googletrans import Translator
 from chatterbot import ChatBot
-from chatterbot.events import ChatterBotCorpusTrainer
+from chatterbot.trainers import ChatterBotCorpusTrainer
 from random import randint
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
