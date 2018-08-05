@@ -118,7 +118,7 @@ async def mention_afk(event):
                         await message.delete()
                   USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.sender.username in USERS:
+              elif event.sender.username in USERS:
                      USERS[event.sender.username]=USERS[event.sender.username]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
@@ -282,7 +282,7 @@ async def afk_on_pm(event):
                         await message.delete()
                   USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.sender.username in USERS:
+              elif event.sender.username in USERS:
                      USERS[event.sender.username]=USERS[event.sender.username]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
@@ -291,7 +291,7 @@ async def afk_on_pm(event):
                          text = str(message.message)
                          event.reply(str(chatbot.get_response(text)))
             else:
-                 await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
                   asyncio.sleep(15)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
