@@ -7,3 +7,4 @@ antispam==0.0.10
 wikipedia==1.4.0
 googletrans==2.3.0
 speedtest-cli==2.0.2
+chatterbot==0.8.7
