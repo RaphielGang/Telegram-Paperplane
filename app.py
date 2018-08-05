@@ -98,24 +98,17 @@ async def mention_afk(event):
     global AFKREASON
     if event.message.mentioned:
         if ISAFK:
-            if event.sender:
-               if event.sender.username not in USERS:
-                 global ISAFK
-    global USERS
-    global COUNT_MSG
-    global AFKREASON
-    if event.is_private:
-        if ISAFK:
+            if ISAFK:
             if event.sender:
               if event.sender.username not in USERS:
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
                   asyncio.sleep(15)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
-                        if i>1:
-                           break
-                        i=i+1
-                        await message.delete()
+                    if i>1:
+                        break
+                    i=i+1
+                    await message.delete()
                   USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
               elif event.sender.username in USERS:
@@ -276,10 +269,10 @@ async def afk_on_pm(event):
                   asyncio.sleep(15)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
-                        if i>1:
-                           break
-                        i=i+1
-                        await message.delete()
+                    if i>1:
+                        break
+                    i=i+1
+                    await message.delete()
                   USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
               elif event.sender.username in USERS:
