@@ -1,5 +1,5 @@
 # Telegram-UserBot
-
+[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/master/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
 Just coz I'm too lazy, I program it, to make stuff easier.
 
