@@ -127,7 +127,7 @@ async def mention_afk(event):
                          text = str(message.message)
                          event.reply(str(chatbot.get_response(text)))
             else:
-                 await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
                   asyncio.sleep(15)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
