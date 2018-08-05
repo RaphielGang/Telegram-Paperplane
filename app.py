@@ -229,6 +229,7 @@ async def speedtest(event):
     l=await event.reply('```Running speed test . . .```')
     k=subprocess.run(['speedtest-cli'], stdout=subprocess.PIPE)
     await l.edit('```' + k.stdout.decode()[:-1] + '```')
+    await event.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='.trt'))
 async def translateme(event):     
     translator=Translator()
