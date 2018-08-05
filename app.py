@@ -8,6 +8,7 @@ import asyncio
 import os
 from gtts import gTTS
 import time
+import sys
 import urbandict
 import gsearch
 import subprocess
@@ -475,4 +476,5 @@ async def tts(event):
     with open("k.mp3", "r") as speech:  
         await client.send_file(event.chat_id,speech,voice_note=True)
         os.remove("k.mp3")
-client.run_until_disconnected()
+if len(sys.argv) < 2:
+    client.run_until_disconnected()
