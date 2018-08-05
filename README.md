@@ -21,7 +21,7 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.
 - Deploy.
 
 #### Running on linux:
-- Clone my repo: `git clone https://github.com/shanuflash/userbot`
+- Clone my repo: `git clone https://github.com/baalajimaestro/Telegram-UserBot`
 
 - Add your API_KEY and API_HASH: `export API_HASH=your-api-hash` and `export API_KEY=your-api-id`
 
