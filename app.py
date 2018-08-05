@@ -129,7 +129,7 @@ async def mention_afk(event):
                         await message.delete()
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.chat_id in USERS:
+                  if event.chat_id in USERS:
                      USERS[event.chat_id]=USERS[event.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
@@ -293,7 +293,7 @@ async def afk_on_pm(event):
                         await message.delete()
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.chat_id in USERS:
+                  if event.chat_id in USERS:
                      USERS[event.chat_id]=USERS[event.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
