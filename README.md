@@ -10,6 +10,7 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org. <br/><br/>
 Use them as config vars in Heroku<br/><br/>
 
 Commands available(this list might be outdated too):<br/><br/>
+    ```
     .delmsg                      Deletes the last typed message<br/>
     .purgeme number              Deletes last n messages sent by you<br/>
     .vapor                       Change the font to an aesthetic font.<br/>
@@ -31,5 +32,6 @@ Commands available(this list might be outdated too):<br/><br/>
     .spam number string          Spams the string n times<br/>
     .exec                        Execute a python command<br/>
     Above four were with with the help of Twit
+    ```
 
 Clone this and try to add features to it, make pull requests to merge it. 
