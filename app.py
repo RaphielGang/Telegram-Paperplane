@@ -98,7 +98,6 @@ async def mention_afk(event):
     global AFKREASON
     if event.message.mentioned:
         if ISAFK:
-            if ISAFK:
             if event.sender:
               if event.sender.username not in USERS:
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
