@@ -9,7 +9,7 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org. <br/><br/>
 
 Use them as config vars in Heroku<br/><br/>
 
-Commands available(this list might be outdated too):
+Commands available(this list might be outdated too):<br/><br/>
     .delmsg                      Deletes the last typed message<br/>
     .purgeme number              Deletes last n messages sent by you<br/>
     .vapor                       Change the font to an aesthetic font.<br/>
