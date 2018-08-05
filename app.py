@@ -19,7 +19,7 @@ import inspect
 import platform
 from googletrans import Translator
 from chatterbot import ChatBot
-from chatterbot.events import ChatterBotCorpusTrainer
+from chatterbot.trainers import ChatterBotCorpusTrainer
 from random import randint
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
@@ -36,9 +36,9 @@ global COUNT_MSG
 COUNT_MSG=0
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
-chatterbot = ChatBot("baalajimaestro")
-chatterbot.set_trainer(ChatterBotCorpusTrainer)
-chatterbot.train("chatterbot.corpus.english")
+chatbot = ChatBot("baalajimaestro")
+chatbot.set_trainer(ChatterBotCorpusTrainer)
+chatbot.train("chatterbot.corpus.english")
 client = TelegramClient('session_name', api_id, api_hash).start()
 client.start()
 @client.on(events.NewMessage(outgoing=True, pattern='.delmsg'))
@@ -72,7 +72,7 @@ async def purgeme(event):
         await message.delete()
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
     await client.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
-    asyncio.sleep(2)
+    time.sleep(2)
     i=1
     async for message in client.iter_messages(event.chat_id,from_user='me'):
         if i>1:
@@ -98,52 +98,44 @@ async def mention_afk(event):
     if event.message.mentioned:
         if ISAFK:
             if event.sender:
-               if event.sender.username not in USERS:
-                 global ISAFK
-    global USERS
-    global COUNT_MSG
-    global AFKREASON
-    if event.is_private:
-        if ISAFK:
-            if event.sender:
               if event.sender.username not in USERS:
-                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
-                  asyncio.sleep(15)
-                  i=1
-                  async for message in client.iter_messages(event.chat_id,from_user='me'):
-                        if i>1:
-                           break
-                        i=i+1
-                        await message.delete()
                   USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.sender.username in USERS:
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
+                  time.sleep(5)
+                  i=1
+                  async for message in client.iter_messages(event.chat_id,from_user='me'):
+                    if i>1:
+                        break
+                    i=i+1
+                    await message.delete()
+              elif event.sender.username in USERS:
                      USERS[event.sender.username]=USERS[event.sender.username]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
                      if textx:
                          message = textx
                          text = str(message.message)
-                         event.reply(str(chatbot.get_response(text)))
+                         await event.reply(str(chatbot.get_response(text)))
             else:
-                 await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
-                  asyncio.sleep(15)
+                  USERS.update({event.chat_id:1})
+                  COUNT_MSG=COUNT_MSG+1
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
+                  time.sleep(5)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
                         if i>1:
                            break
                         i=i+1
                         await message.delete()
-                  USERS.update({event.chat_id:1})
-                  COUNT_MSG=COUNT_MSG+1
-            elif event.chat_id in USERS:
+                  if event.chat_id in USERS:
                      USERS[event.chat_id]=USERS[event.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
                      if textx:
                          message = textx
                          text = str(message.message)
-                         event.reply(str(chatbot.get_response(text)))
+                         await event.reply(str(chatbot.get_response(text)))
 @client.on(events.NewMessage(outgoing=True, pattern='.editme'))
 async def editme(event):
     message=await client.get_messages(event.chat_id)
@@ -271,43 +263,43 @@ async def afk_on_pm(event):
         if ISAFK:
             if event.sender:
               if event.sender.username not in USERS:
-                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
-                  asyncio.sleep(15)
-                  i=1
-                  async for message in client.iter_messages(event.chat_id,from_user='me'):
-                        if i>1:
-                           break
-                        i=i+1
-                        await message.delete()
                   USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
-            elif event.sender.username in USERS:
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI.**This message shall be self destructed in 5 seconds**")
+                  time.sleep(5)
+                  i=1
+                  async for message in client.iter_messages(event.chat_id,from_user='me'):
+                    if i>1:
+                        break
+                    i=i+1
+                    await message.delete()
+              elif event.sender.username in USERS:
                      USERS[event.sender.username]=USERS[event.sender.username]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
                      if textx:
                          message = textx
                          text = str(message.message)
-                         event.reply(str(chatbot.get_response(text)))
+                         await event.reply(str(chatbot.get_response(text)))
             else:
-                 await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
-                  asyncio.sleep(15)
+                  USERS.update({event.chat_id:1})
+                  COUNT_MSG=COUNT_MSG+1
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
+                  time.sleep(5)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
                         if i>1:
                            break
                         i=i+1
                         await message.delete()
-                  USERS.update({event.chat_id:1})
-                  COUNT_MSG=COUNT_MSG+1
-            elif event.chat_id in USERS:
+                  if event.chat_id in USERS:
                      USERS[event.chat_id]=USERS[event.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
                      if textx:
                          message = textx
                          text = str(message.message)
-                         event.reply(str(chatbot.get_response(text)))
+                         await ly(str(chatbot.get_response(text)))
 @client.on(events.NewMessage(outgoing=True, pattern='.cp'))   
 async def copypasta(event):
     textx=await event.get_reply_message()
@@ -344,7 +336,7 @@ async def not_afk(event):
             ISAFK=False
             await event.edit("I have returned from AFK mode.")
             await event.respond("```You had recieved "+str(COUNT_MSG)+" messages while you were away. Check log for more details. This auto-generated message shall be self destructed in 2 seconds.```")
-            asyncio.sleep(2)
+            time.sleep(2)
             i=1
             async for message in client.iter_messages(event.chat_id,from_user='me'):
                 if i>1:
@@ -376,7 +368,7 @@ async def vapor(event):
 async def dopedance(event):
     uio=['/','\\']
     for i in range (1,15):
-        asyncio.sleep(0.3)
+        time.sleep(0.3)
         await event.edit(':'+uio[i%2])
 @client.on(events.NewMessage(outgoing=True, pattern='-_-'))
 async def mutemeow(event):
@@ -408,7 +400,7 @@ async def fastpurge(event):
     await client.delete_messages(chat, msgs)
    await client.send_message(event.chat_id,"```Fast Purge Complete!\n```Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
    await client.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
-   asyncio.sleep(2)
+   time.sleep(2)
    i=1
    async for message in client.iter_messages(event.chat_id,from_user='me'):
         if i>1:
@@ -423,7 +415,7 @@ async def selfdestruct(event):
     text=text+"```This message shall be self-destructed in "+str(counter)+" seconds```"
     await event.delete()
     await client.send_message(event.chat_id,text)
-    asyncio.sleep(counter)
+    time.sleep(counter)
     i=1
     async for message in client.iter_messages(event.chat_id,from_user='me'):
         if i>1:
