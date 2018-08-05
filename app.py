@@ -39,6 +39,17 @@ async def delmsg(event):
             break
         i=i+1
         await message.delete()
+@client.on(events.NewMessage(outgoing=True, pattern='.log'))
+async def log(event):
+    textx=await event.get_reply_message()
+    if textx:
+         message = textx
+         message = str(message.message)
+    else:
+        message = await client.get_messages(event.chat_id)
+        message = str(message[0].message[4:])
+    await client.send_message(-1001200493978,message)
+    await event.edit("```Logged Successfully```")
 @client.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 async def purgeme(event):
     message=await client.get_messages(event.chat_id)
@@ -50,7 +61,7 @@ async def purgeme(event):
         i=i+1
         await message.delete()
     await client.send_message(event.chat_id,"```Purge Complete!``` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
-    await client.send_message(event.chat_id,"Purge of "+str(count)+" messages done successfully.")
+    await client.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
     time.sleep(2)
     i=1
     async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -187,6 +198,7 @@ async def evaluate(event):
 @client.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(event):
  code = event.raw_text[5:]
+ resp = event.respond
  creator='written by [Twit](tg://user?id=234480941) and copied by [blank](tg://user?id=214416808) (piece of shit)'
  exec(
   f'async def __ex(event): ' +
@@ -212,6 +224,11 @@ async def spammer(event):
     spam_message=str(event.text[8:])
     await asyncio.wait([event.respond(spam_message) for i in range(counter)])
     await event.delete()
+@client.on(events.NewMessage(outgoing=True, pattern='.speed'))
+async def speedtest(event):
+    l=await event.reply('```Running speed test . . .```')
+    k=subprocess.run(['speedtest-cli'], stdout=subprocess.PIPE)
+    await l.edit('```' + k.stdout.decode()[:-1] + '```')
 @client.on(events.NewMessage(outgoing=True, pattern='.trt'))
 async def translateme(event):     
     translator=Translator()
@@ -368,6 +385,7 @@ async def vapor(event):
 async def dopedance(event):
     uio=['/','\\']
     for i in range (1,15):
+        time.sleep(0.3)
         await event.edit(':'+uio[i%2])
 @client.on(events.NewMessage(outgoing=True, pattern='-_-'))
 async def mutemeow(event):
