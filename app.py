@@ -21,6 +21,7 @@ from googletrans import Translator
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from random import randint
+from zalgo_text import zalgo
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
 api_hash=os.environ['API_HASH']
@@ -171,6 +172,14 @@ async def set_afk(event):
             await event.edit("I am now AFK!")
             if string!="":
                 AFKREASON=string
+'''@client.on(events.NewMessage(outgoing=True, pattern='.zal'))
+async def zal(event):
+    if update.message.reply_to_message is not None:
+        args = update.message.reply_to_message.text
+        args = args.split(" ")
+    input_text = " ".join(args).lower()
+    zalgofied_text = zalgo.zalgo().zalgofy(input_text)
+    update.message.reply_text(zalgofied_text)'''
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 async def set_asm(event):
             global SPAM
@@ -352,9 +361,10 @@ async def not_afk(event):
 @client.on(events.NewMessage(outgoing=True, pattern='.runs'))
 async def react(event):        
     reactor=['Runs to Kabali for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
-    index=randint(0,len(reactor))
+    index=randint(0,len(reactor)-1)
     reply_text=reactor[index]
     await event.edit(reply_text)
+    await client.send_message(-1001200493978,"You ran away from a cancerous chat")
 @client.on(events.NewMessage(outgoing=True, pattern='.vapor'))  
 async def vapor(event):
     textx=await event.get_reply_message()
