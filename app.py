@@ -350,6 +350,12 @@ async def not_afk(event):
             COUNT_MSG=0
             USERS={}
             AFKREASON="No reason"
+@client.on(events.NewMessage(outgoing=True, pattern='.runs'))
+async def react(event):        
+    reactor=['Runs to Kabali for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
+    index=randint(0,len(reactor))
+    reply_text=reactor[index]
+    await event.edit(reply_text)
 @client.on(events.NewMessage(outgoing=True, pattern='.vapor'))  
 async def vapor(event):
     textx=await event.get_reply_message()
