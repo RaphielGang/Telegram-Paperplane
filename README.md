@@ -1,5 +1,5 @@
 # Telegram-UserBot 
-[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/master/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
+[![Build Status](https://semaphoreci.com/api/v1/leviathanaxeislit/telegram-userbot/branches/master/shields_badge.svg)](https://semaphoreci.com/leviathanaxeislit/telegram-userbot)
 
 Just coz I'm too lazy, I program it, to make stuff easier.
 This is a userbot, which is equivalent to a telegram client, and it can run on the cloud too.
