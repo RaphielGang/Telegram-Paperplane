@@ -122,7 +122,7 @@ async def mention_afk(event):
             else:
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"``` Would ping him to look into the message soon😉. Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
                   time.sleep(5)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -275,7 +275,7 @@ async def afk_on_pm(event):
               if event.sender.username not in USERS:
                   USERS.update({event.sender.username:1})
                   COUNT_MSG=COUNT_MSG+1
-                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI.**This message shall be self destructed in 5 seconds**")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"``` Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI.**This message shall be self destructed in 5 seconds**")
                   time.sleep(5)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -294,7 +294,7 @@ async def afk_on_pm(event):
             else:
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
+                  await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"``` Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
                   time.sleep(5)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
@@ -361,7 +361,7 @@ async def not_afk(event):
             AFKREASON="No reason"
 @client.on(events.NewMessage(outgoing=True, pattern='.runs'))
 async def react(event):        
-    reactor=['Runs to Kabali for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
+    reactor=['Runs to Kabali for help','Runs to MODI FOR HELP','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
     index=randint(0,len(reactor)-1)
     reply_text=reactor[index]
     await event.edit(reply_text)
