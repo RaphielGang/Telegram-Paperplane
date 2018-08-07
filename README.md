@@ -23,6 +23,8 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.
 #### Running on linux:
 - Clone my repo: `git clone https://github.com/baalajimaestro/Telegram-UserBot`
 
+- Install the necessary dependencies by moving to the project directory and running: `pip3 install -r requirements.txt`
+
 - Add your API_KEY and API_HASH: `export API_HASH=your-api-hash` and `export API_KEY=your-api-id`
 
 - Start the userbot: `python3 app.py`
