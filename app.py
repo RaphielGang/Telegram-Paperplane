@@ -66,6 +66,13 @@ async def log(event):
         message = str(message[0].message[4:])
     await client.send_message(-1001200493978,message)
     await event.edit("```Logged Successfully```")
+@client.on(events.NewMessage(outgoing=True, pattern='.term'))
+async def terminal_runner(event):
+    message=await client.get_messages(event.chat_id)
+    command = str(message[0].message[6:])
+    result=subprocess.run([command], stdout=subprocess.PIPE)
+    result=str(result.stdout.decode())
+    await event.edit("**Query: **\n```"+command+'```\n**Output: **\n```'+result+'```')
 @client.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 async def purgeme(event):
     message=await client.get_messages(event.chat_id)
@@ -287,6 +294,13 @@ async def spammer(event):
     message=await client.get_messages(event.chat_id)
     counter=int(message[0].message[6:8])
     spam_message=str(event.text[8:])
+    await asyncio.wait([event.respond(spam_message) for i in range(counter)])
+    await event.delete()
+@client.on(events.NewMessage(outgoing=True, pattern='.bigspam'))
+async def spammer(event):
+    message=await client.get_messages(event.chat_id)
+    counter=int(message[0].message[9:13])
+    spam_message=str(event.text[13:])
     await asyncio.wait([event.respond(spam_message) for i in range(counter)])
     await event.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='.speed'))
