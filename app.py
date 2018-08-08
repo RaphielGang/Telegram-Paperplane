@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from telethon import TelegramClient, events
 from async_generator import aclosing
+from telethon.tl.functions.channels import EditBannedRequest
+from telethon.tl.types import ChannelBannedRights
+from telethon.errors import UserAdminInvalidError
+from telethon.errors import ChatAdminRequiredError
+from telethon.errors import ChannelInvalidError
+from datetime import datetime, timedelta
 import time
 import logging
 import random, re
@@ -14,12 +20,9 @@ import subprocess
 from datetime import datetime
 from requests import get
 import wikipedia
-import antispam
 import inspect
 import platform
 from googletrans import Translator
-from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
 from random import randint
 from zalgo_text import zalgo
 logging.basicConfig(level=logging.DEBUG)
@@ -34,12 +37,13 @@ AFKREASON="No Reason"
 global USERS
 USERS={}
 global COUNT_MSG
+global SPAM_ALLOWANCE
+SPAM_ALLOWANCE=3
+global MUTING_USERS
+MUTING_USERS={}
 COUNT_MSG=0
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
-chatbot = ChatBot("baalajimaestro")
-chatbot.set_trainer(ChatterBotCorpusTrainer)
-chatbot.train("chatterbot.corpus.english")
 client = TelegramClient('session_name', api_id, api_hash).start()
 client.start()
 @client.on(events.NewMessage(outgoing=True, pattern='.delmsg'))
@@ -83,13 +87,52 @@ async def purgeme(event):
 @client.on(events.NewMessage(incoming=True))
 async def spam_tracker(event):
     global SPAM
-    if SPAM==True:
-       ch=str(event.raw_text)
-       spamscore=antispam.score(ch)
-       spambool=antispam.is_spam(ch)
-       if spambool==True:
-         await event.reply('Spam Message Detected')
-         await event.reply('Spam results for `' + ch + '`\nScore: ' + spamscore + '\nIs Spam: ' + spambool)
+    global MUTING_USERS
+    global SPAM_ALLOWANCE
+    if SPAM:
+        if event.sender_id not in MUTING_USERS:
+                  MUTING_USERS={}
+                  MUTING_USERS.update({event.sender_id:1})
+        if event.sender_id in MUTING_USERS:
+                     MUTING_USERS[event.sender_id]=MUTING_USERS[event.sender_id]+1
+                     if MUTING_USERS[event.sender_id]>SPAM_ALLOWANCE:
+                         rights = ChannelBannedRights(
+                         until_date=datetime.now() + timedelta(days=2),
+                         send_messages=True,
+                         send_media=True,
+                         send_stickers=True,
+                         send_gifs=True,
+                         send_games=True,
+                         send_inline=True,
+                         embed_links=True
+                         )
+                         try:
+                           await client(EditBannedRequest(event.chat_id,event.sender_id,rights))
+                         except UserAdminInvalidError:
+                           await client.send_message(event.chat_id,"I'll catch you soon spammer! Now you escaped. ") 
+                           return
+                         except ChatAdminRequiredError:
+                           await client.send_message(event.chat_id,"Boss! You aren't an admin to catch that spammer")
+                           return
+                         except ChannelInvalidError:
+                           await client.send_message(event.chat_id,"Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button")
+                           return
+                         await client.send_message(event.chat_id,"Anti-Flood to the rescue! Spammer "+str(event.sender_id)+" was muted.")
+@client.on(events.NewMessage(outgoing=True,pattern='.thanos'))
+async def thanos_to_rescue(event):
+    rights = ChannelBannedRights(
+                         until_date=None,
+                         view_messages=True,
+                         send_messages=True,
+                         send_media=True,
+                         send_stickers=True,
+                         send_gifs=True,
+                         send_games=True,
+                         send_inline=True,
+                         embed_links=True
+                         )
+    await client(EditBannedRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
+    await event.edit("Banished off the crap!")
 @client.on(events.NewMessage(incoming=True))
 async def mention_afk(event):
     global COUNT_MSG
@@ -98,9 +141,9 @@ async def mention_afk(event):
     global AFKREASON
     if event.message.mentioned:
         if ISAFK:
-            if event.sender:
-              if event.sender.username not in USERS:
-                  USERS.update({event.sender.username:1})
+            if (await event.get_sender()):
+              if (await event.get_sender()).username not in USERS:
+                  USERS.update({(await event.get_sender()).username:1})
                   COUNT_MSG=COUNT_MSG+1
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
                   time.sleep(5)
@@ -110,14 +153,14 @@ async def mention_afk(event):
                         break
                     i=i+1
                     await message.delete()
-              elif event.sender.username in USERS:
-                     USERS[event.sender.username]=USERS[event.sender.username]+1
+              elif (await event.get_sender()).username in USERS:
+                     USERS[(await event.get_sender()).username]=USERS[(await event.get_sender()).username]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
                      if textx:
                          message = textx
                          text = str(message.message)
-                         await event.reply(str(chatbot.get_response(text)))
+                         await event.reply("Bot is off. Better version of it, should be up soon!")
             else:
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
@@ -136,7 +179,7 @@ async def mention_afk(event):
                      if textx:
                          message = textx
                          text = str(message.message)
-                         await event.reply(str(chatbot.get_response(text)))
+                         await event.reply("Bot is down now! A better version of it must be up soon!")
 @client.on(events.NewMessage(outgoing=True, pattern='.editme'))
 async def editme(event):
     message=await client.get_messages(event.chat_id)
@@ -187,7 +230,10 @@ async def zal(event):
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 async def set_asm(event):
             global SPAM
+            global SPAM_ALLOWANCE
             SPAM=True
+            message=await client.get_messages(event.chat_id)
+            SPAM_ALLOWANCE=int(message[0].message[6:])
             await event.edit("Spam Tracking turned on!")
 @client.on(events.NewMessage(outgoing=True, pattern='.asmoff'))
 async def set_asm_off(event):
@@ -274,9 +320,9 @@ async def afk_on_pm(event):
     global AFKREASON
     if event.is_private:
         if ISAFK:
-            if event.sender:
-              if event.sender.username not in USERS:
-                  USERS.update({event.sender.username:1})
+            if (await event.get_sender()):
+              if (await event.get_sender()).username not in USERS:
+                  USERS.update({(await event.get_sender()).username:1})
                   COUNT_MSG=COUNT_MSG+1
                   await event.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI.**This message shall be self destructed in 5 seconds**")
                   time.sleep(5)
@@ -286,14 +332,14 @@ async def afk_on_pm(event):
                         break
                     i=i+1
                     await message.delete()
-              elif event.sender.username in USERS:
-                     USERS[event.sender.username]=USERS[event.sender.username]+1
+              elif (await event.get_sender()).username in USERS:
+                     USERS[(await event.get_sender()).username]=USERS[(await event.get_sender()).username]+1
                      COUNT_MSG=COUNT_MSG+1
                      textx=await event.get_reply_message()
                      if textx:
                          message = textx
                          text = str(message.message)
-                         await event.reply(str(chatbot.get_response(text)))
+                         await event.reply("Bot is down. A better version of it, must be up now!")
             else:
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
@@ -312,7 +358,7 @@ async def afk_on_pm(event):
                      if textx:
                          message = textx
                          text = str(message.message)
-                         await ly(str(chatbot.get_response(text)))
+                         await event.reply("Bot is down! A better version of it, must be up now!")
 @client.on(events.NewMessage(outgoing=True, pattern='.cp'))   
 async def copypasta(event):
     textx=await event.get_reply_message()
@@ -463,7 +509,6 @@ async def tts(event):
     else:
         replye = str(replye[0].message[5:])
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     lang="en"
     tts = gTTS(replye, lang)
     tts.save("k.mp3")
@@ -477,4 +522,9 @@ async def tts(event):
     with open("k.mp3", "r") as speech:  
         await client.send_file(event.chat_id,speech,voice_note=True)
         os.remove("k.mp3")
-client.run_until_disconnected()
+@client.on(events.NewMessage(outgoing=True, pattern='.restart'))  
+async def reboot(event):
+    await event.edit("Thank You! Am taking a break!")
+    os.execl(sys.executable, sys.executable, *sys.argv)
+if len(sys.argv) < 2:
+    client.run_until_disconnected()
