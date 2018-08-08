@@ -107,6 +107,9 @@ async def spam_tracker(event):
                          send_inline=True,
                          embed_links=True
                          )
+                         if event.chat_id > 0:
+                             await client.send_message(event.chat_id,"Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button")
+                             return
                          try:
                            await client(EditBannedRequest(event.chat_id,event.sender_id,rights))
                          except UserAdminInvalidError:
@@ -119,6 +122,12 @@ async def spam_tracker(event):
                            await client.send_message(event.chat_id,"Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button")
                            return
                          await client.send_message(event.chat_id,"Anti-Flood to the rescue! Spammer "+str(event.sender_id)+" was muted.")
+@client.on(events.NewMessage(outgoing=True,pattern='.shrug'))
+async def shrug(event):
+    await event.edit("¯\_(ツ)_/¯")
+@client.on(events.NewMessage(outgoing=True,pattern='.rekt'))
+async def rekt(event):
+    await event.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
 @client.on(events.NewMessage(outgoing=True,pattern='.thanos'))
 async def thanos_to_rescue(event):
     rights = ChannelBannedRights(
