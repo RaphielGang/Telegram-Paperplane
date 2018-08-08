@@ -108,20 +108,20 @@ async def spam_tracker(event):
                          embed_links=True
                          )
                          if event.chat_id > 0:
-                             await client.send_message(event.chat_id,"Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button")
+                             await client.send_message(event.chat_id,"```Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button```")
                              return
                          try:
                            await client(EditBannedRequest(event.chat_id,event.sender_id,rights))
                          except UserAdminInvalidError:
-                           await client.send_message(event.chat_id,"I'll catch you soon spammer! Now you escaped. ") 
+                           await client.send_message(event.chat_id,"```I'll catch you soon spammer! Now you escaped. ```") 
                            return
                          except ChatAdminRequiredError:
-                           await client.send_message(event.chat_id,"Boss! You aren't an admin to catch that spammer")
+                           await client.send_message(event.chat_id,"```Boss! You aren't an admin to catch that spammer```")
                            return
                          except ChannelInvalidError:
-                           await client.send_message(event.chat_id,"Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button")
+                           await client.send_message(event.chat_id,"```Boss! I am not trained to deal with people spamming on PM.\n I request to take action with``` **Report Spam** ```button```")
                            return
-                         await client.send_message(event.chat_id,"Anti-Flood to the rescue! Spammer "+str(event.sender_id)+" was muted.")
+                         await client.send_message(event.chat_id,"```Anti-Flood to the rescue! Spammer "+str(event.sender_id)+" was muted.```")
 @client.on(events.NewMessage(outgoing=True,pattern='.shg'))
 async def shrug(event):
     await event.edit("¯\_(ツ)_/¯")
@@ -280,7 +280,7 @@ async def pingme(event):
     start = datetime.now()
     await event.edit('Pong!')
     end = datetime.now()
-    ms = (end - start).microseconds / 1000
+    ms = (end - start).microseconds/1000
     await event.edit('Pong!\n%sms' % (ms))
 @client.on(events.NewMessage(outgoing=True, pattern='.spam'))
 async def spammer(event):
@@ -534,7 +534,7 @@ async def tts(event):
         os.remove("k.mp3")
 @client.on(events.NewMessage(outgoing=True, pattern='.restart'))  
 async def reboot(event):
-    await event.edit("Thank You! Am taking a break!")
+    await event.edit("```Thank You master! I am taking a break!```")
     os.execl(sys.executable, sys.executable, *sys.argv)
 if len(sys.argv) < 2:
     client.run_until_disconnected()
