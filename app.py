@@ -122,7 +122,7 @@ async def spam_tracker(event):
                            await client.send_message(event.chat_id,"Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button")
                            return
                          await client.send_message(event.chat_id,"Anti-Flood to the rescue! Spammer "+str(event.sender_id)+" was muted.")
-@client.on(events.NewMessage(outgoing=True,pattern='.shrug'))
+@client.on(events.NewMessage(outgoing=True,pattern='.shg'))
 async def shrug(event):
     await event.edit("¯\_(ツ)_/¯")
 @client.on(events.NewMessage(outgoing=True,pattern='.rekt'))
