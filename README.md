@@ -79,4 +79,8 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
  
  - `.asmoff`:                      Turns off the Anti-Spam Handler
  
+ - `.term command`:                Executes a terminal command(Linux if heroku)
+ 
+ - `.bigspam`:                     For huge spams like 1k
+ 
 Clone this and try to add features to it, make pull requests to merge it ;) 
