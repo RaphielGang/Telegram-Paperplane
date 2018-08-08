@@ -5,10 +5,19 @@ Just coz I'm too lazy, I program it, to make stuff easier.
 This is a userbot, which is equivalent to a telegram client, and it can run on the cloud too.
 
 ### Before you start:
-Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.
+Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
+**Please read through this before cloning. I don't want you get stuck anywhere. This guide can get you running up the userbot, if followed properly**
 
 #### Running on heroku:
-<b>If you clone/fork this repo please make sure you delete session_name.session and regenerate it by running app.py on your local pc before deploying it on heroku.</b>
+```diff
+-If you clone/fork this repo please make sure you delete session_name.session and regenerate it by running app.py on your local pc before deploying it on heroku.
+
+- Also, it is not possible to run two instances of the same session. Telegram will ban the session, and it will require regenration.
+
+
+- If you get errors like -->app[worker.1]: telethon.errors.rpcerrorlist.AuthKeyDuplicatedError: An auth key with the same ID was already generated, 
+- It means your session was banned and needs to be regenerated.
+```
 
 - Fork my repo.
 
