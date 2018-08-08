@@ -68,10 +68,11 @@ async def log(event):
 @client.on(events.NewMessage(outgoing=True, pattern='.term'))
 async def terminal_runner(event):
     message=await client.get_messages(event.chat_id)
-    command = str(message[0].message[6:])
-    result=subprocess.run([command], stdout=subprocess.PIPE)
+    command = str(message[0].message)
+    list_x=command.split(' ')
+    result=subprocess.run(list_x[1:], stdout=subprocess.PIPE)
     result=str(result.stdout.decode())
-    await event.edit("**Query: **\n```"+command+'```\n**Output: **\n```'+result+'```')
+    await event.edit("**Query: **\n```"+str(command[6:])+'```\n**Output: **\n```'+result+'```')
 @client.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 async def purgeme(event):
     message=await client.get_messages(event.chat_id)
@@ -147,8 +148,10 @@ async def thanos_to_rescue(event):
                          send_inline=True,
                          embed_links=True
                          )
+    await event.edit("```Thanos snaps!```")
+    time.sleep(5)
     await client(EditBannedRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
-    await event.edit("Banished off the crap!")
+    await event.edit("When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.")
 @client.on(events.NewMessage(incoming=True))
 async def mention_afk(event):
     global COUNT_MSG
