@@ -172,14 +172,18 @@ async def set_afk(event):
             await event.edit("I am now AFK!")
             if string!="":
                 AFKREASON=string
-'''@client.on(events.NewMessage(outgoing=True, pattern='.zal'))
+@client.on(events.NewMessage(outgoing=True, pattern='.zal'))
 async def zal(event):
-    if update.message.reply_to_message is not None:
-        args = update.message.reply_to_message.text
-        args = args.split(" ")
-    input_text = " ".join(args).lower()
-    zalgofied_text = zalgo.zalgo().zalgofy(input_text)
-    update.message.reply_text(zalgofied_text)'''
+     textx=await event.get_reply_message()
+     message = await client.get_messages(event.chat_id)
+     if textx:
+         message = textx
+         message = str(message.message)
+     else:
+        message = str(message[0].message[4:])
+     input_text = " ".join(message).lower()
+     zalgofied_text = zalgo.zalgo().zalgofy(input_text)
+     await event.edit(zalgofied_text)
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 async def set_asm(event):
             global SPAM
