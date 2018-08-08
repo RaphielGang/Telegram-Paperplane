@@ -66,4 +66,8 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.
  
  - `.exec`:                        Execute a python command
     
+ - `.asmon n`:                     Turns on Anti-Spam Handler to mute a person on group for 2d, if 'n' messages exceeded 
+ 
+ - `.asmoff`:                      Turns off the Anti-Spam Handler
+ 
 Clone this and try to add features to it, make pull requests to merge it ;) 
