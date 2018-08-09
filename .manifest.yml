@@ -1,0 +1,7 @@
+---
+applications:
+  - name: telegram-userbot
+    memory: 256M
+    no-route: true
+    health-check-type: none
+    command: python3 app.py
