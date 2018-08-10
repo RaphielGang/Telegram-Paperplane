@@ -133,6 +133,9 @@ async def spam_tracker(event):
 @client.on(events.NewMessage(outgoing=True,pattern='.shg'))
 async def shrug(event):
     await event.edit("¯\_(ツ)_/¯")
+@client.on(events.NewMessage(outgoing=True,pattern='hi'))
+async def hoi(event):
+    await event.edit("Hoi!😄")
 @client.on(events.NewMessage(outgoing=True,pattern='.rekt'))
 async def rekt(event):
     await event.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
@@ -305,7 +308,7 @@ async def spammer(event):
     counter=int(message[0].message[9:13])
     spam_message=str(event.text[13:])
     await asyncio.wait([event.respond(spam_message) for i in range(counter)])
-    await event.delete()
+    await event.delete()q
 @client.on(events.NewMessage(outgoing=True, pattern='.speed'))
 async def speedtest(event):
     l=await event.reply('```Running speed test . . .```')
