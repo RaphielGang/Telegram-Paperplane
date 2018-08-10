@@ -307,7 +307,7 @@ async def spammer(event):
     message=await client.get_messages(event.chat_id)
     counter=int(message[0].message[9:13])
     spam_message=str(event.text[13:])
-    for i in range [counter]:
+    for i in range (1,counter):
        await event.respond(spam_message)
     await event.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='.speed'))
