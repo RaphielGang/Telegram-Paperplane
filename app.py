@@ -307,8 +307,9 @@ async def spammer(event):
     message=await client.get_messages(event.chat_id)
     counter=int(message[0].message[9:13])
     spam_message=str(event.text[13:])
-    await asyncio.wait([event.respond(spam_message) for i in range(counter)])
-    await event.delete()q
+    for i in range [counter]:
+       await event.respond(spam_message)
+    await event.delete()
 @client.on(events.NewMessage(outgoing=True, pattern='.speed'))
 async def speedtest(event):
     l=await event.reply('```Running speed test . . .```')
