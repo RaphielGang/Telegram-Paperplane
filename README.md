@@ -49,7 +49,9 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
  
  - `.trt`:                         Google Translator, translates only to english
  
- - `.tts`:                         Google Text to Speech
+ - `.spider`:                      Mutes a person in the group if you are an admin
+ 
+ - `.wizard`:                      In beta stage, needs all admin rights to work
  
  - `.react`:                       Sends a random ascii emote
  
@@ -76,6 +78,12 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
  - `.spam number string`:          Spams the string n times
  
  - `.exec`:                        Execute a python command
+ 
+ - `.help`:                        Get a link to this readme
+ 
+ - `.killme(incoming)`:            If your bot senses it, it will reply a funny message, try it out
+ 
+ - `.paste string`:                Sends the string to hastebin and gets the link
     
  - `.asmon n`:                     Turns on Anti-Spam Handler to mute a person on group for 2d, if 'n' messages exceeded 
  
