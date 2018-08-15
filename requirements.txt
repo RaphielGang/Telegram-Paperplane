@@ -1,4 +1,4 @@
-telethon==1.1.1
+telethon==1.2
 requests==2.18.4
 gtts==2.0.1
 urbandict==0.5
@@ -7,4 +7,3 @@ wikipedia==1.4.0
 googletrans==2.3.0
 speedtest-cli==2.0.2
 zalgo_text==0.6
-
