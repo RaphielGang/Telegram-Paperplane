@@ -7,6 +7,8 @@ from telethon.tl.types import ChannelBannedRights
 from telethon.errors import UserAdminInvalidError
 from telethon.errors import ChatAdminRequiredError
 from telethon.errors import ChannelInvalidError
+from telethon.tl.functions.channels import EditAdminRequest
+from telethon.tl.types import ChannelAdminRights
 from datetime import datetime, timedelta
 import time
 import logging
@@ -151,10 +153,10 @@ async def pipcheck(event):
 @client.on(events.NewMessage(outgoing=True,pattern='.paste'))
 async def haste_paste(event):
     message=await client.get_messages(event.chat_id)
-    await event.reply('`Sending to bin . . .`')
+    await event.edit('`Sending to bin . . .`')
     text=str(message[0].message[7:])
     await event.edit('`Sent to bin! Check it here: `' + hastebin.post(text))
-@client.on(events.NewMessage(pattern='.killme'))
+@client.on(events.NewMessage(incoming=True,pattern='.killme'))
 async def killmelol(event):
     name = await client.get_entity(event.from_id)
     name0 = str(name.first_name)
@@ -179,6 +181,24 @@ async def thanos_to_rescue(event):
     time.sleep(5)
     await client(EditBannedRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
     await event.edit("When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.")
+@client.on(events.NewMessage(outgoing=True,pattern='.spider'))
+async def spodoman(event):
+    rights = ChannelBannedRights(
+                         until_date=None,
+                         view_messages=None,
+                         send_messages=True,
+                         send_media=True,
+                         send_stickers=True,
+                         send_gifs=True,
+                         send_games=True,
+                         send_inline=True,
+                         embed_links=True
+                         )
+    await event.edit("`Spiderman nabs him!`")
+    time.sleep(5)
+    await client(EditBannedRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
+    await event.edit("I missed the part, that's my problem.")
+
 @client.on(events.NewMessage(incoming=True))
 async def mention_afk(event):
     global COUNT_MSG
@@ -273,6 +293,22 @@ async def zal(event):
      input_text = " ".join(message).lower()
      zalgofied_text = zalgo.zalgo().zalgofy(input_text)
      await event.edit(zalgofied_text)
+@client.on(events.NewMessage(outgoing=True,pattern='.wizard'))
+async def wizard(event):
+    rights = ChannelAdminRights(
+    add_admins=True,
+    invite_users=True,
+    change_info=True,
+    ban_users=True,
+    delete_messages=True,
+    pin_messages=True,
+    invite_link=True,
+    edit_messages=True
+)
+await event.edit("`Wizard waves his wand!`")
+time.sleep(5)
+await client(EditAdminRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
+await event.edit("A perfect magic has happened!")
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 async def set_asm(event):
             global SPAM
