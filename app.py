@@ -150,8 +150,8 @@ async def pipcheck(event):
 	await a.edit(r)
 @client.on(events.NewMessage(outgoing=True,pattern='.paste'))
 async def haste_paste(event):
+    message=await client.get_messages(event.chat_id)
     await event.reply('`Sending to bin . . .`')
-    text=await client.get_messages(event.chat_id)
     text=str(message[0].message[7:])
     await event.edit('`Sent to bin! Check it here: `' + bin.post(text))
 @client.on(events.NewMessage(pattern='.killme'))
