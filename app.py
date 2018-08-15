@@ -303,7 +303,6 @@ async def wizard(event):
     delete_messages=True,
     pin_messages=True,
     invite_link=True,
-    edit_messages=True
     )
     await event.edit("`Wizard waves his wand!`")
     time.sleep(5)
