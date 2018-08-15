@@ -304,11 +304,11 @@ async def wizard(event):
     pin_messages=True,
     invite_link=True,
     edit_messages=True
-)
-await event.edit("`Wizard waves his wand!`")
-time.sleep(5)
-await client(EditAdminRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
-await event.edit("A perfect magic has happened!")
+    )
+    await event.edit("`Wizard waves his wand!`")
+    time.sleep(5)
+    await client(EditAdminRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
+    await event.edit("A perfect magic has happened!")
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 async def set_asm(event):
             global SPAM
