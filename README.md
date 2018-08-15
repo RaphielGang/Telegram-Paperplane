@@ -49,6 +49,8 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
  
  - `.trt`:                         Google Translator, translates only to english
  
+ - `.thanos`:                      Bans a person from the group
+ 
  - `.spider`:                      Mutes a person in the group if you are an admin
  
  - `.wizard`:                      In beta stage, needs all admin rights to work
