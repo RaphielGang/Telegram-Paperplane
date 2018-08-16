@@ -128,12 +128,12 @@ async def spam_tracker(event):
                            await client.send_message(event.chat_id,"`I'll catch you soon spammer! Now you escaped. `")
                            return
                          except ChatAdminRequiredError:
-                           await client.send_message(event.chat_id,"`Boss! You aren't an admin to catch that spammer`")
+                           await client.send_message(event.chat_id,"`Me nu admeme to catch spammer nibba`")
                            return
                          except ChannelInvalidError:
-                           await client.send_message(event.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with` **Report Spam** `button`")
+                           await client.send_message(event.chat_id,"`User retarded af ._.`")
                            return
-                         await client.send_message(event.chat_id,"`Anti-Flood to the rescue! Spammer "+str(event.sender_id)+" was muted.`")
+                         await client.send_message(event.chat_id,"`Get rekt nibba. I am ze anti-spam lord "+str(event.sender_id)+" was muted.`")
 @client.on(events.NewMessage(outgoing=True,pattern='.shg'))
 async def shrug(event):
     await event.edit("¯\_(ツ)_/¯")
@@ -148,7 +148,7 @@ async def userbot_sender(event):
 @client.on(events.NewMessage(pattern='.pip (.+)'))
 async def pipcheck(event):
 	a=await event.reply('`Searching . . .`')
-	r='`' + subprocess.run(['pip3', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
+	r='`' + subprocess.run(['pip', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
 	await a.edit(r)
 @client.on(events.NewMessage(outgoing=True,pattern='.paste'))
 async def haste_paste(event):
@@ -211,8 +211,8 @@ async def mention_afk(event):
               if (await event.get_sender()).username not in USERS:
                   USERS.update({(await event.get_sender()).username:1})
                   COUNT_MSG=COUNT_MSG+1
-                  await event.reply("Sorry! My boss in AFK due to `"+AFKREASON+"`Would ping him to look into the message soon😉.Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
-                  time.sleep(5)
+                  await event.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
+                  time.sleep(10)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
                     if i>1:
@@ -230,8 +230,8 @@ async def mention_afk(event):
             else:
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-                  await event.reply("Sorry! My boss in AFK due to `"+AFKREASON+"`Would ping him to look into the message soon😉. Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
-                  time.sleep(5)
+                  await event.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
+                  time.sleep(10)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
                         if i>1:
@@ -245,7 +245,7 @@ async def mention_afk(event):
                      if textx:
                          message = textx
                          text = str(message.message)
-                         await event.reply("Bot is down now! A better version of it must be up soon!")
+                         await event.reply("Lmao bot dead")
 @client.on(events.NewMessage(outgoing=True, pattern='.editme'))
 async def editme(event):
     message=await client.get_messages(event.chat_id)
@@ -263,7 +263,7 @@ async def gsearch(event):
         match = event.pattern_match.group(1)
         result_=subprocess.run(['gsearch', match], stdout=subprocess.PIPE)
         result=str(result_.stdout.decode())
-        await client.send_message(await client.get_input_entity(event.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
+        await client.send_message(await client.get_input_entity(event.chat_id), message='**Search Query:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=event.id, link_preview=False)
         await client.send_message(-1001200493978,"Google Search query "+match+" was executed successfully")
 @client.on(events.NewMessage(outgoing=True,pattern=r'.wiki (.*)'))
 async def wiki(event):
@@ -278,7 +278,7 @@ async def set_afk(event):
             global ISAFK
             global AFKREASON
             ISAFK=True
-            await event.edit("I am now AFK!")
+            await event.edit("AFK AF!")
             if string!="":
                 AFKREASON=string
 @client.on(events.NewMessage(outgoing=True, pattern='.zal'))
@@ -305,7 +305,7 @@ async def wizard(event):
     invite_link=True,
     )
     await event.edit("`Wizard waves his wand!`")
-    time.sleep(5)
+    time.sleep(3)
     await client(EditAdminRequest(event.chat_id,(await event.get_reply_message()).sender_id,rights))
     await event.edit("A perfect magic has happened!")
 @client.on(events.NewMessage(outgoing=True, pattern='.asmon'))
@@ -363,9 +363,8 @@ async def spammer(event):
 async def killdabot(event):
         message=message = await client.get_messages(event.chat_id)
         counter=int(message[0].message[10:])
-        await event.reply('`Sorry for the mistakes i did master....`')
+        await event.reply('`Goodbye (*Windows XP showdown sound*....`')
         time.sleep(2)
-        await event.edit('`Sir i am dead. Cant respond to any commands for sometime`')
         time.sleep(counter)
 @client.on(events.NewMessage(outgoing=True, pattern='.help'))
 async def help(event):
@@ -424,8 +423,8 @@ async def afk_on_pm(event):
               if (await event.get_sender()).username not in USERS:
                   USERS.update({(await event.get_sender()).username:1})
                   COUNT_MSG=COUNT_MSG+1
-                  await event.reply("Sorry! My boss in AFK due to `"+AFKREASON+"`Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI.**This message shall be self destructed in 5 seconds**")
-                  time.sleep(5)
+                  await event.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
+                  time.sleep(10)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
                     if i>1:
@@ -443,8 +442,8 @@ async def afk_on_pm(event):
             else:
                   USERS.update({event.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
-                  await event.reply("Sorry! My boss in AFK due to `"+AFKREASON+"`Would ping him to look into the message soon😉.  Meanwhile you can play around with his AI. **This message shall be self destructed in 5 seconds**")
-                  time.sleep(5)
+                  await event.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
+                  time.sleep(10)
                   i=1
                   async for message in client.iter_messages(event.chat_id,from_user='me'):
                         if i>1:
@@ -458,7 +457,7 @@ async def afk_on_pm(event):
                      if textx:
                          message = textx
                          text = str(message.message)
-                         await event.reply("Bot is down! A better version of it, must be up now!")
+                         await event.reply("Dead")
 @client.on(events.NewMessage(outgoing=True, pattern='.cp'))
 async def copypasta(event):
     textx=await event.get_reply_message()
@@ -599,30 +598,30 @@ async def ud(event):
     await client.send_message(-1001200493978,"ud query "+str+" executed successfully.")
   else:
     await event.edit("No result found for **"+str+"**")
-'''@client.on(events.NewMessage(outgoing=True, pattern='.tts'))
+@client.on(events.NewMessage(outgoing=True, pattern='.tts'))
 async def tts(event):
     textx=await event.get_reply_message()
     replye = await client.get_messages(event.chat_id)
     if textx:
-         replye = textx
+         replye = await event.get_reply_message()
          replye = str(replye.message)
     else:
         replye = str(replye[0].message[5:])
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    lang="en"
+    lang="ja"
     tts = gTTS(replye, lang)
     tts.save("k.mp3")
     with open("k.mp3", "rb") as f:
         linelist = list(f)
         linecount = len(linelist)
     if linecount == 1:
-        lang = "en"                           COMMENTING OUT COZ NO USE OF THIZ UNTIL IT GETS FIXED
+        lang = "ja"                           #tts on personal chats is broken
         tts = gTTS(replyes, lang)
         tts.save("k.mp3")
     with open("k.mp3", "r") as speech:
-        await client.send_file(event.chat_id,speech,voice_note=True)
+        await client.send_file(event.chat_id, 'k.mp3', voice_note=True)
         os.remove("k.mp3")
-@client.on(events.NewMessage(outgoing=True, pattern='.restart'))'''
+@client.on(events.NewMessage(outgoing=True, pattern='.restart'))
 async def reboot(event):
     await event.edit("`Thank You master! I am taking a break!`")
     os.execl(sys.executable, sys.executable, *sys.argv)
