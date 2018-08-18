@@ -8,9 +8,9 @@ This is a userbot, which is equivalent to a telegram client, and it can run on t
 Join the [news channel](https://t.me/maestro_userbot_channel) if you just want to stay in the loop about new features or
 announcements.
 
-If you found any bugs or you wanna suggest some features then contact [My support group](https://t.me/userbot_supportsupport).
+If you found any bugs or you wanna suggest some features then contact [My support group](https://t.me/userbot_support).
 
-Alternatively, [find me on telegram](https://t.me/Baalajimaestro)!.
+Alternatively, [find me on telegram](https://t.me/baalajimaestro)!.
 
 ### Before you start:
 Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
