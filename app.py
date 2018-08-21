@@ -1,5 +1,5 @@
-e# -*- coding: utf-8 -*-
-from telethon import Telegrambot, events
+# -*- coding: utf-8 -*-
+from telethon import TelegramClient, events
 from async_generator import aclosing
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChannelBannedRights
@@ -83,7 +83,7 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if await e.get_reply_message()).sender_id in SUDO_USERS:
+        if (await e.get_reply_message()).sender_id in SUDO_USERS:
             await e.edit("`I am not supposed to ban a sudo user!`")
             return
         await e.edit("`Thanos snaps!`")
@@ -102,7 +102,7 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if await e.get_reply_message()).sender_id in SUDO_USERS:
+        if (await e.get_reply_message()).sender_id in SUDO_USERS:
             await e.edit("`I am not supposed to mute a sudo user!`")
             return
         await e.edit("`Spiderman nabs him!`")
