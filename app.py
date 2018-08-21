@@ -55,7 +55,7 @@ bot.start()
 @bot.on(events.MessageEdited(outgoing=True))
 async def common_outgoing_handler(e):
     find = await bot.get_messages(e.chat_id)
-    find = str(message[0].message[1:])
+    find = str(find[0].message[1:])
     if find=="delmsg" :
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
