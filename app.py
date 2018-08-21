@@ -243,7 +243,7 @@ async def terminal_runner(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.purgeme'))
 async def purgeme(e):
     message=e.text
-    count = int(.message[9:])
+    count = int(message[9:])
     i=1
     async for message in bot.iter_messages(e.chat_id,from_user='me'):
         if i>count+1:
