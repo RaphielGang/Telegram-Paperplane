@@ -1,5 +1,5 @@
-e# -*- coding: utf-8 -*-
-from telethon import Telegrambot, events
+# -*- coding: utf-8 -*-
+from telethon import TelegramClient, events
 from async_generator import aclosing
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChannelBannedRights
@@ -46,6 +46,7 @@ SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
 COUNT_MSG=0
+SUDO_USERS=[518221376,538543304,423070089]
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 bot = TelegramClient('userbot', api_id, api_hash).start()
@@ -54,7 +55,7 @@ bot.start()
 @bot.on(events.MessageEdited(outgoing=True))
 async def common_outgoing_handler(e):
     find = await bot.get_messages(e.chat_id)
-    find = str(message[0].message[1:])
+    find = str(find[0].message[1:])
     if find=="delmsg" :
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -62,13 +63,11 @@ async def common_outgoing_handler(e):
                 break
             i=i+1
             await message.delete()
-    elif find=="log" :
-
     elif find == "shg":
         await e.edit("¯\_(ツ)_/¯")
     elif find == "hi":
         await e.edit("Hoi!😄")
-    elif find == "/get userbotfile"
+    elif find == "/get userbotfile":
         file=open(sys.argv[0], 'r')
         await bot.send_file(e.chat_id, sys.argv[0], reply_to=e.id, caption='`Here\'s me in a file`')
         file.close()
@@ -84,8 +83,8 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if (await e.get_reply_message()).sender_id == 518221376):
-            await e.edit("`I am not supposed to ban my master :/`")
+        if (await e.get_reply_message()).sender_id in SUDO_USERS:
+            await e.edit("`I am not supposed to ban a sudo user!`")
             return
         await e.edit("`Thanos snaps!`")
         time.sleep(5)
@@ -103,6 +102,9 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
+        if (await e.get_reply_message()).sender_id in SUDO_USERS:
+            await e.edit("`I am not supposed to mute a sudo user!`")
+            return
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
