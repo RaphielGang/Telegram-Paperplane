@@ -54,8 +54,8 @@ bot.start()
 @bot.on(events.NewMessage(outgoing=True,pattern='.*'))
 @bot.on(events.MessageEdited(outgoing=True))
 async def common_outgoing_handler(e):
-    find = await bot.get_messages(e.chat_id)
-    find = str(find[0].message[1:])
+    find = e.text
+    find = str(message[1:])
     if find=="delmsg" :
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -68,9 +68,7 @@ async def common_outgoing_handler(e):
     elif find == "hi":
         await e.edit("Hoi!😄")
     elif find == "/get userbotfile":
-        file=open(sys.argv[0], 'r')
         await bot.send_file(e.chat_id, sys.argv[0], reply_to=e.id, caption='`Here\'s me in a file`')
-        file.close()
     elif find == "thanos":
         rights = ChannelBannedRights(
                              until_date=None,
@@ -110,8 +108,8 @@ async def common_outgoing_handler(e):
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.edit("I missed the part, that's my problem.")
     elif find == "editme":
-        message=await bot.get_messages(e.chat_id)
-        string = str(message[0].message[8:])
+        message=e.text
+        string = str(message[8:])
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
             if i==2:
@@ -228,15 +226,15 @@ async def log(e):
          message = textx
          message = str(message.message)
     else:
-        message = await bot.get_messages(e.chat_id)
-        message = str(message[0].message[4:])
+        message = e.text
+        message = str(message[4:])
     await bot.send_message(-1001200493978,message)
     await e.edit("`Logged Successfully`")
 @bot.on(events.NewMessage(outgoing=True, pattern='.term'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.term'))
 async def terminal_runner(e):
-    message=await bot.get_messages(e.chat_id)
-    command = str(message[0].message)
+    message=e.text
+    command = str(message)
     list_x=command.split(' ')
     result=subprocess.run(list_x[1:], stdout=subprocess.PIPE)
     result=str(result.stdout.decode())
@@ -244,8 +242,8 @@ async def terminal_runner(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.purgeme'))
 async def purgeme(e):
-    message=await bot.get_messages(e.chat_id)
-    count = int(message[0].message[9:])
+    message=e.text
+    count = int(.message[9:])
     i=1
     async for message in bot.iter_messages(e.chat_id,from_user='me'):
         if i>count+1:
@@ -308,9 +306,9 @@ async def pipcheck(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.paste'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.paste'))
 async def haste_paste(e):
-    message=await bot.get_messages(e.chat_id)
+    message=e.text
     await e.edit('`Sending to bin . . .`')
-    text=str(message[0].message[7:])
+    text=str(message[7:])
     await e.edit('`Sent to bin! Check it here: `' + hastebin.post(text))
 @bot.on(events.NewMessage(incoming=True,pattern='.killme'))
 async def killmelol(e):
@@ -383,8 +381,8 @@ async def wiki(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
 async def set_afk(e):
-            message=await bot.get_messages(e.chat_id)
-            string = str(message[0].message[8:])
+            message=e.text
+            string = str(message[8:])
             global ISAFK
             global AFKREASON
             ISAFK=True
@@ -395,12 +393,12 @@ async def set_afk(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
 async def zal(e):
      textx=await e.get_reply_message()
-     message = await bot.get_messages(e.chat_id)
+     message = e.text
      if textx:
          message = textx
          message = str(message.message)
      else:
-        message = str(message[0].message[4:])
+        message = str(message[4:])
      input_text = " ".join(message).lower()
      zalgofied_text = zalgo.zalgo().zalgofy(input_text)
      await e.edit(zalgofied_text)
@@ -410,8 +408,8 @@ async def set_asm(e):
             global SPAM
             global SPAM_ALLOWANCE
             SPAM=True
-            message=await bot.get_messages(e.chat_id)
-            SPAM_ALLOWANCE=int(message[0].message[6:])
+            message=e.text
+            SPAM_ALLOWANCE=int(message[6:])
             await e.edit("Spam Tracking turned on!")
 @bot.on(events.NewMessage(outgoing=True, pattern='.eval'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.eval'))
@@ -440,8 +438,8 @@ async def run(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.spam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.spam'))
 async def spammer(e):
-    message= await bot.get_messages(e.chat_id)
-    counter=int(message[0].message[6:8])
+    message= e.text
+    counter=int(message[6:8])
     spam_message=str(e.text[8:])
     await asyncio.wait([e.respond(spam_message) for i in range(counter)])
     await e.delete()
@@ -449,8 +447,8 @@ async def spammer(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
-        message=message = await bot.get_messages(e.chat_id)
-        counter=int(message[0].message[10:])
+        message=message = e.text
+        counter=int(message[10:])
         await e.reply('`Goodbye (*Windows XP showdown sound*....`')
         time.sleep(2)
         time.sleep(counter)
@@ -461,8 +459,8 @@ async def help(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.bigspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.bigspam'))
 async def bigspam(e):
-    message = await bot.get_messages(e.chat_id)
-    counter=int(message[0].message[9:13])
+    message = e.text
+    counter=int(message[9:13])
     spam_message=str(e.text[13:])
     for i in range (1,counter):
        await e.respond(spam_message)
@@ -473,12 +471,12 @@ async def bigspam(e):
 async def translateme(e):
     translator=Translator()
     textx=await e.get_reply_message()
-    message = await bot.get_messages(e.chat_id)
+    message = e.text
     if textx:
          message = textx
          text = str(message.message)
     else:
-        text = str(message[0].message[4:])
+        text = str(message[4:])
     reply_text=translator.translate(text, dest='en').text
     reply_text="`Source: `\n"+text+"`\n\nTranslation: `\n"+reply_text
     await bot.send_message(e.chat_id,reply_text)
@@ -488,12 +486,12 @@ async def translateme(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.str'))
 async def stretch(e):
     textx=await e.get_reply_message()
-    message = await bot.get_messages(e.chat_id)
+    message = e.text
     if textx:
          message = textx
          message = str(message.message)
     else:
-        message = str(message[0].message[5:])
+        message = str(message[5:])
     count = random.randint(3, 10)
     reply_text = re.sub(r'([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])', (r'\1' * count), message)
     await e.edit(reply_text)
@@ -552,8 +550,8 @@ async def copypasta(e):
          message = textx
          message = str(message.message)
     else:
-        message = await bot.get_messages(e.chat_id)
-        message = str(message[0].message[3:])
+        message = e.text
+        message = str(message[3:])
     emojis = ["😂", "😂", "👌", "✌", "💞", "👍", "👌", "💯", "🎶", "👀", "😂", "👓", "👏", "👐", "🍕", "💥", "🍴", "💦", "💦", "🍑", "🍆", "😩", "😏", "👉👌", "👀", "👅", "😩", "🚰"]
     reply_text = random.choice(emojis)
     b_char = random.choice(message).lower() # choose a random character in the message to be substituted with 🅱️
@@ -576,12 +574,12 @@ async def copypasta(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.vapor'))
 async def vapor(e):
     textx=await e.get_reply_message()
-    message = await bot.get_messages(e.chat_id)
+    message = e.text
     if textx:
          message = textx
          message = str(message.message)
     else:
-        message = str(message[0].message[7:])
+        message = str(message[7:])
     if message:
         data = message
     else:
@@ -591,8 +589,8 @@ async def vapor(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.sd'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.sd'))
 async def selfdestruct(e):
-    message=await bot.get_messages(e.chat_id)
-    counter=int(message[0].message[4:6])
+    message=e.text
+    counter=int(message[4:6])
     text=str(e.text[6:])
     text=text+"`This message shall be self-destructed in "+str(counter)+" seconds`"
     await e.delete()
@@ -620,13 +618,13 @@ async def ud(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.tts'))
 async def tts(e):
     textx=await e.get_reply_message()
-    replye = await bot.get_messages(e.chat_id)
+    replye = e.text
     streng=str(replye.message[5:6])
     if textx:
          replye = await e.get_reply_message()
          replye = str(replye.message)
     else:
-        replye = str(replye[0].message[7:])
+        replye = str(replye[7:])
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     lang=streng
     tts = gTTS(replye, lang)
