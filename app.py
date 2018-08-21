@@ -46,6 +46,7 @@ SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
 COUNT_MSG=0
+SUDO_USERS=[518221376,538543304,423070089]
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 bot = TelegramClient('userbot', api_id, api_hash).start()
@@ -62,8 +63,6 @@ async def common_outgoing_handler(e):
                 break
             i=i+1
             await message.delete()
-    elif find=="log" :
-
     elif find == "shg":
         await e.edit("¯\_(ツ)_/¯")
     elif find == "hi":
@@ -84,8 +83,8 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if (await e.get_reply_message()).sender_id == 518221376):
-            await e.edit("`I am not supposed to ban my master :/`")
+        if await e.get_reply_message()).sender_id in SUDO_USERS:
+            await e.edit("`I am not supposed to ban a sudo user!`")
             return
         await e.edit("`Thanos snaps!`")
         time.sleep(5)
@@ -103,6 +102,9 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
+        if await e.get_reply_message()).sender_id in SUDO_USERS:
+            await e.edit("`I am not supposed to mute a sudo user!`")
+            return
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
