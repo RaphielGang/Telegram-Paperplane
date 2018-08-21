@@ -67,7 +67,7 @@ async def common_outgoing_handler(e):
         await e.edit("¯\_(ツ)_/¯")
     elif find == "hi":
         await e.edit("Hoi!😄")
-    elif find == "/get userbotfile"
+    elif find == "/get userbotfile":
         file=open(sys.argv[0], 'r')
         await bot.send_file(e.chat_id, sys.argv[0], reply_to=e.id, caption='`Here\'s me in a file`')
         file.close()
