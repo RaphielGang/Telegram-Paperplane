@@ -55,7 +55,7 @@ bot.start()
 @bot.on(events.MessageEdited(outgoing=True))
 async def common_outgoing_handler(e):
     find = e.text
-    find = str(message[1:])
+    find = str(find[1:])
     if find=="delmsg" :
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -447,7 +447,7 @@ async def spammer(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
-        message=message = e.text
+        message = e.text
         counter=int(message[10:])
         await e.reply('`Goodbye (*Windows XP showdown sound*....`')
         time.sleep(2)
@@ -619,7 +619,7 @@ async def ud(e):
 async def tts(e):
     textx=await e.get_reply_message()
     replye = e.text
-    streng=str(replye.message[5:6])
+    streng=str(replye[5:6])
     if textx:
          replye = await e.get_reply_message()
          replye = str(replye.message)
