@@ -29,6 +29,7 @@ import platform
 from googletrans import Translator
 from random import randint
 from zalgo_text import zalgo
+import sqlite3
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
 api_hash=os.environ['API_HASH']
@@ -46,16 +47,25 @@ SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
 COUNT_MSG=0
-SUDO_USERS=[518221376,538543304,423070089]
+SUDO_USERS=[518221376,538543304,423070089,234480941]
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 bot = TelegramClient('userbot', api_id, api_hash).start()
 bot.start()
+############Below Line will be commented, I used google cloud storage bucket to  store the db, uncommenting it, will result in pulling of my db
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/filters.db'], stdout=subprocess.PIPE)
+if not os.path.exists('filters.db'):
+     db= sqlite3.connect("filters.db")
+     cursor=db.cursor()
+     cursor.execute('''CREATE TABLE FILTER(chat_id INTEGER,filter TEXT, reply TEXT)''')
+     cursor.execute('''CREATE TABLE NOTES(chat_id INTEGER,note TEXT, reply TEXT)''')
+     db.commit()
+     db.close()
 @bot.on(events.NewMessage(outgoing=True,pattern='.*'))
 @bot.on(events.MessageEdited(outgoing=True))
 async def common_outgoing_handler(e):
     find = e.text
-    find = str(message[1:])
+    find = str(find[1:])
     if find=="delmsg" :
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -65,10 +75,14 @@ async def common_outgoing_handler(e):
             await message.delete()
     elif find == "shg":
         await e.edit("¯\_(ツ)_/¯")
-    elif find == "hi":
-        await e.edit("Hoi!😄")
-    elif find == "/get userbotfile":
+    elif find == "get userbotfile":
+        file=open(sys.argv[0], 'r')
         await bot.send_file(e.chat_id, sys.argv[0], reply_to=e.id, caption='`Here\'s me in a file`')
+        file.close()
+    elif find == "reportbug":
+        await e.edit("Report bugs here: @userbot_support")
+    elif find == "help":
+        await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/blob/master/README.md')
     elif find == "thanos":
         rights = ChannelBannedRights(
                              until_date=None,
@@ -136,6 +150,15 @@ async def common_outgoing_handler(e):
         global SPAM
         SPAM=False
         await e.edit("Spam Tracking turned off!")
+    elif find == "rmfilters":
+        await e.edit("```Will be kicking away all Marie filters.```")
+        time.sleep(3)
+        r = await e.get_reply_message()
+        filters = r.text.split('-')[1:]
+        for filter in filters:
+            await e.reply('/stop %s' % (filter.strip()))
+            await asyncio.sleep(0.3)
+        await e.respond("```Successfully cleaned Marie filters yaay!\n Gimme cookies @baalajimaestro```")
     elif find=="rekt":
         await e.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
     elif find=="speed":
@@ -170,18 +193,6 @@ async def common_outgoing_handler(e):
         reply_text=reactor[index]
         await e.edit(reply_text)
         await bot.send_message(-1001200493978,"You ran away from a cancerous chat")
-    elif find==":/":
-        uio=['/','\\']
-        for i in range (1,15):
-            time.sleep(0.3)
-            await e.edit(':'+uio[i%2])
-    elif find=="-_-":
-        await e.delete()
-        t = '-_-'
-        r = await e.reply(t)
-        for j in range(10):
-            t = t[:-1] + '_-'
-            await r.edit(t)
     elif find=="react":
         reactor=['ʘ‿ʘ','ヾ(-_- )ゞ','(っ˘ڡ˘ς)','(´ж｀ς)','( ಠ ʖ̯ ಠ)','(° ͜ʖ͡°)╭∩╮','(ᵟຶ︵ ᵟຶ)','(งツ)ว','ʚ(•｀','(っ▀¯▀)つ','(◠﹏◠)','( ͡ಠ ʖ̯ ͡ಠ)','( ఠ ͟ʖ ఠ)','(∩｀-´)⊃━☆ﾟ.*･｡ﾟ','(⊃｡•́‿•̀｡)⊃','(._.)','{•̃_•̃}','(ᵔᴥᵔ)','♨_♨','⥀.⥀','ح˚௰˚づ ','(҂◡_◡)','ƪ(ړײ)‎ƪ​​','(っ•́｡•́)♪♬','◖ᵔᴥᵔ◗ ♪ ♫ ','(☞ﾟヮﾟ)☞','[¬º-°]¬','(Ծ‸ Ծ)','(•̀ᴗ•́)و ̑̑','ヾ(´〇`)ﾉ♪♪♪','(ง\'̀-\'́)ง','ლ(•́•́ლ)','ʕ •́؈•̀ ₎','♪♪ ヽ(ˇ∀ˇ )ゞ','щ（ﾟДﾟщ）','( ˇ෴ˇ )','눈_눈','(๑•́ ₃ •̀๑) ','( ˘ ³˘)♥ ','ԅ(≖‿≖ԅ)','♥‿♥','◔_◔','⁽⁽ଘ( ˊᵕˋ )ଓ⁾⁾','乁( ◔ ౪◔)「      ┑(￣Д ￣)┍','( ఠൠఠ )ﾉ','٩(๏_๏)۶','┌(ㆆ㉨ㆆ)ʃ','ఠ_ఠ','(づ｡◕‿‿◕｡)づ','(ノಠ ∩ಠ)ノ彡( \\o°o)\\','“ヽ(´▽｀)ノ”','༼ ༎ຶ ෴ ༎ຶ༽','｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡','(づ￣ ³￣)づ','(⊙.☉)7','ᕕ( ᐛ )ᕗ','t(-_-t)','(ಥ⌣ಥ)','ヽ༼ ಠ益ಠ ༽ﾉ','༼∵༽ ༼⍨༽ ༼⍢༽ ༼⍤༽','ミ●﹏☉ミ','(⊙_◎)','¿ⓧ_ⓧﮌ','ಠ_ಠ','(´･_･`)','ᕦ(ò_óˇ)ᕤ','⊙﹏⊙','(╯°□°）╯︵ ┻━┻','¯\_(⊙︿⊙)_/¯','٩◔̯◔۶','°‿‿°','ᕙ(⇀‸↼‶)ᕗ','⊂(◉‿◉)つ','V•ᴥ•V','q(❂‿❂)p','ಥ_ಥ','ฅ^•ﻌ•^ฅ','ಥ﹏ಥ','（ ^_^）o自自o（^_^ ）','ಠ‿ಠ','ヽ(´▽`)/','ᵒᴥᵒ#','( ͡° ͜ʖ ͡°)','┬─┬﻿ ノ( ゜-゜ノ)','ヽ(´ー｀)ノ','☜(⌒▽⌒)☞','ε=ε=ε=┌(;*´Д`)ﾉ','(╬ ಠ益ಠ)','┬─┬⃰͡ (ᵔᵕᵔ͜ )','┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻','¯\_(ツ)_/¯','ʕᵔᴥᵔʔ','(`･ω･´)','ʕ•ᴥ•ʔ','ლ(｀ー´ლ)','ʕʘ̅͜ʘ̅ʔ','（　ﾟДﾟ）','¯\(°_o)/¯','(｡◕‿◕｡)']
         index=randint(0,len(reactor))
@@ -243,7 +254,7 @@ async def terminal_runner(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.purgeme'))
 async def purgeme(e):
     message=e.text
-    count = int(.message[9:])
+    count = int(message[9:])
     i=1
     async for message in bot.iter_messages(e.chat_id,from_user='me'):
         if i>count+1:
@@ -315,6 +326,11 @@ async def killmelol(e):
     name = await bot.get_entity(e.from_id)
     name0 = str(name.first_name)
     await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+@bot.on(events.NewMessage(outgoing=True,pattern="hi"))
+@bot.on(events.MessageEdited(outgoing=True,pattern="hi"))
+async def hoi(e):
+    if e.text=="hi":
+     await e.edit("Hoi!😄")
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def mention_afk(e):
@@ -447,15 +463,11 @@ async def spammer(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
-        message=message = e.text
+        message = e.text
         counter=int(message[10:])
         await e.reply('`Goodbye (*Windows XP showdown sound*....`')
         time.sleep(2)
         time.sleep(counter)
-@bot.on(events.NewMessage(outgoing=True, pattern='.help'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.help'))
-async def help(e):
-    await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/blob/master/README.md')
 @bot.on(events.NewMessage(outgoing=True, pattern='.bigspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.bigspam'))
 async def bigspam(e):
@@ -603,6 +615,27 @@ async def selfdestruct(e):
         i=i+1
         await message.delete()
         await bot.send_message(-1001200493978,"sd query done successfully")
+@bot.on(events.NewMessage(outgoing=True, pattern='.filter'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.filter'))
+async def add_filter(e):
+     message=e.text
+     kek=message.split()
+     db=sqlite3.connect("filters.db")
+     cursor=db.cursor()
+     cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
+     await e.edit("Added Filter Successfully")
+     db.close()
+@bot.on(events.NewMessage(incoming=True))
+async def incom_filter(e):
+    db=sqlite3.connect("filters.db")
+    cursor=db.cursor()
+    cursor.execute('''SELECT * FROM FILTER''')
+    all_rows = cursor.fetchall()
+    for row in all_rows:
+        if int(row[0]) == int(e.chat_id):
+            if e.text == str(row[1]):
+                e.reply(row[2])
+    db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.ud (.*)'))
 async def ud(e):
@@ -619,22 +652,58 @@ async def ud(e):
 async def tts(e):
     textx=await e.get_reply_message()
     replye = e.text
-    streng=str(replye.message[5:6])
     if textx:
          replye = await e.get_reply_message()
          replye = str(replye.message)
     else:
-        replye = str(replye[7:])
+        replye = str(replye[5:])
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    lang=streng
-    tts = gTTS(replye, lang)
+    tts = gTTS(replye, "en-in")
     tts.save("k.mp3")
     with open("k.mp3", "rb") as f:
         linelist = list(f)
         linecount = len(linelist)
-    if linecount == 1:
-        lang = streng                          #tts on personal chats is broken
-        tts = gTTS(replyes, lang)
+    if linecount == 1:                          #tts on personal chats is broken
+        tts = gTTS(replyes,"en-in")
+        tts.save("k.mp3")
+    with open("k.mp3", "r") as speech:
+        await bot.send_file(e.chat_id, 'k.mp3', voice_note=True)
+        os.remove("k.mp3")
+        await e.delete()
+@bot.on(events.NewMessage(outgoing=True, pattern=':/'))
+@bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
+async def kek(e):
+    uio=['/','\\']
+    for i in range (1,15):
+        time.sleep(0.3)
+        await e.edit(':'+uio[i%2])
+@bot.on(events.NewMessage(outgoing=True, pattern='-_-'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='-_-'))
+async def lol(e):
+    await e.delete()
+    t = '-_-'
+    r = await e.reply(t)
+    for j in range(10):
+        t = t[:-1] + '_-'
+        await r.edit(t)
+@bot.on(events.NewMessage(outgoing=True, pattern='.loltts'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.loltts'))
+async def meme_tts(e):
+    textx=await e.get_reply_message()
+    replye = e.text
+    if textx:
+         replye = await e.get_reply_message()
+         replye = str(replye.message)
+    else:
+        replye = str(replye[8:])
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    tts = gTTS(replye, "ja")
+    tts.save("k.mp3")
+    with open("k.mp3", "rb") as f:
+        linelist = list(f)
+        linecount = len(linelist)
+    if linecount == 1:                          #tts on personal chats is broken
+        tts = gTTS(replyes,"ja")
         tts.save("k.mp3")
     with open("k.mp3", "r") as speech:
         await bot.send_file(e.chat_id, 'k.mp3', voice_note=True)
