@@ -1,8 +1,15 @@
 # Telegram-UserBot 
-[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/master/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
 Just coz I'm too lazy, I program it, to make stuff easier.
 This is a userbot, which is equivalent to a telegram client, and it can run on the cloud too.
+
+# Contact 
+Join the [news channel](https://t.me/maestro_userbot_channel) if you just want to stay in the loop about new features or
+announcements.
+
+If you found any bugs or you wanna suggest some features then contact [My support group](https://t.me/userbot_support).
+
+Alternatively, [find me on telegram](https://t.me/baalajimaestro)!.
 
 ### Before you start:
 Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
@@ -10,12 +17,10 @@ Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
 
 #### Running on heroku:
 ```diff
--If you clone/fork this repo please make sure you delete session_name.session and regenerate it by running app.py on your local pc before deploying it on heroku.
-
-- Also, it is not possible to run two instances of the same session. Telegram will ban the session, and it will require regenration.
-
+-If you clone/fork this repo please make sure you generate a session file  by running app.py on your local pc before deploying it on heroku.
 
 - If you get errors like -->app[worker.1]: telethon.errors.rpcerrorlist.AuthKeyDuplicatedError: An auth key with the same ID was already generated, 
+
 - It means your session was banned and needs to be regenerated.
 ```
 
