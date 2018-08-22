@@ -318,7 +318,7 @@ async def killmelol(e):
 @bot.on(events.NewMessage(outgoing=True,pattern="hi"))
 @bot.on(events.MessageEdited(outgoing=True,pattern="hi"))
 async def hoi(e):
-    if e.text=="hi" or e.text=="Hi" or e.text=="HI":
+    if e.text=="hi":
      await e.edit("Hoi!😄")
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
