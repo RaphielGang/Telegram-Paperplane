@@ -651,7 +651,7 @@ async def meme_tts(e):
          replye = await e.get_reply_message()
          replye = str(replye.message)
     else:
-        replye = str(replye[5:])
+        replye = str(replye[8:])
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     tts = gTTS(replye, "ja")
     tts.save("k.mp3")
