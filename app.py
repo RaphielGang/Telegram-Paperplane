@@ -65,8 +65,6 @@ async def common_outgoing_handler(e):
             await message.delete()
     elif find == "shg":
         await e.edit("¯\_(ツ)_/¯")
-    elif find == "hi":
-        await e.edit("Hoi!😄")
     elif find == "get userbotfile":
         file=open(sys.argv[0], 'r')
         await bot.send_file(e.chat_id, sys.argv[0], reply_to=e.id, caption='`Here\'s me in a file`')
@@ -317,6 +315,11 @@ async def killmelol(e):
     name = await bot.get_entity(e.from_id)
     name0 = str(name.first_name)
     await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+@bot.on(events.NewMessage(outgoing=True,pattern="hi"))
+@bot.on(events.MessageEdited(outgoing=True,pattern="hi"))
+async def hoi(e):
+    if(e.text=="hi"||e.text=="Hi"||e.text=="HI"):
+     await e.edit("Hoi!😄")
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def mention_afk(e):
