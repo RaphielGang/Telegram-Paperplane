@@ -624,22 +624,42 @@ async def ud(e):
 async def tts(e):
     textx=await e.get_reply_message()
     replye = e.text
-    streng=str(replye[5:6])
     if textx:
          replye = await e.get_reply_message()
          replye = str(replye.message)
     else:
-        replye = str(replye[7:])
+        replye = str(replye[5:])
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    lang=streng
-    tts = gTTS(replye, lang)
+    tts = gTTS(replye, "en-in")
     tts.save("k.mp3")
     with open("k.mp3", "rb") as f:
         linelist = list(f)
         linecount = len(linelist)
-    if linecount == 1:
-        lang = streng                          #tts on personal chats is broken
-        tts = gTTS(replyes, lang)
+    if linecount == 1:                          #tts on personal chats is broken
+        tts = gTTS(replyes,"en-in")
+        tts.save("k.mp3")
+    with open("k.mp3", "r") as speech:
+        await bot.send_file(e.chat_id, 'k.mp3', voice_note=True)
+        os.remove("k.mp3")
+        await e.delete()
+@bot.on(events.NewMessage(outgoing=True, pattern='.loltts'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.loltts'))
+async def tts(e):
+    textx=await e.get_reply_message()
+    replye = e.text
+    if textx:
+         replye = await e.get_reply_message()
+         replye = str(replye.message)
+    else:
+        replye = str(replye[5:])
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    tts = gTTS(replye, "ja")
+    tts.save("k.mp3")
+    with open("k.mp3", "rb") as f:
+        linelist = list(f)
+        linecount = len(linelist)
+    if linecount == 1:                          #tts on personal chats is broken
+        tts = gTTS(replyes,"ja")
         tts.save("k.mp3")
     with open("k.mp3", "r") as speech:
         await bot.send_file(e.chat_id, 'k.mp3', voice_note=True)
