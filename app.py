@@ -644,7 +644,7 @@ async def tts(e):
         await e.delete()
 @bot.on(events.NewMessage(outgoing=True, pattern='.loltts'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.loltts'))
-async def tts(e):
+async def meme_tts(e):
     textx=await e.get_reply_message()
     replye = e.text
     if textx:
