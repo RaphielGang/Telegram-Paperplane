@@ -299,17 +299,17 @@ async def remove_filter(e):
      db.commit()
      await e.edit("```Removed Filter Successfully```")
      db.close()
-@bot.on(events.NewMessage(incoming=True))
-async def incom_filter(e):
-    db=sqlite3.connect("filters.db")
-    cursor=db.cursor()
-    cursor.execute('''SELECT * FROM FILTER''')
-    all_rows = cursor.fetchall()
-    for row in all_rows:
-        if int(row[0]) == int(e.chat_id):
-            if str(row[1]) in e.text:
-                await e.reply(row[2])
-    db.close()
+@bot.on(events.NewMessage(outgoing=True, pattern='.nosave'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.nosave'))
+async def remove_filter(e):
+     message=e.text
+     kek=message.split()
+     db=sqlite3.connect("filters.db")
+     cursor=db.cursor()
+     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND filter=?)''', (int(e.chat_id),kek[1])
+     db.commit()
+     await e.edit("```Removed Notes Successfully```")
+     db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.purgeme'))
 async def purgeme(e):
