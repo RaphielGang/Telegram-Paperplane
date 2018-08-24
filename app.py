@@ -618,9 +618,11 @@ async def selfdestruct(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.filter'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.filter'))
 async def add_filter(e):
+     message=e.text
+     kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),filter,reply))
+     cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
      await e.edit("Added Filter Successfully")
      db.close()
 @bot.on(events.NewMessage(incoming=True))
