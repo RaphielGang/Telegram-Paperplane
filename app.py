@@ -151,14 +151,14 @@ async def common_outgoing_handler(e):
         SPAM=False
         await e.edit("Spam Tracking turned off!")
     elif find == "rmfilters":
-        e.edit("```Will be kicking away all Marie filters.```")
+        await e.edit("```Will be kicking away all Marie filters.```")
         time.sleep(3)
         r = await e.get_reply_message()
         filters = r.text.split('-')[1:]
         for filter in filters:
             await e.reply('/stop %s' % (filter.strip()))
             await asyncio.sleep(0.3)
-        e.respond("```Successfully cleaned Marie filters yaay!\n Gimme cookies @baalajimaestro```")
+        await e.respond("```Successfully cleaned Marie filters yaay!\n Gimme cookies @baalajimaestro```")
     elif find=="rekt":
         await e.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
     elif find=="speed":
