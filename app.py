@@ -33,7 +33,6 @@ import sqlite3
 logging.basicConfig(level=logging.DEBUG)
 api_id=os.environ['API_KEY']
 api_hash=os.environ['API_HASH']
-db=client['nevereverland']
 global SPAM
 SPAM=False
 global ISAFK
