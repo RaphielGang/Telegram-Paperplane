@@ -8,4 +8,4 @@ googletrans==2.3.0
 speedtest-cli==2.0.2
 zalgo_text==0.6
 hastebin.py==0.2
-pybase64=0.4.0
+pybase64==0.4.0
