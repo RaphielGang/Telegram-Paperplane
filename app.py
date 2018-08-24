@@ -52,8 +52,6 @@ WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 bot = TelegramClient('userbot', api_id, api_hash).start()
 bot.start()
-############Below Line will be commented, I used google cloud storage bucket to  store the db, uncommenting it, will result in pulling of my db
-#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/filters.db'], stdout=subprocess.PIPE)
 if not os.path.exists('filters.db'):
      db= sqlite3.connect("filters.db")
      cursor=db.cursor()
@@ -158,7 +156,7 @@ async def common_outgoing_handler(e):
         for filter in filters:
             await e.reply('/stop %s' % (filter.strip()))
             await asyncio.sleep(0.3)
-        await e.respond("```Successfully cleaned Marie filters yaay!\n Gimme cookies @baalajimaestro```")
+        await e.respond("```Successfully cleaned Marie filters yaay!\n Gimme cookies x@baalajimaestro```")
     elif find=="rekt":
         await e.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
     elif find=="speed":
@@ -229,6 +227,46 @@ async def common_outgoing_handler(e):
         end = datetime.now()
         ms = (end - start).microseconds/1000
         await e.edit('Pong!\n%sms' % (ms))
+@bot.on(events.NewMessage(pattern='.hash (.*)'))
+@bot.on(events.MessageEdited(pattern='.hash (.*)'))
+async def hash(e):
+	hashtxt_ = e.pattern_match.group(1)
+	hashtxt=open('hashdis.txt','w+')
+	hashtxt.write(hashtxt_)
+	hashtxt.close()
+	md5=subprocess.run(['md5', 'hashdis.txt'], stdout=subprocess.PIPE)
+	md5=md5.stdout.decode()
+	sha1=subprocess.run(['sha1', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha1=sha1.stdout.decode()
+	sha256=subprocess.run(['sha256', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha256=sha256.stdout.decode()
+	sha512=subprocess.run(['sha512', 'hashdis.txt'], stdout=subprocess.PIPE)
+	subprocess.run(['rm', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha512=sha512.stdout.decode()
+	ans='Text: `' + hashtxt_ + '`\nMD5: `' + md5 + '`SHA1: `' + sha1 + '`SHA256: `' + sha256 + '`SHA512: `' + sha512[:-1] + '`'
+	if len(ans) > 4096:
+		f=open('hashes.txt', 'w+')
+		f.write(ans)
+		f.close()
+		await bot.send_file(e.chat_id, 'hashes.txt', reply_to=e.id, caption="`It's too big, in a text file and hastebin instead. `" + hastebin.post(ans[1:-1]))
+		subprocess.run(['rm', 'hashes.txt'], stdout=subprocess.PIPE)
+	else:
+		await e.reply(ans)
+@bot.on(events.NewMessage(pattern='.base64 (en|de)code (.*)'))
+@bot.on(events.MessageEdited(pattern='.base64 (en|de)code (.*)'))
+async def endecrypt(e):
+	if e.pattern_match.group(1) == 'en':
+		lething=str(pybase64.b64encode(bytes(e.pattern_match.group(2), 'utf-8')))[2:]
+		await e.reply('Encoded: `' + lething[:-1] + '`')
+	else:
+		lething=str(pybase64.b64decode(bytes(e.pattern_match.group(2), 'utf-8'), validate=True))[2:]
+		await e.reply('Decoded: `' + lething[:-1] + '`')
+@bot.on(events.NewMessage(outgoing=True, pattern='.random'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.random'))
+async def randomise(e):
+    r=(e.text).split()
+    index=randint(1,len(r)-1)
+    await e.edit("**Query: **\n`"+e.text+'`\n**Output: **\n`'+r[index]+'`')
 @bot.on(events.NewMessage(outgoing=True, pattern='.log'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.log'))
 async def log(e):
@@ -340,45 +378,59 @@ async def mention_afk(e):
     global AFKREASON
     if e.message.mentioned:
         if ISAFK:
-            if (await e.get_sender()):
-              if (await e.get_sender()).username not in USERS:
-                  USERS.update({(await e.get_sender()).username:1})
-                  COUNT_MSG=COUNT_MSG+1
-                  await e.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
-                  time.sleep(10)
-                  i=1
-                  async for message in bot.iter_messages(e.chat_id,from_user='me'):
-                    if i>1:
-                        break
-                    i=i+1
-                    await message.delete()
-              elif (await e.get_sender()).username in USERS:
-                     USERS[(await e.get_sender()).username]=USERS[(await e.get_sender()).username]+1
-                     COUNT_MSG=COUNT_MSG+1
-                     textx=await e.get_reply_message()
-                     if textx:
-                         message = textx
-                         text = str(message.message)
-                         await e.reply("Bot is off. Better version of it, should be up soon!")
-            else:
-                  USERS.update({e.chat_id:1})
-                  COUNT_MSG=COUNT_MSG+1
-                  await e.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
-                  time.sleep(10)
+            if e.sender:
+               if e.sender.username not in USERS:
+                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉.**This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
                   i=1
                   async for message in bot.iter_messages(e.chat_id,from_user='me'):
                         if i>1:
                            break
                         i=i+1
                         await message.delete()
+                  USERS.update({e.sender.username:1})
+                  COUNT_MSG=COUNT_MSG+1
+            elif e.sender.username in USERS:
+                 if USERS[e.sender.username] % 5 == 0:
+                      await e.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                      time.sleep(15)
+                      i=1
+                      async for message in bot.iter_messages(e.chat_id,from_user='me'):
+                               if i>1:
+                                   break
+                               i=i+1
+                               await message.delete()
+                      USERS[e.sender.username]=USERS[e.sender.username]+1
+                      COUNT_MSG=COUNT_MSG+1
+                 else:
+                   USERS[e.sender.username]=USERS[e.senser.username]+1
+                   COUNT_MSG=COUNT_MSG+1
+            else:
+                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
+                  i=1
+                  async for message in bot.iter_messages(e.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
+                  USERS.update({e.chat_id:1})
+                  COUNT_MSG=COUNT_MSG+1
                   if e.chat_id in USERS:
+                   if USERS[e.chat_id] % 5 == 0:
+                     await e.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                     time.sleep(15)
+                     i=1
+                     async for message in bot.iter_messages(e.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
                      USERS[e.chat_id]=USERS[e.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
-                     textx=await e.get_reply_message()
-                     if textx:
-                         message = textx
-                         text = str(message.message)
-                         await e.reply("Lmao bot dead")
+                   else:
+                    USERS[e.chat_id]=USERS[e.chat_id]+1
+                    COUNT_MSG=COUNT_MSG+1
 @bot.on(events.NewMessage(outgoing=True,pattern=r'.google (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'.google (.*)'))
 async def gsearch(e):
@@ -515,45 +567,59 @@ async def afk_on_pm(e):
     global AFKREASON
     if e.is_private:
         if ISAFK:
-            if (await e.get_sender()):
-              if (await e.get_sender()).username not in USERS:
-                  USERS.update({(await e.get_sender()).username:1})
-                  COUNT_MSG=COUNT_MSG+1
-                  await e.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
-                  time.sleep(10)
-                  i=1
-                  async for message in bot.iter_messages(e.chat_id,from_user='me'):
-                    if i>1:
-                        break
-                    i=i+1
-                    await message.delete()
-              elif (await e.get_sender()).username in USERS:
-                     USERS[(await e.get_sender()).username]=USERS[(await e.get_sender()).username]+1
-                     COUNT_MSG=COUNT_MSG+1
-                     textx=await e.get_reply_message()
-                     if textx:
-                         message = textx
-                         text = str(message.message)
-                         await e.reply("Bot is down. A better version of it, must be up now!")
-            else:
-                  USERS.update({e.chat_id:1})
-                  COUNT_MSG=COUNT_MSG+1
-                  await e.reply("AFK AF `"+AFKREASON+"`Spam me if you want me to notice you")
-                  time.sleep(10)
+            if e.sender:
+              if e.sender.username not in USERS:
+                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
                   i=1
                   async for message in bot.iter_messages(e.chat_id,from_user='me'):
                         if i>1:
                            break
                         i=i+1
                         await message.delete()
+                  USERS.update({e.sender.username:1})
+                  COUNT_MSG=COUNT_MSG+1
+            elif e.sender.username in USERS:
+                   if USERS[e.sender.username] % 5 == 0:
+                     await e.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                     time.sleep(15)
+                     i=1
+                     async for message in bot.iter_messages(e.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
+                     USERS[e.sender.username]=USERS[e.sender.username]+1
+                     COUNT_MSG=COUNT_MSG+1
+                   else:
+                    USERS[e.sender.username]=USERS[e.sender.username]+1
+                    COUNT_MSG=COUNT_MSG+1
+            else:
+                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉. **This message shall be self destructed in 15 seconds**")
+                  time.sleep(15)
+                  i=1
+                  async for message in bot.iter_messages(e.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
+                  USERS.update({e.chat_id:1})
+                  COUNT_MSG=COUNT_MSG+1
                   if e.chat_id in USERS:
+                   if USERS[e.chat_id] % 5 == 0:
+                     await e.reply("Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He mentioned me he was busy with ```"+AFKREASON+"```**This message shall be self destructed in 15 seconds**")
+                     time.sleep(15)
+                     i=1
+                     async for message in bot.iter_messages(e.chat_id,from_user='me'):
+                        if i>1:
+                           break
+                        i=i+1
+                        await message.delete()
                      USERS[e.chat_id]=USERS[e.chat_id]+1
                      COUNT_MSG=COUNT_MSG+1
-                     textx=await e.get_reply_message()
-                     if textx:
-                         message = textx
-                         text = str(message.message)
-                         await e.reply("Dead")
+                   else:
+                    USERS[e.chat_id]=USERS[e.chat_id]+1
+                    COUNT_MSG=COUNT_MSG+1
 @bot.on(events.NewMessage(outgoing=True, pattern='.cp'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.cp'))
 async def copypasta(e):
@@ -623,7 +689,8 @@ async def add_filter(e):
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
      cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
-     await e.edit("Added Filter Successfully")
+     db.commit()
+     await e.edit("```Added Filter Successfully```")
      db.close()
 @bot.on(events.NewMessage(incoming=True))
 async def incom_filter(e):
@@ -633,8 +700,30 @@ async def incom_filter(e):
     all_rows = cursor.fetchall()
     for row in all_rows:
         if int(row[0]) == int(e.chat_id):
-            if e.text == str(row[1]):
-                e.reply(row[2])
+            if str(row[1]) in e.text:
+                await e.reply(row[2])
+    db.close()
+@bot.on(events.NewMessage(outgoing=True, pattern='.save'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.save'))
+async def add_filter(e):
+     message=e.text
+     kek=message.split()
+     db=sqlite3.connect("filters.db")
+     cursor=db.cursor()
+     cursor.execute('''INSERT INTO NOTES VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
+     db.commit()
+     await e.edit("```Saved Note Successfully```")
+     db.close()
+@bot.on(events.NewMessage(incoming=True,pattern='#*'))
+async def incom_note(e):
+    db=sqlite3.connect("filters.db")
+    cursor=db.cursor()
+    cursor.execute('''SELECT * FROM NOTES''')
+    all_rows = cursor.fetchall()
+    for row in all_rows:
+        if int(row[0]) == int(e.chat_id):
+            if str(e.text[1:]) == str(row[1]):
+                await e.reply(row[2])
     db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.ud (.*)'))
