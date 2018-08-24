@@ -470,10 +470,6 @@ async def killdabot(e):
         await e.reply('`Goodbye (*Windows XP showdown sound*....`')
         time.sleep(2)
         time.sleep(counter)
-@bot.on(events.NewMessage(outgoing=True, pattern='.help'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.help'))
-async def help(e):
-
 @bot.on(events.NewMessage(outgoing=True, pattern='.bigspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.bigspam'))
 async def bigspam(e):
