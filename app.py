@@ -120,7 +120,7 @@ async def common_outgoing_handler(e):
         time.sleep(5)
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
-        await bot.send_file(e.chat_id,"https://pasteboard.co/HAFSGq0.gif/download")
+        await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
     elif find == "editme":
         message=e.text
         string = str(message[8:])
