@@ -60,9 +60,9 @@ if not os.path.exists('filters.db'):
      db= sqlite3.connect("filters.db")
      cursor=db.cursor()
      cursor.execute('''CREATE TABLE FILTER(chat_id INTEGER,filter TEXT, reply TEXT)''')
-      cursor.execute('''CREATE TABLE NOTES(chat_id INTEGER,note TEXT, reply TEXT)''')
-      db.commit()
-      db.close()
+     cursor.execute('''CREATE TABLE NOTES(chat_id INTEGER,note TEXT, reply TEXT)''')
+     db.commit()
+     db.close()
 @bot.on(events.NewMessage(outgoing=True,pattern='.*'))
 @bot.on(events.MessageEdited(outgoing=True))
 async def common_outgoing_handler(e):
