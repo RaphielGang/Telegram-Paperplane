@@ -26,6 +26,7 @@ from requests import get
 import wikipedia
 import inspect
 import platform
+import pybase64
 from googletrans import Translator
 from random import randint
 from zalgo_text import zalgo
@@ -236,13 +237,13 @@ async def hash(e):
 	hashtxt=open('hashdis.txt','w+')
 	hashtxt.write(hashtxt_)
 	hashtxt.close()
-	md5=subprocess.run(['md5', 'hashdis.txt'], stdout=subprocess.PIPE)
+	md5=subprocess.run(['md5sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	md5=md5.stdout.decode()
-	sha1=subprocess.run(['sha1', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha1=subprocess.run(['sha1sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	sha1=sha1.stdout.decode()
-	sha256=subprocess.run(['sha256', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha256=subprocess.run(['sha256sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	sha256=sha256.stdout.decode()
-	sha512=subprocess.run(['sha512', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha512=subprocess.run(['sha512sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	subprocess.run(['rm', 'hashdis.txt'], stdout=subprocess.PIPE)
 	sha512=sha512.stdout.decode()
 	ans='Text: `' + hashtxt_ + '`\nMD5: `' + md5 + '`SHA1: `' + sha1 + '`SHA256: `' + sha256 + '`SHA512: `' + sha512[:-1] + '`'
