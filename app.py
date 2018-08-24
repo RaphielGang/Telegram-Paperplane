@@ -230,8 +230,8 @@ async def common_outgoing_handler(e):
         end = datetime.now()
         ms = (end - start).microseconds/1000
         await e.edit('Pong!\n%sms' % (ms))
-@bot.on(events.NewMessage(pattern='.hash (.*)'))
-@bot.on(events.MessageEdited(pattern='.hash (.*)'))
+@bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
 	hashtxt_ = e.pattern_match.group(1)
 	hashtxt=open('hashdis.txt','w+')
@@ -255,8 +255,8 @@ async def hash(e):
 		subprocess.run(['rm', 'hashes.txt'], stdout=subprocess.PIPE)
 	else:
 		await e.reply(ans)
-@bot.on(events.NewMessage(pattern='.base64 (en|de)code (.*)'))
-@bot.on(events.MessageEdited(pattern='.base64 (en|de)code (.*)'))
+@bot.on(events.NewMessage(outgoing=True,pattern='.base64 (en|de) (.*)'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.base64 (en|de) (.*)'))
 async def endecrypt(e):
 	if e.pattern_match.group(1) == 'en':
 		lething=str(pybase64.b64encode(bytes(e.pattern_match.group(2), 'utf-8')))[2:]
