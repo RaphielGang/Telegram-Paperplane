@@ -55,7 +55,6 @@ bot.start()
 ############Below Line will be commented, I used google cloud storage bucket to  store the db, uncommenting it, will result in pulling of my db
 #subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/filters.db'], stdout=subprocess.PIPE)
 if not os.path.exists('filters.db'):
-     create_connection("filters.db")
      db= sqlite3.connect("filters.db")
      cursor=db.cursor()
      cursor.execute('''CREATE TABLE FILTER(chat_id INTEGER,filter TEXT, reply TEXT)''')
