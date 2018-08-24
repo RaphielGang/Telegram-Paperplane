@@ -672,12 +672,14 @@ async def tts(e):
         await e.delete()
 @bot.on(events.NewMessage(outgoing=True, pattern=':/'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
+async def kek(e):
     uio=['/','\\']
     for i in range (1,15):
         time.sleep(0.3)
         await e.edit(':'+uio[i%2])
 @bot.on(events.NewMessage(outgoing=True, pattern='-_-'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='-_-'))
+async def lol(e):
     await e.delete()
     t = '-_-'
     r = await e.reply(t)
