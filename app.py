@@ -26,6 +26,7 @@ from requests import get
 import wikipedia
 import inspect
 import platform
+import pybase64
 from googletrans import Translator
 from random import randint
 from zalgo_text import zalgo
@@ -229,20 +230,20 @@ async def common_outgoing_handler(e):
         end = datetime.now()
         ms = (end - start).microseconds/1000
         await e.edit('Pong!\n%sms' % (ms))
-@bot.on(events.NewMessage(pattern='.hash (.*)'))
-@bot.on(events.MessageEdited(pattern='.hash (.*)'))
+@bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
 	hashtxt_ = e.pattern_match.group(1)
 	hashtxt=open('hashdis.txt','w+')
 	hashtxt.write(hashtxt_)
 	hashtxt.close()
-	md5=subprocess.run(['md5', 'hashdis.txt'], stdout=subprocess.PIPE)
+	md5=subprocess.run(['md5sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	md5=md5.stdout.decode()
-	sha1=subprocess.run(['sha1', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha1=subprocess.run(['sha1sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	sha1=sha1.stdout.decode()
-	sha256=subprocess.run(['sha256', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha256=subprocess.run(['sha256sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	sha256=sha256.stdout.decode()
-	sha512=subprocess.run(['sha512', 'hashdis.txt'], stdout=subprocess.PIPE)
+	sha512=subprocess.run(['sha512sum', 'hashdis.txt'], stdout=subprocess.PIPE)
 	subprocess.run(['rm', 'hashdis.txt'], stdout=subprocess.PIPE)
 	sha512=sha512.stdout.decode()
 	ans='Text: `' + hashtxt_ + '`\nMD5: `' + md5 + '`SHA1: `' + sha1 + '`SHA256: `' + sha256 + '`SHA512: `' + sha512[:-1] + '`'
@@ -254,8 +255,8 @@ async def hash(e):
 		subprocess.run(['rm', 'hashes.txt'], stdout=subprocess.PIPE)
 	else:
 		await e.reply(ans)
-@bot.on(events.NewMessage(pattern='.base64 (en|de)code (.*)'))
-@bot.on(events.MessageEdited(pattern='.base64 (en|de)code (.*)'))
+@bot.on(events.NewMessage(outgoing=True,pattern='.base64 (en|de) (.*)'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.base64 (en|de) (.*)'))
 async def endecrypt(e):
 	if e.pattern_match.group(1) == 'en':
 		lething=str(pybase64.b64encode(bytes(e.pattern_match.group(2), 'utf-8')))[2:]
