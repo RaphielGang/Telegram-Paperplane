@@ -129,7 +129,7 @@ async def common_outgoing_handler(e):
                 await e.delete()
                 break
             i=i+1
-        await bot.send_message(-1001200493978,"Edit query was executed successfully")
+        await bot.send_message(-266765687,"Edit query was executed successfully")
     elif find == "wizard":
         rights = ChannelAdminRights(
         add_admins=True,
@@ -179,9 +179,9 @@ async def common_outgoing_handler(e):
                 break
             i=i+1
             await message.delete()
-        await bot.send_message(-1001200493978,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away")
+        await bot.send_message(-266765687,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away")
         for i in USERS:
-            await bot.send_message(-1001200493978,str(i)+" sent you "+"`"+str(USERS[i])+" messages`")
+            await bot.send_message(-266765687,str(i)+" sent you "+"`"+str(USERS[i])+" messages`")
         COUNT_MSG=0
         USERS={}
         AFKREASON="No reason"
@@ -190,7 +190,7 @@ async def common_outgoing_handler(e):
         index=randint(0,len(reactor)-1)
         reply_text=reactor[index]
         await e.edit(reply_text)
-        await bot.send_message(-1001200493978,"You ran away from a cancerous chat")
+        await bot.send_message(-266765687,"You ran away from a cancerous chat")
     elif find=="react":
         reactor=['ʘ‿ʘ','ヾ(-_- )ゞ','(っ˘ڡ˘ς)','(´ж｀ς)','( ಠ ʖ̯ ಠ)','(° ͜ʖ͡°)╭∩╮','(ᵟຶ︵ ᵟຶ)','(งツ)ว','ʚ(•｀','(っ▀¯▀)つ','(◠﹏◠)','( ͡ಠ ʖ̯ ͡ಠ)','( ఠ ͟ʖ ఠ)','(∩｀-´)⊃━☆ﾟ.*･｡ﾟ','(⊃｡•́‿•̀｡)⊃','(._.)','{•̃_•̃}','(ᵔᴥᵔ)','♨_♨','⥀.⥀','ح˚௰˚づ ','(҂◡_◡)','ƪ(ړײ)‎ƪ​​','(っ•́｡•́)♪♬','◖ᵔᴥᵔ◗ ♪ ♫ ','(☞ﾟヮﾟ)☞','[¬º-°]¬','(Ծ‸ Ծ)','(•̀ᴗ•́)و ̑̑','ヾ(´〇`)ﾉ♪♪♪','(ง\'̀-\'́)ง','ლ(•́•́ლ)','ʕ •́؈•̀ ₎','♪♪ ヽ(ˇ∀ˇ )ゞ','щ（ﾟДﾟщ）','( ˇ෴ˇ )','눈_눈','(๑•́ ₃ •̀๑) ','( ˘ ³˘)♥ ','ԅ(≖‿≖ԅ)','♥‿♥','◔_◔','⁽⁽ଘ( ˊᵕˋ )ଓ⁾⁾','乁( ◔ ౪◔)「      ┑(￣Д ￣)┍','( ఠൠఠ )ﾉ','٩(๏_๏)۶','┌(ㆆ㉨ㆆ)ʃ','ఠ_ఠ','(づ｡◕‿‿◕｡)づ','(ノಠ ∩ಠ)ノ彡( \\o°o)\\','“ヽ(´▽｀)ノ”','༼ ༎ຶ ෴ ༎ຶ༽','｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡','(づ￣ ³￣)づ','(⊙.☉)7','ᕕ( ᐛ )ᕗ','t(-_-t)','(ಥ⌣ಥ)','ヽ༼ ಠ益ಠ ༽ﾉ','༼∵༽ ༼⍨༽ ༼⍢༽ ༼⍤༽','ミ●﹏☉ミ','(⊙_◎)','¿ⓧ_ⓧﮌ','ಠ_ಠ','(´･_･`)','ᕦ(ò_óˇ)ᕤ','⊙﹏⊙','(╯°□°）╯︵ ┻━┻','¯\_(⊙︿⊙)_/¯','٩◔̯◔۶','°‿‿°','ᕙ(⇀‸↼‶)ᕗ','⊂(◉‿◉)つ','V•ᴥ•V','q(❂‿❂)p','ಥ_ಥ','ฅ^•ﻌ•^ฅ','ಥ﹏ಥ','（ ^_^）o自自o（^_^ ）','ಠ‿ಠ','ヽ(´▽`)/','ᵒᴥᵒ#','( ͡° ͜ʖ ͡°)','┬─┬﻿ ノ( ゜-゜ノ)','ヽ(´ー｀)ノ','☜(⌒▽⌒)☞','ε=ε=ε=┌(;*´Д`)ﾉ','(╬ ಠ益ಠ)','┬─┬⃰͡ (ᵔᵕᵔ͜ )','┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻','¯\_(ツ)_/¯','ʕᵔᴥᵔʔ','(`･ω･´)','ʕ•ᴥ•ʔ','ლ(｀ー´ლ)','ʕʘ̅͜ʘ̅ʔ','（　ﾟДﾟ）','¯\(°_o)/¯','(｡◕‿◕｡)']
         index=randint(0,len(reactor))
@@ -210,7 +210,7 @@ async def common_outgoing_handler(e):
         if msgs:
          await bot.delete_messages(chat, msgs)
         await bot.send_message(e.chat_id,"`Fast Purge Complete!\n`Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
-        await bot.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
+        await bot.send_message(-266765687,"Purge of "+str(count)+" messages done successfully.")
         time.sleep(2)
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -277,7 +277,7 @@ async def log(e):
     else:
         message = e.text
         message = str(message[4:])
-    await bot.send_message(-1001200493978,message)
+    await bot.send_message(-266765687,message)
     await e.edit("`Logged Successfully`")
 @bot.on(events.NewMessage(outgoing=True, pattern='.term'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.term'))
@@ -288,6 +288,28 @@ async def terminal_runner(e):
     result=subprocess.run(list_x[1:], stdout=subprocess.PIPE)
     result=str(result.stdout.decode())
     await e.edit("**Query: **\n`"+str(command[6:])+'`\n**Output: **\n`'+result+'`')
+@bot.on(events.NewMessage(outgoing=True, pattern='.nofilter'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.nofilter'))
+async def remove_filter(e):
+     message=e.text
+     kek=message.split()
+     db=sqlite3.connect("filters.db")
+     cursor=db.cursor()
+     cursor.execute('''DELETE FROM FILTER WHERE chat_id=? AND filter=?)''', (int(e.chat_id),kek[1])
+     db.commit()
+     await e.edit("```Removed Filter Successfully```")
+     db.close()
+@bot.on(events.NewMessage(incoming=True))
+async def incom_filter(e):
+    db=sqlite3.connect("filters.db")
+    cursor=db.cursor()
+    cursor.execute('''SELECT * FROM FILTER''')
+    all_rows = cursor.fetchall()
+    for row in all_rows:
+        if int(row[0]) == int(e.chat_id):
+            if str(row[1]) in e.text:
+                await e.reply(row[2])
+    db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.purgeme'))
 async def purgeme(e):
@@ -300,7 +322,7 @@ async def purgeme(e):
         i=i+1
         await message.delete()
     await bot.send_message(e.chat_id,"`Purge Complete!` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
-    await bot.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
+    await bot.send_message(-266765687,"Purge of "+str(count)+" messages done successfully.")
     time.sleep(2)
     i=1
     async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -438,14 +460,14 @@ async def gsearch(e):
         result_=subprocess.run(['gsearch', match], stdout=subprocess.PIPE)
         result=str(result_.stdout.decode())
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search Query:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
-        await bot.send_message(-1001200493978,"Google Search query "+match+" was executed successfully")
+        await bot.send_message(-266765687,"Google Search query "+match+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True,pattern=r'.wiki (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'.wiki (.*)'))
 async def wiki(e):
         match = e.pattern_match.group(1)
         result=wikipedia.summary(match)
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
-        await bot.send_message(-1001200493978,"Wiki query "+match+" was executed successfully")
+        await bot.send_message(-266765687,"Wiki query "+match+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
 async def set_afk(e):
@@ -489,7 +511,7 @@ async def evaluate(e):
       await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`'+str(evaluation)+'`')
     else:
       await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`No Result Returned/False`')
-    await bot.send_message(-1001200493978,"Eval query "+e.text[6:]+" was executed successfully")
+    await bot.send_message(-266765687,"Eval query "+e.text[6:]+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(e):
  code = e.raw_text[5:]
@@ -502,7 +524,7 @@ async def run(e):
   await e.edit("**Query: **\n`"+e.text[5:]+'`\n**Result: **\n`'+str(result)+'`')
  else:
   await e.edit("**Query: **\n`"+e.text[5:]+'`\n**Result: **\n`'+'No Result Returned/False'+'`')
- await bot.send_message(-1001200493978,"Exec query "+e.text[5:]+" was executed successfully")
+ await bot.send_message(-266765687,"Exec query "+e.text[5:]+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.spam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.spam'))
 async def spammer(e):
@@ -511,7 +533,7 @@ async def spammer(e):
     spam_message=str(e.text[8:])
     await asyncio.wait([e.respond(spam_message) for i in range(counter)])
     await e.delete()
-    await bot.send_message(-1001200493978,"Spam was executed successfully")
+    await bot.send_message(-266765687,"Spam was executed successfully")
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
@@ -529,7 +551,7 @@ async def bigspam(e):
     for i in range (1,counter):
        await e.respond(spam_message)
     await e.delete()
-    await bot.send_message(-1001200493978,"bigspam was executed successfully")
+    await bot.send_message(-266765687,"bigspam was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.trt'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.trt'))
 async def translateme(e):
@@ -545,7 +567,7 @@ async def translateme(e):
     reply_text="`Source: `\n"+text+"`\n\nTranslation: `\n"+reply_text
     await bot.send_message(e.chat_id,reply_text)
     await e.delete()
-    await bot.send_message(-1001200493978,"Translate query "+message+" was executed successfully")
+    await bot.send_message(-266765687,"Translate query "+message+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.str'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.str'))
 async def stretch(e):
@@ -680,7 +702,7 @@ async def selfdestruct(e):
             break
         i=i+1
         await message.delete()
-        await bot.send_message(-1001200493978,"sd query done successfully")
+        await bot.send_message(-266765687,"sd query done successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.filter'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.filter'))
 async def add_filter(e):
@@ -733,7 +755,7 @@ async def ud(e):
   mean = urbandict.define(str)
   if len(mean) >= 0:
     await e.edit('Text: **'+str+'**\n\nMeaning: **'+mean[0]['def']+'**\n\n'+'Example: \n__'+mean[0]['example']+'__')
-    await bot.send_message(-1001200493978,"ud query "+str+" executed successfully.")
+    await bot.send_message(-266765687,"ud query "+str+" executed successfully.")
   else:
     await e.edit("No result found for **"+str+"**")
 @bot.on(events.NewMessage(outgoing=True, pattern='.tts'))
