@@ -47,7 +47,7 @@ SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
 COUNT_MSG=0
-SUDO_USERS=[518221376,538543304,423070089,234480941]
+SUDO_USERS=[518221376,538543304,423070089,234480941,573925010,444970538]
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 bot = TelegramClient('userbot', api_id, api_hash).start()
@@ -99,7 +99,8 @@ async def common_outgoing_handler(e):
         await e.edit("`Thanos snaps!`")
         time.sleep(5)
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
-        await e.edit("When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.")
+        await e.delete()
+        await bot.send_file(e.chat_id,"https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif")
     elif find == "spider":
         rights = ChannelBannedRights(
                              until_date=None,
@@ -118,7 +119,8 @@ async def common_outgoing_handler(e):
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
-        await e.edit("I missed the part, that's my problem.")
+        await e.delete()
+        await bot.send_file(e.chat_id,"https://pasteboard.co/HAFSGq0.gif")
     elif find == "editme":
         message=e.text
         string = str(message[8:])
@@ -156,7 +158,7 @@ async def common_outgoing_handler(e):
         for filter in filters:
             await e.reply('/stop %s' % (filter.strip()))
             await asyncio.sleep(0.3)
-        await e.respond("```Successfully cleaned Marie filters yaay!\n Gimme cookies x@baalajimaestro```")
+        await e.respond("```Successfully cleaned Marie filters yaay!```\n Gimme cookies @baalajimaestro")
     elif find=="rekt":
         await e.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
     elif find=="speed":
@@ -295,7 +297,7 @@ async def remove_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''DELETE FROM FILTER WHERE chat_id=? AND filter=?)''', (int(e.chat_id),kek[1]))
+     cursor.execute('''DELETE FROM FILTER WHERE chat_id=? AND filter=?''', (int(e.chat_id),kek[1]))
      db.commit()
      await e.edit("```Removed Filter Successfully```")
      db.close()
@@ -306,7 +308,7 @@ async def remove_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND filter=?)''', (int(e.chat_id),kek[1]))
+     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND filter=?''', (int(e.chat_id),kek[1]))
      db.commit()
      await e.edit("```Removed Notes Successfully```")
      db.close()
