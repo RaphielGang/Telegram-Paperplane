@@ -473,8 +473,8 @@ async def set_afk(e):
             await e.edit("AFK AF!")
             if string!="":
                 AFKREASON=string
-@bot.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
+@bot.on(events.NewMessage(outgoing=True, pattern='.editme'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.editme'))
 async def editer(e):
    message=e.text
    string = str(message[8:])
