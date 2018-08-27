@@ -122,17 +122,6 @@ async def common_outgoing_handler(e):
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
-    elif find == "editme":
-        message=e.text
-        string = str(message[8:])
-        i=1
-        async for message in bot.iter_messages(e.chat_id,from_user='me'):
-            if i==2:
-                await message.edit(string)
-                await e.delete()
-                break
-            i=i+1
-        await bot.send_message(-1001200493978,"Edit query was executed successfully")
     elif find == "wizard":
         rights = ChannelAdminRights(
         add_admins=True,
@@ -167,6 +156,8 @@ async def common_outgoing_handler(e):
             k=subprocess.run(['speedtest-cli'], stdout=subprocess.PIPE)
             await l.edit('`' + k.stdout.decode()[:-1] + '`')
             await e.delete()
+    elif find == "alive":
+        await e.edit("`Master! I am alive😁`")
     elif find=="notafk":
         global ISAFK
         global COUNT_MSG
@@ -309,7 +300,7 @@ async def remove_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND filter=?''', (int(e.chat_id),kek[1]))
+     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND note=?''', (int(e.chat_id),kek[1]))
      db.commit()
      await e.edit("```Removed Notes Successfully```")
      db.close()
@@ -482,6 +473,19 @@ async def set_afk(e):
             await e.edit("AFK AF!")
             if string!="":
                 AFKREASON=string
+@bot.on(events.NewMessage(outgoing=True, pattern='.editme'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.editme'))
+async def editer(e):
+   message=e.text
+   string = str(message[8:])
+   i=1
+   async for message in bot.iter_messages(e.chat_id,from_user='me'):
+    if i==2:
+        await message.edit(string)
+        await e.delete()
+        break
+    i=i+1
+   await bot.send_message(-1001200493978,"Edit query was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.zal'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
 async def zal(e):
@@ -713,7 +717,10 @@ async def add_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
+     string=""
+     for i in range(2,len(kek)):
+         string=string+" "+str(kek[i])
+     cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],string))
      db.commit()
      await e.edit("```Added Filter Successfully```")
      db.close()
@@ -735,7 +742,10 @@ async def add_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''INSERT INTO NOTES VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
+     string=""
+     for i in range(2,len(kek)):
+              string=string+" "+str(kek[i])
+     cursor.execute('''INSERT INTO NOTES VALUES(?,?,?)''', (int(e.chat_id),kek[1],string))
      db.commit()
      await e.edit("```Saved Note Successfully```")
      db.close()
