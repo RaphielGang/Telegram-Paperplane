@@ -717,7 +717,10 @@ async def add_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
+     string=""
+     for i in range(1,len(kek)-1):
+         string=string+" "+str(kek[i])
+     cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],string))
      db.commit()
      await e.edit("```Added Filter Successfully```")
      db.close()
@@ -739,7 +742,10 @@ async def add_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''INSERT INTO NOTES VALUES(?,?,?)''', (int(e.chat_id),kek[1],kek[2]))
+     string=""
+     for i in range(1,len(kek)-1):
+              string=string+" "+str(kek[i])
+     cursor.execute('''INSERT INTO NOTES VALUES(?,?,?)''', (int(e.chat_id),kek[1],string))
      db.commit()
      await e.edit("```Saved Note Successfully```")
      db.close()
