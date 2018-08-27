@@ -300,7 +300,7 @@ async def remove_filter(e):
      kek=message.split()
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
-     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND filter=?''', (int(e.chat_id),kek[1]))
+     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND note=?''', (int(e.chat_id),kek[1]))
      db.commit()
      await e.edit("```Removed Notes Successfully```")
      db.close()
