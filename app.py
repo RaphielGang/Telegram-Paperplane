@@ -718,7 +718,7 @@ async def add_filter(e):
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
      string=""
-     for i in range(1,len(kek)-1):
+     for i in range(2,len(kek)):
          string=string+" "+str(kek[i])
      cursor.execute('''INSERT INTO FILTER VALUES(?,?,?)''', (int(e.chat_id),kek[1],string))
      db.commit()
@@ -743,7 +743,7 @@ async def add_filter(e):
      db=sqlite3.connect("filters.db")
      cursor=db.cursor()
      string=""
-     for i in range(1,len(kek)-1):
+     for i in range(2,len(kek)):
               string=string+" "+str(kek[i])
      cursor.execute('''INSERT INTO NOTES VALUES(?,?,?)''', (int(e.chat_id),kek[1],string))
      db.commit()
