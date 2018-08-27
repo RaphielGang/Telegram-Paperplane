@@ -156,6 +156,8 @@ async def common_outgoing_handler(e):
             k=subprocess.run(['speedtest-cli'], stdout=subprocess.PIPE)
             await l.edit('`' + k.stdout.decode()[:-1] + '`')
             await e.delete()
+    elif find == "alive":
+        await e.edit("`Master! I am alive😁`")
     elif find=="notafk":
         global ISAFK
         global COUNT_MSG
