@@ -53,7 +53,7 @@ global MUTING_USERS
 MUTING_USERS={}
 COUNT_MSG=0
 BRAIN_CHECKER=[]
-subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
 cursor.execute('''SELECT * FROM BRAIN1''')
@@ -242,14 +242,15 @@ async def common_outgoing_handler(e):
         end = datetime.now()
         ms = (end - start).microseconds/1000
         await e.edit('Pong!\n%sms' % (ms))
-@bot.on(events.NewMessage(outgoing=True, pattern='.figlet'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.figlet'))
+'''@bot.on(events.NewMessage(outgoing=True, pattern='.fig'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.fig'))
 async def figlet(e):
-    text= e.text
-    text = text[8:]
-    if text != '':
-        res = pyfiglet.figlet_format(text)
-        e.edit(str(res))
+    text= e.text                        #useless
+    text = text[5:]
+    res = pyfiglet.figlet_format(text)
+    print(res)
+    await e.respond(res)
+    await e.edit(res)'''
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
