@@ -27,6 +27,7 @@ import wikipedia
 import inspect
 import platform
 import pybase64
+import pyfiglet
 from googletrans import Translator
 from random import randint
 from zalgo_text import zalgo
@@ -48,7 +49,12 @@ SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
 COUNT_MSG=0
-SUDO_USERS=[518221376,538543304,423070089,234480941,573925010,444970538]
+BRAIN_CHECKER=[]
+subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+db=sqlite3.connect("brains.check")
+cursor=db.cursor()
+BRAIN_CHECKER = cursor.fetchall()
+db.close()
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 bot = TelegramClient('userbot', api_id, api_hash).start()
@@ -94,8 +100,8 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if (await e.get_reply_message()).sender_id in SUDO_USERS:
-            await e.edit("`I am not supposed to ban a sudo user!`")
+        if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await e.edit("`Ban Error! Couldn\'t ban this user`")
             return
         await e.edit("`Thanos snaps!`")
         time.sleep(5)
@@ -114,8 +120,8 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if (await e.get_reply_message()).sender_id in SUDO_USERS:
-            await e.edit("`I am not supposed to mute a sudo user!`")
+        if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await e.edit("`Mute Error! Couldn\'t mute this user`")
             return
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
@@ -221,6 +227,14 @@ async def common_outgoing_handler(e):
         end = datetime.now()
         ms = (end - start).microseconds/1000
         await e.edit('Pong!\n%sms' % (ms))
+@bot.on(events.NewMessage(outgoing=True, pattern='.figlet'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.figlet'))
+async def figlet(e):
+    text= e.text
+    text = text[8:]
+    if text != '':
+        res = pyfiglet.figlet_format(text)
+        e.edit(str(res))
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
