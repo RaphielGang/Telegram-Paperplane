@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import sys
+if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+    LOGGER.error("You MUST have a python version of at least 3.6!")
+    quit(1)
 from telethon import TelegramClient, events
 from async_generator import aclosing
 from telethon.tl.functions.channels import EditBannedRequest
@@ -17,7 +21,6 @@ import os
 from gtts import gTTS
 import time
 import hastebin
-import sys
 import urbandict
 import gsearch
 import subprocess
@@ -53,7 +56,10 @@ BRAIN_CHECKER=[]
 subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
-BRAIN_CHECKER = cursor.fetchall()
+cursor.execute('''SELECT * FROM BRAIN1''')
+all_rows = cursor.fetchall()
+for i in all_rows:
+    BRAIN_CHECKER.append(i[0])
 db.close()
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
@@ -108,6 +114,15 @@ async def common_outgoing_handler(e):
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
         await bot.send_file(e.chat_id,"https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif")
+    elif find == "addsudo":
+        if e.sender_id==BRAIN_CHECKER[0]:
+            db=sqlite3.connect("brains.check")
+            cursor=db.cursor()
+            id=(await e.get_reply_message()).sender_id
+            cursor.execute('''INSERT INTO BRAIN1 VALUES(?)''',(id,))
+            db.commit()
+            await e.edit("```Added to Sudo Successfully```")
+            db.close()
     elif find == "spider":
         rights = ChannelBannedRights(
                              until_date=None,
