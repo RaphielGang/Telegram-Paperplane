@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import sys
+if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+    LOGGER.error("You MUST have a python version of at least 3.6!")
+    quit(1)
 from telethon import TelegramClient, events
 from async_generator import aclosing
 from telethon.tl.functions.channels import EditBannedRequest
@@ -17,7 +21,6 @@ import os
 from gtts import gTTS
 import time
 import hastebin
-import sys
 import urbandict
 import gsearch
 import subprocess
@@ -27,6 +30,7 @@ import wikipedia
 import inspect
 import platform
 import pybase64
+import pyfiglet
 from googletrans import Translator
 from random import randint
 from zalgo_text import zalgo
@@ -48,7 +52,15 @@ SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
 COUNT_MSG=0
-SUDO_USERS=[518221376,538543304,423070089,234480941,573925010,444970538]
+BRAIN_CHECKER=[]
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+db=sqlite3.connect("brains.check")
+cursor=db.cursor()
+cursor.execute('''SELECT * FROM BRAIN1''')
+all_rows = cursor.fetchall()
+for i in all_rows:
+    BRAIN_CHECKER.append(i[0])
+db.close()
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 bot = TelegramClient('userbot', api_id, api_hash).start()
@@ -94,14 +106,23 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if (await e.get_reply_message()).sender_id in SUDO_USERS:
-            await e.edit("`I am not supposed to ban a sudo user!`")
+        if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await e.edit("`Ban Error! Couldn\'t ban this user`")
             return
         await e.edit("`Thanos snaps!`")
         time.sleep(5)
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
         await bot.send_file(e.chat_id,"https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif")
+    elif find == "addsudo":
+        if e.sender_id==BRAIN_CHECKER[0]:
+            db=sqlite3.connect("brains.check")
+            cursor=db.cursor()
+            id=(await e.get_reply_message()).sender_id
+            cursor.execute('''INSERT INTO BRAIN1 VALUES(?)''',(id,))
+            db.commit()
+            await e.edit("```Added to Sudo Successfully```")
+            db.close()
     elif find == "spider":
         rights = ChannelBannedRights(
                              until_date=None,
@@ -114,8 +135,8 @@ async def common_outgoing_handler(e):
                              send_inline=True,
                              embed_links=True
                              )
-        if (await e.get_reply_message()).sender_id in SUDO_USERS:
-            await e.edit("`I am not supposed to mute a sudo user!`")
+        if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await e.edit("`Mute Error! Couldn\'t mute this user`")
             return
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
@@ -221,6 +242,15 @@ async def common_outgoing_handler(e):
         end = datetime.now()
         ms = (end - start).microseconds/1000
         await e.edit('Pong!\n%sms' % (ms))
+'''@bot.on(events.NewMessage(outgoing=True, pattern='.fig'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.fig'))
+async def figlet(e):
+    text= e.text                        #useless
+    text = text[5:]
+    res = pyfiglet.figlet_format(text)
+    print(res)
+    await e.respond(res)
+    await e.edit(res)'''
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
