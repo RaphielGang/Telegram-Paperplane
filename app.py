@@ -345,6 +345,7 @@ async def snipe_on(e):
     text = text[7:]
     global SNIPE_TEXT
     global SNIPER
+    global SNIPE_ID
     SNIPER=True
     SNIPE_TEXT=text
     SNIPE_ID=e.chat_id
