@@ -46,6 +46,12 @@ global AFKREASON
 AFKREASON="No Reason"
 global USERS
 USERS={}
+global SNIPE_TEXT
+SNIPE_TEXT=""
+global SNIPE_ID
+SNIPE_ID=0
+global SNIPER
+SNIPER=False
 global COUNT_MSG
 global SPAM_ALLOWANCE
 SPAM_ALLOWANCE=3
@@ -94,6 +100,10 @@ async def common_outgoing_handler(e):
         await e.edit("Report bugs here: @userbot_support")
     elif find == "help":
         await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/blob/master/README.md')
+    elif find == "repo":
+        await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/')
+    elif find == "supportchannel":
+        await e.edit('t.me/maestro_userbot_channel')
     elif find == "thanos":
         rights = ChannelBannedRights(
                              until_date=None,
@@ -157,6 +167,14 @@ async def common_outgoing_handler(e):
         time.sleep(3)
         await bot(EditAdminRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.edit("A perfect magic has happened!")
+    elif find == "nosnipe":
+            global SNIPE_TEXT
+            global SNIPER
+            global SNIPER_ID
+            SNIPER=False
+            SNIPE_TEXT=""
+            SNIPER_ID=0
+            await e.edit('`Sniping Turned Off!`')
     elif find == "asmoff":
         global SPAM
         SPAM=False
@@ -169,15 +187,17 @@ async def common_outgoing_handler(e):
         for filter in filters:
             await e.reply('/stop %s' % (filter.strip()))
             await asyncio.sleep(0.3)
+        await e.respond('/filter filters @baalajimaestro kicked them all')
         await e.respond("```Successfully cleaned Marie filters yaay!```\n Gimme cookies @baalajimaestro")
     elif find == "rmnotes":
-        await e.edit("```Will be kicking away all Marie filters.```")
+        await e.edit("```Will be kicking away all Marie notes.```")
         time.sleep(3)
         r = await e.get_reply_message()
         filters = r.text.split('-')[1:]
         for filter in filters:
             await e.reply('/clear %s' % (filter.strip()))
             await asyncio.sleep(0.3)
+        await e.respond('/save save @baalajimaestro kicked them all')
         await e.respond("```Successfully cleaned Marie notes yaay!```\n Gimme cookies @baalajimaestro")
     elif find=="rekt":
         await e.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
@@ -260,6 +280,75 @@ async def figlet(e):
     print(res)
     await e.respond(res)
     await e.edit(res)'''
+@bot.on(events.NewMessage(incoming=True))
+@bot.on(events.MessageEdited(incoming=True))
+async def common_incoming_handler(e):
+    global SNIPE_TEXT
+    global SNIPER
+    global SNIPE_ID
+    global SPAM
+    global MUTING_USERS
+    global SPAM_ALLOWANCE
+    if SNIPER:
+         if SNIPE_ID == e.chat_id:
+             if SNIPE_TEXT in e.text:
+                  e.delete()
+    db=sqlite3.connect("filters.db")
+    cursor=db.cursor()
+    cursor.execute('''SELECT * FROM FILTER''')
+    all_rows = cursor.fetchall()
+    for row in all_rows:
+        if int(row[0]) == int(e.chat_id):
+            if str(row[1]) in e.text:
+                await e.reply(row[2])
+    db.close()
+    if SPAM:
+        if e.sender_id not in MUTING_USERS:
+                  MUTING_USERS={}
+                  MUTING_USERS.update({e.sender_id:1})
+        if e.sender_id in MUTING_USERS:
+                     MUTING_USERS[e.sender_id]=MUTING_USERS[e.sender_id]+1
+                     if MUTING_USERS[e.sender_id]>SPAM_ALLOWANCE:
+                         rights = ChannelBannedRights(
+                         until_date=datetime.now() + timedelta(days=2),
+                         send_messages=True,
+                         send_media=True,
+                         send_stickers=True,
+                         send_gifs=True,
+                         send_games=True,
+                         send_inline=True,
+                         embed_links=True
+                         )
+                         if e.chat_id > 0:
+                             await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
+                             return
+                         try:
+                           await bot(EditBannedRequest(e.chat_id,e.sender_id,rights))
+                         except UserAdminInvalidError:
+                           await bot.send_message(e.chat_id,"`I'll catch you soon spammer! Now you escaped. `")
+                           return
+                         except ChatAdminRequiredError:
+                           await bot.send_message(e.chat_id,"`Me nu admeme to catch spammer nibba`")
+                           return
+                         except ChannelInvalidError:
+                           await bot.send_message(e.chat_id,"`User retarded af ._.`")
+                           return
+                         await bot.send_message(e.chat_id,"`Get rekt nibba. I am ze anti-spam lord "+str(e.sender_id)+" was muted.`")
+    if e.text == '.killme':
+        name = await bot.get_entity(e.from_id)
+        name0 = str(name.first_name)
+        await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+@bot.on(events.NewMessage(outgoing=True, pattern='.snipe'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.snipe'))
+async def snipe_on(e):
+    text= e.text                        #useless
+    text = text[7:]
+    global SNIPE_TEXT
+    global SNIPER
+    SNIPER=True
+    SNIPE_TEXT=text
+    SNIPE_ID=e.chat_id
+    await e.edit('`Sniping active on the word'+text+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
@@ -363,44 +452,6 @@ async def purgeme(e):
             break
         i=i+1
         await message.delete()
-@bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
-async def spam_tracker(e):
-    global SPAM
-    global MUTING_USERS
-    global SPAM_ALLOWANCE
-    if SPAM:
-        if e.sender_id not in MUTING_USERS:
-                  MUTING_USERS={}
-                  MUTING_USERS.update({e.sender_id:1})
-        if e.sender_id in MUTING_USERS:
-                     MUTING_USERS[e.sender_id]=MUTING_USERS[e.sender_id]+1
-                     if MUTING_USERS[e.sender_id]>SPAM_ALLOWANCE:
-                         rights = ChannelBannedRights(
-                         until_date=datetime.now() + timedelta(days=2),
-                         send_messages=True,
-                         send_media=True,
-                         send_stickers=True,
-                         send_gifs=True,
-                         send_games=True,
-                         send_inline=True,
-                         embed_links=True
-                         )
-                         if e.chat_id > 0:
-                             await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
-                             return
-                         try:
-                           await bot(EditBannedRequest(e.chat_id,e.sender_id,rights))
-                         except UserAdminInvalidError:
-                           await bot.send_message(e.chat_id,"`I'll catch you soon spammer! Now you escaped. `")
-                           return
-                         except ChatAdminRequiredError:
-                           await bot.send_message(e.chat_id,"`Me nu admeme to catch spammer nibba`")
-                           return
-                         except ChannelInvalidError:
-                           await bot.send_message(e.chat_id,"`User retarded af ._.`")
-                           return
-                         await bot.send_message(e.chat_id,"`Get rekt nibba. I am ze anti-spam lord "+str(e.sender_id)+" was muted.`")
 @bot.on(events.NewMessage(outgoing=True,pattern='.pip (.+)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
 async def pipcheck(e):
@@ -414,11 +465,6 @@ async def haste_paste(e):
     await e.edit('`Sending to bin . . .`')
     text=str(message[7:])
     await e.edit('`Sent to bin! Check it here: `' + hastebin.post(text))
-@bot.on(events.NewMessage(incoming=True,pattern='.killme'))
-async def killmelol(e):
-    name = await bot.get_entity(e.from_id)
-    name0 = str(name.first_name)
-    await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
 @bot.on(events.NewMessage(outgoing=True,pattern="hi"))
 @bot.on(events.MessageEdited(outgoing=True,pattern="hi"))
 async def hoi(e):
@@ -763,17 +809,6 @@ async def add_filter(e):
      db.commit()
      await e.edit("```Added Filter Successfully```")
      db.close()
-@bot.on(events.NewMessage(incoming=True))
-async def incom_filter(e):
-    db=sqlite3.connect("filters.db")
-    cursor=db.cursor()
-    cursor.execute('''SELECT * FROM FILTER''')
-    all_rows = cursor.fetchall()
-    for row in all_rows:
-        if int(row[0]) == int(e.chat_id):
-            if str(row[1]) in e.text:
-                await e.reply(row[2])
-    db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.save'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.save'))
 async def add_filter(e):
