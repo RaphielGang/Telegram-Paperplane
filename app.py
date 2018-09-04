@@ -54,12 +54,16 @@ global SNIPER
 SNIPER=False
 global COUNT_MSG
 global SPAM_ALLOWANCE
+global SPAM_CHAT_ID
+SPAM_CHAT_ID=[]
 SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
+global MUTED_USERS
+MUTED_USERS={}
 COUNT_MSG=0
 BRAIN_CHECKER=[]
-subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
 cursor.execute('''SELECT * FROM BRAIN1''')
@@ -76,6 +80,13 @@ if not os.path.exists('filters.db'):
      cursor=db.cursor()
      cursor.execute('''CREATE TABLE FILTER(chat_id INTEGER,filter TEXT, reply TEXT)''')
      cursor.execute('''CREATE TABLE NOTES(chat_id INTEGER,note TEXT, reply TEXT)''')
+     db.commit()
+     db.close()
+if not os.path.exists("spam_mute.db"):
+     db= sqlite3.connect("spam_mute.db")
+     cursor=db.cursor()
+     cursor.execute('''CREATE TABLE SPAM(chat_id INTEGER,sender INTEGER)''')
+     cursor.execute('''CREATE TABLE MUTE(chat_id INTEGER,sender INTEGER)''')
      db.commit()
      db.close()
 @bot.on(events.NewMessage(outgoing=True,pattern='.*'))
@@ -134,23 +145,15 @@ async def common_outgoing_handler(e):
             await e.edit("```Added to Sudo Successfully```")
             db.close()
     elif find == "spider":
-        rights = ChannelBannedRights(
-                             until_date=None,
-                             view_messages=None,
-                             send_messages=True,
-                             send_media=True,
-                             send_stickers=True,
-                             send_gifs=True,
-                             send_games=True,
-                             send_inline=True,
-                             embed_links=True
-                             )
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn\'t mute this user`")
-            return
+        db=sqlite3.connect("spam_mute.db")
+        cursor=db.cursor()
+        cursor.execute('''INSERT INTO MUTE VALUES(?,?)''', (int(e.chat_id),int((await e.get_reply_message()).sender_id)))
+        db.commit()
+        db.close()
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
-        await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
     elif find == "wizard":
@@ -179,6 +182,11 @@ async def common_outgoing_handler(e):
         global SPAM
         SPAM=False
         await e.edit("Spam Tracking turned off!")
+        db=sqlite3.connect("spam_mute.db")
+        cursor=db.cursor()
+        cursor.execute('''DELETE FROM SPAM WHERE chat_id<0''')
+        db.commit()
+        db.close()
     elif find == "rmfilters":
         await e.edit("```Will be kicking away all Marie filters.```")
         time.sleep(3)
@@ -289,6 +297,25 @@ async def common_incoming_handler(e):
     global SPAM
     global MUTING_USERS
     global SPAM_ALLOWANCE
+    if SPAM:
+      db=sqlite3.connect("spam_mute.db")
+      cursor=db.cursor()
+      cursor.execute('''SELECT * FROM SPAM''')
+      all_rows = cursor.fetchall()
+      for row in all_rows:
+        if int(row[0]) == int(e.chat_id):
+            if int(row[1]) == int(e.sender_id):
+                await e.delete()
+                return
+    db=sqlite3.connect("spam_mute.db")
+    cursor=db.cursor()
+    cursor.execute('''SELECT * FROM MUTE''')
+    all_rows = cursor.fetchall()
+    for row in all_rows:
+       if int(row[0]) == int(e.chat_id):
+          if int(row[1]) == int(e.sender_id):
+            await e.delete()
+            return
     if SNIPER:
          if SNIPE_ID == e.chat_id:
              if SNIPE_TEXT in e.text:
@@ -299,7 +326,7 @@ async def common_incoming_handler(e):
     all_rows = cursor.fetchall()
     for row in all_rows:
         if int(row[0]) == int(e.chat_id):
-            if str(row[1]) in e.text:
+            if int(row[1]) in e.text:
                 await e.reply(row[2])
     db.close()
     if SPAM:
@@ -309,16 +336,13 @@ async def common_incoming_handler(e):
         if e.sender_id in MUTING_USERS:
                      MUTING_USERS[e.sender_id]=MUTING_USERS[e.sender_id]+1
                      if MUTING_USERS[e.sender_id]>SPAM_ALLOWANCE:
-                         rights = ChannelBannedRights(
-                         until_date=datetime.now() + timedelta(days=2),
-                         send_messages=True,
-                         send_media=True,
-                         send_stickers=True,
-                         send_gifs=True,
-                         send_games=True,
-                         send_inline=True,
-                         embed_links=True
-                         )
+                         db=sqlite3.connect("spam_mute.db")
+                         cursor=db.cursor()
+                         cursor.execute('''INSERT INTO SPAM VALUES(?,?)''', (int(e.chat_id),int(e.sender_id)))
+                         db.commit()
+                         db.close()
+                         await bot.send_message(e.chat_id,"`Spammer Nibba was muted.`")
+                         return
                          if e.chat_id > 0:
                              await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
                              return
@@ -421,6 +445,15 @@ async def remove_filter(e):
      cursor.execute('''DELETE FROM FILTER WHERE chat_id=? AND filter=?''', (int(e.chat_id),kek[1]))
      db.commit()
      await e.edit("```Removed Filter Successfully```")
+     db.close()
+@bot.on(events.NewMessage(outgoing=True, pattern='.speak'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.speak'))
+async def unmute(e):
+     db=sqlite3.connect("spam_mute.db")
+     cursor=db.cursor()
+     cursor.execute('''DELETE FROM mute WHERE chat_id=? AND sender=?''', (int(e.chat_id),int((await e.get_reply_message()).sender_id)))
+     db.commit()
+     await e.edit("```Unmuted Successfully```")
      db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.nosave'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.nosave'))
