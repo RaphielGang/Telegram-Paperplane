@@ -298,6 +298,7 @@ async def common_incoming_handler(e):
         if e.chat_id in MUTED_USERS:
             if MUTED_USERS[e.chat_id]==e.sender_id:
                 await e.delete()
+                return
     if SNIPER:
          if SNIPE_ID == e.chat_id:
              if SNIPE_TEXT in e.text:
