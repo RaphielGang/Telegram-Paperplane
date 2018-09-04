@@ -63,7 +63,7 @@ global MUTED_USERS
 MUTED_USERS={}
 COUNT_MSG=0
 BRAIN_CHECKER=[]
-subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
 cursor.execute('''SELECT * FROM BRAIN1''')
@@ -184,7 +184,7 @@ async def common_outgoing_handler(e):
         await e.edit("Spam Tracking turned off!")
         db=sqlite3.connect("spam_mute.db")
         cursor=db.cursor()
-        cursor.execute('''DELETE FROM MUTE''')
+        cursor.execute('''DELETE FROM SPAM WHERE chat_id<0''')
         db.commit()
         db.close()
     elif find == "rmfilters":
@@ -298,24 +298,24 @@ async def common_incoming_handler(e):
     global MUTING_USERS
     global SPAM_ALLOWANCE
     if SPAM:
-        db=sqlite3.connect("spam_mute.db")
-        cursor=db.cursor()
-        cursor.execute('''SELECT * FROM SPAM''')
-        all_rows = cursor.fetchall()
-        for row in all_rows:
-            if int(row[0]) == int(e.chat_id):
-                if str(row[1]) == int(e.sender_id):
-                    await e.delete()
-                    return
-        db.close()
+      db=sqlite3.connect("spam_mute.db")
+      cursor=db.cursor()
+      cursor.execute('''SELECT * FROM SPAM''')
+      all_rows = cursor.fetchall()
+      for row in all_rows:
+        if int(row[0]) == int(e.chat_id):
+            if int(row[1]) == int(e.sender_id):
+                await e.delete()
+                return
     db=sqlite3.connect("spam_mute.db")
     cursor=db.cursor()
     cursor.execute('''SELECT * FROM MUTE''')
     all_rows = cursor.fetchall()
     for row in all_rows:
-        if int(row[0]) == int(e.chat_id):
-            if str(row[1]) == int(e.sender_id):
-                await e.delete()
+       if int(row[0]) == int(e.chat_id):
+          if int(row[1]) == int(e.sender_id):
+            await e.delete()
+            return
     if SNIPER:
          if SNIPE_ID == e.chat_id:
              if SNIPE_TEXT in e.text:
@@ -326,7 +326,7 @@ async def common_incoming_handler(e):
     all_rows = cursor.fetchall()
     for row in all_rows:
         if int(row[0]) == int(e.chat_id):
-            if str(row[1]) in e.text:
+            if int(row[1]) in e.text:
                 await e.reply(row[2])
     db.close()
     if SPAM:
@@ -451,7 +451,7 @@ async def remove_filter(e):
 async def unmute(e):
      db=sqlite3.connect("spam_mute.db")
      cursor=db.cursor()
-     cursor.execute('''DELETE FROM mute WHERE chat_id=? AND sender=?''', (int(e.chat_id),int(await e.get_reply_message()).sender_id))
+     cursor.execute('''DELETE FROM mute WHERE chat_id=? AND sender=?''', (int(e.chat_id),int((await e.get_reply_message()).sender_id)))
      db.commit()
      await e.edit("```Unmuted Successfully```")
      db.close()
