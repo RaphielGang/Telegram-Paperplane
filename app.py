@@ -54,9 +54,13 @@ global SNIPER
 SNIPER=False
 global COUNT_MSG
 global SPAM_ALLOWANCE
+global SPAM_CHAT_ID
+SPAM_CHAT_ID=[]
 SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
+global MUTED_USERS
+MUTED_USERS={}
 COUNT_MSG=0
 BRAIN_CHECKER=[]
 subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
@@ -289,6 +293,11 @@ async def common_incoming_handler(e):
     global SPAM
     global MUTING_USERS
     global SPAM_ALLOWANCE
+    global MUTED_USERS
+    if SPAM:
+        if e.chat_id in MUTED_USERS:
+            if MUTED_USERS[e.chat_id]==e.sender_id:
+                await e.delete()
     if SNIPER:
          if SNIPE_ID == e.chat_id:
              if SNIPE_TEXT in e.text:
@@ -309,16 +318,9 @@ async def common_incoming_handler(e):
         if e.sender_id in MUTING_USERS:
                      MUTING_USERS[e.sender_id]=MUTING_USERS[e.sender_id]+1
                      if MUTING_USERS[e.sender_id]>SPAM_ALLOWANCE:
-                         rights = ChannelBannedRights(
-                         until_date=datetime.now() + timedelta(days=2),
-                         send_messages=True,
-                         send_media=True,
-                         send_stickers=True,
-                         send_gifs=True,
-                         send_games=True,
-                         send_inline=True,
-                         embed_links=True
-                         )
+                         MUTING_USERS.update({e.chat_id:e.sender_id})
+                             await bot.send_message(e.chat_id,"`Spammer Nibba was muted.`")
+                             return
                          if e.chat_id > 0:
                              await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
                              return
