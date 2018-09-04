@@ -306,6 +306,7 @@ async def common_incoming_handler(e):
             if int(row[0]) == int(e.chat_id):
                 if str(row[1]) == int(e.sender_id):
                     await e.delete()
+                    return
         db.close()
     db=sqlite3.connect("spam_mute.db")
     cursor=db.cursor()
