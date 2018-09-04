@@ -181,7 +181,9 @@ async def common_outgoing_handler(e):
             await e.edit('`Sniping Turned Off!`')
     elif find == "asmoff":
         global SPAM
+        global MUTED_USERS
         SPAM=False
+        MUTED_USERS={}
         await e.edit("Spam Tracking turned off!")
     elif find == "rmfilters":
         await e.edit("```Will be kicking away all Marie filters.```")
