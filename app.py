@@ -292,7 +292,7 @@ async def common_incoming_handler(e):
     if SNIPER:
          if SNIPE_ID == e.chat_id:
              if SNIPE_TEXT in e.text:
-                  e.delete()
+                  await e.delete()
     db=sqlite3.connect("filters.db")
     cursor=db.cursor()
     cursor.execute('''SELECT * FROM FILTER''')
