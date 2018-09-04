@@ -297,7 +297,6 @@ async def common_incoming_handler(e):
     global SPAM
     global MUTING_USERS
     global SPAM_ALLOWANCE
-    if e.chat_id
     if SPAM:
         db=sqlite3.connect("spam_mute.db")
         cursor=db.cursor()
