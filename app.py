@@ -63,7 +63,7 @@ global MUTED_USERS
 MUTED_USERS={}
 COUNT_MSG=0
 BRAIN_CHECKER=[]
-#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
 cursor.execute('''SELECT * FROM BRAIN1''')
@@ -356,8 +356,8 @@ async def common_incoming_handler(e):
         name = await bot.get_entity(e.from_id)
         name0 = str(name.first_name)
         await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
-@bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+@bot.on(events.NewMessage(incoming=True, pattern='*'))
+@bot.on(events.MessageEdited(incoming=True, pattern='*'))
 async def filter_incoming_handler(e):
     db=sqlite3.connect("filters.db")
     cursor=db.cursor()
@@ -365,13 +365,13 @@ async def filter_incoming_handler(e):
     all_rows = cursor.fetchall()
     for row in all_rows:
         if int(row[0]) == int(e.chat_id):
-            if int(row[1]) in e.text:
+            if str(row[1]) in str(e.text):
                 await e.reply(row[2])
     db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.snipe'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.snipe'))
 async def snipe_on(e):
-    text= e.text                        #useless
+    text= e.text
     text = text[7:]
     global SNIPE_TEXT
     global SNIPER
@@ -482,7 +482,7 @@ async def unmute(e):
      db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.nosave'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.nosave'))
-async def remove_filter(e):
+async def remove_notes(e):
      message=e.text
      kek=message.split()
      db=sqlite3.connect("filters.db")
