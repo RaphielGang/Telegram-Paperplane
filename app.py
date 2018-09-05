@@ -320,15 +320,6 @@ async def common_incoming_handler(e):
          if SNIPE_ID == e.chat_id:
              if SNIPE_TEXT in e.text:
                   await e.delete()
-    db=sqlite3.connect("filters.db")
-    cursor=db.cursor()
-    cursor.execute('''SELECT * FROM FILTER''')
-    all_rows = cursor.fetchall()
-    for row in all_rows:
-        if int(row[0]) == int(e.chat_id):
-            if int(row[1]) in e.text:
-                await e.reply(row[2])
-    db.close()
     if SPAM:
         if e.sender_id not in MUTING_USERS:
                   MUTING_USERS={}
@@ -362,6 +353,18 @@ async def common_incoming_handler(e):
         name = await bot.get_entity(e.from_id)
         name0 = str(name.first_name)
         await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+@bot.on(events.NewMessage(incoming=True))
+@bot.on(events.MessageEdited(incoming=True))
+async def filter_incoming_handler(e):
+    db=sqlite3.connect("filters.db")
+    cursor=db.cursor()
+    cursor.execute('''SELECT * FROM FILTER''')
+    all_rows = cursor.fetchall()
+    for row in all_rows:
+        if int(row[0]) == int(e.chat_id):
+            if int(row[1]) in e.text:
+                await e.reply(row[2])
+    db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.snipe'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.snipe'))
 async def snipe_on(e):
@@ -490,7 +493,7 @@ async def purgeme(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
 async def pipcheck(e):
 	a=await e.reply('`Searching . . .`')
-	r='`' + subprocess.run(['pip', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
+	r='`' + subprocess.run(['pip3', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
 	await a.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.paste'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.paste'))
