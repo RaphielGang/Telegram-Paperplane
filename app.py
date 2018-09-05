@@ -405,6 +405,25 @@ async def hash(e):
 		subprocess.run(['rm', 'hashes.txt'], stdout=subprocess.PIPE)
 	else:
 		await e.reply(ans)
+@bot.on(events.NewMessage(outgoing=True,pattern='.owo'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.owo'))
+async def faces(e):
+    textx=await e.get_reply_message()
+    message = e.text
+    if textx:
+         message = textx
+         message = str(message.message)
+    else:
+        message = str(message[4:])
+    faces = ['(・`ω´・)',';;w;;','owo','UwU','>w<','^w^','\(^o\) (/o^)/','( ^ _ ^)∠☆','(ô_ô)','~:o',';-;', '(*^*)', '(>_', '(♥_♥)', '*(^O^)*', '((+_+))']
+    reply_text = re.sub(r'(r|l)', "w", message)
+    reply_text = re.sub(r'(R|L)', 'W', reply_text)
+    reply_text = re.sub(r'n([aeiou])', r'ny\1', reply_text)
+    reply_text = re.sub(r'N([aeiouAEIOU])', r'Ny\1', reply_text)
+    reply_text = re.sub(r'\!+', ' ' + random.choice(faces), reply_text)
+    reply_text = reply_text.replace("ove", "uv")
+    reply_text += ' ' + random.choice(faces)
+    await e.edit(reply_text)
 @bot.on(events.NewMessage(outgoing=True,pattern='.base64 (en|de) (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.base64 (en|de) (.*)'))
 async def endecrypt(e):
