@@ -73,7 +73,7 @@ for i in all_rows:
 db.close()
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
-bot = TelegramClient('userbot', api_id, api_hash).start()
+bot = TelegramClient('userbot', api_id, api_hash)
 bot.start()
 if not os.path.exists('filters.db'):
      db= sqlite3.connect("filters.db")
