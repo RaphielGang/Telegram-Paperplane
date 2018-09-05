@@ -356,8 +356,8 @@ async def common_incoming_handler(e):
         name = await bot.get_entity(e.from_id)
         name0 = str(name.first_name)
         await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
-@bot.on(events.NewMessage(incoming=True, pattern='*'))
-@bot.on(events.MessageEdited(incoming=True, pattern='*'))
+@bot.on(events.NewMessage(incoming=True))
+@bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):
     db=sqlite3.connect("filters.db")
     cursor=db.cursor()
