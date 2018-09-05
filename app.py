@@ -144,6 +144,9 @@ async def common_outgoing_handler(e):
             db.commit()
             await e.edit("```Added to Sudo Successfully```")
             db.close()
+    elif find == 'del':
+        (await e.get_reply_message()).delete()
+        await e.delete()
     elif find == "spider":
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn\'t mute this user`")
