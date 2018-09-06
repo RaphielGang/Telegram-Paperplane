@@ -63,6 +63,7 @@ global MUTED_USERS
 MUTED_USERS={}
 COUNT_MSG=0
 BRAIN_CHECKER=[]
+subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
 subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
