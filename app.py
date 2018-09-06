@@ -150,6 +150,7 @@ async def common_outgoing_handler(e):
     elif find == "spider":
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn\'t mute this user`")
+            return
         db=sqlite3.connect("spam_mute.db")
         cursor=db.cursor()
         cursor.execute('''INSERT INTO MUTE VALUES(?,?)''', (int(e.chat_id),int((await e.get_reply_message()).sender_id)))
