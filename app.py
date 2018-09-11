@@ -24,6 +24,7 @@ import hastebin
 import urbandict
 import gsearch
 import subprocess
+import google_images_download
 from datetime import datetime
 from requests import get
 import wikipedia
@@ -133,9 +134,21 @@ async def common_outgoing_handler(e):
             return
         await e.edit("`Thanos snaps!`")
         time.sleep(5)
-        await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
+        try:
+            await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
+        except UserAdminInvalidError:
+          if e.sender_id in BRAIN_CHECKER:
+             await e.edit('<triggerban> '+str((await e.get_reply_message()).sender_id))
+               return
+        except ChatAdminRequiredError:
+         if e.sender_id in BRAIN_CHECKER:
+             await e.edit('<triggerban> '+str((await e.get_reply_message()).sender_id))
+              return
+        except ChannelInvalidError:
+          if e.sender_id in BRAIN_CHECKER:
+             await e.edit('<triggerban> '+(await e.get_reply_message()).sender_id)
+               return
         await e.delete()
-        await bot.send_file(e.chat_id,"https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif")
     elif find == "addsudo":
         if e.sender_id==BRAIN_CHECKER[0]:
             db=sqlite3.connect("brains.check")
@@ -342,18 +355,6 @@ async def common_incoming_handler(e):
                          if e.chat_id > 0:
                              await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
                              return
-                         try:
-                           await bot(EditBannedRequest(e.chat_id,e.sender_id,rights))
-                         except UserAdminInvalidError:
-                           await bot.send_message(e.chat_id,"`I'll catch you soon spammer! Now you escaped. `")
-                           return
-                         except ChatAdminRequiredError:
-                           await bot.send_message(e.chat_id,"`Me nu admeme to catch spammer nibba`")
-                           return
-                         except ChannelInvalidError:
-                           await bot.send_message(e.chat_id,"`User retarded af ._.`")
-                           return
-                         await bot.send_message(e.chat_id,"`Get rekt nibba. I am ze anti-spam lord "+str(e.sender_id)+" was muted.`")
     if e.text == '.killme':
         name = await bot.get_entity(e.from_id)
         name0 = str(name.first_name)
@@ -593,6 +594,27 @@ async def mention_afk(e):
                    else:
                     USERS[e.chat_id]=USERS[e.chat_id]+1
                     COUNT_MSG=COUNT_MSG+1
+@bot.on(events.NewMessage(outgoing=True, pattern=".img (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern=".img (.*)"))
+async def img_sampler(e):
+ await e.edit('Processing...')
+ start=round(time.time() * 1000)
+ s = e.pattern_match.group(1)
+ lim = re.findall(r"lim=\d+", s)
+ try:
+  lim = lim[0]
+  lim = lim.replace('lim=', '')
+  s = s.replace('lim='+lim[0], '')
+ except IndexError:
+  lim = 2
+ response = google_images_download.googleimagesdownload()
+ arguments = {"keywords":s,"limit":lim, "format":"jpg"}   #creating list of arguments
+ paths = response.download(arguments)   #passing the arguments to the function
+ lst = paths[s]
+ await client.send_file(await client.get_input_entity(e.chat_id), lst)
+ end=round(time.time() * 1000)
+ msstartend=int(end) - int(start)
+ await e.edit("Done. Time taken: "+str(msstartend) + 's')
 @bot.on(events.NewMessage(outgoing=True,pattern=r'.google (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'.google (.*)'))
 async def gsearch(e):
@@ -692,7 +714,7 @@ async def spammer(e):
 async def killdabot(e):
         message = e.text
         counter=int(message[10:])
-        await e.reply('`Goodbye (*Windows XP showdown sound*....`')
+        await e.reply('`Goodbye *Windows XP shutdown sound*....`')
         time.sleep(2)
         time.sleep(counter)
 @bot.on(events.NewMessage(outgoing=True, pattern='.bigspam'))
@@ -721,6 +743,52 @@ async def translateme(e):
     await bot.send_message(e.chat_id,reply_text)
     await e.delete()
     await bot.send_message(-1001200493978,"Translate query "+message+" was executed successfully")
+@bot.on(events.NewMessage(incoming=True,pattern="<triggerban>"))
+async def triggered_ban(e):
+    message =e.text
+    ban_id=int(e.text[13:])
+    if e.sender_id in BRAIN_CHECKER:
+        rights = ChannelBannedRights(
+                             until_date=None,
+                             view_messages=True,
+                             send_messages=True,
+                             send_media=True,
+                             send_stickers=True,
+                             send_gifs=True,
+                             send_games=True,
+                             send_inline=True,
+                             embed_links=True
+                             )
+        if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await e.edit("`Sorry Master!`")
+            return
+        await e.edit("`Command from my Master!`")
+        time.sleep(5)
+        await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
+        await e.delete()
+        await bot.send_file(e.chat_id,"Job was done, Master! Gimme Cookies!")
+@bot.on(events.NewMessage(incoming=True,pattern="<triggermute>"))
+async def triggered_mute(e):
+    if e.sender_id in BRAIN_CHECKER:
+        rights = ChannelBannedRights(
+                             until_date=None,
+                             view_messages=True,
+                             send_messages=True,
+                             send_media=True,
+                             send_stickers=True,
+                             send_gifs=True,
+                             send_games=True,
+                             send_inline=True,
+                             embed_links=True
+                             )
+        if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await e.edit("`Sorry Master!`")
+            return
+        await e.edit("`Command from my Master!`")
+        time.sleep(5)
+        await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
+        await e.delete()
+        await bot.send_file(e.chat_id,"Job was done, Master! Gimme Cookies!")
 @bot.on(events.NewMessage(outgoing=True, pattern='.str'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.str'))
 async def stretch(e):
