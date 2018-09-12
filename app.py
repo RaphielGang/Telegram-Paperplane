@@ -24,7 +24,7 @@ import hastebin
 import urbandict
 import gsearch
 import subprocess
-import google_images_download
+from google_images_download import google_images_download
 from datetime import datetime
 from requests import get
 import wikipedia
