@@ -87,15 +87,15 @@ async def common_outgoing_handler(e):
         except UserAdminInvalidError:
           if e.sender_id in BRAIN_CHECKER:
              await e.edit('<triggerban> '+str((await e.get_reply_message()).sender_id))
-               return
+             return
         except ChatAdminRequiredError:
          if e.sender_id in BRAIN_CHECKER:
              await e.edit('<triggerban> '+str((await e.get_reply_message()).sender_id))
-              return
+             return
         except ChannelInvalidError:
           if e.sender_id in BRAIN_CHECKER:
-             await e.edit('<triggerban> '+(await e.get_reply_message()).sender_id)
-               return
+             await e.edit('<triggerban> '+str((await e.get_reply_message()).sender_id))
+             return
         await e.delete()
     elif find == "addsudo":
         if e.sender_id==BRAIN_CHECKER[0]:
