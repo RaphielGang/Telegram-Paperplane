@@ -559,7 +559,7 @@ async def img_sampler(e):
  arguments = {"keywords":s,"limit":lim, "format":"jpg"}   #creating list of arguments
  paths = response.download(arguments)   #passing the arguments to the function
  lst = paths[s]
- await client.send_file(await client.get_input_entity(e.chat_id), lst)
+ await bot.send_file(await bot.get_input_entity(e.chat_id), lst)
  end=round(time.time() * 1000)
  msstartend=int(end) - int(start)
  await e.edit("Done. Time taken: "+str(msstartend) + 's')
