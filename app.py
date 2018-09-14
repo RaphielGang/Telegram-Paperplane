@@ -71,6 +71,7 @@ if not os.path.exists("spam_mute.db"):
 @bot.on(events.NewMessage(outgoing=True,pattern='.*'))
 @bot.on(events.MessageEdited(outgoing=True))
 async def common_outgoing_handler(e):
+    global ENABLE_KILLME
     find = e.text
     find = str(find[1:])
     if find=="delmsg" :
@@ -152,11 +153,9 @@ async def common_outgoing_handler(e):
         await e.delete()
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
     elif find == "disable killme":
-        global ENABLE_KILLME
         ENABLE_KILLME=False
         await e.edit("```Done!```")
     elif find == "enable killme":
-            global ENABLE_KILLME
             ENABLE_KILLME=True
             await e.edit("```Done!```")
     elif find == "wizard":
@@ -322,6 +321,7 @@ async def common_incoming_handler(e):
     global SPAM
     global MUTING_USERS
     global SPAM_ALLOWANCE
+    global ENABLE_KILLME
     if SPAM:
       db=sqlite3.connect("spam_mute.db")
       cursor=db.cursor()
@@ -363,7 +363,6 @@ async def common_incoming_handler(e):
                              await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
                              return
     if e.text == '.killme':
-        global ENABLE_KILLME
         if ENABLE_KILLME:
              name = await bot.get_entity(e.from_id)
              name0 = str(name.first_name)
@@ -501,7 +500,7 @@ async def remove_notes(e):
      cursor=db.cursor()
      cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND note=?''', (int(e.chat_id),kek[1]))
      db.commit()
-     await e.edit("```Removed Notes Successfully```")
+     await e.edit("```Removed Note Successfully```")
      db.close()
 @bot.on(events.NewMessage(outgoing=True, pattern='.purgeme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.purgeme'))
@@ -664,7 +663,7 @@ async def editer(e):
     i=i+1
    await bot.send_message(-1001200493978,"Edit query was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.zal'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.zal'))
 async def zal(e):
      textx=await e.get_reply_message()
      message = e.text
