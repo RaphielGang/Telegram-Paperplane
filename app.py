@@ -15,8 +15,38 @@ from googletrans import Translator
 from random import randint
 from zalgo_text import zalgo
 import sqlite3
-#subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
-#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+logging.basicConfig(level=logging.DEBUG)
+api_id=os.environ['API_KEY']
+api_hash=os.environ['API_HASH']
+global SPAM
+SPAM=False
+global ISAFK
+ISAFK=False
+global AFKREASON
+global ENABLE_KILLME
+ENABLE_KILLME=True
+AFKREASON="No Reason"
+global USERS
+USERS={}
+global SNIPE_TEXT
+SNIPE_TEXT=""
+global SNIPE_ID
+SNIPE_ID=0
+global SNIPER
+SNIPER=False
+global COUNT_MSG
+global SPAM_ALLOWANCE
+global SPAM_CHAT_ID
+SPAM_CHAT_ID=[]
+SPAM_ALLOWANCE=3
+global MUTING_USERS
+MUTING_USERS={}
+global MUTED_USERS
+MUTED_USERS={}
+COUNT_MSG=0
+BRAIN_CHECKER=[]
+subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
+subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
 cursor.execute('''SELECT * FROM BRAIN1''')
@@ -121,6 +151,14 @@ async def common_outgoing_handler(e):
         time.sleep(5)
         await e.delete()
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
+    elif find == "disable killme":
+        global ENABLE_KILLME
+        ENABLE_KILLME=False
+        await e.edit("```Done!```")
+    elif find == "enable killme":
+            global ENABLE_KILLME
+            ENABLE_KILLME=True
+            await e.edit("```Done!```")
     elif find == "wizard":
         rights = ChannelAdminRights(
         add_admins=True,
@@ -325,9 +363,11 @@ async def common_incoming_handler(e):
                              await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
                              return
     if e.text == '.killme':
-        name = await bot.get_entity(e.from_id)
-        name0 = str(name.first_name)
-        await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+        global ENABLE_KILLME
+        if ENABLE_KILLME:
+             name = await bot.get_entity(e.from_id)
+             name0 = str(name.first_name)
+             await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):
