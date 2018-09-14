@@ -175,9 +175,11 @@ async def common_outgoing_handler(e):
         await e.delete()
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
     elif find == "disable killme":
+        global ENABLE_KILLME
         ENABLE_KILLME=False
         await e.edit("```Done!```")
     elif find == "enable killme":
+            global ENABLE_KILLME
             ENABLE_KILLME=True
             await e.edit("```Done!```")
     elif find == "wizard":
@@ -384,6 +386,7 @@ async def common_incoming_handler(e):
                              await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
                              return
     if e.text == '.killme':
+        global ENABLE_KILLME
         if ENABLE_KILLME:
              name = await bot.get_entity(e.from_id)
              name0 = str(name.first_name)
