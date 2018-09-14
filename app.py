@@ -43,6 +43,7 @@ SPAM=False
 global ISAFK
 ISAFK=False
 global AFKREASON
+global ENABLE_KILLME
 ENABLE_KILLME=True
 AFKREASON="No Reason"
 global USERS
