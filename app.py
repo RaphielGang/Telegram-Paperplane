@@ -43,6 +43,8 @@ SPAM=False
 global ISAFK
 ISAFK=False
 global AFKREASON
+global ENABLE_KILLME
+ENABLE_KILLME=True
 AFKREASON="No Reason"
 global USERS
 USERS={}
@@ -173,6 +175,14 @@ async def common_outgoing_handler(e):
         time.sleep(5)
         await e.delete()
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
+    elif find == "disable killme":
+        global ENABLE_KILLME
+        ENABLE_KILLME=False
+        await e.edit("```Done!```")
+    elif find == "enable killme":
+            global ENABLE_KILLME
+            ENABLE_KILLME=True
+            await e.edit("```Done!```")
     elif find == "wizard":
         rights = ChannelAdminRights(
         add_admins=True,
@@ -377,9 +387,11 @@ async def common_incoming_handler(e):
                              await bot.send_message(e.chat_id,"`Boss! I am not trained to deal with people spamming on PM.\n I request to take action with **Report Spam** button`")
                              return
     if e.text == '.killme':
-        name = await bot.get_entity(e.from_id)
-        name0 = str(name.first_name)
-        await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+        global ENABLE_KILLME
+        if ENABLE_KILLME:
+             name = await bot.get_entity(e.from_id)
+             name0 = str(name.first_name)
+             await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):
