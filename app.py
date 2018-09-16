@@ -781,8 +781,8 @@ async def bigspam(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.tinypicspam'))
 async def tiny_pic_spam(e):
     message= e.text
-    counter=int(message[6:8])
-    LINK=str(e.text[8:])
+    counter=int(message[12:14])
+    LINK=str(e.text[14:])
     for i in range (1,counter):
        await bot.send_file(e.chat_id,LINK)
     await e.delete()
