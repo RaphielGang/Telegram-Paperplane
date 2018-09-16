@@ -495,7 +495,7 @@ async def log(e):
     await bot.send_message(LOGGER_GROUP,message)
     await e.edit("`Logged Successfully`")
 @bot.on(events.NewMessage(pattern='.lang'))
- async def lang(event):
+async def lang(event):
       global langi
       message=await bot.get_messages(e.chat_id)
       langi = str(message[0].message[6:])
