@@ -422,7 +422,7 @@ async def snipe_on(e):
     SNIPE_TEXT=text
     SNIPE_ID=e.chat_id
     await e.edit('`Sniping active on the word '+text+'`')
-    await bot.send_message(LOGGER_GROUP,'`Sniping active on the word '+text+' at +'str(e.chat_id)+'`')
+    await bot.send_message(LOGGER_GROUP,'`Sniping active on the word '+text+' at '+str(e.chat_id)+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
