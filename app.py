@@ -785,8 +785,9 @@ async def tiny_pic_spam(e):
     message= e.text
     counter=int(message[6:8])
     LINK=str(e.text[8:])
+    subprocess.run['wget',LINK,'-O','spamimg.jpg']
     for i in range (1,counter):
-       await bot.send_file(e.chat_id,LINK)
+       await bot.send_file(e.chat_id,"spamimg.jpg")
     await e.delete()
     await bot.send_message(LOGGER_GROUP,"TinyPicSpam was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.picspam'))
@@ -795,8 +796,9 @@ async def pic_spam(e):
     message = e.text
     counter=int(message[9:13])
     LINK=str(e.text[13:])
+    ubprocess.run['wget',LINK,'-O','spamimg.jpg']
     for i in range (1,counter):
-       await bot.send_file(e.chat_id,LINK)
+       await bot.send_file(e.chat_id,"spamimg.jpg")
     await e.delete()
     await bot.send_message(LOGGER_GROUP,"PicSpam was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.trt'))
