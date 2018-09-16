@@ -59,7 +59,7 @@ global SPAM_ALLOWANCE
 global SPAM_CHAT_ID
 langi="en-us"
 SPAM_CHAT_ID=[]
-LOGGER_GROUP=os.environ['LOGGER']
+LOGGER_GROUP=int(os.environ['LOGGER'])
 SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
