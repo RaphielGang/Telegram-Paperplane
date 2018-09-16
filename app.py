@@ -57,7 +57,9 @@ SNIPER=False
 global COUNT_MSG
 global SPAM_ALLOWANCE
 global SPAM_CHAT_ID
+langi="en-us"
 SPAM_CHAT_ID=[]
+LOGGER_GROUP=os.environ(LOGGER)
 SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
@@ -151,6 +153,8 @@ async def common_outgoing_handler(e):
              await e.edit('<triggerban> '+str((await e.get_reply_message()).sender_id))
              return
         await e.delete()
+        await bot.send_file(e.chat_id,"https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif")
+        await bot.send_message(LOGGER_GROUP,str((await e.get_reply_message()).sender_id)+" was banned.")
     elif find == "addsudo":
         if e.sender_id==BRAIN_CHECKER[0]:
             db=sqlite3.connect("brains.check")
@@ -176,6 +180,7 @@ async def common_outgoing_handler(e):
         time.sleep(5)
         await e.delete()
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
+        await bot.send_message(LOGGER_GROUP,str((await e.get_reply_message()).sender_id)+" was muted.")
     elif find == "disable killme":
         ENABLE_KILLME=False
         await e.edit("```Done!```")
@@ -223,6 +228,7 @@ async def common_outgoing_handler(e):
             await asyncio.sleep(0.3)
         await e.respond('/filter filters @baalajimaestro kicked them all')
         await e.respond("```Successfully cleaned Marie filters yaay!```\n Gimme cookies @baalajimaestro")
+        await bot.send_message(LOGGER_GROUP,"I cleaned all Marie filters at "+str(e.chat_id))
     elif find == "rmnotes":
         await e.edit("```Will be kicking away all Marie notes.```")
         time.sleep(3)
@@ -233,6 +239,7 @@ async def common_outgoing_handler(e):
             await asyncio.sleep(0.3)
         await e.respond('/save save @baalajimaestro kicked them all')
         await e.respond("```Successfully cleaned Marie notes yaay!```\n Gimme cookies @baalajimaestro")
+        await bot.send_message(LOGGER_GROUP,"I cleaned all Marie notes at "+str(e.chat_id))
     elif find=="rekt":
         await e.edit("Get Rekt man! ( ͡° ͜ʖ ͡°)")
     elif find=="speed":
@@ -257,9 +264,9 @@ async def common_outgoing_handler(e):
                 break
             i=i+1
             await message.delete()
-        await bot.send_message(-1001200493978,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away")
+        await bot.send_message(LOGGER_GROUP,"You had recieved "+str(COUNT_MSG)+" messages from "+str(len(USERS))+" chats while you were away")
         for i in USERS:
-            await bot.send_message(-1001200493978,str(i)+" sent you "+"`"+str(USERS[i])+" messages`")
+            await bot.send_message(LOGGER_GROUP,str(i)+" sent you "+"`"+str(USERS[i])+" messages`")
         COUNT_MSG=0
         USERS={}
         AFKREASON="No reason"
@@ -268,7 +275,7 @@ async def common_outgoing_handler(e):
         index=randint(0,len(reactor)-1)
         reply_text=reactor[index]
         await e.edit(reply_text)
-        await bot.send_message(-1001200493978,"You ran away from a cancerous chat")
+        await bot.send_message(LOGGER_GROUP,"You ran away from a cancerous chat")
     elif find=="get filters":
             db=sqlite3.connect("filters.db")
             cursor=db.cursor()
@@ -310,7 +317,7 @@ async def common_outgoing_handler(e):
         if msgs:
          await bot.delete_messages(chat, msgs)
         await bot.send_message(e.chat_id,"`Fast Purge Complete!\n`Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
-        await bot.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
+        await bot.send_message(LOGGER_GROUP,"Purge of "+str(count)+" messages done successfully.")
         time.sleep(2)
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -415,6 +422,7 @@ async def snipe_on(e):
     SNIPE_TEXT=text
     SNIPE_ID=e.chat_id
     await e.edit('`Sniping active on the word '+text+'`')
+    await bot.send_message(LOGGER_GROUP,'`Sniping active on the word '+text+' at +'str(e.chat_id)+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
@@ -484,8 +492,15 @@ async def log(e):
     else:
         message = e.text
         message = str(message[4:])
-    await bot.send_message(-1001200493978,message)
+    await bot.send_message(LOGGER_GROUP,message)
     await e.edit("`Logged Successfully`")
+@bot.on(events.NewMessage(pattern='.lang'))
+ async def lang(event):
+      global langi
+      message=await bot.get_messages(e.chat_id)
+      langi = str(message[0].message[6:])
+      await bot.send_message(LOGGER_GROUP,"tts language changed to **"+langi+"**")
+      await e.edit("tts language changed to **"+langi+"**")
 @bot.on(events.NewMessage(outgoing=True, pattern='.term'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.term'))
 async def terminal_runner(e):
@@ -538,7 +553,7 @@ async def purgeme(e):
         i=i+1
         await message.delete()
     await bot.send_message(e.chat_id,"`Purge Complete!` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
-    await bot.send_message(-1001200493978,"Purge of "+str(count)+" messages done successfully.")
+    await bot.send_message(LOGGER_GROUP,"Purge of "+str(count)+" messages done successfully.")
     time.sleep(2)
     i=1
     async for message in bot.iter_messages(e.chat_id,from_user='me'):
@@ -654,14 +669,14 @@ async def gsearch(e):
         result_=subprocess.run(['gsearch', match], stdout=subprocess.PIPE)
         result=str(result_.stdout.decode())
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search Query:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
-        await bot.send_message(-1001200493978,"Google Search query "+match+" was executed successfully")
+        await bot.send_message(LOGGER_GROUP,"Google Search query "+match+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True,pattern=r'.wiki (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'.wiki (.*)'))
 async def wiki(e):
         match = e.pattern_match.group(1)
         result=wikipedia.summary(match)
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
-        await bot.send_message(-1001200493978,"Wiki query "+match+" was executed successfully")
+        await bot.send_message(LOGGER_GROUP,"Wiki query "+match+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
 async def set_afk(e):
@@ -673,6 +688,7 @@ async def set_afk(e):
             await e.edit("AFK AF!")
             if string!="":
                 AFKREASON=string
+            await bot.send_message(LOGGER_GROUP,"You went AFK!")
 @bot.on(events.NewMessage(outgoing=True, pattern='.editme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.editme'))
 async def editer(e):
@@ -685,7 +701,7 @@ async def editer(e):
         await e.delete()
         break
     i=i+1
-   await bot.send_message(-1001200493978,"Edit query was executed successfully")
+   await bot.send_message(LOGGER_GROUP,"Edit query was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.zal'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.zal'))
 async def zal(e):
@@ -708,6 +724,7 @@ async def set_asm(e):
             message=e.text
             SPAM_ALLOWANCE=int(message[6:])
             await e.edit("Spam Tracking turned on!")
+            await bot.send_message(LOGGER_GROUP,"Spam Tracking is Turned on!")
 @bot.on(events.NewMessage(outgoing=True, pattern='.eval'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.eval'))
 async def evaluate(e):
@@ -718,7 +735,7 @@ async def evaluate(e):
       await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`'+str(evaluation)+'`')
     else:
       await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`No Result Returned/False`')
-    await bot.send_message(-1001200493978,"Eval query "+e.text[6:]+" was executed successfully")
+    await bot.send_message(LOGGER_GROUP,"Eval query "+e.text[6:]+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern=r'.exec (.*)'))
 async def run(e):
  code = e.raw_text[5:]
@@ -731,7 +748,7 @@ async def run(e):
   await e.edit("**Query: **\n`"+e.text[5:]+'`\n**Result: **\n`'+str(result)+'`')
  else:
   await e.edit("**Query: **\n`"+e.text[5:]+'`\n**Result: **\n`'+'No Result Returned/False'+'`')
- await bot.send_message(-1001200493978,"Exec query "+e.text[5:]+" was executed successfully")
+ await bot.send_message(LOGGER_GROUP,"Exec query "+e.text[5:]+" was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.spam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.spam'))
 async def spammer(e):
@@ -740,7 +757,7 @@ async def spammer(e):
     spam_message=str(e.text[8:])
     await asyncio.wait([e.respond(spam_message) for i in range(counter)])
     await e.delete()
-    await bot.send_message(-1001200493978,"Spam was executed successfully")
+    await bot.send_message(LOGGER_GROUP,"Spam was executed successfully")
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
@@ -748,6 +765,7 @@ async def killdabot(e):
         counter=int(message[10:])
         await e.reply('`Goodbye *Windows XP shutdown sound*....`')
         time.sleep(2)
+        await bot.send_message(LOGGER_GROUP,"You shutdown the bot for "+str(counter)+" seconds")
         time.sleep(counter)
 @bot.on(events.NewMessage(outgoing=True, pattern='.bigspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.bigspam'))
@@ -758,7 +776,27 @@ async def bigspam(e):
     for i in range (1,counter):
        await e.respond(spam_message)
     await e.delete()
-    await bot.send_message(-1001200493978,"bigspam was executed successfully")
+    await bot.send_message(LOGGER_GROUP,"bigspam was executed successfully")
+@bot.on(events.NewMessage(outgoing=True, pattern='.tinypicspam'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.tinypicspam'))
+async def tiny_pic_spam(e):
+    message= e.text
+    counter=int(message[6:8])
+    LINK=str(e.text[8:])
+    for i in range (1,counter):
+       await bot.send_file(e.chat_id,LINK)
+    await e.delete()
+    await bot.send_message(LOGGER_GROUP,"TinyPicSpam was executed successfully")
+@bot.on(events.NewMessage(outgoing=True, pattern='.picspam'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.picspam'))
+async def pic_spam(e):
+    message = e.text
+    counter=int(message[9:13])
+    LINK=str(e.text[13:])
+    for i in range (1,counter):
+       await bot.send_file(e.chat_id,LINK)
+    await e.delete()
+    await bot.send_message(LOGGER_GROUP,"PicSpam was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.trt'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.trt'))
 async def translateme(e):
@@ -774,7 +812,7 @@ async def translateme(e):
     reply_text="`Source: `\n"+text+"`\n\nTranslation: `\n"+reply_text
     await bot.send_message(e.chat_id,reply_text)
     await e.delete()
-    await bot.send_message(-1001200493978,"Translate query "+message+" was executed successfully")
+    await bot.send_message(LOGGER_GROUP,"Translate query "+message+" was executed successfully")
 @bot.on(events.NewMessage(incoming=True,pattern="<triggerban>"))
 async def triggered_ban(e):
     message =e.text
@@ -955,7 +993,7 @@ async def selfdestruct(e):
             break
         i=i+1
         await message.delete()
-        await bot.send_message(-1001200493978,"sd query done successfully")
+        await bot.send_message(LOGGER_GROUP,"sd query done successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.filter'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.filter'))
 async def add_filter(e):
@@ -1003,7 +1041,7 @@ async def ud(e):
   mean = urbandict.define(str)
   if len(mean) >= 0:
     await e.edit('Text: **'+str+'**\n\nMeaning: **'+mean[0]['def']+'**\n\n'+'Example: \n__'+mean[0]['example']+'__')
-    await bot.send_message(-1001200493978,"ud query "+str+" executed successfully.")
+    await bot.send_message(LOGGER_GROUP,"ud query "+str+" executed successfully.")
   else:
     await e.edit("No result found for **"+str+"**")
 @bot.on(events.NewMessage(outgoing=True, pattern='.tts'))
@@ -1017,17 +1055,18 @@ async def tts(e):
     else:
         replye = str(replye[5:])
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    tts = gTTS(replye, "en-in")
+    tts = gTTS(replye,langi)
     tts.save("k.mp3")
     with open("k.mp3", "rb") as f:
         linelist = list(f)
         linecount = len(linelist)
     if linecount == 1:                          #tts on personal chats is broken
-        tts = gTTS(replyes,"en-in")
+        tts = gTTS(replyes,langi)
         tts.save("k.mp3")
     with open("k.mp3", "r") as speech:
         await bot.send_file(e.chat_id, 'k.mp3', voice_note=True)
         os.remove("k.mp3")
+        await bot.send_message(LOGGER_GROUP,"tts of "+replye+" executed successfully!")
         await e.delete()
 @bot.on(events.NewMessage(outgoing=True, pattern=':/'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
@@ -1045,28 +1084,5 @@ async def lol(e):
     for j in range(10):
         t = t[:-1] + '_-'
         await r.edit(t)
-@bot.on(events.NewMessage(outgoing=True, pattern='.loltts'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.loltts'))
-async def meme_tts(e):
-    textx=await e.get_reply_message()
-    replye = e.text
-    if textx:
-         replye = await e.get_reply_message()
-         replye = str(replye.message)
-    else:
-        replye = str(replye[8:])
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    tts = gTTS(replye, "ja")
-    tts.save("k.mp3")
-    with open("k.mp3", "rb") as f:
-        linelist = list(f)
-        linecount = len(linelist)
-    if linecount == 1:                          #tts on personal chats is broken
-        tts = gTTS(replyes,"ja")
-        tts.save("k.mp3")
-    with open("k.mp3", "r") as speech:
-        await bot.send_file(e.chat_id, 'k.mp3', voice_note=True)
-        os.remove("k.mp3")
-        await e.delete()
 if len(sys.argv) < 2:
     bot.run_until_disconnected()
