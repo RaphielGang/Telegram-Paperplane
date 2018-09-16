@@ -39,7 +39,7 @@ global SPAM_ALLOWANCE
 global SPAM_CHAT_ID
 langi="en-us"
 SPAM_CHAT_ID=[]
-LOGGER_GROUP=os.environ(LOGGER)
+LOGGER_GROUP=int(os.environ['LOGGER'])
 SPAM_ALLOWANCE=3
 global MUTING_USERS
 MUTING_USERS={}
@@ -398,7 +398,7 @@ async def snipe_on(e):
     SNIPE_TEXT=text
     SNIPE_ID=e.chat_id
     await e.edit('`Sniping active on the word '+text+'`')
-    await bot.send_message(LOGGER_GROUP,'`Sniping active on the word '+text+' at +'str(e.chat_id)+'`')
+    await bot.send_message(LOGGER_GROUP,'`Sniping active on the word '+text+' at '+str(e.chat_id)+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
@@ -471,7 +471,7 @@ async def log(e):
     await bot.send_message(LOGGER_GROUP,message)
     await e.edit("`Logged Successfully`")
 @bot.on(events.NewMessage(pattern='.lang'))
- async def lang(event):
+async def lang(event):
       global langi
       message=await bot.get_messages(e.chat_id)
       langi = str(message[0].message[6:])
@@ -757,8 +757,8 @@ async def bigspam(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.tinypicspam'))
 async def tiny_pic_spam(e):
     message= e.text
-    counter=int(message[6:8])
-    LINK=str(e.text[8:])
+    counter=int(message[12:14])
+    LINK=str(e.text[14:])
     for i in range (1,counter):
        await bot.send_file(e.chat_id,LINK)
     await e.delete()
