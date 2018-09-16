@@ -755,22 +755,13 @@ async def bigspam(e):
        await e.respond(spam_message)
     await e.delete()
     await bot.send_message(LOGGER_GROUP,"bigspam was executed successfully")
-@bot.on(events.NewMessage(outgoing=True, pattern='.tinypicspam'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.tinypicspam'))
+@bot.on(events.NewMessage(outgoing=True, pattern='.picspam'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.ppam'))
 async def tiny_pic_spam(e):
     message= e.text
-    counter=int(message[13:15])
-    LINK=str(e.text[15:])
-    for i in range (1,counter):
-       await bot.send_file(e.chat_id,LINK)
-    await e.delete()
-    await bot.send_message(LOGGER_GROUP,"TinyPicSpam was executed successfully")
-@bot.on(events.NewMessage(outgoing=True, pattern='.picspam'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.picspam'))
-async def pic_spam(e):
-    message = e.text
-    counter=int(message[9:13])
-    LINK=str(e.text[13:])
+    TEXT=message.split()
+    counter=int(TEXT[1])
+    LINK=str(TEXT[2])
     for i in range (1,counter):
        await bot.send_file(e.chat_id,LINK)
     await e.delete()
