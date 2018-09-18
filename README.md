@@ -32,9 +32,9 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 - Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a session_name.session file, which is needed to run your bot, push this file to your git.
 
-- Connect your git to heroku.
+- Push it with the heroku cli
 
-- Add API_KEY and API_HASH in CONFIG VARS. 
+- Add API_KEY, API_HASH and LOGGER in CONFIG VARS. 
 
 - Deploy.
 
