@@ -308,7 +308,7 @@ async def common_outgoing_handler(e):
         os.execl(sys.executable, sys.executable, *sys.argv)
     elif find == "pingme":
         start = datetime.now()
-        await e.edit('Pong!')
+        await e.edit('`Pong!`')
         end = datetime.now()
         ms = (end - start).microseconds/1000
         await e.edit('Pong!\n%sms' % (ms))
@@ -472,8 +472,8 @@ async def log(e):
         message = str(message[4:])
     await bot.send_message(LOGGER_GROUP,message)
     await e.edit("`Logged Successfully`")
-@bot.on(events.NewMessage(pattern='.lang'))
-async def lang(event):
+@bot.on(events.NewMessage(pattern='.lang',outgoing=True))
+async def lang(e):
       global langi
       message=await bot.get_messages(e.chat_id)
       langi = str(message[0].message[6:])
@@ -756,7 +756,7 @@ async def bigspam(e):
     await e.delete()
     await bot.send_message(LOGGER_GROUP,"bigspam was executed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.picspam'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.ppam'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.picspam'))
 async def tiny_pic_spam(e):
     message= e.text
     TEXT=message.split()
@@ -769,6 +769,7 @@ async def tiny_pic_spam(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.trt'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.trt'))
 async def translateme(e):
+    global langi
     translator=Translator()
     textx=await e.get_reply_message()
     message = e.text
@@ -777,7 +778,7 @@ async def translateme(e):
          text = str(message.message)
     else:
         text = str(message[4:])
-    reply_text=translator.translate(text, dest='en').text
+    reply_text=translator.translate(text, dest=langi).text
     reply_text="`Source: `\n"+text+"`\n\nTranslation: `\n"+reply_text
     await bot.send_message(e.chat_id,reply_text)
     await e.delete()
