@@ -47,6 +47,10 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 ### Commands available(will be constantly updated):
 
+```diff
+- This Readme might go out-of-date at any point, as I push notifications for all updates to my [support channel](https://t.me/maestro_userbot_channel). I recommend subscribing to the channel, for timely updates and fixes.
+```
+
 -----`.` stands for any random character, it is made for the ease of the user------
 
 - `.delmsg`:                         Deletes the last typed message
