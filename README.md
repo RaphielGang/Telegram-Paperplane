@@ -16,7 +16,7 @@ Alternatively, [find me on telegram](https://t.me/baalajimaestro)!.
 
 ### Before you start:
 Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
-Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER
+Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER<br/><br/>
 **Please read through this before cloning. I don't want you get stuck anywhere. This guide can get you running up the userbot, if followed properly**
 
 #### Running on heroku:
