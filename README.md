@@ -12,6 +12,8 @@ If you found any bugs or you wanna suggest some features then contact [My suppor
 
 Alternatively, [find me on telegram](https://t.me/baalajimaestro)!.
 
+-This Readme might go out-of-date at any point, as I push notifications for all updates to my [support channel](https://t.me/maestro_userbot_channel). I recommend subscribing to the channel, for timely updates and fixes.
+
 ### Before you start:
 Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
 Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER
@@ -46,10 +48,6 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 - Start the userbot: `python3 app.py`
 
 ### Commands available(will be constantly updated):
-
-```diff
-- This Readme might go out-of-date at any point, as I push notifications for all updates to my [support channel](https://t.me/maestro_userbot_channel). I recommend subscribing to the channel, for timely updates and fixes.
-```
 
 -----`.` stands for any random character, it is made for the ease of the user------
 
