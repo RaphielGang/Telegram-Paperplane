@@ -97,8 +97,8 @@ async def restart_the_bot(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.pingme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pingme'))
 async def pingme(e):
-        k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
-		await e.edit('`' + k.stdout.decode()[:-1] + '`')
+	k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
+	await e.edit('`' + k.stdout.decode()[:-1] + '`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
@@ -112,7 +112,7 @@ async def killdabot(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
         await e.edit("Report bugs here: @userbot_support")
-@bot.on(events.NewMessage(outgoing=True,pattern='.help))
+@bot.on(events.NewMessage(outgoing=True,pattern='.help'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.help'))
 async def readme(e):
         await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/blob/master/README.md')
