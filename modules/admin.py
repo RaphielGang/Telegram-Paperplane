@@ -5,6 +5,7 @@ from telethon.errors import ChatAdminRequiredError
 from telethon.errors import ChannelInvalidError
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChannelAdminRights
+import time
 @bot.on(events.NewMessage(outgoing=True,pattern=".wizard"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.wizard'))
 async def wizzard(e):
