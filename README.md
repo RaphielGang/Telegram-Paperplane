@@ -30,11 +30,9 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 - Fork my repo.
 
-- Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a session_name.session file, which is needed to run your bot, push this file to your git.
+- Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a session_name.session file, which is needed to run your bot.
 
 - Push it with the heroku cli
-
-- Add API_KEY, API_HASH and LOGGER in CONFIG VARS. 
 
 - Deploy.
 
@@ -43,7 +41,7 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 - Install the necessary dependencies by moving to the project directory and running: `pip3 install -r requirements.txt`
 
-- Add your API_KEY, API_HASH and LOGGER: `export API_HASH=your-api-hash` ,`export API_KEY=your-api-id` and `export LOGGER=your-group-id`
+- Add your API_KEY, API_HASH and LOGGER, and other stuff to config.py(You need to create it, a sample is provided)
 
 - Start the userbot: `python3 app.py`
 
