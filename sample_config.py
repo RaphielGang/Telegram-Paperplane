@@ -5,8 +5,9 @@ if not __name__.endswith("sample_config"):
     quit(1)
 API_ID="YOUR API ID"
 API_HASH="YOUR API HASH"
-LOG_GROUP="CHAT ID (-ve) OF THE LOG GROUP"
+LOGGER_GROUP="CHAT ID (-ve) OF THE LOG GROUP"
 LOGGER=True    #Incase you want to turn off logging, put this to false
+CONSOLE_LOGGER_VERBOSE=False
 TRT_ENABLE=False
 TTS_ENABLE=False
 TRT_API_USERNAME="Insert API Username"    #For Using IBM Translator API

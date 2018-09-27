@@ -6,8 +6,8 @@ import glob
 import subprocess
 import os
 import sqlite3
-subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
-subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
 cursor=db.cursor()
 cursor.execute('''SELECT * FROM BRAIN1''')
@@ -50,6 +50,8 @@ os.chdir(path)
 copy('template_start.py','runner.py')
 with open('runner.py','a') as run:
     run.writelines(["print('Started the bot!')\n"])
+    if CONSOLE_LOGGER_VERBOSE:
+         run.writelines(["import logging\nlogging.basicConfig(level=logging.DEBUG)\n"])
     for file in files:
         os.chdir(path)
         os.chdir('modules')
