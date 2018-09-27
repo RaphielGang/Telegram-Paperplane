@@ -11,19 +11,19 @@ async def common_incoming_handler(e):
             if int(row[1]) == int(e.sender_id):
                 await e.delete()
                 return
-    db=sqlite3.connect("spam_mute.db")
-    cursor=db.cursor()
-    cursor.execute('''SELECT * FROM MUTE''')
-    all_rows = cursor.fetchall()
-    for row in all_rows:
+      db=sqlite3.connect("spam_mute.db")
+      cursor=db.cursor()
+      cursor.execute('''SELECT * FROM MUTE''')
+      all_rows = cursor.fetchall()
+      for row in all_rows:
        if int(row[0]) == int(e.chat_id):
           if int(row[1]) == int(e.sender_id):
             await e.delete()
             return
-        if e.sender_id not in MUTING_USERS:
+          if e.sender_id not in MUTING_USERS:
                   MUTING_USERS={}
                   MUTING_USERS.update({e.sender_id:1})
-        if e.sender_id in MUTING_USERS:
+          if e.sender_id in MUTING_USERS:
                      MUTING_USERS[e.sender_id]=MUTING_USERS[e.sender_id]+1
                      if MUTING_USERS[e.sender_id]>SPAM_ALLOWANCE:
                          db=sqlite3.connect("spam_mute.db")
