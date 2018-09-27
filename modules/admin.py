@@ -133,3 +133,12 @@ async def triggered_mute(e):
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
         await bot.send_file(e.chat_id,"Job was done, Master! Gimme Cookies!")
+@bot.on(events.NewMessage(outgoing=True, pattern='.speak'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.speak'))
+async def unmute(e):
+     db=sqlite3.connect("spam_mute.db")
+     cursor=db.cursor()
+     cursor.execute('''DELETE FROM mute WHERE chat_id=? AND sender=?''', (int(e.chat_id),int((await e.get_reply_message()).sender_id)))
+     db.commit()
+     await e.edit("```Unmuted Successfully```")
+     db.close()

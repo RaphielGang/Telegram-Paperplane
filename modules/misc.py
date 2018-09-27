@@ -1,4 +1,7 @@
 import hastebin
+import pybase64
+import random,re
+import subprocess
 @bot.on(events.NewMessage(outgoing=True,pattern='.pip (.+)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
 async def pipcheck(e):
@@ -72,3 +75,52 @@ async def randomise(e):
     r=(e.text).split()
     index=randint(1,len(r)-1)
     await e.edit("**Query: **\n`"+e.text+'`\n**Output: **\n`'+r[index]+'`')
+@bot.on(events.NewMessage(outgoing=True,pattern='.get userbotfile'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.get userbotfile'))
+async def userbot_file(e):
+    file=open(sys.argv[0], 'r')
+    await bot.send_file(e.chat_id, sys.argv[0], reply_to=e.id, caption='`Here\'s me in a file`')
+    file.close()
+@bot.on(events.NewMessage(outgoing=True,pattern='.alive'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.alive'))
+async def amialive(e):
+        await e.edit("`Master! I am alive😁`")
+@bot.on(events.NewMessage(outgoing=True,pattern='.chatid'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.chatid'))
+async def chatidgetter(e):
+        await e.edit('`Chat ID: '+str(e.chat_id)+'`')
+@bot.on(events.NewMessage(outgoing=True,pattern='.restart'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.restart'))
+async def restart_the_bot(e):
+        await e.edit("`Thank You master! I am taking a break!`")
+        os.execl(sys.executable, sys.executable, *sys.argv)
+@bot.on(events.NewMessage(outgoing=True,pattern='.pingme'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.pingme'))
+async def pingme(e):
+        k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
+		await e.edit('`' + k.stdout.decode()[:-1] + '`')
+@bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
+async def killdabot(e):
+        message = e.text
+        counter=int(message[10:])
+        await e.reply('`Goodbye *Windows XP shutdown sound*....`')
+        time.sleep(2)
+        await bot.send_message(LOGGER_GROUP,"You shutdown the bot for "+str(counter)+" seconds")
+        time.sleep(counter)
+@bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
+async def killdabot(e):
+        await e.edit("Report bugs here: @userbot_support")
+@bot.on(events.NewMessage(outgoing=True,pattern='.help))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.help'))
+async def readme(e):
+        await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/blob/master/README.md')
+@bot.on(events.NewMessage(outgoing=True,pattern='.repo'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.repo'))
+async def repo_is_here(e):
+        await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/')
+@bot.on(events.NewMessage(outgoing=True,pattern='.supportchannel'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.supportchannel'))
+async def support_channel(e):
+        await e.edit('t.me/maestro_userbot_channel')

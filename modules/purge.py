@@ -93,3 +93,21 @@ async def editer(e):
     i=i+1
    if LOGGER:
          await bot.send_message(LOGGER_GROUP,"Edit query was executed successfully")
+@bot.on(events.NewMessage(outgoing=True, pattern='.sd'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.sd'))
+async def selfdestruct(e):
+    message=e.text
+    counter=int(message[4:6])
+    text=str(e.text[6:])
+    text=text+"`This message shall be self-destructed in "+str(counter)+" seconds`"
+    await e.delete()
+    await bot.send_message(e.chat_id,text)
+    time.sleep(counter)
+    i=1
+    async for message in bot.iter_messages(e.chat_id,from_user='me'):
+        if i>1:
+            break
+        i=i+1
+        await message.delete()
+    if LOGGER:
+        await bot.send_message(LOGGER_GROUP,"sd query done successfully")
