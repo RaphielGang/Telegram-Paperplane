@@ -124,3 +124,7 @@ async def repo_is_here(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.supportchannel'))
 async def support_channel(e):
         await e.edit('t.me/maestro_userbot_channel')
+@bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
+async def bot_ver(e):
+	await e.edit('`UserBot Version: Modular r1`')
