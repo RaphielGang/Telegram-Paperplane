@@ -15,38 +15,6 @@ from googletrans import Translator
 from random import randint
 from zalgo_text import zalgo
 import sqlite3
-logging.basicConfig(level=logging.DEBUG)
-api_id=os.environ['API_KEY']
-api_hash=os.environ['API_HASH']
-global SPAM
-SPAM=False
-global ISAFK
-ISAFK=False
-global AFKREASON
-global ENABLE_KILLME
-ENABLE_KILLME=True
-AFKREASON="No Reason"
-global USERS
-USERS={}
-global SNIPE_TEXT
-SNIPE_TEXT=""
-global SNIPE_ID
-SNIPE_ID=0
-global SNIPER
-SNIPER=False
-global COUNT_MSG
-global SPAM_ALLOWANCE
-global SPAM_CHAT_ID
-langi="en-us"
-SPAM_CHAT_ID=[]
-LOGGER_GROUP=int(os.environ['LOGGER'])
-SPAM_ALLOWANCE=3
-global MUTING_USERS
-MUTING_USERS={}
-global MUTED_USERS
-MUTED_USERS={}
-COUNT_MSG=0
-BRAIN_CHECKER=[]
 subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
 subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 db=sqlite3.connect("brains.check")
