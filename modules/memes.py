@@ -117,3 +117,34 @@ async def react_meme(e):
     index=randint(0,len(reactor))
     reply_text=reactor[index]
     await e.edit(reply_text)
+@bot.on(events.NewMessage(outgoing=True,pattern='.shg'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.shg'))
+async def shrugger(e):
+    await e.edit("¯\_(ツ)_/¯")
+@bot.on(events.NewMessage(outgoing=True,pattern='.disable killme'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.disable killme'))
+async def disable_killme(e):
+        global ENABLE_KILLME
+        ENABLE_KILLME=False
+        await e.edit("```Done!```")
+@bot.on(events.NewMessage(outgoing=True,pattern='.enable killme'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.enable killme'))
+async def enable_killme(e):
+            global ENABLE_KILLME
+            ENABLE_KILLME=True
+            await e.edit("```Done!```")
+@bot.on(events.NewMessage(outgoing=True,pattern='.runs'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.runs'))
+async def runner_lol(e):
+    reactor=['Runs to Modi for Help','Runs to Donald Trumpet for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
+    index=randint(0,len(reactor)-1)
+    reply_text=reactor[index]
+    await e.edit(reply_text)
+    if LOGGER:
+        await bot.send_message(LOGGER_GROUP,"You ran away from a cancerous chat")
+@bot.on(events.NewMessage(incoming=True,pattern=".killme"))
+async def killmelol(e):
+    if ENABLE_KILLME:
+         name = await bot.get_entity(e.from_id)
+         name0 = str(name.first_name)
+         await e.reply('**K I L L  **[' + name0 + '](tg://user?id=' + str(e.from_id) + ')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
