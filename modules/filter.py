@@ -48,4 +48,18 @@ async def kick_marie_filter(e):
         await asyncio.sleep(0.3)
     await e.respond('/filter filters @baalajimaestro kicked them all')
     await e.respond("```Successfully cleaned Marie filters yaay!```\n Gimme cookies @baalajimaestro")
-    await bot.send_message(LOGGER_GROUP,"I cleaned all Marie filters at "+str(e.chat_id))
+    if LOGGER:
+          await bot.send_message(LOGGER_GROUP,"I cleaned all Marie filters at "+str(e.chat_id))
+@bot.on(events.NewMessage(outgoing=True, pattern='.get filters'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.get filters'))
+async def filters_active(e):
+        db=sqlite3.connect("filters.db")
+        cursor=db.cursor()
+        transact="Filters active on this chat: \n"
+        cursor.execute('''SELECT * FROM FILTER''')
+        all_rows = cursor.fetchall()
+        for row in all_rows:
+            if int(row[0]) == int(e.chat_id):
+                    transact=transact+"-"+str(row[1])+" : "+str(row[2])+"\n"
+        db.close()
+        await e.edit(transact)
