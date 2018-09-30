@@ -9,6 +9,7 @@ LOGGER_GROUP="CHAT ID (-ve) OF THE LOG GROUP"
 LOGGER=True    #Incase you want to turn off logging, put this to false
 CONSOLE_LOGGER_VERBOSE=False
 TRT_ENABLE=False
+PM_AUTO_BAN=False
 TTS_ENABLE=False
 TRT_API_USERNAME="Insert API Username"    #For Using IBM Translator API
 TTS_API_USERNAME="Insert API Username"    #For IBM Voice API

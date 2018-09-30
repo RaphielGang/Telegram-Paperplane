@@ -1,13 +1,13 @@
 import hastebin
 import pybase64
-import random,re
+import random,re,os,signal
 import subprocess
 @bot.on(events.NewMessage(outgoing=True,pattern='.pip (.+)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
 async def pipcheck(e):
 	a=await e.reply('`Searching . . .`')
 	r='`' + subprocess.run(['pip3', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
-	await a.edit(r)
+	await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.paste'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.paste'))
 async def haste_paste(e):
@@ -26,7 +26,7 @@ async def log(e):
         message = e.text
         message = str(message[4:])
     if LOGGER:
-        await bot.send_message(LOGGER_GROUP,message)
+        await (await e.get_reply_message()).forward_to(LOGGER_GROUP)
         await e.edit("`Logged Successfully`")
 @bot.on(events.NewMessage(outgoing=True, pattern='.speed'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.speed'))
@@ -92,8 +92,11 @@ async def chatidgetter(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.restart'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.restart'))
 async def restart_the_bot(e):
-        await e.edit("`Thank You master! I am taking a break!`")
-        os.execl(sys.executable, sys.executable, *sys.argv)
+	global SIGINT
+	await e.edit("`Thank You master! I am taking a break!`")
+	SIGINT=-1
+	os.killpg(PROCESS_ID,signal.SIGTERM)
+	os.killpg(PROCESS_ID,signal.SIGINT)
 @bot.on(events.NewMessage(outgoing=True,pattern='.pingme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pingme'))
 async def pingme(e):
@@ -108,8 +111,8 @@ async def killdabot(e):
         time.sleep(2)
         await bot.send_message(LOGGER_GROUP,"You shutdown the bot for "+str(counter)+" seconds")
         time.sleep(counter)
-@bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
+@bot.on(events.NewMessage(outgoing=True,pattern='.support'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.support'))
 async def killdabot(e):
         await e.edit("Report bugs here: @userbot_support")
 @bot.on(events.NewMessage(outgoing=True,pattern='.help'))
@@ -124,7 +127,12 @@ async def repo_is_here(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.supportchannel'))
 async def support_channel(e):
         await e.edit('t.me/maestro_userbot_channel')
+@bot.on(events.NewMessage(outgoing=True,pattern='.sysdetails'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.sysdetails'))
+async def sysdetails(e):
+    r='`' + subprocess.run(['screenfetch', '-n'], stdout=subprocess.PIPE).stdout.decode() + '`'
+    await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
 async def bot_ver(e):
-	await e.edit('`UserBot Version: Modular r1`')
+	await e.edit('`UserBot Version: Modular r1.03`')

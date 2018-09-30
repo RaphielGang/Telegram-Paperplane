@@ -124,5 +124,7 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 - `.get notes`:                      Fetch all notes set in the userbot in that chat
 
 - `.img text`:                       Search and fetch first two images from google
+
+- `.approvepm`:                      Approves the Person in reply to PM, incase PM-Permit is enabled
  
 Clone this and try to add features to it, make pull requests to merge it ;) 
