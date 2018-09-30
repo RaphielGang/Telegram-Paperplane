@@ -21,6 +21,7 @@ async def permitpm(e):
               COUNT_PM[e.chat_id]=COUNT_PM[e.chat_id]+1
            if COUNT_PM[e.chat_id]>4:
                await e.respond('`Imma reporting you! Bye nibba!`')
+               del COUNT_PM[e.chat_id]
                await bot(BlockRequest(e.chat_id))
 @bot.on(events.NewMessage(outgoing=True,pattern='.approvepm'))
 @bot.on(events.NewMessage(outgoing=True,pattern=".approvepm"))
