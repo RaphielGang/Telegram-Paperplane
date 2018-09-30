@@ -22,6 +22,12 @@ if not os.path.exists('filters.db'):
      cursor.execute('''CREATE TABLE NOTES(chat_id INTEGER,note TEXT, reply TEXT)''')
      db.commit()
      db.close()
+if not os.path.exists('pmpermit.db'):
+     db= sqlite3.connect("pmpermit.db")
+     cursor=db.cursor()
+     cursor.execute('''CREATE TABLE APPROVED(chat_id INTEGER)''')
+     db.commit()
+     db.close()
 if not os.path.exists("spam_mute.db"):
      db= sqlite3.connect("spam_mute.db")
      cursor=db.cursor()
