@@ -47,7 +47,7 @@ for file in files:
             with open('test.py','a') as w:
                 string=fd.readlines()
                 w.writelines(string)
-                subprocess.run('python test.py',shell=True)
+                subprocess.run('python3 test.py',shell=True)
                 os.chdir("modules")
 for i in files:
     print("INFO: Successfully Loaded: "+ i)
@@ -69,4 +69,4 @@ with open('runner.py','a') as run:
 os.chdir(path)
 with open('runner.py','a') as run:
     run.writelines(["\nbot.run_until_disconnected()"])
-subprocess.run('python runner.py',shell=True)
+subprocess.run('python3 runner.py',shell=True)
