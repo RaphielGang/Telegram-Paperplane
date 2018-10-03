@@ -26,7 +26,7 @@ async def log(e):
         message = e.text
         message = str(message[4:])
     if LOGGER:
-        await bot.send_message(LOGGER_GROUP,message)
+        await (await e.get_reply_message()).forward_to(LOGGER_GROUP)
         await e.edit("`Logged Successfully`")
 @bot.on(events.NewMessage(outgoing=True, pattern='.speed'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.speed'))
@@ -127,4 +127,4 @@ async def support_channel(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
 async def bot_ver(e):
-	await e.edit('`UserBot Version: Modular r1`')
+	await e.edit('`UserBot Version: Modular r1.01`')
