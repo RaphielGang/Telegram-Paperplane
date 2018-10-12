@@ -143,3 +143,15 @@ async def unmute(e):
      db.commit()
      await e.edit("```Unmuted Successfully```")
      db.close()
+@bot.on(events.NewMessage(incoming=True))
+@bot.on(events.MessageEdited(incoming=True))
+async def muter(e):
+         db=sqlite3.connect("spam_mute.db")
+         cursor=db.cursor()
+         cursor.execute('''SELECT * FROM MUTE''')
+         all_rows = cursor.fetchall()
+         for row in all_rows:
+            if int(row[0]) == int(e.chat_id):
+               if int(row[1]) == int(e.sender_id):
+                 await e.delete()
+                 return

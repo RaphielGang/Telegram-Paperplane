@@ -127,4 +127,4 @@ async def support_channel(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
 async def bot_ver(e):
-	await e.edit('`UserBot Version: Modular r1`')
+	await e.edit('`UserBot Version: Modular r1.02`')
