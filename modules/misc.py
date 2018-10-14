@@ -21,8 +21,6 @@ async def log(e):
     textx=await e.get_reply_message()
     if textx:
          message = textx
-
-		 \
          message = str(message.message)
     else:
         message = e.text
