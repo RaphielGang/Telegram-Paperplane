@@ -13,7 +13,7 @@ async def evaluate(e):
           f.close()
           await bot.send_file(e.chat_id, 'sender.txt', reply_to=e.id, caption="`It's too big to send as text, sent to hastebin: `" + hastebin.post(ans[1:-1]))
           subprocess.run(['rm', 'sender.txt'], stdout=subprocess.PIPE)
-      await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`'+str(evaluation)+'`')
+      eawait e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`'+str(evaluation)+'`')
     else:
       await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`No Result Returned/False`')
     if LOGGER:
