@@ -1,6 +1,6 @@
 import hastebin
 import pybase64
-import random,re
+import random,re,os,signal
 import subprocess
 @bot.on(events.NewMessage(outgoing=True,pattern='.pip (.+)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
@@ -21,6 +21,8 @@ async def log(e):
     textx=await e.get_reply_message()
     if textx:
          message = textx
+
+		 \
          message = str(message.message)
     else:
         message = e.text
@@ -92,8 +94,11 @@ async def chatidgetter(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.restart'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.restart'))
 async def restart_the_bot(e):
-        await e.edit("`Thank You master! I am taking a break!`")
-        os.execl(sys.executable, sys.executable, *sys.argv)
+	global SIGINT
+	await e.edit("`Thank You master! I am taking a break!`")
+	SIGINT=-1
+	os.killpg(PROCESS_ID,signal.SIGTERM)
+	os.killpg(PROCESS_ID,signal.SIGINT)
 @bot.on(events.NewMessage(outgoing=True,pattern='.pingme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pingme'))
 async def pingme(e):
@@ -108,8 +113,8 @@ async def killdabot(e):
         time.sleep(2)
         await bot.send_message(LOGGER_GROUP,"You shutdown the bot for "+str(counter)+" seconds")
         time.sleep(counter)
-@bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
+@bot.on(events.NewMessage(outgoing=True,pattern='.support'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.support'))
 async def killdabot(e):
         await e.edit("Report bugs here: @userbot_support")
 @bot.on(events.NewMessage(outgoing=True,pattern='.help'))
