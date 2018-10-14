@@ -1,3 +1,4 @@
+import inspect
 @bot.on(events.NewMessage(outgoing=True, pattern='.eval'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.eval'))
 async def evaluate(e):
@@ -32,6 +33,12 @@ async def terminal_runner(e):
     list_x=command.split(' ')
     result=subprocess.run(list_x[1:], stdout=subprocess.PIPE)
     result=str(result.stdout.decode())
+    if len(result) > 4096:
+		f=open('sender.txt', 'w+')
+		f.write(ans)
+		f.close()
+		await bot.send_file(e.chat_id, 'hashes.txt', reply_to=e.id, caption="`It's too big to send a text, sent to hastebin: `" + hastebin.post(ans[1:-1]))
+		subprocess.run(['rm', 'sender.txt'], stdout=subprocess.PIPE)
     await e.edit("**Query: **\n`"+str(command[6:])+'`\n**Output: **\n`'+result+'`')
     if LOGGER:
         await bot.send_message(LOGGER_GROUP,"Terminal Command "+ str(list_x[1:])+" was executed sucessfully")

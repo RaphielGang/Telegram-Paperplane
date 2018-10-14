@@ -55,7 +55,7 @@ print("\n\nStarting Bot......")
 os.chdir(path)
 copy('template_start.py','runner.py')
 with open('runner.py','a') as run:
-    run.writelines(["print('Started the bot!')\n"])
+    run.writelines(["print('Bot is running!')\n"])
     if CONSOLE_LOGGER_VERBOSE:
          run.writelines(["import logging\nlogging.basicConfig(level=logging.DEBUG)\n"])
     for file in files:
