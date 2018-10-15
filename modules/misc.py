@@ -129,8 +129,9 @@ async def support_channel(e):
         await e.edit('t.me/maestro_userbot_channel')
 @bot.on(events.NewMessage(outgoing=True,pattern='.sysdetails'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.sysdetails'))
-r='`' + subprocess.run("screenfetch -n", stdout=subprocess.PIPE).stdout.decode() + '`'
-await e.edit(r)
+async def sysdetails(e):
+    r='`' + subprocess.run("screenfetch -n", stdout=subprocess.PIPE).stdout.decode() + '`'
+    await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
 async def bot_ver(e):
