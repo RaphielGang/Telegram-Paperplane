@@ -16,7 +16,7 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/
 
 
 def progress(current, total):
-    logger.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
+    print("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
 
 
 @bot.on(events.NewMessage(pattern=r".download (.*)", outgoing=True))
@@ -63,9 +63,9 @@ async def _(event):
                     """try:
                         await event.edit(download_progress_string)
                     except MessageNotModifiedError as e:
-                        logger.warn("__FLOODWAIT__: {} sleeping for 100seconds, before proceeding.".format(str(e)))
+                        print("__FLOODWAIT__: {} sleeping for 100seconds, before proceeding.".format(str(e)))
                     time.sleep(1)"""
-                    logger.info(download_progress_string)
+                    print(download_progress_string)
         end = datetime.now()
         ms = (end - start).seconds
         await event.edit("Downloaded to `{}` in {} seconds.".format(required_file_name, ms))
