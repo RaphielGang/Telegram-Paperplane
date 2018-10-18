@@ -14,7 +14,7 @@ from PIL import Image
 
 
 def progress(current, total):
-    logger.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
+    print("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
 
 
 def get_lst_of_files(input_directory, output_lst):
@@ -111,7 +111,7 @@ def extract_w_h(file):
     try:
         t_response = subprocess.check_output(command_to_run, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
-        logger.warn(exc)
+        print(exc)
     else:
         x_reponse = t_response.decode("UTF-8")
         response_json = json.loads(x_reponse)
