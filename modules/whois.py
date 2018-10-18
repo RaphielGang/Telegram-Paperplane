@@ -4,7 +4,7 @@ from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 
 
-current_date_time = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./../DOWNLOADS/")
+current_date_time = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
 
 
 @bot.on(events.NewMessage(pattern="\.whois ?(.*)", outgoing=True))
