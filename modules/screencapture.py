@@ -13,7 +13,7 @@ async def _(event):
     sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&url={}"
     input_str = event.pattern_match.group(1)
     response_api = requests.get(sample_url.format(SCREEN_SHOT_LAYER_ACCESS_KEY, input_str), stream=True)
-    temp_file_name = "screenshotlayer.png"
+    temp_file_name = "screenshotlayer.jpg"
     with open(temp_file_name, "wb") as fd:
         for chunk in response_api.iter_content(chunk_size=128):
             fd.write(chunk)
