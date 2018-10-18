@@ -115,8 +115,8 @@ async def killdabot(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.support'))
 async def killdabot(e):
         await e.edit("Report bugs here: @userbot_support")
-@bot.on(events.NewMessage(outgoing=True,pattern='.help'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.help'))
+@bot.on(events.NewMessage(outgoing=True,pattern='.helpme'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.helpme'))
 async def readme(e):
         await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/blob/master/README.md')
 @bot.on(events.NewMessage(outgoing=True,pattern='.repo'))
