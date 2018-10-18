@@ -4,7 +4,7 @@ import os
 import requests
 
 
-download_directory = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./../DOWNLOADS/")
+download_directory = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
 
 
 def progress(current, total):
