@@ -10,3 +10,5 @@ zalgo_text>=0.6
 hastebin.py>=0.2
 pybase64>=0.4.0
 google_images_download>=2.4.2
+hachoir
+Pillow>=5.3.0
