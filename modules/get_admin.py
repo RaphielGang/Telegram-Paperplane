@@ -12,8 +12,6 @@ async def get_admin(e):
     choice = e.pattern_match.group(1)
     to_write_chat = LOGGER_GROUP
     chat = None
-    if not choice:
-        chat = to_write_chat
     else:
         mentions = "Admins in channel {}: \n".format(str(e.chat_id))
         try:
