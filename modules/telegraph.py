@@ -5,7 +5,7 @@ from telegraph import Telegraph, upload_file, exceptions
 
 TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./DOWNLOADS/")
 short_name = os.environ.get("TELEGRAPH_SHORT_NAME", "BaalajiMaestro")
-PRIVATE_GROUP_BOT_API_ID = borg.uid
+PRIVATE_GROUP_BOT_API_ID = (await bot.get_me()).id
 
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=short_name)
