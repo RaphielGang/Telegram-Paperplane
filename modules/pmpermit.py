@@ -23,8 +23,10 @@ async def permitpm(e):
                await e.respond('`Imma reporting you! Bye nibba!`')
                del COUNT_PM[e.chat_id]
                await bot(BlockRequest(e.chat_id))
+               if LOGGER:
+                   await bot.send_message(str(e.chat_id)+" was just another retarded nibba")
 @bot.on(events.NewMessage(outgoing=True,pattern='.approvepm'))
-@bot.on(events.NewMessage(outgoing=True,pattern=".approvepm"))
+@bot.on(events.MessageEdited(outgoing=True,pattern=".approvepm"))
 async def approvepm(e):
     db=sqlite3.connect("pmpermit.db")
     cursor=db.cursor()
