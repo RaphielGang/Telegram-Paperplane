@@ -12,7 +12,7 @@ from telethon.errors import MessageNotModifiedError
 
 from PIL import Image
 
-TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
+TEMP_DOWNLOAD_DIRECTORY = os.getcwd()
 
 
 def progress(current, total):
@@ -58,14 +58,6 @@ async def _(event):
                     fd.write(chunk)
                     done = int(100 * dl / total_length)
                     download_progress_string = "Downloading ... [%s%s]" % ('=' * done, ' ' * (50-done))
-                    # download_progress_string = "Downloading ... [%s of %s]" % (str(dl), str(total_length))
-                    # download_progress_string = "Downloading ... [%s%s]" % ('⬛️' * done, '⬜️' * (100 - done))
-                    """try:
-                        await event.edit(download_progress_string)
-                    except MessageNotModifiedError as e:
-                        print("__FLOODWAIT__: {} sleeping for 100seconds, before proceeding.".format(str(e)))
-                    time.sleep(1)"""
-                    print(download_progress_string)
         end = datetime.now()
         ms = (end - start).seconds
         await event.edit("Downloaded to `{}` in {} seconds.".format(required_file_name, ms))

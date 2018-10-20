@@ -6,13 +6,13 @@ from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator
 from telethon.errors import ChatAdminRequiredError, InputUserDeactivatedError
 @bot.on(events.NewMessage(pattern=".get_admin ?(.*)", outgoing=True))
 async def get_admin(e):
-    if event.fwd_from:
+    if e.fwd_from:
         return
     mentions = "**Admins in this Chat**: \n"
     choice = e.pattern_match.group(1)
     to_write_chat = LOGGER_GROUP
     chat = None
-    if not input_str:
+    if not choice:
         chat = to_write_chat
     else:
         mentions = "Admins in channel {}: \n".format(str(e.chat_id))
@@ -22,7 +22,7 @@ async def get_admin(e):
             await e.edit(str(ea))
             return None
     try:
-        async for x in bot.iter_participants(chat, filter=ChannelParticipantsAdmins):
+        async for x in bot.iter_participants(e.chat_id, filter=ChannelParticipantsAdmins):
             if not x.deleted:
                 mentions += f"\n[{x.first_name}](tg://user?id={x.id}) `{x.id}`"
             else:
@@ -31,13 +31,13 @@ async def get_admin(e):
         mentions += " " + str(ea) + "\n"
     if choice==1:
         await bot.send_message(
-        to_write_chat,
+        e.chat_id,
         mentions,
-        reply_to=event.message.reply_to_msg_id
+        reply_to=e.message.reply_to_msg_id
         )
     else:
       if LOGGER:
-        await e.edit("`Sent admin details to Logs!``")
+        await e.edit("`Sent admin details to Logs!`")
         await bot.send_message(
         to_write_chat,
         mentions
