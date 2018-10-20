@@ -12,11 +12,10 @@ async def get_admin(e):
     choice = e.pattern_match.group(1)
     to_write_chat = LOGGER_GROUP
     chat = None
-    else:
-        mentions = "Admins in channel {}: \n".format(str(e.chat_id))
-        try:
+    mentions = "Admins in channel {}: \n".format(str(e.chat_id))
+    try:
             chat = await bot.get_entity(input_str)
-        except ValueError as ea:
+    except ValueError as ea:
             await e.edit(str(ea))
             return None
     try:
