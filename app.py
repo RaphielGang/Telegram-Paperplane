@@ -1,3 +1,7 @@
+import sys
+if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+    LOGGER.error("You MUST have a python version of at least 3.6!")
+    quit(1)
 from config import *
 from set_variables import *
 from shutil import copy
@@ -69,4 +73,4 @@ with open('runner.py','a') as run:
 os.chdir(path)
 with open('runner.py','a') as run:
     run.writelines(["\nbot.run_until_disconnected()"])
-subprocess.run('python3 runner.py',shell=True)
+process=subprocess.run('python3 runner.py',shell=True)
