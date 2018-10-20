@@ -3,9 +3,9 @@ from datetime import datetime
 from telegraph import Telegraph, upload_file, exceptions
 
 
-TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./DOWNLOADS/")
+TMP_DOWNLOAD_DIRECTORY = os.getcwd()
 short_name = os.environ.get("TELEGRAPH_SHORT_NAME", "BaalajiMaestro")
-PRIVATE_GROUP_BOT_API_ID = (await bot.get_me()).id
+PRIVATE_GROUP_BOT_API_ID = LOGGER_GROUP
 
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=short_name)
@@ -18,10 +18,11 @@ async def _(event):
         return
     if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TMP_DOWNLOAD_DIRECTORY)
-    await bot.send_message(
-        PRIVATE_GROUP_BOT_API_ID,
-        "Created New Telegraph account {} for the current session. \n**Do not give this url to anyone, even if they say they are from Telegram!**".format(auth_url)
-    )
+        if LOGGER:
+            await bot.send_message(
+            PRIVATE_GROUP_BOT_API_ID,
+            "Created New Telegraph account {} for the current session. \n**Do not give this url to anyone, even if they say they are from Telegram!**".format(auth_url)
+            )
     if event.reply_to_msg_id:
         start = datetime.now()
         r_message = await event.get_reply_message()
