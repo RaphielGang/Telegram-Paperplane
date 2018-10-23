@@ -73,7 +73,7 @@ async def endecrypt(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='.random'))
 async def randomise(e):
     r=(e.text).split()
-    index=randint(1,len(r)-1)
+    index=random.randint(1,len(r)-1)
     await e.edit("**Query: **\n`"+e.text+'`\n**Output: **\n`'+r[index]+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.get userbotfile'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.get userbotfile'))
