@@ -5,7 +5,7 @@ import sqlite3
 async def permitpm(e):
   if PM_AUTO_BAN:
     global COUNT_PM
-    if e.is_private:
+    if e.is_private and not (await e.get_sender()).bot:
        db=sqlite3.connect("pmpermit.db")
        cursor=db.cursor()
        cursor.execute('''SELECT * FROM APPROVED''')
