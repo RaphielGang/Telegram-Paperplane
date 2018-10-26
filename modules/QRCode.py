@@ -11,7 +11,7 @@ def progress(current, total):
     print("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
 
 
-@bot.on(events.NewMessage(pattern=r"\.getqr", outgoing=True))
+@bot.on(events.NewMessage(pattern=r".getqr", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -33,7 +33,7 @@ async def _(event):
     await event.edit(qr_contents)
 
 
-@bot.on(events.NewMessage(pattern=r"\.makeqr ?(.*)", outgoing=True))
+@bot.on(events.NewMessage(pattern=r".makeqr ?(.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -81,4 +81,3 @@ async def _(event):
     await event.edit("Created QRCode in {} seconds".format(ms))
     await asyncio.sleep(5)
     await event.delete()
-
