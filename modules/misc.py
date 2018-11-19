@@ -75,12 +75,6 @@ async def randomise(e):
     r=(e.text).split()
     index=random.randint(1,len(r)-1)
     await e.edit("**Query: **\n`"+e.text+'`\n**Output: **\n`'+r[index]+'`')
-@bot.on(events.NewMessage(outgoing=True,pattern='.get userbotfile'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.get userbotfile'))
-async def userbot_file(e):
-    file=open(sys.argv[0], 'r')
-    await bot.send_file(e.chat_id, sys.argv[0], reply_to=e.id, caption='`Here\'s me in a file`')
-    file.close()
 @bot.on(events.NewMessage(outgoing=True,pattern='.alive'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.alive'))
 async def amialive(e):
@@ -130,7 +124,7 @@ async def support_channel(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.sysdetails'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.sysdetails'))
 async def sysdetails(e):
-    r='`' + subprocess.run(['screenfetch', '-n'], stdout=subprocess.PIPE).stdout.decode() + '`'
+    r='`' + subprocess.run(['neofetch', '--off', '--color_blocks off', '--bold off', '--cpu_temp', 'C', '--cpu_speed','on','--cpu_cores', 'physical','--stdout'], stdout=subprocess.PIPE).stdout.decode() + '`'
     await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
