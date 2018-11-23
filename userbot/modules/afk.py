@@ -1,5 +1,6 @@
 from telethon import TelegramClient, events
 from userbot import bot
+from userbot import COUNT_MSG,USERS,ISAFK,AFKREASON
 @bot.on(events.NewMessage(incoming=True))
 async def mention_afk(e):
     global COUNT_MSG
@@ -27,7 +28,7 @@ async def afk_on_pm(e):
     if e.is_private:
         if ISAFK:
             if e.chat_id not in USERS:
-                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"```Would ping him to look into the message soon😉")
+                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"``` Would ping him to look into the message soon😉")
                   USERS.update({e.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
             elif   e.chat_id in USERS:
@@ -61,7 +62,7 @@ async def not_afk(e):
                 await bot.send_message(LOGGER_GROUP,str(i)+" sent you "+"`"+str(USERS[i])+" messages`")
         COUNT_MSG=0
         USERS={}
-        AFKREASON="No reason"
+        AFKREASON="No Reason"
 @bot.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
 async def set_afk(e):
