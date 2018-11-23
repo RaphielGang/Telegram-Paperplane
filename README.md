@@ -10,27 +10,21 @@ announcements.
 
 If you found any bugs or you wanna suggest some features then contact [My support group](https://t.me/userbot_support).
 
-Alternatively, [find me on telegram](https://t.me/baalajimaestro)!.
-
 -This Readme might go out-of-date at any point, as I push notifications for all updates to my [support channel](https://t.me/maestro_userbot_channel). I recommend subscribing to the channel, for timely updates and fixes.
 
 ### Before you start:
-Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br/>
-Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER<br/><br/>
+Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br>
+Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER(Incase you want logging) It can be very well turned off<br/><br/>
 **Please read through this before cloning. I don't want you get stuck anywhere. This guide can get you running up the userbot, if followed properly**
 
 #### Running on heroku:
 ```diff
 -If you clone/fork this repo please make sure you generate a session file  by running app.py on your local pc before deploying it on heroku.
-
-- If you get errors like -->app[worker.1]: telethon.errors.rpcerrorlist.AuthKeyDuplicatedError: An auth key with the same ID was already generated, 
-
-- It means your session was banned and needs to be regenerated.
 ```
 
 - Fork my repo.
 
-- Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a session_name.session file, which is needed to run your bot.
+- Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a userbot.session file, which is needed to run your bot.
 
 - Push it with the heroku cli
 
@@ -43,7 +37,11 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 - Add your API_KEY, API_HASH and LOGGER, and other stuff to config.py(You need to create it, a sample is provided)
 
-- Start the userbot: `python3 app.py`
+- Remove the warning provided in sample_config, it is to avoid just rename and leave cases
+
+- Or you use them as ENV Variables, upto your ease
+
+- Start the userbot: `python3 -m userbot`
 
 ### Commands available(will be constantly updated):
 
@@ -126,5 +124,6 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 - `.img text`:                       Search and fetch first two images from google
 
 - `.approvepm`:                      Approves the Person in reply to PM, incase PM-Permit is enabled
- 
-Clone this and try to add features to it, make pull requests to merge it ;) 
+
+
+Found Bugs? Start up an issue on issue tracker, or feel free to post in my support group.
