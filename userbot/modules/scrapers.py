@@ -2,6 +2,8 @@ import wikipedia
 from google_images_download import google_images_download
 import urbandict
 import re
+from telethon import TelegramClient, events
+from userbot import bot
 @bot.on(events.NewMessage(outgoing=True, pattern=".img (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern=".img (.*)"))
 async def img_sampler(e):

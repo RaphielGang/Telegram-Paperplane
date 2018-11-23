@@ -3,12 +3,14 @@ import os
 import subprocess
 import requests
 import time
+from telethon import TelegramClient, events
 from datetime import datetime
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.errors import MessageNotModifiedError
 from PIL import Image
+from userbot import bot
 TEMP_DOWNLOAD_DIRECTORY = os.getcwd()
 def progress(current, total):
     print("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))

@@ -1,7 +1,8 @@
 import requests
-import bs4 
+import bs4
 import re
-
+from telethon import TelegramClient, events
+from userbot import bot
 @bot.on(events.NewMessage(outgoing=True,pattern='.imdb (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.imdb (.*)'))
 async def imdb(e):
@@ -13,7 +14,7 @@ async def imdb(e):
     soup = bs4.BeautifulSoup(page.content,'lxml')
     results = soup.findAll("td","result_text")
     mov_title = results[0].text
-    mov_link = "http://www.imdb.com/"+results[0].a['href'] 
+    mov_link = "http://www.imdb.com/"+results[0].a['href']
     page1 = requests.get(mov_link)
     soup = bs4.BeautifulSoup(page1.content,'lxml')
     story_line = soup.find('div', "inline canwrap")

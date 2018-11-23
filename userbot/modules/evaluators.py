@@ -1,11 +1,11 @@
 import inspect
 import hastebin
+from telethon import TelegramClient, events
+from userbot import bot
 @bot.on(events.NewMessage(outgoing=True, pattern='.eval'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.eval'))
 async def evaluate(e):
     evaluation = eval(e.text[6:])
-    if inspect.isawaitable(evaluation):
-       evaluation = await evaluation
     if evaluation:
       if len(evaluation) > 4096:
           f=open('output.txt', 'w+')

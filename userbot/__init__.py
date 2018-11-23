@@ -1,25 +1,19 @@
-from set_variables import *
 import sqlite3
-subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
-subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
-db=sqlite3.connect("brains.check")
-cursor=db.cursor()
-cursor.execute('''SELECT * FROM BRAIN1''')
-all_rows = cursor.fetchall()
-for i in all_rows:
-    BRAIN_CHECKER.append(i[0])
-db.close()
+import subprocess
+#subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 import logging
 import os
 import sys
+from telethon import TelegramClient,events
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO)
-LOGGER = logging.getLogger(__name__)
+LOGS = logging.getLogger(__name__)
 if sys.version_info[0] < 3 or sys.version_info[1] < 6:
     LOGGER.error("You MUST have a python version of at least 3.6! Multiple features depend on this. Bot quitting.")
     quit(1)
-ENV = bool(os.environ.get('ENV', False)
+ENV = bool(os.environ.get('ENV', False))
 if ENV:
     API_KEY = os.environ.get('API_KEY', None)
     API_HASH = os.environ.get('API_HASH',None)
@@ -34,4 +28,5 @@ if ENV:
     TRT_API_PASSWORD=os.environ.get('TRT_API_PASSWORD',None)
     TTS_API_PASSWORD=os.environ.get('TTS_API_PASSWORD',None)
 else:
-    from userbot.config import *
+    from config import *
+bot = TelegramClient('userbot',API_KEY,API_HASH)

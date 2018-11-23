@@ -1,7 +1,5 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/
-
+from telethon import TelegramClient, events
+from userbot import bot
 from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator
 from telethon.errors import ChatAdminRequiredError, InputUserDeactivatedError
 @bot.on(events.NewMessage(pattern=".get_admin (.*)", outgoing=True))

@@ -1,4 +1,6 @@
 import sqlite3
+from telethon import TelegramClient, events
+from userbot import bot
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):

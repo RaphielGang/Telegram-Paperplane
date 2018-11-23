@@ -1,6 +1,9 @@
 #Special module to block pms automatically
 from telethon.tl.functions.contacts import BlockRequest
 import sqlite3
+from telethon import TelegramClient, events
+from userbot import bot
+from userbot import PM_AUTO_BAN
 @bot.on(events.NewMessage(incoming=True))
 async def permitpm(e):
   if PM_AUTO_BAN:

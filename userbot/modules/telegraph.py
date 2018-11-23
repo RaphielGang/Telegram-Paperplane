@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
+from telethon import TelegramClient, events
 from telegraph import Telegraph, upload_file, exceptions
+from userbot import bot
 @bot.on(events.NewMessage(pattern=r".telegraph (media|text)", outgoing=True))
 async def telegraph(event):
     TMP_DOWNLOAD_DIRECTORY = os.getcwd()
