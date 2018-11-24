@@ -14,9 +14,9 @@ class Filters(BASE):
                     and self.chat_id == other.chat_id
                     and self.keyword == other.keyword)
 Filters.__table__.create(checkfirst=True)
-def get_filters(chat_id,keyword):
+def get_filters(chat_id):
     try:
-        return SESSION.query(Filters).get((str(chat_id),keyword))
+        return SESSION.query(Filters).filter(Filters.chat_id==str(chat_id)).all()
     finally:
         SESSION.close()
 def add_filter(chat_id, keyword, reply):

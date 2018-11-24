@@ -1,17 +1,21 @@
 import sqlite3
 from telethon import TelegramClient, events
 from userbot import bot,NULL_CHATS
-
+import re
 from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):
         from userbot.modules.sql_helper.filter_sql import get_filters
         listes= e.text.split(" ")
-        for i in listes:
-            E=get_filters(e.chat_id,str(i))
-            if E:
-                await e.reply(E.reply)
+        E=get_filters(e.chat_id)
+        for t in E:
+            for r in listes:
+                pro = re.fullmatch(t.keyword,r,flags=re.IGNORECASE)
+                if pro:
+                      print(pro)
+                      await e.reply(t.reply)
+                      return
 @bot.on(events.NewMessage(outgoing=True, pattern='.addfilter'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.addfilter'))
 async def add_filter(e):
