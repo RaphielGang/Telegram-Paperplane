@@ -5,6 +5,7 @@ import subprocess
 import logging
 import os
 import sys
+from sqlalchemy import create_engine
 from telethon import TelegramClient,events
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -27,6 +28,49 @@ if ENV:
     TTS_API_USERNAME=os.environ.get('TTS_API_USERNAME',None)
     TRT_API_PASSWORD=os.environ.get('TRT_API_PASSWORD',None)
     TTS_API_PASSWORD=os.environ.get('TTS_API_PASSWORD',None)
+    DB_URI=os.environ.get('DB_URI',None)
 else:
     from config import *
 bot = TelegramClient('userbot',API_KEY,API_HASH)
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
+def start() -> scoped_session:
+    engine = create_engine(DB_URI, client_encoding="utf8")
+    BASE.metadata.bind = engine
+    BASE.metadata.create_all(engine)
+    return scoped_session(sessionmaker(bind=engine, autoflush=False))
+BASE = declarative_base()
+SESSION = start()
+class Filters(BASE):
+    __tablename__ = "filters"
+    chat_id = Column(String(14), primary_key=True)
+    keyword = Column(UnicodeText, primary_key=True, nullable=False)
+    reply = Column(UnicodeText, nullable=False)
+    def __init__(self, chat_id, keyword, reply):
+            self.chat_id = str(chat_id)  # ensure string
+            self.keyword = keyword
+            self.reply = reply
+    def __eq__(self, other):
+        return bool(isinstance(other, Filters)
+                    and self.chat_id == other.chat_id
+                    and self.keyword == other.keyword)
+
+# Global Variables
+SNIPE_TEXT=""
+COUNT_MSG=0
+BRAIN_CHECKER=[]
+USERS={}
+SPAM=False
+WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
+WIDE_MAP[0x20] = 0x3000
+COUNT_PM={}
+ISAFK=False
+ENABLE_KILLME=True
+SNIPE_ID=0
+MUTING_USERS={}
+MUTED_USERS={}
+AFKREASON="No Reason "
+SPAM_ALLOWANCE=3
+SPAM_CHAT_ID=[]
+BRAIN_CHECKER=[]
