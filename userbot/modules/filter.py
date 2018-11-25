@@ -13,7 +13,6 @@ async def filter_incoming_handler(e):
             for r in listes:
                 pro = re.fullmatch(t.keyword,r,flags=re.IGNORECASE)
                 if pro:
-                      print(pro)
                       await e.reply(t.reply)
                       return
 @bot.on(events.NewMessage(outgoing=True, pattern='.addfilter'))
