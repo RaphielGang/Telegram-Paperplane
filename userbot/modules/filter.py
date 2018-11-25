@@ -33,7 +33,6 @@ async def remove_filter(e):
      message=e.text
      kek=message.split(" ")
      remove_filter(e.chat_id,kek[1])
-
      await e.edit("```Removed Filter Successfully```")
 @bot.on(events.NewMessage(outgoing=True, pattern='.rmfilters'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.rmfilters'))
@@ -52,13 +51,9 @@ async def kick_marie_filter(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.get filters'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.get filters'))
 async def filters_active(e):
-        db=sqlite3.connect("filters.db")
-        cursor=db.cursor()
-        transact="Filters active on this chat: \n"
-        cursor.execute('''SELECT * FROM FILTER''')
-        all_rows = cursor.fetchall()
-        for row in all_rows:
-            if int(row[0]) == int(e.chat_id):
-                    transact=transact+"-"+str(row[1])+" : "+str(row[2])+"\n"
-        db.close()
+        from userbot.modules.sql_helper.filter_sql import get_filters
+        transact="Filters active on this chat: \n\n"
+        E=get_filters(e.chat_id)
+        for i in E:
+            transact=transact+"🔹 "+i.keyword+"    👉     "+i.reply+"\n"
         await e.edit(transact)

@@ -4,52 +4,40 @@ import sqlite3
 @bot.on(events.NewMessage(outgoing=True, pattern='.get notes'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.get notes'))
 async def notes_active(e):
-        db=sqlite3.connect("filters.db")
-        cursor=db.cursor()
-        transact="Notes active on this chat: \n"
-        cursor.execute('''SELECT * FROM NOTES''')
-        all_rows = cursor.fetchall()
-        for row in all_rows:
-            if int(row[0]) == int(e.chat_id):
-                    transact=transact+"-"+str(row[1])+" : "+str(row[2])+"\n"
-        db.close()
+        from userbot.modules.sql_helper.notes_sql import get_notes
+        transact="Messages saved on this chat: \n\n"
+        E=get_notes(e.chat_id)
+        for i in E:
+            transact=transact+"🔹 "+i.keyword+"    👉     "+i.reply+"\n"
         await e.edit(transact)
 @bot.on(events.NewMessage(outgoing=True, pattern='.nosave'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.nosave'))
 async def remove_notes(e):
-     message=e.text
-     kek=message.split()
-     db=sqlite3.connect("filters.db")
-     cursor=db.cursor()
-     cursor.execute('''DELETE FROM NOTES WHERE chat_id=? AND note=?''', (int(e.chat_id),kek[1]))
-     db.commit()
-     await e.edit("```Removed Note Successfully```")
-     db.close()
+      from userbot.modules.sql_helper.notes_sql import remove_notes
+      message=e.text
+      kek=message.split(" ")
+      remove_notes(e.chat_id,kek[1])
+      await e.edit("```Removed Note Successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='.save'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.save'))
 async def add_filter(e):
-     message=e.text
-     kek=message.split()
-     db=sqlite3.connect("filters.db")
-     cursor=db.cursor()
-     string=""
-     for i in range(2,len(kek)):
-              string=string+" "+str(kek[i])
-     cursor.execute('''INSERT INTO NOTES VALUES(?,?,?)''', (int(e.chat_id),kek[1],string))
-     db.commit()
-     await e.edit("```Saved Note Successfully```")
-     db.close()
+    from userbot.modules.sql_helper.notes_sql import add_note
+    message=e.text
+    kek=message.split()
+    string=""
+    for i in range(2,len(kek)):
+        string=string+" "+str(kek[i])
+    add_note(str(e.chat_id),kek[1],string)
+    await e.edit("```Added Note Successfully. Use # followed by note name, to get it```")
 @bot.on(events.NewMessage(incoming=True,pattern='#*'))
 async def incom_note(e):
-    db=sqlite3.connect("filters.db")
-    cursor=db.cursor()
-    cursor.execute('''SELECT * FROM NOTES''')
-    all_rows = cursor.fetchall()
-    for row in all_rows:
-        if int(row[0]) == int(e.chat_id):
-            if str(e.text[1:]) == str(row[1]):
-                await e.reply(row[2])
-    db.close()
+    from userbot.modules.sql_helper.notes_sql import get_notes
+    listes= e.text[1:]
+    E=get_notes(e.chat_id)
+    for t in E:
+        if listes==t.keyword:
+           await e.reply(t.reply)
+           return
 @bot.on(events.NewMessage(outgoing=True, pattern='.rmnotes'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.rmnotes'))
 async def remove_notes(e):
