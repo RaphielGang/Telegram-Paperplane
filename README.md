@@ -12,6 +12,12 @@ If you found any bugs or you wanna suggest some features then contact [My suppor
 
 - This Readme might go out-of-date at any point, as I push notifications for all updates to my [support channel](https://t.me/maestro_userbot_channel). I recommend subscribing to the channel, for timely updates and fixes.
 
+## Dependencies:
+
+- SQL DB, Can be Postgres/MySQL or anything, basically the bot uses SQLAlchemy
+
+- Neofetch(in case you need sysdetails)
+
 ### Before you start:
 Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br>
 Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER(Incase you want logging) It can be very well turned off<br/><br/>
