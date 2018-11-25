@@ -2,11 +2,13 @@
 
 [![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
+### If you see the semaphore badge showing passed, still running on your local PC gives syntax it must be very clear that it isn't a problem with the source, you need to check your compiler
+
+
+
 Just coz I'm too lazy, I program it, to make stuff easier.
 This is a userbot, which is equivalent to a telegram client, and it can run on the cloud too.
 It needs a linux pc or any unix to run basic commands, or you need to find the workaround yourself :/
-
-### If you see the semaphore badge showing passed, still running on your local PC gives syntax it must be very clear that it isn't a problem with the source, you need to check your compiler
 
 # Contact 
 Join the [news channel](https://t.me/maestro_userbot_channel) if you just want to stay in the loop about new features or
