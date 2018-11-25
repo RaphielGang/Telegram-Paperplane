@@ -4,26 +4,22 @@ import sqlite3
 from telethon import TelegramClient, events
 from userbot import bot
 from userbot import PM_AUTO_BAN
+from userbot import COUNT_PM
 @bot.on(events.NewMessage(incoming=True))
 async def permitpm(e):
   if PM_AUTO_BAN:
     global COUNT_PM
-    if e.is_private and not (await e.get_sender()).bot:
-       db=sqlite3.connect("pmpermit.db")
-       cursor=db.cursor()
-       cursor.execute('''SELECT * FROM APPROVED''')
-       all_rows = cursor.fetchall()
-       PERMITTED_USERS=[]
-       for i in all_rows:
-           PERMITTED_USERS.append(i[0])
-       if not int(e.chat_id) in PERMITTED_USERS:
-           await e.reply("`My Master hasn't permitted you to PM. Please tag him in a group you found him common. I will report spam if I find more PMs.`")
+    if e.is_private:
+       from userbot.modules.sql_helper.pm_permit_sql import is_approved
+       E=is_approved(e.chat_id)
+       if not E:
+           await e.reply("`Bleep Blop! This is a Bot. Don't fret.\n\nMy Master hasn't approved you to PM. Please wait for my Master to look in, he would mostly approve PMs.\n\nAs for as i know, he doesn't usually approve Retards.`")
            if e.chat_id not in COUNT_PM:
               COUNT_PM.update({e.chat_id:1})
            else:
               COUNT_PM[e.chat_id]=COUNT_PM[e.chat_id]+1
            if COUNT_PM[e.chat_id]>4:
-               await e.respond('`Imma reporting you! Bye nibba!`')
+               await e.respond('`You were spamming my Master\'s PM, which I don\'t like. I\'mma Report Spam.`')
                del COUNT_PM[e.chat_id]
                await bot(BlockRequest(e.chat_id))
                if LOGGER:
@@ -31,11 +27,8 @@ async def permitpm(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.approvepm'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=".approvepm"))
 async def approvepm(e):
-    db=sqlite3.connect("pmpermit.db")
-    cursor=db.cursor()
-    cursor.execute('''INSERT INTO APPROVED VALUES(?)''',(int((await e.get_reply_message()).sender_id),))
-    db.commit()
-    db.close()
+    from userbot.modules.sql_helper.pm_permit_sql import approve
+    approve(e.chat_id)
     await e.edit("`Approved to PM!`")
     if LOGGER:
         await bot.send_message(LOGGER_GROUP,str(e.chat_id)+" was approved to PM you.")
