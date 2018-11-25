@@ -13,3 +13,4 @@ google_images_download>=2.4.2
 hachoir
 Pillow>=5.3.0
 telegraph
+sqlalchemy>=1.12
