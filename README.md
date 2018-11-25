@@ -1,5 +1,7 @@
 # Telegram-UserBot 
 
+[![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot)
+
 Just coz I'm too lazy, I program it, to make stuff easier.
 This is a userbot, which is equivalent to a telegram client, and it can run on the cloud too.
 It needs a linux pc or any unix to run basic commands, or you need to find the workaround yourself :/
