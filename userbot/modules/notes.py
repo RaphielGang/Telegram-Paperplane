@@ -18,8 +18,8 @@ async def remove_notes(e):
       kek=message.split(" ")
       remove_notes(e.chat_id,kek[1])
       await e.edit("```Removed Note Successfully")
-@bot.on(events.NewMessage(outgoing=True, pattern='.save'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.save'))
+@bot.on(events.NewMessage(outgoing=True, pattern='.addnote'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.addnote'))
 async def add_filter(e):
     from userbot.modules.sql_helper.notes_sql import add_note
     message=e.text
