@@ -1,5 +1,5 @@
 from telethon import TelegramClient, events
-from userbot import bot
+from userbot import bot,SPAM
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def common_incoming_handler(e):
@@ -58,3 +58,6 @@ async def set_asm(e):
             SPAM_ALLOWANCE=int(message[6:])
             await e.edit("Spam Tracking turned on!")
             await bot.send_message(LOGGER_GROUP,"Spam Tracking is Turned on!")
+
+
+####### Module will be taken care of later

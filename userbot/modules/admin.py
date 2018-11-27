@@ -6,8 +6,9 @@ from telethon.errors import ChannelInvalidError
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChannelAdminRights
 import time
+import sqlite3
 from telethon import TelegramClient, events
-from userbot import bot
+from userbot import bot,SPAM,SPAM_ALLOWANCE,BRAIN_CHECKER,LOGGER_GROUP,LOGGER
 @bot.on(events.NewMessage(outgoing=True,pattern=".wizard"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.wizard'))
 async def wizzard(e):
@@ -45,15 +46,7 @@ async def thanos(e):
         time.sleep(5)
         try:
             await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
-        except UserAdminInvalidError:
-          if e.sender_id in BRAIN_CHECKER:
-             await e.respond('<triggerban> '+str((await e.get_reply_message()).sender_id))
-             return
-        except ChatAdminRequiredError:
-         if e.sender_id in BRAIN_CHECKER:
-             await e.respond('<triggerban> '+str((await e.get_reply_message()).sender_id))
-             return
-        except ChannelInvalidError:
+        except:
           if e.sender_id in BRAIN_CHECKER:
              await e.respond('<triggerban> '+str((await e.get_reply_message()).sender_id))
              return
@@ -67,11 +60,8 @@ async def spider(e):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn\'t mute this user`")
             return
-        db=sqlite3.connect("spam_mute.db")
-        cursor=db.cursor()
-        cursor.execute('''INSERT INTO MUTE VALUES(?,?)''', (int(e.chat_id),int((await e.get_reply_message()).sender_id)))
-        db.commit()
-        db.close()
+        from userbot.modules.sql_helper.spam_mute_sql import mute
+        mute(e.chat_id,str((await e.get_reply_message()).sender_id))
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
         await e.delete()
@@ -139,21 +129,14 @@ async def triggered_mute(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.speak'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.speak'))
 async def unmute(e):
-     db=sqlite3.connect("spam_mute.db")
-     cursor=db.cursor()
-     cursor.execute('''DELETE FROM mute WHERE chat_id=? AND sender=?''', (int(e.chat_id),int((await e.get_reply_message()).sender_id)))
-     db.commit()
+     from userbot.modules.sql_helper.spam_mute_sql import unmute
+     unmute(e.chat_id,str((await e.get_reply_message()).sender_id))
      await e.edit("```Unmuted Successfully```")
-     db.close()
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def muter(e):
-         db=sqlite3.connect("spam_mute.db")
-         cursor=db.cursor()
-         cursor.execute('''SELECT * FROM MUTE''')
-         all_rows = cursor.fetchall()
-         for row in all_rows:
-            if int(row[0]) == int(e.chat_id):
-               if int(row[1]) == int(e.sender_id):
+         from userbot.modules.sql_helper.spam_mute_sql import is_muted
+         L=is_muted(e.chat_id)
+         for i in L:
+             if str(i.sender) == str(e.sender_id):
                  await e.delete()
-                 return

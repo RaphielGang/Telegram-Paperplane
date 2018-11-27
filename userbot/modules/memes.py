@@ -1,6 +1,6 @@
 from zalgo_text import zalgo
 import random,re
-from userbot import bot
+from userbot import bot,ENABLE_KILLME
 from telethon import TelegramClient, events
 @bot.on(events.NewMessage(outgoing=True, pattern=':/'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
@@ -150,3 +150,15 @@ async def killmelol(e):
          name = await bot.get_entity(e.from_id)
          name0 = str(name.first_name)
          await e.reply('**K I L L  **['+name0+'](tg://user?id='+str(e.from_id)+')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+@bot.on(events.NewMessage(outgoing=True,pattern='.disable runs'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.disable runs'))
+async def disable_killme(e):
+        global DISABLE_RUN
+        DISABLE_RUN=True
+        await e.edit("```Done!```")
+@bot.on(events.NewMessage(outgoing=True,pattern='.enable runs'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='.enable runs'))
+async def enable_killme(e):
+            global DISABLE_RUN
+            DISABLE_RUN=False
+            await e.edit("```Done!```")

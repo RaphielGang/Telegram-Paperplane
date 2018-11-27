@@ -1,6 +1,6 @@
 import sqlite3
 from telethon import TelegramClient, events
-from userbot import bot,NULL_CHATS
+from userbot import bot
 import re
 from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
 @bot.on(events.NewMessage(incoming=True))
