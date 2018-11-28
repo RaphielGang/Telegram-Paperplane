@@ -1,5 +1,6 @@
 from telethon import TelegramClient, events
 from userbot import bot
+import time
 from userbot import COUNT_MSG,USERS,ISAFK,AFKREASON
 @bot.on(events.NewMessage(incoming=True))
 async def mention_afk(e):
