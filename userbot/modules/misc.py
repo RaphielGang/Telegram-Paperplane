@@ -131,4 +131,4 @@ async def sysdetails(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
 async def bot_ver(e):
-	await e.edit('`UserBot Version: Modular r2.02`')
+	await e.edit('`UserBot Version: Modular r2.03`')

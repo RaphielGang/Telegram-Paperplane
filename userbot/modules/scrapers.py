@@ -3,8 +3,13 @@ from google_images_download import google_images_download
 import urbandict
 import subprocess
 import re
+from datetime import datetime, timedelta
 from telethon import TelegramClient, events
-from userbot import bot
+from userbot import bot,LOGGER,LOGGER_GROUP
+from gtts import gTTS
+import os
+from py_translator import Translator
+langi="en"
 @bot.on(events.NewMessage(outgoing=True, pattern=".img (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern=".img (.*)"))
 async def img_sampler(e):
@@ -55,9 +60,61 @@ async def ud(e):
         await bot.send_message(LOGGER_GROUP,"ud query "+str+" executed successfully.")
   else:
     await e.edit("No result found for **"+str+"**")
-
-
-
-
+@bot.on(events.NewMessage(outgoing=True, pattern='.tts'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.tts'))
+async def tts(e):
+    textx=await e.get_reply_message()
+    replye = e.text
+    if textx:
+         replye = await e.get_reply_message()
+         replye = str(replye.message)
+    else:
+        replye = str(replye[5:])
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    tts = gTTS(replye,langi)
+    tts.save("k.mp3")
+    with open("k.mp3", "rb") as f:
+        linelist = list(f)
+        linecount = len(linelist)
+    if linecount == 1:
+        try:                       #tts on personal chats is broken
+            tts = gTTS(replyes,langi)
+            tts.save("k.mp3")
+        except:
+            await e.edit("`Some Internal Error! Try Again!`")
+            return
+    with open("k.mp3", "r") as speech:
+        await bot.send_file(e.chat_id, 'k.mp3', voice_note=True)
+        os.remove("k.mp3")
+        if LOGGER:
+              await bot.send_message(LOGGER_GROUP,"tts of "+replye+" executed successfully!")
+        await e.delete()
+@bot.on(events.NewMessage(outgoing=True, pattern='.trt'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='.trt'))
+async def translateme(e):
+    global langi
+    translator=Translator()
+    textx=await e.get_reply_message()
+    message = e.text
+    if textx:
+         message = textx
+         text = str(message.message)
+    else:
+        text = str(message[4:])
+    reply_text=translator.translate(text, dest=langi).text
+    reply_text="`Source: `\n"+text+"`\n\nTranslation: `\n"+reply_text
+    await bot.send_message(e.chat_id,reply_text)
+    await e.delete()
+    if LOGGER:
+        await bot.send_message(LOGGER_GROUP,"Translate query "+message+" was executed successfully")
+@bot.on(events.NewMessage(pattern='.lang',outgoing=True))
+@bot.on(events.MessageEdited(pattern='.lang',outgoing=True))
+async def lang(e):
+      global langi
+      message=await bot.get_messages(e.chat_id)
+      langi = str(message[0].message[6:])
+      if LOGGER:
+         await bot.send_message(LOGGER_GROUP,"tts language changed to **"+langi+"**")
+         await e.edit("tts language changed to **"+langi+"**")
     ######TTS AND TRT will be back soon :/
     ######Need to implement a new api
