@@ -4,6 +4,7 @@ from telethon import TelegramClient, events
 from telethon.tl.types import MessageEntityMentionName
 from telethon.utils import get_input_location
 from userbot import bot
+from userbot import LOGGER,LOGGER_GROUP
 current_date_time = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
 
 

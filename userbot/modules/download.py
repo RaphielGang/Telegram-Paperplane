@@ -3,6 +3,7 @@ import os
 import subprocess
 import requests
 import time
+from userbot import LOGGER,LOGGER_GROUP
 from telethon import TelegramClient, events
 from datetime import datetime
 from hachoir.metadata import extractMetadata

@@ -1,5 +1,6 @@
 from telethon import TelegramClient, events
 from userbot import bot
+from userbot import LOGGER,LOGGER_GROUP
 from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator
 from telethon.errors import ChatAdminRequiredError, InputUserDeactivatedError
 @bot.on(events.NewMessage(pattern=".get_admin (.*)", outgoing=True))

@@ -16,7 +16,7 @@ class Notes(BASE):
 Notes.__table__.create(checkfirst=True)
 def get_notes(chat_id):
     try:
-        return SESSION.query(Notes).filter(Notes.chat_id==str(chat_id)).all()
+        return SESSION.query(Notes).all()
     finally:
         SESSION.close()
 def add_note(chat_id, keyword, reply):
