@@ -103,7 +103,7 @@ async def restart_the_bot(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.pingme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pingme'))
 async def pingme(e):
-if not e.text[0].isalpha():
+ if not e.text[0].isalpha():
     k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
     await e.edit('`' + k.stdout.decode()[:-1] + '`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
