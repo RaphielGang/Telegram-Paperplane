@@ -1,5 +1,6 @@
 from telethon import TelegramClient, events
 from userbot import bot,SPAM
+from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def common_incoming_handler(e):

@@ -1,6 +1,7 @@
 import inspect
 import hastebin
 import subprocess
+from userbot import LOGGER,LOGGER_GROUP
 from telethon import TelegramClient, events
 from userbot import bot
 @bot.on(events.NewMessage(outgoing=True, pattern='.eval'))

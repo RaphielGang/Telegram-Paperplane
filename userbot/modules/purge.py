@@ -2,6 +2,7 @@ from async_generator import aclosing
 import asyncio
 from telethon import TelegramClient, events
 from userbot import bot
+from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True, pattern='.fastpurge'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.fastpurge'))
 async def fastpurger(e):

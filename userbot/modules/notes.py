@@ -1,6 +1,7 @@
 from telethon import TelegramClient, events
 from userbot import bot
 import sqlite3
+from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True, pattern='.get notes'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.get notes'))
 async def notes_active(e):

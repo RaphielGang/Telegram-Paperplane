@@ -1,6 +1,7 @@
 import asyncio
 from telethon import TelegramClient, events
 from userbot import bot
+from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True, pattern='.spam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.spam'))
 async def spammer(e):

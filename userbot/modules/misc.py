@@ -4,6 +4,7 @@ import random,re,os,signal
 import subprocess
 from userbot import bot
 from telethon import TelegramClient, events
+from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True,pattern='.pip (.+)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
 async def pipcheck(e):
