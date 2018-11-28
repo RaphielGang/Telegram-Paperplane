@@ -46,28 +46,28 @@ async def speedtest(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
  if not e.text[0].isalpha():
-	hashtxt_ = e.pattern_match.group(1)
-	hashtxt=open('hashdis.txt','w+')
-	hashtxt.write(hashtxt_)
-	hashtxt.close()
-	md5=subprocess.run(['md5sum', 'hashdis.txt'], stdout=subprocess.PIPE)
-	md5=md5.stdout.decode()
-	sha1=subprocess.run(['sha1sum', 'hashdis.txt'], stdout=subprocess.PIPE)
-	sha1=sha1.stdout.decode()
-	sha256=subprocess.run(['sha256sum', 'hashdis.txt'], stdout=subprocess.PIPE)
-	sha256=sha256.stdout.decode()
-	sha512=subprocess.run(['sha512sum', 'hashdis.txt'], stdout=subprocess.PIPE)
-	subprocess.run(['rm', 'hashdis.txt'], stdout=subprocess.PIPE)
-	sha512=sha512.stdout.decode()
-	ans='Text: `' + hashtxt_ + '`\nMD5: `' + md5 + '`SHA1: `' + sha1 + '`SHA256: `' + sha256 + '`SHA512: `' + sha512[:-1] + '`'
-	if len(ans) > 4096:
-		f=open('hashes.txt', 'w+')
-		f.write(ans)
-		f.close()
-		await bot.send_file(e.chat_id, 'hashes.txt', reply_to=e.id, caption="`It's too big, in a text file and hastebin instead. `" + hastebin.post(ans[1:-1]))
-		subprocess.run(['rm', 'hashes.txt'], stdout=subprocess.PIPE)
-	else:
-		await e.reply(ans)
+    hashtxt_ = e.pattern_match.group(1)
+    hashtxt=open('hashdis.txt','w+')
+    hashtxt.write(hashtxt_)
+    hashtxt.close()
+    md5=subprocess.run(['md5sum', 'hashdis.txt'], stdout=subprocess.PIPE)
+    md5=md5.stdout.decode()
+    sha1=subprocess.run(['sha1sum', 'hashdis.txt'], stdout=subprocess.PIPE)
+    sha1=sha1.stdout.decode()
+    sha256=subprocess.run(['sha256sum', 'hashdis.txt'], stdout=subprocess.PIPE)
+    sha256=sha256.stdout.decode()
+    sha512=subprocess.run(['sha512sum', 'hashdis.txt'], stdout=subprocess.PIPE)
+    subprocess.run(['rm', 'hashdis.txt'], stdout=subprocess.PIPE)
+    sha512=sha512.stdout.decode()
+    ans='Text: `' + hashtxt_ + '`\nMD5: `' + md5 + '`SHA1: `' + sha1 + '`SHA256: `' + sha256 + '`SHA512: `' + sha512[:-1] + '`'
+    if len(ans) > 4096:
+        f=open('hashes.txt', 'w+')
+        f.write(ans)
+        f.close()
+        await bot.send_file(e.chat_id, 'hashes.txt', reply_to=e.id, caption="`It's too big, in a text file and hastebin instead. `" + hastebin.post(ans[1:-1]))
+        subprocess.run(['rm', 'hashes.txt'], stdout=subprocess.PIPE)
+    else:
+        await e.reply(ans)
 @bot.on(events.NewMessage(outgoing=True,pattern='.base64 (en|de) (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.base64 (en|de) (.*)'))
 async def endecrypt(e):
