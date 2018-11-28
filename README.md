@@ -138,4 +138,18 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 - `.approvepm`:                      Approves the Person in reply to PM, incase PM-Permit is enabled
 
 
+### Credits:
+
+I would like to thank people who assisted me throughout this project:
+
+[@YouTwitFace](https://github.com/YouTwitFace)<br/>
+[@TheDevXen](https://github.com/TheDevXen)<br/>
+[@Skittles9823](https://github.com/Skittles9823)<br/>
+[@deletescape](https://github.com/deletescape)<br/>
+[@songotenks69](https://github.com/songotenks69)<br/>
+[@Ovenoboyo](https://github.com/Ovenoboyo)<br/>
+SphericalKat<br/>
+<br/>
+and much more people I haven't mentioned here too.
+
 Found Bugs? Start up an issue on issue tracker, or feel free to post in my support group.
