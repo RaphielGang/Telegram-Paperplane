@@ -10,6 +10,7 @@ current_date_time = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
 
 @bot.on(events.NewMessage(pattern="\.whois ?(.*)", outgoing=True))
 async def _(event):
+  if not e.text[0].isalpha():
     if event.fwd_from:
         return
     if not os.path.isdir(current_date_time):

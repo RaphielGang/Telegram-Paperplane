@@ -2,10 +2,12 @@ from async_generator import aclosing
 import asyncio
 from telethon import TelegramClient, events
 from userbot import bot
-from userbot import LOGGER,LOGGER_GROUP
+from userbot import LOGGER,LOGGER_GROUP,SNIPE,SNIPE_ID,SNIPE_TEXT
+import time
 @bot.on(events.NewMessage(outgoing=True, pattern='.fastpurge'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.fastpurge'))
 async def fastpurger(e):
+    if not e.text[0].isalpha():
         chat = await e.get_input_chat()
         msgs = []
         count =0
@@ -31,6 +33,7 @@ async def fastpurger(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.snipe'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.snipe'))
 async def snipe_on(e):
+  if not e.text[0].isalpha():
     text= e.text
     text = text[7:]
     global SNIPE_TEXT
@@ -66,6 +69,7 @@ async def purgeme(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.delmsg'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.delmsg'))
 async def delmsg(e):
+    if not e.text[0].isalpha():
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
             if i>2:
@@ -75,6 +79,7 @@ async def delmsg(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.nosnipe'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.nosnipe'))
 async def nosnipe(e):
+    if not e.text[0].isalpha():
                 global SNIPE_TEXT
                 global SNIPER
                 global SNIPER_ID
@@ -85,6 +90,7 @@ async def nosnipe(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.editme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.editme'))
 async def editer(e):
+ if not e.text[0].isalpha():
    message=e.text
    string = str(message[8:])
    i=1
@@ -99,6 +105,7 @@ async def editer(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.sd'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.sd'))
 async def selfdestruct(e):
+ if not e.text[0].isalpha():
     message=e.text
     counter=int(message[4:6])
     text=str(e.text[6:])

@@ -22,6 +22,7 @@ async def lol(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.cp'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.cp'))
 async def copypasta(e):
+ if not e.text[0].isalpha():
     textx=await e.get_reply_message()
     if textx:
          message = textx
@@ -50,6 +51,7 @@ async def copypasta(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.vapor'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.vapor'))
 async def vapor(e):
+ if not e.text[0].isalpha():
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -66,6 +68,7 @@ async def vapor(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.str'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.str'))
 async def stretch(e):
+ if not e.text[0].isalpha():
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -79,6 +82,7 @@ async def stretch(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.zal'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.zal'))
 async def zal(e):
+ if not e.text[0].isalpha():
      textx=await e.get_reply_message()
      message = e.text
      if textx:
@@ -97,6 +101,7 @@ async def hoi(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.owo'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.owo'))
 async def faces(e):
+ if not e.text[0].isalpha():
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -123,16 +128,19 @@ async def react_meme(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.shg'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shg'))
 async def shrugger(e):
+ if not e.text[0].isalpha():
     await e.edit("¯\_(ツ)_/¯")
 @bot.on(events.NewMessage(outgoing=True,pattern='.disable killme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.disable killme'))
 async def disable_killme(e):
+  if not e.text[0].isalpha():
         global ENABLE_KILLME
         ENABLE_KILLME=False
         await e.edit("```Done!```")
 @bot.on(events.NewMessage(outgoing=True,pattern='.enable killme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.enable killme'))
 async def enable_killme(e):
+    if not e.text[0].isalpha():
             global ENABLE_KILLME
             ENABLE_KILLME=True
             await e.edit("```Done!```")
@@ -140,14 +148,16 @@ async def enable_killme(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.runs'))
 async def runner_lol(e):
    if not DISABLE_RUN:
-     reactor=['Runs to Modi for Help','Runs to Donald Trumpet for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
-     index=random.randint(0,len(reactor)-1)
-     reply_text=reactor[index]
-     await e.edit(reply_text)
-     if LOGGER:
-        await bot.send_message(LOGGER_GROUP,"You ran away from a cancerous chat")
+       if not e.text[0].isalpha():
+           reactor=['Runs to Modi for Help','Runs to Donald Trumpet for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
+           index=random.randint(0,len(reactor)-1)
+           reply_text=reactor[index]
+           await e.edit(reply_text)
+           if LOGGER:
+               await bot.send_message(LOGGER_GROUP,"You ran away from a cancerous chat")
 @bot.on(events.NewMessage(incoming=True,pattern=".killme"))
 async def killmelol(e):
+ if not e.text[0].isalpha():
     if ENABLE_KILLME:
          name = await bot.get_entity(e.from_id)
          name0 = str(name.first_name)
@@ -155,12 +165,14 @@ async def killmelol(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.disable runs'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.disable runs'))
 async def disable_killme(e):
+    if not e.text[0].isalpha():
         global DISABLE_RUN
         DISABLE_RUN=True
         await e.edit("```Done!```")
 @bot.on(events.NewMessage(outgoing=True,pattern='.enable runs'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.enable runs'))
 async def enable_killme(e):
+    if not e.text[0].isalpha():
             global DISABLE_RUN
             DISABLE_RUN=False
             await e.edit("```Done!```")

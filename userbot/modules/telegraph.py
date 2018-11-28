@@ -5,6 +5,7 @@ from telegraph import Telegraph, upload_file, exceptions
 from userbot import bot
 @bot.on(events.NewMessage(pattern=r".telegraph (media|text)", outgoing=True))
 async def telegraph(event):
+ if not e.text[0].isalpha():
     TMP_DOWNLOAD_DIRECTORY = os.getcwd()
     short_name = "baalajimaestro"
     PRIVATE_GROUP_BOT_API_ID = LOGGER_GROUP

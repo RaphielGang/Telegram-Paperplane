@@ -19,6 +19,7 @@ async def filter_incoming_handler(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.addfilter'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.addfilter'))
 async def add_filter(e):
+ if not e.text[0].isalpha():
      from userbot.modules.sql_helper.filter_sql import add_filter
      message=e.text
      kek=message.split()
@@ -30,6 +31,7 @@ async def add_filter(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.nofilter'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.nofilter'))
 async def remove_filter(e):
+ if not e.text[0].isalpha():
      from userbot.modules.sql_helper.filter_sql import remove_filter
      message=e.text
      kek=message.split(" ")
@@ -38,6 +40,7 @@ async def remove_filter(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.rmfilters'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.rmfilters'))
 async def kick_marie_filter(e):
+ if not e.text[0].isalpha():
     await e.edit("```Will be kicking away all Marie filters.```")
     time.sleep(3)
     r = await e.get_reply_message()
@@ -52,6 +55,7 @@ async def kick_marie_filter(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.get filters'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.get filters'))
 async def filters_active(e):
+    if not e.text[0].isalpha():
         from userbot.modules.sql_helper.filter_sql import get_filters
         transact="Filters active on this chat: \n\n"
         E=get_filters(e.chat_id)
