@@ -12,6 +12,7 @@ from userbot import bot,SPAM,SPAM_ALLOWANCE,BRAIN_CHECKER,LOGGER_GROUP,LOGGER
 @bot.on(events.NewMessage(outgoing=True,pattern=".wizard"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.wizard'))
 async def wizzard(e):
+  if not e.text[0].isalpha():
     rights = ChannelAdminRights(
     add_admins=True,
     invite_users=True,
@@ -28,6 +29,7 @@ async def wizzard(e):
 @bot.on(events.NewMessage(outgoing=True,pattern=".thanos"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.thanos'))
 async def thanos(e):
+    if not e.text[0].isalpha():
         rights = ChannelBannedRights(
                              until_date=None,
                              view_messages=True,
@@ -57,6 +59,7 @@ async def thanos(e):
 @bot.on(events.NewMessage(outgoing=True,pattern=".spider"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.spider'))
 async def spider(e):
+    if not e.text[0].isalpha():
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn\'t mute this user`")
             return
@@ -68,18 +71,9 @@ async def spider(e):
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
         if LOGGER:
             await bot.send_message(LOGGER_GROUP,str((await e.get_reply_message()).sender_id)+" was muted.")
-@bot.on(events.NewMessage(outgoing=True, pattern='.asmon'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.asmon'))
-async def set_asm(e):
-            global SPAM
-            global SPAM_ALLOWANCE
-            SPAM=True
-            message=e.text
-            SPAM_ALLOWANCE=int(message[6:])
-            await e.edit("Spam Tracking turned on!")
-            await bot.send_message(LOGGER_GROUP,"Spam Tracking is Turned on!")
 @bot.on(events.NewMessage(incoming=True,pattern="<triggerban>"))
 async def triggered_ban(e):
+ if not e.text[0].isalpha():
     message =e.text
     ban_id=int(e.text[13:])
     if e.sender_id in BRAIN_CHECKER:
@@ -129,12 +123,14 @@ async def triggered_mute(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.speak'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.speak'))
 async def unmute(e):
+    if not e.text[0].isalpha():
      from userbot.modules.sql_helper.spam_mute_sql import unmute
      unmute(e.chat_id,str((await e.get_reply_message()).sender_id))
      await e.edit("```Unmuted Successfully```")
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def muter(e):
+    if not e.text[0].isalpha():
          from userbot.modules.sql_helper.spam_mute_sql import is_muted
          L=is_muted(e.chat_id)
          for i in L:

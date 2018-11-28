@@ -27,6 +27,7 @@ def get_lst_of_files(input_directory, output_lst):
 @bot.on(events.NewMessage(pattern=r".download (.*)", outgoing=True))
 @bot.on(events.MessageEdited(pattern=r".download (.*)", outgoing=True))
 async def downloader(event):
+ if not e.text[0].isalpha():
     if event.fwd_from:
         return
     await event.edit("Processing ...")
@@ -72,6 +73,7 @@ async def downloader(event):
 @bot.on(events.NewMessage(pattern=r".upload (stream|vn|all) (.*)", outgoing=True))
 @bot.on(events.MessageEdited(pattern=r".upload (stream|vn|all) (.*)", outgoing=True))
 async def uploader(event):
+ if not e.text[0].isalpha():
     if event.fwd_from:
         return
     await event.edit("Processing ...")

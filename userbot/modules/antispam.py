@@ -41,6 +41,7 @@ async def common_incoming_handler(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.asmoff'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.asmoff'))
 async def set_asm(e):
+  if not e.text[0].isalpha():
     global SPAM
     SPAM=False
     await e.edit("Spam Tracking turned off!")
@@ -52,6 +53,7 @@ async def set_asm(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.asmon'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.asmon'))
 async def set_asm(e):
+    if not e.text[0].isalpha():
             global SPAM
             global SPAM_ALLOWANCE
             SPAM=True

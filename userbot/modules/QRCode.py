@@ -15,6 +15,7 @@ def progress(current, total):
 @bot.on(events.NewMessage(pattern=r".getqr", outgoing=True))
 @bot.on(events.MessageEdited(pattern=r".getqr", outgoing=True))
 async def parseqr(e):
+  if not e.text[0].isalpha():
     if e.fwd_from:
         return
     start = datetime.now()
@@ -33,6 +34,7 @@ async def parseqr(e):
     await e.edit("Obtained QRCode contents in {} seconds.\n{}".format(ms, qr_contents))
 @bot.on(events.NewMessage(pattern=r".makeqr ?(.*)", outgoing=True))
 async def make_qr(e):
+  if not e.text[0].isalpha():
     if e.fwd_from:
         return
     start = datetime.now()

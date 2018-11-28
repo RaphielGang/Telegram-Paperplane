@@ -8,12 +8,14 @@ from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True,pattern='.pip (.+)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
 async def pipcheck(e):
+ if not e.text[0].isalpha():
 	a=await e.reply('`Searching . . .`')
 	r='`' + subprocess.run(['pip3', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
 	await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.paste'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.paste'))
 async def haste_paste(e):
+ if not e.text[0].isalpha():
     message=e.text
     await e.edit('`Sending to bin . . .`')
     text=str(message[7:])
@@ -21,6 +23,7 @@ async def haste_paste(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.log'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.log'))
 async def log(e):
+ if not e.text[0].isalpha():
     textx=await e.get_reply_message()
     if textx:
          message = textx
@@ -34,6 +37,7 @@ async def log(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.speed'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.speed'))
 async def speedtest(e):
+     if not e.text[0].isalpha():
             l=await e.reply('`Running speed test . . .`')
             k=subprocess.run(['speedtest-cli'], stdout=subprocess.PIPE)
             await l.edit('`' + k.stdout.decode()[:-1] + '`')
@@ -41,6 +45,7 @@ async def speedtest(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.hash (.*)'))
 async def hash(e):
+ if not e.text[0].isalpha():
 	hashtxt_ = e.pattern_match.group(1)
 	hashtxt=open('hashdis.txt','w+')
 	hashtxt.write(hashtxt_)
@@ -66,6 +71,7 @@ async def hash(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.base64 (en|de) (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.base64 (en|de) (.*)'))
 async def endecrypt(e):
+ if not e.text[0].isalpha():
 	if e.pattern_match.group(1) == 'en':
 		lething=str(pybase64.b64encode(bytes(e.pattern_match.group(2), 'utf-8')))[2:]
 		await e.reply('Encoded: `' + lething[:-1] + '`')
@@ -75,33 +81,35 @@ async def endecrypt(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.random'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.random'))
 async def randomise(e):
+  if not e.text[0].isalpha():
     r=(e.text).split()
     index=random.randint(1,len(r)-1)
     await e.edit("**Query: **\n`"+e.text+'`\n**Output: **\n`'+r[index]+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.alive'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.alive'))
 async def amialive(e):
+    if not e.text[0].isalpha():
         await e.edit("`Master! I am alive😁`")
 @bot.on(events.NewMessage(outgoing=True,pattern='.chatid'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.chatid'))
 async def chatidgetter(e):
+    if not e.text[0].isalpha():
         await e.edit('`Chat ID: '+str(e.chat_id)+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.restart'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.restart'))
 async def restart_the_bot(e):
-	global SIGINT
 	await e.edit("`Thank You master! I am taking a break!`")
-	SIGINT=-1
-	os.killpg(PROCESS_ID,signal.SIGTERM)
-	os.killpg(PROCESS_ID,signal.SIGINT)
+	os.execl(sys.executable, sys.executable, *sys.argv)
 @bot.on(events.NewMessage(outgoing=True,pattern='.pingme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pingme'))
 async def pingme(e):
+ if not e.text[0].isalpha():
 	k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
 	await e.edit('`' + k.stdout.decode()[:-1] + '`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
+    if not e.text[0].isalpha():
         message = e.text
         counter=int(message[10:])
         await e.reply('`Goodbye *Windows XP shutdown sound*....`')
@@ -110,26 +118,32 @@ async def killdabot(e):
         time.sleep(counter)
 @bot.on(events.NewMessage(outgoing=True,pattern='.support'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.support'))
-async def killdabot(e):
+async def bot_support(e):
+	 if not e.text[0].isalpha():
         await e.edit("Report bugs here: @userbot_support")
 @bot.on(events.NewMessage(outgoing=True,pattern='.helpme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.helpme'))
 async def readme(e):
+	 if not e.text[0].isalpha():
         await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/blob/master/README.md')
 @bot.on(events.NewMessage(outgoing=True,pattern='.repo'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.repo'))
 async def repo_is_here(e):
+    if not e.text[0].isalpha():
         await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/')
 @bot.on(events.NewMessage(outgoing=True,pattern='.supportchannel'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.supportchannel'))
 async def support_channel(e):
+	if not e.text[0].isalpha():
         await e.edit('t.me/maestro_userbot_channel')
 @bot.on(events.NewMessage(outgoing=True,pattern='.sysdetails'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.sysdetails'))
 async def sysdetails(e):
+ if not e.text[0].isalpha():
     r='`' + subprocess.run(['neofetch', '--off', '--color_blocks off', '--bold off', '--cpu_temp', 'C', '--cpu_speed','on','--cpu_cores', 'physical','--stdout'], stdout=subprocess.PIPE).stdout.decode() + '`'
     await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
 async def bot_ver(e):
-	await e.edit('`UserBot Version: Modular r2.03`')
+  if not e.text[0].isalpha():
+	await e.edit('`UserBot Version: Modular r2.04`')

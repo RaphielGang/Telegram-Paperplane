@@ -5,6 +5,7 @@ from telethon import TelegramClient, events
 from userbot import bot,OPEN_WEATHER_MAP_APPID
 @bot.on(events.NewMessage(pattern=r".weather (.*)", outgoing=True))
 async def _(event):
+  if not e.text[0].isalpha():
     if event.fwd_from:
         return
     sample_url = "https://api.openweathermap.org/data/2.5/weather?q={}&APPID={}"

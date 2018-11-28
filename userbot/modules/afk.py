@@ -43,6 +43,7 @@ async def afk_on_pm(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.notafk'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.notafk'))
 async def not_afk(e):
+    if not e.text[0].isalpha():
         global ISAFK
         global COUNT_MSG
         global USERS
@@ -67,6 +68,7 @@ async def not_afk(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='.iamafk'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.iamafk'))
 async def set_afk(e):
+    if not e.text[0].isalpha():
             message=e.text
             string = str(message[8:])
             global ISAFK
