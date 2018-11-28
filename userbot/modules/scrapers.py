@@ -1,6 +1,7 @@
 import wikipedia
 from google_images_download import google_images_download
 import urbandict
+import subprocess
 import re
 from telethon import TelegramClient, events
 from userbot import bot
