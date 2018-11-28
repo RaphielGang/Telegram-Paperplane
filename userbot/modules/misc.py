@@ -103,9 +103,9 @@ async def restart_the_bot(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.pingme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pingme'))
 async def pingme(e):
- if not e.text[0].isalpha():
-	k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
-	await e.edit('`' + k.stdout.decode()[:-1] + '`')
+if not e.text[0].isalpha():
+    k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
+    await e.edit('`' + k.stdout.decode()[:-1] + '`')
 @bot.on(events.NewMessage(outgoing=True,pattern='.shutdown'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.shutdown'))
 async def killdabot(e):
@@ -119,7 +119,7 @@ async def killdabot(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.support'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.support'))
 async def bot_support(e):
-	 if not e.text[0].isalpha():
+    if not e.text[0].isalpha():
         await e.edit("Report bugs here: @userbot_support")
 @bot.on(events.NewMessage(outgoing=True,pattern='.helpme'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.helpme'))
