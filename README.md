@@ -55,6 +55,16 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 - Start the userbot: `python3 -m userbot`
 
+#### Running on Windows: 
+
+- Use the exclusive script provided
+
+- Setup the config as in linux
+
+- Pip install just telethon
+
+- Start the bot `python3 windows_startup_script.py`
+
 ### Commands available(will be constantly updated):
 
 -----`.` stands for any random character, it is made for the ease of the user------
@@ -148,7 +158,7 @@ I would like to thank people who assisted me throughout this project:
 [@deletescape](https://github.com/deletescape)<br/>
 [@songotenks69](https://github.com/songotenks69)<br/>
 [@Ovenoboyo](https://github.com/Ovenoboyo)<br/>
-SphericalKat<br/>
+[SphericalKat](https://github.com/ATechnoHazard)<br/>
 <br/>
 and much more people I haven't mentioned here too.
 
