@@ -51,14 +51,15 @@ async def wiki(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.ud (.*)'))
 async def ud(e):
-  await e.edit("Processing...")
-  str = e.pattern_match.group(1)
-  mean = urbandict.define(str)
-  if len(mean) >= 0:
+  if e.text[0]!='g':
+   await e.edit("Processing...")
+   str = e.pattern_match.group(1)
+   mean = urbandict.define(str)
+   if len(mean) >= 0:
     await e.edit('Text: **'+str+'**\n\nMeaning: **'+mean[0]['def']+'**\n\n'+'Example: \n__'+mean[0]['example']+'__')
     if LOGGER:
         await bot.send_message(LOGGER_GROUP,"ud query "+str+" executed successfully.")
-  else:
+   else:
     await e.edit("No result found for **"+str+"**")
 @bot.on(events.NewMessage(outgoing=True, pattern='.tts'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.tts'))
