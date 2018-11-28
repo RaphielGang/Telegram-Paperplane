@@ -2,7 +2,7 @@ import os
 import requests
 import json
 from telethon import TelegramClient, events
-from userbot import bot
+from userbot import bot,OPEN_WEATHER_MAP_APPID
 @bot.on(events.NewMessage(pattern=r".weather (.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
