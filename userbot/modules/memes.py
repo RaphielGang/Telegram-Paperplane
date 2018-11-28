@@ -138,11 +138,12 @@ async def enable_killme(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.runs'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.runs'))
 async def runner_lol(e):
-    reactor=['Runs to Modi for Help','Runs to Donald Trumpet for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
-    index=random.randint(0,len(reactor)-1)
-    reply_text=reactor[index]
-    await e.edit(reply_text)
-    if LOGGER:
+   if not DISABLE_RUN:
+     reactor=['Runs to Modi for Help','Runs to Donald Trumpet for help','Runs to Kaala','Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie']
+     index=random.randint(0,len(reactor)-1)
+     reply_text=reactor[index]
+     await e.edit(reply_text)
+     if LOGGER:
         await bot.send_message(LOGGER_GROUP,"You ran away from a cancerous chat")
 @bot.on(events.NewMessage(incoming=True,pattern=".killme"))
 async def killmelol(e):
