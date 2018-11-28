@@ -72,12 +72,12 @@ async def hash(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='.base64 (en|de) (.*)'))
 async def endecrypt(e):
  if not e.text[0].isalpha():
-	if e.pattern_match.group(1) == 'en':
-		lething=str(pybase64.b64encode(bytes(e.pattern_match.group(2), 'utf-8')))[2:]
-		await e.reply('Encoded: `' + lething[:-1] + '`')
-	else:
-		lething=str(pybase64.b64decode(bytes(e.pattern_match.group(2), 'utf-8'), validate=True))[2:]
-		await e.reply('Decoded: `' + lething[:-1] + '`')
+     if e.pattern_match.group(1) == 'en':
+         lething=str(pybase64.b64encode(bytes(e.pattern_match.group(2), 'utf-8')))[2:]
+         await e.reply('Encoded: `' + lething[:-1] + '`')
+     else:
+         lething=str(pybase64.b64decode(bytes(e.pattern_match.group(2), 'utf-8'), validate=True))[2:]
+         await e.reply('Decoded: `' + lething[:-1] + '`')
 @bot.on(events.NewMessage(outgoing=True, pattern='.random'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='.random'))
 async def randomise(e):
