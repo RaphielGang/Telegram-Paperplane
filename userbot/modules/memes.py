@@ -1,6 +1,6 @@
 from zalgo_text import zalgo
 import random,re
-from userbot import bot,ENABLE_KILLME
+from userbot import bot,ENABLE_KILLME,WIDE_MAP
 from telethon import TelegramClient, events
 @bot.on(events.NewMessage(outgoing=True, pattern=':/'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
