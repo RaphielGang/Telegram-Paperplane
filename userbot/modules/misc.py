@@ -9,9 +9,9 @@ from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.MessageEdited(outgoing=True,pattern='.pip (.+)'))
 async def pipcheck(e):
  if not e.text[0].isalpha():
-	a=await e.reply('`Searching . . .`')
-	r='`' + subprocess.run(['pip3', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
-	await e.edit(r)
+    a=await e.reply('`Searching . . .`')
+    r='`' + subprocess.run(['pip3', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
+    await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.paste'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.paste'))
 async def haste_paste(e):
