@@ -129,16 +129,16 @@ async def repo_is_here(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='.supportchannel'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.supportchannel'))
 async def support_channel(e):
-	if not e.text[0].isalpha():
+    if not e.text[0].isalpha():
         await e.edit('t.me/maestro_userbot_channel')
 @bot.on(events.NewMessage(outgoing=True,pattern='.sysdetails'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.sysdetails'))
 async def sysdetails(e):
- if not e.text[0].isalpha():
-    r='`' + subprocess.run(['neofetch', '--off', '--color_blocks off', '--bold off', '--cpu_temp', 'C', '--cpu_speed','on','--cpu_cores', 'physical','--stdout'], stdout=subprocess.PIPE).stdout.decode() + '`'
-    await e.edit(r)
+    if not e.text[0].isalpha():
+        r='`' + subprocess.run(['neofetch', '--off', '--color_blocks off', '--bold off', '--cpu_temp', 'C', '--cpu_speed','on','--cpu_cores', 'physical','--stdout'], stdout=subprocess.PIPE).stdout.decode() + '`'
+        await e.edit(r)
 @bot.on(events.NewMessage(outgoing=True,pattern='.botversion'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='.botversion'))
 async def bot_ver(e):
-  if not e.text[0].isalpha():
-	await e.edit('`UserBot Version: Modular r2.04`')
+    if not e.text[0].isalpha():
+        await e.edit('`UserBot Version: Modular r2.04`')
