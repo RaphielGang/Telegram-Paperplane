@@ -11,13 +11,13 @@ from userbot import bot,LOGGER,LOGGER_GROUP
 async def web_server_stat(e):
     result = ""
     if LOGGER:
-        result=subprocess.run("sudo systemctl status nginx", stdout=subprocess.PIPE).stdout.decode()
+        result=subprocess.run(['sudo', 'systemctl' ,'status', 'nginx'], stdout=subprocess.PIPE).stdout.decode()
         result=result+"\n\n"
-        result=result+subprocess.run("sudo systemctl status mariadb", stdout=subprocess.PIPE).stdout.decode()
+        result=result+subprocess.run(['sudo','systemctl','status','mariadb'], stdout=subprocess.PIPE).stdout.decode()
         result=result+"\n\n"
-        result=result+subprocess.run("sudo systemctl status postgresql", stdout=subprocess.PIPE).stdout.decode()
+        result=result+subprocess.run(['sudo' ,'systemctl', 'status' ,'postgresql'], stdout=subprocess.PIPE).stdout.decode()
         result=result+"\n\n"
-        result=result+subprocess.run("sudo systemctl status php-fpm", stdout=subprocess.PIPE).stdout.decode()
+        result=result+subprocess.run(['sudo', 'systemctl' ,'status' ,'php-fpm'], stdout=subprocess.PIPE).stdout.decode()
         f=open('output.txt', 'w+')
         f.write(result)
         f.close()
