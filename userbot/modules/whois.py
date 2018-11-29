@@ -8,7 +8,7 @@ from userbot import LOGGER,LOGGER_GROUP
 current_date_time = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
 
 
-@bot.on(events.NewMessage(pattern="\.whois ?(.*)", outgoing=True))
+@bot.on(events.NewMessage(pattern=".whois ?(.*)", outgoing=True))
 async def _(event):
   if not e.text[0].isalpha():
     if event.fwd_from:

@@ -2,8 +2,8 @@ from telethon import TelegramClient, events
 from userbot import bot
 import sqlite3
 from userbot import LOGGER,LOGGER_GROUP
-@bot.on(events.NewMessage(outgoing=True, pattern='.get notes'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.get notes'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.get notes$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.get notes$'))
 async def notes_active(e):
     if not e.text[0].isalpha():
         from userbot.modules.sql_helper.notes_sql import get_notes
@@ -12,8 +12,8 @@ async def notes_active(e):
         for i in E:
             transact=transact+"🔹 "+i.keyword+"    👉     "+i.reply+"\n"
         await e.edit(transact)
-@bot.on(events.NewMessage(outgoing=True, pattern='.nosave'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.nosave'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.nosave (.*)'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.nosave (.*)'))
 async def remove_notes(e):
     if not e.text[0].isalpha():
       from userbot.modules.sql_helper.notes_sql import remove_notes
@@ -21,8 +21,8 @@ async def remove_notes(e):
       kek=message.split(" ")
       remove_notes(e.chat_id,kek[1])
       await e.edit("```Removed Note Successfully")
-@bot.on(events.NewMessage(outgoing=True, pattern='.addnote'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.addnote'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.addnote (.*)'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.addnote (.*)'))
 async def add_filter(e):
   if not e.text[0].isalpha():
     from userbot.modules.sql_helper.notes_sql import add_note
@@ -42,8 +42,8 @@ async def incom_note(e):
         if listes==t.keyword:
            await e.reply(t.reply)
            return
-@bot.on(events.NewMessage(outgoing=True, pattern='.rmnotes'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.rmnotes'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.rmnotes$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.rmnotes$'))
 async def remove_notes(e):
     if not e.text[0].isalpha():
         await e.edit("```Will be kicking away all Marie notes.```")

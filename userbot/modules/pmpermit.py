@@ -25,8 +25,8 @@ async def permitpm(e):
                await bot(BlockRequest(e.chat_id))
                if LOGGER:
                    await bot.send_message(LOGGER_GROUP,str(e.chat_id)+" was just another retarded nibba")
-@bot.on(events.NewMessage(outgoing=True,pattern='.approvepm'))
-@bot.on(events.MessageEdited(outgoing=True,pattern=".approvepm"))
+@bot.on(events.NewMessage(outgoing=True,pattern='^.approvepm$'))
+@bot.on(events.MessageEdited(outgoing=True,pattern="^.approvepm$"))
 async def approvepm(e):
   if not e.text[0].isalpha():
     from userbot.modules.sql_helper.pm_permit_sql import approve
