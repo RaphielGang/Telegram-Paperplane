@@ -30,8 +30,8 @@ async def fastpurger(e):
                  break
              i=i+1
              await message.delete()
-@bot.on(events.NewMessage(outgoing=True, pattern='^.purgeme$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.purgeme$'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.purgeme'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.purgeme'))
 async def purgeme(e):
     message=e.text
     count = int(message[9:])
@@ -61,8 +61,8 @@ async def delmsg(e):
                 break
             i=i+1
             await message.delete()
-@bot.on(events.NewMessage(outgoing=True, pattern='^.editme$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.editme$'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.editme'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.editme'))
 async def editer(e):
  if not e.text[0].isalpha():
    message=e.text
@@ -76,8 +76,8 @@ async def editer(e):
     i=i+1
    if LOGGER:
          await bot.send_message(LOGGER_GROUP,"Edit query was executed successfully")
-@bot.on(events.NewMessage(outgoing=True, pattern='^.sd$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.sd$'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.sd'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.sd'))
 async def selfdestruct(e):
  if not e.text[0].isalpha():
     message=e.text
