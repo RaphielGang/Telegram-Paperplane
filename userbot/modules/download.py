@@ -1,50 +1,39 @@
+from telethon import events
 import json
 import os
 import subprocess
 import requests
-import time
-from userbot import LOGGER,LOGGER_GROUP
-from telethon import TelegramClient, events
+import asyncio
 from datetime import datetime
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from userbot import bot,LOGS
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.errors import MessageNotModifiedError
 from PIL import Image
-from userbot import bot
-TEMP_DOWNLOAD_DIRECTORY = os.getcwd()
+TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 def progress(current, total):
-    print("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
-def get_lst_of_files(input_directory, output_lst):
-    filesinfolder = os.listdir(input_directory)
-    for file_name in filesinfolder:
-        current_file_name = os.path.join(input_directory, file_name)
-        if os.path.isdir(current_file_name):
-            return get_lst_of_files(current_file_name, output_lst)
-        else:
-            output_lst.append(current_file_name)
-    return output_lst
-@bot.on(events.NewMessage(pattern=r"^.download (.*)", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r"^.download (.*)", outgoing=True))
-async def downloader(event):
- if not e.text[0].isalpha():
-    if event.fwd_from:
+    LOGS.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
+@bot.on(events.NewMessage(pattern=r".download ?(.*)", outgoing=True))
+@bot.on(events.MessageEdited(pattern=r".download ?(.*)", outgoing=True))
+async def download(e):
+    if e.fwd_from:
         return
-    await event.edit("Processing ...")
-    input_str = event.pattern_match.group(1)
+    await e.edit("Processing ...")
+    input_str = e.pattern_match.group(1)
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-    if event.reply_to_msg_id:
+    if e.reply_to_msg_id:
         start = datetime.now()
         downloaded_file_name = await bot.download_media(
-            await event.get_reply_message(),
+            await e.get_reply_message(),
             TEMP_DOWNLOAD_DIRECTORY,
             progress_callback=progress
         )
         end = datetime.now()
         ms = (end - start).seconds
-        await event.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
-    elif input_str:
+        await e.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+    elif "|" in input_str:
         url, file_name = input_str.split("|")
         url = url.strip()
         # https://stackoverflow.com/a/761825/4723940
@@ -65,19 +54,151 @@ async def downloader(event):
                     fd.write(chunk)
                     done = int(100 * dl / total_length)
                     download_progress_string = "Downloading ... [%s%s]" % ('=' * done, ' ' * (50-done))
+                    # download_progress_string = "Downloading ... [%s of %s]" % (str(dl), str(total_length))
+                    # download_progress_string = "Downloading ... [%s%s]" % ('⬛️' * done, '⬜️' * (100 - done))
+                    """try:
+                        await e.edit(download_progress_string)
+                    except MessageNotModifiedError as e:
+                        LOGS.warn("__FLOODWAIT__: {} sleeping for 100seconds, before proceeding.".format(str(e)))
+                    await asyncio.sleep(1)"""
+                    LOGS.info(download_progress_string)
         end = datetime.now()
         ms = (end - start).seconds
-        await event.edit("Downloaded to `{}` in {} seconds.".format(required_file_name, ms))
+        await e.edit("Downloaded to `{}` in {} seconds.".format(required_file_name, ms))
     else:
-        await event.edit("Reply to a message to download to my local server.")
-@bot.on(events.NewMessage(pattern=r"^.upload (stream|vn|all) (.*)", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r"^.upload (stream|vn|all) (.*)", outgoing=True))
-async def uploader(event):
- if not e.text[0].isalpha():
-    if event.fwd_from:
+        await e.edit("Reply to a message to download to my local server.")
+@bot.on(events.NewMessage(pattern=r"\.uploadir (.*)", outgoing=True))
+async def _(e):
+    if e.fwd_from:
         return
-    await event.edit("Processing ...")
-    type_of_upload = event.pattern_match.group(1)
+    input_str = e.pattern_match.group(1)
+    if os.path.exists(input_str):
+        start = datetime.now()
+        await e.edit("Processing ...")
+        lst_of_files = get_lst_of_files(input_str, [])
+        LOGS.info(lst_of_files)
+        u = 0
+        await e.edit("Found {} files. Uploading will start soon. Please wait!".format(len(lst_of_files)))
+        for single_file in lst_of_files:
+            if os.path.exists(single_file):
+                # https://stackoverflow.com/a/678242/4723940
+                caption_rts = os.path.basename(single_file)
+                if not caption_rts.lower().endswith(".mp4"):
+                    await bot.send_file(
+                        e.chat_id,
+                        single_file,
+                        caption=caption_rts,
+                        force_document=False,
+                        allow_cache=False,
+                        reply_to=e.message.id,
+                        progress_callback=progress
+                    )
+                else:
+                    thumb_image = os.path.join(input_str, "thumb.jpg")
+                    metadata = extractMetadata(createParser(single_file))
+                    duration = 0
+                    width = 0
+                    height = 0
+                    if metadata.has("duration"):
+                        duration = metadata.get('duration').seconds
+                    if metadata.has("width"):
+                        width = metadata.get("width")
+                    if metadata.has("height"):
+                        height = metadata.get("height")
+                    await bot.send_file(
+                        e.chat_id,
+                        single_file,
+                        caption=caption_rts,
+                        thumb=thumb_image,
+                        force_document=False,
+                        allow_cache=False,
+                        reply_to=e.message.id,
+                        attributes=[
+                            DocumentAttributeVideo(
+                                duration=duration,
+                                w=width,
+                                h=height,
+                                round_message=False,
+                                supports_streaming=True
+                            )
+                        ],
+                        progress_callback=progress
+                    )
+                os.remove(single_file)
+                u = u + 1
+        end = datetime.now()
+        ms = (end - start).seconds
+        await e.edit("Uploaded {} files in {} seconds.".format(u, ms))
+    else:
+        await e.edit("404: Directory Not Found")
+
+
+@bot.on(events.NewMessage(pattern=r".upload (.*)", outgoing=True))
+async def _(e):
+    if e.fwd_from:
+        return
+    await e.edit("Processing ...")
+    input_str = e.pattern_match.group(1)
+    if os.path.exists(input_str):
+        start = datetime.now()
+        await bot.send_file(
+            e.chat_id,
+            input_str,
+            force_document=True,
+            allow_cache=False,
+            reply_to=e.message.id,
+            progress_callback=progress
+        )
+        end = datetime.now()
+        ms = (end - start).seconds
+        await e.edit("Uploaded in {} seconds.".format(ms))
+    else:
+        await e.edit("404: File Not Found")
+
+
+def get_video_thumb(file, output=None, width=90):
+    metadata = extractMetadata(createParser(file))
+    p = subprocess.Popen([
+        'ffmpeg', '-i', file,
+        '-ss', str(int((0, metadata.get('duration').seconds)[metadata.has('duration')] / 2)),
+        '-filter:v', 'scale={}:-1'.format(width),
+        '-vframes', '1',
+        output,
+    ], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    if not p.returncode and os.path.lexists(file):
+        return output
+
+
+def extract_w_h(file):
+    command_to_run = [
+        "ffprobe",
+        "-v",
+        "quiet",
+        "-print_format",
+        "json",
+        "-show_format",
+        "-show_streams",
+        file
+    ]
+    # https://stackoverflow.com/a/11236144/4723940
+    try:
+        t_response = subprocess.check_output(command_to_run, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as exc:
+        LOGS.warn(exc)
+    else:
+        x_reponse = t_response.decode("UTF-8")
+        response_json = json.loads(x_reponse)
+        width = int(response_json["streams"][0]["width"])
+        height = int(response_json["streams"][0]["height"])
+        return width, height
+
+
+@bot.on(events.NewMessage(pattern=r".uploadas(stream|vn|all) (.*)", outgoing=True))
+async def _(e):
+    if e.fwd_from:
+        return
+    await e.edit("Processing ...")
+    type_of_upload = e.pattern_match.group(1)
     supports_streaming = False
     round_message = False
     spam_big_messages = False
@@ -87,7 +208,7 @@ async def uploader(event):
         round_message = True
     if type_of_upload == "all":
         spam_big_messages = True
-    input_str = event.pattern_match.group(2)
+    input_str = e.pattern_match.group(2)
     thumb = None
     file_name = None
     if "|" in input_str:
@@ -110,16 +231,26 @@ async def uploader(event):
             width = metadata.get("width")
         if metadata.has("height"):
             height = metadata.get("height")
+        # hachoir only works with MP4 files
+        # this is good, since with MKV files sent as streamable Telegram responds,
+        # Bad Request: VIDEO_CONTENT_TYPE_INVALID
+        # if width is None or height is None:
+        #     width, height = extract_w_h(file_name)
+        """if os.path.exists(thumb):
+            # width and height need to be the image width and height
+            im = Image.open(thumb)
+            # https://stackoverflow.com/a/6444612/4723940
+            width, height = im.size"""
         try:
             if supports_streaming:
                 await bot.send_file(
-                    event.chat_id,
+                    e.chat_id,
                     file_name,
                     thumb=thumb,
                     caption=input_str,
                     force_document=False,
                     allow_cache=False,
-                    reply_to=event.message.id,
+                    reply_to=e.message.id,
                     attributes=[
                         DocumentAttributeVideo(
                             duration=duration,
@@ -133,11 +264,11 @@ async def uploader(event):
                 )
             elif round_message:
                 await bot.send_file(
-                    event.chat_id,
+                    e.chat_id,
                     file_name,
                     thumb=thumb,
                     allow_cache=False,
-                    reply_to=event.message.id,
+                    reply_to=e.message.id,
                     video_note=True,
                     attributes=[
                         DocumentAttributeVideo(
@@ -151,13 +282,13 @@ async def uploader(event):
                     progress_callback=progress
                 )
             elif spam_big_messages:
-                await event.edit("TBD: Not (yet) Implemented")
+                await e.edit("TBD: Not (yet) Implemented")
                 return
             end = datetime.now()
             ms = (end - start).seconds
             os.remove(thumb)
-            await event.edit("Uploaded in {} seconds.".format(ms))
+            await e.edit("Uploaded in {} seconds.".format(ms))
         except FileNotFoundError as e:
-            await event.edit(str(e))
+            await e.edit(str(e))
     else:
-        await event.edit("404: File Not Found")
+        await e.edit("404: File Not Found")
