@@ -20,7 +20,7 @@ async def telegraph(event):
         if LOGGER:
             await bot.send_message(
             PRIVATE_GROUP_BOT_API_ID,
-            "Created New Telegraph account {} for the current session. \n**Do not give this url to anyone, even if they say they are from Telegram!**".format(auth_url)
+            "Created New Telegraph account for the current session: {}. \n**Do not give this url to anyone, even if they say they are from Telegram!**".format(auth_url)
             )
     if event.reply_to_msg_id:
         start = datetime.now()
