@@ -24,8 +24,8 @@ def get_lst_of_files(input_directory, output_lst):
         else:
             output_lst.append(current_file_name)
     return output_lst
-@bot.on(events.NewMessage(pattern=r".download (.*)", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r".download (.*)", outgoing=True))
+@bot.on(events.NewMessage(pattern=r"^.download (.*)", outgoing=True))
+@bot.on(events.MessageEdited(pattern=r"^.download (.*)", outgoing=True))
 async def downloader(event):
  if not e.text[0].isalpha():
     if event.fwd_from:
@@ -70,8 +70,8 @@ async def downloader(event):
         await event.edit("Downloaded to `{}` in {} seconds.".format(required_file_name, ms))
     else:
         await event.edit("Reply to a message to download to my local server.")
-@bot.on(events.NewMessage(pattern=r".upload (stream|vn|all) (.*)", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r".upload (stream|vn|all) (.*)", outgoing=True))
+@bot.on(events.NewMessage(pattern=r"^.upload (stream|vn|all) (.*)", outgoing=True))
+@bot.on(events.MessageEdited(pattern=r"^.upload (stream|vn|all) (.*)", outgoing=True))
 async def uploader(event):
  if not e.text[0].isalpha():
     if event.fwd_from:

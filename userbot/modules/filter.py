@@ -16,8 +16,8 @@ async def filter_incoming_handler(e):
                 if pro:
                       await e.reply(t.reply)
                       return
-@bot.on(events.NewMessage(outgoing=True, pattern='.addfilter'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.addfilter'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.addfilter\\s.*'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.addfilter\\s.*'))
 async def add_filter(e):
  if not e.text[0].isalpha():
      from userbot.modules.sql_helper.filter_sql import add_filter
@@ -28,8 +28,8 @@ async def add_filter(e):
          string=string+" "+str(kek[i])
      add_filter(str(e.chat_id),kek[1],string)
      await e.edit("```Added Filter Successfully```")
-@bot.on(events.NewMessage(outgoing=True, pattern='.nofilter'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.nofilter'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.nofilter\\s.*'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.nofilter\\s.*'))
 async def remove_filter(e):
  if not e.text[0].isalpha():
      from userbot.modules.sql_helper.filter_sql import remove_filter
@@ -37,8 +37,8 @@ async def remove_filter(e):
      kek=message.split(" ")
      remove_filter(e.chat_id,kek[1])
      await e.edit("```Removed Filter Successfully```")
-@bot.on(events.NewMessage(outgoing=True, pattern='.rmfilters'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.rmfilters'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.rmfilters$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.rmfilters$'))
 async def kick_marie_filter(e):
  if not e.text[0].isalpha():
     await e.edit("```Will be kicking away all Marie filters.```")
@@ -52,8 +52,8 @@ async def kick_marie_filter(e):
     await e.respond("```Successfully cleaned Marie filters yaay!```\n Gimme cookies @baalajimaestro")
     if LOGGER:
           await bot.send_message(LOGGER_GROUP,"I cleaned all Marie filters at "+str(e.chat_id))
-@bot.on(events.NewMessage(outgoing=True, pattern='.get filters'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.get filters'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.get filters$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.get filters$'))
 async def filters_active(e):
     if not e.text[0].isalpha():
         from userbot.modules.sql_helper.filter_sql import get_filters
