@@ -1,9 +1,10 @@
 from zalgo_text import zalgo
 import random,re
 from userbot import bot,ENABLE_KILLME,WIDE_MAP
-from userbot import LOGGER,LOGGER_GROUP
+from userbot import LOGGER,LOGGER_GROUP,DISABLE_RUN
 from telethon import TelegramClient, events
 from spongemock import spongemock
+import time
 @bot.on(events.NewMessage(outgoing=True, pattern=':/'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
 async def kek(e):

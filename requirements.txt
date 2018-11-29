@@ -17,3 +17,4 @@ sqlalchemy>=1.2
 gTTS>=2.0.1
 py_translator>=1.8.9
 spongemock
+gTTS-token>=1.1.3

@@ -64,8 +64,8 @@ async def ud(e):
         await bot.send_message(LOGGER_GROUP,"ud query "+str+" executed successfully.")
    else:
     await e.edit("No result found for **"+str+"**")
-@bot.on(events.NewMessage(outgoing=True, pattern='^.tts?(\\s)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.tts?(\\s)'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.tts'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.tts'))
 async def tts(e):
   if not e.text[0].isalpha():
     textx=await e.get_reply_message()
@@ -94,8 +94,8 @@ async def tts(e):
         if LOGGER:
               await bot.send_message(LOGGER_GROUP,"tts of "+replye+" executed successfully!")
         await e.delete()
-@bot.on(events.NewMessage(outgoing=True, pattern='.trt'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.trt'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.trt'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.trt'))
 async def translateme(e):
   if not e.text[0].isalpha():
     global langi
