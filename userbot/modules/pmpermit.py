@@ -14,7 +14,9 @@ async def permitpm(e):
        from userbot.modules.sql_helper.pm_permit_sql import is_approved
        E=is_approved(e.chat_id)
        if not E:
-           await e.reply("`Bleep Blop! This is a Bot. Don't fret.\n\nMy Master hasn't approved you to PM. Please wait for my Master to look in, he would mostly approve PMs.\n\nAs for as i know, he doesn't usually approve Retards.`")
+           await e.reply("`Bleep Blop! This is a Bot. Don't fret.\n\nMy Master hasn't approved you to PM. \
+                          Please wait for my Master to look in, he would mostly approve PMs.\n\n\
+                          As far as i know, he doesn't usually approve Retards.`")
            if e.chat_id not in COUNT_PM:
               COUNT_PM.update({e.chat_id:1})
            else:

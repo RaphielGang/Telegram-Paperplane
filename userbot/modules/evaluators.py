@@ -14,7 +14,7 @@ async def evaluate(e):
           f=open('output.txt', 'w+')
           f.write(evaluation)
           f.close()
-          await bot.send_file(e.chat_id, 'output.txt', reply_to=e.id, caption="`It's too big to send as text, output is sent as file`")
+          await bot.send_file(e.chat_id, 'output.txt', reply_to=e.id, caption="`Output too large, sending as file`")
           subprocess.run(['rm', 'sender.txt'], stdout=subprocess.PIPE)
       await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`'+str(evaluation)+'`')
     else:
@@ -36,7 +36,7 @@ async def run(e):
           f=open('output.txt', 'w+')
           f.write(result)
           f.close()
-          await bot.send_file(e.chat_id, 'output.txt', reply_to=e.id, caption="`It's too big to send as text, sent as file`")
+          await bot.send_file(e.chat_id, 'output.txt', reply_to=e.id, caption="`Output too large, sending as file`")
           subprocess.run(['rm', 'output.txt'], stdout=subprocess.PIPE)
       await e.edit("**Query: **\n`"+e.text[5:]+'`\n**Result: **\n`'+str(result)+'`')
   else:
@@ -56,7 +56,7 @@ async def terminal_runner(e):
         f=open('output.txt', 'w+')
         f.write(result)
         f.close()
-        await bot.send_file(e.chat_id, 'sender.txt', reply_to=e.id, caption="`It's too big to send as text. So it is sent as file`")
+        await bot.send_file(e.chat_id, 'sender.txt', reply_to=e.id, caption="`Output too large, sending as file`")
         subprocess.run(['rm', 'output.txt'], stdout=subprocess.PIPE)
     await e.edit("**Query: **\n`"+str(command[6:])+'`\n**Output: **\n`'+result+'`')
     if LOGGER:

@@ -7,7 +7,7 @@ from userbot import LOGGER,LOGGER_GROUP
 async def notes_active(e):
     if not e.text[0].isalpha():
         from userbot.modules.sql_helper.notes_sql import get_notes
-        transact="Messages saved on this chat: \n\n"
+        transact="Messages saved in this chat: \n\n"
         E=get_notes(e.chat_id)
         for i in E:
             transact=transact+"🔹 "+i.keyword+"    👉     "+i.reply+"\n"
@@ -20,7 +20,7 @@ async def remove_notes(e):
       message=e.text
       kek=message.split(" ")
       remove_notes(e.chat_id,kek[1])
-      await e.edit("```Removed Note Successfully")
+      await e.edit("```Note removed successfully")
 @bot.on(events.NewMessage(outgoing=True, pattern='^.addnote (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.addnote (.*)'))
 async def add_filter(e):
@@ -32,7 +32,7 @@ async def add_filter(e):
     for i in range(2,len(kek)):
         string=string+" "+str(kek[i])
     add_note(str(e.chat_id),kek[1],string)
-    await e.edit("```Added Note Successfully. Use # followed by note name, to get it```")
+    await e.edit("```Note added successfully. Use # followed by note name, to get it```")
 @bot.on(events.NewMessage(incoming=True,pattern='#*'))
 async def incom_note(e):
     from userbot.modules.sql_helper.notes_sql import get_notes
@@ -46,7 +46,7 @@ async def incom_note(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.rmnotes$'))
 async def remove_notes(e):
     if not e.text[0].isalpha():
-        await e.edit("```Will be kicking away all Marie notes.```")
+        await e.edit("```Purging all Marie notes.```")
         time.sleep(3)
         r = await e.get_reply_message()
         filters = r.text.split('-')[1:]

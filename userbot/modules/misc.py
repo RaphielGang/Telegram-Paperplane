@@ -17,9 +17,9 @@ async def pipcheck(e):
 async def haste_paste(e):
  if not e.text[0].isalpha():
     message=e.text
-    await e.edit('`Sending to bin . . .`')
+    await e.edit('`Pasting text . . .`')
     text=str(message[7:])
-    await e.edit('`Sent to bin! Check it here: `' + hastebin.post(text))
+    await e.edit('`Paste successful! Check it here: `' + hastebin.post(text))
 @bot.on(events.NewMessage(outgoing=True, pattern='^.log?(\\s)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.log?(\\s)'))
 async def log(e):
