@@ -21,7 +21,7 @@ async def web_server_stat(e):
         f=open('output.txt', 'w+')
         f.write(result)
         f.close()
-        await bot.send_file(LOGGER_GROUP, 'sender.txt', reply_to=e.id, caption="`Here is your current status`")
+        await bot.send_file(LOGGER_GROUP, 'output.txt', reply_to=e.id, caption="`Here is your current status`")
         r='`' + subprocess.run(['neofetch', '--off', '--color_blocks off', '--bold off', '--cpu_temp', 'C', '--cpu_speed','on','--cpu_cores', 'physical','--stdout'], stdout=subprocess.PIPE).stdout.decode() + '`'
         await bot.send_message(LOGGER_GROUP,r)
         subprocess.run(['rm', 'output.txt'], stdout=subprocess.PIPE)
