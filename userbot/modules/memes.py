@@ -19,8 +19,8 @@ async def lol(e):
     for j in range(10):
         t = t[:-1] + '_-'
         await r.edit(t)
-@bot.on(events.NewMessage(outgoing=True, pattern='^.cp(\\s)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.cp?(\\s)'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.cp'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.cp'))
 async def copypasta(e):
  if not e.text[0].isalpha():
     textx=await e.get_reply_message()
@@ -48,8 +48,8 @@ async def copypasta(e):
                 reply_text += c.lower()
     reply_text += random.choice(emojis)
     await e.edit(reply_text)
-@bot.on(events.NewMessage(outgoing=True, pattern='^.vapor?(\\s)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.vapor?(\\s)'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.vapor'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.vapor'))
 async def vapor(e):
  if not e.text[0].isalpha():
     textx=await e.get_reply_message()
@@ -65,8 +65,8 @@ async def vapor(e):
         data = ''
     reply_text = str(data).translate(WIDE_MAP)
     await e.edit(reply_text)
-@bot.on(events.NewMessage(outgoing=True, pattern='^.str?(\\s)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.str?(\\s)'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.str'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.str'))
 async def stretch(e):
  if not e.text[0].isalpha():
     textx=await e.get_reply_message()
@@ -79,8 +79,8 @@ async def stretch(e):
     count = random.randint(3, 10)
     reply_text = re.sub(r'([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])', (r'\1' * count), message)
     await e.edit(reply_text)
-@bot.on(events.NewMessage(outgoing=True, pattern='^.zal(\\s)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.zal(\\s)'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.zal'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.zal'))
 async def zal(e):
  if not e.text[0].isalpha():
      textx=await e.get_reply_message()
@@ -97,8 +97,8 @@ async def zal(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern="^hi$"))
 async def hoi(e):
      await e.edit("Hoi!😄")
-@bot.on(events.NewMessage(outgoing=True,pattern='^.owo?(\\s)'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='^.owo?(\\s)'))
+@bot.on(events.NewMessage(outgoing=True,pattern='^.owo'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.owo'))
 async def faces(e):
  if not e.text[0].isalpha():
     textx=await e.get_reply_message()

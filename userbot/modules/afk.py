@@ -65,8 +65,8 @@ async def not_afk(e):
         COUNT_MSG=0
         USERS={}
         AFKREASON="No Reason"
-@bot.on(events.NewMessage(outgoing=True, pattern='^.iamafk$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.iamafk$'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.iamafk'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.iamafk'))
 async def set_afk(e):
     if not e.text[0].isalpha():
             message=e.text
