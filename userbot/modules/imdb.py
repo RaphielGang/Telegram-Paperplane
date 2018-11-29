@@ -3,8 +3,8 @@ import bs4
 import re
 from telethon import TelegramClient, events
 from userbot import bot
-@bot.on(events.NewMessage(outgoing=True,pattern='.imdb (.*)'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.imdb (.*)'))
+@bot.on(events.NewMessage(outgoing=True,pattern='^.imdb (.*)'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.imdb (.*)'))
 async def imdb(e):
  if not e.text[0].isalpha():
     movie_name = e.pattern_match.group(1)
