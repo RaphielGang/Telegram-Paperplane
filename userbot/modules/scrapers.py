@@ -10,8 +10,8 @@ from gtts import gTTS
 import os
 from py_translator import Translator
 langi="en"
-@bot.on(events.NewMessage(outgoing=True, pattern=".img (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern=".img (.*)"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.img (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.img (.*)"))
 async def img_sampler(e):
   if not e.text[0].isalpha():
    await e.edit('Processing...')
@@ -32,8 +32,8 @@ async def img_sampler(e):
    end=round(time.time() * 1000)
    msstartend=int(end) - int(start)
    await e.edit("Done. Time taken: "+str(msstartend) + 's')
-@bot.on(events.NewMessage(outgoing=True,pattern=r'.google (.*)'))
-@bot.on(events.MessageEdited(outgoing=True,pattern=r'.google (.*)'))
+@bot.on(events.NewMessage(outgoing=True,pattern=r'^.google (.*)'))
+@bot.on(events.MessageEdited(outgoing=True,pattern=r'^.google (.*)'))
 async def gsearch(e):
       if not e.text[0].isalpha():
         match = e.pattern_match.group(1)
@@ -42,8 +42,8 @@ async def gsearch(e):
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search Query:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
         if LOGGER:
            await bot.send_message(LOGGER_GROUP,"Google Search query "+match+" was executed successfully")
-@bot.on(events.NewMessage(outgoing=True,pattern=r'.wiki (.*)'))
-@bot.on(events.MessageEdited(outgoing=True,pattern=r'.wiki (.*)'))
+@bot.on(events.NewMessage(outgoing=True,pattern=r'^.wiki (.*)'))
+@bot.on(events.MessageEdited(outgoing=True,pattern=r'^.wiki (.*)'))
 async def wiki(e):
       if not e.text[0].isalpha():
         match = e.pattern_match.group(1)
@@ -64,8 +64,8 @@ async def ud(e):
         await bot.send_message(LOGGER_GROUP,"ud query "+str+" executed successfully.")
    else:
     await e.edit("No result found for **"+str+"**")
-@bot.on(events.NewMessage(outgoing=True, pattern='.tts'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.tts'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.tts?(\\s)'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.tts?(\\s)'))
 async def tts(e):
   if not e.text[0].isalpha():
     textx=await e.get_reply_message()

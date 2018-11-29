@@ -12,8 +12,8 @@ def progress(current, total):
     print("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
 
 
-@bot.on(events.NewMessage(pattern=r".getqr", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r".getqr", outgoing=True))
+@bot.on(events.NewMessage(pattern=r"^.getqr$", outgoing=True))
+@bot.on(events.MessageEdited(pattern=r"^.getqr$", outgoing=True))
 async def parseqr(e):
   if not e.text[0].isalpha():
     if e.fwd_from:
