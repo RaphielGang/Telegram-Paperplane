@@ -130,7 +130,6 @@ async def unmute(e):
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def muter(e):
-    if not e.text[0].isalpha():
          from userbot.modules.sql_helper.spam_mute_sql import is_muted
          L=is_muted(e.chat_id)
          for i in L:
