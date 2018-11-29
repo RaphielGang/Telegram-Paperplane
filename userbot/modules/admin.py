@@ -9,8 +9,8 @@ import time
 import sqlite3
 from telethon import TelegramClient, events
 from userbot import bot,SPAM,SPAM_ALLOWANCE,BRAIN_CHECKER,LOGGER_GROUP,LOGGER
-@bot.on(events.NewMessage(outgoing=True,pattern=".wizard"))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.wizard'))
+@bot.on(events.NewMessage(outgoing=True,pattern="^.wizard$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.wizard$'))
 async def wizzard(e):
   if not e.text[0].isalpha():
     rights = ChannelAdminRights(
@@ -26,8 +26,8 @@ async def wizzard(e):
     time.sleep(3)
     await bot(EditAdminRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
     await e.edit("A perfect magic has happened!")
-@bot.on(events.NewMessage(outgoing=True,pattern=".thanos"))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.thanos'))
+@bot.on(events.NewMessage(outgoing=True,pattern="^.thanos$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.thanos$'))
 async def thanos(e):
     if not e.text[0].isalpha():
         rights = ChannelBannedRights(
@@ -56,8 +56,8 @@ async def thanos(e):
         await bot.send_file(e.chat_id,"https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif")
         if LOGGER:
             await bot.send_message(LOGGER_GROUP,str((await e.get_reply_message()).sender_id)+" was banned.")
-@bot.on(events.NewMessage(outgoing=True,pattern=".spider"))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.spider'))
+@bot.on(events.NewMessage(outgoing=True,pattern="^.spider$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.spider$'))
 async def spider(e):
     if not e.text[0].isalpha():
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
@@ -120,8 +120,8 @@ async def triggered_mute(e):
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
         await bot.send_file(e.chat_id,"Job was done, Master! Gimme Cookies!")
-@bot.on(events.NewMessage(outgoing=True, pattern='.speak'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.speak'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.speak$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.speak$'))
 async def unmute(e):
     if not e.text[0].isalpha():
      from userbot.modules.sql_helper.spam_mute_sql import unmute
