@@ -10,11 +10,7 @@ async def mention_afk(e):
     if e.message.mentioned:
         if ISAFK:
             if e.chat_id not in USERS:
-<<<<<<< HEAD
                   await e.reply("Sorry! My boss is AFK due to ```"+AFKREASON+"```. Would ping him to look into the message soon😉")
-=======
-                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"``` I\'ll ping him to look into the message soon😉")
->>>>>>> b54e28a... strings and grammar cleanup
                   USERS.update({e.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
             elif e.chat_id in USERS:
