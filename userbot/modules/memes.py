@@ -3,6 +3,7 @@ import random,re
 from userbot import bot,ENABLE_KILLME,WIDE_MAP
 from userbot import LOGGER,LOGGER_GROUP
 from telethon import TelegramClient, events
+from spongemock import spongemock
 @bot.on(events.NewMessage(outgoing=True, pattern=':/'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
 async def kek(e):
@@ -175,3 +176,15 @@ async def enable_killme(e):
             global DISABLE_RUN
             DISABLE_RUN=False
             await e.edit("```Done!```")
+@bot.on(events.NewMessage(outgoing=True,pattern='^.mock'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.mock'))
+async def spongemocktext(e):
+    textx=await e.get_reply_message()
+    message = e.text
+    if textx:
+        message = textx
+        message = str(message.message)
+    else:
+       message = str(message[6:])
+    reply_text = spongemock.mock(message)
+    await e.edit(reply_text)
