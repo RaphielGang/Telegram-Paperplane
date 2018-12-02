@@ -29,7 +29,7 @@ async def afk_on_pm(e):
     if e.is_private:
         if ISAFK:
             if e.chat_id not in USERS:
-                  await e.reply("Sorry! My boss in AFK due to ```"+AFKREASON+"``` I\'ll ping him to look into the message soon😉")
+                  await e.reply("Sorry! My boss is AFK due to ```"+AFKREASON+"``` I\'ll ping him to look into the message soon😉")
                   USERS.update({e.chat_id:1})
                   COUNT_MSG=COUNT_MSG+1
             elif   e.chat_id in USERS:
