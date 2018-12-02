@@ -18,10 +18,6 @@
 - /
 ```
 
-Just coz I'm too lazy, I program it, to make stuff easier.
-This is a userbot, which is equivalent to a telegram client, and it can run on the cloud too.
-It needs a linux pc or any unix to run basic commands, or you need to find the workaround yourself :/
-
 # Contact 
 Join the [news channel](https://t.me/maestro_userbot_channel) if you just want to stay in the loop about new features or
 announcements.
