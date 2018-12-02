@@ -94,7 +94,7 @@ async def amialive(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.chatid$'))
 async def chatidgetter(e):
     if not e.text[0].isalpha():
-        await e.edit('`Chat ID: '+str(e.chat_id)+'`')
+        await e.edit('Chat ID: `'+str(e.chat_id)+'`')
 @bot.on(events.NewMessage(outgoing=True,pattern='^.restart$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.restart$'))
 async def restart_the_bot(e):
@@ -146,4 +146,4 @@ async def bot_ver(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.userid$'))
 async def chatidgetter(e):
     if not e.text[0].isalpha():
-        await e.edit('`User ID: '+str((await e.get_reply_message()).sender_id)+'`')
+        await e.edit(`User ID: `'+str((await e.get_reply_message()).sender_id)+'`')
