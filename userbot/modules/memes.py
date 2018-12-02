@@ -5,6 +5,8 @@ from userbot import LOGGER,LOGGER_GROUP,DISABLE_RUN
 from telethon import TelegramClient, events
 from spongemock import spongemock
 import time
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern=':/'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
 async def kek(e):
@@ -12,6 +14,8 @@ async def kek(e):
     for i in range (1,15):
         time.sleep(0.3)
         await e.edit(':'+uio[i%2])
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='-_-'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='-_-'))
 async def lol(e):
@@ -21,6 +25,8 @@ async def lol(e):
     for j in range(10):
         t = t[:-1] + '_-'
         await r.edit(t)
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.cp'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.cp'))
 async def copypasta(e):
@@ -50,6 +56,8 @@ async def copypasta(e):
                 reply_text += c.lower()
     reply_text += random.choice(emojis)
     await e.edit(reply_text)
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.vapor'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.vapor'))
 async def vapor(e):
@@ -67,6 +75,8 @@ async def vapor(e):
         data = ''
     reply_text = str(data).translate(WIDE_MAP)
     await e.edit(reply_text)
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.str'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.str'))
 async def stretch(e):
@@ -81,6 +91,8 @@ async def stretch(e):
     count = random.randint(3, 10)
     reply_text = re.sub(r'([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])', (r'\1' * count), message)
     await e.edit(reply_text)
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.zal'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.zal'))
 async def zal(e):
@@ -95,10 +107,14 @@ async def zal(e):
      input_text = " ".join(message).lower()
      zalgofied_text = zalgo.zalgo().zalgofy(input_text)
      await e.edit(zalgofied_text)
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern="^hi$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern="^hi$"))
 async def hoi(e):
      await e.edit("Hoi!😄")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.owo'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.owo'))
 async def faces(e):
@@ -119,6 +135,8 @@ async def faces(e):
     reply_text = reply_text.replace("ove", "uv")
     reply_text += ' ' + random.choice(faces)
     await e.edit(reply_text)
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.react$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.react$'))
 async def react_meme(e):
@@ -126,11 +144,15 @@ async def react_meme(e):
     index=random.randint(0,len(reactor))
     reply_text=reactor[index]
     await e.edit(reply_text)
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.shg$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.shg$'))
 async def shrugger(e):
  if not e.text[0].isalpha():
     await e.edit("¯\_(ツ)_/¯")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.disable killme$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.disable killme$'))
 async def disable_killme(e):
@@ -138,6 +160,8 @@ async def disable_killme(e):
         global ENABLE_KILLME
         ENABLE_KILLME=False
         await e.edit("```Done!```")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.enable killme$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.enable killme$'))
 async def enable_killme(e):
@@ -145,6 +169,8 @@ async def enable_killme(e):
             global ENABLE_KILLME
             ENABLE_KILLME=True
             await e.edit("```Done!```")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.runs$'))
 async def runner_lol(e):
@@ -154,15 +180,8 @@ async def runner_lol(e):
            index=random.randint(0,len(reactor)-1)
            reply_text=reactor[index]
            await e.edit(reply_text)
-           if LOGGER:
-               await bot.send_message(LOGGER_GROUP,"You ran away from a cancerous chat")
-@bot.on(events.NewMessage(incoming=True,pattern=".killme"))
-async def killmelol(e):
- if not e.text[0].isalpha():
-    if ENABLE_KILLME:
-         name = await bot.get_entity(e.from_id)
-         name0 = str(name.first_name)
-         await e.reply('**K I L L  **['+name0+'](tg://user?id='+str(e.from_id)+')**\n\nP L E A S E\n\nE N D  T H E I R  S U F F E R I N G**')
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.disable runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.disable runs$'))
 async def disable_killme(e):
@@ -170,6 +189,8 @@ async def disable_killme(e):
         global DISABLE_RUN
         DISABLE_RUN=True
         await e.edit("```Done!```")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.enable runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.enable runs$'))
 async def enable_killme(e):
@@ -177,6 +198,8 @@ async def enable_killme(e):
             global DISABLE_RUN
             DISABLE_RUN=False
             await e.edit("```Done!```")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.mock'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.mock'))
 async def spongemocktext(e):

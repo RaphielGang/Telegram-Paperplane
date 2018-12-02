@@ -10,6 +10,8 @@ from gtts import gTTS
 import os
 from py_translator import Translator
 langi="en"
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern="^.img (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.img (.*)"))
 async def img_sampler(e):
@@ -32,6 +34,8 @@ async def img_sampler(e):
    end=round(time.time() * 1000)
    msstartend=int(end) - int(start)
    await e.edit("Done. Time taken: "+str(msstartend) + 's')
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern=r'^.google (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'^.google (.*)'))
 async def gsearch(e):
@@ -42,6 +46,8 @@ async def gsearch(e):
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search Query:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
         if LOGGER:
            await bot.send_message(LOGGER_GROUP,"Google Search query "+match+" was executed successfully")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern=r'^.wiki (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'^.wiki (.*)'))
 async def wiki(e):
@@ -51,6 +57,8 @@ async def wiki(e):
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
         if LOGGER:
            await bot.send_message(LOGGER_GROUP,"Wiki query "+match+" was executed successfully")
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.ud (.*)'))
 async def ud(e):
@@ -64,6 +72,8 @@ async def ud(e):
         await bot.send_message(LOGGER_GROUP,"ud query "+str+" executed successfully.")
    else:
     await e.edit("No result found for **"+str+"**")
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.tts'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.tts'))
 async def tts(e):
@@ -94,6 +104,8 @@ async def tts(e):
         if LOGGER:
               await bot.send_message(LOGGER_GROUP,"tts of "+replye+" executed successfully!")
         await e.delete()
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.trt'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.trt'))
 async def translateme(e):
@@ -113,6 +125,8 @@ async def translateme(e):
     await e.delete()
     if LOGGER:
         await bot.send_message(LOGGER_GROUP,"Translate query "+message+" was executed successfully")
+
+
 @bot.on(events.NewMessage(pattern='.lang',outgoing=True))
 @bot.on(events.MessageEdited(pattern='.lang',outgoing=True))
 async def lang(e):
@@ -123,5 +137,3 @@ async def lang(e):
       if LOGGER:
          await bot.send_message(LOGGER_GROUP,"tts language changed to **"+langi+"**")
          await e.edit("tts language changed to **"+langi+"**")
-    ######TTS AND TRT will be back soon :/
-    ######Need to implement a new api

@@ -4,6 +4,8 @@ from userbot import bot
 import re
 from userbot import LOGGER,LOGGER_GROUP
 from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
+
+
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):
@@ -16,6 +18,8 @@ async def filter_incoming_handler(e):
                 if pro:
                       await e.reply(t.reply)
                       return
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.addfilter\\s.*'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.addfilter\\s.*'))
 async def add_filter(e):
@@ -28,6 +32,8 @@ async def add_filter(e):
          string=string+" "+str(kek[i])
      add_filter(str(e.chat_id),kek[1],string)
      await e.edit("```Filter added successfully```")
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.nofilter\\s.*'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.nofilter\\s.*'))
 async def remove_filter(e):
@@ -37,6 +43,8 @@ async def remove_filter(e):
      kek=message.split(" ")
      remove_filter(e.chat_id,kek[1])
      await e.edit("```Filter removed successfully```")
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.rmfilters$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.rmfilters$'))
 async def kick_marie_filter(e):
@@ -52,6 +60,8 @@ async def kick_marie_filter(e):
     await e.respond("```Successfully purged Marie filters yaay!```\n Gimme cookies @baalajimaestro")
     if LOGGER:
           await bot.send_message(LOGGER_GROUP,"I cleaned all Marie filters at "+str(e.chat_id))
+
+          
 @bot.on(events.NewMessage(outgoing=True, pattern='^.get filters$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.get filters$'))
 async def filters_active(e):

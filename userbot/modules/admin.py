@@ -9,6 +9,8 @@ import time
 import sqlite3
 from telethon import TelegramClient, events
 from userbot import bot,SPAM,SPAM_ALLOWANCE,BRAIN_CHECKER,LOGGER_GROUP,LOGGER
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern="^.wizard$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.wizard$'))
 async def wizzard(e):
@@ -26,6 +28,8 @@ async def wizzard(e):
     time.sleep(3)
     await bot(EditAdminRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
     await e.edit("A perfect magic has happened!")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern="^.thanos$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.thanos$'))
 async def thanos(e):
@@ -56,6 +60,8 @@ async def thanos(e):
         await bot.send_file(e.chat_id,"https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif")
         if LOGGER:
             await bot.send_message(LOGGER_GROUP,str((await e.get_reply_message()).sender_id)+" was banned.")
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern="^.spider$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.spider$'))
 async def spider(e):
@@ -71,12 +77,14 @@ async def spider(e):
         await bot.send_file(e.chat_id,"https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif")
         if LOGGER:
             await bot.send_message(LOGGER_GROUP,str((await e.get_reply_message()).sender_id)+" was muted.")
+
+
 @bot.on(events.NewMessage(incoming=True,pattern="<triggerban>"))
 async def triggered_ban(e):
  if not e.text[0].isalpha():
     message =e.text
     ban_id=int(e.text[13:])
-    if e.sender_id in BRAIN_CHECKER:
+    if e.sender_id in BRAIN_CHECKER:      #non-working module#
         rights = ChannelBannedRights(
                              until_date=None,
                              view_messages=True,
@@ -96,6 +104,8 @@ async def triggered_ban(e):
         await bot(EditBannedRequest(e.chat_id,ban_id,rights))
         await e.delete()
         await bot.send_message(e.chat_id,"Job was done, Master! Gimme Cookies!")
+
+
 @bot.on(events.NewMessage(incoming=True,pattern="<triggermute>"))
 async def triggered_mute(e):
     message =e.text
@@ -106,7 +116,7 @@ async def triggered_mute(e):
                              view_messages=True,
                              send_messages=True,
                              send_media=True,
-                             send_stickers=True,
+                             send_stickers=True,       #non-working module#
                              send_gifs=True,
                              send_games=True,
                              send_inline=True,
@@ -120,6 +130,8 @@ async def triggered_mute(e):
         await bot(EditBannedRequest(e.chat_id,(await e.get_reply_message()).sender_id,rights))
         await e.delete()
         await bot.send_file(e.chat_id,"Job was done, Master! Gimme Cookies!")
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.speak$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.speak$'))
 async def unmute(e):
@@ -127,6 +139,8 @@ async def unmute(e):
      from userbot.modules.sql_helper.spam_mute_sql import unmute
      unmute(e.chat_id,str((await e.get_reply_message()).sender_id))
      await e.edit("```Unmuted Successfully```")
+
+
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def muter(e):
@@ -135,3 +149,13 @@ async def muter(e):
          for i in L:
              if str(i.sender) == str(e.sender_id):
                  await e.delete()
+
+                 
+@bot.on(events.NewMessage(pattern=r".tagall", outgoing=True))
+@bot.on(events.MessageEdited(pattern=r".tagall", outgoing=True))
+async def tagging_powerful(event):
+    mentions = "@tagall"
+    chat = await event.get_input_chat()
+    async for x in borg.iter_participants(chat, 100):
+        mentions += f"[\u2063](tg://user?id={x.id})"
+    await event.edit(mentions)
