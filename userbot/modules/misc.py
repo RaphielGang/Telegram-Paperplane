@@ -146,4 +146,4 @@ async def bot_ver(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.userid$'))
 async def chatidgetter(e):
     if not e.text[0].isalpha():
-        await e.edit(`User ID: `'+str((await e.get_reply_message()).sender_id)+'`')
+        await e.edit('User ID: `'+str((await e.get_reply_message()).sender_id)+'`')
