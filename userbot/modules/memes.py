@@ -153,24 +153,6 @@ async def shrugger(e):
     await e.edit("¯\_(ツ)_/¯")
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern='^.disable killme$'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='^.disable killme$'))
-async def disable_killme(e):
-  if not e.text[0].isalpha():
-        global ENABLE_KILLME
-        ENABLE_KILLME=False
-        await e.edit("```Done!```")
-
-
-@bot.on(events.NewMessage(outgoing=True,pattern='^.enable killme$'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='^.enable killme$'))
-async def enable_killme(e):
-    if not e.text[0].isalpha():
-            global ENABLE_KILLME
-            ENABLE_KILLME=True
-            await e.edit("```Done!```")
-
-
 @bot.on(events.NewMessage(outgoing=True,pattern='^.runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.runs$'))
 async def runner_lol(e):
