@@ -15,7 +15,7 @@
 - Ending up spamming in groups, getting reported, 
 - and if you point the finger at me for getting yourself reported,
 - I will laugh at you, because thats gay af
-/
+- /
 ```
 
 Just coz I'm too lazy, I program it, to make stuff easier.
