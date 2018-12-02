@@ -5,6 +5,8 @@ import re
 from userbot import LOGGER,LOGGER_GROUP
 from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
 import time
+import asyncio
+
 
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
