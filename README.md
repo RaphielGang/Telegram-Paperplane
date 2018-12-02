@@ -4,7 +4,19 @@
 
 ### If you see the semaphore badge showing passed, still running on your local PC gives syntax it must be very clear that it isn't a problem with the source, you need to check your compiler
 
+```diff
+- #include <std/disclaimer.h>
+- /
+- Your Telegram account may be banned too.
 
+- I am not responsible for improper use of this bot,
+- this bot is to have fun memes,
+- manage group in an efficient manner.
+- Ending up spamming in groups, getting reported, 
+- and if you point the finger at me for getting yourself reported,
+- I will laugh at you, because thats gay af
+/
+```
 
 Just coz I'm too lazy, I program it, to make stuff easier.
 This is a userbot, which is equivalent to a telegram client, and it can run on the cloud too.
