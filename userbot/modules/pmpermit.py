@@ -6,6 +6,8 @@ from userbot import bot
 from userbot import PM_AUTO_BAN
 from userbot import COUNT_PM
 from userbot import LOGGER,LOGGER_GROUP
+
+
 @bot.on(events.NewMessage(incoming=True))
 async def permitpm(e):
   if PM_AUTO_BAN:
@@ -14,9 +16,9 @@ async def permitpm(e):
        from userbot.modules.sql_helper.pm_permit_sql import is_approved
        E=is_approved(e.chat_id)
        if not E:
-           await e.reply("`Bleep Blop! This is a Bot. Don't fret.\n\nMy Master hasn't approved you to PM. \
-                          Please wait for my Master to look in, he would mostly approve PMs.\n\n\
-                          As far as i know, he doesn't usually approve Retards.`")
+           await e.reply("`Bleep Blop! This is a Bot. Don't fret. \n\nMy Master hasn't approved you to PM. \
+Please wait for my Master to look in, he would mostly approve PMs.\n\n\
+As far as i know, he doesn't usually approve Retards.`")
            if e.chat_id not in COUNT_PM:
               COUNT_PM.update({e.chat_id:1})
            else:
@@ -27,6 +29,8 @@ async def permitpm(e):
                await bot(BlockRequest(e.chat_id))
                if LOGGER:
                    await bot.send_message(LOGGER_GROUP,str(e.chat_id)+" was just another retarded nibba")
+
+                   
 @bot.on(events.NewMessage(outgoing=True,pattern='^.approvepm$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern="^.approvepm$"))
 async def approvepm(e):

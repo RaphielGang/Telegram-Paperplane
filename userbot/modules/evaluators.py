@@ -4,6 +4,8 @@ import subprocess
 from userbot import LOGGER,LOGGER_GROUP
 from telethon import TelegramClient, events
 from userbot import bot
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.eval'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.eval'))
 async def evaluate(e):
@@ -21,6 +23,8 @@ async def evaluate(e):
       await e.edit("**Query: **\n`"+e.text[6:]+'`\n**Result: **\n`No Result Returned/False`')
     if LOGGER:
       await bot.send_message(LOGGER_GROUP,"Eval query "+e.text[6:]+" was executed successfully")
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern=r'^.exec (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=r'^.exec (.*)'))
 async def run(e):
@@ -43,6 +47,8 @@ async def run(e):
    await e.edit("**Query: **\n`"+e.text[5:]+'`\n**Result: **\n`'+'No Result Returned/False'+'`')
   if LOGGER:
      await bot.send_message(LOGGER_GROUP,"Exec query "+e.text[5:]+" was executed successfully")
+
+     
 @bot.on(events.NewMessage(outgoing=True, pattern='^.term'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.term'))
 async def terminal_runner(e):

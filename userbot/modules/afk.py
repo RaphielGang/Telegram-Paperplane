@@ -2,6 +2,8 @@ from telethon import TelegramClient, events
 from userbot import bot
 import time
 from userbot import COUNT_MSG,USERS,ISAFK,AFKREASON,LOGGER,LOGGER_GROUP
+
+
 @bot.on(events.NewMessage(incoming=True))
 async def mention_afk(e):
     global COUNT_MSG
@@ -21,6 +23,8 @@ async def mention_afk(e):
                  else:
                    USERS[e.chat_id]=USERS[e.chat_id]+1
                    COUNT_MSG=COUNT_MSG+1
+
+
 @bot.on(events.NewMessage(incoming=True))
 async def afk_on_pm(e):
     global ISAFK
@@ -40,6 +44,8 @@ async def afk_on_pm(e):
                    else:
                     USERS[e.chat_id]=USERS[e.chat_id]+1
                     COUNT_MSG=COUNT_MSG+1
+
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.notafk$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.notafk$'))
 async def not_afk(e):
@@ -65,6 +71,8 @@ async def not_afk(e):
         COUNT_MSG=0
         USERS={}
         AFKREASON="No Reason"
+
+        
 @bot.on(events.NewMessage(outgoing=True, pattern='^.iamafk'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.iamafk'))
 async def set_afk(e):

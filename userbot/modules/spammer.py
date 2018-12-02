@@ -2,6 +2,8 @@ import asyncio
 from telethon import TelegramClient, events
 from userbot import bot
 from userbot import LOGGER,LOGGER_GROUP
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.spam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.spam'))
 async def spammer(e):
@@ -12,6 +14,8 @@ async def spammer(e):
     await asyncio.wait([e.respond(spam_message) for i in range(counter)])
     await e.delete()
     await bot.send_message(LOGGER_GROUP,"Spammed successfully")
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.bigspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.bigspam'))
 async def bigspam(e):
@@ -23,6 +27,8 @@ async def bigspam(e):
        await e.respond(spam_message)
     await e.delete()
     await bot.send_message(LOGGER_GROUP,"bigspam was successful")
+
+    
 @bot.on(events.NewMessage(outgoing=True, pattern='^.picspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.picspam'))
 async def tiny_pic_spam(e):

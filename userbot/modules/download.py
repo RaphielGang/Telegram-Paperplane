@@ -11,9 +11,13 @@ from userbot import bot,LOGS
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.errors import MessageNotModifiedError
 from PIL import Image
+
+
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 def progress(current, total):
     LOGS.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
+
+
 @bot.on(events.NewMessage(pattern=r".download ?(.*)", outgoing=True))
 @bot.on(events.MessageEdited(pattern=r".download ?(.*)", outgoing=True))
 async def download(e):
@@ -54,19 +58,14 @@ async def download(e):
                     fd.write(chunk)
                     done = int(100 * dl / total_length)
                     download_progress_string = "Downloading ... [%s%s]" % ('=' * done, ' ' * (50-done))
-                    # download_progress_string = "Downloading ... [%s of %s]" % (str(dl), str(total_length))
-                    # download_progress_string = "Downloading ... [%s%s]" % ('⬛️' * done, '⬜️' * (100 - done))
-                    """try:
-                        await e.edit(download_progress_string)
-                    except MessageNotModifiedError as e:
-                        LOGS.warn("__FLOODWAIT__: {} sleeping for 100seconds, before proceeding.".format(str(e)))
-                    await asyncio.sleep(1)"""
                     LOGS.info(download_progress_string)
         end = datetime.now()
         ms = (end - start).seconds
         await e.edit("Downloaded to `{}` in {} seconds.".format(required_file_name, ms))
     else:
         await e.edit("Reply to a message to download to my local server.")
+
+
 @bot.on(events.NewMessage(pattern=r"\.uploadir (.*)", outgoing=True))
 async def _(e):
     if e.fwd_from:
@@ -231,16 +230,6 @@ async def _(e):
             width = metadata.get("width")
         if metadata.has("height"):
             height = metadata.get("height")
-        # hachoir only works with MP4 files
-        # this is good, since with MKV files sent as streamable Telegram responds,
-        # Bad Request: VIDEO_CONTENT_TYPE_INVALID
-        # if width is None or height is None:
-        #     width, height = extract_w_h(file_name)
-        """if os.path.exists(thumb):
-            # width and height need to be the image width and height
-            im = Image.open(thumb)
-            # https://stackoverflow.com/a/6444612/4723940
-            width, height = im.size"""
         try:
             if supports_streaming:
                 await bot.send_file(
