@@ -149,13 +149,3 @@ async def muter(e):
          for i in L:
              if str(i.sender) == str(e.sender_id):
                  await e.delete()
-
-
-@bot.on(events.NewMessage(pattern=r"^@tagall$", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r"^@tagall$", outgoing=True))
-async def tagging_powerful(e):
-    mentions = "@tagall"
-    chat = await e.get_input_chat()
-    async for x in bot.iter_participants(chat, 100):
-        mentions += f"[\u2063](tg://user?id={x.id})"
-    await e.edit(mentions)
