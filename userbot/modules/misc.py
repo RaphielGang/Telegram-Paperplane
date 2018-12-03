@@ -177,9 +177,24 @@ async def bot_ver(e):
     if not e.text[0].isalpha():
         await e.edit('`UserBot Version: Modular r2.05`')
 
-        
+
 @bot.on(events.NewMessage(outgoing=True,pattern='^.userid$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.userid$'))
 async def chatidgetter(e):
     if not e.text[0].isalpha():
-        await e.edit('User ID: `'+str((await e.get_reply_message()).sender_id)+'`')
+        message = await e.get_reply_message()
+        if message:
+            if not message.forward:
+                user_id = message.sender.id
+                if message.sender.username:
+                    name = '@' + message.sender.username
+                else:
+                    name = '**' + message.sender.first_name + '**'
+
+            else:
+                user_id = message.forward.sender.id
+                if message.forward.sender.username:
+                    name = '@' + message.forward.sender.username
+                else:
+                    name = '*' + message.forward.sender.first_name + '*'
+            await e.edit('This beautiful person named {} has this amazing id: `{}`'.format(name, user_id))
