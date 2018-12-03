@@ -51,7 +51,7 @@ async def update_bio(e):
         await bot(UpdateProfileRequest(
             about=bio
             ))
-        await e.edit('```About succesfully edited```')
+        await e.edit('```Succesfully edited Bio```')
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.name '))
 async def update_name(e):
