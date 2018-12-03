@@ -7,7 +7,7 @@ import asyncio
 from datetime import datetime
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from userbot import bot,LOGS
+from userbot import bot, LOGS
 from telethon.tl.types import DocumentAttributeVideo
 from telethon.errors import MessageNotModifiedError
 from PIL import Image

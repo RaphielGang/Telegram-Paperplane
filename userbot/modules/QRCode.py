@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import requests
 from userbot import bot
-from userbot import LOGGER,LOGGER_GROUP
+from userbot import LOGGER, LOGGER_GROUP
 from telethon import TelegramClient, events
 download_directory = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
 
@@ -32,6 +32,8 @@ async def parseqr(e):
     end = datetime.now()
     ms = (end - start).seconds
     await e.edit("Obtained QRCode contents in {} seconds.\n{}".format(ms, qr_contents))
+
+
 @bot.on(events.NewMessage(pattern=r".makeqr ?(.*)", outgoing=True))
 async def make_qr(e):
   if not e.text[0].isalpha():

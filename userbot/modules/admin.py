@@ -8,7 +8,7 @@ from telethon.tl.types import ChannelAdminRights
 import time
 import sqlite3
 from telethon import TelegramClient, events
-from userbot import bot,SPAM,SPAM_ALLOWANCE,BRAIN_CHECKER,LOGGER_GROUP,LOGGER
+from userbot import bot, SPAM,SPAM_ALLOWANCE, BRAIN_CHECKER, LOGGER_GROUP, LOGGER
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern="^.wizard$"))

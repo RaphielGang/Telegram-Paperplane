@@ -1,7 +1,7 @@
 from zalgo_text import zalgo
 import random,re
-from userbot import bot,ENABLE_KILLME,WIDE_MAP
-from userbot import LOGGER,LOGGER_GROUP,DISABLE_RUN
+from userbot import bot, ENABLE_KILLME, WIDE_MAP
+from userbot import LOGGER, LOGGER_GROUP, DISABLE_RUN
 from telethon import TelegramClient, events
 from spongemock import spongemock
 import time
