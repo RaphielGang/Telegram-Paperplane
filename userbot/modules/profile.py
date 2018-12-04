@@ -10,6 +10,7 @@ from telethon.errors.rpcerrorlist import UsernameOccupiedError
 from userbot import bot
 import io
 import re
+from telethon.tl.functions.channels import EditPhotoRequest
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.ppic$'))
@@ -41,6 +42,39 @@ async def profile_photo(e):
                     await e.edit('```The image is too small```')
                 elif isinstance(exc, ImageProcessFailedError):
                     await e.edit('```Failure while processing image```')
+
+
+@bot.on(events.NewMessage(outgoing=True,pattern='^.xpic$'))
+async def profile_photo(e):
+    if not e.text[0].isalpha():
+        message = await e.get_reply_message()
+        photo = None
+        if message.media:
+            if isinstance(message.media, MessageMediaPhoto):
+                photo = message.photo
+                photo = await bot.download_media(message=photo)
+            elif isinstance(message.media, MessageMediaDocument):
+                if message.media.document.mime_type in ['image/jpeg', 'image/png']:
+                    photo = message.media.document
+                    photo = await bot.download_file(photo)
+                    photo = io.BytesIO(photo)
+                    photo.name = 'image.jpeg' # small hack for documents images
+            else:
+                await e.edit('```The extension of the media entity is invalid.```')
+
+        if photo:
+            file = await bot.upload_file(photo)
+            try:
+                await bot(EditPhotoRequest(e.chat_id,file))
+                await e.edit('```Chat Picture Changed```')
+
+            except Exception as exc:
+                if isinstance(exc, PhotoCropSizeSmallError):
+                    await e.edit('```The image is too small```')
+                elif isinstance(exc, ImageProcessFailedError):
+                    await e.edit('```Failure while processing image```')
+                else:
+                    await e.edit('`Some issue with updating the pic, maybe you aren\'t an admin, or don\'t have the desired rights.`')
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.set '))
 async def update_bio(e):
