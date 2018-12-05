@@ -69,7 +69,7 @@ async def not_afk(e):
             for i in USERS:
                 name = await bot.get_entity(i)
                 name0 = str(name.first_name)
-                await bot.send_message(LOGGER_GROUP,'['+name0'+](tg://user?id='+str(i)+')+" sent you "+"`"+str(USERS[i])+" messages`")
+                await bot.send_message(LOGGER_GROUP,'['+ name0 +'](tg://user?id='+str(i)+')'+" sent you "+"`"+str(USERS[i])+" messages`")
         COUNT_MSG=0
         USERS={}
         AFKREASON="No Reason"

@@ -30,7 +30,7 @@ As far as i know, he doesn't usually approve Retards.`")
                if LOGGER:
                    name = await bot.get_entity(e.chat_id)
                    name0 = str(name.first_name)
-                   await bot.send_message(LOGGER_GROUP,'['+name0'+](tg://user?id='+str(e.chat_id)+')+" was just another retarded nibba")
+                   await bot.send_message(LOGGER_GROUP,'['+ name0 +'](tg://user?id='+str(e.chat_id)+')'+" was just another retarded nibba")
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.approvepm$'))
@@ -43,4 +43,4 @@ async def approvepm(e):
     if LOGGER:
         aname = await bot.get_entity(e.chat_id)
         name0 = str(name.first_name)
-        await bot.send_message(LOGGER_GROUP,'['+name0'+](tg://user?id='+str(e.chat_id)+')+" was approved to PM you.")
+        await bot.send_message(LOGGER_GROUP,'['+ name0 +'](tg://user?id='+str(e.chat_id)+')'+" was approved to PM you.")

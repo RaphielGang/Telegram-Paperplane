@@ -158,7 +158,7 @@ async def shrugger(e):
 async def runner_lol(e):
    if not DISABLE_RUN:
        if not e.text[0].isalpha():
-           reactor=['Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie','This Group is too cancerous to deal with.','Cya bois','I am just retarded'.'Kys','I am a mad person. Plox Ban me.','I go away','I am just walking off, coz me is too fat.','I Fugged off!']
+           reactor=['Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie','This Group is too cancerous to deal with.','Cya bois','I am just retarded','Kys','I am a mad person. Plox Ban me.','I go away','I am just walking off, coz me is too fat.','I Fugged off!']
            index=random.randint(0,len(reactor)-1)
            reply_text=reactor[index]
            await e.edit(reply_text)
