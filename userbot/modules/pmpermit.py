@@ -12,7 +12,7 @@ from userbot import LOGGER, LOGGER_GROUP
 async def permitpm(e):
   if PM_AUTO_BAN:
     global COUNT_PM
-    if e.is_private:
+    if e.is_private and not (await e.get_sender()).bot:
        from userbot.modules.sql_helper.pm_permit_sql import is_approved
        E=is_approved(e.chat_id)
        if not E:
