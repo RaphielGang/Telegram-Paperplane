@@ -146,6 +146,7 @@ async def unmute(e):
 async def muter(e):
          from userbot.modules.sql_helper.spam_mute_sql import is_muted
          L=is_muted(e.chat_id)
-         for i in L:
+         if L:
+          for i in L:
              if str(i.sender) == str(e.sender_id):
                  await e.delete()

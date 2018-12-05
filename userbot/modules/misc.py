@@ -26,8 +26,8 @@ async def haste_paste(e):
     await e.edit('`Paste successful! Check it here: `' + hastebin.post(text))
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern='^.log?(\\s)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.log?(\\s)'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.log'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.log'))
 async def log(e):
  if not e.text[0].isalpha():
     textx=await e.get_reply_message()
