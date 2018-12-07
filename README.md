@@ -76,87 +76,84 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 - Start the bot `python3 windows_startup_script.py`
 
-### Commands available(will be constantly updated):
+### Commands available(might go horribly out-of-date anytime):
 
 -----`.` stands for any random character, it is made for the ease of the user------
 
-- `.delmsg`:                         Deletes the last typed message
+#### Utilities
+- `.approvepm`: approve DMing
+- `.iamafk`: Sets you as AFK
+- `.notafk`: Sets you as not AFK, and gives you brief list if who messaged you while you were away
+- `.addfilter trigger response`: Adds a filter in that group, if text is contained in incoming message, bot replies with the reply
+- `.nofilter trigger`: removes the filter text from the current group
+- `.rmfilters`: remove all filters
+- `.get filters`: fetch all filters set in the userbot in that chat
+- `.chatid`: show chat id
+- `.userid`: show user id
+- `.getqr`: encrypt QRCode
+- `.screencapture`
 
-- `.purgeme number`:                 Deletes last n messages sent by you
+#### Notes
+- `.get notes`
+- `.nosave`
+- `.addnote`
+- `.rmnotes`
 
-- `.vapor`:                          Change the font to an aesthetic font.
 
-- `.cp`:                             CopyPasta, as in SkittlesBot
+#### Purge
+- `.fastpurge`
+- `.purgeme`
+- `.delmsg`
+- `.editme`
+- `.sd`
 
-- `.trt`:                            Google Translator, translates to the language specified by lang
+#### Scraper:
+- `.img`
+- `.google`
+- `.wiki`
+- `.ud`
+- `.tts`
+- `.trt`: translate text
+- `.lang`: change language
 
-- `.thanos`:                         Bans a person from the group
+#### Admin Commands:
+- `.wizard`: promote user
+- `.thanos`: ban user
+- `.spider`: mute user
+- `.speak`: unmute user
 
-- `.spider`:                         Mutes a person in the group if you are an admin
+#### MISC
+- `.pip`
+- `.pingme`: pings server
+- `.paste`: paste code in hastebin
+- `.log`
+- `.speed`: speed test
+- `.hash`
+- `.random`
+- `.alive`: check if bot is running
+- `.restart`: restart the bot
+- `.shutdown`: shutdown the bot
+- `.support`: get support
+- `.supportchannel`: get support
+- `.repo`: show the repo
+- `.sysdetails`
+- `.botversion`
+- `.term`: execute terminal commands
 
-- `.wizard`:                         In beta stage, needs all admin rights to work
-
-- `.react`:                          Sends a random ascii emote
-
-- `.editme`:                         Edits the last sent message with the string in the parameter
-
-- `.pingme`:                         Pings your server
-
-- `.iamafk`:                         Sets you as AFK
-
-- `.notafk`:                         Sets you as not AFK, and gives you brief list if who messaged you while you were away
-
-- `.ud`:                             Query urban dictionary
-
-- `.google`:                         Query Google
-
-- `.wiki`:                           Query Wikipedia and get a summary
-
-- `.sd`:                             Send a self-destructing message
-
-- `.eval`:                           Evaluate the given expression
-
-- `.fastpurge`:                      Purge like marie
-
-- `.spam number string`:             Spams the string n times
-
-- `.exec`:                           Execute a python command
-
-- `.help`:                           Get a link to this readme
-
-- `.killme(incoming)`:               If your bot senses it, it will reply a funny message, try it out
-
-- `.paste string`:                   Sends the string to hastebin and gets the link
-
-- `.asmon n`:                        Turns on Anti-Spam Handler to mute a person on group until anti-spam is turned off
-
-- `.asmoff`:                         Turns off the Anti-Spam Handler
-
-- `.term command`:                   Executes a terminal command(Linux if heroku)
-
-- `.bigspam`:                        For huge spams like 1k
-
-- `.random a,b,c`:                   Finds random of a,b,c
-
-- `.base64 en|decode`:               Pretty explains it
-
-- `.hash`:                           Returns the md5 hash
-
-- `.filter text reply`:              Adds a filter in that group, if text is contained in incoming message, bot replies with the reply
-
-- `.nofilter text`:                  Removes the filter text from the current group
-
-- `.save text reply`:                It saves reply for the text, can be obtained with #text again.
-
-- `.speak`:                          Unmutes a user
-
-- `.get filters`:                    Fetch all filters set in the userbot in that chat
-
-- `.get notes`:                      Fetch all notes set in the userbot in that chat
-
-- `.img text`:                       Search and fetch first two images from google
-
-- `.approvepm`:                      Approves the Person in reply to PM, incase PM-Permit is enabled
+#### MEMES(much are kanged from SkittBot)
+- `:/`
+- `-_-`
+- `.cp`
+- `.vapor`
+- `.str`
+- `.zal`
+- `.owo`
+- `.react`
+- `.shg`: ¯\_(ツ)_/¯
+- `.runs`: random message
+- `.disable runs`
+- `.enable runs`
+- `.mock`
 
 
 ### Credits:
