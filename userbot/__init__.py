@@ -31,6 +31,11 @@ if ENV:
     DB_URI=os.environ.get('DB_URI',None)
 else:
     from config import *
+    if CONSOLE_LOGGER_VERBOSE:
+        logging.basicConfig(
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            level=logging.DEBUG)
+        LOGS = logging.getLogger(__name__)
 bot = TelegramClient('userbot',API_KEY,API_HASH)
 # Global Variables
 SNIPE_TEXT=""
