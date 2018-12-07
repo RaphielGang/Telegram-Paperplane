@@ -7,13 +7,12 @@
 ```diff
 - #include <std/disclaimer.h>
 - /
-- Your Telegram account may be banned too.
-
-- I am not responsible for improper use of this bot,
-- this bot is to have fun memes,
-- manage group in an efficient manner.
-- Ending up spamming in groups, getting reported, 
-- and if you point the finger at me for getting yourself reported,
+- Your Telegram account may be banned.
+- I am not responsible for improper use of this bot
+- This bot is to have fun memes
+- Manage group in an efficient manner
+- Ending up spamming in groups, getting reported, and Telegram Team deleted your account?
+- And then you point the finger at me for getting yourself reported?
 - I will laugh at you, because thats gay af
 - /
 ```
