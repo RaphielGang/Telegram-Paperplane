@@ -9,7 +9,7 @@ import time
 @bot.on(events.NewMessage(outgoing=True, pattern='^.fastpurge$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.fastpurge$'))
 async def fastpurger(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@"::
         chat = await e.get_input_chat()
         msgs = []
         count =0
@@ -60,7 +60,7 @@ async def purgeme(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.delmsg$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.delmsg$'))
 async def delmsg(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
             if i>2:
@@ -85,11 +85,11 @@ async def editer(e):
    if LOGGER:
          await bot.send_message(LOGGER_GROUP,"Edit query was executed successfully")
 
-         
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.sd'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.sd'))
 async def selfdestruct(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     message=e.text
     counter=int(message[4:6])
     text=str(e.text[6:])

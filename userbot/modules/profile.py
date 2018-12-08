@@ -25,7 +25,7 @@ async def profile_photo(e):
             elif isinstance(message.media, MessageMediaDocument):
                 if message.media.document.mime_type in ['image/jpeg', 'image/png']:
                     photo = message.media.document
-                    photo = await bot.download_file(photo)
+                    photo = await bot.download_file(photo,file="propic.jpeg")
                     photo = io.BytesIO(photo)
                     photo.name = 'image.jpeg' # small hack for documents images
             else:
@@ -56,7 +56,7 @@ async def profile_photo(e):
             elif isinstance(message.media, MessageMediaDocument):
                 if message.media.document.mime_type in ['image/jpeg', 'image/png']:
                     photo = message.media.document
-                    photo = await bot.download_file(photo)
+                    photo = await bot.download_file(photo,file="propic.jpeg")
                     photo = io.BytesIO(photo)
                     photo.name = 'image.jpeg' # small hack for documents images
             else:
