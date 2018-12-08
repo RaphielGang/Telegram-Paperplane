@@ -10,7 +10,7 @@ from userbot import bot
 
 @bot.on(events.NewMessage(pattern=r".screencapture (.*)", outgoing=True))
 async def _(event):
-  if not e.text[0].isalpha():
+  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     if event.fwd_from:
         return
     await event.edit("Processing ...")

@@ -15,7 +15,7 @@ langi="en"
 @bot.on(events.NewMessage(outgoing=True, pattern="^.img (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.img (.*)"))
 async def img_sampler(e):
-  if not e.text[0].isalpha():
+  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
    await e.edit('Processing...')
    start=round(time.time() * 1000)
    s = e.pattern_match.group(1)
@@ -39,7 +39,7 @@ async def img_sampler(e):
 @bot.on(events.NewMessage(outgoing=True,pattern=r'^.google (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'^.google (.*)'))
 async def gsearch(e):
-      if not e.text[0].isalpha():
+      if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         match = e.pattern_match.group(1)
         result_=subprocess.run(['gsearch', match], stdout=subprocess.PIPE)
         result=str(result_.stdout.decode())
@@ -51,7 +51,7 @@ async def gsearch(e):
 @bot.on(events.NewMessage(outgoing=True,pattern=r'^.wiki (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern=r'^.wiki (.*)'))
 async def wiki(e):
-      if not e.text[0].isalpha():
+      if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         match = e.pattern_match.group(1)
         result=wikipedia.summary(match)
         await bot.send_message(await bot.get_input_entity(e.chat_id), message='**Search:**\n`' + match + '`\n\n**Result:**\n' + result, reply_to=e.id, link_preview=False)
@@ -62,7 +62,7 @@ async def wiki(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.ud (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.ud (.*)'))
 async def ud(e):
-  if not e.text[0].isalpha():
+  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
    await e.edit("Processing...")
    str = e.pattern_match.group(1)
    mean = urbandict.define(str)
@@ -77,7 +77,7 @@ async def ud(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.tts'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.tts'))
 async def tts(e):
-  if not e.text[0].isalpha():
+  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     textx=await e.get_reply_message()
     replye = e.text
     if textx:
@@ -109,7 +109,7 @@ async def tts(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.trt'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.trt'))
 async def translateme(e):
-  if not e.text[0].isalpha():
+  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     global langi
     translator=Translator()
     textx=await e.get_reply_message()
@@ -130,7 +130,7 @@ async def translateme(e):
 @bot.on(events.NewMessage(pattern='.lang',outgoing=True))
 @bot.on(events.MessageEdited(pattern='.lang',outgoing=True))
 async def lang(e):
-  if not e.text[0].isalpha():
+  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
       global langi
       message=await bot.get_messages(e.chat_id)
       langi = str(message[0].message[6:])

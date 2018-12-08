@@ -7,8 +7,8 @@ from spongemock import spongemock
 import time
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern=':/'))
-@bot.on(events.MessageEdited(outgoing=True, pattern=':/'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^:/$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^:/$'))
 async def kek(e):
     uio=['/','\\']
     for i in range (1,15):
@@ -16,8 +16,8 @@ async def kek(e):
         await e.edit(':'+uio[i%2])
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern='-_-'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='-_-'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^-_-$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^-_-$'))
 async def lol(e):
     await e.delete()
     t = '-_-'
@@ -30,7 +30,7 @@ async def lol(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.cp'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.cp'))
 async def copypasta(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     textx=await e.get_reply_message()
     if textx:
          message = textx
@@ -61,7 +61,7 @@ async def copypasta(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.vapor'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.vapor'))
 async def vapor(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -80,7 +80,7 @@ async def vapor(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.str'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.str'))
 async def stretch(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -96,7 +96,7 @@ async def stretch(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.zal'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.zal'))
 async def zal(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
      textx=await e.get_reply_message()
      message = e.text
      if textx:
@@ -118,7 +118,7 @@ async def hoi(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.owo'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.owo'))
 async def faces(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -149,7 +149,7 @@ async def react_meme(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.shg$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.shg$'))
 async def shrugger(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     await e.edit("¯\_(ツ)_/¯")
 
 
@@ -157,7 +157,7 @@ async def shrugger(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.runs$'))
 async def runner_lol(e):
    if not DISABLE_RUN:
-       if not e.text[0].isalpha():
+       if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
            reactor=['Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie','This Group is too cancerous to deal with.','Cya bois','I am just retarded','Kys','I am a mad person. Plox Ban me.','I go away','I am just walking off, coz me is too fat.','I Fugged off!']
            index=random.randint(0,len(reactor)-1)
            reply_text=reactor[index]
@@ -167,7 +167,7 @@ async def runner_lol(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.disable runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.disable runs$'))
 async def disable_killme(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         global DISABLE_RUN
         DISABLE_RUN=True
         await e.edit("```Done!```")
@@ -176,7 +176,7 @@ async def disable_killme(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.enable runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.enable runs$'))
 async def enable_killme(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
             global DISABLE_RUN
             DISABLE_RUN=False
             await e.edit("```Done!```")

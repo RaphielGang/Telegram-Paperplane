@@ -10,7 +10,7 @@ from userbot import LOGGER, LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True,pattern='^.pip (.+)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.pip (.+)'))
 async def pipcheck(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     a=await e.reply('`Searching . . .`')
     r='`' + subprocess.run(['pip3', 'search', e.pattern_match.group(1)], stdout=subprocess.PIPE).stdout.decode() + '`'
     await e.edit(r)
@@ -19,7 +19,7 @@ async def pipcheck(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.paste?(\\s)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.paste?(\\s)'))
 async def haste_paste(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     message=e.text
     await e.edit('`Pasting text . . .`')
     text=str(message[7:])
@@ -29,7 +29,7 @@ async def haste_paste(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.log'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.log'))
 async def log(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     textx=await e.get_reply_message()
     if textx:
          message = textx
@@ -45,7 +45,7 @@ async def log(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.speed$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.speed$'))
 async def speedtest(e):
-     if not e.text[0].isalpha():
+     if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
             l=await e.reply('`Running speed test . . .`')
             k=subprocess.run(['speedtest-cli'], stdout=subprocess.PIPE)
             await l.edit('`' + k.stdout.decode()[:-1] + '`')
@@ -55,7 +55,7 @@ async def speedtest(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.hash (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.hash (.*)'))
 async def hash(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     hashtxt_ = e.pattern_match.group(1)
     hashtxt=open('hashdis.txt','w+')
     hashtxt.write(hashtxt_)
@@ -83,7 +83,7 @@ async def hash(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.base64 (en|de) (.*)'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.base64 (en|de) (.*)'))
 async def endecrypt(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
      if e.pattern_match.group(1) == 'en':
          lething=str(pybase64.b64encode(bytes(e.pattern_match.group(2), 'utf-8')))[2:]
          await e.reply('Encoded: `' + lething[:-1] + '`')
@@ -95,7 +95,7 @@ async def endecrypt(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.random'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.random'))
 async def randomise(e):
-  if not e.text[0].isalpha():
+  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     r=(e.text).split()
     index=random.randint(1,len(r)-1)
     await e.edit("**Query: **\n`"+e.text+'`\n**Output: **\n`'+r[index]+'`')
@@ -104,14 +104,14 @@ async def randomise(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.alive$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.alive$'))
 async def amialive(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         await e.edit("`Master! I am alive😁`")
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.chatid$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.chatid$'))
 async def chatidgetter(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         await e.edit('Chat ID: `'+str(e.chat_id)+'`')
 
 
@@ -152,21 +152,21 @@ async def bot_support(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.repo$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.repo$'))
 async def repo_is_here(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         await e.edit('https://github.com/baalajimaestro/Telegram-UserBot/')
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.supportchannel$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.supportchannel$'))
 async def support_channel(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         await e.edit('t.me/maestro_userbot_channel')
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.sysdetails$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.sysdetails$'))
 async def sysdetails(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         r='`' + subprocess.run(['neofetch', '--off', '--color_blocks off', '--bold off', '--cpu_temp', 'C', '--cpu_speed','on','--cpu_cores', 'physical','--stdout'], stdout=subprocess.PIPE).stdout.decode() + '`'
         await e.edit(r)
 
@@ -174,14 +174,14 @@ async def sysdetails(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.botversion$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.botversion$'))
 async def bot_ver(e):
-    if not e.text[0].isalpha():
-        await e.edit('`UserBot Version: Modular r2.06`')
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
+        await e.edit('`UserBot Version: Modular r2.07-b`')
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.userid$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.userid$'))
 async def chatidgetter(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         message = await e.get_reply_message()
         if message:
             if not message.forward:

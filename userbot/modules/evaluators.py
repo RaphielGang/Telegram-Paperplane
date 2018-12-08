@@ -9,7 +9,7 @@ from userbot import bot
 @bot.on(events.NewMessage(outgoing=True, pattern='^.eval'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.eval'))
 async def evaluate(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     evaluation = eval(e.text[6:])
     if evaluation:
       if len(evaluation) > 4096:
@@ -28,7 +28,7 @@ async def evaluate(e):
 @bot.on(events.NewMessage(outgoing=True, pattern=r'^.exec (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=r'^.exec (.*)'))
 async def run(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
   code = e.raw_text[5:]
   exec(
    f'async def __ex(e): ' +
@@ -48,11 +48,11 @@ async def run(e):
   if LOGGER:
      await bot.send_message(LOGGER_GROUP,"Exec query "+e.text[5:]+" was executed successfully")
 
-     
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.term'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.term'))
 async def terminal_runner(e):
- if not e.text[0].isalpha():
+ if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     message=e.text
     command = str(message)
     list_x=command.split(' ')

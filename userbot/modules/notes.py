@@ -7,19 +7,19 @@ from userbot import LOGGER, LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True, pattern='^.get notes$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.get notes$'))
 async def notes_active(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         from userbot.modules.sql_helper.notes_sql import get_notes
         transact="Messages saved in this chat: \n\n"
         E=get_notes(e.chat_id)
         for i in E:
-            transact=transact+"🔹 "+i.keyword+"    👉     "+i.reply+"\n"
+            transact=transact+"🔹 "+i.keyword+"\n"
         await e.edit(transact)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.nosave (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.nosave (.*)'))
 async def remove_notes(e):
-    if not e.text[0].isalpha():
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
       from userbot.modules.sql_helper.notes_sql import remove_notes
       message=e.text
       kek=message.split(" ")
