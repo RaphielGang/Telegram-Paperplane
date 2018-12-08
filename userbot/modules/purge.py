@@ -9,7 +9,7 @@ import time
 @bot.on(events.NewMessage(outgoing=True, pattern='^.fastpurge$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.fastpurge$'))
 async def fastpurger(e):
-    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@"::
+    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
         chat = await e.get_input_chat()
         msgs = []
         count =0
