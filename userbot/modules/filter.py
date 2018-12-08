@@ -11,6 +11,7 @@ import asyncio
 @bot.on(events.NewMessage(incoming=True))
 @bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):
+    if not (await e.get_sender()).bot:
         from userbot.modules.sql_helper.filter_sql import get_filters
         listes= e.text.split(" ")
         E=get_filters(e.chat_id)
@@ -63,7 +64,7 @@ async def kick_marie_filter(e):
     if LOGGER:
           await bot.send_message(LOGGER_GROUP,"I cleaned all Marie filters at "+str(e.chat_id))
 
-          
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.get filters$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.get filters$'))
 async def filters_active(e):
