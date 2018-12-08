@@ -43,6 +43,7 @@ async def add_filter(e):
 
 @bot.on(events.NewMessage(incoming=True,pattern='#*'))
 async def incom_note(e):
+  if not (await e.get_sender()).bot:
     from userbot.modules.sql_helper.notes_sql import get_notes
     listes= e.text[1:]
     E=get_notes(e.chat_id)
@@ -51,7 +52,7 @@ async def incom_note(e):
            await e.reply(t.reply)
            return
 
-           
+
 @bot.on(events.NewMessage(outgoing=True, pattern='^.rmnotes$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.rmnotes$'))
 async def remove_notes(e):

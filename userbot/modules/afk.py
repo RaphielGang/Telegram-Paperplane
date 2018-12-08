@@ -9,7 +9,7 @@ async def mention_afk(e):
     global COUNT_MSG
     global USERS
     global ISAFK
-    if e.message.mentioned:
+    if e.message.mentioned and not (await e.get_sender()).bot:
         if ISAFK:
             if e.chat_id not in USERS:
                   await e.reply("Sorry! My boss is AFK due to ```"+AFKREASON+"```. Would ping him to look into the message soon😉")
@@ -30,7 +30,7 @@ async def afk_on_pm(e):
     global ISAFK
     global USERS
     global COUNT_MSG
-    if e.is_private:
+    if e.is_private  and not (await e.get_sender()).bot:
         if ISAFK:
             if e.chat_id not in USERS:
                   await e.reply("Sorry! My boss is AFK due to ```"+AFKREASON+"``` I\'ll ping him to look into the message soon😉")
