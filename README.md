@@ -45,6 +45,10 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 - Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a userbot.session file, which is needed to run your bot.
 
+- You can choose bleeding edge builds which might be buggy, else can choose from release tags.
+
+- If you use a bleeding edge, your botversion will bear `b` on the botversion
+
 ##### The session is the key to your telegram account, pushing it to github will grant any person access to your telegram account.
 #####  You must be extra careful when you push to github. Though my gitignore avoids session files, I am still notifying this,
 #####  coz it causes serious consequences if the session reaches the wrong hands
