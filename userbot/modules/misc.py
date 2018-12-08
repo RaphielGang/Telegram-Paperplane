@@ -3,6 +3,7 @@ import pybase64
 import random,re,os,signal
 import subprocess
 from userbot import bot
+import time
 from telethon import TelegramClient, events
 from userbot import LOGGER, LOGGER_GROUP
 
@@ -119,9 +120,9 @@ async def chatidgetter(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.restart$'))
 async def restart_the_bot(e):
 	await e.edit("`Thank You master! I am taking a break!`")
+    os.execl(sys.executable, sys.executable, *sys.argv)
 
-
-	os.execl(sys.executable, sys.executable, *sys.argv)
+    
 @bot.on(events.NewMessage(outgoing=True,pattern='^.pingme$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.pingme$'))
 async def pingme(e):
