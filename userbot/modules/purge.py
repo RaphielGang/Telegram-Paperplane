@@ -17,6 +17,7 @@ async def fastpurger(e):
          async for m in h:
              msgs.append(m)
              count=count+1
+             msgs.append(e.reply_to_msg_id)
              if len(msgs) == 100:
                  await bot.delete_messages(chat, msgs)
                  msgs = []

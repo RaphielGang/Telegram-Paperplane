@@ -131,12 +131,14 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 - `.pingme`: pings server
 - `.paste`: paste code in hastebin
 - `.log`
+- `.log silent`: logs the message but silently
 - `.speed`: speed test
 - `.hash`
 - `.random`
 - `.alive`: check if bot is running
 - `.restart`: restart the bot
 - `.shutdown`: shutdown the bot
+- `.real_shutdown`: REALLY shutdown the bot
 - `.support`: get support
 - `.supportchannel`: get support
 - `.repo`: show the repo

@@ -10,3 +10,4 @@ LOGGER_GROUP=(CHAT ID OF THE LOG GROUP (APPLY A HYPEN aka NEGATIVE SIGN BEFORE T
 LOGGER=True    #Incase you want to turn off logging, put this to false
 CONSOLE_LOGGER_VERBOSE=False
 PM_AUTO_BAN=False
+DB_URI='postgres://userbot:userbot@localhost/userbot'	#dis is 4 db
