@@ -117,12 +117,14 @@ You must be extra careful when pushing to GitHub. The gitignore in this reposito
 - `.pingme`: pings server
 - `.paste`: paste code in hastebin
 - `.log`
+- `.log silent`: logs the message but silently
 - `.speed`: speed test
 - `.hash`
 - `.random`
 - `.alive`: check if bot is running
 - `.restart`: restart the bot
 - `.shutdown`: shutdown the bot
+- `.real_shutdown`: REALLY shutdown the bot
 - `.support`: get support
 - `.supportchannel`: get support
 - `.repo`: show the repo
