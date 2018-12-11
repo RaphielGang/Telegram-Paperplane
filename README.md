@@ -1,4 +1,4 @@
-# Telegram-UserBot 
+# Telegram-UserBot
 
 [![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
@@ -11,13 +11,14 @@
 - I am not responsible for any improper use of this bot
 - This bot is intended for the purpose of having fun with memes
 - as well as efficiently managing groups
-- You ended up spamming groups, getting reported left and right, and the Telegram Team deleted your account?
+- You ended up spamming groups, getting reported left and right,
+- and the Telegram Team deleted your account?
 - And then you pointed your fingers at me for getting yourself reported?
-- I will laugh at you, because thats gay af
+- I will laugh at you.
 - /
 ```
 
-# Contact 
+# Contact
 If you just want to stay in the loop about new features or
 announcements you can join the [news channel](https://t.me/maestro_userbot_channel).
 
@@ -59,7 +60,7 @@ You must be extra careful when pushing to GitHub. The gitignore in this reposito
   - You can optionally use environment variables to configure it instead
 - Start the userbot: `python3 -m userbot`
 
-#### Running on Windows: 
+#### Running on Windows:
 
 - Use the exclusive script provided
 - Setup the config as in Linux
