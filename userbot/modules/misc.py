@@ -1,7 +1,7 @@
 import hastebin
 import pybase64
 import random,re,os,signal
-import subprocess
+import subprocess,time
 from userbot import bot
 import time
 from telethon import TelegramClient, events
@@ -27,8 +27,8 @@ async def haste_paste(e):
     await e.edit('`Paste successful! Check it here: `' + hastebin.post(text))
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern='^.log'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^.log'))
+@bot.on(events.NewMessage(outgoing=True, pattern='^.log( silent)?$'))
+@bot.on(events.MessageEdited(outgoing=True, pattern='^.log( silent)?$'))
 async def log(e):
  if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
     textx=await e.get_reply_message()
@@ -40,8 +40,16 @@ async def log(e):
         message = str(message[4:])
     if LOGGER:
         await (await e.get_reply_message()).forward_to(LOGGER_GROUP)
-        await e.edit("`Logged Successfully`")
-
+        markstuf=False
+        try:
+            if 'silent' in e.pattern_match.group(1):
+                markstuf=True
+        except TypeError:
+            markstuf=False
+        if markstuf == False:
+            await e.edit("`Logged Successfully`\nYou can also use `.log silent` to prevent this message being sent.")
+        else:
+            await e.delete()
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.speed$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.speed$'))
@@ -131,20 +139,30 @@ async def pingme(e):
     await e.edit('`' + k.stdout.decode()[:-1] + '`')
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern='^.shutdown'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='^.shutdown'))
+@bot.on(events.NewMessage(outgoing=True,pattern='^.shutdown( [0-9]+)?$'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.shutdown( [0-9]+)?$'))
 async def killdabot(e):
     if not e.text[0].isalpha():
         message = e.text
-        counter=int(message[10:])
-        await e.reply('`Goodbye *Windows XP shutdown sound*....`')
-        time.sleep(2)
-        await bot.send_message(LOGGER_GROUP,"You shutdown the bot for "+str(counter)+" seconds")
-        time.sleep(counter)
+        if not ' ' in e.pattern_match.group(1):
+            await e.reply('Syntax: `.shutdown [seconds]`')
+        else:
+            counter=int(e.pattern_match.group(1))
+            await e.edit('`Goodbye *Windows XP shutdown sound*....`')
+            time.sleep(2)
+            await bot.send_message(LOGGER_GROUP,"You shutdown the bot for "+str(counter)+" seconds")
+            time.sleep(counter)
 
+@bot.on(events.NewMessage(outgoing=True,pattern='^.real_shutdown$'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.real_shutdown$'))
+async def killdabot(e):
+    if not e.text[0].isalpha():
+        await e.edit('`REALLY Goodbye *Windows XP shutdown sound*....`')
+        await bot.send_message(LOGGER_GROUP,"You REALLY shutdown the bot")
+        await bot.disconnect()
 
-@bot.on(events.NewMessage(outgoing=True,pattern='.support'))
-@bot.on(events.MessageEdited(outgoing=True,pattern='.support'))
+@bot.on(events.NewMessage(outgoing=True,pattern='^.support$'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.support$'))
 async def bot_support(e):
     if not e.text[0].isalpha():
         await e.edit("Report bugs here: @userbot_support")
