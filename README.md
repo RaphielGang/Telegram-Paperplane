@@ -2,87 +2,73 @@
 
 [![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
-### If you see the semaphore badge showing passed, still running on your local PC gives syntax it must be very clear that it isn't a problem with the source, you need to check your compiler
+### If the semaphore build passed, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
 ```diff
 - #include <std/disclaimer.h>
 - /
-- Your Telegram account may be banned.
-- I am not responsible for improper use of this bot
-- This bot is to have fun memes
-- Manage group in an efficient manner
-- Ending up spamming in groups, getting reported, and Telegram Team deleted your account?
-- And then you point the finger at me for getting yourself reported?
+- Your Telegram account may get banned.
+- I am not responsible for any improper use of this bot
+- This bot is intended for the purpose of having fun with memes
+- as well as efficiently managing groups
+- You ended up spamming groups, getting reported left and right, and the Telegram Team deleted your account?
+- And then you pointed your fingers at me for getting yourself reported?
 - I will laugh at you, because thats gay af
 - /
 ```
 
 # Contact 
-Join the [news channel](https://t.me/maestro_userbot_channel) if you just want to stay in the loop about new features or
-announcements.
+If you just want to stay in the loop about new features or
+announcements you can join the [news channel](https://t.me/maestro_userbot_channel).
 
-If you found any bugs or you wanna suggest some features then contact [My support group](https://t.me/userbot_support).
+If you find any bugs or have any suggestions then don't hesitate to contact me in [my support group](https://t.me/userbot_support).
 
-- This Readme might go out-of-date at any point, as I push notifications for all updates to my [support channel](https://t.me/maestro_userbot_channel). I recommend subscribing to the channel, for timely updates and fixes.
+- This README is not guaranteed to always be up to date, refer to the [support channel](https://t.me/maestro_userbot_channel) for the latest informations.
 
 ## Dependencies:
 
-- SQL DB, Can be Postgres/MySQL or anything, basically the bot uses SQLAlchemy
+- SQL DB, can be Postgres/MySQL or anything else supported by SQLAlchemy
 
-- Neofetch(in case you need sysdetails)
+- Neofetch (in case you need `sysdetails`)
 
 ### Before you start:
-Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br>
-Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER(Incase you want logging) It can be very well turned off<br/><br/>
-**Please read through this before cloning. I don't want you get stuck anywhere. This guide can get you running up the userbot, if followed properly**
+Get your api-id (called `API_KEY` in this bot) and API_HASH from my.telegram.org.
 
-#### Running on heroku:
-```diff
--If you clone/fork this repo please make sure you generate a session file  by running app.py on your local pc before deploying it on heroku.
-```
 
-- Fork my repo.
+Optional: Create an empty group, add Marie, or any forks, get the group id, copy it and set it as your `LOGGER` (in case you want logging).
 
-- Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a userbot.session file, which is needed to run your bot.
 
-- You can choose bleeding edge builds which might be buggy, else can choose from release tags.
+**Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
 
-- If you use a bleeding edge, your botversion will bear `b` on the botversion
-
-##### The session is the key to your telegram account, pushing it to github will grant any person access to your telegram account.
-#####  You must be extra careful when you push to github. Though my gitignore avoids session files, I am still notifying this,
-#####  coz it causes serious consequences if the session reaches the wrong hands
-
+#### Running on Heroku:
+1. **Make sure to generate a session file, by running app.py on your local pc before deploying it on Heroku.**
+- Fork this repo.
+- Download/Clone it to your Linux PC, then follow the instructions on running on Linux below, to generate a userbot.session file, which is needed to run your bot.
+> **A session is a key to your Telegram account, pushing it to GitHub will grant any person full access to your Telegram account.
+You must be extra careful when pushing to GitHub. The gitignore in this repository should prevent this from happening in most cases, but you should still keep this in mind to prevent any fatal consequences.**
+- You can choose bleeding edge builds which might be buggy, otherwise choose a release tags.
+- If you use a bleeding edge, your bot version will be `b`
 - Push it with the heroku cli
-
 - Deploy.
 
 #### Running on linux:
-- Clone my repo: `git clone https://github.com/baalajimaestro/Telegram-UserBot`
-
-- Install the necessary dependencies by moving to the project directory and running: `pip3 install -r requirements.txt`
-
-- Add your API_KEY, API_HASH and LOGGER, and other stuff to config.py(You need to create it, a sample is provided)
-
-- Remove the warning provided in sample_config, it is to avoid just rename and leave cases
-
-- Or you use them as ENV Variables, upto your ease
-
+- Clone the repo: `git clone https://github.com/baalajimaestro/Telegram-UserBot`
+- Install all dependencies after moving to the project directory by running: `pip3 install -r requirements.txt`
+- Configure your bot in `config.py` (You can use `sample_config.py` as a reference when doing so)
+  - Remove the warning from sample_config, it is to prevent simple renaming and running
+  - You can optionally use environment variables to configure it instead
 - Start the userbot: `python3 -m userbot`
 
 #### Running on Windows: 
 
 - Use the exclusive script provided
-
-- Setup the config as in linux
-
-- Pip install just telethon
-
-- Start the bot `python3 windows_startup_script.py`
+- Setup the config as in Linux
+- Run `pip install telethon`
+- Start the bot by using `python3 windows_startup_script.py`
 
 ### Commands available(might go horribly out-of-date anytime):
 
------`.` stands for any random character, it is made for the ease of the user------
+> `.` stands for any random character, it is made for the ease of the user
 
 #### Utilities
 - `.approvepm`: approve DMing
@@ -164,14 +150,14 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 
 I would like to thank people who assisted me throughout this project:
 
-[@YouTwitFace](https://github.com/YouTwitFace)<br/>
-[@TheDevXen](https://github.com/TheDevXen)<br/>
-[@Skittles9823](https://github.com/Skittles9823)<br/>
-[@deletescape](https://github.com/deletescape)<br/>
-[@songotenks69](https://github.com/songotenks69)<br/>
-[@Ovenoboyo](https://github.com/Ovenoboyo)<br/>
-[SphericalKat](https://github.com/ATechnoHazard)<br/>
-<br/>
-and much more people I haven't mentioned here too.
+* [@YouTwitFace](https://github.com/YouTwitFace)
+* [@TheDevXen](https://github.com/TheDevXen)
+* [@Skittles9823](https://github.com/Skittles9823)
+* [@deletescape](https://github.com/deletescape)
+* [@songotenks69](https://github.com/songotenks69)
+* [@Ovenoboyo](https://github.com/Ovenoboyo)
+* [SphericalKat](https://github.com/ATechnoHazard)
 
-Found Bugs? Start up an issue on issue tracker, or feel free to post in my support group.
+and many more people which aren't mentioned here.
+
+Found Bugs? Create an issue on the issue tracker, or post it in the support group.
