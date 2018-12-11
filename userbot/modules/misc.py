@@ -192,7 +192,7 @@ async def sysdetails(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.botversion$'))
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
-        await e.edit('`UserBot Version: Modular r2.08-b`')
+        await e.edit('`UserBot Version: Modular r2.07-b`')
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.userid$'))
