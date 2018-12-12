@@ -23,14 +23,8 @@ API_KEY = os.environ.get('API_KEY', None)
 API_HASH = os.environ.get('API_HASH',None)
 LOGGER_GROUP=os.environ.get('LOGGER_GROUP',None)
 LOGGER=os.environ.get('LOGGER',None)    #Incase you want to turn off logging, put this to false
-TRT_ENABLE=os.environ.get('TRT_ENABLE',None)
 PM_AUTO_BAN=os.environ.get('PM_AUTO_BAN',None)
 CONSOLE_LOGGER_VERBOSE=os.environ.get('CONSOLE_LOGGER_VERBOSE',None)
-TTS_ENABLE=os.environ.get('TTS_ENABLE',None)
-TRT_API_USERNAME=os.environ.get('TRT_API_USERNAME',None)    #For Using IBM Translator
-TTS_API_USERNAME=os.environ.get('TTS_API_USERNAME',None)
-TRT_API_PASSWORD=os.environ.get('TRT_API_PASSWORD',None)
-TTS_API_PASSWORD=os.environ.get('TTS_API_PASSWORD',None)
 DB_URI=os.environ.get('DB_URI',None)
 if CONSOLE_LOGGER_VERBOSE:
     logging.basicConfig(
