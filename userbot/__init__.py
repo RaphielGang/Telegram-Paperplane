@@ -16,6 +16,9 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
     LOGS.error("You MUST have a python version of at least 3.6. Multiple features depend on this. Bot quitting.")
     quit(1)
 dotenv.load_dotenv('config.env')
+if ___________PLOX_______REMOVE_____THIS_____LINE__________:
+    LOGS.error("Your config file seems to be un-edited. Doing so is not allowed. Bot exiting!")
+    quit(1)
 API_KEY = os.environ.get('API_KEY', None)
 API_HASH = os.environ.get('API_HASH',None)
 LOGGER_GROUP=os.environ.get('LOGGER_GROUP',None)
