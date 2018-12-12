@@ -1,4 +1,4 @@
-config.py
+config.env
 __pycache__/*
 brains.check
 userbot.session
