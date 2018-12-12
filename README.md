@@ -55,8 +55,8 @@ You must be extra careful when pushing to GitHub. The gitignore in this reposito
 #### Running on linux:
 - Clone the repo: `git clone https://github.com/baalajimaestro/Telegram-UserBot`
 - Checkout to the latest release tag incase you want a stable build, else you can go ahead with bleeding edge ones.
-`git tag -l #lists all versions available
- git checkout tags/version_number #replace version_number with your choice`
+- `git tag -l #lists all versions available`
+- `git checkout tags/version_number #replace version_number with your choice`
 - Install all dependencies after moving to the project directory by running: `pip3 install -r requirements.txt`
 - Configure your bot in `config.py` (You can use `sample_config.py` as a reference when doing so)
   - Remove the warning from sample_config, it is to prevent simple renaming and running
