@@ -30,7 +30,7 @@ except NameError:
         logging.basicConfig(
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             level=logging.DEBUG)
-            LOGS = logging.getLogger(__name__)
+        LOGS = logging.getLogger(__name__)
     bot = TelegramClient('userbot',API_KEY,API_HASH)
 else:
     LOGS.error("Your config file seems to be un-edited. Doing so is not allowed. Bot exiting!")
