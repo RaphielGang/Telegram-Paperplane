@@ -30,7 +30,7 @@ async def lol(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.cp'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.cp'))
 async def copypasta(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     if textx:
          message = textx
@@ -61,7 +61,7 @@ async def copypasta(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.vapor'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.vapor'))
 async def vapor(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -80,7 +80,7 @@ async def vapor(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.str'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.str'))
 async def stretch(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -96,7 +96,7 @@ async def stretch(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.zal'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.zal'))
 async def zal(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
      textx=await e.get_reply_message()
      message = e.text
      if textx:
@@ -118,7 +118,7 @@ async def hoi(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.owo'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.owo'))
 async def faces(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     message = e.text
     if textx:
@@ -140,7 +140,7 @@ async def faces(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.react$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.react$'))
 async def react_meme(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     reactor=['ʘ‿ʘ','ヾ(-_- )ゞ','(っ˘ڡ˘ς)','(´ж｀ς)','( ಠ ʖ̯ ಠ)','(° ͜ʖ͡°)╭∩╮','(ᵟຶ︵ ᵟຶ)','(งツ)ว','ʚ(•｀','(っ▀¯▀)つ','(◠﹏◠)','( ͡ಠ ʖ̯ ͡ಠ)','( ఠ ͟ʖ ఠ)','(∩｀-´)⊃━☆ﾟ.*･｡ﾟ','(⊃｡•́‿•̀｡)⊃','(._.)','{•̃_•̃}','(ᵔᴥᵔ)','♨_♨','⥀.⥀','ح˚௰˚づ ','(҂◡_◡)','ƪ(ړײ)‎ƪ​​','(っ•́｡•́)♪♬','◖ᵔᴥᵔ◗ ♪ ♫ ','(☞ﾟヮﾟ)☞','[¬º-°]¬','(Ծ‸ Ծ)','(•̀ᴗ•́)و ̑̑','ヾ(´〇`)ﾉ♪♪♪','(ง\'̀-\'́)ง','ლ(•́•́ლ)','ʕ •́؈•̀ ₎','♪♪ ヽ(ˇ∀ˇ )ゞ','щ（ﾟДﾟщ）','( ˇ෴ˇ )','눈_눈','(๑•́ ₃ •̀๑) ','( ˘ ³˘)♥ ','ԅ(≖‿≖ԅ)','♥‿♥','◔_◔','⁽⁽ଘ( ˊᵕˋ )ଓ⁾⁾','乁( ◔ ౪◔)「      ┑(￣Д ￣)┍','( ఠൠఠ )ﾉ','٩(๏_๏)۶','┌(ㆆ㉨ㆆ)ʃ','ఠ_ఠ','(づ｡◕‿‿◕｡)づ','(ノಠ ∩ಠ)ノ彡( \\o°o)\\','“ヽ(´▽｀)ノ”','༼ ༎ຶ ෴ ༎ຶ༽','｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡','(づ￣ ³￣)づ','(⊙.☉)7','ᕕ( ᐛ )ᕗ','t(-_-t)','(ಥ⌣ಥ)','ヽ༼ ಠ益ಠ ༽ﾉ','༼∵༽ ༼⍨༽ ༼⍢༽ ༼⍤༽','ミ●﹏☉ミ','(⊙_◎)','¿ⓧ_ⓧﮌ','ಠ_ಠ','(´･_･`)','ᕦ(ò_óˇ)ᕤ','⊙﹏⊙','(╯°□°）╯︵ ┻━┻','¯\_(⊙︿⊙)_/¯','٩◔̯◔۶','°‿‿°','ᕙ(⇀‸↼‶)ᕗ','⊂(◉‿◉)つ','V•ᴥ•V','q(❂‿❂)p','ಥ_ಥ','ฅ^•ﻌ•^ฅ','ಥ﹏ಥ','（ ^_^）o自自o（^_^ ）','ಠ‿ಠ','ヽ(´▽`)/','ᵒᴥᵒ#','( ͡° ͜ʖ ͡°)','┬─┬﻿ ノ( ゜-゜ノ)','ヽ(´ー｀)ノ','☜(⌒▽⌒)☞','ε=ε=ε=┌(;*´Д`)ﾉ','(╬ ಠ益ಠ)','┬─┬⃰͡ (ᵔᵕᵔ͜ )','┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻','¯\_(ツ)_/¯','ʕᵔᴥᵔʔ','(`･ω･´)','ʕ•ᴥ•ʔ','ლ(｀ー´ლ)','ʕʘ̅͜ʘ̅ʔ','（　ﾟДﾟ）','¯\(°_o)/¯','(｡◕‿◕｡)']
     index=random.randint(0,len(reactor))
     reply_text=reactor[index]
@@ -150,7 +150,7 @@ async def react_meme(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.shg$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.shg$'))
 async def shrugger(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     await e.edit("¯\_(ツ)_/¯")
 
 
@@ -158,7 +158,7 @@ async def shrugger(e):
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.runs$'))
 async def runner_lol(e):
    if not DISABLE_RUN:
-       if e.text[0] not in (isalpha(),'/','#','@','!'):
+       if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
            reactor=['Runs to Thanos','Runs far, far away from earth','Running faster than usian bolt coz I\'mma Bot','Runs to Marie','This Group is too cancerous to deal with.','Cya bois','I am just retarded','Kys','I am a mad person. Plox Ban me.','I go away','I am just walking off, coz me is too fat.','I Fugged off!']
            index=random.randint(0,len(reactor)-1)
            reply_text=reactor[index]
@@ -168,7 +168,7 @@ async def runner_lol(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.disable runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.disable runs$'))
 async def disable_killme(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!'):
+    if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
         global DISABLE_RUN
         DISABLE_RUN=True
         await e.edit("```Done!```")
@@ -177,7 +177,7 @@ async def disable_killme(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.enable runs$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.enable runs$'))
 async def enable_killme(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!'):
+    if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
             global DISABLE_RUN
             DISABLE_RUN=False
             await e.edit("```Done!```")
@@ -186,6 +186,7 @@ async def enable_killme(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.mock'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.mock'))
 async def spongemocktext(e):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     message = e.text
     if textx:

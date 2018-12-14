@@ -14,7 +14,7 @@ from userbot import bot, SPAM,SPAM_ALLOWANCE, BRAIN_CHECKER, LOGGER_GROUP, LOGGE
 @bot.on(events.NewMessage(outgoing=True,pattern="^.wizard$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.wizard$'))
 async def wizzard(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     rights = ChannelAdminRights(
     add_admins=True,
     invite_users=True,
@@ -33,7 +33,7 @@ async def wizzard(e):
 @bot.on(events.NewMessage(outgoing=True,pattern="^.thanos$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.thanos$'))
 async def thanos(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!'):
+    if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
         rights = ChannelBannedRights(
                              until_date=None,
                              view_messages=True,
@@ -65,7 +65,7 @@ async def thanos(e):
 @bot.on(events.NewMessage(outgoing=True,pattern="^.spider$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.spider$'))
 async def spider(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!'):
+    if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn\'t mute this user`")
             return
@@ -81,7 +81,7 @@ async def spider(e):
 
 @bot.on(events.NewMessage(incoming=True,pattern="<triggerban>"))
 async def triggered_ban(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     message =e.text
     ban_id=int(e.text[13:])
     if e.sender_id in BRAIN_CHECKER:      #non-working module#
@@ -135,7 +135,7 @@ async def triggered_mute(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.speak$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.speak$'))
 async def unmute(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!'):
+    if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
      from userbot.modules.sql_helper.spam_mute_sql import unmute
      unmute(e.chat_id,str((await e.get_reply_message()).sender_id))
      await e.edit("```Unmuted Successfully```")

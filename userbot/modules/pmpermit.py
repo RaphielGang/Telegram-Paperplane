@@ -36,7 +36,7 @@ As far as i know, he doesn't usually approve Retards.`")
 @bot.on(events.NewMessage(outgoing=True,pattern='^.approvepm$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern="^.approvepm$"))
 async def approvepm(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     from userbot.modules.sql_helper.pm_permit_sql import approve
     approve(e.chat_id)
     await e.edit("`Approved to PM!`")
