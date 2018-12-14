@@ -46,7 +46,7 @@ async def profile_photo(e):
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.xpic$'))
 async def profile_photo(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!')
+    if e.text[0] not in (isalpha(),'/','#','@','!'):
         message = await e.get_reply_message()
         photo = None
         if message.media:
