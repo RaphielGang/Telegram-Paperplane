@@ -7,7 +7,7 @@ from userbot import LOGGER, LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True, pattern='^.get notes$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.get notes$'))
 async def notes_active(e):
-    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
+    if e.text[0] not in (isalpha(),'/','#','@','!'):
         from userbot.modules.sql_helper.notes_sql import get_notes
         transact="Messages saved in this chat: \n\n"
         E=get_notes(e.chat_id)
@@ -19,7 +19,7 @@ async def notes_active(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.nosave (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.nosave (.*)'))
 async def remove_notes(e):
-    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
+    if e.text[0] not in (isalpha(),'/','#','@','!'):
       from userbot.modules.sql_helper.notes_sql import remove_notes
       message=e.text
       kek=message.split(" ")
@@ -43,15 +43,17 @@ async def add_filter(e):
 
 @bot.on(events.NewMessage(incoming=True,pattern='#*'))
 async def incom_note(e):
-  if not (await e.get_sender()).bot:
-    from userbot.modules.sql_helper.notes_sql import get_notes
-    listes= e.text[1:]
-    E=get_notes(e.chat_id)
-    for t in E:
-        if listes==t.keyword:
-           await e.reply(t.reply)
-           return
-
+  try:
+    if not (await e.get_sender()).bot:
+        from userbot.modules.sql_helper.notes_sql import get_notes
+        listes= e.text[1:]
+        E=get_notes(e.chat_id)
+        for t in E:
+            if listes==t.keyword:
+                await e.reply(t.reply)
+                return
+  except:
+      pass
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.rmnotes$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.rmnotes$'))
