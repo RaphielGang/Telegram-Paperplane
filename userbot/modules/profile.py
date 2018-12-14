@@ -15,7 +15,7 @@ from telethon.tl.functions.channels import EditPhotoRequest
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.ppic$'))
 async def profile_photo(e):
-    if not e.text[0].isalpha():
+    if e.text[0] not in (isalpha(),'/','#','@','!'):
         message = await e.get_reply_message()
         photo = None
         if message.media:
@@ -46,7 +46,7 @@ async def profile_photo(e):
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.xpic$'))
 async def profile_photo(e):
-    if not e.text[0].isalpha():
+    if e.text[0] not in (isalpha(),'/','#','@','!')
         message = await e.get_reply_message()
         photo = None
         if message.media:

@@ -78,7 +78,7 @@ async def not_afk(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.iamafk'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.iamafk'))
 async def set_afk(e):
-    if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
+    if e.text[0] not in (isalpha(),'/','#','@','!'):
             message=e.text
             string = str(message[8:])
             global ISAFK

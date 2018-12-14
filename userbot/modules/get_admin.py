@@ -7,7 +7,7 @@ from telethon.errors import ChatAdminRequiredError, InputUserDeactivatedError
 
 @bot.on(events.NewMessage(pattern="^.get admin (.*)", outgoing=True))
 async def get_admin(e):
- if not e.text[0].isalpha() and e.text[0]!="!" and e.text[0]!="/" and e.text[0]!="#" and e.text[0]!="@":
+ if e.text[0] not in (isalpha(),'/','#','@','!'):
     mentions = "**Admins in this Chat**: \n"
     choice = int(e.pattern_match.group(1))
     to_write_chat = LOGGER_GROUP
