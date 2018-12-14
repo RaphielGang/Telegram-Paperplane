@@ -21,7 +21,7 @@ def progress(current, total):
 @bot.on(events.NewMessage(pattern=r".download ?(.*)", outgoing=True))
 @bot.on(events.MessageEdited(pattern=r".download ?(.*)", outgoing=True))
 async def download(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     if e.fwd_from:
         return
     await e.edit("Processing ...")
@@ -69,7 +69,7 @@ async def download(e):
 
 @bot.on(events.NewMessage(pattern=r".uploadir (.*)", outgoing=True))
 async def _(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     if e.fwd_from:
         return
     input_str = e.pattern_match.group(1)
@@ -136,7 +136,7 @@ async def _(e):
 
 @bot.on(events.NewMessage(pattern=r".upload (.*)", outgoing=True))
 async def _(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     if e.fwd_from:
         return
     await e.edit("Processing ...")
@@ -197,7 +197,7 @@ def extract_w_h(file):
 
 @bot.on(events.NewMessage(pattern=r".uploadas(stream|vn|all) (.*)", outgoing=True))
 async def _(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     if e.fwd_from:
         return
     await e.edit("Processing ...")

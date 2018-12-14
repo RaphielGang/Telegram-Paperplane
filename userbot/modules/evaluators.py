@@ -9,7 +9,7 @@ from userbot import bot
 @bot.on(events.NewMessage(outgoing=True, pattern='^.eval'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.eval'))
 async def evaluate(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     evaluation = eval(e.text[6:])
     if evaluation:
       if len(evaluation) > 4096:
@@ -28,7 +28,7 @@ async def evaluate(e):
 @bot.on(events.NewMessage(outgoing=True, pattern=r'^.exec (.*)'))
 @bot.on(events.MessageEdited(outgoing=True, pattern=r'^.exec (.*)'))
 async def run(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
   code = e.raw_text[5:]
   exec(
    f'async def __ex(e): ' +
@@ -52,7 +52,7 @@ async def run(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.term'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.term'))
 async def terminal_runner(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     message=e.text
     command = str(message)
     list_x=command.split(' ')

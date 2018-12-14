@@ -9,7 +9,7 @@ import time
 @bot.on(events.NewMessage(outgoing=True, pattern='^.fastpurge$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.fastpurge$'))
 async def fastpurger(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!'):
+    if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
         chat = await e.get_input_chat()
         msgs = []
         count =0
@@ -38,7 +38,7 @@ async def fastpurger(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.purgeme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.purgeme'))
 async def purgeme(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     message=e.text
     count = int(message[9:])
     i=1
@@ -62,7 +62,7 @@ async def purgeme(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.delmsg$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.delmsg$'))
 async def delmsg(e):
-    if e.text[0] not in (isalpha(),'/','#','@','!'):
+    if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
         i=1
         async for message in bot.iter_messages(e.chat_id,from_user='me'):
             if i>2:
@@ -74,7 +74,7 @@ async def delmsg(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.editme'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.editme'))
 async def editer(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
    message=e.text
    string = str(message[8:])
    i=1
@@ -91,7 +91,7 @@ async def editer(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.sd'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.sd'))
 async def selfdestruct(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     message=e.text
     counter=int(message[4:6])
     text=str(e.text[6:])

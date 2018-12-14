@@ -7,7 +7,7 @@ from userbot import LOGGER,LOGGER_GROUP
 @bot.on(events.NewMessage(outgoing=True, pattern='^.spam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.spam'))
 async def spammer(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     message= e.text
     counter=int(message[6:8])
     spam_message=str(e.text[8:])
@@ -19,7 +19,7 @@ async def spammer(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.bigspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.bigspam'))
 async def bigspam(e):
-  if e.text[0] not in (isalpha(),'/','#','@','!'):
+  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     message = e.text
     counter=int(message[9:13])
     spam_message=str(e.text[13:])
@@ -32,7 +32,7 @@ async def bigspam(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^.picspam'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.picspam'))
 async def tiny_pic_spam(e):
- if e.text[0] not in (isalpha(),'/','#','@','!'):
+ if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     message= e.text
     TEXT=message.split()
     counter=int(TEXT[1])
