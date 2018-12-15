@@ -20,7 +20,7 @@ async def _(e):
     await e.edit("Processing ...")
     sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&url={}&fullpage={}&format={}&viewport={}"
     input_str = e.pattern_match.group(1)
-    response_api = requests.get(sample_url.format(Config.SCREEN_SHOT_LAYER_ACCESS_KEY, input_str, "1", "PNG", "2560x1440"), stream=True)
+    response_api = requests.get(sample_url.format(SCREEN_SHOT_LAYER_ACCESS_KEY, input_str, "1", "PNG", "2560x1440"), stream=True)
     contentType = response_api.headers['content-type']
     if "image" in contentType:
         temp_file_name = "screencapture.png"
