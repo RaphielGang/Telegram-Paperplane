@@ -1,7 +1,7 @@
 import sqlite3
 import subprocess
-subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
-subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['rm','-rf','brains.check'], stdout=subprocess.PIPE)
+#subprocess.run(['wget','https://storage.googleapis.com/project-aiml-bot/brains.check'], stdout=subprocess.PIPE)
 import logging
 import os
 import sys
