@@ -43,6 +43,7 @@ async def log(e):
         await e.edit("`Logged Successfully`")
     else:
         await e.edit("`This feature requires Logging to be enabled!`")
+    time.sleep(2)
     await e.delete()
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.speed$'))
