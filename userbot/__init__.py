@@ -26,6 +26,8 @@ except NameError:
     PM_AUTO_BAN=os.environ.get('PM_AUTO_BAN',None)
     CONSOLE_LOGGER_VERBOSE=os.environ.get('CONSOLE_LOGGER_VERBOSE',None)
     DB_URI=os.environ.get('DB_URI',None)
+    SCREEN_SHOT_LAYER_ACCESS_KEY=os.environ.get('SCREEN_SHOT_LAYER_ACCESS_KEY',None)
+    OPEN_WEATHER_MAP_APPID=os.environ.get('OPEN_WEATHER_MAP_APPID',None)
     if CONSOLE_LOGGER_VERBOSE:
         logging.basicConfig(
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
