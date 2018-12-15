@@ -28,7 +28,7 @@ async def _(e):
             for chunk in response_api.iter_content(chunk_size=128):
                 fd.write(chunk)
         try:
-            await borg.send_file(
+            await bot.send_file(
                 e.chat_id,
                 temp_file_name,
                 caption=input_str,
