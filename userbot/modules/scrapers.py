@@ -80,11 +80,11 @@ async def tts(e):
   if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     replye = e.text
-    if textx:
-         replye = await e.get_reply_message()
-         replye = str(replye.message)
-    else:
-        replye = str(replye[5:])
+    if replye[5:]:
+        message = str(replye[5:])
+    elif textx:
+        message = textx
+        message = str(message.message)
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     tts = gTTS(replye,langi)
     tts.save("k.mp3")
@@ -114,11 +114,11 @@ async def translateme(e):
     translator=Translator()
     textx=await e.get_reply_message()
     message = e.text
-    if textx:
-         message = textx
-         text = str(message.message)
-    else:
-        text = str(message[4:])
+    if message[4:]:
+        message = str(message[4:])
+    elif textx:
+        message = textx
+        message = str(message.message)
     reply_text=translator.translate(text, dest=langi).text
     reply_text="`Source: `\n"+text+"`\n\nTranslation: `\n"+reply_text
     await bot.send_message(e.chat_id,reply_text)
