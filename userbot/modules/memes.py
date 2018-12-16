@@ -212,5 +212,5 @@ async def claptext(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.bt$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.bt$'))
 async def bluetext(e):
-    if await e.get_reply_message():
+    if (await e.get_reply_message()):
         await e.edit("`BLUETEXT MUST CLICK.\nAre you a stupid animal which is attracted to colours?`")
