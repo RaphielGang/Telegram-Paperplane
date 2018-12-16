@@ -32,12 +32,11 @@ async def haste_paste(e):
 async def log(e):
  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
-    if textx:
-         message = textx
-         message = str(message.message)
-    else:
-        message = e.text
+    if message[4:]:
         message = str(message[4:])
+    elif textx:
+        message = textx
+        message = str(message.message)
     if LOGGER:
         await (await e.get_reply_message()).forward_to(LOGGER_GROUP)
         await e.edit("`Logged Successfully`")
@@ -208,4 +207,4 @@ async def chatidgetter(e):
                     name = '@' + message.forward.sender.username
                 else:
                     name = '*' + message.forward.sender.first_name + '*'
-            await e.edit('**Name:** {} \n **User ID:** `{}`'.format(name, user_id))
+            await e.edit('**Name:** {} \n**User ID:** `{}`'.format(name, user_id))
