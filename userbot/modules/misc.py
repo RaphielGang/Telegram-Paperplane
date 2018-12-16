@@ -3,7 +3,8 @@ import pybase64
 import random,re,os,signal
 import subprocess,time
 from userbot import bot
-import time, datetime
+import time
+from datetime import datetime
 from telethon import TelegramClient, events
 from userbot import LOGGER, LOGGER_GROUP
 
