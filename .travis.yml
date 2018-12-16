@@ -9,7 +9,7 @@ script:
 notifications:
   webhooks:
     urls:
-      - https://integrations.bonbotics.io/travis/webhook/5xtlU8Onq8Wgs6raFXt0TeS0A5aQgVzUFhmnwsETQ44
+      - https://fathomless-fjord-24024.herokuapp.com/notify
     on_success: always
     on_failure: always
     on_start: never
