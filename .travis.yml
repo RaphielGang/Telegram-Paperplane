@@ -6,3 +6,10 @@ install:
   - pip3 install -r requirements.txt
 script:
   - python3 -m userbot test
+notifications:
+  webhooks:
+    urls:
+      - https://integrations.bonbotics.io/travis/webhook/5xtlU8Onq8Wgs6raFXt0TeS0A5aQgVzUFhmnwsETQ44
+    on_success: always
+    on_failure: always
+    on_start: never
