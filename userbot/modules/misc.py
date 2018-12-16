@@ -3,7 +3,8 @@ import pybase64
 import random,re,os,signal
 import subprocess,time
 from userbot import bot
-import time, datetime
+import time
+from datetime import datetime
 from telethon import TelegramClient, events
 from userbot import LOGGER, LOGGER_GROUP
 
@@ -32,11 +33,8 @@ async def haste_paste(e):
 async def log(e):
  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
-    if message[4:]:
-        message = str(message[4:])
-    elif textx:
-        message = textx
-        message = str(message.message)
+    message = textx
+    message = str(message.message)
     if LOGGER:
         await (await e.get_reply_message()).forward_to(LOGGER_GROUP)
         await e.edit("`Logged Successfully`")

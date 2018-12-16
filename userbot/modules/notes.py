@@ -24,7 +24,7 @@ async def remove_notes(e):
       message=e.text
       kek=message.split(" ")
       remove_notes(e.chat_id,kek[1])
-      await e.edit("```Note removed successfully")
+      await e.edit("```Note removed successfully```")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.addnote (.*)'))
