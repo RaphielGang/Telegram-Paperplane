@@ -19,13 +19,10 @@ async def kek(e):
 @bot.on(events.NewMessage(outgoing=True, pattern='^-_-$'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^-_-$'))
 async def lol(e):
-    await e.delete()
     t = '-_-'
-    r = await e.reply(t)
     for j in range(10):
         t = t[:-1] + '_-'
-        await r.edit(t)
-
+        await e.edit(t)
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.cp'))
 @bot.on(events.MessageEdited(outgoing=True, pattern='^.cp'))
@@ -206,7 +203,7 @@ async def spongemocktext(e):
  elif textx:
      message = textx
      message = str(message.message)
-     reply_text = "👏 "
-     reply_text += message.replace(" ", " 👏 ")
-     reply_text += " 👏"
-     await e.edit(reply_text)
+ reply_text = "👏 "
+ reply_text += message.replace(" ", " 👏 ")
+ reply_text += " 👏"
+ await e.edit(reply_text)
