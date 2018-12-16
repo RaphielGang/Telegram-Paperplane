@@ -33,10 +33,17 @@ except NameError:
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             level=logging.DEBUG)
         LOGS = logging.getLogger(__name__)
-    bot = TelegramClient('userbot',API_KEY,API_HASH)
 else:
     LOGS.error("Your config file seems to be un-edited. Doing so is not allowed. Bot exiting!")
     quit(1)
+if len(sys.argv) == 1:
+    bot = TelegramClient(None, api_id, api_hash)
+    bot.session.set_dc(2, '149.154.167.40', 443)
+    bot.start(
+    phone='9996621234', code_callback=lambda: '22222'
+)
+else:
+    bot = TelegramClient('userbot',API_KEY,API_HASH)
 # Global Variables
 SNIPE_TEXT=""
 COUNT_MSG=0
