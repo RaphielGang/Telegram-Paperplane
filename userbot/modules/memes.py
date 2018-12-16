@@ -32,12 +32,11 @@ async def lol(e):
 async def copypasta(e):
  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
-    if textx:
-         message = textx
-         message = str(message.message)
-    else:
-        message = e.text
+    if message[3:]:
         message = str(message[3:])
+    elif textx:
+        message = textx
+        message = str(message.message)
     emojis = ["😂", "😂", "👌", "✌", "💞", "👍", "👌", "💯", "🎶", "👀", "😂", "👓", "👏", "👐", "🍕", "💥", "🍴", "💦", "💦", "🍑", "🍆", "😩", "😏", "👉👌", "👀", "👅", "😩", "🚰"]
     reply_text = random.choice(emojis)
     b_char = random.choice(message).lower() # choose a random character in the message to be substituted with 🅱️
@@ -64,11 +63,11 @@ async def vapor(e):
  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     message = e.text
-    if textx:
-         message = textx
-         message = str(message.message)
-    else:
+    if message[7:]:
         message = str(message[7:])
+    elif textx:
+        message = textx
+        message = str(message.message)
     if message:
         data = message
     else:
@@ -83,11 +82,11 @@ async def stretch(e):
  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     message = e.text
-    if textx:
-         message = textx
-         message = str(message.message)
-    else:
+    if message[5:]:
         message = str(message[5:])
+    elif textx:
+        message = textx
+        message = str(message.message)
     count = random.randint(3, 10)
     reply_text = re.sub(r'([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])', (r'\1' * count), message)
     await e.edit(reply_text)
@@ -99,11 +98,11 @@ async def zal(e):
  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
      textx=await e.get_reply_message()
      message = e.text
-     if textx:
+     if message[4:]:
+         message = str(message[4:])
+     elif textx:
          message = textx
          message = str(message.message)
-     else:
-        message = str(message[4:])
      input_text = " ".join(message).lower()
      zalgofied_text = zalgo.zalgo().zalgofy(input_text)
      await e.edit(zalgofied_text)
@@ -120,12 +119,11 @@ async def hoi(e):
 async def faces(e):
  if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
-    message = e.text
-    if textx:
-         message = textx
-         message = str(message.message)
-    else:
-        message = str(message[4:])
+    if message[4:]:
+        message = str(message[6:])
+    elif textx:
+        message = textx
+        message = str(message.message)
     faces = ['(・`ω´・)',';;w;;','owo','UwU','>w<','^w^','\(^o\) (/o^)/','( ^ _ ^)∠☆','(ô_ô)','~:o',';-;', '(*^*)', '(>_', '(♥_♥)', '*(^O^)*', '((+_+))']
     reply_text = re.sub(r'(r|l)', "w", message)
     reply_text = re.sub(r'(R|L)', 'W', reply_text)
@@ -189,10 +187,23 @@ async def spongemocktext(e):
   if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
     textx=await e.get_reply_message()
     message = e.text
-    if textx:
+    if message[6:]:
+        message = str(message[6:])
+    elif textx:
         message = textx
         message = str(message.message)
-    else:
-       message = str(message[6:])
     reply_text = spongemock.mock(message)
     await e.edit(reply_text)
+
+
+@bot.on(events.NewMessage(outgoing=True,pattern='^.clap'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.clap'))
+async def spongemocktext(e):
+ message = update.effective_message
+    if not message.reply_to_message:
+        message.reply_text("I need a message to meme.")
+    else:
+        reply_text = "👏 "
+        reply_text += message.reply_to_message.text.replace(" ", " 👏 ")
+        reply_text += " 👏"
+        message.reply_to_message.reply_text(reply_text)
