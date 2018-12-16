@@ -1,8 +1,8 @@
 # Telegram-UserBot
 
-[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
+ [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot)
 
-### If the semaphore build passed, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
+### If the travis ci build passed, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
 ```diff
 - #include <std/disclaimer.h>
