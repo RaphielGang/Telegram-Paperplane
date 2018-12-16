@@ -195,7 +195,7 @@ async def spongemocktext(e):
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.clap'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.clap'))
-async def spongemocktext(e):
+async def claptext(e):
  textx=await e.get_reply_message()
  message = e.text
  if message[6:]:
@@ -207,3 +207,10 @@ async def spongemocktext(e):
  reply_text += message.replace(" ", " 👏 ")
  reply_text += " 👏"
  await e.edit(reply_text)
+
+
+@bot.on(events.NewMessage(outgoing=True,pattern='^.bt$'))
+@bot.on(events.MessageEdited(outgoing=True,pattern='^.bt$'))
+async def bluetext(e):
+    if (await e.get_reply_message()):
+        await e.edit("`BLUETEXT MUST CLICK.\nAre you a stupid animal which is attracted to colours?`")
