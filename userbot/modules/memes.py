@@ -199,11 +199,14 @@ async def spongemocktext(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.clap'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.clap'))
 async def spongemocktext(e):
- message = update.effective_message
-    if not message.reply_to_message:
-        message.reply_text("I need a message to meme.")
-    else:
-        reply_text = "👏 "
-        reply_text += message.reply_to_message.text.replace(" ", " 👏 ")
-        reply_text += " 👏"
-        message.reply_to_message.reply_text(reply_text)
+ textx=await e.get_reply_message()
+ message = e.text
+ if message[6:]:
+     message = str(message[6:])
+ elif textx:
+     message = textx
+     message = str(message.message)
+     reply_text = "👏 "
+     reply_text += message.replace(" ", " 👏 ")
+     reply_text += " 👏"
+     await e.edit(reply_text)
