@@ -3,7 +3,7 @@ import pybase64
 import random,re,os,signal
 import subprocess,time
 from userbot import bot
-import time
+import time,datetime
 from telethon import TelegramClient, events
 from userbot import LOGGER, LOGGER_GROUP
 
@@ -125,9 +125,12 @@ async def restart_the_bot(e):
 @bot.on(events.NewMessage(outgoing=True,pattern='^.pingme$'))
 @bot.on(events.MessageEdited(outgoing=True,pattern='^.pingme$'))
 async def pingme(e):
- if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
-    k=subprocess.run(['ping','-c','3','google.com'], stdout=subprocess.PIPE)
-    await e.edit('`' + k.stdout.decode()[:-1] + '`')
+   if not e.text[0].isalpha() and e.text[0] not in ('/','#','@','!'):
+        start = datetime.now()
+        await e.edit('`Pong!`')
+        end = datetime.now()
+        ms = (end - start).microseconds/1000
+        await e.edit('Pong!\n%sms' % (ms))
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern='^.sleep( [0-9]+)?$'))
