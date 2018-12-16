@@ -23,16 +23,12 @@ async def fastpurger(e):
                  msgs = []
         if msgs:
          await bot.delete_messages(chat, msgs)
-        await bot.send_message(e.chat_id,"`Fast purge complete!\n`Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
+        r=await bot.send_message(e.chat_id,"`Fast purge complete!\n`Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
         if LOGGER:
             await bot.send_message(LOGGER_GROUP,"Purge of "+str(count)+" messages done successfully.")
         time.sleep(2)
         i=1
-        async for message in bot.iter_messages(e.chat_id,from_user='me'):
-             if i>1:
-                 break
-             i=i+1
-             await message.delete()
+        await r.delete()
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.purgeme'))
@@ -47,16 +43,12 @@ async def purgeme(e):
             break
         i=i+1
         await message.delete()
-    await bot.send_message(e.chat_id,"`Purge complete!` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
+    r=await bot.send_message(e.chat_id,"`Purge complete!` Purged "+str(count)+" messages. **This auto-generated message shall be self destructed in 2 seconds.**")
     if LOGGER:
         await bot.send_message(LOGGER_GROUP,"Purge of "+str(count)+" messages done successfully.")
     time.sleep(2)
     i=1
-    async for message in bot.iter_messages(e.chat_id,from_user='me'):
-        if i>1:
-            break
-        i=i+1
-        await message.delete()
+    await r.delete()
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^.delmsg$'))
