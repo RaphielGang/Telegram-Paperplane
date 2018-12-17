@@ -41,7 +41,7 @@ async def add_filter(e):
     await e.edit("```Note added successfully. Use # followed by note name, to get it```")
 
 
-@bot.on(events.NewMessage(incoming=True,pattern='#*'))
+@bot.on(events.NewMessage(pattern='#*'))
 async def incom_note(e):
   try:
     if not (await e.get_sender()).bot:
