@@ -30,6 +30,7 @@ async def lol(e):
 async def copypasta(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
+        message=e.text
         if message[3:]:
             message = str(message[3:])
         elif textx:
@@ -148,6 +149,7 @@ async def hoi(e):
 async def faces(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
+        message=e.text
         if message[4:]:
             message = str(message[6:])
         elif textx:
