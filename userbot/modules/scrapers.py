@@ -8,7 +8,7 @@ from telethon import TelegramClient, events
 from userbot import bot, LOGGER, LOGGER_GROUP
 from gtts import gTTS
 import os
-from py_translator import Translator
+from googletrans import Translator
 
 langi = "en"
 
