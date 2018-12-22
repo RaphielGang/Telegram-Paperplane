@@ -117,14 +117,14 @@ async def tts(e):
             message = textx
             message = str(message.message)
         current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-        tts = gTTS(replye, langi)
+        tts = gTTS(message, langi)
         tts.save("k.mp3")
         with open("k.mp3", "rb") as f:
             linelist = list(f)
             linecount = len(linelist)
         if linecount == 1:
             try:  # tts on personal chats is broken
-                tts = gTTS(replyes, langi)
+                tts = gTTS(message, langi)
                 tts.save("k.mp3")
             except:
                 await e.edit("`Some Internal Error! Try Again!`")
@@ -134,7 +134,7 @@ async def tts(e):
             os.remove("k.mp3")
             if LOGGER:
                 await bot.send_message(
-                    LOGGER_GROUP, "tts of " + replye + " executed successfully!"
+                    LOGGER_GROUP, "tts of " + message + " executed successfully!"
                 )
             await e.delete()
 
@@ -152,8 +152,8 @@ async def translateme(e):
         elif textx:
             message = textx
             message = str(message.message)
-        reply_text = translator.translate(text, dest=langi).text
-        reply_text = "`Source: `\n" + text + "`\n\nTranslation: `\n" + reply_text
+        reply_text = translator.translate(message, dest=langi).text
+        reply_text = "`Source: `\n" + message + "`\n\nTranslation: `\n" + reply_text
         await bot.send_message(e.chat_id, reply_text)
         await e.delete()
         if LOGGER:
