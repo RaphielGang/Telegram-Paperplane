@@ -19,5 +19,5 @@ from userbot.modules import ALL_MODULES
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("userbot.modules." + module_name)
 LOGS.info('Your Bot is alive! Test it by typing .alive on any chat. Should you need assistance, head to https://t.me/userbot_support. Your Bot Version is 2.1-b')
-if len(sys.argv) == 1:
+if len(sys.argv) in (1,3,4):
     bot.run_until_disconnected()
