@@ -1,5 +1,6 @@
 import sqlite3
 import subprocess
+import sys
 
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
 subprocess.run(
