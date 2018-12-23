@@ -40,7 +40,7 @@ subprocess.run(
     ],
     stdout=subprocess.PIPE,
 )
-if len(sys.argv==1):
+if len(sys.argv)==1:
     print("Type y to go ahead on a bleeding edge build. Else it will remain stable.")
     t=input()
     if t != "y":
