@@ -1,7 +1,7 @@
 import hastebin
 import pybase64
 import random, re, os, signal
-import subprocess, time
+import subprocess, time, sys
 from userbot import bot
 import time
 from datetime import datetime
@@ -147,12 +147,25 @@ async def chatidgetter(e):
         await e.edit("Chat ID: `" + str(e.chat_id) + "`")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.restart$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.restart$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.updatebleeding$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatebleding$"))
 async def restart_the_bot(e):
-    await e.edit("`Thank You master! I am taking a break!`")
-    os.execl(sys.executable, sys.executable, *sys.argv)
+    await e.edit("`Please wait while I upstream myself!`")
+    bot.disconnect()
+    try:
+        subprocess.run(["python", "-m", "userbot", "test", "haha"])
+    except:
+        pass
 
+@bot.on(events.NewMessage(outgoing=True, pattern="^.updatestable$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatestable$"))
+async def restart_the_bot(e):
+    await e.edit("`Please wait while I upstream myself!`")
+    bot.disconnect()
+    try:
+        subprocess.run(["python", "-m", "userbot", "test", "haha", "yes"])
+    except:
+        pass
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.pingme$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.pingme$"))

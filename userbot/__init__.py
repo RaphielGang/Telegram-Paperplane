@@ -57,10 +57,26 @@ if len(sys.argv)==1:
         "git",
         "checkout",
         "tags/"+tyq[-2],
-        "pull340913",
         ],
         stdout=subprocess.PIPE,
         )
+if len(sys.argv) == 4:
+    tyq=subprocess.run(
+    [
+    "git",
+    "tag",
+    "-l",
+    ],
+    stdout=subprocess.PIPE,
+    ).stdout.decode().split("\n")
+    subprocess.run(
+    [
+    "git",
+    "checkout",
+    "tags/"+tyq[-2],
+    ],
+    stdout=subprocess.PIPE,
+    )
 print("Your Bot is up-to-date. Bot Spinning up!")
 import logging
 import os
@@ -104,7 +120,7 @@ else:
         "Your config file seems to be un-edited. Doing so is not allowed. Bot exiting!"
     )
     quit(1)
-if len(sys.argv) == 1:
+if len(sys.argv) in (1,3,4):
     bot = TelegramClient("userbot", API_KEY, API_HASH)
 else:
     bot = TelegramClient(None, API_KEY, API_HASH)
