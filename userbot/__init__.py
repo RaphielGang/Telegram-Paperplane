@@ -1,7 +1,10 @@
 import sqlite3
 import subprocess
 import sys
+import dotenv
 
+dotenv.load_dotenv("config.env")
+BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
 subprocess.run(
     [
@@ -41,9 +44,7 @@ subprocess.run(
     stdout=subprocess.PIPE,
 )
 if len(sys.argv)==1:
-    print("Type y to go ahead on a bleeding edge build. Else it will remain stable.")
-    t=input()
-    if t != "y":
+    if BUILD_CHOICE == "stable":
         tyq=subprocess.run(
         [
         "git",
@@ -83,7 +84,7 @@ import os
 import sys
 from sqlalchemy import create_engine
 from telethon import TelegramClient, events
-import dotenv
+
 import time
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -94,13 +95,12 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         "You MUST have a python version of at least 3.6. Multiple features depend on this. Bot quitting."
     )
     quit(1)
-dotenv.load_dotenv("config.env")
 try:
     print(___________PLOX_______REMOVE_____THIS_____LINE__________)
 except NameError:
     API_KEY = os.environ.get("API_KEY", None)
     API_HASH = os.environ.get("API_HASH", None)
-    LOGGER_GROUP = int(os.environ.get("LOGGER_GROUP"))
+    LOGGER_GROUP = int(os.environ.get("LOGGER_GROUP","0"))
     LOGGER = os.environ.get(
         "LOGGER", None
     )  # Incase you want to turn off logging, put this to false
