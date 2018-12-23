@@ -39,26 +39,27 @@ subprocess.run(
     ],
     stdout=subprocess.PIPE,
 )
-print("Type y to go ahead on a bleeding edge build. Else it will remain stable.")
-t=input()
-if t != "y":
-    tyq=subprocess.run(
-    [
+if len(sys.argv==1):
+    print("Type y to go ahead on a bleeding edge build. Else it will remain stable.")
+    t=input()
+    if t != "y":
+        tyq=subprocess.run(
+        [
         "git",
         "tag",
         "-l",
-    ],
-    stdout=subprocess.PIPE,
-    ).stdout.decode().split("\n")
-    subprocess.run(
-    [
+        ],
+        stdout=subprocess.PIPE,
+        ).stdout.decode().split("\n")
+        subprocess.run(
+        [
         "git",
         "checkout",
         "tags/"+tyq[-2],
         "pull340913",
-    ],
-    stdout=subprocess.PIPE,
-    )
+        ],
+        stdout=subprocess.PIPE,
+        )
 print("Your Bot is up-to-date. Bot Spinning up!")
 import logging
 import os
