@@ -1,6 +1,6 @@
 import sqlite3
 import subprocess
-import sys
+import sys, os
 import dotenv
 
 dotenv.load_dotenv("config.env")
@@ -80,8 +80,6 @@ if len(sys.argv) == 4:
     )
 print("Your Bot is up-to-date. Bot Spinning up!")
 import logging
-import os
-import sys
 from sqlalchemy import create_engine
 from telethon import TelegramClient, events
 
