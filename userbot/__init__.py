@@ -11,13 +11,62 @@ subprocess.run(
     ],
     stdout=subprocess.PIPE,
 )
+subprocess.run(
+    [
+        "git",
+        "remote",
+        "rm",
+        "pull340913",
+    ],
+    stdout=subprocess.PIPE,
+)
+subprocess.run(
+    [
+        "git",
+        "remote",
+        "add",
+        "pull340913",
+        "https://github.com/baalajimaestro/Telegram-UserBot"
+    ],
+    stdout=subprocess.PIPE,
+)
+subprocess.run(
+    [
+        "git",
+        "pull",
+        "pull340913",
+        "modular",
+    ],
+    stdout=subprocess.PIPE,
+)
+print("Type y to go ahead on a bleeding edge build. Else it will remain stable.")
+t=input()
+if t != "y":
+    tyq=subprocess.run(
+    [
+        "git",
+        "tag",
+        "-l",
+    ],
+    stdout=subprocess.PIPE,
+    ).stdout.decode().split("\n")
+    subprocess.run(
+    [
+        "git",
+        "checkout",
+        "tags/"+tyq[-2],
+        "pull340913",
+    ],
+    stdout=subprocess.PIPE,
+    )
+print("Your Bot is up-to-date. Bot Spinning up!")
 import logging
 import os
 import sys
 from sqlalchemy import create_engine
 from telethon import TelegramClient, events
 import dotenv
-
+import time
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
