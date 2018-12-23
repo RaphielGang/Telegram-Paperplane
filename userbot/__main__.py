@@ -16,11 +16,8 @@ db.close()
 bot.start()
 import importlib
 from userbot.modules import ALL_MODULES
-
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("userbot.modules." + module_name)
-LOGS.info(
-    "Success! Loaded modules!\n Your Bot is running! Test it by typing .alive in any chat"
-)
+LOGS.info('Your Bot is alive! Test it by typing .alive on any chat. Should you need assistance, head to https://t.me/userbot_support. Your Bot Version is 2.1-b')
 if len(sys.argv) == 1:
     bot.run_until_disconnected()
