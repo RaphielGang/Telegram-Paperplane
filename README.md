@@ -18,7 +18,11 @@
 - /
 ```
 
-# Contact
+A modular telegram Python UserBot running on python3 with an sqlalchemy database.
+
+Started up as a simple bot, which helps with deleting messages and other stuffs when I didn't possess a smartphone(selecting each message indeed difficult) with a ton of meme features kanged from [SkittBot](https://github.com/skittles9823/SkittBot), it has evolved, becoming extremely modular and simple to use.
+
+
 If you just want to stay in the loop about new features or
 announcements you can join the [news channel](https://t.me/maestro_userbot_channel).
 
@@ -26,11 +30,36 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 
 - This README is not guaranteed to always be up to date, refer to the [support channel](https://t.me/maestro_userbot_channel) for the latest informations.
 
-## Dependencies:
+## Getting your own userbot up and running:
 
-- SQL DB, can be Postgres/MySQL or anything else supported by SQLAlchemy
+### Configuration:
 
-- Neofetch (in case you need `sysdetails`)
+There are two possible ways of configuring your bot: a config.env file, or ENV variables.
+
+The prefered version is to use a `config.env` file, as it makes it easier to see all your settings grouped together.
+This file should be placed in the topmost part of the repo. 
+This is where your `API KEYS` will be loaded from, as well as your `database URI` (if you're using a database), and most of 
+your other settings.
+
+An example `config.env` file could be:
+```
+    API_KEY=123456
+    BUILD_CHOICE="bleeding"
+    API_HASH='4588acb1863ead924119c885dfffba2'
+    LOGGER_GROUP=-1001200493567
+    LOGGER=True    #Incase you want to turn off logging, put this to false
+    TRT_ENABLE=False
+    PM_AUTO_BAN=True
+    CONSOLE_LOGGER_VERBOSE=True
+    TTS_ENABLE=False
+    TRT_API_USERNAME="Insert API Username"    #For Using IBM Translator
+    TTS_API_USERNAME="Insert API Username"
+    TRT_API_PASSWORD="Insert API Password"
+    TTS_API_PASSWORD="Insert API Password"
+    DB_URI="postgres://userbot:mypass@localhost:5432/userbot"
+```
+
+If you can't have a config.env file, or you missed to type something on `config.env` but then pushed it up, it is also possible to use environment variables.
 
 ### Before you start:
 Get your api-id (called `API_KEY` in this bot) and API_HASH from my.telegram.org.
