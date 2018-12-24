@@ -1,6 +1,6 @@
 # Telegram-UserBot
 
- [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot)
+ [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot)[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
 ### If the travis ci build passed, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
@@ -32,6 +32,55 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 
 ## Getting your own userbot up and running:
 
+**Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
+
+### Before you start:
+Get your api-id (called `API_KEY` in this bot) and API_HASH from my.telegram.org.
+
+Optional: Create an empty group, add Marie, or any forks, get the group id, copy it and set it as your `LOGGER` (in case you want logging).
+
+### Database
+
+If you wish to use a database-dependent module (eg: locks, notes, userinfo, users, filters, welcomes),
+you'll need to have a database installed on your system. I use postgres, so I recommend using it for optimal compatibility.
+
+In the case of postgres, this is how you would set up a the database on a debian/ubuntu system. Other distributions may vary.
+
+- install postgresql:
+
+`sudo apt-get update && sudo apt-get install postgresql`
+
+- change to the postgres user:
+
+`sudo su - postgres`
+
+- create a new database user (change YOUR_USER appropriately):
+
+`createuser -P -s -e YOUR_USER`
+
+This will be followed by you needing to input your password.
+
+- create a new database table:
+
+`createdb -O YOUR_USER YOUR_DB_NAME`
+
+Change YOUR_USER and YOUR_DB_NAME appropriately.
+
+- finally:
+
+`psql YOUR_DB_NAME -h YOUR_HOST YOUR_USER`
+
+This will allow you to connect to your database via your terminal.
+By default, YOUR_HOST should be 127.0.0.1:5432.
+
+You should now be able to build your database URI. This will be:
+
+`sqldbtype://username:pw@hostname:port/db_name`
+
+Replace sqldbtype with whichever db youre using (eg postgres, mysql, sqllite, etc)
+repeat for your username, password, hostname (localhost?), port (5432?), and db name.
+
+
 ### Configuration:
 
 There are two possible ways of configuring your bot: a config.env file, or ENV variables.
@@ -51,86 +100,70 @@ An example `config.env` file could be:
     TRT_ENABLE=False
     PM_AUTO_BAN=True
     CONSOLE_LOGGER_VERBOSE=True
-    TTS_ENABLE=False
-    TRT_API_USERNAME="Insert API Username"    #For Using IBM Translator
-    TTS_API_USERNAME="Insert API Username"
-    TRT_API_PASSWORD="Insert API Password"
-    TTS_API_PASSWORD="Insert API Password"
+    SCREEN_SHOT_LAYER_ACCESS_KEY="get from screenshot layer website google it "
+    OPEN_WEATHER_MAP_APPID="get it from openweather site"    
     DB_URI="postgres://userbot:mypass@localhost:5432/userbot"
 ```
 
 If you can't have a config.env file, or you missed to type something on `config.env` but then pushed it up, it is also possible to use environment variables.
 
-### Before you start:
-Get your api-id (called `API_KEY` in this bot) and API_HASH from my.telegram.org.
-
-
-Optional: Create an empty group, add Marie, or any forks, get the group id, copy it and set it as your `LOGGER` (in case you want logging).
-
-
-**Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
 
 #### Running on Heroku:
 1. **Make sure to generate a session file, by running app.py on your local pc before deploying it on Heroku.**
-- Fork this repo.
-- Download/Clone it to your Linux PC, then follow the instructions on running on Linux below, to generate a userbot.session file, which is needed to run your bot.
-> **A session is a key to your Telegram account, pushing it to GitHub will grant any person full access to your Telegram account.
-You must be extra careful when pushing to GitHub. The gitignore in this repository should prevent this from happening in most cases, but you should still keep this in mind to prevent any fatal consequences.**
-- You can choose bleeding edge builds which might be buggy, otherwise choose a release tags.
-- If you use a bleeding edge, your bot version will be `b`
-- Push it with the heroku cli
+- Make sure you followed the instruction to setup the config file/ENV variables.
+- If you need Database Commands, provision a heroku postgres instance.
+- Push you bot along with `config.env` and `userbot.session` with the heroku cli, you need `git add -f` to add both of them.
 - Deploy.
 
-#### Running on linux:
-- Clone the repo: `git clone https://github.com/baalajimaestro/Telegram-UserBot`
-- Checkout to the latest release tag incase you want a stable build, else you can go ahead with bleeding edge ones.
-- `git tag -l #lists all versions available`
-- `git checkout tags/version_number #replace version_number with your choice`
-- Install all dependencies after moving to the project directory by running: `pip3 install -r requirements.txt`
-- Configure your bot in `config.py` (You can use `sample_config.py` as a reference when doing so)
-  - Remove the warning from sample_config, it is to prevent simple renaming and running
-  - You can optionally use environment variables to configure it instead
-- Start the userbot: `python3 -m userbot`
+## Starting the bot.
 
-#### Running on Windows:
+Once you've setup your database and your configuration (see below) is complete, simply run:
 
-- Use the exclusive script provided
-- Setup the config as in Linux
-- Run `pip install telethon`
-- Start the bot by using `python3 windows_startup_script.py`
+`python3 -m userbot`
 
 ### Commands available(might go horribly out-of-date anytime):
 
-> `.` stands for any random character, it is made for the ease of the user
+> `.` stands for any random special character like *,&,^,% , it is made for the ease of the user
 
 #### Utilities
+
 - `.approvepm`: approve DMing
 - `.iamafk`: Sets you as AFK
 - `.notafk`: Sets you as not AFK, and gives you brief list if who messaged you while you were away
-- `.addfilter trigger response`: Adds a filter in that group, if text is contained in incoming message, bot replies with the reply
-- `.nofilter trigger`: removes the filter text from the current group
-- `.rmfilters`: remove all filters
-- `.get filters`: fetch all filters set in the userbot in that chat
 - `.chatid`: show chat id
 - `.userid`: show user id
 - `.getqr`: encrypt QRCode
 - `.screencapture`
+- `.weather`
+- `.updatebleeding`
+- `.updatestable`
 
-#### Notes
+#### Filters:
+
+- `.addfilter trigger response`
+- `.nofilter trigger`
+- `.rmfilters`
+- `.get filters`
+
+
+#### Notes:
+
 - `.get notes`
 - `.nosave`
 - `.addnote`
 - `.rmnotes`
 
 
-#### Purge
+#### Purgers:
+
 - `.fastpurge`
 - `.purgeme`
 - `.delmsg`
 - `.editme`
 - `.sd`
 
-#### Scraper:
+#### Scrapers:
+
 - `.img`
 - `.google`
 - `.wiki`
@@ -140,27 +173,27 @@ You must be extra careful when pushing to GitHub. The gitignore in this reposito
 - `.lang`: change language
 
 #### Admin Commands:
+
 - `.wizard`: promote user
 - `.thanos`: ban user
-- `.spider`: mute user
+- `.spider`: mute user(doesnt use TG API mute)
 - `.speak`: unmute user
 
 #### MISC
 - `.pip`
 - `.pingme`: pings server
 - `.paste`: paste code in hastebin
-- `.log`
-- `.log silent`: logs the message but silently
+- `.log`: Save the message in your logs
 - `.speed`: speed test
 - `.hash`
 - `.random`
 - `.alive`: check if bot is running
 - `.restart`: restart the bot
 - `.shutdown`: shutdown the bot
-- `.real_shutdown`: REALLY shutdown the bot
+- `.shutdown`: REALLY shutdown the bot
 - `.support`: get support
 - `.supportchannel`: get support
-- `.repo`: show the repo
+- `.repo`: link to this repo
 - `.sysdetails`
 - `.botversion`
 - `.term`: execute terminal commands
@@ -174,11 +207,47 @@ You must be extra careful when pushing to GitHub. The gitignore in this reposito
 - `.zal`
 - `.owo`
 - `.react`
-- `.shg`: ¯\_(ツ)_/¯
+- `.shg`: * Shrugs *
 - `.runs`: random message
 - `.disable runs`
 - `.enable runs`
 - `.mock`
+- `.clap`
+
+### Creating your own modules.
+
+Creating a module has been simplified as much as possible - but do not hesitate to suggest further simplification.
+
+All that is needed is that your .py file be in the modules folder.
+
+To add commands, make sure to import the the primary bot via
+
+`from userbot import bot`.
+
+
+and
+
+
+telethon's important stuff via
+
+`from telethon import events`
+
+You can then add commands wrapping them under
+
+```
+@bot.on(events.NewMessage(outgoing=True,pattern=""))
+async def some_function(e):
+     Whatever here.
+```
+
+
+You can also set outgoing to incoming incase, you wanna make that command to parse the incoming message.
+
+The command pattern will be regex. Hope you know it, else feel free to hop on [here](https://regexone.com)
+
+Use asynchronous functions, and await the functions.
+
+Should you need assistance with telethon library check out their [documentation](http://telethon.readthedocs.io/) or get support from [them](https://t.me/TelethonChat)
 
 
 ### Credits:
@@ -192,7 +261,8 @@ I would like to thank people who assisted me throughout this project:
 * [@songotenks69](https://github.com/songotenks69)
 * [@Ovenoboyo](https://github.com/Ovenoboyo)
 * [SphericalKat](https://github.com/ATechnoHazard)
+* [nitamarcel](https://github.com/nitanmarcel)
 
-and many more people which aren't mentioned here.
+and many more people who aren't mentioned here.
 
-Found Bugs? Create an issue on the issue tracker, or post it in the support group.
+Found Bugs? Create an issue on the issue tracker, or post it in the [support group](https://t.me/userbot_support).
