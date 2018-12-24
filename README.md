@@ -98,11 +98,8 @@ An example `config.env` file could be:
     TRT_ENABLE=False
     PM_AUTO_BAN=True
     CONSOLE_LOGGER_VERBOSE=True
-    TTS_ENABLE=False
-    TRT_API_USERNAME="Insert API Username"    #For Using IBM Translator
-    TTS_API_USERNAME="Insert API Username"
-    TRT_API_PASSWORD="Insert API Password"
-    TTS_API_PASSWORD="Insert API Password"
+    SCREEN_SHOT_LAYER_ACCESS_KEY="get from screenshot layer website google it "
+    OPEN_WEATHER_MAP_APPID="get it from openweather site"    
     DB_URI="postgres://userbot:mypass@localhost:5432/userbot"
 ```
 
