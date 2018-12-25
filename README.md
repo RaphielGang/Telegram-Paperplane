@@ -1,6 +1,6 @@
 # Telegram-UserBot
 
- [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot)[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
+ [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot) [![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot) [![codecov](https://codecov.io/gh/baalajimaestro/Telegram-UserBot/branch/modular/graph/badge.svg)](https://codecov.io/gh/baalajimaestro/Telegram-UserBot)
 
 ### If the travis ci build passed, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
@@ -86,8 +86,8 @@ repeat for your username, password, hostname (localhost?), port (5432?), and db 
 There are two possible ways of configuring your bot: a config.env file, or ENV variables.
 
 The prefered version is to use a `config.env` file, as it makes it easier to see all your settings grouped together.
-This file should be placed in the topmost part of the repo. 
-This is where your `API KEYS` will be loaded from, as well as your `database URI` (if you're using a database), and most of 
+This file should be placed in the topmost part of the repo.
+This is where your `API KEYS` will be loaded from, as well as your `database URI` (if you're using a database), and most of
 your other settings.
 
 An example `config.env` file could be:
