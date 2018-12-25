@@ -32,6 +32,8 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 
 ## Getting your own userbot up and running:
 
+**Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
+
 ### Before you start:
 Get your api-id (called `API_KEY` in this bot) and API_HASH from my.telegram.org.
 
@@ -105,7 +107,6 @@ An example `config.env` file could be:
 
 If you can't have a config.env file, or you missed to type something on `config.env` but then pushed it up, it is also possible to use environment variables.
 
-**Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
 
 #### Running on Heroku:
 1. **Make sure to generate a session file, by running app.py on your local pc before deploying it on Heroku.**
@@ -122,40 +123,51 @@ You must be extra careful when pushing to GitHub. The gitignore in this reposito
 
 Once you've setup your database and your configuration (see below) is complete, simply run:
 
-`python3 -m tg_bot`
+`python3 -m userbot`
 
 ### Commands available(might go horribly out-of-date anytime):
 
 > `.` stands for any random character, it is made for the ease of the user
 
 #### Utilities
+
 - `.approvepm`: approve DMing
 - `.iamafk`: Sets you as AFK
 - `.notafk`: Sets you as not AFK, and gives you brief list if who messaged you while you were away
-- `.addfilter trigger response`: Adds a filter in that group, if text is contained in incoming message, bot replies with the reply
-- `.nofilter trigger`: removes the filter text from the current group
-- `.rmfilters`: remove all filters
-- `.get filters`: fetch all filters set in the userbot in that chat
 - `.chatid`: show chat id
 - `.userid`: show user id
 - `.getqr`: encrypt QRCode
 - `.screencapture`
+- `.weather`
+- `.updatebleeding`
+- `.updatestable`
 
-#### Notes
+#### Filters:
+
+- `.addfilter trigger response`
+- `.nofilter trigger`
+- `.rmfilters`
+- `.get filters
+
+
+#### Notes:
+
 - `.get notes`
 - `.nosave`
 - `.addnote`
 - `.rmnotes`
 
 
-#### Purge
+#### Purgers:
+
 - `.fastpurge`
 - `.purgeme`
 - `.delmsg`
 - `.editme`
 - `.sd`
 
-#### Scraper:
+#### Scrapers:
+
 - `.img`
 - `.google`
 - `.wiki`
@@ -165,9 +177,10 @@ Once you've setup your database and your configuration (see below) is complete, 
 - `.lang`: change language
 
 #### Admin Commands:
+
 - `.wizard`: promote user
 - `.thanos`: ban user
-- `.spider`: mute user
+- `.spider`: mute user(doesnt use TG API mute)
 - `.speak`: unmute user
 
 #### MISC
@@ -182,10 +195,10 @@ Once you've setup your database and your configuration (see below) is complete, 
 - `.alive`: check if bot is running
 - `.restart`: restart the bot
 - `.shutdown`: shutdown the bot
-- `.real_shutdown`: REALLY shutdown the bot
+- `.shutdown`: REALLY shutdown the bot
 - `.support`: get support
 - `.supportchannel`: get support
-- `.repo`: show the repo
+- `.repo`: link to this repo
 - `.sysdetails`
 - `.botversion`
 - `.term`: execute terminal commands
@@ -199,12 +212,12 @@ Once you've setup your database and your configuration (see below) is complete, 
 - `.zal`
 - `.owo`
 - `.react`
-- `.shg`: ¯\_(ツ)_/¯
+- `.shg`: * Shrugs *
 - `.runs`: random message
 - `.disable runs`
 - `.enable runs`
 - `.mock`
-
+- `.clap`
 
 ### Creating your own modules.
 
