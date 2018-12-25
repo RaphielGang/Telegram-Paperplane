@@ -13,8 +13,10 @@ async def permitpm(e):
     if PM_AUTO_BAN:
         global COUNT_PM
         if e.is_private and not (await e.get_sender()).bot:
-            from userbot.modules.sql_helper.pm_permit_sql import is_approved
-
+            try:
+                from userbot.modules.sql_helper.pm_permit_sql import is_approved
+            except:
+                return
             E = is_approved(e.chat_id)
             if not E:
                 await e.reply(
@@ -50,8 +52,11 @@ As far as i know, he doesn't usually approve Retards.`"
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.approvepm$"))
 async def approvepm(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        from userbot.modules.sql_helper.pm_permit_sql import approve
-
+        try:
+            from userbot.modules.sql_helper.pm_permit_sql import approve
+        except:
+            await e.edit("`Running on Non-SQL mode!`")
+            return
         approve(e.chat_id)
         await e.edit("`Approved to PM!`")
         if LOGGER:
