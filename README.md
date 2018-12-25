@@ -1,6 +1,6 @@
 # Telegram-UserBot
 
- [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot)
+ [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot)[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
 ### If the travis ci build passed, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
@@ -110,13 +110,9 @@ If you can't have a config.env file, or you missed to type something on `config.
 
 #### Running on Heroku:
 1. **Make sure to generate a session file, by running app.py on your local pc before deploying it on Heroku.**
-- Fork this repo.
-- Download/Clone it to your Linux PC, then follow the instructions on running on Linux below, to generate a userbot.session file, which is needed to run your bot.
-> **A session is a key to your Telegram account, pushing it to GitHub will grant any person full access to your Telegram account.
-You must be extra careful when pushing to GitHub. The gitignore in this repository should prevent this from happening in most cases, but you should still keep this in mind to prevent any fatal consequences.**
-- You can choose bleeding edge builds which might be buggy, otherwise choose a release tags.
-- If you use a bleeding edge, your bot version will be `b`
-- Push it with the heroku cli
+- Make sure you followed the instruction to setup the config file/ENV variables.
+- If you need Database Commands, provision a heroku postgres instance.
+- Push you bot along with `config.env` and `userbot.session` with the heroku cli, you need `git add -f` to add both of them.
 - Deploy.
 
 ## Starting the bot.
@@ -127,7 +123,7 @@ Once you've setup your database and your configuration (see below) is complete, 
 
 ### Commands available(might go horribly out-of-date anytime):
 
-> `.` stands for any random character, it is made for the ease of the user
+> `.` stands for any random special character like *,&,^,% , it is made for the ease of the user
 
 #### Utilities
 
@@ -147,7 +143,7 @@ Once you've setup your database and your configuration (see below) is complete, 
 - `.addfilter trigger response`
 - `.nofilter trigger`
 - `.rmfilters`
-- `.get filters
+- `.get filters`
 
 
 #### Notes:
@@ -187,8 +183,7 @@ Once you've setup your database and your configuration (see below) is complete, 
 - `.pip`
 - `.pingme`: pings server
 - `.paste`: paste code in hastebin
-- `.log`
-- `.log silent`: logs the message but silently
+- `.log`: Save the message in your logs
 - `.speed`: speed test
 - `.hash`
 - `.random`
