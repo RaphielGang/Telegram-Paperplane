@@ -8,8 +8,11 @@ from userbot import LOGGER, LOGGER_GROUP
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.get notes$"))
 async def notes_active(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        from userbot.modules.sql_helper.notes_sql import get_notes
-
+        try:
+            from userbot.modules.sql_helper.notes_sql import get_notes
+        except:
+            await e.edit("`Running on Non-SQL mode!`")
+            return
         transact = "Messages saved in this chat: \n\n"
         E = get_notes(e.chat_id)
         for i in E:
@@ -21,8 +24,11 @@ async def notes_active(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.nosave (.*)"))
 async def remove_notes(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        from userbot.modules.sql_helper.notes_sql import remove_notes
-
+        try:
+            from userbot.modules.sql_helper.notes_sql import remove_notes
+        except:
+            await e.edit("`Running on Non-SQL mode!`")
+            return
         message = e.text
         kek = message.split(" ")
         remove_notes(e.chat_id, kek[1])
@@ -33,8 +39,11 @@ async def remove_notes(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.addnote (.*)"))
 async def add_filter(e):
     if not e.text[0].isalpha():
-        from userbot.modules.sql_helper.notes_sql import add_note
-
+        try:
+            from userbot.modules.sql_helper.notes_sql import add_note
+        except:
+            await e.edit("`Running on Non-SQL mode!`")
+            return
         message = e.text
         kek = message.split()
         string = ""
@@ -50,8 +59,10 @@ async def add_filter(e):
 async def incom_note(e):
     try:
         if not (await e.get_sender()).bot:
-            from userbot.modules.sql_helper.notes_sql import get_notes
-
+            try:
+                from userbot.modules.sql_helper.notes_sql import get_notes
+            except:
+                return
             listes = e.text[1:]
             E = get_notes(e.chat_id)
             for t in E:
