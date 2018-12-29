@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from telethon import TelegramClient, events
 from userbot import bot, LOGGER, LOGGER_GROUP
 from gtts import gTTS
-import os
+import os,time
 from googletrans import Translator
 
 langi = "en"
