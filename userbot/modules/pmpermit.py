@@ -61,7 +61,7 @@ async def approvepm(e):
         await e.edit("`Approved to PM!`")
         if LOGGER:
             aname = await bot.get_entity(e.chat_id)
-            name0 = str(name.first_name)
+            name0 = str(aname.first_name)
             await bot.send_message(
                 LOGGER_GROUP,
                 "["
