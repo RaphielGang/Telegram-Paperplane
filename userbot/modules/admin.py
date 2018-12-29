@@ -82,8 +82,11 @@ async def spider(e):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn't mute this user`")
             return
-        from userbot.modules.sql_helper.spam_mute_sql import mute
-
+        try:
+            from userbot.modules.sql_helper.spam_mute_sql import mute
+        except Exception as er:
+            await e.edit("`Running on Non-SQL mode!`")
+            return
         mute(e.chat_id, str((await e.get_reply_message()).sender_id))
         await e.edit("`Spiderman nabs him!`")
         time.sleep(5)
