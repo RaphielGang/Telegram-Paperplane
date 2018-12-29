@@ -108,13 +108,8 @@ async def selfdestruct(e):
             + " seconds`"
         )
         await e.delete()
-        await bot.send_message(e.chat_id, text)
+        x=await bot.send_message(e.chat_id, text)
         time.sleep(counter)
-        i = 1
-        async for message in bot.iter_messages(e.chat_id, from_user="me"):
-            if i > 1:
-                break
-            i = i + 1
-            await message.delete()
+        await x.delete()
         if LOGGER:
             await bot.send_message(LOGGER_GROUP, "sd query done successfully")
