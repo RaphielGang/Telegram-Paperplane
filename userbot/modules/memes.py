@@ -342,6 +342,24 @@ async def enable_killme(e):
         await e.edit("```Done!```")
 
 
+@bot.on(events.NewMessage(outgoing=True, pattern="^.metoo"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.metoo"))
+async def metoo(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        metoostr = [
+            "Me too thanks",
+            "Haha yes, me too",
+            "Same lol",
+            "Me irl",
+            "Same here",
+            "Haha yes",
+            "Me rn",
+        ]
+        index = random.randint(0, len(metoostr) - 1)
+        reply_text = metoostr[index]
+        await e.edit(reply_text)
+
+
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mock"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.mock"))
 async def spongemocktext(e):
