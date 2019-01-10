@@ -118,7 +118,7 @@ async def stretch(e):
             message = textx
             message = str(message.message)
         count = random.randint(3, 10)
-        reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵ])", (r"\1" * count), message)
+        reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count), message)
         await e.edit(reply_text)
 
 
