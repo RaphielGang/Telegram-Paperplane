@@ -16,13 +16,6 @@ class Notes(BASE):
         self.keyword = keyword
         self.reply = reply
 
-    def __eq__(self, other):
-        return bool(
-            isinstance(other, Filters)
-            and self.chat_id == other.chat_id
-            and self.keyword == other.keyword
-        )
-
 
 Notes.__table__.create(checkfirst=True)
 
@@ -35,13 +28,23 @@ def get_notes(chat_id):
 
 
 def add_note(chat_id, keyword, reply):
-    adder = Notes(str(chat_id), keyword, reply)
+    adder = SESSION.query(Notes).get((str(chat_id), keyword))
+    if adder:
+        adder.reply = reply
+    else:
+        adder = Notes(str(chat_id), keyword, reply)
     SESSION.add(adder)
     SESSION.commit()
 
 
-def remove_notes(chat_id, keyword):
-    rem = SESSION.query(Notes).get((str(chat_id), keyword))
-    if rem:
-        SESSION.delete(rem)
+def rm_note(chat_id, keyword):
+    note = SESSION.query(Notes).filter(Notes.chat_id == str(chat_id), Notes.keyword == keyword)
+    if note:
+        note.delete()
+        SESSION.commit()
+
+def rm_all_notes(chat_id):
+    notes = SESSION.query(Notes).filter(Notes.chat_id == str(chat_id))
+    if notes:
+        notes.delete()
         SESSION.commit()
