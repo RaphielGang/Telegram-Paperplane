@@ -173,10 +173,53 @@ async def unmute(e):
 async def muter(e):
     try:
         from userbot.modules.sql_helper.spam_mute_sql import is_muted
+        from userbot.modules.sql_helper.gmute_sql import is_gmuted
     except:
         return
     L = is_muted(e.chat_id)
+    K = is_gmuted(e.sender_id)
     if L:
         for i in L:
             if str(i.sender) == str(e.sender_id):
                 await e.delete()
+    for i in K:
+        if i.sender == str(e.sender_id):
+            await e.delete()
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
+async def unmute(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        try:
+            from userbot.modules.sql_helper.gmute_sql import ungmute
+        except:
+            await e.edit('`Running on Non-SQL Mode!`')
+        ungmute(str((await e.get_reply_message()).sender_id))
+        await e.edit("```Ungmuted Successfully```")
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.gspider$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.gspider$"))
+async def spider(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await e.edit("`Mute Error! Couldn't mute this user`")
+            return
+        try:
+            from userbot.modules.sql_helper.gmute_sql import gmute
+        except Exception as er:
+            print(er)
+            await e.edit("`Running on Non-SQL mode!`")
+            return
+        gmute(str((await e.get_reply_message()).sender_id))
+        await e.edit("`Spiderman nabs him!`")
+        time.sleep(5)
+        await e.delete()
+        await bot.send_file(
+            e.chat_id, "https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif"
+        )
+        if LOGGER:
+            await bot.send_message(
+                LOGGER_GROUP,
+                str((await e.get_reply_message()).sender_id) + " was muted.",
+            )

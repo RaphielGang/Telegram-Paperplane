@@ -11,25 +11,25 @@ async def mention_afk(e):
     global ISAFK
     if e.message.mentioned and not (await e.get_sender()).bot:
         if ISAFK:
-            if e.chat_id not in USERS:
+            if e.sender_id not in USERS:
                 await e.reply(
                     "Sorry! My boss is AFK due to ```"
                     + AFKREASON
                     + "```. Would ping him to look into the message soon😉"
                 )
-                USERS.update({e.chat_id: 1})
+                USERS.update({e.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
-            elif e.chat_id in USERS:
-                if USERS[e.chat_id] % 5 == 0:
+            elif e.sender_id in USERS:
+                if USERS[e.sender_id] % 5 == 0:
                     await e.reply(
                         "Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He told me he was busy with ```"
                         + AFKREASON
                         + "```"
                     )
-                    USERS[e.chat_id] = USERS[e.chat_id] + 1
+                    USERS[e.sender_id] = USERS[e.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
-                    USERS[e.chat_id] = USERS[e.chat_id] + 1
+                    USERS[e.sender_id] = USERS[e.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
 
 
@@ -40,25 +40,25 @@ async def afk_on_pm(e):
     global COUNT_MSG
     if e.is_private and not (await e.get_sender()).bot:
         if ISAFK:
-            if e.chat_id not in USERS:
+            if e.sender_id not in USERS:
                 await e.reply(
                     "Sorry! My boss is AFK due to ```"
                     + AFKREASON
                     + "``` I'll ping him to look into the message soon😉"
                 )
-                USERS.update({e.chat_id: 1})
+                USERS.update({e.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
-            elif e.chat_id in USERS:
-                if USERS[e.chat_id] % 5 == 0:
+            elif e.sender_id in USERS:
+                if USERS[e.sender_id] % 5 == 0:
                     await e.reply(
                         "Sorry! But my boss is still not here. Try to ping him a little later. I am sorry😖. He told me he was busy with ```"
                         + AFKREASON
                         + "```"
                     )
-                    USERS[e.chat_id] = USERS[e.chat_id] + 1
+                    USERS[e.sender_id] = USERS[e.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
-                    USERS[e.chat_id] = USERS[e.chat_id] + 1
+                    USERS[e.sender_id] = USERS[e.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
 
 
@@ -72,18 +72,13 @@ async def not_afk(e):
         global AFKREASON
         ISAFK = False
         await e.edit("I'm no longer AFK.")
-        await e.respond(
+        x=await e.respond(
             "`You recieved "
             + str(COUNT_MSG)
             + " messages while you were away. Check log for more details. This auto-generated message shall be self destructed in 2 seconds.`"
         )
         time.sleep(2)
-        i = 1
-        async for message in bot.iter_messages(e.chat_id, from_user="me"):
-            if i > 1:
-                break
-            i = i + 1
-            await message.delete()
+        await x.delete()
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,

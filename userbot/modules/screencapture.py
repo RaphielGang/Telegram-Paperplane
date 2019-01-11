@@ -12,8 +12,6 @@ from userbot import bot, SCREEN_SHOT_LAYER_ACCESS_KEY
 @bot.on(events.MessageEdited(pattern=r".screencapture (.*)", outgoing=True))
 async def _(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if e.fwd_from:
-            return
         if SCREEN_SHOT_LAYER_ACCESS_KEY is None:
             await e.edit(
                 "Need to get an API key from https://screenshotlayer.com/product \nModule stopping!"
