@@ -4,7 +4,7 @@ import sqlite3
 from userbot import LOGGER, LOGGER_GROUP
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.get notes$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^\.get notes$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.get notes$"))
 async def notes_active(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -13,30 +13,30 @@ async def notes_active(e):
         except:
             await e.edit("`Running on Non-SQL mode!`")
             return
-        transact = "Messages saved in this chat: \n\n"
-        E = get_notes(e.chat_id)
-        for i in E:
-            transact = transact + "🔹 " + i.keyword + "\n"
-        await e.edit(transact)
+
+        notes = get_notes(e.chat_id)
+        message = '`There are no saved notes in this chat`'
+        if notes:
+            message = "Messages saved in this chat: \n\n"
+            for note in notes:
+                message = message + "🔹 " + note.keyword + "\n"
+        await e.edit(message)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.nosave (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.nosave (.*)"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^\.nosave (\w*)"))
 async def remove_notes(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
-            from userbot.modules.sql_helper.notes_sql import remove_notes
+            from userbot.modules.sql_helper.notes_sql import rm_note
         except:
             await e.edit("`Running on Non-SQL mode!`")
             return
-        message = e.text
-        kek = message.split(" ")
-        remove_notes(e.chat_id, kek[1])
+        notename = e.pattern_match.group(1)
+        rm_note(e.chat_id, notename)
         await e.edit("```Note removed successfully```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.addnote (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.addnote (.*)"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^\.addnote (\w*)"))
 async def add_filter(e):
     if not e.text[0].isalpha():
         try:
@@ -44,18 +44,16 @@ async def add_filter(e):
         except:
             await e.edit("`Running on Non-SQL mode!`")
             return
-        message = e.text
-        kek = message.split()
-        string = ""
-        for i in range(2, len(kek)):
-            string = string + " " + str(kek[i])
-        add_note(str(e.chat_id), kek[1], string)
-        await e.edit(
-            "```Note added successfully. Use # followed by note name, to get it```"
-        )
+        notename = e.pattern_match.group(1)
+        string = e.text.partition(notename)[2]
+        if e.reply_to_msg_id:
+            rep_msg = await e.get_reply_message()
+            string = rep_msg.text
+        add_note(str(e.chat_id), notename, string)
+        await e.edit("`Note added successfully. Use` #{} `to get it`".format(notename))
 
 
-@bot.on(events.NewMessage(pattern="#*"))
+@bot.on(events.NewMessage(pattern="#\w*"))
 async def incom_note(e):
     try:
         if not (await e.get_sender()).bot:
@@ -63,32 +61,28 @@ async def incom_note(e):
                 from userbot.modules.sql_helper.notes_sql import get_notes
             except:
                 return
-            listes = e.text[1:]
-            E = get_notes(e.chat_id)
-            for t in E:
-                if listes == t.keyword:
-                    await e.reply(t.reply)
+            notename = e.text[1:]
+            notes = get_notes(e.chat_id)
+            for note in notes:
+                if notename == note.keyword:
+                    await e.reply(note.reply)
                     return
     except:
         pass
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.rmnotes$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.rmnotes$"))
-async def remove_notes(e):
+@bot.on(events.NewMessage(outgoing=True, pattern="^\.rmnotes$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^\.rmnotes$"))
+async def purge_notes(e):
+    try:
+        from userbot.modules.sql_helper.notes_sql import rm_all_notes
+    except:
+        await e.edit("`Running on Non-SQL mode!`")
+        return
     if not e.text[0].isalpha():
-        await e.edit("```Purging all Marie notes.```")
-        time.sleep(3)
-        r = await e.get_reply_message()
-        filters = r.text.split("-")[1:]
-        for filter in filters:
-            await e.reply("/clear %s" % (filter.strip()))
-            await asyncio.sleep(0.3)
-        await e.respond("/save save @baalajimaestro kicked them all")
-        await e.respond(
-            "```Successfully cleaned Marie notes yaay!```\n Gimme cookies @baalajimaestro"
-        )
+        await e.edit("```Purging all notes.```")
+        rm_all_notes(str(e.chat_id))
         if LOGGER:
             await bot.send_message(
-                LOGGER_GROUP, "I cleaned all Marie notes at " + str(e.chat_id)
+                LOGGER_GROUP, "I cleaned all notes at " + str(e.chat_id)
             )
