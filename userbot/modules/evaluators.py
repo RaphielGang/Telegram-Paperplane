@@ -1,7 +1,7 @@
 import inspect
 import hastebin
 import subprocess
-from userbot import LOGGER, LOGGER_GROUP
+from userbot import *
 from telethon import TelegramClient, events
 from userbot import bot
 

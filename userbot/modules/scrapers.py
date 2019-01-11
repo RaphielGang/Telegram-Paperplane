@@ -38,7 +38,7 @@ async def img_sampler(e):
         await bot.send_file(await bot.get_input_entity(e.chat_id), lst)
         end = round(time.time() * 1000)
         msstartend = int(end) - int(start)
-        await e.edit("Done. Time taken: " + str(msstartend) + "s")
+        await e.delete()
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern=r"^.google (.*)"))
@@ -48,11 +48,8 @@ async def gsearch(e):
         match = e.pattern_match.group(1)
         result_ = subprocess.run(["gsearch", match], stdout=subprocess.PIPE)
         result = str(result_.stdout.decode())
-        await bot.send_message(
-            await bot.get_input_entity(e.chat_id),
-            message="**Search Query:**\n`" + match + "`\n\n**Result:**\n" + result,
-            reply_to=e.id,
-            link_preview=False,
+        await e.edit(
+            "**Search Query:**\n`" + match + "`\n\n**Result:**\n" + result
         )
         if LOGGER:
             await bot.send_message(
@@ -67,11 +64,8 @@ async def wiki(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         match = e.pattern_match.group(1)
         result = wikipedia.summary(match)
-        await bot.send_message(
-            await bot.get_input_entity(e.chat_id),
-            message="**Search:**\n`" + match + "`\n\n**Result:**\n" + result,
-            reply_to=e.id,
-            link_preview=False,
+        await e.edit(
+            "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
         )
         if LOGGER:
             await bot.send_message(
