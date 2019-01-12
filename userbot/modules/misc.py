@@ -6,6 +6,7 @@ from userbot import bot
 import time
 from datetime import datetime
 from telethon import TelegramClient, events
+from userbot.modules.rextester.api import CompilerError, Rextester
 from userbot import LOGGER, LOGGER_GROUP
 
 
@@ -280,3 +281,37 @@ async def chatidgetter(e):
                 else:
                     name = "*" + message.forward.sender.first_name + "*"
             await e.edit("**Name:** {} \n**User ID:** `{}`".format(name, user_id))
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^\$"))
+async def rextestercli(e):
+    stdin = ""
+    message = e.text
+
+    if len(message.split()) > 1:
+        regex = re.search('^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$', message, re.IGNORECASE)
+        language = regex.group(1)
+        code = regex.group(2)
+        stdin = regex.group(3)
+
+
+
+        try:
+            regexter = Rextester(language, code, stdin)
+        except CompilerError as exc:
+            await e.edit(str(exc))
+            return
+
+        output = ""
+        output += "**Language:**\n```{}```".format(language)
+        output += "\n\n**Source:** \n```{}```".format(code)
+
+        if regexter.result:
+            output += "\n\n**Result:** \n```{}```".format(regexter.result)
+
+        if regexter.warnings:
+            output += "\n\n**Warnings:** \n```{}```\n".format(regexter.warnings)
+
+        if regexter.errors:
+            output += "\n\n**Errors:** \n'```{}```".format(regexter.errors)
+
+        await e.edit(output)
