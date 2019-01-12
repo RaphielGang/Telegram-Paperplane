@@ -1,5 +1,5 @@
 import asyncio, subprocess
-import time
+import time, re, io
 from userbot import bot, LOGGER, LOGGER_GROUP, HELPER
 from telethon import events, functions, types
 from telethon.events import StopPropagation
@@ -10,6 +10,7 @@ from lmgtfy import lmgtfy
 from collections import deque
 from telethon.tl.functions.users import GetFullUserRequest
 from userbot.events import register
+from userbot.modules.rextester.api import UnknownLanguage, Rextester
 
 @register(outgoing=True, pattern="^.leave$")
 async def leave(e):
@@ -115,6 +116,52 @@ async def _(event):
     for channel_obj in result.chats:
         output_str += f"- {channel_obj.title} @{channel_obj.username} \n"
     await event.edit(output_str)
+
+@register(outgoing=True, pattern="^\$")
+async def rextestercli(e):
+    stdin = ""
+    message = e.text
+    chat = await e.get_chat()
+
+    if len(message.split()) > 1:
+        regex = re.search(
+            r"^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$",
+            message,
+            re.IGNORECASE,
+        )
+        language = regex.group(1)
+        code = regex.group(2)
+        stdin = regex.group(3)
+
+        try:
+            rextester = Rextester(language, code, stdin)
+            res = await rextester.exec()
+        except UnknownLanguage as exc:
+            await e.edit(str(exc))
+            return
+
+        output = ""
+        output += f"**Language:**\n```{language}```"
+        output += f"\n\n**Source:** \n```{code}```"
+
+        if res.result:
+            output += f"\n\n**Result:** \n```{res.result}```"
+
+        if res.warnings:
+            output += f"\n\n**Warnings:** \n```{res.warnings}```\n"
+
+        if res.errors:
+            output += f"\n\n**Errors:** \n'```{res.errors}```"
+
+        if len(res.result) > 4096:
+            with io.BytesIO(str.encode(res.result)) as out_file:
+                out_file.name = "result.txt"
+                await bot.send_file(chat.id, file = out_file)
+                await e.edit(code)
+            return
+
+        await e.edit(output)
+
 
 HELPER.update({
     "leave": "Leave a Chat"
