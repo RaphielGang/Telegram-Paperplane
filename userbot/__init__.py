@@ -2,7 +2,6 @@ import sqlite3
 import subprocess
 import sys, os
 import dotenv
-
 dotenv.load_dotenv("config.env")
 BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
@@ -107,6 +106,7 @@ except NameError:
     DB_URI = os.environ.get("DB_URI", None)
     SCREEN_SHOT_LAYER_ACCESS_KEY = os.environ.get("SCREEN_SHOT_LAYER_ACCESS_KEY", None)
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
+    SUDO = os.environ.get("SUDO", None)
     if CONSOLE_LOGGER_VERBOSE:
         logging.basicConfig(
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
