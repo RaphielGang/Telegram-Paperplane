@@ -6,8 +6,8 @@ from userbot import LOGGER, LOGGER_GROUP
 import time
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.fastpurge$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.fastpurge$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.purge$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.purge$"))
 async def fastpurger(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         chat = await e.get_input_chat()
@@ -34,7 +34,6 @@ async def fastpurger(e):
                 LOGGER_GROUP, "Purge of " + str(count) + " messages done successfully."
             )
         time.sleep(2)
-        i = 1
         await r.delete()
 
 

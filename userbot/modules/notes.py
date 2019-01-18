@@ -4,8 +4,8 @@ import sqlite3
 from userbot import LOGGER, LOGGER_GROUP
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^\.get notes$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.get notes$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^\.saved$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^\.saved$"))
 async def notes_active(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -23,7 +23,7 @@ async def notes_active(e):
         await e.edit(message)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^\.nosave (\w*)"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^\.clear (\w*)"))
 async def remove_notes(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -36,7 +36,7 @@ async def remove_notes(e):
         await e.edit("```Note removed successfully```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^\.addnote (\w*)"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^\.save (\w*)"))
 async def add_filter(e):
     if not e.text[0].isalpha():
         try:

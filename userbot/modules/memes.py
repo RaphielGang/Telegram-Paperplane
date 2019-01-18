@@ -312,7 +312,6 @@ async def runner_lol(e):
                 "Runs to Marie",
                 "This Group is too cancerous to deal with.",
                 "Cya bois",
-                "I am just retarded",
                 "Kys",
                 "I am a mad person. Plox Ban me.",
                 "I go away",
