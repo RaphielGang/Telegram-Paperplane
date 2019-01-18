@@ -126,10 +126,11 @@ async def set_afk(e):
 @bot.on(events.NewMessage(outgoing=True))
 @bot.on(events.MessageEdited(outgoing=True))
 async def type_afk_is_not_true(e):
-            global ISAFK
-            global COUNT_MSG
-            global USERS
-            global AFKREASON
+        global ISAFK
+        global COUNT_MSG
+        global USERS
+        global AFKREASON
+        if ISAFK:
             ISAFK = False
             await e.respond("I'm no longer AFK.")
             x=await e.respond(
