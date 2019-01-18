@@ -25,6 +25,7 @@ async def pipcheck(e):
         await e.edit(r)
 
 
+######Will put del.dog later lmao sorry Tillie
 @bot.on(events.NewMessage(outgoing=True, pattern="^.paste?(\\s)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.paste?(\\s)"))
 async def haste_paste(e):
@@ -258,7 +259,7 @@ async def sysdetails(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botversion$"))
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("`UserBot Version: Modular r2.1`")
+        await e.edit("`UserBot Version: Modular r2.1.1-b`")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.userid$"))

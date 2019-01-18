@@ -11,8 +11,8 @@ from telethon import TelegramClient, events
 from userbot import bot, SPAM, SPAM_ALLOWANCE, BRAIN_CHECKER, LOGGER_GROUP, LOGGER
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.wizard$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.wizard$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.promote$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
 async def wizzard(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         rights = ChannelAdminRights(
@@ -32,8 +32,8 @@ async def wizzard(e):
         await e.edit("A perfect magic has happened!")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.thanos$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.thanos$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.ban$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.ban$"))
 async def thanos(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         rights = ChannelBannedRights(
@@ -75,8 +75,8 @@ async def thanos(e):
             )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.spider$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.spider$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.mute$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.mute$"))
 async def spider(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
@@ -100,10 +100,9 @@ async def spider(e):
                 str((await e.get_reply_message()).sender_id) + " was muted.",
             )
 
-
+##############POTENTIALLY MAY WORK
 @bot.on(events.NewMessage(incoming=True, pattern="<triggerban>"))
 async def triggered_ban(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
         ban_id = int(e.text[13:])
         if e.sender_id in BRAIN_CHECKER:  # non-working module#
@@ -128,38 +127,8 @@ async def triggered_ban(e):
             await bot.send_message(e.chat_id, "Job was done, Master! Gimme Cookies!")
 
 
-@bot.on(events.NewMessage(incoming=True, pattern="<triggermute>"))
-async def triggered_mute(e):
-    message = e.text
-    ban_id = int(e.text[14:])
-    if e.sender_id in BRAIN_CHECKER:
-        rights = ChannelBannedRights(
-            until_date=None,
-            view_messages=True,
-            send_messages=True,
-            send_media=True,
-            send_stickers=True,  # non-working module#
-            send_gifs=True,
-            send_games=True,
-            send_inline=True,
-            embed_links=True,
-        )
-        if ban_id in BRAIN_CHECKER:
-            await e.edit("`Sorry Master!`")
-            return
-        await e.edit("`Command from my Master!`")
-        time.sleep(5)
-        await bot(
-            EditBannedRequest(
-                e.chat_id, (await e.get_reply_message()).sender_id, rights
-            )
-        )
-        await e.delete()
-        await bot.send_file(e.chat_id, "Job was done, Master! Gimme Cookies!")
-
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^.speak$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.speak$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
 async def unmute(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         from userbot.modules.sql_helper.spam_mute_sql import unmute
@@ -198,8 +167,8 @@ async def unmute(e):
         await e.edit("```Ungmuted Successfully```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.gspider$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.gspider$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.gmute$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.gmute$"))
 async def spider(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
