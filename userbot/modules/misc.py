@@ -316,3 +316,49 @@ async def rextestercli(e):
             output += "\n\n**Errors:** \n'```{}```".format(regexter.errors)
 
         await e.edit(output)
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.unmutechat$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmutechat$"))
+async def unmute_chat(e):
+        if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+            try:
+                from userbot.modules.sql_helper.keep_read_sql import unkread
+            except:
+                await e.edit('`Running on Non-SQL Mode!`')
+            unkread(str(e.chat_id))
+            await e.edit("```Unmuted this chat Successfully```")
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.mutechat$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.mutechat$"))
+async def mute_chat(e):
+        if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+            try:
+                from userbot.modules.sql_helper.keep_read_sql import kread
+            except Exception as er:
+                print(er)
+                await e.edit("`Running on Non-SQL mode!`")
+                return
+            await e.edit(str(e.chat_id))
+            kread(str(e.chat_id))
+            await e.edit("`Shush! This chat will be silenced!`")
+            if LOGGER:
+                await bot.send_message(
+                    LOGGER_GROUP,
+                    str(e.chat_id) + " was silenced.")
+
+
+@bot.on(events.NewMessage(incoming=True))
+@bot.on(events.MessageEdited(incoming=True))
+async def keep_read(e):
+    try:
+        from userbot.modules.sql_helper.keep_read_sql import is_kread
+    except:
+        return
+    K = is_kread()
+    if K:
+      for i in K:
+        if i.groupid == str(e.chat_id):
+            print("In")
+            await bot.send_read_acknowledge(e.chat_id)
