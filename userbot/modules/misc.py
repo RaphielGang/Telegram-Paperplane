@@ -360,5 +360,4 @@ async def keep_read(e):
     if K:
       for i in K:
         if i.groupid == str(e.chat_id):
-            print("In")
             await bot.send_read_acknowledge(e.chat_id)
