@@ -228,8 +228,8 @@ async def support_channel(e):
         await e.edit("t.me/maestro_userbot_channel")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.sysdetails$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysdetails$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.sysd$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
 async def sysdetails(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         r = (

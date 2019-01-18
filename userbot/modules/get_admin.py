@@ -5,7 +5,7 @@ from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator
 from telethon.errors import ChatAdminRequiredError, InputUserDeactivatedError
 
 
-@bot.on(events.NewMessage(pattern="^.chatadmin (.*)", outgoing=True))
+@bot.on(events.NewMessage(pattern="^.adminlist (.*)", outgoing=True))
 async def get_admin(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         mentions = "**Admins in this Chat**: \n"

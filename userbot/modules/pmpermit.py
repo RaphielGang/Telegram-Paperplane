@@ -4,11 +4,12 @@ import sqlite3
 from telethon import TelegramClient, events
 from userbot import bot
 from userbot import PM_AUTO_BAN
-from userbot import COUNT_PM
+from userbot import COUNT_PM,NOTIF_OFF
 from userbot import LOGGER, LOGGER_GROUP
 
 
 @bot.on(events.NewMessage(incoming=True))
+@bot.on(events.MessageEdited(incoming=True))
 async def permitpm(e):
     if PM_AUTO_BAN:
         global COUNT_PM
@@ -18,12 +19,16 @@ async def permitpm(e):
             except:
                 return
             E = is_approved(e.chat_id)
-            if not E:
+            if not E and e.text != "`Bleep Blop! This is a Bot. Don't fret. \n\nMy Master hasn't approved you to PM. \
+Please wait for my Master to look in, he would mostly approve PMs.\n\n\
+As far as i know, he doesn't usually approve Retards.`" :
                 await e.reply(
                     "`Bleep Blop! This is a Bot. Don't fret. \n\nMy Master hasn't approved you to PM. \
 Please wait for my Master to look in, he would mostly approve PMs.\n\n\
 As far as i know, he doesn't usually approve Retards.`"
                 )
+                if NOTIF_OFF:
+                    await bot.send_read_acknowledge(e.chat_id)
                 if e.chat_id not in COUNT_PM:
                     COUNT_PM.update({e.chat_id: 1})
                 else:
@@ -46,6 +51,22 @@ As far as i know, he doesn't usually approve Retards.`"
                             + ")"
                             + " was just another retarded nibba",
                         )
+
+
+@bot.on(events.NewMessage(outgoing=True,pattern="^.notifoff$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifoff$"))
+async def notifoff(e):
+    global NOTIF_OFF
+    NOTIF_OFF=True
+    await e.edit("`Notifications silenced!`")
+
+
+@bot.on(events.NewMessage(outgoing=True,pattern="^.notifon$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifon$"))
+async def notifoff(e):
+    global NOTIF_OFF
+    NOTIF_OFF=False
+    await e.edit("`Notifications unmuted!`")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.approve$"))
