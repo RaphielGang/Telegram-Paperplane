@@ -2,7 +2,7 @@ from telethon import TelegramClient, events
 from userbot import bot
 import time
 from userbot import COUNT_MSG, USERS, ISAFK, AFKREASON, LOGGER, LOGGER_GROUP
-
+from telethon.events import StopPropagation
 
 @bot.on(events.NewMessage(incoming=True))
 async def mention_afk(e):
@@ -113,7 +113,10 @@ async def not_afk(e):
 async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
-        string = str(message[8:])
+        try:
+            string = str(message[5:])
+        except:
+            string=''
         global ISAFK
         global AFKREASON
         ISAFK = True
@@ -121,6 +124,7 @@ async def set_afk(e):
         if string != "":
             AFKREASON = string
         await bot.send_message(LOGGER_GROUP, "You went AFK!")
+        raise StopPropagation
 
 
 @bot.on(events.NewMessage(outgoing=True))
