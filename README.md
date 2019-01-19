@@ -1,117 +1,169 @@
-# Telegram-UserBot 
+# Telegram-UserBot
 
-[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
+ [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot) [![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/modular/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot) [![codecov](https://codecov.io/gh/baalajimaestro/Telegram-UserBot/branch/modular/graph/badge.svg)](https://codecov.io/gh/baalajimaestro/Telegram-UserBot)
 
-### If you see the semaphore badge showing passed, still running on your local PC gives syntax it must be very clear that it isn't a problem with the source, you need to check your compiler
+### If the travis ci build passed, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
 ```diff
 - #include <std/disclaimer.h>
 - /
-- Your Telegram account may be banned.
-- I am not responsible for improper use of this bot
-- This bot is to have fun memes
-- Manage group in an efficient manner
-- Ending up spamming in groups, getting reported, and Telegram Team deleted your account?
-- And then you point the finger at me for getting yourself reported?
-- I will laugh at you, because thats gay af
+- Your Telegram account may get banned.
+- I am not responsible for any improper use of this bot
+- This bot is intended for the purpose of having fun with memes
+- as well as efficiently managing groups
+- You ended up spamming groups, getting reported left and right,
+- and the Telegram Team deleted your account?
+- And then you pointed your fingers at me for getting yourself reported?
+- I will laugh at you.
 - /
 ```
 
-# Contact 
-Join the [news channel](https://t.me/maestro_userbot_channel) if you just want to stay in the loop about new features or
-announcements.
+A modular telegram Python UserBot running on python3 with an sqlalchemy database.
 
-If you found any bugs or you wanna suggest some features then contact [My support group](https://t.me/userbot_support).
+Started up as a simple bot, which helps with deleting messages and other stuffs when I didn't possess a smartphone(selecting each message indeed difficult) with a ton of meme features kanged from [SkittBot](https://github.com/skittles9823/SkittBot), it has evolved, becoming extremely modular and simple to use.
 
-- This Readme might go out-of-date at any point, as I push notifications for all updates to my [support channel](https://t.me/maestro_userbot_channel). I recommend subscribing to the channel, for timely updates and fixes.
 
-## Dependencies:
+If you just want to stay in the loop about new features or
+announcements you can join the [news channel](https://t.me/maestro_userbot_channel).
 
-- SQL DB, Can be Postgres/MySQL or anything, basically the bot uses SQLAlchemy
+If you find any bugs or have any suggestions then don't hesitate to contact me in [my support group](https://t.me/userbot_support).
 
-- Neofetch(in case you need sysdetails)
+- This README is not guaranteed to always be up to date, refer to the [support channel](https://t.me/maestro_userbot_channel) for the latest informations.
+
+## Getting your own userbot up and running:
+
+**Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
 
 ### Before you start:
-Get your api-id(API_KEY in my code), API_HASH from my.telegram.org.<br/><br>
-Create an empty group, add marie, or any of its clone, find group id, then copy it and this is your LOGGER(Incase you want logging) It can be very well turned off<br/><br/>
-**Please read through this before cloning. I don't want you get stuck anywhere. This guide can get you running up the userbot, if followed properly**
+Get your api-id (called `API_KEY` in this bot) and API_HASH from my.telegram.org.
 
-#### Running on heroku:
-```diff
--If you clone/fork this repo please make sure you generate a session file  by running app.py on your local pc before deploying it on heroku.
+Optional: Create an empty group, add Marie, or any forks, get the group id, copy it and set it as your `LOGGER` (in case you want logging).
+
+### Database
+
+If you wish to use a database-dependent module (eg: locks, notes, userinfo, users, filters, welcomes),
+you'll need to have a database installed on your system. I use postgres, so I recommend using it for optimal compatibility.
+
+In the case of postgres, this is how you would set up a the database on a debian/ubuntu system. Other distributions may vary.
+
+- install postgresql:
+
+`sudo apt-get update && sudo apt-get install postgresql`
+
+- change to the postgres user:
+
+`sudo su - postgres`
+
+- create a new database user (change YOUR_USER appropriately):
+
+`createuser -P -s -e YOUR_USER`
+
+This will be followed by you needing to input your password.
+
+- create a new database table:
+
+`createdb -O YOUR_USER YOUR_DB_NAME`
+
+Change YOUR_USER and YOUR_DB_NAME appropriately.
+
+- finally:
+
+`psql YOUR_DB_NAME -h YOUR_HOST YOUR_USER`
+
+This will allow you to connect to your database via your terminal.
+By default, YOUR_HOST should be 127.0.0.1:5432.
+
+You should now be able to build your database URI. This will be:
+
+`sqldbtype://username:pw@hostname:port/db_name`
+
+Replace sqldbtype with whichever db youre using (eg postgres, mysql, sqllite, etc)
+repeat for your username, password, hostname (localhost?), port (5432?), and db name.
+
+
+### Configuration:
+
+There are two possible ways of configuring your bot: a config.env file, or ENV variables.
+
+The prefered version is to use a `config.env` file, as it makes it easier to see all your settings grouped together.
+This file should be placed in the topmost part of the repo.
+This is where your `API KEYS` will be loaded from, as well as your `database URI` (if you're using a database), and most of
+your other settings.
+
+An example `config.env` file could be:
+```
+    API_KEY=123456
+    BUILD_CHOICE="bleeding"
+    API_HASH='4588acb1863ead924119c885dfffba2'
+    LOGGER_GROUP=-1001200493567
+    LOGGER=True    #Incase you want to turn off logging, put this to false
+    TRT_ENABLE=False
+    PM_AUTO_BAN=True
+    CONSOLE_LOGGER_VERBOSE=True
+    SCREEN_SHOT_LAYER_ACCESS_KEY="get from screenshot layer website google it "
+    OPEN_WEATHER_MAP_APPID="get it from openweather site"    
+    DB_URI="postgres://userbot:mypass@localhost:5432/userbot"
 ```
 
-- Fork my repo.
+If you can't have a config.env file, or you missed to type something on `config.env` but then pushed it up, it is also possible to use environment variables.
 
-- Download/Clone it in your linux PC, then follow instructions on Running on linux(below), this will generate a userbot.session file, which is needed to run your bot.
 
-- You can choose bleeding edge builds which might be buggy, else can choose from release tags.
-
-- If you use a bleeding edge, your botversion will bear `b` on the botversion
-
-##### The session is the key to your telegram account, pushing it to github will grant any person access to your telegram account.
-#####  You must be extra careful when you push to github. Though my gitignore avoids session files, I am still notifying this,
-#####  coz it causes serious consequences if the session reaches the wrong hands
-
-- Push it with the heroku cli
-
+#### Running on Heroku:
+1. **Make sure to generate a session file, by running app.py on your local pc before deploying it on Heroku.**
+- Make sure you followed the instruction to setup the config file/ENV variables.
+- If you need Database Commands, provision a heroku postgres instance.
+- Push you bot along with `config.env` and `userbot.session` with the heroku cli, you need `git add -f` to add both of them.
 - Deploy.
 
-#### Running on linux:
-- Clone my repo: `git clone https://github.com/baalajimaestro/Telegram-UserBot`
+## Starting the bot.
 
-- Install the necessary dependencies by moving to the project directory and running: `pip3 install -r requirements.txt`
+Once you've setup your database and your configuration (see below) is complete, simply run:
 
-- Add your API_KEY, API_HASH and LOGGER, and other stuff to config.py(You need to create it, a sample is provided)
-
-- Remove the warning provided in sample_config, it is to avoid just rename and leave cases
-
-- Or you use them as ENV Variables, upto your ease
-
-- Start the userbot: `python3 -m userbot`
-
-#### Running on Windows: 
-
-- Use the exclusive script provided
-
-- Setup the config as in linux
-
-- Pip install just telethon
-
-- Start the bot `python3 windows_startup_script.py`
+`python3 -m userbot`
 
 ### Commands available(might go horribly out-of-date anytime):
 
------`.` stands for any random character, it is made for the ease of the user------
+> `.` stands for any random special character like *,&,^,% , it is made for the ease of the user
 
 #### Utilities
+
 - `.approvepm`: approve DMing
 - `.iamafk`: Sets you as AFK
 - `.notafk`: Sets you as not AFK, and gives you brief list if who messaged you while you were away
-- `.addfilter trigger response`: Adds a filter in that group, if text is contained in incoming message, bot replies with the reply
-- `.nofilter trigger`: removes the filter text from the current group
-- `.rmfilters`: remove all filters
-- `.get filters`: fetch all filters set in the userbot in that chat
 - `.chatid`: show chat id
 - `.userid`: show user id
 - `.getqr`: encrypt QRCode
 - `.screencapture`
+- `.weather`
+- `.updatebleeding`
+- `.updatestable`
 
-#### Notes
+#### Filters:
+
+- `.addfilter trigger response`
+- `.nofilter trigger`
+- `.rmfilters`
+- `.get filters`
+
+
+#### Notes:
+
 - `.get notes`
 - `.nosave`
 - `.addnote`
 - `.rmnotes`
 
 
-#### Purge
+#### Purgers:
+
 - `.fastpurge`
 - `.purgeme`
 - `.delmsg`
 - `.editme`
 - `.sd`
 
-#### Scraper:
+#### Scrapers:
+
 - `.img`
 - `.google`
 - `.wiki`
@@ -121,27 +173,27 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 - `.lang`: change language
 
 #### Admin Commands:
+
 - `.wizard`: promote user
 - `.thanos`: ban user
-- `.spider`: mute user
+- `.spider`: mute user(doesnt use TG API mute)
 - `.speak`: unmute user
 
 #### MISC
 - `.pip`
 - `.pingme`: pings server
 - `.paste`: paste code in hastebin
-- `.log`
-- `.log silent`: logs the message but silently
+- `.log`: Save the message in your logs
 - `.speed`: speed test
 - `.hash`
 - `.random`
 - `.alive`: check if bot is running
 - `.restart`: restart the bot
 - `.shutdown`: shutdown the bot
-- `.real_shutdown`: REALLY shutdown the bot
+- `.shutdown`: REALLY shutdown the bot
 - `.support`: get support
 - `.supportchannel`: get support
-- `.repo`: show the repo
+- `.repo`: link to this repo
 - `.sysdetails`
 - `.botversion`
 - `.term`: execute terminal commands
@@ -155,25 +207,62 @@ Create an empty group, add marie, or any of its clone, find group id, then copy 
 - `.zal`
 - `.owo`
 - `.react`
-- `.shg`: ¯\_(ツ)_/¯
+- `.shg`: * Shrugs *
 - `.runs`: random message
 - `.disable runs`
 - `.enable runs`
 - `.mock`
+- `.clap`
+
+### Creating your own modules.
+
+Creating a module has been simplified as much as possible - but do not hesitate to suggest further simplification.
+
+All that is needed is that your .py file be in the modules folder.
+
+To add commands, make sure to import the the primary bot via
+
+`from userbot import bot`.
+
+
+and
+
+
+telethon's important stuff via
+
+`from telethon import events`
+
+You can then add commands wrapping them under
+
+```
+@bot.on(events.NewMessage(outgoing=True,pattern=""))
+async def some_function(e):
+     Whatever here.
+```
+
+
+You can also set outgoing to incoming incase, you wanna make that command to parse the incoming message.
+
+The command pattern will be regex. Hope you know it, else feel free to hop on [here](https://regexone.com)
+
+Use asynchronous functions, and await the functions.
+
+Should you need assistance with telethon library check out their [documentation](http://telethon.readthedocs.io/) or get support from [them](https://t.me/TelethonChat)
 
 
 ### Credits:
 
 I would like to thank people who assisted me throughout this project:
 
-[@YouTwitFace](https://github.com/YouTwitFace)<br/>
-[@TheDevXen](https://github.com/TheDevXen)<br/>
-[@Skittles9823](https://github.com/Skittles9823)<br/>
-[@deletescape](https://github.com/deletescape)<br/>
-[@songotenks69](https://github.com/songotenks69)<br/>
-[@Ovenoboyo](https://github.com/Ovenoboyo)<br/>
-[SphericalKat](https://github.com/ATechnoHazard)<br/>
-<br/>
-and much more people I haven't mentioned here too.
+* [@YouTwitFace](https://github.com/YouTwitFace)
+* [@TheDevXen](https://github.com/TheDevXen)
+* [@Skittles9823](https://github.com/Skittles9823)
+* [@deletescape](https://github.com/deletescape)
+* [@songotenks69](https://github.com/songotenks69)
+* [@Ovenoboyo](https://github.com/Ovenoboyo)
+* [SphericalKat](https://github.com/ATechnoHazard)
+* [nitamarcel](https://github.com/nitanmarcel)
 
-Found Bugs? Start up an issue on issue tracker, or feel free to post in my support group.
+and many more people who aren't mentioned here.
+
+Found Bugs? Create an issue on the issue tracker, or post it in the [support group](https://t.me/userbot_support).
