@@ -127,9 +127,9 @@ Once you've setup your database and your configuration (see below) is complete, 
 
 #### Utilities
 
-- `.approvepm`: approve DMing
-- `.iamafk`: Sets you as AFK
-- `.notafk`: Sets you as not AFK, and gives you brief list if who messaged you while you were away
+- `.approve`: approve DMing
+- `.afk`: Sets you as AFK
+- `just send a message Anywhere To Remove afk`: Sets you as not AFK, and gives you brief list if who messaged you while you were away
 - `.chatid`: show chat id
 - `.userid`: show user id
 - `.getqr`: encrypt QRCode
@@ -140,23 +140,23 @@ Once you've setup your database and your configuration (see below) is complete, 
 
 #### Filters:
 
-- `.addfilter trigger response`
-- `.nofilter trigger`
+- `.filter trigger response`
+- `.stop trigger`
 - `.rmfilters`
-- `.get filters`
+- `.filters`
 
 
 #### Notes:
 
-- `.get notes`
-- `.nosave`
-- `.addnote`
+- `.saved`
+- `.clear`
+- `.save`
 - `.rmnotes`
 
 
 #### Purgers:
 
-- `.fastpurge`
+- `.purge`
 - `.purgeme`
 - `.delmsg`
 - `.editme`
@@ -174,10 +174,14 @@ Once you've setup your database and your configuration (see below) is complete, 
 
 #### Admin Commands:
 
-- `.wizard`: promote user
-- `.thanos`: ban user
-- `.spider`: mute user(doesnt use TG API mute)
-- `.speak`: unmute user
+- `.promote`: promote user
+- `.ban`: ban user
+- `.mute`: mute user(doesnt use TG API mute)
+- `.unmute`: unmute user
+
+#### Global Commands
+- `.gmute`: Global Mute a User.
+- `.ungmute`: Ungmute a User!.
 
 #### MISC
 - `.pip`
@@ -194,7 +198,7 @@ Once you've setup your database and your configuration (see below) is complete, 
 - `.support`: get support
 - `.supportchannel`: get support
 - `.repo`: link to this repo
-- `.sysdetails`
+- `.sysd`
 - `.botversion`
 - `.term`: execute terminal commands
 
