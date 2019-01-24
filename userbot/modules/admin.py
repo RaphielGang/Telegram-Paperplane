@@ -12,7 +12,7 @@ from userbot import bot, SPAM, SPAM_ALLOWANCE, BRAIN_CHECKER, LOGGER_GROUP, LOGG
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.promote$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
 async def wizzard(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         rights = ChannelAdminRights(
@@ -33,7 +33,7 @@ async def wizzard(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ban$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.ban$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.ban$"))
 async def thanos(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         rights = ChannelBannedRights(
@@ -76,7 +76,7 @@ async def thanos(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.mute$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.mute$"))
 async def spider(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
@@ -128,7 +128,7 @@ async def triggered_ban(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
 async def unmute(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         from userbot.modules.sql_helper.spam_mute_sql import unmute
@@ -138,7 +138,7 @@ async def unmute(e):
 
 
 @bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+#@bot.on(events.MessageEdited(incoming=True))
 async def muter(e):
     try:
         from userbot.modules.sql_helper.spam_mute_sql import is_muted
@@ -156,7 +156,7 @@ async def muter(e):
             await e.delete()
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
 async def unmute(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -168,7 +168,7 @@ async def unmute(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.gmute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.gmute$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.gmute$"))
 async def spider(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:

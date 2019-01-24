@@ -9,7 +9,7 @@ from userbot import LOGGER, LOGGER_GROUP
 
 
 @bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+#@bot.on(events.MessageEdited(incoming=True))
 async def permitpm(e):
     if PM_AUTO_BAN:
         global COUNT_PM
@@ -54,7 +54,7 @@ As far as i know, he doesn't usually approve Retards.`"
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern="^.notifoff$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifoff$"))
+#@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifoff$"))
 async def notifoff(e):
     global NOTIF_OFF
     NOTIF_OFF=True
@@ -62,7 +62,7 @@ async def notifoff(e):
 
 
 @bot.on(events.NewMessage(outgoing=True,pattern="^.notifon$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifon$"))
+#@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifon$"))
 async def notifoff(e):
     global NOTIF_OFF
     NOTIF_OFF=False
@@ -70,7 +70,7 @@ async def notifoff(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.approve$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.approve$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.approve$"))
 async def approvepm(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:

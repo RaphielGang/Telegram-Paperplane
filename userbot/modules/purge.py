@@ -7,7 +7,7 @@ import time
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.purge$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.purge$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.purge$"))
 async def fastpurger(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         chat = await e.get_input_chat()
@@ -38,7 +38,7 @@ async def fastpurger(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.purgeme"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.purgeme"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.purgeme"))
 async def purgeme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -65,7 +65,7 @@ async def purgeme(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.delmsg$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.delmsg$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.delmsg$"))
 async def delmsg(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         i = 1
@@ -77,7 +77,7 @@ async def delmsg(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.editme"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.editme"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.editme"))
 async def editer(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -94,7 +94,7 @@ async def editer(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.sd"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sd"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.sd"))
 async def selfdestruct(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text

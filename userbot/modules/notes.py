@@ -5,7 +5,7 @@ from userbot import LOGGER, LOGGER_GROUP
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^\.saved$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^\.saved$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^\.saved$"))
 async def notes_active(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -72,7 +72,7 @@ async def incom_note(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^\.rmnotes$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^\.rmnotes$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^\.rmnotes$"))
 async def purge_notes(e):
     try:
         from userbot.modules.sql_helper.notes_sql import rm_all_notes

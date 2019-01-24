@@ -53,7 +53,7 @@ def separate_sed(sed_string):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^sed"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^sed"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^sed"))
 async def sed(e):
     sed_result = separate_sed(e.text)
     L = await e.get_reply_message()

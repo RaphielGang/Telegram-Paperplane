@@ -7,7 +7,7 @@ from userbot import bot
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.eval"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.eval"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.eval"))
 async def evaluate(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         evaluation = eval(e.text[6:])
@@ -43,7 +43,7 @@ async def evaluate(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern=r"^.exec (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.exec (.*)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.exec (.*)"))
 async def run(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         code = e.raw_text[5:]
@@ -79,7 +79,7 @@ async def run(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.term"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.term"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.term"))
 async def terminal_runner(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text

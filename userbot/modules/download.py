@@ -25,7 +25,7 @@ def progress(current, total):
 
 
 @bot.on(events.NewMessage(pattern=r".download ?(.*)", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r".download ?(.*)", outgoing=True))
+#@bot.on(events.MessageEdited(pattern=r".download ?(.*)", outgoing=True))
 async def download(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.fwd_from:

@@ -14,7 +14,7 @@ langi = "en"
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.img (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.img (.*)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.img (.*)"))
 async def img_sampler(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Processing...")
@@ -42,7 +42,7 @@ async def img_sampler(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern=r"^.google (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.google (.*)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.google (.*)"))
 async def gsearch(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         match = e.pattern_match.group(1)
@@ -59,7 +59,7 @@ async def gsearch(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern=r"^.wiki (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.wiki (.*)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.wiki (.*)"))
 async def wiki(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         match = e.pattern_match.group(1)
@@ -74,7 +74,7 @@ async def wiki(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ud (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.ud (.*)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.ud (.*)"))
 async def ud(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Processing...")
@@ -100,7 +100,7 @@ async def ud(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.tts"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.tts"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.tts"))
 async def tts(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
@@ -134,7 +134,7 @@ async def tts(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.trt"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.trt"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.trt"))
 async def translateme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         global langi
@@ -158,7 +158,7 @@ async def translateme(e):
 
 
 @bot.on(events.NewMessage(pattern=".lang", outgoing=True))
-@bot.on(events.MessageEdited(pattern=".lang", outgoing=True))
+#@bot.on(events.MessageEdited(pattern=".lang", outgoing=True))
 async def lang(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         global langi

@@ -9,7 +9,7 @@ import asyncio
 
 
 @bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+#@bot.on(events.MessageEdited(incoming=True))
 async def filter_incoming_handler(e):
     try:
         if not (await e.get_sender()).bot:
@@ -31,7 +31,7 @@ async def filter_incoming_handler(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.filter\\s.*"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.filter\\s.*"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.filter\\s.*"))
 async def add_filter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -49,7 +49,7 @@ async def add_filter(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.stop\\s.*"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.stop\\s.*"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.stop\\s.*"))
 async def remove_filter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -64,7 +64,7 @@ async def remove_filter(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.rmfilters$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.rmfilters$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.rmfilters$"))
 async def kick_marie_filter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("```Will be kicking away all Marie filters.```")
@@ -85,7 +85,7 @@ async def kick_marie_filter(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.filters$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.filters$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.filters$"))
 async def filters_active(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:

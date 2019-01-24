@@ -5,7 +5,7 @@ from userbot import LOGGER, LOGGER_GROUP
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.spam"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.spam"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.spam"))
 async def spammer(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -17,7 +17,7 @@ async def spammer(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.bigspam"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.bigspam"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.bigspam"))
 async def bigspam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -30,7 +30,7 @@ async def bigspam(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.picspam"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.picspam"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.picspam"))
 async def tiny_pic_spam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text

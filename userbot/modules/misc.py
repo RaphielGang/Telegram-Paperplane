@@ -11,7 +11,7 @@ from userbot import LOGGER, LOGGER_GROUP
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.pip (.+)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
 async def pipcheck(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         a = await e.reply("`Searching . . .`")
@@ -27,7 +27,7 @@ async def pipcheck(e):
 
 ######Will put del.dog later lmao sorry Tillie
 @bot.on(events.NewMessage(outgoing=True, pattern="^.paste?(\\s)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.paste?(\\s)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.paste?(\\s)"))
 async def haste_paste(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -37,7 +37,7 @@ async def haste_paste(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.log"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.log"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.log"))
 async def log(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
@@ -53,7 +53,7 @@ async def log(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.speed$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.speed$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.speed$"))
 async def speedtest(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         l = await e.reply("`Running speed test . . .`")
@@ -63,7 +63,7 @@ async def speedtest(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.hash (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.hash (.*)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.hash (.*)"))
 async def hash(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         hashtxt_ = e.pattern_match.group(1)
@@ -109,7 +109,7 @@ async def hash(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.base64 (en|de) (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.base64 (en|de) (.*)"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.base64 (en|de) (.*)"))
 async def endecrypt(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.pattern_match.group(1) == "en":
@@ -127,7 +127,7 @@ async def endecrypt(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.random"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.random"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.random"))
 async def randomise(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         r = (e.text).split()
@@ -136,21 +136,21 @@ async def randomise(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.alive$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.alive$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.alive$"))
 async def amialive(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`Master! I am alive😁`")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.chatid$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.chatid$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.chatid$"))
 async def chatidgetter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Chat ID: `" + str(e.chat_id) + "`")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.updatebleeding$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatebleding$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatebleding$"))
 async def restart_the_bot(e):
     await e.edit("`Please wait while I upstream myself!`")
     bot.disconnect()
@@ -160,7 +160,7 @@ async def restart_the_bot(e):
         pass
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.updatestable$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatestable$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatestable$"))
 async def restart_the_bot(e):
     await e.edit("`Please wait while I upstream myself!`")
     bot.disconnect()
@@ -170,7 +170,7 @@ async def restart_the_bot(e):
         pass
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.pingme$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.pingme$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.pingme$"))
 async def pingme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         start = datetime.now()
@@ -181,7 +181,7 @@ async def pingme(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.sleep( [0-9]+)?$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sleep( [0-9]+)?$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.sleep( [0-9]+)?$"))
 async def killdabot(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -199,7 +199,7 @@ async def killdabot(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.shutdown$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.shutdown$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.shutdown$"))
 async def killdabot(e):
     if not e.text[0].isalpha():
         await e.edit("`Goodbye *Windows XP shutdown sound*....`")
@@ -208,28 +208,28 @@ async def killdabot(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.support$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.support$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.support$"))
 async def bot_support(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Report bugs here: @userbot_support")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.repo$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.repo$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.repo$"))
 async def repo_is_here(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("https://github.com/baalajimaestro/Telegram-UserBot/")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.supportchannel$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.supportchannel$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.supportchannel$"))
 async def support_channel(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("t.me/maestro_userbot_channel")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.sysd$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
 async def sysdetails(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         r = (
@@ -256,14 +256,14 @@ async def sysdetails(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.botversion$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.botversion$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.botversion$"))
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`UserBot Version: Modular r2.1.1-b`")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.userid$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.userid$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.userid$"))
 async def chatidgetter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = await e.get_reply_message()
@@ -319,7 +319,7 @@ async def rextestercli(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.unmutechat$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmutechat$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmutechat$"))
 async def unmute_chat(e):
         if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
             try:
@@ -331,7 +331,7 @@ async def unmute_chat(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mutechat$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.mutechat$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.mutechat$"))
 async def mute_chat(e):
         if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
             try:
@@ -350,7 +350,7 @@ async def mute_chat(e):
 
 
 @bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+#@bot.on(events.MessageEdited(incoming=True))
 async def keep_read(e):
     try:
         from userbot.modules.sql_helper.keep_read_sql import is_kread

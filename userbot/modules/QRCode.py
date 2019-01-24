@@ -18,7 +18,7 @@ def progress(current, total):
 
 
 @bot.on(events.NewMessage(pattern=r"^.getqr$", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r"^.getqr$", outgoing=True))
+#@bot.on(events.MessageEdited(pattern=r"^.getqr$", outgoing=True))
 async def parseqr(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.fwd_from:

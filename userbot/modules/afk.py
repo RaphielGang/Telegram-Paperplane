@@ -63,7 +63,7 @@ async def afk_on_pm(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.notafk$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.notafk$"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.notafk$"))
 async def not_afk(e):
     if not e.text[0].isalpha():
         global ISAFK
@@ -109,7 +109,7 @@ async def not_afk(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.afk"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.afk"))
+#@bot.on(events.MessageEdited(outgoing=True, pattern="^.afk"))
 async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -128,7 +128,7 @@ async def set_afk(e):
 
 
 @bot.on(events.NewMessage(outgoing=True))
-@bot.on(events.MessageEdited(outgoing=True))
+#@bot.on(events.MessageEdited(outgoing=True))
 async def type_afk_is_not_true(e):
         global ISAFK
         global COUNT_MSG
