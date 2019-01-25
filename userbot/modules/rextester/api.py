@@ -1,6 +1,6 @@
 import aiohttp
 
-from tg_userbot.modules.rextester.langs import languages
+from userbot.modules.rextester.langs import languages
 
 
 class Rextester(object):
