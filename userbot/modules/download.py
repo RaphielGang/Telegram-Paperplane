@@ -152,12 +152,16 @@ async def _(e):
 
 
 @bot.on(events.NewMessage(pattern=r".upload (.*)", outgoing=True))
+@bot.on(events.MessageEdited(pattern=r".upload (.*)", outgoing=True))
 async def _(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.fwd_from:
             return
         await e.edit("Processing ...")
         input_str = e.pattern_match.group(1)
+        if input_str in ("userbot.session", "config.env"):
+            await e.edit("`That's a dangerous operation! Not Permitted!`")
+            return
         if os.path.exists(input_str):
             start = datetime.now()
             await bot.send_file(
