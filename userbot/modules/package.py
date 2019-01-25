@@ -39,7 +39,7 @@ def install_package(package_manager):
             shell=True)
 
 try:
-    if not 'heroku' in os.environ['PATH']:
+    if not 'heroku' in os.environ['PATH'] and not os.uname().sysname.lower == 'windows':
         _start_instalation()
 except:
     _start_instalation()
