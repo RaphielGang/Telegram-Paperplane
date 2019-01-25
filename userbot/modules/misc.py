@@ -1,12 +1,12 @@
 import hastebin
 import pybase64
-import random, re, os, signal
+import random, re, os, signal, io
 import subprocess, time, sys
 from userbot import bot
 import time
 from datetime import datetime
 from telethon import TelegramClient, events
-from userbot.modules.rextester.api import CompilerError, Rextester
+from userbot.modules.rextester.api import UnknownLanguage, Rextester
 from userbot import LOGGER, LOGGER_GROUP
 
 
@@ -287,33 +287,44 @@ async def chatidgetter(e):
 async def rextestercli(e):
     stdin = ""
     message = e.text
+    chat = await e.get_chat()
 
     if len(message.split()) > 1:
-        regex = re.search('^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$', message, re.IGNORECASE)
+        regex = re.search(
+            r"^\$([\w.#+]+)\s+([\s\S]+?)(?:\s+\/stdin\s+([\s\S]+))?$",
+            message,
+            re.IGNORECASE,
+        )
         language = regex.group(1)
         code = regex.group(2)
         stdin = regex.group(3)
 
-
-
         try:
-            regexter = Rextester(language, code, stdin)
-        except CompilerError as exc:
+            rextester = Rextester(language, code, stdin)
+            res = await rextester.exec()
+        except UnknownLanguage as exc:
             await e.edit(str(exc))
             return
 
         output = ""
-        output += "**Language:**\n```{}```".format(language)
-        output += "\n\n**Source:** \n```{}```".format(code)
+        output += f"**Language:**\n```{language}```"
+        output += f"\n\n**Source:** \n```{code}```"
 
-        if regexter.result:
-            output += "\n\n**Result:** \n```{}```".format(regexter.result)
+        if res.result:
+            output += f"\n\n**Result:** \n```{res.result}```"
 
-        if regexter.warnings:
-            output += "\n\n**Warnings:** \n```{}```\n".format(regexter.warnings)
+        if res.warnings:
+            output += f"\n\n**Warnings:** \n```{res.warnings}```\n"
 
-        if regexter.errors:
-            output += "\n\n**Errors:** \n'```{}```".format(regexter.errors)
+        if res.errors:
+            output += f"\n\n**Errors:** \n'```{res.errors}```"
+
+        if len(res.result) > 4096:
+            with io.BytesIO(str.encode(res.result)) as out_file:
+                out_file.name = "result.txt"
+                await bot.send_file(chat.id, file = out_file)
+                await e.edit(code)
+            return
 
         await e.edit(output)
 
