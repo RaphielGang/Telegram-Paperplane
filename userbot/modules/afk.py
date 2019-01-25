@@ -123,7 +123,6 @@ async def set_afk(e):
         await e.edit("AFK AF!")
         if string != "":
             AFKREASON = string
-        await bot.send_message(LOGGER_GROUP, "You went AFK!")
         raise StopPropagation
 
 
