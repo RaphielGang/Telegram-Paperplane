@@ -2,6 +2,17 @@ import sqlite3
 import subprocess
 import sys, os
 import dotenv
+from alchemysession import AlchemySessionContainer
+from argparse import ArgumentParser
+
+parser = ArgumentParser()
+
+parser.add_argument(
+    "-d", "--delete", help="Deletes the current session and creates a new one", action="store_true"
+)
+
+args = parser.parse_args()
+
 dotenv.load_dotenv("config.env")
 BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
