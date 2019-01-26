@@ -5,6 +5,7 @@ from telethon.errors import ChatAdminRequiredError
 from telethon.errors import ChannelInvalidError
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChannelAdminRights
+from telethon.tl.functions.messages import GetChatsRequest
 import time
 import sqlite3
 from telethon import TelegramClient, events
@@ -15,22 +16,19 @@ from userbot import bot, SPAM, SPAM_ALLOWANCE, BRAIN_CHECKER, LOGGER_GROUP, LOGG
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
 async def wizzard(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        rights = ChannelAdminRights(
-            add_admins=True,
-            invite_users=True,
-            change_info=True,
-            ban_users=True,
-            delete_messages=True,
-            pin_messages=True,
-            invite_link=True,
-        )
+        chat=await e.get_chat()
+        rights = chat.admin_rights
+        if not rights and not (await e.get_reply_message()):
+            await e.edit("`Give a reply message or you dont have aren't an admin`")
         await e.edit("`Wizard waves his wand!`")
         time.sleep(3)
-        await bot(
+        try:
+          await bot(
             EditAdminRequest(e.chat_id, (await e.get_reply_message()).sender_id, rights)
-        )
+            )
+        except Exception as er:
+            await e.edit("`Dont have sufficient permissions to paramod`")
         await e.edit("A perfect magic has happened!")
-
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ban$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ban$"))
