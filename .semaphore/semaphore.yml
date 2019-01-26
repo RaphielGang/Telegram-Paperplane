@@ -1,11 +1,11 @@
 version: v1.0
-name: The name of the Semaphore 2.0 project
+name: Telegram-UserBot
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: Tests
+  - name: Semaphore CI Test
     task:
       prologue:
         commands:
@@ -14,7 +14,7 @@ blocks:
           - wget $PULL_LINK
           - pip install -r requirements.txt
       jobs:
-        - name: Tests
+        - name: Semaphore CI Test
           commands:
             - python -m userbot test
       secrets:
