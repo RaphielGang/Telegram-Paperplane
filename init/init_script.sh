@@ -63,7 +63,9 @@ LOGGER_GROUP=$LOGGER_GROUP
 OPEN_WEATHER_MAP_APPID=$OPEN_WEATHER_MAP_APP_ID
 DB_URI=$DB_URI" >> config.env
 python3.7 -m userbot test
-sudo mv bot /etc/init.d/userbot
+sudo mv bot /etc/systemd/system/userbot.service
+sudo systemctl start userbot.service
+sudo systemctl enable userbot.service
 echo "
 
 Pushed to init.d. Bot must work on reboot too.
