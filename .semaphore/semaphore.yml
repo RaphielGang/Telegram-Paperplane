@@ -1,0 +1,21 @@
+version: v1.0
+name: Telegram-UserBot
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Semaphore CI Test
+    task:
+      prologue:
+        commands:
+          - sem-version python 3.7
+          - checkout
+          - wget $PULL_LINK
+          - pip install -r requirements.txt
+      jobs:
+        - name: Semaphore CI Test
+          commands:
+            - python -m userbot test
+      secrets:
+        - name: api-keys

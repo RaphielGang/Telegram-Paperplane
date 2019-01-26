@@ -4,6 +4,7 @@ import random, re, os, signal, io
 import subprocess, time, sys
 from userbot import bot
 import time
+import asyncio
 from datetime import datetime
 from telethon import TelegramClient, events
 from userbot.modules.rextester.api import UnknownLanguage, Rextester
@@ -255,8 +256,8 @@ async def sysdetails(e):
         await e.edit(r)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.botversion$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.botversion$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.botver$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.botver$"))
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`UserBot Version: Modular r2.1.1-b`")
@@ -372,3 +373,20 @@ async def keep_read(e):
       for i in K:
         if i.groupid == str(e.chat_id):
             await bot.send_read_acknowledge(e.chat_id)
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.botlog$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.botlog$"))
+async def botlogs(e):
+    process = await asyncio.create_subprocess_shell("sudo systemctl status userbot | tail -n 20", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    stdout, stderr = await process.communicate()
+    result = str(stdout.decode().strip())
+    f = open("err.log", "w+")
+    f.write(result)
+    f.close()
+    await bot.send_file(
+    e.chat_id,
+    "sender.txt",
+    reply_to=e.id,
+    caption="`Bot logs are here!`",
+    )

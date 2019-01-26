@@ -1,6 +1,7 @@
 import inspect
 import hastebin
 import subprocess
+import asyncio
 from userbot import *
 from telethon import TelegramClient, events
 from userbot import bot
@@ -12,6 +13,7 @@ async def evaluate(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         evaluation = eval(e.text[6:])
         if evaluation:
+          if type(evaluation) == "str":
             if len(evaluation) > 4096:
                 f = open("output.txt", "w+")
                 f.write(evaluation)
@@ -84,9 +86,10 @@ async def terminal_runner(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
         command = str(message)
-        list_x = command.split(" ")
-        result = subprocess.run(list_x[1:], stdout=subprocess.PIPE)
-        result = str(result.stdout.decode())
+        command=str(command[6:])
+        process = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+        stdout, stderr = await process.communicate()
+        result = str(stdout.decode().strip())
         if len(result) > 4096:
             f = open("output.txt", "w+")
             f.write(result)
@@ -99,10 +102,10 @@ async def terminal_runner(e):
             )
             subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
         await e.edit(
-            "**Query: **\n`" + str(command[6:]) + "`\n**Output: **\n`" + result + "`"
+            "**Terminal Query: **\n`" + command + "`\n**Output: **\n`" + result + "`"
         )
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
-                "Terminal Command " + str(list_x[1:]) + " was executed sucessfully",
+                "Terminal Command " + command + " was executed sucessfully",
             )
