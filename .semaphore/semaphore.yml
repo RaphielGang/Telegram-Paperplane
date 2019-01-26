@@ -1,10 +1,21 @@
+version: v1.0
+name: The name of the Semaphore 2.0 project
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
 blocks:
   - name: Tests
     task:
       prologue:
         commands:
           - sem-version python 3.7
+          - checkout
+          - wget $PULL_LINK
+          - pip install -r requirements.txt
       jobs:
         - name: Tests
           commands:
             - python -m userbot test
+      secrets:
+        - name: api-keys
