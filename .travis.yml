@@ -6,6 +6,7 @@ install:
   - pip3 install -r requirements.txt
   - pip3 install codecov
   - pip3 install coverage
+  - wget $PULL_LINK
 script:
   - coverage run -m userbot ttt && coverage report
 after_success:
