@@ -5,7 +5,6 @@ from telethon.errors import ChatAdminRequiredError
 from telethon.errors import ChannelInvalidError
 from telethon.tl.functions.channels import EditAdminRequest
 from telethon.tl.types import ChannelAdminRights
-from telethon.tl.functions.messages import GetChatsRequest
 import time
 import sqlite3
 from telethon import TelegramClient, events
@@ -16,20 +15,66 @@ from userbot import bot, SPAM, SPAM_ALLOWANCE, BRAIN_CHECKER, LOGGER_GROUP, LOGG
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
 async def wizzard(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        chat=await e.get_chat()
-        rights = chat.admin_rights
-        if not rights and not (await e.get_reply_message()):
-            await e.edit("`Give a reply message or aren't an admin`")
+        chats=await e.get_chat()
+        rights = chats.admin_rights
+        rights3 = chats.creator
+        rights2 = ChannelAdminRights(
+            add_admins=True,
+            invite_users=True,
+            change_info=True,
+            ban_users=True,
+            delete_messages=True,
+            pin_messages=True,
+            invite_link=True,
+        )
+        if not (await e.get_reply_message()):
+            await e.edit("`Give a reply message`")
+            return
+        elif not rights and rights3:
+            rights=rights2
+        elif not rights and not rights3:
+            rights=None
         await e.edit("`Trying a promote.....`")
         time.sleep(3)
         try:
-          await bot(
+            await bot(
             EditAdminRequest(e.chat_id, (await e.get_reply_message()).sender_id, rights)
             )
         except Exception as er:
             await e.edit("`You Don't have sufficient permissions to paramod`")
             return
-        await e.edit("A perfect magic has happened!")
+        await e.edit("`Promoted Successfully!`")
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.demote$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.demote$"))
+async def wizzard(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        rights = ChannelAdminRights(
+            add_admins=False,
+            invite_users=False,
+            change_info=False,
+            ban_users=False,
+            delete_messages=False,
+            pin_messages=False,
+            invite_link=False,
+        )
+        chat=await e.get_chat()
+        rights = chat.admin_rights
+        rights2 = chat.creator
+        if not (await e.get_reply_message()):
+            await e.edit("`Give a reply message`")
+            return
+        if not rights and not rights2:
+            await e.edit("`You aren't an admin!`")
+            return
+        await e.edit("`Trying a demote.....`")
+        time.sleep(3)
+        await bot(
+            EditAdminRequest(e.chat_id, (await e.get_reply_message()).sender_id, rights)
+            )
+        await e.edit("`Demoted Successfully!`")
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ban$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ban$"))
@@ -47,9 +92,9 @@ async def thanos(e):
             embed_links=True,
         )
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
-            await e.edit("`Ban Error! Couldn't ban this user`")
+            await e.edit("`Ban Error! I am not supposed to ban this user`")
             return
-        await e.edit("`Thanos snaps!`")
+        await e.edit("`Whacking the pest!`")
         time.sleep(5)
         try:
             await bot(
@@ -64,9 +109,7 @@ async def thanos(e):
                 )
                 return
         await e.delete()
-        await bot.send_file(
-            e.chat_id, "https://media.giphy.com/media/xUOxfgwY8Tvj1DY5y0/source.gif"
-        )
+        await e.respond("`Banned!`")
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
@@ -79,27 +122,31 @@ async def thanos(e):
 async def spider(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
-            await e.edit("`Mute Error! Couldn't mute this user`")
+            await e.edit("`Mute Error! I am not supposed to mute this user`")
             return
         try:
             from userbot.modules.sql_helper.spam_mute_sql import mute
         except Exception as er:
             await e.edit("`Running on Non-SQL mode!`")
             return
+        chat=await e.get_chat()
+        rights = chat.admin_rights
+        rights2 = chat.creator
+        if not rights and not rights2:
+            await e.edit("`You aren't an admin!`")
+            return
         mute(e.chat_id, str((await e.get_reply_message()).sender_id))
-        await e.edit("`Spiderman nabs him!`")
+        await e.edit("`Gets a tape!`")
         time.sleep(5)
         await e.delete()
-        await bot.send_file(
-            e.chat_id, "https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif"
-        )
+        await e.respond("`Safely taped!`")
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
                 str((await e.get_reply_message()).sender_id) + " was muted.",
             )
 
-##############POTENTIALLY MAY WORK
+
 @bot.on(events.NewMessage(incoming=True, pattern="<triggerban>"))
 async def triggered_ban(e):
         message = e.text
@@ -180,12 +227,10 @@ async def spider(e):
             await e.edit("`Running on Non-SQL mode!`")
             return
         gmute(str((await e.get_reply_message()).sender_id))
-        await e.edit("`Spiderman nabs him!`")
+        await e.edit("`Grabs a huge, sticky duct tape!`")
         time.sleep(5)
         await e.delete()
-        await bot.send_file(
-            e.chat_id, "https://image.ibb.co/mNtVa9/ezgif_2_49b4f89285.gif"
-        )
+        await e.respond("`Taped!`")
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
