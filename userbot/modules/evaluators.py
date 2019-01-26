@@ -87,7 +87,8 @@ async def terminal_runner(e):
         message = e.text
         command = str(message)
         command=str(command[6:])
-        process = await asyncio.create_subprocess_exec(command, stdout=asyncio.subprocess.PIPE)
+        list_x=command.split(" ")
+        process = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE)
         stdout, stderr = await process.communicate()
         result = str(stdout.decode().strip())
         if len(result) > 4096:
