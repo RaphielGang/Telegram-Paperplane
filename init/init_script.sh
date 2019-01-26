@@ -23,7 +23,7 @@ git checkout tags/$X
 clear
 fi
 echo "***Installing Requirements***"
-sudo pip3 install -r requirements.txt
+sudo python3.7 -m pip install -r requirements.txt
 curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
 clear
 echo "***Please enter your details***"
