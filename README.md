@@ -136,10 +136,16 @@ Userbot setup on termux:
 
 - **OPTIONAL (Only if you are not planning to use any external DB. Also you can omit this if you don't plan of using a DB at all)**
 
-`pg_ctl -D $PREFIX/var/lib/postgresqlstart
-createdb <DBNAME>
-createuser <USER>
-psql <DBNAME> -h 127.0.0.1 <USER>`
+`pg_ctl -D $PREFIX/var/lib/postgresqlstart`
+
+
+`createdb <DBNAME>`
+
+
+`createuser <USER>`
+
+
+`psql <DBNAME> -h 127.0.0.1 <USER>`
 
 - **Installing Requirements:** `pip3 install -r requirements.txt`
 
