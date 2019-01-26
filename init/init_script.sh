@@ -9,7 +9,7 @@ sudo apt-get --yes --force-yes install build-essential checkinstall git\
 sudo libreadline-gplv2-dev libncursesw5-dev libssl-dev wget\
 sudo libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
 sudo apt --yes --force-yes install python3.7
-useradd userbot
+sudo useradd userbot
 sudo echo "userbot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 clear
 cd /tmp
