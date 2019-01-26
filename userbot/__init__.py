@@ -3,15 +3,15 @@ import subprocess
 import sys, os
 import dotenv
 from alchemysession import AlchemySessionContainer
-from argparse import ArgumentParser
+#from argparse import ArgumentParser
 
-parser = ArgumentParser()
+#parser = ArgumentParser()
 
-parser.add_argument(
-    "-d", "--delete", help="Deletes the current session and creates a new one", action="store_true"
-)
+#parser.add_argument(
+##    "-m", help="Run as module?"
+#)
 
-args = parser.parse_args()
+#args = parser.parse_args()
 
 dotenv.load_dotenv("config.env")
 BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
