@@ -411,7 +411,7 @@ async def typewriter(e):
         elif textx:
             message = textx
             message = str(message.message)
-        sleep_time = 0.1
+        sleep_time = 0.001
         typing_symbol = "|"
         index = 1
         old_text = ''
