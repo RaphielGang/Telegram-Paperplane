@@ -16,7 +16,7 @@ cd /tmp
 git clone https://github.com/baalajimaestro/Telegram-UserBot
 cd Telegram-UserBot
 read -p "Press y to go ahead with bleeding builds. Or press any other key for stable " BUILDS
-if [ "$BUILDS" != "y" ];
+if [ "$BUILDS"!="y" ];
 then
 X = git tag -l | cut -f 1 -d \n | tail -n 1
 git checkout tags/$X
@@ -40,7 +40,7 @@ PM_AUTO_BAN=True
 else
 PM_AUTO_BAN=False
 fi
-if [ "$LOG" = "y" ];
+if [ "$LOG"="y" ];
 then
 read -p "Enter the Log Group ID: " LOGGER_GROUP
 LOGGER=True
@@ -48,7 +48,7 @@ else
 LOGGER=False
 LOGGER_GROUP=0
 fi
-if [ "$DB" = "y" ];
+if [ "$DB"="y" ];
 then
 read -p "Enter your DB URL: " DB_URI
 else
