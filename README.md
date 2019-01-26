@@ -38,6 +38,15 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 
 **Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
 
+## Automated Method:
+
+
+`curl -sLo https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/init_script.sh | bash`
+
+
+## Manual Method:
+
+
 ### Before you start:
 
 Clone this repo `git clone https://github.com/baalajimaestro/Telegram-UserBot`
