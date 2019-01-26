@@ -129,23 +129,11 @@ else:
         "Your config file seems to be un-edited. Doing so is not allowed. Bot exiting!"
     )
     quit(1)
-
-session = "userbot"
-
-if DB_URI:
-    container = AlchemySessionContainer(DB_URI)
-    session = container.new_session("userbot")
-    if args.delete:
-        session.delete()
-        print("SESSION DELETED...")
-
-
-if len(sys.argv) in (1,3,4):
-    bot = TelegramClient(session, API_KEY, API_HASH)
-else:
-    bot = TelegramClient(None, API_KEY, API_HASH)
-    bot.session.set_dc(2, "149.154.167.40", 443)
-    bot.start(phone="9996621234", code_callback=lambda: "22222")
+bot = TelegramClient("userbot", API_KEY, API_HASH)
+#else:
+#    bot = TelegramClient(None, API_KEY, API_HASH)
+#    bot.session.set_dc(2, "149.154.167.40", 443)
+#    bot.start(phone="9996621234", code_callback=lambda: "22222")
 # Global Variables
 SNIPE_TEXT = ""
 COUNT_MSG = 0
