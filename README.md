@@ -41,7 +41,10 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 ## Automated Method:
 
 
-`curl -sL https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/init_script.sh | bash`
+`curl -sLo init_script.sh https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/init_script.sh`
+
+
+`bash init_script.sh`
 
 
 ## Manual Method:
