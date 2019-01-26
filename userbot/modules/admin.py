@@ -19,15 +19,16 @@ async def wizzard(e):
         chat=await e.get_chat()
         rights = chat.admin_rights
         if not rights and not (await e.get_reply_message()):
-            await e.edit("`Give a reply message or you dont have aren't an admin`")
-        await e.edit("`Wizard waves his wand!`")
+            await e.edit("`Give a reply message or aren't an admin`")
+        await e.edit("`Trying a promote.....`")
         time.sleep(3)
         try:
           await bot(
             EditAdminRequest(e.chat_id, (await e.get_reply_message()).sender_id, rights)
             )
         except Exception as er:
-            await e.edit("`Dont have sufficient permissions to paramod`")
+            await e.edit("`You Don't have sufficient permissions to paramod`")
+            return
         await e.edit("A perfect magic has happened!")
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ban$"))
