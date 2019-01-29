@@ -25,13 +25,13 @@ async def evaluate(e):
                     caption="`Output too large, sending as file`",
                 )
                 subprocess.run(["rm", "sender.txt"], stdout=subprocess.PIPE)
-            await e.edit(
+          await e.edit(
                 "**Query: **\n`"
                 + e.text[6:]
                 + "`\n**Result: **\n`"
                 + str(evaluation)
                 + "`"
-            )
+           )
         else:
             await e.edit(
                 "**Query: **\n`"
