@@ -4,8 +4,7 @@ import sys, os
 import dotenv
 dotenv.load_dotenv("config.env")
 UPDATER = os.environ.get("UPDATER",True)
-BUILD_CHOICE = os.environ.get("BUILD_CHOICE","stable")
-
+BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
 subprocess.run(
     [
@@ -14,7 +13,7 @@ subprocess.run(
         "brains.check",
         "https://storage.googleapis.com/project-aiml-bot/brains.check",
     ],
-    stdout =s ubprocess.PIPE,
+    stdout=subprocess.PIPE,
 )
 
 if UPDATER:
@@ -25,7 +24,7 @@ if UPDATER:
             "rm",
             "pull340913",
         ],
-        stdout = subprocess.PIPE,
+        stdout=subprocess.PIPE,
     )
     subprocess.run(
         [
@@ -35,7 +34,7 @@ if UPDATER:
             "pull340913",
             "https://github.com/baalajimaestro/Telegram-UserBot"
         ],
-        stdout = subprocess.PIPE,
+        stdout=subprocess.PIPE,
     )
     subprocess.run(
         [
@@ -44,35 +43,18 @@ if UPDATER:
             "pull340913",
             "modular",
         ],
-        stdout = subprocess.PIPE,
+        stdout=subprocess.PIPE,
     )
     if len(sys.argv)==1:
         if BUILD_CHOICE == "stable":
-            tyq = subprocess.run(
-                [
-                "git",
-                "tag",
-                "-l",
-                ],
-                stdout=subprocess.PIPE,
-            ).stdout.decode().split("\n")
-            subprocess.run(
-                [
-                "git",
-                "checkout",
-                "tags/"+tyq[-2],
-                ],
-                stdout=subprocess.PIPE,
-            )
-    if len(sys.argv) == 4:
-        tyq = subprocess.run(
+            tyq=subprocess.run(
             [
             "git",
             "tag",
             "-l",
             ],
             stdout=subprocess.PIPE,
-        ).stdout.decode().split("\n")
+            ).stdout.decode().split("\n")
             subprocess.run(
             [
             "git",
@@ -80,6 +62,23 @@ if UPDATER:
             "tags/"+tyq[-2],
             ],
             stdout=subprocess.PIPE,
+            )
+    if len(sys.argv) == 4:
+        tyq=subprocess.run(
+        [
+        "git",
+        "tag",
+        "-l",
+        ],
+        stdout=subprocess.PIPE,
+        ).stdout.decode().split("\n")
+        subprocess.run(
+        [
+        "git",
+        "checkout",
+        "tags/"+tyq[-2],
+        ],
+        stdout=subprocess.PIPE,
         )
     print("Your Bot is up-to-date. Bot Spinning up!")
 else:
