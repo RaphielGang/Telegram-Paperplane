@@ -14,7 +14,7 @@ from alchemysession import AlchemySessionContainer
 #args = parser.parse_args()
 
 dotenv.load_dotenv("config.env")
-UPDATER = os.environ.get("UPDATER",True)
+UPDATER=os.environ.get("UPDATER", False)
 BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
 subprocess.run(
@@ -26,8 +26,7 @@ subprocess.run(
     ],
     stdout=subprocess.PIPE,
 )
-
-if UPDATER:
+if UPDATER==True:
     subprocess.run(
         [
             "git",
