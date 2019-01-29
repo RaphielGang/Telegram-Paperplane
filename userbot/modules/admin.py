@@ -70,9 +70,13 @@ async def wizzard(e):
             return
         await e.edit("`Trying a demote.....`")
         time.sleep(3)
-        await bot(
+        try:
+            await bot(
             EditAdminRequest(e.chat_id, (await e.get_reply_message()).sender_id, rights)
             )
+        except Exception as er:
+            await e.edit("`You Don't have sufficient permissions to demhott`")
+            return
         await e.edit("`Demoted Successfully!`")
 
 
