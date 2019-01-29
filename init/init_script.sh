@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 clear
 echo "*****Welcome to baalajimaestro's userbot setup*****
-This Guided Setup shall help you get your own userbot up and running."
+This Guided Setup shall help you get your own userbot up and running.
+You might be asked for sudo password several number of times."
 sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt update
 sudo apt --yes --force-yes upgrade
 sudo apt-get --yes --force-yes install build-essential checkinstall git\
-sudo libreadline-gplv2-dev libncursesw5-dev libssl-dev wget\
-sudo libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+libreadline-gplv2-dev libncursesw5-dev libssl-dev wget\
+libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
 sudo apt --yes --force-yes install python3.7
 sudo useradd userbot
 sudo echo "userbot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -65,6 +65,7 @@ DB_URI=$DB_URI" >> config.env
 python3.7 -m userbot test
 sudo mv bot /etc/systemd/system/userbot.service
 sudo chown -R userbot /tmp/Telegram-UserBot
+sudo chmod -R 777 /tmp/Telegram-UserBot
 sudo systemctl start userbot.service
 sudo systemctl enable userbot.service
 echo "

@@ -386,7 +386,7 @@ async def botlogs(e):
     f.close()
     await bot.send_file(
     e.chat_id,
-    "sender.txt",
+    "err.log",
     reply_to=e.id,
     caption="`Bot logs are here!`",
     )
