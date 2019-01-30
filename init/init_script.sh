@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env dash
 
 clear
 echo "*****Welcome to baalajimaestro's userbot setup*****
@@ -23,7 +23,7 @@ cd /tmp || exit
     git clone https://github.com/baalajimaestro/Telegram-UserBot
         cd Telegram-UserBot || exit
 
-read -r "Press y to go ahead with bleeding builds. Or press any other key for stable " BUILDS
+read -r -p "Press y to go ahead with bleeding builds. Or press any other key for stable " BUILDS
 
 if [ "$BUILDS" != "y" ]; then
     X=git tag -l | cut -f 1 | tail -n 1
@@ -37,13 +37,13 @@ sudo python3.7 -m pip install -r requirements.txt
 clear
 
 echo "***Please enter your details***"
-read -r "What's your API_ID? " API_KEY
-read -r "What's your API_HASH? " API_HASH
-read -r "What's your Screenshot Layer API Key? " SCREENSHOT_LAYER_ACCESS_KEY
-read -r "Do you need PMPermit Enabled? (y/n) " PMPERMIT
-read -r "Do you need Logging Enabled? (y/n) " LOG
-read -r "What's your OpenWeatherMap API Key? " OPEN_WEATHER_MAP_APPID
-read -r "Do you need a Database Mode? (y/n) " DB
+read -r -p "What's your API_ID? " API_KEY
+read -r -p "What's your API_HASH? " API_HASH
+read -r -p "What's your Screenshot Layer API Key? " SCREENSHOT_LAYER_ACCESS_KEY
+read -r -p "Do you need PMPermit Enabled? (y/n) " PMPERMIT
+read -r -p "Do you need Logging Enabled? (y/n) " LOG
+read -r -p "What's your OpenWeatherMap API Key? " OPEN_WEATHER_MAP_APPID
+read -r -p "Do you need a Database Mode? (y/n) " DB
 
 if [ "$PMPERMIT" = "y" ]; then
     PM_AUTO_BAN=True
@@ -52,7 +52,7 @@ else
 fi
 
 if [ "$LOG" = "y" ]; then
-    read -r "Enter the Log Group ID: " LOGGER_GROUP
+    read -r -p "Enter the Log Group ID: " LOGGER_GROUP
     LOGGER=True
 else
     LOGGER=False
@@ -60,7 +60,7 @@ else
 fi
 
 if [ "$DB" = "y" ]; then
-    read -r "Enter your DB URL: " DB_URI
+    read -r -p "Enter your DB URL: " DB_URI
 else
     DB_URI=None
 fi
