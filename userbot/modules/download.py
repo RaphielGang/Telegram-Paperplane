@@ -157,6 +157,9 @@ async def _(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.fwd_from:
             return
+        if e.is_channel and not e.is_group:
+            await e.edit("`Uploading isn't permitted on channels`")
+            return
         await e.edit("Processing ...")
         input_str = e.pattern_match.group(1)
         if input_str in ("userbot.session", "config.env"):
