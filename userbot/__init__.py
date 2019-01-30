@@ -3,7 +3,7 @@ import subprocess
 import sys, os
 import dotenv
 dotenv.load_dotenv("config.env")
-UPDATER=os.environ.get("UPDATER", False)
+UPDATER=os.environ.get("UPDATER", None)
 BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
 subprocess.run(
@@ -15,7 +15,7 @@ subprocess.run(
     ],
     stdout=subprocess.PIPE,
 )
-if UPDATER==True:
+if UPDATER=="True":
     subprocess.run(
         [
             "git",
