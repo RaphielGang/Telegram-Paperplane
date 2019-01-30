@@ -5,12 +5,16 @@ import asyncio
 from userbot import *
 from telethon import TelegramClient, events
 from userbot import bot
+from telethon.events import StopPropagation
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.eval"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.eval"))
 async def evaluate(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        if e.is_channel and not e.is_group:
+            await e.edit("`Eval isn't permitted on channels`")
+            return
         evaluation = eval(e.text[6:])
         if evaluation:
           if type(evaluation) == "str":
@@ -45,9 +49,12 @@ async def evaluate(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern=r"^.exec (.*)"))
-#@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.exec (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.exec (.*)"))
 async def run(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        if e.is_channel and not e.is_group:
+            await e.edit("`Exec isn't permitted on channels`")
+            return
         code = e.raw_text[5:]
         exec(f"async def __ex(e): " + "".join(f"\n {l}" for l in code.split("\n")))
         result = await locals()["__ex"](e)
@@ -81,9 +88,12 @@ async def run(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.term"))
-#@bot.on(events.MessageEdited(outgoing=True, pattern="^.term"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.term"))
 async def terminal_runner(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        if e.is_channel and not e.is_group:
+            await e.edit("`Term Commands aren't permitted on channels`")
+            return
         message = e.text
         command = str(message)
         command=str(command[6:])
