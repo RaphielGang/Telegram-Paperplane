@@ -16,7 +16,7 @@ packageinstall() {
     sudo apt --yes --force-yes install build-essential checkinstall git \
         libreadline-gplv2-dev libncursesw5-dev libssl-dev wget \
         libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-    sudo apt --yes --force-yes install python3.7
+    sudo apt --yes --force-yes install python3.7 docker
 }
 
 # Create userbot user
@@ -28,7 +28,7 @@ createuser() {
 
 # Clone the required repo
 botclone() {
-    git clone https://github.com/baalajimaestro/Telegram-UserBot
+    sudo -Hu userbot git clone https://github.com/baalajimaestro/Telegram-UserBot
     cd Telegram-UserBot || exit
 }
 
@@ -36,7 +36,7 @@ botclone() {
 reqinstall() {
     echo "***Installing Requirements***"
     sudo python3.7 -m pip install -r requirements.txt
-    curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
+    sudo -Hu userbot curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
     clear
 }
 
@@ -90,6 +90,8 @@ LOGGER=$LOGGER
 LOGGER_GROUP=$LOGGER_GROUP
 OPEN_WEATHER_MAP_APPID=$OPEN_WEATHER_MAP_APPID
 DB_URI=$DB_URI" >> config.env
+sudo mv config.env /home/userbot/Telegram-UserBot 
+sudo chown userbot /home/userbot/Telegram-Userbot/config.env
 }
 
 # Systemd service bringup
