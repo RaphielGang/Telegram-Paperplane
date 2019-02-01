@@ -400,8 +400,8 @@ async def bluetext(e):
         )
 
 
-@bot.on(events.NewMessage(pattern='^(?i).type'))
-@bot.on(events.MessageEdited(pattern='^(?i).type'))
+@bot.on(events.NewMessage(pattern='(?i).type'))
+@bot.on(events.MessageEdited(pattern='(?i).type'))
 async def typewriter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
@@ -412,15 +412,16 @@ async def typewriter(e):
         elif textx:
             message = textx
             message = str(message.message)
-        sleep_time = 0.1
+        sleep_time = 0.03
+        typing_symbol = "|"
         index = 1
         old_text = ''
-        msg = await e.edit('|')
-        await asyncio.sleep(sleep_time)
-        while old_text != message:
-            old_text = message[:index]
-            index += 1
-            await msg.edit('`%s`' % (old_text + '|'))
+        await e.edit(typing_symbol)
+        await asyncio.sleep(sleep_time)    
+        for character in message:
+            old_text = old_text + "" + character
+            typing_text = old_text + "" + typing_symbol
+            await e.edit(typing_text)
             await asyncio.sleep(sleep_time)
-            await msg.edit('`%s`' % (old_text.strip()))
+            await e.edit(old_text)
             await asyncio.sleep(sleep_time)
