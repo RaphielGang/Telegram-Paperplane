@@ -29,12 +29,11 @@ async def pipcheck(e):
         await e.edit(r)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.paste?(\\s)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.paste?(\\s)"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.paste"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.paste"))
 async def paste(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         dogbin_final_url = ""
-        dogbin_fail = False
 
         textx = await e.get_reply_message()
         message = e.text
@@ -48,9 +47,13 @@ async def paste(e):
         r = requests.post(dogbin_url + "documents", data=message.encode('utf-8'))
 
         #Hastebin 
-        hastebin_final_url = hastebin.post(message)
+        try:
+            hastebin_final_url = hastebin.post(message)
+        except Exception:
+            hastebin_failed = True
+            hastebin_final_url = "`Failed to reach hastebin`"        
 
-        if r.status_code != 404:
+        if r.status_code == 200:
             response = r.json()
             key = response['key']
             dogbin_final_url = dogbin_url + key            
@@ -58,9 +61,10 @@ async def paste(e):
             if response['isUrl']:
                 reply_text = f'`Pasted successfully!`\n\n`Shortened URL:` {dogbin_final_url}\n\n`Original(non-shortened) URLs`\n`Dogbin URL`: {dogbin_url}v/{key}\n`Hastebin URL`: {hastebin_final_url}'
             else:
-                reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: {dogbin_url}{key}\n`Hastebin URL`: {hastebin_final_url}'
+                reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: {dogbin_final_url}\n`Hastebin URL`: {hastebin_final_url}'
         else:
-            reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: Failed to reach fogbin\n`Hastebin URL`: {hastebin_final_url}'
+            reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: `Failed to reach dogbin`\n`Hastebin URL`: {hastebin_final_url}'
+
         
         await e.edit(reply_text)
         if LOGGER:
