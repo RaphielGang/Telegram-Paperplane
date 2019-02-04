@@ -14,6 +14,7 @@ from alchemysession import AlchemySessionContainer
 #args = parser.parse_args()
 
 dotenv.load_dotenv("config.env")
+UPDATER=os.environ.get("UPDATER", None)
 BUILD_CHOICE=os.environ.get("BUILD_CHOICE","stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
 subprocess.run(
@@ -25,36 +26,54 @@ subprocess.run(
     ],
     stdout=subprocess.PIPE,
 )
-subprocess.run(
-    [
-        "git",
-        "remote",
-        "rm",
-        "pull340913",
-    ],
-    stdout=subprocess.PIPE,
-)
-subprocess.run(
-    [
-        "git",
-        "remote",
-        "add",
-        "pull340913",
-        "https://github.com/baalajimaestro/Telegram-UserBot"
-    ],
-    stdout=subprocess.PIPE,
-)
-subprocess.run(
-    [
-        "git",
-        "pull",
-        "pull340913",
-        "modular",
-    ],
-    stdout=subprocess.PIPE,
-)
-if len(sys.argv)==1:
-    if BUILD_CHOICE == "stable":
+if UPDATER=="True":
+    subprocess.run(
+        [
+            "git",
+            "remote",
+            "rm",
+            "pull340913",
+        ],
+        stdout=subprocess.PIPE,
+    )
+    subprocess.run(
+        [
+            "git",
+            "remote",
+            "add",
+            "pull340913",
+            "https://github.com/baalajimaestro/Telegram-UserBot"
+        ],
+        stdout=subprocess.PIPE,
+    )
+    subprocess.run(
+        [
+            "git",
+            "pull",
+            "pull340913",
+            "modular",
+        ],
+        stdout=subprocess.PIPE,
+    )
+    if len(sys.argv)==1:
+        if BUILD_CHOICE == "stable":
+            tyq=subprocess.run(
+            [
+            "git",
+            "tag",
+            "-l",
+            ],
+            stdout=subprocess.PIPE,
+            ).stdout.decode().split("\n")
+            subprocess.run(
+            [
+            "git",
+            "checkout",
+            "tags/"+tyq[-2],
+            ],
+            stdout=subprocess.PIPE,
+            )
+    if len(sys.argv) == 4:
         tyq=subprocess.run(
         [
         "git",
@@ -71,24 +90,9 @@ if len(sys.argv)==1:
         ],
         stdout=subprocess.PIPE,
         )
-if len(sys.argv) == 4:
-    tyq=subprocess.run(
-    [
-    "git",
-    "tag",
-    "-l",
-    ],
-    stdout=subprocess.PIPE,
-    ).stdout.decode().split("\n")
-    subprocess.run(
-    [
-    "git",
-    "checkout",
-    "tags/"+tyq[-2],
-    ],
-    stdout=subprocess.PIPE,
-    )
-print("Your Bot is up-to-date. Bot Spinning up!")
+    print("Your Bot is up-to-date. Bot Spinning up!")
+else:
+    print("Updater disabled, spinning the bot without updating.")
 import logging
 from sqlalchemy import create_engine
 from telethon import TelegramClient, events
