@@ -1,17 +1,18 @@
-from telethon import events
+import asyncio
 import json
 import os
 import subprocess
-import requests
-import asyncio
 from datetime import datetime
+
+import requests
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from userbot import bot, LOGS
-from telethon.tl.types import DocumentAttributeVideo
-from telethon.errors import MessageNotModifiedError
 from PIL import Image
+from telethon import events
+from telethon.errors import MessageNotModifiedError
+from telethon.tl.types import DocumentAttributeVideo
 
+from userbot import LOGS, bot
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
@@ -89,7 +90,7 @@ async def _(e):
         if os.path.exists(input_str):
             start = datetime.now()
             await e.edit("Processing ...")
-            lst_of_files = get_lst_of_files(input_str, [])
+            lst_of_files = lst_of_files(input_str, [])
             LOGS.info(lst_of_files)
             u = 0
             await e.edit(

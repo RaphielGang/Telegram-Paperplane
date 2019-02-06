@@ -1,15 +1,14 @@
-from telethon.tl.functions.channels import EditBannedRequest
-from telethon.tl.types import ChatBannedRights
-from telethon.errors import UserAdminInvalidError
-from telethon.errors import ChatAdminRequiredError
-from telethon.errors import ChannelInvalidError
-from telethon.tl.functions.channels import EditAdminRequest
-from telethon.tl.types import ChatAdminRights
-import time
 import sqlite3
-from telethon import TelegramClient, events
-from userbot import bot, SPAM, SPAM_ALLOWANCE, BRAIN_CHECKER, LOGGER_GROUP, LOGGER
+import time
 
+from telethon import TelegramClient, events
+from telethon.errors import (ChannelInvalidError, ChatAdminRequiredError,
+                             UserAdminInvalidError)
+from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
+from telethon.tl.types import ChatAdminRights, ChatBannedRights
+
+from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, SPAM, SPAM_ALLOWANCE,
+                     bot)
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.promote$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
@@ -40,7 +39,7 @@ async def wizzard(e):
             await bot(
             EditAdminRequest(e.chat_id, (await e.get_reply_message()).sender_id, rights)
             )
-        except Exception as er:
+        except Exception:
             await e.edit("`You Don't have sufficient permissions to paramod`")
             return
         await e.edit("`Promoted Successfully!`")
@@ -48,7 +47,7 @@ async def wizzard(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.demote$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.demote$"))
-async def wizzard(e):
+async def demote(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         rights = ChatAdminRights(
             add_admins=False,
@@ -74,7 +73,7 @@ async def wizzard(e):
             await bot(
             EditAdminRequest(e.chat_id, (await e.get_reply_message()).sender_id, rights)
             )
-        except Exception as er:
+        except Exception:
             await e.edit("`You Don't have sufficient permissions to demhott`")
             return
         await e.edit("`Demoted Successfully!`")
@@ -130,7 +129,7 @@ async def spider(e):
             return
         try:
             from userbot.modules.sql_helper.spam_mute_sql import mute
-        except Exception as er:
+        except Exception:
             await e.edit("`Running on Non-SQL mode!`")
             return
         chat=await e.get_chat()
@@ -153,28 +152,27 @@ async def spider(e):
 
 @bot.on(events.NewMessage(incoming=True, pattern="<triggerban>"))
 async def triggered_ban(e):
-        message = e.text
-        ban_id = int(e.text[13:])
-        if e.sender_id in BRAIN_CHECKER:  # non-working module#
-            rights = ChatBannedRights(
-                until_date=None,
-                view_messages=True,
-                send_messages=True,
-                send_media=True,
-                send_stickers=True,
-                send_gifs=True,
-                send_games=True,
-                send_inline=True,
-                embed_links=True,
-            )
-            if ban_id in BRAIN_CHECKER:
-                await e.edit("`Sorry Master!`")
-                return
-            await e.edit("`Command from my Master!`")
-            time.sleep(5)
-            await bot(EditBannedRequest(e.chat_id, ban_id, rights))
-            await e.delete()
-            await bot.send_message(e.chat_id, "Job was done, Master! Gimme Cookies!")
+    ban_id = int(e.text[13:])
+    if e.sender_id in BRAIN_CHECKER:  # non-working module#
+        rights = ChatBannedRights(
+            until_date=None,
+            view_messages=True,
+            send_messages=True,
+            send_media=True,
+            send_stickers=True,
+            send_gifs=True,
+            send_games=True,
+            send_inline=True,
+            embed_links=True,
+        )
+    if ban_id in BRAIN_CHECKER:
+        await e.edit("`Sorry Master!`")
+        return
+    await e.edit("`Command from my Master!`")
+    time.sleep(5)
+    await bot(EditBannedRequest(e.chat_id, ban_id, rights))
+    await e.delete()
+    await bot.send_message(e.chat_id, "Job was done, Master! Gimme Cookies!")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
@@ -207,7 +205,7 @@ async def muter(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
-async def unmute(e):
+async def ungmute(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.gmute_sql import ungmute
@@ -219,7 +217,7 @@ async def unmute(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.gmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.gmute$"))
-async def spider(e):
+async def gmute(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if (await e.get_reply_message()).sender_id in BRAIN_CHECKER:
             await e.edit("`Mute Error! Couldn't mute this user`")

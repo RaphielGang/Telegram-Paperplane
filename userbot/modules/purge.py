@@ -6,6 +6,7 @@ from telethon import TelegramClient, events
 
 from userbot import LOGGER, LOGGER_GROUP, bot
 
+
 @bot.on(events.NewMessage(outgoing=True, pattern="^.purge$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.purge$"))
 async def fastpurger(e):

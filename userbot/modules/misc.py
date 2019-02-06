@@ -1,15 +1,21 @@
+import asyncio
+import io
+import os
+import random
+import re
+import signal
+import subprocess
+import sys
+import time
+from datetime import datetime
+
 import hastebin
 import pybase64
-import random, re, os, signal, io
-import subprocess, time, sys
-from userbot import bot
-import time
-import asyncio
-from datetime import datetime
-from telethon import TelegramClient, events
-from userbot.modules.rextester.api import UnknownLanguage, Rextester
-from userbot import LOGGER, LOGGER_GROUP
 import requests
+from telethon import TelegramClient, events
+
+from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot.modules.rextester.api import Rextester, UnknownLanguage
 
 dogbin_url = "https://del.dog/"
 
@@ -18,7 +24,7 @@ dogbin_url = "https://del.dog/"
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
 async def pipcheck(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        a = await e.reply("`Searching . . .`")
+        await e.reply("`Searching . . .`")
         r = (
             "`"
             + subprocess.run(
@@ -42,21 +48,20 @@ async def paste(e):
             message = str(message[7:])
         elif textx:
             message = str(textx.message)
-        
+
         #Dogbin
         r = requests.post(dogbin_url + "documents", data=message.encode('utf-8'))
 
-        #Hastebin 
+        #Hastebin
         try:
             hastebin_final_url = hastebin.post(message)
         except Exception:
-            hastebin_failed = True
-            hastebin_final_url = "`Failed to reach hastebin`"        
+            hastebin_final_url = "`Failed to reach hastebin`"
 
         if r.status_code == 200:
             response = r.json()
             key = response['key']
-            dogbin_final_url = dogbin_url + key            
+            dogbin_final_url = dogbin_url + key
 
             if response['isUrl']:
                 reply_text = f'`Pasted successfully!`\n\n`Shortened URL:` {dogbin_final_url}\n\n`Original(non-shortened) URLs`\n`Dogbin URL`: {dogbin_url}v/{key}\n`Hastebin URL`: {hastebin_final_url}'
@@ -65,7 +70,7 @@ async def paste(e):
         else:
             reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: `Failed to reach dogbin`\n`Hastebin URL`: {hastebin_final_url}'
 
-        
+
         await e.edit(reply_text)
         if LOGGER:
             await bot.send_message(
@@ -231,7 +236,7 @@ async def chatidgetter(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.updatebleeding$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.updatebleding$"))
-async def restart_the_bot(e):
+async def bleeding_upstream(e):
     await e.edit("`Please wait while I upstream myself!`")
     bot.disconnect()
     try:
@@ -241,7 +246,7 @@ async def restart_the_bot(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.updatestable$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.updatestable$"))
-async def restart_the_bot(e):
+async def stable_upstream(e):
     await e.edit("`Please wait while I upstream myself!`")
     bot.disconnect()
     try:
@@ -262,9 +267,9 @@ async def pingme(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.sleep( [0-9]+)?$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.sleep( [0-9]+)?$"))
-async def killdabot(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = e.text
+async def sleepybot(e):
+    message = e.text
+    if not message[0].isalpha() and message[0] not in ("/", "#", "@", "!"):
         if not " " in e.pattern_match.group(1):
             await e.reply("Syntax: `.shutdown [seconds]`")
         else:

@@ -3,16 +3,18 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import os
+
 import requests
 from telethon import TelegramClient, events
-from userbot import bot, SCREEN_SHOT_LAYER_ACCESS_KEY
+
+from userbot import SCREENSHOT_LAYER_ACCESS_KEY, bot
 
 
 @bot.on(events.NewMessage(pattern=r".screencapture (.*)", outgoing=True))
 @bot.on(events.MessageEdited(pattern=r".screencapture (.*)", outgoing=True))
 async def _(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if SCREEN_SHOT_LAYER_ACCESS_KEY is None:
+        if SCREENSHOT_LAYER_ACCESS_KEY is None:
             await e.edit(
                 "Need to get an API key from https://screenshotlayer.com/product \nModule stopping!"
             )
@@ -22,7 +24,7 @@ async def _(e):
         input_str = e.pattern_match.group(1)
         response_api = requests.get(
             sample_url.format(
-                SCREEN_SHOT_LAYER_ACCESS_KEY, input_str, "1", "PNG", "2560x1440"
+                SCREENSHOT_LAYER_ACCESS_KEY, input_str, "1", "PNG", "2560x1440"
             ),
             stream=True,
         )

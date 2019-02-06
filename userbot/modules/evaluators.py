@@ -1,11 +1,13 @@
-import inspect
-import hastebin
-import subprocess
 import asyncio
-from userbot import *
+import inspect
+import subprocess
+
+import hastebin
 from telethon import TelegramClient, events
-from userbot import bot
 from telethon.events import StopPropagation
+
+from userbot import *
+from userbot import bot
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.eval"))
