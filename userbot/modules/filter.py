@@ -1,11 +1,13 @@
-import sqlite3
-from telethon import TelegramClient, events
-from userbot import bot
-import re
-from userbot import LOGGER, LOGGER_GROUP
-from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
-import time
 import asyncio
+import re
+import sqlite3
+import time
+
+from sqlalchemy import (Boolean, Column, Integer, String, UnicodeText,
+                        distinct, func)
+from telethon import TelegramClient, events
+
+from userbot import LOGGER, LOGGER_GROUP, bot
 
 
 @bot.on(events.NewMessage(incoming=True))
@@ -19,8 +21,8 @@ async def filter_incoming_handler(e):
                 await e.edit("`Running on Non-SQL mode!`")
                 return
             listes = e.text.split(" ")
-            E = get_filters(e.chat_id)
-            for t in E:
+            filters = get_filters(e.chat_id)
+            for t in filters:
                 for r in listes:
                     pro = re.fullmatch(t.keyword, r, flags=re.IGNORECASE)
                     if pro:
@@ -93,7 +95,7 @@ async def filters_active(e):
         except:
             return
         transact = "Filters active on this chat: \n\n"
-        E = get_filters(e.chat_id)
-        for i in E:
+        filters = get_filters(e.chat_id)
+        for i in filters:
             transact = transact + "🔹 " + i.keyword + "\n"
         await e.edit(transact)

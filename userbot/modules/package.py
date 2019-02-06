@@ -4,7 +4,6 @@ import platform
 from userbot import SUDO
 
 def _start_instalation():
-    install_with = None
     package_managers = ["pacman", "apt-get", "yum", "brew", "yaourt", "dnf", "homebrew", "eopkg", "snap"]
     if "linux" in str(platform.system()).lower():
             for manager in package_managers:

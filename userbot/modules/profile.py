@@ -1,20 +1,19 @@
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.functions.photos import UploadProfilePhotoRequest
-from telethon.tl.functions.account import UpdateProfileRequest
-from telethon.tl.functions.account import UpdateUsernameRequest
-from telethon import TelegramClient, events
-from telethon.tl.types import (
-    MessageEntityMentionName,
-    MessageMediaPhoto,
-    MessageMediaDocument,
-)
-from telethon.utils import get_input_location
-from telethon.errors import PhotoCropSizeSmallError, ImageProcessFailedError
-from telethon.errors.rpcerrorlist import UsernameOccupiedError
-from userbot import bot
 import io
 import re
+
+from telethon import TelegramClient, events
+from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
+from telethon.errors.rpcerrorlist import UsernameOccupiedError
+from telethon.tl.functions.account import (UpdateProfileRequest,
+                                           UpdateUsernameRequest)
 from telethon.tl.functions.channels import EditPhotoRequest
+from telethon.tl.functions.photos import UploadProfilePhotoRequest
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.types import (MessageEntityMentionName, MessageMediaDocument,
+                               MessageMediaPhoto)
+from telethon.utils import get_input_location
+
+from userbot import bot
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ppic$"))

@@ -1,32 +1,21 @@
 from telethon import TelegramClient, events
+from telethon.errors import ChatAdminRequiredError
+from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator, Chat
+
 from userbot import bot
-from userbot import LOGGER, LOGGER_GROUP
-from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator
-from telethon.errors import ChatAdminRequiredError, InputUserDeactivatedError
 
-
-@bot.on(events.NewMessage(pattern="^.adminlist (.*)", outgoing=True))
-async def get_admin(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        mentions = "**Admins in this Chat**: \n"
-        choice = int(e.pattern_match.group(1))
-        to_write_chat = LOGGER_GROUP
-        chat = None
-        mentions = "Admins in channel {}: \n".format(str(e.chat_id))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.adminlist"))
+async def get_admin(show):
+    if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
+        mentions = "Admins in {}: \n".format(show.chat.title or "this chat")
         try:
-            async for x in bot.iter_participants(
-                e.chat_id, filter=ChannelParticipantsAdmins
+            async for user in bot.iter_participants(
+                show.chat_id, filter=ChannelParticipantsAdmins
             ):
-                if not x.deleted:
-                    mentions += f"\n[{x.first_name}](tg://user?id={x.id}) `{x.id}`"
+                if not user.deleted:
+                    mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
                 else:
-                    mentions += f"\n InputUserDeactivatedError `{x.id}`"
+                    mentions += f"\nDeleted Account `{user.id}`"
         except ChatAdminRequiredError as ea:
             mentions += " " + str(ea) + "\n"
-        if choice:
-            await e.edit(mentions)
-        elif LOGGER:
-            await e.edit("`Sent admin details to Logs!`")
-            await bot.send_message(LOGGER_GROUP, mentions)
-        else:
-            await e.edit("`This feature needs Logging to be enabled!`")
+        await show.edit(mentions)

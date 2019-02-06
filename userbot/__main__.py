@@ -1,11 +1,15 @@
-from telethon import TelegramClient, events
-import sqlite3
+import asyncio
+import importlib
 import logging
 import os
-import asyncio,time
+import sqlite3
 import sys
-from userbot import bot
-from userbot import LOGS, BRAIN_CHECKER
+import time
+
+from telethon import TelegramClient, events
+
+from userbot import BRAIN_CHECKER, LOGS, bot
+from userbot.modules import ALL_MODULES
 
 db = sqlite3.connect("brains.check")
 cursor = db.cursor()
@@ -15,8 +19,6 @@ for i in all_rows:
     BRAIN_CHECKER.append(i[0])
 db.close()
 bot.start()
-import importlib
-from userbot.modules import ALL_MODULES
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("userbot.modules." + module_name)
 LOGS.info('Your Bot is alive! Test it by typing .alive on any chat. Should you need assistance, head to https://t.me/userbot_support. Your Bot Version is 2.1.1-b')

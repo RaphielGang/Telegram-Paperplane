@@ -1,11 +1,10 @@
 # Special module to block pms automatically
-from telethon.tl.functions.contacts import BlockRequest
 import sqlite3
+
 from telethon import TelegramClient, events
-from userbot import bot
-from userbot import PM_AUTO_BAN
-from userbot import COUNT_PM, NOTIF_OFF
-from userbot import LOGGER, LOGGER_GROUP
+from telethon.tl.functions.contacts import BlockRequest
+
+from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, bot
 
 
 @bot.on(events.NewMessage(incoming=True))
@@ -18,8 +17,8 @@ async def permitpm(e):
                 from userbot.modules.sql_helper.pm_permit_sql import is_approved
             except:
                 return
-            E = is_approved(e.chat_id)
-            if not E and e.text != "`Bleep Blop! This is a Bot. Don't fret. \n\nMy Master hasn't approved you to PM. \
+            apprv = is_approved(e.chat_id)
+            if not apprv and e.text != "`Bleep Blop! This is a Bot. Don't fret. \n\nMy Master hasn't approved you to PM. \
 Please wait for my Master to look in, he would mostly approve PMs.\n\n\
 As far as i know, he doesn't usually approve Retards.`" :
                 await e.reply(
@@ -63,7 +62,7 @@ async def notifoff(e):
 
 @bot.on(events.NewMessage(outgoing=True,pattern="^.notifon$"))
 @bot.on(events.MessageEdited(outgoing=True,pattern="^.notifon$"))
-async def notifoff(e):
+async def notifon(e):
     global NOTIF_OFF
     NOTIF_OFF=False
     await e.edit("`Notifications unmuted!`")
