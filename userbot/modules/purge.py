@@ -1,10 +1,10 @@
-from async_generator import aclosing
 import asyncio
-from telethon import TelegramClient, events
-from userbot import bot
-from userbot import LOGGER, LOGGER_GROUP
 import time
 
+from async_generator import aclosing
+from telethon import TelegramClient, events
+
+from userbot import LOGGER, LOGGER_GROUP, bot
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.purge$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.purge$"))
@@ -39,18 +39,21 @@ async def fastpurger(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.purgeme"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.purgeme"))
-async def purgeme(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = e.text
+async def purgeme(delme):
+    if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
+        message = delme.text
+        self_id = await bot.get_peer_id('me')
         count = int(message[9:])
         i = 1
-        async for message in bot.iter_messages(e.chat_id, from_user="me"):
+
+        async for message in bot.iter_messages(delme.chat, self_id):
             if i > count + 1:
                 break
             i = i + 1
             await message.delete()
-        r = await bot.send_message(
-            e.chat_id,
+
+        smsg = await bot.send_message(
+            delme.chat_id,
             "`Purge complete!` Purged "
             + str(count)
             + " messages. **This auto-generated message shall be self destructed in 2 seconds.**",
@@ -61,15 +64,16 @@ async def purgeme(e):
             )
         time.sleep(2)
         i = 1
-        await r.delete()
+        await smsg.delete()
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.delmsg$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.delmsg$"))
-async def delmsg(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def delmsg(delmsg):
+    if not delmsg.text[0].isalpha() and delmsg.text[0] not in ("/", "#", "@", "!"):
+        self_id = await bot.get_peer_id('me')
         i = 1
-        async for message in bot.iter_messages(e.chat_id, from_user="me"):
+        async for message in bot.iter_messages(delmsg.chat, self_id):
             if i > 2:
                 break
             i = i + 1
@@ -78,15 +82,16 @@ async def delmsg(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.editme"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.editme"))
-async def editer(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = e.text
+async def editer(edit):
+    if not edit.text[0].isalpha() and edit.text[0] not in ("/", "#", "@", "!"):
+        message = edit.text
+        self_id = await bot.get_peer_id('me')
         string = str(message[8:])
         i = 1
-        async for message in bot.iter_messages(e.chat_id, from_user="me"):
+        async for message in bot.iter_messages(edit.chat, self_id):
             if i == 2:
                 await message.edit(string)
-                await e.delete()
+                await edit.delete()
                 break
             i = i + 1
         if LOGGER:
@@ -95,20 +100,20 @@ async def editer(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.sd"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.sd"))
-async def selfdestruct(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = e.text
+async def selfdestruct(destroy):
+    if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
+        message = destroy.text
         counter = int(message[4:6])
-        text = str(e.text[6:])
+        text = str(destroy.text[6:])
         text = (
             text
             + "`This message shall be self-destructed in "
             + str(counter)
             + " seconds`"
         )
-        await e.delete()
-        x=await bot.send_message(e.chat_id, text)
+        await destroy.delete()
+        smsg = await bot.send_message(e.chat_id, text)
         time.sleep(counter)
-        await x.delete()
+        await smsg.delete()
         if LOGGER:
             await bot.send_message(LOGGER_GROUP, "sd query done successfully")
