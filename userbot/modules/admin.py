@@ -10,6 +10,7 @@ from telethon.tl.types import ChatAdminRights, ChatBannedRights
 from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, SPAM, SPAM_ALLOWANCE,
                      bot)
 
+
 @bot.on(events.NewMessage(outgoing=True, pattern="^.promote$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
 async def promote(promt):
@@ -51,6 +52,7 @@ async def promote(promt):
             return
         await promt.edit("`Promoted Successfully!`")
 
+
 @bot.on(events.NewMessage(outgoing=True, pattern="^.demote$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.demote$"))
 async def demote(dmod):
@@ -88,6 +90,7 @@ async def demote(dmod):
             await dmod.edit("`You Don't have sufficient permissions to demhott`")
             return
         await dmod.edit("`Demoted Successfully!`")
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ban$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ban$"))
@@ -132,6 +135,7 @@ async def thanos(bon):
                 LOGGER_GROUP,
                 str((await bon.get_reply_message()).sender_id) + " was banned.",
             )
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.mute$"))
@@ -194,12 +198,12 @@ async def triggered_ban(triggerbon):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
-async def unmute(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def unmute(unmot):
+    if not unmot.text[0].isalpha() and unmot.text[0] not in ("/", "#", "@", "!"):
         from userbot.modules.sql_helper.spam_mute_sql import unmute
 
-        unmute(e.chat_id, str((await e.get_reply_message()).sender_id))
-        await e.edit("```Unmuted Successfully```")
+        unmute(unmot.chat_id, str((await unmot.get_reply_message()).sender_id))
+        await unmot.edit("```Unmuted Successfully```")
 
 
 @bot.on(events.NewMessage(incoming=True))
@@ -210,15 +214,16 @@ async def muter(moot):
         from userbot.modules.sql_helper.gmute_sql import is_gmuted
     except:
         return
-    mootd = is_muted(e.chat_id)
-    gmootd = is_gmuted(e.sender_id)
+    mootd = is_muted(moot.chat_id)
+    gmootd = is_gmuted(moot.sender_id)
     if mootd:
         for i in mootd:
-            if str(i.sender) == str(e.sender_id):
+            if str(i.sender) == str(moot.sender_id):
                 await moot.delete()
     for i in gmootd:
-        if i.sender == str(e.sender_id):
+        if i.sender == str(moot.sender_id):
             await moot.delete()
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
@@ -230,6 +235,7 @@ async def ungmute(ungmoot):
             await ungmoot.edit('`Running on Non-SQL Mode!`')
         ungmute(str((await ungmoot.get_reply_message()).sender_id))
         await ungmoot.edit("```Ungmuted Successfully```")
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.gmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.gmute$"))
