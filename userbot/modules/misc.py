@@ -1,9 +1,7 @@
 import asyncio
 import io
-import os
 import random
 import re
-import signal
 import subprocess
 import sys
 import time
@@ -12,47 +10,47 @@ from datetime import datetime
 import hastebin
 import pybase64
 import requests
-from telethon import TelegramClient, events
+from telethon import events
 
 from userbot import LOGGER, LOGGER_GROUP, bot
 from userbot.modules.rextester.api import Rextester, UnknownLanguage
 
-dogbin_url = "https://del.dog/"
+DOGBIN_URL = "https://del.dog/"
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.pip (.+)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
-async def pipcheck(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def pipcheck(pip):
+    if not pipe.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
         await e.reply("`Searching . . .`")
-        r = (
+        pipc = (
             "`"
             + subprocess.run(
                 ["pip3", "search", e.pattern_match.group(1)], stdout=subprocess.PIPE
             ).stdout.decode()
             + "`"
         )
-        await e.edit(r)
+        await pip.edit(pipc)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.paste"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.paste"))
-async def paste(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def paste(pstl):
+    if not pstl.text[0].isalpha() and pstl.text[0] not in ("/", "#", "@", "!"):
         dogbin_final_url = ""
 
-        textx = await e.get_reply_message()
-        message = e.text
-        await e.edit("`Pasting text . . .`")
+        textx = await pstl.get_reply_message()
+        message = pstl.text
+        await pstl.edit("`Pasting text . . .`")
         if message[7:]:
             message = str(message[7:])
         elif textx:
             message = str(textx.message)
 
-        #Dogbin
-        r = requests.post(dogbin_url + "documents", data=message.encode('utf-8'))
+        # Dogbin
+        r = requests.post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
 
-        #Hastebin
+        # Hastebin
         try:
             hastebin_final_url = hastebin.post(message)
         except Exception:
@@ -61,17 +59,17 @@ async def paste(e):
         if r.status_code == 200:
             response = r.json()
             key = response['key']
-            dogbin_final_url = dogbin_url + key
+            dogbin_final_url = DOGBIN_URL + key
 
             if response['isUrl']:
-                reply_text = f'`Pasted successfully!`\n\n`Shortened URL:` {dogbin_final_url}\n\n`Original(non-shortened) URLs`\n`Dogbin URL`: {dogbin_url}v/{key}\n`Hastebin URL`: {hastebin_final_url}'
+                reply_text = f'`Pasted successfully!`\n\n`Shortened URL:` {dogbin_final_url}\n\n`Original(non-shortened) URLs`\n`Dogbin URL`: {DOGBIN_URL}v/{key}\n`Hastebin URL`: {hastebin_final_url}'
             else:
                 reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: {dogbin_final_url}\n`Hastebin URL`: {hastebin_final_url}'
         else:
             reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: `Failed to reach dogbin`\n`Hastebin URL`: {hastebin_final_url}'
 
 
-        await e.edit(reply_text)
+        await pstl.edit(reply_text)
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
@@ -90,15 +88,15 @@ async def get_dogbin_content(e):
         elif textx:
             message = str(textx.message)
 
-        format_normal = f'{dogbin_url}'
-        format_view = f'{dogbin_url}v/'
+        format_normal = f'{DOGBIN_URL}'
+        format_view = f'{DOGBIN_URL}v/'
 
         if message.startswith(format_view):
             message = message[len(format_view):]
         elif message.startswith(format_normal):
             message = message[len(format_normal):]
 
-        r = requests.get(f'{dogbin_url}raw/{message}')
+        r = requests.get(f'{DOGBIN_URL}raw/{message}')
 
         if r.status_code != 200:
             try:
@@ -315,9 +313,9 @@ async def support_channel(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.sysd$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
-async def sysdetails(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        r = (
+async def sysdetails(sysd):
+    if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
+        neo = (
             "`"
             + subprocess.run(
                 [
@@ -337,7 +335,7 @@ async def sysdetails(e):
             ).stdout.decode()
             + "`"
         )
-        await e.edit(r)
+        await sysd.edit(neo)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.botver$"))
@@ -366,7 +364,11 @@ async def chatidgetter(e):
                     name = "@" + message.forward.sender.username
                 else:
                     name = "*" + message.forward.sender.first_name + "*"
-            await e.edit("**Name:** {} \n**User ID:** `{}`".format(name, user_id))
+            await e.edit(
+                "**Name:** {} \n**User ID:** `{}`"
+                .format(name, user_id)
+            )
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^\$"))
 async def rextestercli(e):
@@ -417,32 +419,32 @@ async def rextestercli(e):
 @bot.on(events.NewMessage(outgoing=True, pattern="^.unmutechat$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.unmutechat$"))
 async def unmute_chat(e):
-        if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-            try:
-                from userbot.modules.sql_helper.keep_read_sql import unkread
-            except:
-                await e.edit('`Running on Non-SQL Mode!`')
-            unkread(str(e.chat_id))
-            await e.edit("```Unmuted this chat Successfully```")
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        try:
+            from userbot.modules.sql_helper.keep_read_sql import unkread
+        except:
+            await e.edit('`Running on Non-SQL Mode!`')
+        unkread(str(e.chat_id))
+        await e.edit("```Unmuted this chat Successfully```")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mutechat$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.mutechat$"))
 async def mute_chat(e):
-        if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-            try:
-                from userbot.modules.sql_helper.keep_read_sql import kread
-            except Exception as er:
-                print(er)
-                await e.edit("`Running on Non-SQL mode!`")
-                return
-            await e.edit(str(e.chat_id))
-            kread(str(e.chat_id))
-            await e.edit("`Shush! This chat will be silenced!`")
-            if LOGGER:
-                await bot.send_message(
-                    LOGGER_GROUP,
-                    str(e.chat_id) + " was silenced.")
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        try:
+            from userbot.modules.sql_helper.keep_read_sql import kread
+        except Exception as er:
+            print(er)
+            await e.edit("`Running on Non-SQL mode!`")
+            return
+        await e.edit(str(e.chat_id))
+        kread(str(e.chat_id))
+        await e.edit("`Shush! This chat will be silenced!`")
+        if LOGGER:
+            await bot.send_message(
+                LOGGER_GROUP,
+                str(e.chat_id) + " was silenced.")
 
 
 @bot.on(events.NewMessage(incoming=True))
@@ -454,23 +456,28 @@ async def keep_read(e):
         return
     K = is_kread()
     if K:
-      for i in K:
-        if i.groupid == str(e.chat_id):
-            await bot.send_read_acknowledge(e.chat_id)
+        for i in K:
+            if i.groupid == str(e.chat_id):
+                await bot.send_read_acknowledge(e.chat_id)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.botlog$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botlog$"))
 async def botlogs(e):
-    process = await asyncio.create_subprocess_shell("sudo systemctl status userbot | tail -n 20", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    process = await asyncio.create_subprocess_shell(
+        "sudo systemctl status userbot | tail -n 20",
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+        )
+
     stdout, stderr = await process.communicate()
     result = str(stdout.decode().strip())
     f = open("err.log", "w+")
     f.write(result)
     f.close()
     await bot.send_file(
-    e.chat_id,
-    "err.log",
-    reply_to=e.id,
-    caption="`Bot logs are here!`",
+        e.chat_id,
+        "err.log",
+        reply_to=e.id,
+        caption="`Bot logs are here!`",
     )

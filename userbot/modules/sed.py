@@ -10,9 +10,9 @@ DELIMITERS = ("/", ":", "|", "_")
 
 def separate_sed(sed_string):
     if (
-        len(sed_string) >= 3
-        and sed_string[3] in DELIMITERS
-        and sed_string.count(sed_string[3]) >= 2
+            len(sed_string) >= 3
+            and sed_string[3] in DELIMITERS
+            and sed_string.count(sed_string[3]) >= 2
     ):
         delim = sed_string[3]
         start = counter = 4
@@ -33,9 +33,9 @@ def separate_sed(sed_string):
 
         while counter < len(sed_string):
             if (
-                sed_string[counter] == "\\"
-                and counter + 1 < len(sed_string)
-                and sed_string[counter + 1] == delim
+                    sed_string[counter] == "\\"
+                    and counter + 1 < len(sed_string)
+                    and sed_string[counter + 1] == delim
             ):
                 sed_string = sed_string[:counter] + sed_string[counter + 1 :]
 
@@ -63,19 +63,25 @@ async def sed(e):
         if L:
             to_fix = L.text
         else:
-            await e.edit("`Master, I don't have brains. Well you too don't I guess.`")
+            await e.edit(
+                "`Master, I don't have brains. Well you too don't I guess.`"
+                )
             return
 
         repl, repl_with, flags = sed_result
 
         if not repl:
-            await e.edit("`Master, I don't have brains. Well you too don't I guess.`")
+            await e.edit(
+                "`Master, I don't have brains. Well you too don't I guess.`"
+                )
             return
 
         try:
             check = re.match(repl, to_fix, flags=re.IGNORECASE)
             if check and check.group(0).lower() == to_fix.lower():
-                await e.edit("`Boi!, that's a reply. Don't use sed`")
+                await e.edit(
+                    "`Boi!, that's a reply. Don't use sed`"
+                    )
                 return
 
             if "i" in flags and "g" in flags:

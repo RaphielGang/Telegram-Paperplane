@@ -1,7 +1,7 @@
 import sqlite3
 import time
 
-from telethon import TelegramClient, events
+from telethon import events
 from telethon.errors import (ChannelInvalidError, ChatAdminRequiredError,
                              UserAdminInvalidError)
 from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
@@ -117,14 +117,16 @@ async def thanos(bon):
         try:
             await bot(
                 EditBannedRequest(
-                    bon.chat_id, (await bon.get_reply_message()).sender_id, rights
+                    bon.chat_id, (await bon.get_reply_message()).sender_id,
+                    rights
                 )
             )
 
         except Exception:
             if bon.sender_id in BRAIN_CHECKER:
                 await bon.respond(
-                    "<triggerban> " + str((await bon.get_reply_message()).sender_id)
+                    "<triggerban> " +
+                    str((await bon.get_reply_message()).sender_id)
                 )
                 return
 
@@ -165,7 +167,8 @@ async def spider(spdr):
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
-                str((await spdr.get_reply_message()).sender_id) + " was muted.",
+                str((await spdr.get_reply_message()).sender_id) +
+                " was muted.",
             )
 
 
@@ -228,7 +231,9 @@ async def muter(moot):
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
 async def ungmute(ungmoot):
-    if not ungmoot.text[0].isalpha() and ungmoot.text[0] not in ("/", "#", "@", "!"):
+    if not ungmoot.text[0].isalpha() and ungmoot.text[0] \
+            not in ("/", "#", "@", "!"):
+
         try:
             from userbot.modules.sql_helper.gmute_sql import ungmute
         except:

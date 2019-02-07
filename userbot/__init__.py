@@ -94,7 +94,8 @@ else:
     print("Updater disabled, spinning the bot without updating.")
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
 )
 LOGS = logging.getLogger(__name__)
 
