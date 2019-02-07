@@ -17,9 +17,9 @@ from userbot import bot
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ppic$"))
-async def profile_photo(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = await e.get_reply_message()
+async def profile_pic(ppic):
+    if not ppic.text[0].isalpha() and ppic.text[0] not in ("/", "#", "@", "!"):
+        message = await ppic.get_reply_message()
         photo = None
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
@@ -32,25 +32,25 @@ async def profile_photo(e):
                     photo = io.BytesIO(photo)
                     photo.name = "image.jpeg"  # small hack for documents images
             else:
-                await e.edit("```The extension of the media entity is invalid.```")
+                await ppic.edit("```The extension of the media entity is invalid.```")
 
         if photo:
             file = await bot.upload_file(photo)
             try:
                 await bot(UploadProfilePhotoRequest(file))
-                await e.edit("```Profile Picture Changed```")
+                await ppic.edit("```Profile Picture Changed```")
 
             except Exception as exc:
                 if isinstance(exc, PhotoCropSizeSmallError):
-                    await e.edit("```The image is too small```")
+                    await ppic.edit("```The image is too small```")
                 elif isinstance(exc, ImageProcessFailedError):
-                    await e.edit("```Failure while processing image```")
+                    await ppic.edit("```Failure while processing image```")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.xpic$"))
-async def profile_photo(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = await e.get_reply_message()
+async def profile_photo(ppht):
+    if not ppht.text[0].isalpha() and ppht.text[0] not in ("/", "#", "@", "!"):
+        message = await ppht.get_reply_message()
         photo = None
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
@@ -63,22 +63,26 @@ async def profile_photo(e):
                     photo = io.BytesIO(photo)
                     photo.name = "image.jpeg"  # small hack for documents images
             else:
-                await e.edit("```The extension of the media entity is invalid.```")
+                await ppht.edit(
+                    "```The extension of the media entity is invalid.```"
+                    )
 
         if photo:
             file = await bot.upload_file(photo)
             try:
                 await bot(EditPhotoRequest(e.chat_id, file))
-                await e.edit("```Chat Picture Changed```")
+                await ppht.edit("```Chat Picture Changed```")
 
             except Exception as exc:
                 if isinstance(exc, PhotoCropSizeSmallError):
-                    await e.edit("```The image is too small```")
+                    await ppht.edit("```The image is too small```")
                 elif isinstance(exc, ImageProcessFailedError):
-                    await e.edit("```Failure while processing image```")
+                    await ppht.edit("```Failure while processing image```")
                 else:
-                    await e.edit(
-                        "`Some issue with updating the pic, maybe you aren't an admin, or don't have the desired rights.`"
+                    await ppht.edit(
+                        "`Some issue with updating the pic,`"
+                        "`maybe you aren't an admin,`"
+                        "`or don't have the desired rights.`"
                     )
 
 
@@ -86,7 +90,9 @@ async def profile_photo(e):
 async def update_bio(e):
     bio = e.text.split(" ", 1)[1]
     if len(bio) > 70:
-        await e.edit("```Your Bio text is too long. The limit is 70 characters```")
+        await e.edit(
+            "```Your Bio text is too long. The limit is 70 characters```"
+            )
     else:
         await bot(UpdateProfileRequest(about=bio))
         await e.edit("```Succesfully edited Bio```")
@@ -96,28 +102,32 @@ async def update_bio(e):
 async def update_name(e):
     text = e.text.split(" ", 1)[1]
     name = text.split("\\n", 1)
-    firstName = name[0]
-    lastName = " "
+    firstname = name[0]
+    lastname = " "
     if len(name) == 2:
-        lastName = name[1]
+        lastname = name[1]
 
-    await bot(UpdateProfileRequest(first_name=firstName, last_name=lastName))
+    await bot(UpdateProfileRequest(first_name=firstname, last_name=lastname))
     await e.edit("```Your name was succesfully changed```")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.uname "))
-async def update_username(e):
-    text = e.text.split(" ", 1)[1]
+async def update_username(updtusrnm):
+    text = updtusrnm.text.split(" ", 1)[1]
     allowed_char = re.match(r"[a-zA-Z][\w\d]{3,30}[a-zA-Z\d]", text)
     if not allowed_char:
-        await e.edit("```Invalid Username```")
+        await updtusrnm.edit("```Invalid Username```")
     elif len(text) > 30:
-        await e.edit("```Your username is too long. The limit is 30 characters```")
+        await updtusrnm.edit(
+            "```Your username is too long. The limit is 30 characters```"
+            )
     elif len(text) < 5:
-        await e.edit("```Your username is to short.```")
+        await updtusrnm.edit(
+            "```Your username is to short.```"
+            )
     else:
         try:
             await bot(UpdateUsernameRequest(text))
-            await e.edit("```Your username was succesfully changed```")
+            await updtusrnm.edit("```Your username was succesfully changed```")
         except UsernameOccupiedError:
-            await e.edit("```This username is already taken```")
+            await updtusrnm.edit("```This username is already taken```")

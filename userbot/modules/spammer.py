@@ -35,10 +35,10 @@ async def bigspam(e):
 async def tiny_pic_spam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
-        TEXT = message.split()
-        counter = int(TEXT[1])
-        LINK = str(TEXT[2])
+        text = message.split()
+        counter = int(text[1])
+        link = str(text[2])
         for i in range(1, counter):
-            await bot.send_file(e.chat_id, LINK)
+            await bot.send_file(e.chat_id, link)
         await e.delete()
         await bot.send_message(LOGGER_GROUP, "PicSpam was successful")
