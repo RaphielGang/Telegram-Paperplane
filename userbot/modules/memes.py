@@ -399,7 +399,8 @@ async def claptext(e):
 async def bluetext(e):
     if await e.get_reply_message():
         await e.edit(
-            "`BLUETEXT MUST CLICK.\nAre you a stupid animal which is attracted to colours?`"
+            "`BLUETEXT MUST CLICK.`\n"
+            "`Are you a stupid animal which is attracted to colours?`"
         )
 
 

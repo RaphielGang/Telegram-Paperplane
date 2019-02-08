@@ -222,7 +222,7 @@ async def randomise(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.alive$"))
 async def amialive(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("`Master! I am alive😁`")
+        await e.edit("`Master! I am alive 😁`")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.chatid$"))
@@ -465,7 +465,7 @@ async def keep_read(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botlog$"))
 async def botlogs(e):
     process = await asyncio.create_subprocess_shell(
-        "sudo systemctl status userbot | tail -n 20",
+        "su -c systemctl status userbot | tail -n 20",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
         )

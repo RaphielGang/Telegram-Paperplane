@@ -20,4 +20,4 @@ gTTS-token>=1.1.3
 psycopg2
 python-dotenv
 aiohttp
-git+https://github.com/tulir/telethon-session-sqlalchemy
+telethon-session-sqlalchemy>=0.2.6
