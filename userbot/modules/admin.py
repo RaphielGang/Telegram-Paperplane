@@ -167,8 +167,8 @@ async def spider(spdr):
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
-                str((await spdr.get_reply_message()).sender_id) +
-                " was muted.",
+                str((await spdr.get_reply_message()).sender_id)
+                + " was muted.",
             )
 
 

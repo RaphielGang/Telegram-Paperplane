@@ -3,7 +3,7 @@ try:
 except ImportError:
     raise Exception("Hello!")
 
-from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
+from sqlalchemy import Column, String, UnicodeText
 
 
 class GMute(BASE):
