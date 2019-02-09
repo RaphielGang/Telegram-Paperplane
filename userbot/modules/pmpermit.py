@@ -1,7 +1,8 @@
 import sqlite3
 
-from telethon import TelegramClient, events
+from telethon import events
 from telethon.tl.functions.contacts import BlockRequest
+from telethon.tl.functions.messages import ReportSpamRequest
 
 from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, bot
 
@@ -44,6 +45,7 @@ async def permitpm(e):
                     )
                     del COUNT_PM[e.chat_id]
                     await bot(BlockRequest(e.chat_id))
+                    await bot(ReportSpamRequest(peer='e.chat_id'))
                     if LOGGER:
                         name = await bot.get_entity(e.chat_id)
                         name0 = str(name.first_name)
