@@ -232,26 +232,6 @@ async def chatidgetter(e):
         await e.edit("Chat ID: `" + str(e.chat_id) + "`")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.updatebleeding$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatebleding$"))
-async def bleeding_upstream(e):
-    await e.edit("`Please wait while I upstream myself!`")
-    bot.disconnect()
-    try:
-        subprocess.run(["python", "-m", "userbot", "test", "haha"])
-    except:
-        pass
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^.updatestable$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatestable$"))
-async def stable_upstream(e):
-    await e.edit("`Please wait while I upstream myself!`")
-    bot.disconnect()
-    try:
-        subprocess.run(["python", "-m", "userbot", "test", "haha", "yes"])
-    except:
-        pass
-
 @bot.on(events.NewMessage(outgoing=True, pattern="^.pingme$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.pingme$"))
 async def pingme(e):
