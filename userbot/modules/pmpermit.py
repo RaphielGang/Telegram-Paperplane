@@ -93,7 +93,7 @@ async def approvepm(apprvpm):
                 "["
                 + name0
                 + "](tg://user?id="
-                + str(e.chat_id)
+                + str(apprvpm.chat_id)
                 + ")"
                 + " was approved to PM you.",
             )
