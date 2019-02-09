@@ -1,14 +1,12 @@
-import sqlite3
 import time
 
 from telethon import events
-from telethon.errors import (ChannelInvalidError, ChatAdminRequiredError,
-                             UserAdminInvalidError)
+from telethon.errors import BadRequestError
 from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
+
 from telethon.tl.types import ChatAdminRights, ChatBannedRights
 
-from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, SPAM, SPAM_ALLOWANCE,
-                     bot)
+from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, bot)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.promote$"))
@@ -45,7 +43,7 @@ async def promote(promt):
                                  rights)
             )
 
-        except Exception:
+        except BadRequestError:
             await promt.edit(
                 "`You Don't have sufficient permissions to parmod`"
                 )
@@ -86,7 +84,7 @@ async def demote(dmod):
                                  .sender_id, rights)
             )
 
-        except Exception:
+        except BadRequestError:
             await dmod.edit("`You Don't have sufficient permissions to demhott`")
             return
         await dmod.edit("`Demoted Successfully!`")
@@ -122,7 +120,7 @@ async def thanos(bon):
                 )
             )
 
-        except Exception:
+        except BadRequestError:
             if bon.sender_id in BRAIN_CHECKER:
                 await bon.respond(
                     "<triggerban> " +
@@ -174,7 +172,7 @@ async def spider(spdr):
 
 @bot.on(events.NewMessage(incoming=True, pattern="<triggerban>"))
 async def triggered_ban(triggerbon):
-    ban_id = int(e.text[13:])
+    ban_id = int(triggerbon.text[13:])
     if triggerbon.sender_id in BRAIN_CHECKER:  # non-working module#
         rights = ChatBannedRights(
             until_date=None,
@@ -193,15 +191,15 @@ async def triggered_ban(triggerbon):
         return
 
         time.sleep(5)
-        await bot(EditBannedRequest(e.chat_id, ban_id, rights))
+        await bot(EditBannedRequest(triggerbon.chat_id, ban_id, rights))
         await triggerbon.delete()
-        await bot.send_message(e.chat_id,
+        await bot.send_message(triggerbon.chat_id,
                                "Job was done, Master! Gimme Cookies!")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
-async def unmute(unmot):
+async def unmoot(unmot):
     if not unmot.text[0].isalpha() and unmot.text[0] not in ("/", "#", "@", "!"):
         from userbot.modules.sql_helper.spam_mute_sql import unmute
 
@@ -230,7 +228,7 @@ async def muter(moot):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
-async def ungmute(ungmoot):
+async def ungmoot(ungmoot):
     if not ungmoot.text[0].isalpha() and ungmoot.text[0] \
             not in ("/", "#", "@", "!"):
 
