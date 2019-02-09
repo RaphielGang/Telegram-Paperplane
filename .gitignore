@@ -1,7 +1,9 @@
 config.env
 __pycache__/*
 brains.check
+userbot.db
 userbot.session
+userbot.session-journal
 userbot/__pycache__/*
 userbot/modules/__pycache__/*
 userbot/modules/rextester/__pycache__/*
