@@ -140,7 +140,7 @@ async def log(e):
 async def speedtest(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         l = await e.reply("`Running speed test . . .`")
-        k = subprocess.run(["speedtest-cli"], stdout=subprocess.PIPE)
+        k = subprocess.run(["speedtest-cli --simple"], stdout=subprocess.PIPE)
         await l.edit("`" + k.stdout.decode()[:-1] + "`")
         await e.delete()
 
