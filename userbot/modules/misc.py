@@ -21,7 +21,7 @@ DOGBIN_URL = "https://del.dog/"
 @bot.on(events.NewMessage(outgoing=True, pattern="^.pip (.+)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
 async def pipcheck(pip):
-    if not pipe.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
+    if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
         await e.reply("`Searching . . .`")
         pipc = (
             "`"
