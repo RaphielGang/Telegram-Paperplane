@@ -186,9 +186,9 @@ async def triggered_ban(triggerbon):
             embed_links=True,
         )
 
-    if ban_id in BRAIN_CHECKER:
-        await triggerbon.edit("`Sorry Master!`")
-        return
+        if ban_id in BRAIN_CHECKER:
+            await triggerbon.edit("`Sorry Master!`")
+            return
 
         time.sleep(5)
         await bot(EditBannedRequest(triggerbon.chat_id, ban_id, rights))
