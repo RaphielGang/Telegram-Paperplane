@@ -1,13 +1,33 @@
+# We're using Alpine stable
+FROM alpine:3.9
 
+#
+# We have to uncomment Community repo for some packages
+#
+RUN sed -e 's;^#http\(.*\)/v3.9/community;http\1/v3.9/community;g' \
+      -i /etc/apk/repositories
 
-FROM base/devel
-# ensure local python is preferred over distribution python
-ENV PATH /usr/local/bin:$PATH
-ENV PYTHON_VERSION 3.7.2
-RUN pacman -Syu --noconfirm && pacman -S python3 python-pip postgresql postgresql-libs neofetch git --noconfirm
-# http://bugs.python.org/issue19846
-# > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not 
-COPY . /app
+#
+# Install all the required packages
+#
+RUN apk add --no-cache python3 \
+    py-pillow py-requests py-sqlalchemy py-psycopg2 \
+    curl neofetch git
+RUN apk add --no-cache sqlite
+
+#
+# Copy Python Requirements to /app
+#
+COPY ./requirements.txt /app/
 WORKDIR /app
-RUN pip install -r requirements.txt
-CMD ["python3","-m","userbot"]
+
+#
+# Install requirements
+#
+RUN pip3 install -r requirements.txt
+
+#
+# Copy bot files to /app
+#
+COPY . /app
+cmd ["python3","-m","userbot"]
