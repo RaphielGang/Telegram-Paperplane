@@ -3,7 +3,7 @@ import sqlite3
 from telethon import events
 from telethon.tl.functions.contacts import BlockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
-
+import time
 from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, bot
 
 
@@ -99,3 +99,11 @@ async def approvepm(apprvpm):
                 + ")"
                 + " was approved to PM you.",
             )
+
+
+@bot.on(await events.NewMessage(outgoing=True,pattern="^.block$"))
+@bot.on(await events.MessageEdited(outgoing=True,pattern="^.block$"))
+async def blockpm(block):
+    await block.respond("`You are gonna be blocked from PM-ing my Master!")
+    time.sleep(3)
+    await bot(BlockRequest(block.chat_id))
