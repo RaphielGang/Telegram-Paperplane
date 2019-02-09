@@ -342,7 +342,18 @@ async def sysdetails(sysd):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botver$"))
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("`UserBot Version: Modular r2.1.1-b`")
+        ver = (
+            "`UserBot Version: "
+            + subprocess.run(
+                [
+                    "git",
+                    "describe",
+                    "--always"
+                ],
+                stdout=subprocess.PIPE,).stdout.decode() + "`"
+        )
+
+        await e.edit(ver)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.userid$"))
