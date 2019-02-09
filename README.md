@@ -1,9 +1,9 @@
 # Telegram-UserBot
 
  [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot) [![codecov](https://codecov.io/gh/baalajimaestro/Telegram-UserBot/branch/modular/graph/badge.svg)](https://codecov.io/gh/baalajimaestro/Telegram-UserBot)
- 
+
  #### To track Semaphore builds, see the commits section. Since I use Semaphore 2.0, it is not possible to track the progress fully, or put a badge here. Ignore Travis CI for PRs.
- 
+
 
 ### If the CI builds pass, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
@@ -36,7 +36,9 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 
 ## Getting your own userbot up and running:
 
-**Carfully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
+**Carefully read this entire guide before cloning so you don't end up getting stuck. When followed properly you'll end up with your userbot up and running after following it.**
+
+## A big note for humans : Please don't push your config.env and userbot.session to GitHub directly, Please, can you not
 
 ## Automated Method:
 
@@ -123,7 +125,7 @@ An example `config.env` file could be:
     PM_AUTO_BAN=True
     CONSOLE_LOGGER_VERBOSE=True
     SCREEN_SHOT_LAYER_ACCESS_KEY="get from screenshot layer website google it "
-    OPEN_WEATHER_MAP_APPID="get it from openweather site"    
+    OPEN_WEATHER_MAP_APPID="get it from openweather site"
     DB_URI="postgres://userbot:mypass@localhost:5432/userbot"
 ```
 
@@ -161,7 +163,7 @@ Userbot setup on termux:
 - **Installing Requirements:** `pip3 install -r requirements.txt`
 
 - **Finally Run it now:** `python3 -m userbot`
- 
+
 
 #### Running on Heroku:
 
