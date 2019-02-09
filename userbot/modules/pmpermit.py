@@ -101,8 +101,8 @@ async def approvepm(apprvpm):
             )
 
 
-@bot.on(await events.NewMessage(outgoing=True,pattern="^.block$"))
-@bot.on(await events.MessageEdited(outgoing=True,pattern="^.block$"))
+@bot.on(events.NewMessage(outgoing=True,pattern="^.block$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern="^.block$"))
 async def blockpm(block):
     await block.respond("`You are gonna be blocked from PM-ing my Master!")
     time.sleep(3)
