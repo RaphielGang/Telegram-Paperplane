@@ -76,9 +76,8 @@ async def kick_marie_filter(e):
         for filter in filters:
             await e.reply("/stop %s" % (filter.strip()))
             await asyncio.sleep(0.3)
-        await e.respond("/filter filters @baalajimaestro kicked them all")
         await e.respond(
-            "```Successfully purged Marie filters yaay!```\n Gimme cookies @baalajimaestro"
+            "```Successfully purged Marie filters yaay!```\n Gimme cookies!"
         )
         if LOGGER:
             await bot.send_message(

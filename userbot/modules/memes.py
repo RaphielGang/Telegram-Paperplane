@@ -91,14 +91,14 @@ async def copypasta(e):
         await e.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.vapor"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.vapor"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.vapor (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.vapor (.*)"))
 async def vapor(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
         message = e.text
         if message[7:]:
-            message = str(message[7:])
+            message = e.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
@@ -110,14 +110,14 @@ async def vapor(e):
         await e.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.str"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.str"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.str (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.str (.*)"))
 async def stretch(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
         message = e.text
         if message[5:]:
-            message = str(message[5:])
+            message = e.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
@@ -126,14 +126,14 @@ async def stretch(e):
         await e.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.zal"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.zal"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.zal (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.zal (.*)"))
 async def zal(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
         message = e.text
         if message[4:]:
-            message = str(message[4:])
+            message = e.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
@@ -148,14 +148,14 @@ async def hoi(e):
     await e.edit("Hoi!😄")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.owo"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.owo"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.owo (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.owo (.*)"))
 async def faces(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
         message = e.text
         if message[5:]:
-            message = str(message[5:])
+            message = e.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
@@ -378,13 +378,13 @@ async def spongemocktext(e):
         await e.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.clap"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.clap"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.clap (.*)"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.clap (.*)"))
 async def claptext(e):
     textx = await e.get_reply_message()
     message = e.text
     if message[6:]:
-        message = str(message[6:])
+        message = se.pattern_match.group(1)
     elif textx:
         message = textx
         message = str(message.message)
