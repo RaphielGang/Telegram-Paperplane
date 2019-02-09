@@ -43,11 +43,12 @@ async def fastpurger(e):
 async def purgeme(delme):
     if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
         message = delme.text
+        chat = await delme.get_input_chat()
         self_id = await bot.get_peer_id('me')
         count = int(message[9:])
         i = 1
 
-        async for message in bot.iter_messages(delme.chat, self_id):
+        async for message in bot.iter_messages(chat, self_id):
             if i > count + 1:
                 break
             i = i + 1
@@ -70,11 +71,12 @@ async def purgeme(delme):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.delmsg$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.delmsg$"))
-async def delmsg(delmsg):
-    if not delmsg.text[0].isalpha() and delmsg.text[0] not in ("/", "#", "@", "!"):
+async def delmsg(delme):
+    if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
         self_id = await bot.get_peer_id('me')
+        chat = await delme.get_input_chat()
         i = 1
-        async for message in bot.iter_messages(delmsg.chat, self_id):
+        async for message in bot.iter_messages(chat, self_id):
             if i > 2:
                 break
             i = i + 1
@@ -86,10 +88,11 @@ async def delmsg(delmsg):
 async def editer(edit):
     if not edit.text[0].isalpha() and edit.text[0] not in ("/", "#", "@", "!"):
         message = edit.text
+        chat = await edit.get_input_chat()
         self_id = await bot.get_peer_id('me')
         string = str(message[8:])
         i = 1
-        async for message in bot.iter_messages(edit.chat, self_id):
+        async for message in bot.iter_messages(chat, self_id):
             if i == 2:
                 await message.edit(string)
                 await edit.delete()
