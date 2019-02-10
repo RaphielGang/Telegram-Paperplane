@@ -5,6 +5,7 @@ import os
 import logging
 import time
 import dotenv
+from distutils.util import strtobool as sb
 from alchemysession import AlchemySessionContainer
 from sqlalchemy import create_engine
 from telethon import TelegramClient, events
@@ -44,13 +45,13 @@ except NameError:
 
     LOGGER_GROUP = int(os.environ.get("LOGGER_GROUP", "0"))
 
-    LOGGER = os.environ.get(
-        "LOGGER", None
-    )  # Incase you want to turn off logging, put this to false
+    LOGGER = sb(os.environ.get(
+        "LOGGER", "False"
+    ))  # Incase you want to turn off logging, put this to false
 
-    PM_AUTO_BAN = os.environ.get("PM_AUTO_BAN", None)
+    PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
-    CONSOLE_LOGGER_VERBOSE = os.environ.get("CONSOLE_LOGGER_VERBOSE", None)
+    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
     DB_URI = os.environ.get("DATABASE_URI", None)
 
