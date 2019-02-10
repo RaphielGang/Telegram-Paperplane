@@ -81,22 +81,16 @@ async def who(event):
     else:
         user_bio = "This User has no About"
 
-    caption = ("```USER INFO:``` \n"
-               "First Name: {} \n"
-               "Last Name: {} \n"
-               "Username: {} \n"
-               "ID: `{}` \n \n"
-               "Bio: \n`{}` \n \n"
-               "Common Chats with this user: {} \n"
-               "Permanent Link To Profile: [Click Here](tg://user?id={})"
-               .format(
-                   first_name,
-                   last_name,
-                   username,
-                   user_id,
-                   user_bio,
-                   common_chat,
-                   user_id))
+    caption = "<b>USER INFO:</b> \n"
+    caption += f"First Name: {first_name} \n"
+    caption += f"Last Name: {last_name} \n"
+    caption += f"Username: {username} \n"
+    caption += f"ID: <code>{user_id}</code> \n \n"
+    caption += f"Bio: \n<code>{user_bio}</code> \n \n"
+    caption += f"Common Chats with this user: {common_chat} \n"
+    caption += f"Permanent Link To Profile: "
+    caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
+
     message_id_to_reply = event.message.reply_to_msg_id
 
     if not message_id_to_reply:
@@ -106,8 +100,10 @@ async def who(event):
         event.chat_id,
         photo,
         caption=caption,
+        link_preview=False,
         force_document=False,
-        reply_to=message_id_to_reply
+        reply_to=message_id_to_reply,
+        parse_mode="html"
     )
 
     if not photo.startswith("http"):
