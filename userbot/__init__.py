@@ -31,12 +31,12 @@ except NameError:
     LOGGER_GROUP = int(os.environ.get("LOGGER_GROUP", "0"))
 
     LOGGER = sb(os.environ.get(
-        "LOGGER", None
+        "LOGGER", "False"
     ))  # Incase you want to turn off logging, put this to false
 
-    PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", None))
+    PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
-    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", None))
+    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
     DB_URI = os.environ.get("DATABASE_URL", None)
 
