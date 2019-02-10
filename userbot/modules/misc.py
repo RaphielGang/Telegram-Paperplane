@@ -10,9 +10,10 @@ from datetime import datetime
 import hastebin
 import pybase64
 import requests
-from telethon import events
+from telethon import functions, events
 
 from userbot import LOGGER, LOGGER_GROUP, bot
+from telethon.tl.functions.help import GetNearestDcRequest
 from userbot.modules.rextester.api import Rextester, UnknownLanguage
 
 DOGBIN_URL = "https://del.dog/"
@@ -153,6 +154,17 @@ async def speedtest(e):
         k = subprocess.run(["speedtest-cli --simple"], stdout=subprocess.PIPE)
         await l.edit("`" + k.stdout.decode()[:-1] + "`")
         await e.delete()
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.nearestdc$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.nearestdc$"))
+async def neardc(e):
+    result = await bot(functions.help.GetNearestDcRequest())
+    await e.edit(
+        f"Country : `{result.country}` \n"
+        f"Nearest Datacenter : `{result.nearest_dc}` \n"
+        f"This Datacenter : `{result.this_dc}`"
+    )
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.hash (.*)"))
