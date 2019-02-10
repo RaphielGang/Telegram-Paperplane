@@ -1,3 +1,4 @@
+import subprocess
 from datetime import datetime
 
 from telethon import events, functions
