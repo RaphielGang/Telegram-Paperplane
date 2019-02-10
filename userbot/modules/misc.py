@@ -281,33 +281,6 @@ async def support_channel(e):
         await e.edit("t.me/maestro_userbot_channel")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.sysd$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
-async def sysdetails(sysd):
-    if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
-        neo = (
-            "`"
-            + subprocess.run(
-                [
-                    "neofetch",
-                    "--off",
-                    "--color_blocks off",
-                    "--bold off",
-                    "--cpu_temp",
-                    "C",
-                    "--cpu_speed",
-                    "on",
-                    "--cpu_cores",
-                    "physical",
-                    "--stdout",
-                ],
-                stdout=subprocess.PIPE,
-            ).stdout.decode()
-            + "`"
-        )
-        await sysd.edit(neo)
-
-
 @bot.on(events.NewMessage(outgoing=True, pattern="^.botver$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botver$"))
 async def bot_ver(e):

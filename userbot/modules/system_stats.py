@@ -5,6 +5,7 @@
 ########
 import subprocess
 
+from shutil import which
 from telethon import events
 
 from userbot import LOGGER, LOGGER_GROUP, bot
@@ -52,26 +53,35 @@ async def web_server_stat(e):
             reply_to=e.id,
             caption="`Here is your current status`",
         )
-        r = (
-            "`"
-            + subprocess.run(
-                [
-                    "neofetch",
-                    "--off",
-                    "--color_blocks off",
-                    "--bold off",
-                    "--cpu_temp",
-                    "C",
-                    "--cpu_speed",
-                    "on",
-                    "--cpu_cores",
-                    "physical",
-                    "--stdout",
-                ],
-                stdout=subprocess.PIPE,
-            ).stdout.decode()
-            + "`"
-        )
-        await bot.send_message(LOGGER_GROUP, r)
         subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
         await e.delete()
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.sysd$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
+async def sysdetails(sysd):
+    if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
+        try:
+            neo = (
+                "`"
+                + subprocess.run(
+                    [
+                        "neofetch",
+                        "--off",
+                        "--color_blocks off",
+                        "--bold off",
+                        "--cpu_temp",
+                        "C",
+                        "--cpu_speed",
+                        "on",
+                        "--cpu_cores",
+                        "physical",
+                        "--stdout",
+                    ],
+                    stdout=subprocess.PIPE,
+                ).stdout.decode()
+                + "`"
+            )
+            await sysd.edit(neo)
+        except FileNotFoundError:
+            await sysd.edit("`Hella install neofetch first kthx`")
