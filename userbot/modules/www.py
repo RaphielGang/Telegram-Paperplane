@@ -1,4 +1,6 @@
 import subprocess
+import speedtest
+
 from datetime import datetime
 
 from telethon import events, functions
@@ -8,12 +10,48 @@ from userbot import bot
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.speed$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.speed$"))
-async def speedtest(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        l = await e.reply("`Running speed test . . .`")
-        k = subprocess.run(["speedtest-cli --simple"], stdout=subprocess.PIPE)
-        await l.edit("`" + k.stdout.decode()[:-1] + "`")
-        await e.delete()
+async def speedtst(spd):
+    if not spd.text[0].isalpha() and spd.text[0] not in ("/", "#", "@", "!"):
+        await spd.edit("`Running speed test . . .`")
+        test = speedtest.Speedtest()
+
+        test.get_best_server()
+        test.download()
+        test.upload()
+        test.results.share()
+        result = test.results.dict()
+
+    await spd.edit("`"
+                   "Started at "
+                   f"{result['timestamp']} \n\n"
+                   "Download "
+                   f"{speed_convert(result['download'])} \n"
+                   "Upload "
+                   f"{speed_convert(result['upload'])} \n"
+                   "Ping "
+                   f"{result['ping']} \n"
+                   "ISP "
+                   f"{result['client']['isp']}"
+                   "`")
+
+
+def speed_convert(size):
+    """
+    Hi human, you can't read bytes?
+    """
+    power = 2**10
+    zero = 0
+    units = {
+        0: '',
+        1: 'KB',
+        2: 'MB',
+        3: 'GB',
+        4: 'TB'}
+    while size > power:
+        size /= power
+        zero += 1
+    return f"{round(size, 2)} {units[zero]}"
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.nearestdc$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.nearestdc$"))
