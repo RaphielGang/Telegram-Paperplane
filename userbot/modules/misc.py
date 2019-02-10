@@ -22,7 +22,7 @@ DOGBIN_URL = "https://del.dog/"
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
 async def pipcheck(pip):
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
-        await e.reply("`Searching . . .`")
+        await pip.reply("`Searching . . .`")
         pipc = (
             "`"
             + subprocess.run(
@@ -62,12 +62,22 @@ async def paste(pstl):
             dogbin_final_url = DOGBIN_URL + key
 
             if response['isUrl']:
-                reply_text = f'`Pasted successfully!`\n\n`Shortened URL:` {dogbin_final_url}\n\n`Original(non-shortened) URLs`\n`Dogbin URL`: {DOGBIN_URL}v/{key}\n`Hastebin URL`: {hastebin_final_url}'
+                reply_text = (
+                    f"`Pasted successfully!`\n\n"
+                    "`Shortened URL:` {dogbin_final_url}\n\n`"
+                    "Original(non-shortened) URLs`\n"
+                    "`Dogbin URL`: {DOGBIN_URL}v/{key}\n`"
+                    "Hastebin URL`: {hastebin_final_url}")
             else:
-                reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: {dogbin_final_url}\n`Hastebin URL`: {hastebin_final_url}'
+                reply_text = (
+                    f"`Pasted successfully!`\n\n"
+                    "`Dogbin URL`: {dogbin_final_url}\n`"
+                    "Hastebin URL`: {hastebin_final_url}")
         else:
-            reply_text = f'`Pasted successfully!`\n\n`Dogbin URL`: `Failed to reach dogbin`\n`Hastebin URL`: {hastebin_final_url}'
-
+            reply_text = (
+                f"`Pasted successfully!`\n\n"
+                "`Dogbin URL`: `Failed to reach dogbin`"
+                "\n`Hastebin URL`: {hastebin_final_url}")
 
         await pstl.edit(reply_text)
         if LOGGER:
