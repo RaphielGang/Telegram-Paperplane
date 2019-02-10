@@ -107,15 +107,22 @@ async def thanos(bon):
             embed_links=True,
         )
 
-        if (await bon.get_reply_message()).sender_id in BRAIN_CHECKER:
-            await bon.edit("`Ban Error! I am not supposed to ban this user`")
+        sender = await bon.get_reply_message()
+        try:
+            if sender.sender_id in BRAIN_CHECKER:
+                await bon.edit("`Ban Error! I am not supposed to ban this user`")
+                return
+        except AttributeError:
+            await bon.edit("`You don't seems to do this right`")
             return
+
         await bon.edit("`Whacking the pest!`")
         time.sleep(5)
         try:
             await bot(
                 EditBannedRequest(
-                    bon.chat_id, (await bon.get_reply_message()).sender_id,
+                    bon.chat_id,
+                    sender.sender_id,
                     rights
                 )
             )
