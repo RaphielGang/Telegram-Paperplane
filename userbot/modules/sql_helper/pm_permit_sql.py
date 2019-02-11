@@ -29,10 +29,3 @@ def approve(chat_id):
     adder = PMPermit(str(chat_id))
     SESSION.add(adder)
     SESSION.commit()
-
-
-def dissprove(chat_id):
-    rem = SESSION.query(PMPermit).get(str(chat_id))
-    if rem:
-        SESSION.delete(rem)
-        SESSION.commit()
