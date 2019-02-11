@@ -12,7 +12,11 @@ from telethon import TelegramClient, events
 
 
 dotenv.load_dotenv("config.env")
-subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
+
+if os.path.exists("brains.check"):
+    os.remove("brains.check")
+else:
+    LOGS.info("Braincheck file does not exist, fetching...")
 
 URL = 'https://storage.googleapis.com/project-aiml-bot/brains.check'
 GET = requests.get(URL)
