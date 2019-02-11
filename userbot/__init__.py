@@ -53,7 +53,7 @@ except NameError:
 
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
-    DB_URI = os.environ.get("DATABASE_URI", None)
+    DB_URI = os.environ.get("DATABASE_URL", None)
 
     SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY", None)
 
