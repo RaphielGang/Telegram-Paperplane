@@ -5,6 +5,7 @@ import re
 import subprocess
 import sys
 import time
+from shutil import which
 from datetime import datetime
 
 import hastebin
@@ -285,31 +286,38 @@ async def support_channel(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botver$"))
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        ver = (
-            "`UserBot Version: "
-            + subprocess.run(
-                [
-                    "git",
-                    "describe",
-                    "--all",
-                    "--long"
-                ],
-                stdout=subprocess.PIPE,).stdout.decode() + "`"
-        )
+        if which("git") is not None:
+            ver = (
+                "`UserBot Version: "
+                + subprocess.run(
+                    [
+                        "git",
+                        "describe",
+                        "--all",
+                        "--long"
+                    ],
+                    stdout=subprocess.PIPE,).stdout.decode() + "`"
+            )
 
-        copoint = (
-            "`At: "
-            + subprocess.run(
-                [
-                    "git",
-                    "rev-list",
-                    "--all",
-                    "--count"
-                ], stdout=subprocess.PIPE,
-            ).stdout.decode() + "`"
-        )
+            copoint = (
+                "`At: "
+                + subprocess.run(
+                    [
+                        "git",
+                        "rev-list",
+                        "--all",
+                        "--count"
+                    ], stdout=subprocess.PIPE,
+                ).stdout.decode() + "`"
+            )
 
-        await e.edit(ver + copoint)
+            await e.edit(ver + copoint)
+        else:
+            ver = (
+                "`UserBot Version: r2.2a`"
+            )
+
+            await e.edit(ver)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.userid$"))
