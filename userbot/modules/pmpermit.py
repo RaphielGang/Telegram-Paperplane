@@ -116,7 +116,8 @@ async def approvepm(apprvpm):
 @bot.on(events.MessageEdited(outgoing=True,pattern="^.block$"))
 async def blockpm(block):
     if not block.text[0].isalpha() and block.text[0] not in ("/", "#", "@", "!"):
-        await block.respond("`You are gonna be blocked from PM-ing my Master!`")
+
+        await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
         if block.reply_to_msg_id:
             reply = await block.get_reply_message()
@@ -142,7 +143,7 @@ async def unblockpm(unblock):
     if not unblock.text[0].isalpha() and unblock.text[0] \
             not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
 
-        await unblock.respond("`My Master has forgiven you to PM now`")
+        await unblock.edit("`My Master has forgiven you to PM now`")
 
         if unblock.reply_to_msg_id:
             reply = await unblock.get_reply_message()
