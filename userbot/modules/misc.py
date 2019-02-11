@@ -419,7 +419,7 @@ async def keep_read(e):
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botlog$"))
 async def botlogs(e):
     process = await asyncio.create_subprocess_shell(
-        "su -c systemctl status userbot | tail -n 20",
+        "sudo systemctl status userbot | tail -n 20",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
         )
