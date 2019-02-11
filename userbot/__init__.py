@@ -6,23 +6,20 @@ import logging
 import time
 import dotenv
 from distutils.util import strtobool as sb
+import requests
 from alchemysession import AlchemySessionContainer
 from sqlalchemy import create_engine
 from telethon import TelegramClient, events
 
+
 dotenv.load_dotenv("config.env")
-UPDATER = os.environ.get("UPDATER", None)
-BUILD_CHOICE = os.environ.get("BUILD_CHOICE", "stable")
 subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
-subprocess.run(
-    [
-        "curl",
-        "-sLo",
-        "brains.check",
-        "https://storage.googleapis.com/project-aiml-bot/brains.check",
-    ],
-    stdout=subprocess.PIPE,
-)
+
+URL = 'https://storage.googleapis.com/project-aiml-bot/brains.check'
+GET = requests.get(URL)
+
+with open('brains.check', 'wb') as brains:
+    brains.write(GET.content)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
