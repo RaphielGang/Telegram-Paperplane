@@ -36,6 +36,14 @@ async def bleeding_upstream(bleed):
     subprocess.run(
         [
             "git",
+            "checkout",
+            "staging"
+        ], stdout=subprocess.PIPE,
+    )
+
+    subprocess.run(
+        [
+            "git",
             "reset",
             "--hard",
             "origin/staging"
@@ -74,9 +82,17 @@ async def stable_upstream(stable):
     subprocess.run(
         [
             "git",
+            "checkout",
+            "staging"
+        ], stdout=subprocess.PIPE,
+    )
+
+    subprocess.run(
+        [
+            "git",
             "reset",
             "--hard",
-            "origin/modular"
+            "origin/master"
         ], stdout=subprocess.PIPE,)
     await stable.edit("`Shutting down for the upstream, Restart the bot kthx`")
     bot.disconnect()
