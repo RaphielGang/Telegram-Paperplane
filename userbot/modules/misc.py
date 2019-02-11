@@ -313,11 +313,9 @@ async def bot_ver(e):
 
             await e.edit(ver + copoint)
         else:
-            ver = (
-                "`UserBot Version: r2.2a`"
-            )
-
-            await e.edit(ver)
+            await e.edit(
+                "Shame that you don't have git, You're running r2.2a anyway"
+                )
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.userid$"))
