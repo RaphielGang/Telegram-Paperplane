@@ -14,17 +14,6 @@ from telethon import TelegramClient, events
 
 dotenv.load_dotenv("config.env")
 
-if os.path.exists("brains.check"):
-    os.remove("brains.check")
-else:
-    LOGS.info("Braincheck file does not exist, fetching...")
-
-URL = 'https://storage.googleapis.com/project-aiml-bot/brains.check'
-GET = requests.get(URL)
-
-with open('brains.check', 'wb') as brains:
-    brains.write(GET.content)
-
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO
@@ -75,7 +64,19 @@ else:
         "Doing so is not allowed. Bot exiting!"
     )
     quit(1)
+
 bot = TelegramClient("userbot", API_KEY, API_HASH)
+
+if os.path.exists("brains.check"):
+    os.remove("brains.check")
+else:
+    LOGS.info("Braincheck file does not exist, fetching...")
+
+URL = 'https://storage.googleapis.com/project-aiml-bot/brains.check'
+GET = requests.get(URL)
+
+with open('brains.check', 'wb') as brains:
+    brains.write(GET.content)
 
 # Global Variables
 SNIPE_TEXT = ""
