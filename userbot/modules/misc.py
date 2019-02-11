@@ -64,21 +64,21 @@ async def paste(pstl):
 
             if response['isUrl']:
                 reply_text = (
-                    f"`Pasted successfully!`\n\n"
-                    "`Shortened URL:` {dogbin_final_url}\n\n`"
+                    "`Pasted successfully!`\n\n"
+                    f"`Shortened URL:` {dogbin_final_url}\n\n`"
                     "Original(non-shortened) URLs`\n"
-                    "`Dogbin URL`: {DOGBIN_URL}v/{key}\n`"
-                    "Hastebin URL`: {hastebin_final_url}")
+                    f"`Dogbin URL`: {DOGBIN_URL}v/{key}\n`"
+                    f"Hastebin URL`: {hastebin_final_url}")
             else:
                 reply_text = (
-                    f"`Pasted successfully!`\n\n"
-                    "`Dogbin URL`: {dogbin_final_url}\n`"
-                    "Hastebin URL`: {hastebin_final_url}")
+                    "`Pasted successfully!`\n\n"
+                    f"`Dogbin URL`: {dogbin_final_url}\n`"
+                    f"Hastebin URL`: {hastebin_final_url}")
         else:
             reply_text = (
-                f"`Pasted successfully!`\n\n"
+                "`Pasted successfully!`\n\n"
                 "`Dogbin URL`: `Failed to reach dogbin`"
-                "\n`Hastebin URL`: {hastebin_final_url}")
+                f"\n`Hastebin URL`: {hastebin_final_url}")
 
         await pstl.edit(reply_text)
         if LOGGER:
