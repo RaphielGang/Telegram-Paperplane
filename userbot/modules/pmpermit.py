@@ -48,7 +48,7 @@ async def permitpm(e):
                     )
                     del COUNT_PM[e.chat_id]
                     await bot(BlockRequest(e.chat_id))
-                    await bot(ReportSpamRequest(peer='e.chat_id'))
+                    await bot(ReportSpamRequest(peer=e.chat_id))
                     if LOGGER:
                         name = await bot.get_entity(e.chat_id)
                         name0 = str(name.first_name)
