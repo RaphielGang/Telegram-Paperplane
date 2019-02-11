@@ -5,7 +5,7 @@
 ########
 import subprocess
 
-from shutil import which
+import asyncio
 from telethon import events
 
 from userbot import LOGGER, LOGGER_GROUP, bot
@@ -62,26 +62,18 @@ async def web_server_stat(e):
 async def sysdetails(sysd):
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
-            neo = (
-                "`"
-                + subprocess.run(
-                    [
-                        "neofetch",
-                        "--off",
-                        "--color_blocks off",
-                        "--bold off",
-                        "--cpu_temp",
-                        "C",
-                        "--cpu_speed",
-                        "on",
-                        "--cpu_cores",
-                        "physical",
-                        "--stdout",
-                    ],
-                    stdout=subprocess.PIPE,
-                ).stdout.decode()
-                + "`"
+            neo = "neofetch --off --color_blocks off --bold off --cpu_temp C \
+                    --cpu_speed on --cpu_cores physical --stdout"
+            fetch = await asyncio.create_subprocess_shell(
+                neo,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
             )
-            await sysd.edit(neo)
+
+            stdout, stderr = await fetch.communicate()
+            result = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
+
+            await sysd.edit("`" + result + "`")
         except FileNotFoundError:
             await sysd.edit("`Hella install neofetch first kthx`")
