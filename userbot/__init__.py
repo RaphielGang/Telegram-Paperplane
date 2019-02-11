@@ -55,6 +55,8 @@ except NameError:
 
     DB_URI = os.environ.get("DATABASE_URL", None)
 
+    DB_URI = os.environ.get("DATABASE_URI", None)
+
     SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY", None)
 
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
