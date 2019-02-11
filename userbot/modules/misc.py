@@ -291,12 +291,25 @@ async def bot_ver(e):
                 [
                     "git",
                     "describe",
-                    "--always"
+                    "--all",
+                    "--long"
                 ],
                 stdout=subprocess.PIPE,).stdout.decode() + "`"
         )
 
-        await e.edit(ver)
+        copoint = (
+            "`At: "
+            + subprocess.run(
+                [
+                    "git",
+                    "rev-list",
+                    "--all",
+                    "--count"
+                ], stdout=subprocess.PIPE,
+            ).stdout.decode() + "`"
+        )
+
+        await e.edit(ver + copoint)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.userid$"))
