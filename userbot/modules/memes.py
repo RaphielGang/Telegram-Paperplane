@@ -154,23 +154,23 @@ async def hoi(ha):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.owo (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.owo (.*)"))
-async def faces(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
+async def faces(owo):
+    if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
+        textx = await owo.get_reply_message()
+        message = owo.text
         if message[5:]:
-            message = e.pattern_match.group(1)
+            message = owo.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
-        faces = [
+        uwus = [
             "(・`ω´・)",
             ";;w;;",
             "owo",
             "UwU",
             ">w<",
             "^w^",
-            "\(^o\) (/o^)/",
+            r"\(^o\) (/o^)/",
             "( ^ _ ^)∠☆",
             "(ô_ô)",
             "~:o",
@@ -185,10 +185,10 @@ async def faces(e):
         reply_text = re.sub(r"(R|L)", "W", reply_text)
         reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
         reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-        reply_text = re.sub(r"\!+", " " + random.choice(faces), reply_text)
+        reply_text = re.sub(r"\!+", " " + random.choice(uwus), reply_text)
         reply_text = reply_text.replace("ove", "uv")
-        reply_text += " " + random.choice(faces)
-        await e.edit(reply_text)
+        reply_text += " " + random.choice(uwus)
+        await owo.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.react$"))
