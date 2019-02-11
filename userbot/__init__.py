@@ -1,15 +1,10 @@
-import sqlite3
-import subprocess
 import sys
 import os
 import logging
-import time
 import dotenv
 from distutils.util import strtobool as sb
 import requests
-from alchemysession import AlchemySessionContainer
-from sqlalchemy import create_engine
-from telethon import TelegramClient, events
+from telethon import TelegramClient
 
 
 dotenv.load_dotenv("config.env")
@@ -26,6 +21,7 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         "Multiple features depend on this. Bot quitting."
     )
     quit(1)
+
 try:
     print(___________PLOX_______REMOVE_____THIS_____LINE__________)
 except NameError:
@@ -65,7 +61,9 @@ else:
     )
     quit(1)
 
+
 bot = TelegramClient("userbot", API_KEY, API_HASH)
+
 
 if os.path.exists("brains.check"):
     os.remove("brains.check")
