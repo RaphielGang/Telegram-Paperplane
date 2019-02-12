@@ -1,8 +1,8 @@
-import asyncio
+from asyncio import wait
 
-from telethon import TelegramClient, events
+from telethon import events
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import bot
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.spam"))
@@ -12,7 +12,11 @@ async def spammer(e):
         message = e.text
         counter = int(message[6:8])
         spam_message = str(e.text[8:])
-        await asyncio.wait([e.respond(spam_message) for i in range(counter)])
+
+        await wait(
+            [e.respond(spam_message) for i in range(counter)]
+            )
+
         await e.delete()
         await bot.send_message(LOGGER_GROUP, "Spammed successfully")
 
@@ -24,8 +28,10 @@ async def bigspam(e):
         message = e.text
         counter = int(message[9:13])
         spam_message = str(e.text[13:])
+
         for i in range(1, counter):
             await e.respond(spam_message)
+
         await e.delete()
         await bot.send_message(LOGGER_GROUP, "bigspam was successful")
 
