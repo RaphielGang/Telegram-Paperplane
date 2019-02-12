@@ -1,38 +1,21 @@
-import asyncio
 import io
 import random
 import re
-import subprocess
-import sys
 import time
-from shutil import which
-from datetime import datetime
+from asyncio import create_subprocess_shell as asyncsh
+from asyncio.subprocess import PIPE as asyncsh_PIPE
+from subprocess import PIPE
+from subprocess import run as runapp
 
 import hastebin
 import pybase64
 import requests
-from telethon import functions, events
+from telethon import events
 
 from userbot import LOGGER, LOGGER_GROUP, bot
-
 from userbot.modules.rextester.api import Rextester, UnknownLanguage
 
 DOGBIN_URL = "https://del.dog/"
-
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^.pip (.+)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
-async def pipcheck(pip):
-    if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
-        await pip.reply("`Searching . . .`")
-        pipc = (
-            "`"
-            + subprocess.run(
-                ["pip3", "search", e.pattern_match.group(1)], stdout=subprocess.PIPE
-            ).stdout.decode()
-            + "`"
-        )
-        await pip.edit(pipc)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.paste"))
@@ -155,14 +138,14 @@ async def hash(e):
         hashtxt = open("hashdis.txt", "w+")
         hashtxt.write(hashtxt_)
         hashtxt.close()
-        md5 = subprocess.run(["md5sum", "hashdis.txt"], stdout=subprocess.PIPE)
+        md5 = runapp(["md5sum", "hashdis.txt"], stdout=PIPE)
         md5 = md5.stdout.decode()
-        sha1 = subprocess.run(["sha1sum", "hashdis.txt"], stdout=subprocess.PIPE)
+        sha1 = runapp(["sha1sum", "hashdis.txt"], stdout=PIPE)
         sha1 = sha1.stdout.decode()
-        sha256 = subprocess.run(["sha256sum", "hashdis.txt"], stdout=subprocess.PIPE)
+        sha256 = runapp(["sha256sum", "hashdis.txt"], stdout=PIPE)
         sha256 = sha256.stdout.decode()
-        sha512 = subprocess.run(["sha512sum", "hashdis.txt"], stdout=subprocess.PIPE)
-        subprocess.run(["rm", "hashdis.txt"], stdout=subprocess.PIPE)
+        sha512 = runapp(["sha512sum", "hashdis.txt"], stdout=PIPE)
+        runapp(["rm", "hashdis.txt"], stdout=PIPE)
         sha512 = sha512.stdout.decode()
         ans = (
             "Text: `"
@@ -188,7 +171,7 @@ async def hash(e):
                 caption="`It's too big, in a text file and hastebin instead. `"
                 + hastebin.post(ans[1:-1]),
             )
-            subprocess.run(["rm", "hashes.txt"], stdout=subprocess.PIPE)
+            runapp(["rm", "hashes.txt"], stdout=PIPE)
         else:
             await e.reply(ans)
 
@@ -280,42 +263,6 @@ async def repo_is_here(e):
 async def support_channel(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("t.me/maestro_userbot_channel")
-
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^.botver$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.botver$"))
-async def bot_ver(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if which("git") is not None:
-            ver = (
-                "`UserBot Version: "
-                + subprocess.run(
-                    [
-                        "git",
-                        "describe",
-                        "--all",
-                        "--long"
-                    ],
-                    stdout=subprocess.PIPE,).stdout.decode() + "`"
-            )
-
-            copoint = (
-                "`At: "
-                + subprocess.run(
-                    [
-                        "git",
-                        "rev-list",
-                        "--all",
-                        "--count"
-                    ], stdout=subprocess.PIPE,
-                ).stdout.decode() + "`"
-            )
-
-            await e.edit(ver + copoint)
-        else:
-            await e.edit(
-                "Shame that you don't have git, You're running r2.2a anyway"
-                )
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.userid$"))
@@ -437,10 +384,10 @@ async def keep_read(e):
 @bot.on(events.NewMessage(outgoing=True, pattern="^.botlog$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.botlog$"))
 async def botlogs(e):
-    process = await asyncio.create_subprocess_shell(
+    process = await asyncsh(
         "sudo systemctl status userbot | tail -n 20",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
+        stdout=asyncsh_PIPE,
+        stderr=asyncsh_PIPE
         )
 
     stdout, stderr = await process.communicate()
