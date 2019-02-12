@@ -1,4 +1,4 @@
-import time
+from time import sleep
 
 from telethon import events
 from telethon.errors import BadRequestError
@@ -16,9 +16,9 @@ async def promote(promt):
     if not promt.text[0].isalpha() \
             and promt.text[0] not in ("/", "#", "@", "!"):
         chats = await promt.get_chat()
-        rights = chats.admin_rights
-        rights3 = chats.creator
-        rights2 = ChatAdminRights(
+        admin = chats.admin_rights
+        creator = chats.creator
+        new_rights = ChatAdminRights(
             add_admins=True,
             invite_users=True,
             change_info=True,
@@ -27,15 +27,16 @@ async def promote(promt):
             pin_messages=True
         )
 
+        # Self explanatory
         if not await promt.get_reply_message():
             await promt.edit("`Give a reply message`")
-        elif not rights and rights3:
-            rights = rights2
-        elif not rights and not rights3:
+        elif not admin and creator:
+            rights = new_rights
+        elif not admin and not creator:
             rights = None
-        await promt.edit("`Trying a promote.....`")
-        time.sleep(3)
+        await promt.edit("`Promoting...`")
 
+        # Try to promote if current user is admin or creator
         try:
             await bot(
                 EditAdminRequest(promt.chat_id,
@@ -43,6 +44,8 @@ async def promote(promt):
                                  rights)
             )
 
+        # If Telethon spit BadRequestError, assume
+        # we don't have Promote permission
         except BadRequestError:
             await promt.edit(
                 "`You Don't have sufficient permissions to parmod`"
@@ -56,7 +59,26 @@ async def promote(promt):
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     if not dmod.text[0].isalpha() and dmod.text[0] not in ("/", "#", "@", "!"):
-        trights = ChatAdminRights(
+        # Get targeted chat
+        chat = await dmod.get_chat()
+        # Grab admin status or creator in a chat
+        admin = chat.admin_rights
+        creator = chat.creator
+
+        # If there's no reply, return
+        if not await dmod.get_reply_message():
+            await dmod.edit("`Give a reply message`")
+            return
+        # If not admin and not creator, also return
+        if not admin and not creator:
+            await dmod.edit("`You aren't an admin!`")
+            return
+
+        # If passing, declare that we're going to demote
+        await dmod.edit("`Demoting...`")
+
+        # New rights after demotion
+        newrights = ChatAdminRights(
             add_admins=None,
             invite_users=None,
             change_info=None,
@@ -64,25 +86,16 @@ async def demote(dmod):
             delete_messages=None,
             pin_messages=None
         )
-
-        chat = await dmod.get_chat()
-        rights = chat.admin_rights
-        rights2 = chat.creator
-        if not await dmod.get_reply_message():
-            await dmod.edit("`Give a reply message`")
-            return
-        if not rights and not rights2:
-            await dmod.edit("`You aren't an admin!`")
-            return
-        await dmod.edit("`Demoting...`")
-
+        # Edit Admin Permission
         try:
             await bot(
                 EditAdminRequest(dmod.chat_id,
                                  (await dmod.get_reply_message()).sender_id,
-                                 trights)
+                                 newrights)
             )
 
+        # If we catch BadRequestError from Telethon
+        # Assume we don't have permission to demote
         except BadRequestError:
             await dmod.edit("`You Don't have sufficient permissions to demhott`")
             return
@@ -94,7 +107,7 @@ async def demote(dmod):
 async def thanos(bon):
     """ For .ban command, do "thanos" at targeted person """
     if not bon.text[0].isalpha() and bon.text[0] not in ("/", "#", "@", "!"):
-        rights = ChatBannedRights(
+        banned_rights = ChatBannedRights(
             until_date=None,
             view_messages=True,
             send_messages=True,
@@ -106,26 +119,33 @@ async def thanos(bon):
             embed_links=True,
         )
 
+        # For dealing with reply-at-ban
         sender = await bon.get_reply_message()
+
+        # If the user is a sudo
         try:
             if sender.sender_id in BRAIN_CHECKER:
                 await bon.edit("`Ban Error! I am not supposed to ban this user`")
                 return
+
+        # This exception handled if the user doesn't
+        # Specifying any target (reply in this case)
         except AttributeError:
             await bon.edit("`You don't seems to do this right`")
             return
 
+        # Announce that we're going to whacking the pest
         await bon.edit("`Whacking the pest!`")
-        time.sleep(5)
         try:
             await bot(
                 EditBannedRequest(
                     bon.chat_id,
                     sender.sender_id,
-                    rights
+                    banned_rights
                 )
             )
 
+        # ExceptionHandling if the user is a Sudo
         except BadRequestError:
             if bon.sender_id in BRAIN_CHECKER:
                 await bon.respond(
@@ -134,8 +154,12 @@ async def thanos(bon):
                 )
                 return
 
+        # Delete message and then tell that the command
+        # is done gracefully
         await bon.delete()
         await bon.respond("`Banned!`")
+
+        # Announce to the logging group if we done a banning
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
@@ -146,28 +170,45 @@ async def thanos(bon):
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.mute$"))
 async def spider(spdr):
+    """
+    This function basically muting peeps
+    """
     if not spdr.text[0].isalpha() and spdr.text[0] not in ("/", "#", "@", "!"):
+
+        # If the targeted user is a Sudo
         if (await spdr.get_reply_message()).sender_id in BRAIN_CHECKER:
             await spdr.edit("`Mute Error! I am not supposed to mute this user`")
             return
+
+        # Check if the function running under SQL mode
         try:
             from userbot.modules.sql_helper.spam_mute_sql import mute
         except Exception:
             await spdr.edit("`Running on Non-SQL mode!`")
             return
 
+        # Get the targeted chat
         chat = await spdr.get_chat()
-        rights = chat.admin_rights
-        rights2 = chat.creator
-        if not rights and not rights2:
+        # Check if current user is admin
+        admin = chat.admin_rights
+        # Check if current user is creator
+        creator = chat.creator
+
+        # If not admin and not creator, return
+        if not admin and not creator:
             await spdr.edit("`You aren't an admin!`")
             return
-        mute(spdr.chat_id, str((await spdr.get_reply_message()).sender_id))
-        await spdr.edit("`Gets a tape!`")
-        time.sleep(5)
 
+        target = str(await spdr.get_reply_message().sender_id)
+        # Else, do announce and do the mute
+        mute(spdr.chat_id, target)
+        await spdr.edit("`Gets a tape!`")
+
+        # Announce that the function is done
         await spdr.delete()
         await spdr.respond("`Safely taped!`")
+
+        # Announce to logging group
         if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
@@ -178,6 +219,10 @@ async def spider(spdr):
 
 @bot.on(events.NewMessage(incoming=True, pattern="<triggerban>"))
 async def triggered_ban(triggerbon):
+    """
+    This function is supposed to check if the banned person is a sudo
+    If yes, revoke all the restricts
+    """
     ban_id = int(triggerbon.text[13:])
     if triggerbon.sender_id in BRAIN_CHECKER:  # non-working module#
         rights = ChatBannedRights(
@@ -196,7 +241,7 @@ async def triggered_ban(triggerbon):
             await triggerbon.edit("`Sorry Master!`")
             return
 
-        time.sleep(5)
+        sleep(5)
         await bot(EditBannedRequest(triggerbon.chat_id, ban_id, rights))
         await triggerbon.delete()
         await bot.send_message(triggerbon.chat_id,
@@ -235,8 +280,8 @@ async def muter(moot):
         from userbot.modules.sql_helper.gmute_sql import is_gmuted
     except:
         return
-    mootd = is_muted(moot.chat_id)
-    gmootd = is_gmuted(moot.sender_id)
+    muted = is_muted(moot.chat_id)
+    gmuted = is_gmuted(moot.sender_id)
     rights = ChatBannedRights(
                 until_date=None,
                 send_messages=True,
@@ -247,8 +292,8 @@ async def muter(moot):
                 send_inline=True,
                 embed_links=True,
                 )
-    if mootd:
-        for i in mootd:
+    if muted:
+        for i in muted:
             if str(i.sender) == str(moot.sender_id):
                 await moot.delete()
                 await bot(EditBannedRequest(
@@ -256,9 +301,10 @@ async def muter(moot):
                     moot.sender_id,
                     rights
                     ))
-    for i in gmootd:
+    for i in gmuted:
         if i.sender == str(moot.sender_id):
             await moot.delete()
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
@@ -289,7 +335,7 @@ async def gspider(gspdr):
 
         gmute(str((await gspdr.get_reply_message()).sender_id))
         await gspdr.edit("`Grabs a huge, sticky duct tape!`")
-        time.sleep(5)
+        sleep(5)
         await gspdr.delete()
         await gspdr.respond("`Taped!`")
 
