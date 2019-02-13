@@ -256,7 +256,7 @@ async def gspider(gspdr):
             await gspdr.edit("`Running on Non-SQL mode!`")
             return
 
-        gmute(str((await e.get_reply_message()).sender_id))
+        gmute(str((await gspdr.get_reply_message()).sender_id))
         await gspdr.edit("`Grabs a huge, sticky duct tape!`")
         time.sleep(5)
         await gspdr.delete()
