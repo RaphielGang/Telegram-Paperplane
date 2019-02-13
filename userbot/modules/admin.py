@@ -2,6 +2,7 @@ from time import sleep
 
 from telethon import events
 from telethon.errors import BadRequestError
+from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
 
 from telethon.tl.types import ChatAdminRights, ChatBannedRights
@@ -119,8 +120,18 @@ async def thanos(bon):
             embed_links=True,
         )
 
+        # Here laying the sanity check
+        chat = await bon.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+
         # For dealing with reply-at-ban
         sender = await bon.get_reply_message()
+
+        # Well
+        if not admin and not creator:
+            await bon.edit("`You aren't an admin!`")
+            return
 
         # If the user is a sudo
         try:
@@ -136,28 +147,25 @@ async def thanos(bon):
 
         # Announce that we're going to whacking the pest
         await bon.edit("`Whacking the pest!`")
-        try:
-            await bot(
-                EditBannedRequest(
-                    bon.chat_id,
-                    sender.sender_id,
-                    banned_rights
-                )
+        await bot(
+            EditBannedRequest(
+                bon.chat_id,
+                sender.sender_id,
+                banned_rights
             )
+        )
 
         # ExceptionHandling if the user is a Sudo
-        except BadRequestError:
-            if bon.sender_id in BRAIN_CHECKER:
-                await bon.respond(
-                    "<triggerban> " +
-                    str((await bon.get_reply_message()).sender_id)
-                )
-                return
+        if bon.sender_id in BRAIN_CHECKER:
+            await bon.respond(
+                "<triggerban> " +
+                str((await bon.get_reply_message()).sender_id)
+            )
+            return
 
         # Delete message and then tell that the command
         # is done gracefully
-        await bon.delete()
-        await bon.respond("`Banned!`")
+        await bon.edit("`Banned!`")
 
         # Announce to the logging group if we done a banning
         if LOGGER:
@@ -165,6 +173,37 @@ async def thanos(bon):
                 LOGGER_GROUP,
                 str((await bon.get_reply_message()).sender_id) + " was banned.",
             )
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.unban$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.unban$"))
+async def nothanos(unbon):
+    if not unbon.text[0].isalpha() and unbon.text[0] not in ("/", "#", "@", "!"):
+        rights = ChatBannedRights(
+            until_date=None,
+            send_messages=None,
+            send_media=None,
+            send_stickers=None,
+            send_gifs=None,
+            send_games=None,
+            send_inline=None,
+            embed_links=None,
+            )
+        replymsg = await unbon.get_reply_message()
+        try:
+            await bot(EditBannedRequest(
+                unbon.chat_id,
+                replymsg.sender_id,
+                rights
+                ))
+            await unbon.edit("```Unbanned Successfully```")
+
+            if LOGGER:
+                await bot.send_message(
+                    LOGGER_GROUP,
+                    str((await unbon.get_reply_message()).sender_id) + " was unbanned.",
+                )
+        except UserIdInvalidError:
+            await unbon.edit("`Uh oh my unban logic broke!`")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mute$"))
@@ -199,14 +238,13 @@ async def spider(spdr):
             await spdr.edit("`You aren't an admin!`")
             return
 
-        target = str(await spdr.get_reply_message().sender_id)
+        target = await spdr.get_reply_message()
         # Else, do announce and do the mute
-        mute(spdr.chat_id, target)
+        mute(spdr.chat_id, target.sender_id)
         await spdr.edit("`Gets a tape!`")
 
         # Announce that the function is done
-        await spdr.delete()
-        await spdr.respond("`Safely taped!`")
+        await spdr.edit("`Safely taped!`")
 
         # Announce to logging group
         if LOGGER:
@@ -216,6 +254,33 @@ async def spider(spdr):
                 + " was muted.",
             )
 
+@bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
+async def unmoot(unmot):
+    if not unmot.text[0].isalpha() and unmot.text[0] not in ("/", "#", "@", "!"):
+        rights = ChatBannedRights(
+            until_date=None,
+            send_messages=None,
+            send_media=None,
+            send_stickers=None,
+            send_gifs=None,
+            send_games=None,
+            send_inline=None,
+            embed_links=None,
+            )
+        replymsg = await unmot.get_reply_message()
+        from userbot.modules.sql_helper.spam_mute_sql import unmute
+        unmute(unmot.chat_id, replymsg.sender_id)
+        try:
+            await bot(EditBannedRequest(
+                unmot.chat_id,
+                replymsg.sender_id,
+                rights
+                ))
+            await unmot.edit("```Unmuted Successfully```")
+        except UserIdInvalidError:
+            await unmot.edit("`Uh oh my unmute logic broke!`")
+
 
 @bot.on(events.NewMessage(incoming=True, pattern="<triggerban>"))
 async def triggered_ban(triggerbon):
@@ -224,7 +289,7 @@ async def triggered_ban(triggerbon):
     If yes, revoke all the restricts
     """
     ban_id = int(triggerbon.text[13:])
-    if triggerbon.sender_id in BRAIN_CHECKER:  # non-working module#
+    if triggerbon.sender_id in BRAIN_CHECKER:
         rights = ChatBannedRights(
             until_date=None,
             view_messages=True,
@@ -246,30 +311,6 @@ async def triggered_ban(triggerbon):
         await triggerbon.delete()
         await bot.send_message(triggerbon.chat_id,
                                "Job was done, Master! Gimme Cookies!")
-
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
-async def unmoot(unmot):
-    if not unmot.text[0].isalpha() and unmot.text[0] not in ("/", "#", "@", "!"):
-        rights = ChatBannedRights(
-            until_date=None,
-            send_messages=None,
-            send_media=None,
-            send_stickers=None,
-            send_gifs=None,
-            send_games=None,
-            send_inline=None,
-            embed_links=None,
-            )
-        from userbot.modules.sql_helper.spam_mute_sql import unmute
-        unmute(unmot.chat_id, str((await unmot.get_reply_message()).sender_id))
-        await bot(EditBannedRequest(
-            unmot.chat_id,
-            unmot.sender_id,
-            rights
-            ))
-        await unmot.edit("```Unmuted Successfully```")
 
 
 @bot.on(events.NewMessage(incoming=True))
