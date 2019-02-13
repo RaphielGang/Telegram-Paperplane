@@ -1,5 +1,6 @@
 import asyncio
 import subprocess
+from getpass import getuser
 
 from telethon import events
 
@@ -101,6 +102,7 @@ async def terminal_runner(term):
             await term.edit("`Term Commands aren't permitted on channels`")
             return
         message = term.text
+        curruser = getuser()
         command = str(message)
         command = str(command[6:])
         process = await asyncio.create_subprocess_shell(
@@ -125,7 +127,7 @@ async def terminal_runner(term):
             subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
 
         await term.edit(
-            "`userbot:~# "
+            f"`{curruser}:~# "
             + command
             + "`\n`"
             + result + "`"
