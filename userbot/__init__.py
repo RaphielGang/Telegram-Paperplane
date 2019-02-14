@@ -4,7 +4,7 @@ import logging
 import dotenv
 import requests
 from telethon import TelegramClient
-
+from distutils.util import strtobool as sb
 
 dotenv.load_dotenv("config.env")
 
@@ -30,17 +30,15 @@ except NameError:
 
     LOGGER_GROUP = int(os.environ.get("LOGGER_GROUP", "0"))
 
-    LOGGER = os.environ.get(
+    LOGGER = sb(os.environ.get(
         "LOGGER", None
-    )  # Incase you want to turn off logging, put this to false
+    ))  # Incase you want to turn off logging, put this to false
 
-    PM_AUTO_BAN = os.environ.get("PM_AUTO_BAN", None)
+    PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", None))
 
-    CONSOLE_LOGGER_VERBOSE = os.environ.get("CONSOLE_LOGGER_VERBOSE", None)
+    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", None))
 
     DB_URI = os.environ.get("DATABASE_URL", None)
-
-    DB_URI = os.environ.get("DATABASE_URI", None)
 
     SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY", None)
 
