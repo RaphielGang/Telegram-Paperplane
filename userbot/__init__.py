@@ -5,7 +5,7 @@ import dotenv
 from distutils.util import strtobool as sb
 import requests
 from telethon import TelegramClient
-
+from distutils.util import strtobool as sb
 
 dotenv.load_dotenv("config.env")
 
@@ -40,8 +40,6 @@ except NameError:
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
     DB_URI = os.environ.get("DATABASE_URL", None)
-
-    DB_URI = os.environ.get("DATABASE_URI", None)
 
     SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY", None)
 
