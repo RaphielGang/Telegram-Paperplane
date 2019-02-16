@@ -1,28 +1,12 @@
-import sqlite3
-import subprocess
 import sys
 import os
 import logging
-import time
 import dotenv
+import requests
+from telethon import TelegramClient
 from distutils.util import strtobool as sb
-from alchemysession import AlchemySessionContainer
-from sqlalchemy import create_engine
-from telethon import TelegramClient, events
 
 dotenv.load_dotenv("config.env")
-UPDATER = os.environ.get("UPDATER", None)
-BUILD_CHOICE = os.environ.get("BUILD_CHOICE", "stable")
-subprocess.run(["rm", "-rf", "brains.check"], stdout=subprocess.PIPE)
-subprocess.run(
-    [
-        "curl",
-        "-sLo",
-        "brains.check",
-        "https://storage.googleapis.com/project-aiml-bot/brains.check",
-    ],
-    stdout=subprocess.PIPE,
-)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -36,6 +20,7 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         "Multiple features depend on this. Bot quitting."
     )
     quit(1)
+
 try:
     print(___________PLOX_______REMOVE_____THIS_____LINE__________)
 except NameError:
@@ -53,7 +38,7 @@ except NameError:
 
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
-    DB_URI = os.environ.get("DATABASE_URI", None)
+    DB_URI = os.environ.get("DATABASE_URL", None)
 
     SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY", None)
 
@@ -72,7 +57,21 @@ else:
         "Doing so is not allowed. Bot exiting!"
     )
     quit(1)
+
+
 bot = TelegramClient("userbot", API_KEY, API_HASH)
+
+
+if os.path.exists("brains.check"):
+    os.remove("brains.check")
+else:
+    LOGS.info("Braincheck file does not exist, fetching...")
+
+URL = 'https://storage.googleapis.com/project-aiml-bot/brains.check'
+GET = requests.get(URL)
+
+with open('brains.check', 'wb') as brains:
+    brains.write(GET.content)
 
 # Global Variables
 SNIPE_TEXT = ""

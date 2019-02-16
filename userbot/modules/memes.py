@@ -13,28 +13,28 @@ from userbot import (DISABLE_RUN, ENABLE_KILLME, LOGGER, LOGGER_GROUP,
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^:/$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^:/$"))
-async def kek(e):
+async def kek(keks):
     uio = ["/", "\\"]
     for i in range(1, 15):
         time.sleep(0.3)
-        await e.edit(":" + uio[i % 2])
+        await keks.edit(":" + uio[i % 2])
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^-_-$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^-_-$"))
-async def lol(e):
-    t = "-_-"
-    for j in range(10):
-        t = t[:-1] + "_-"
-        await e.edit(t)
+async def lol(lel):
+    ok = "-_-"
+    if range(10):
+        ok = t[:-1] + "_-"
+        await lel.edit(t)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.cp"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.cp"))
-async def copypasta(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message=e.text
+async def copypasta(cp):
+    if not cp.text[0].isalpha() and cp.text[0] not in ("/", "#", "@", "!"):
+        textx = await cp.get_reply_message()
+        message = cp.text
         if message[3:]:
             message = str(message[3:])
         elif textx:
@@ -74,31 +74,31 @@ async def copypasta(e):
         b_char = random.choice(
             message
         ).lower()  # choose a random character in the message to be substituted with 🅱️
-        for c in message:
-            if c == " ":
+        for owo in message:
+            if owo == " ":
                 reply_text += random.choice(emojis)
-            elif c in emojis:
-                reply_text += c
+            elif owo in emojis:
+                reply_text += owo
                 reply_text += random.choice(emojis)
-            elif c.lower() == b_char:
+            elif owo.lower() == b_char:
                 reply_text += "🅱️"
             else:
                 if bool(random.getrandbits(1)):
-                    reply_text += c.upper()
+                    reply_text += owo.upper()
                 else:
-                    reply_text += c.lower()
+                    reply_text += owo.lower()
         reply_text += random.choice(emojis)
-        await e.edit(reply_text)
+        await cp.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.vapor (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.vapor (.*)"))
-async def vapor(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
+async def vapor(vpr):
+    if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
+        textx = await vpr.get_reply_message()
+        message = vpr.text
         if message[7:]:
-            message = e.pattern_match.group(1)
+            message = vpr.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
@@ -107,66 +107,70 @@ async def vapor(e):
         else:
             data = ""
         reply_text = str(data).translate(WIDE_MAP)
-        await e.edit(reply_text)
+        await vpr.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.str (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.str (.*)"))
-async def stretch(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
+async def stretch(stret):
+    if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
+        textx = await stret.get_reply_message()
+        message = stret.text
         if message[5:]:
-            message = e.pattern_match.group(1)
+            message = stret.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
         count = random.randint(3, 10)
-        reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count), message)
-        await e.edit(reply_text)
+        reply_text = re.sub(
+            r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])",
+            (r"\1"*count),
+            message
+            )
+        await stret.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.zal (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.zal (.*)"))
-async def zal(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
+async def zal(zgfy):
+    if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
+        textx = await zgfy.get_reply_message()
+        message = zgfy.text
         if message[4:]:
-            message = e.pattern_match.group(1)
+            message = zgfy.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
         input_text = " ".join(message).lower()
         zalgofied_text = zalgo.zalgo().zalgofy(input_text)
-        await e.edit(zalgofied_text)
+        await zgfy.edit(zalgofied_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^hi$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^hi$"))
-async def hoi(e):
-    await e.edit("Hoi!😄")
+async def hoi(ha):
+    await ha.edit("Hoi!😄")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.owo (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.owo (.*)"))
-async def faces(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
+async def faces(owo):
+    if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
+        textx = await owo.get_reply_message()
+        message = owo.text
         if message[5:]:
-            message = e.pattern_match.group(1)
+            message = owo.pattern_match.group(1)
         elif textx:
             message = textx
             message = str(message.message)
-        faces = [
+        uwus = [
             "(・`ω´・)",
             ";;w;;",
             "owo",
             "UwU",
             ">w<",
             "^w^",
-            "\(^o\) (/o^)/",
+            r"\(^o\) (/o^)/",
             "( ^ _ ^)∠☆",
             "(ô_ô)",
             "~:o",
@@ -181,10 +185,10 @@ async def faces(e):
         reply_text = re.sub(r"(R|L)", "W", reply_text)
         reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
         reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-        reply_text = re.sub(r"\!+", " " + random.choice(faces), reply_text)
+        reply_text = re.sub(r"\!+", " " + random.choice(uwus), reply_text)
         reply_text = reply_text.replace("ove", "uv")
-        reply_text += " " + random.choice(faces)
-        await e.edit(reply_text)
+        reply_text += " " + random.choice(uwus)
+        await owo.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.react$"))
@@ -260,7 +264,7 @@ async def react_meme(e):
             "ᕦ(ò_óˇ)ᕤ",
             "⊙﹏⊙",
             "(╯°□°）╯︵ ┻━┻",
-            "¯\_(⊙︿⊙)_/¯",
+            r"¯\_(⊙︿⊙)_/¯",
             "٩◔̯◔۶",
             "°‿‿°",
             "ᕙ(⇀‸↼‶)ᕗ",
@@ -282,14 +286,14 @@ async def react_meme(e):
             "(╬ ಠ益ಠ)",
             "┬─┬⃰͡ (ᵔᵕᵔ͜ )",
             "┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻",
-            "¯\_(ツ)_/¯",
+            r"¯\_(ツ)_/¯",
             "ʕᵔᴥᵔʔ",
             "(`･ω･´)",
             "ʕ•ᴥ•ʔ",
             "ლ(｀ー´ლ)",
             "ʕʘ̅͜ʘ̅ʔ",
             "（　ﾟДﾟ）",
-            "¯\(°_o)/¯",
+            r"¯\(°_o)/¯",
             "(｡◕‿◕｡)",
         ]
         index = random.randint(0, len(reactor))
@@ -299,16 +303,16 @@ async def react_meme(e):
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.shg$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.shg$"))
-async def shrugger(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("¯\_(ツ)_/¯")
+async def shrugger(shg):
+    if not shg.text[0].isalpha() and shg.text[0] not in ("/", "#", "@", "!"):
+        await shg.edit(r"¯\_(ツ)_/¯")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.runs$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.runs$"))
-async def runner_lol(e):
+async def runner_lol(run):
     if not DISABLE_RUN:
-        if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
             reactor = [
                 "Runs to Thanos",
                 "Runs far, far away from earth",
@@ -324,31 +328,31 @@ async def runner_lol(e):
             ]
             index = random.randint(0, len(reactor) - 1)
             reply_text = reactor[index]
-            await e.edit(reply_text)
+            await run.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.disable runs$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.disable runs$"))
-async def disable_killme(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def disable_killme(nokill):
+    if not nokill.text[0].isalpha() and nokill.text[0] not in ("/", "#", "@", "!"):
         global DISABLE_RUN
         DISABLE_RUN = True
-        await e.edit("```Done!```")
+        await nokill.edit("```Done!```")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.enable runs$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.enable runs$"))
-async def enable_killme(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def enable_killme(killme):
+    if not killme.text[0].isalpha() and killme.text[0] not in ("/", "#", "@", "!"):
         global DISABLE_RUN
         DISABLE_RUN = False
-        await e.edit("```Done!```")
+        await killme.edit("```Done!```")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.metoo"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.metoo"))
-async def metoo(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def metoo(hahayes):
+    if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         metoostr = [
             "Me too thanks",
             "Haha yes, me too",
@@ -360,45 +364,45 @@ async def metoo(e):
         ]
         index = random.randint(0, len(metoostr) - 1)
         reply_text = metoostr[index]
-        await e.edit(reply_text)
+        await hahayes.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.mock"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.mock"))
-async def spongemocktext(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
+async def spongemocktext(mock):
+    if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
+        textx = await mock.get_reply_message()
+        message = mock.text
         if message[6:]:
             message = str(message[6:])
         elif textx:
             message = textx
             message = str(message.message)
         reply_text = spongemock.mock(message)
-        await e.edit(reply_text)
+        await mock.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.clap (.*)"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.clap (.*)"))
-async def claptext(e):
-    textx = await e.get_reply_message()
-    message = e.text
+async def claptext(memereview):
+    textx = await memereview.get_reply_message()
+    message = memereview.text
     if message[6:]:
-        message = se.pattern_match.group(1)
+        message = memereview.pattern_match.group(1)
     elif textx:
         message = textx
         message = str(message.message)
     reply_text = "👏 "
     reply_text += message.replace(" ", " 👏 ")
     reply_text += " 👏"
-    await e.edit(reply_text)
+    await memereview.edit(reply_text)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.bt$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.bt$"))
-async def bluetext(e):
-    if await e.get_reply_message():
-        await e.edit(
+async def bluetext(bt):
+    if await bt.get_reply_message():
+        await bt.edit(
             "`BLUETEXT MUST CLICK.`\n"
             "`Are you a stupid animal which is attracted to colours?`"
         )

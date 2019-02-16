@@ -1,8 +1,11 @@
 import sqlite3
+import time
 
 from telethon import events
 from telethon.tl.functions.contacts import BlockRequest
+from telethon.tl.functions.contacts import UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
+from telethon.tl.functions.users import GetFullUserRequest
 
 from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, bot
 
@@ -45,7 +48,7 @@ async def permitpm(e):
                     )
                     del COUNT_PM[e.chat_id]
                     await bot(BlockRequest(e.chat_id))
-                    await bot(ReportSpamRequest(peer='e.chat_id'))
+                    await bot(ReportSpamRequest(peer=e.chat_id))
                     if LOGGER:
                         name = await bot.get_entity(e.chat_id)
                         name0 = str(name.first_name)
@@ -85,17 +88,72 @@ async def approvepm(apprvpm):
         except:
             await apprvpm.edit("`Running on Non-SQL mode!`")
             return
-        approve(apprvpm.chat_id)
-        await apprvpm.edit("`Approved to PM!`")
-        if LOGGER:
+
+        if apprvpm.reply_to_msg_id:
+            reply = await apprvpm.get_reply_message()
+            replied_user = await bot(GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            approve(replied_user.user.id)
+        else:
+            approve(apprvpm.chat_id)
             aname = await bot.get_entity(apprvpm.chat_id)
             name0 = str(aname.first_name)
+
+        await apprvpm.edit(
+            f"[{name0}](tg://user?id={apprvpm.chat_id}) `Approved to PM!`"
+            )
+
+        if LOGGER:
             await bot.send_message(
                 LOGGER_GROUP,
-                "["
-                + name0
-                + "](tg://user?id="
-                + str(apprvpm.chat_id)
-                + ")"
-                + " was approved to PM you.",
+                f"[{name0}](tg://user?id={apprvpm.chat_id})"
+                " was approved to PM you.",
+            )
+
+
+@bot.on(events.NewMessage(outgoing=True,pattern="^.block$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern="^.block$"))
+async def blockpm(block):
+    if not block.text[0].isalpha() and block.text[0] not in ("/", "#", "@", "!"):
+
+        await block.edit("`You are gonna be blocked from PM-ing my Master!`")
+
+        if block.reply_to_msg_id:
+            reply = await block.get_reply_message()
+            replied_user = await bot(GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            await bot(BlockRequest(replied_user.user.id))
+        else:
+            await bot(BlockRequest(block.chat_id))
+            aname = await bot.get_entity(block.chat_id)
+            name0 = str(aname.first_name)
+
+        if LOGGER:
+            await bot.send_message(
+                LOGGER_GROUP,
+                f"[{name0}](tg://user?id={block.chat_id})"
+                " was blocc'd!.",
+            )
+
+@bot.on(events.NewMessage(outgoing=True,pattern="^.unblock$"))
+@bot.on(events.MessageEdited(outgoing=True,pattern="^.unblock$"))
+async def unblockpm(unblock):
+    if not unblock.text[0].isalpha() and unblock.text[0] \
+            not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
+
+        await unblock.edit("`My Master has forgiven you to PM now`")
+
+        if unblock.reply_to_msg_id:
+            reply = await unblock.get_reply_message()
+            replied_user = await bot(GetFullUserRequest(reply.from_id))
+            name0 = str(replied_user.user.first_name)
+            await bot(UnblockRequest(replied_user.user.id))
+
+        if LOGGER:
+            await bot.send_message(
+                LOGGER_GROUP,
+                f"[{name0}](tg://user?id={unblock.chat_id})"
+                " was unblocc'd!.",
             )

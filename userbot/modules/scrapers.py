@@ -150,7 +150,7 @@ async def translateme(e):
             message = textx
             message = str(message.message)
         reply_text = translator.translate(message, dest=langi).text
-        reply_text = "**Source:** `\n" + message + "**\n\nTranslation: **\n" + reply_text
+        reply_text = "**Source:** `\n" + message + "`**\n\nTranslation: **`\n" + reply_text  + "`"
         await bot.send_message(e.chat_id, reply_text)
         await e.delete()
         if LOGGER:
