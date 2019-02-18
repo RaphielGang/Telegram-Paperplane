@@ -25,8 +25,8 @@ async def kek(keks):
 async def lol(lel):
     ok = "-_-"
     if range(10):
-        ok = t[:-1] + "_-"
-        await lel.edit(t)
+        ok = ok[:-1] + "_-"
+        await lel.edit(ok)
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.cp"))
