@@ -1,23 +1,25 @@
-import sys
 import os
-import logging
-import dotenv
+
+from sys import version_info
+from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
-import requests
+
+from dotenv import load_dotenv
+from requests import get
 from telethon import TelegramClient
-from distutils.util import strtobool as sb
 
-dotenv.load_dotenv("config.env")
 
-logging.basicConfig(
+load_dotenv("config.env")
+
+basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO
+    level=INFO
 )
-LOGS = logging.getLogger(__name__)
+LOGS = getLogger(__name__)
 
-if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+if version_info[0] < 3 or version_info[1] < 6:
     LOGS.error(
-        "You MUST have a python version of at least 3.6." \
+        "You MUST have a python version of at least 3.6."
         "Multiple features depend on this. Bot quitting."
     )
     quit(1)
@@ -37,21 +39,25 @@ except NameError:
 
     PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
-    CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
+    CONSOLE_LOGGER_VERBOSE = sb(
+        os.environ.get("CONSOLE_LOGGER_VERBOSE", "False")
+        )
 
     DB_URI = os.environ.get("DATABASE_URL", None)
 
-    SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY", None)
+    SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get(
+        "SCREENSHOT_LAYER_ACCESS_KEY", None
+        )
 
     OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 
     SUDO = os.environ.get("SUDO", None)
     if CONSOLE_LOGGER_VERBOSE:
-        logging.basicConfig(
+        basicConfig(
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-            level=logging.DEBUG,
+            level=DEBUG,
         )
-        LOGS = logging.getLogger(__name__)
+        LOGS = getLogger(__name__)
 else:
     LOGS.error(
         "Your config file seems to be un-edited."
@@ -69,7 +75,7 @@ else:
     LOGS.info("Braincheck file does not exist, fetching...")
 
 URL = 'https://storage.googleapis.com/project-aiml-bot/brains.check'
-GET = requests.get(URL)
+GET = get(URL)
 
 with open('brains.check', 'wb') as brains:
     brains.write(GET.content)
