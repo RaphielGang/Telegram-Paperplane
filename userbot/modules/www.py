@@ -1,4 +1,3 @@
-import subprocess
 import speedtest
 
 from datetime import datetime
@@ -43,10 +42,10 @@ def speed_convert(size):
     zero = 0
     units = {
         0: '',
-        1: 'KB',
-        2: 'MB',
-        3: 'GB',
-        4: 'TB'}
+        1: 'KB/s',
+        2: 'MB/s',
+        3: 'GB/s',
+        4: 'TB/s'}
     while size > power:
         size /= power
         zero += 1
@@ -62,6 +61,7 @@ async def neardc(e):
         f"Nearest Datacenter : `{result.nearest_dc}` \n"
         f"This Datacenter : `{result.this_dc}`"
     )
+
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.pingme$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.pingme$"))
