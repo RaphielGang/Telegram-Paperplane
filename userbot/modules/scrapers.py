@@ -1,6 +1,7 @@
 import os
 import re
-import subprocess
+from asyncio import create_subprocess_shell as asyncsh
+from asyncio.subprocess import PIPE as asyncsh_PIPE
 import time
 from datetime import datetime, timedelta
 
@@ -49,8 +50,14 @@ async def img_sampler(e):
 async def gsearch(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         match = e.pattern_match.group(1)
-        result_ = subprocess.run(["gsearch", match], stdout=subprocess.PIPE)
-        result = str(result_.stdout.decode())
+        result_ = await asyncsh(
+            f"gsearch {match}",
+            stdout=asyncsh_PIPE,
+            stderr=asyncsh_PIPE
+            )
+        stdout, stderr = await result_.communicate()
+        result = str(stdout.decode().strip()) \
+            + str(stderr.decode().strip())
         await e.edit(
             "**Search Query:**\n`" + match + "`\n\n**Result:**\n" + result
         )
