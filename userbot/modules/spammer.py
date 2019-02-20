@@ -2,7 +2,7 @@ from asyncio import wait
 
 from telethon import events
 
-from userbot import bot
+from userbot import bot, LOGGER_GROUP
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.spam"))
