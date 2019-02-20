@@ -1,6 +1,3 @@
-import sqlite3
-import time
-
 from telethon import events
 from telethon.tl.functions.contacts import BlockRequest
 from telethon.tl.functions.contacts import UnblockRequest
@@ -63,16 +60,16 @@ async def permitpm(e):
                         )
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.notifoff$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifoff$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.notifoff$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.notifoff$"))
 async def notifoff(e):
     global NOTIF_OFF
     NOTIF_OFF = True
     await e.edit("`Notifications silenced!`")
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.notifon$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifon$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.notifon$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.notifon$"))
 async def notifon(e):
     global NOTIF_OFF
     NOTIF_OFF = False
@@ -112,8 +109,8 @@ async def approvepm(apprvpm):
             )
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.block$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.block$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^.block$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.block$"))
 async def blockpm(block):
     if not block.text[0].isalpha() and block.text[0] not in ("/", "#", "@", "!"):
 
@@ -147,8 +144,9 @@ async def blockpm(block):
                 " was blocc'd!.",
             )
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.unblock$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.unblock$"))
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.unblock$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.unblock$"))
 async def unblockpm(unblock):
     if not unblock.text[0].isalpha() and unblock.text[0] \
             not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
