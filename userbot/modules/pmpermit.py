@@ -125,10 +125,20 @@ async def blockpm(block):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             await bot(BlockRequest(replied_user.user.id))
+            try:
+                from userbot.modules.sql_helper.pm_permit_sql import dissprove
+                dissprove(replied_user.user.id)
+            except Exception:
+                pass
         else:
             await bot(BlockRequest(block.chat_id))
             aname = await bot.get_entity(block.chat_id)
             name0 = str(aname.first_name)
+            try:
+                from userbot.modules.sql_helper.pm_permit_sql import dissprove
+                dissprove(block.chat_id)
+            except Exception:
+                pass
 
         if LOGGER:
             await bot.send_message(
