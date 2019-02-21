@@ -6,5 +6,4 @@ userbot.session
 userbot.session-journal
 userbot/__pycache__/*
 userbot/modules/__pycache__/*
-userbot/modules/rextester/__pycache__/*
 userbot/modules/sql_helper/__pycache__/*
