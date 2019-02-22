@@ -33,7 +33,7 @@ reqinstall() {
     curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
     clear
 }
-
+DB = "n"
 # Questionaire
 questions() {
     echo "***Please enter your details***"
@@ -66,6 +66,12 @@ questions() {
     fi
 }
 
+#Fixup the poatgresql server
+postgresconfig() {
+TRACK = echo `ls /etc/postgresql`
+sudo mv init/pg_hba.conf  /etc/postgresql/$TRACK/main/pg_hba.conf
+sudo echo "listen_address = '*'" >> postgresql.conf
+}
 # Config write function
 writeconfig() {
     echo "API_KEY=$API_KEY
@@ -123,6 +129,11 @@ reqinstall
 questions
 writeconfig
 
+if [ "$DB" = "y" ]
+then
+postgresconfig
+fi
+ 
 session
 dockerspin
 
