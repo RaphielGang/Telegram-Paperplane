@@ -1,9 +1,13 @@
+# Copyright (C) 2018 Raphielscape LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.0 (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 import asyncio
 import os
 from datetime import datetime
-
 import requests
-from telethon import TelegramClient, events
 
 from userbot import LOGGER, LOGGER_GROUP
 from userbot.events import register

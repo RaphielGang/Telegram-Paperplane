@@ -1,3 +1,9 @@
+# Copyright (C) 2018 Raphielscape LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.0 (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 import os
 import re
 from asyncio import create_subprocess_shell as asyncsh
@@ -10,7 +16,6 @@ import wikipedia
 from google_images_download import google_images_download
 from googletrans import Translator
 from gtts import gTTS
-from telethon import TelegramClient, events
 
 from userbot import LOGGER, LOGGER_GROUP
 from userbot.events import register
