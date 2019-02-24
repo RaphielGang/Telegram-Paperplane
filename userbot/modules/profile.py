@@ -17,7 +17,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import (MessageEntityMentionName, MessageMediaDocument,
                                MessageMediaPhoto)
 from telethon.utils import get_input_location
-
+from userbot.events import register
 from userbot import bot
 
 # ====================== CONSTANT ===============================
@@ -42,7 +42,7 @@ USERNAME_SUCCESS = "```Your username was succesfully changed```"
 USERNAME_TAKEN = "```This username is already taken```"
 #===============================================================
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.ppic$"))
+@register(outgoing=True, pattern="^.ppic$")
 async def profile_pic(ppic):
     if not ppic.text[0].isalpha() and ppic.text[0] not in ("/", "#", "@", "!"):
         message = await ppic.get_reply_message()
@@ -73,7 +73,7 @@ async def profile_pic(ppic):
                     await ppic.edit(PP_ERROR)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.xpic$"))
+@register(outgoing=True, pattern="^.xpic$")
 async def profile_photo(ppht):
     if not ppht.text[0].isalpha() and ppht.text[0] not in ("/", "#", "@", "!"):
         message = await ppht.get_reply_message()
@@ -106,7 +106,7 @@ async def profile_photo(ppht):
                     await ppht.edit(CHAT_PP_ERROR)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.set "))
+@register(outgoing=True, pattern="^.set ")
 async def update_bio(e):
     bio = e.text.split(" ", 1)[1]
     if len(bio) > 70:
@@ -116,7 +116,7 @@ async def update_bio(e):
         await e.edit(BIO_SUCCESS)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.name "))
+@register(outgoing=True, pattern="^.name ")
 async def update_name(e):
     text = e.text.split(" ", 1)[1]
     name = text.split("\\n", 1)
@@ -129,7 +129,7 @@ async def update_name(e):
     await e.edit(NAME_OK)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.uname "))
+@register(outgoing=True, pattern="^.uname ")
 async def update_username(updtusrnm):
     text = updtusrnm.text.split(" ", 1)[1]
     allowed_char = re.match(r"[a-zA-Z][\w\d]{3,30}[a-zA-Z\d]", text)
