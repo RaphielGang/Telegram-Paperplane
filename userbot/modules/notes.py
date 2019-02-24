@@ -1,10 +1,10 @@
 from telethon import events
 
 from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^\.saved$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^\.saved$"))
+@register(outgoing=True, pattern="^\.saved$")
 async def notes_active(svd):
     if not svd.text[0].isalpha() and svd.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -51,7 +51,7 @@ async def add_filter(fltr):
         add_note(str(fltr.chat_id), notename, string)
         await fltr.edit(
             "`Note added successfully. Use` #{} `to get it`".format(notename)
-            )
+        )
 
 
 @bot.on(events.NewMessage(pattern="#\w*"))
@@ -72,8 +72,7 @@ async def incom_note(getnt):
         pass
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^\.rmnotes$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^\.rmnotes$"))
+@register(outgoing=True, pattern="^\.rmnotes$")
 async def purge_notes(prg):
     try:
         from userbot.modules.sql_helper.notes_sql import rm_all_notes
@@ -84,6 +83,6 @@ async def purge_notes(prg):
         await prg.edit("```Purging all notes.```")
         rm_all_notes(str(prg.chat_id))
         if LOGGER:
-            await bot.send_message(
+            await prg.client.send_message(
                 LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
             )

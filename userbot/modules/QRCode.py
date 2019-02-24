@@ -5,7 +5,8 @@ from datetime import datetime
 import requests
 from telethon import TelegramClient, events
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import LOGGER, LOGGER_GROUP
+from userbot.events import register
 
 download_directory = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
 
@@ -18,14 +19,13 @@ def progress(current, total):
     )
 
 
-@bot.on(events.NewMessage(pattern=r"^.getqr$", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r"^.getqr$", outgoing=True))
+@register(pattern=r"^.getqr$", outgoing=True)
 async def parseqr(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.fwd_from:
             return
         start = datetime.now()
-        downloaded_file_name = await bot.download_media(
+        downloaded_file_name = await e.client.download_media(
             await e.get_reply_message(), download_directory, progress_callback=progress
         )
         url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
@@ -40,7 +40,7 @@ async def parseqr(e):
         )
 
 
-@bot.on(events.NewMessage(pattern=r".makeqr ?(.*)", outgoing=True))
+@register(pattern=r".makeqr ?(.*)", outgoing=True)
 async def make_qr(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.fwd_from:
@@ -55,7 +55,7 @@ async def make_qr(e):
             previous_message = await e.get_reply_message()
             reply_msg_id = previous_message.id
             if previous_message.media:
-                downloaded_file_name = await bot.download_media(
+                downloaded_file_name = await e.client.download_media(
                     previous_message, download_directory, progress_callback=progress
                 )
                 m_list = None
@@ -75,7 +75,7 @@ async def make_qr(e):
         with open(required_file_name, "wb") as fd:
             for chunk in r.iter_content(chunk_size=128):
                 fd.write(chunk)
-        await bot.send_file(
+        await e.client.send_file(
             e.chat_id,
             required_file_name,
             reply_to=reply_msg_id,

@@ -7,11 +7,11 @@ import os
 import requests
 from telethon import TelegramClient, events
 
-from userbot import SCREENSHOT_LAYER_ACCESS_KEY, bot
+from userbot import SCREENSHOT_LAYER_ACCESS_KEY
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(pattern=r".screencapture (.*)", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r".screencapture (.*)", outgoing=True))
+@register(pattern=r".screencapture (.*)", outgoing=True)
 async def _(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if SCREENSHOT_LAYER_ACCESS_KEY is None:
@@ -35,7 +35,7 @@ async def _(e):
                 for chunk in response_api.iter_content(chunk_size=128):
                     fd.write(chunk)
             try:
-                await bot.send_file(
+                await e.client.send_file(
                     e.chat_id,
                     temp_file_name,
                     caption=input_str,
