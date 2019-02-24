@@ -1,8 +1,14 @@
+# Copyright (C) 2018 Raphielscape LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.0 (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 import speedtest
 
 from datetime import datetime
 
-from telethon import events, functions
+from telethon import functions
 
 from userbot.events import register
 

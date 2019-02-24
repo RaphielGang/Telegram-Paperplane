@@ -1,4 +1,9 @@
-from telethon import events
+# Copyright (C) 2018 Raphielscape LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.0 (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 from telethon.errors import ChatAdminRequiredError
 from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator, Chat
 

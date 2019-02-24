@@ -11,7 +11,7 @@ RUN sed -e 's;^#http\(.*\)/v3.9/community;http\1/v3.9/community;g' -i /etc/apk/r
 #
 RUN apk add --no-cache python3 \
     py-pillow py-requests py-sqlalchemy py-psycopg2 \
-    curl neofetch git sudo
+    curl neofetch git sudo gcc musl-dev postgresql postgresql-dev
 RUN apk add --no-cache sqlite
 # Copy Python Requirements to /app
 

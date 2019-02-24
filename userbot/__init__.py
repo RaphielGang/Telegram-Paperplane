@@ -1,3 +1,11 @@
+#!/usr/bin/env bash
+# shellcheck source=/dev/null
+#
+# Copyright (C) 2018 Raphielscape LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.0 (the "License");
+# you may not use this file except in compliance with the License.
+#
 import os
 
 from sys import version_info
