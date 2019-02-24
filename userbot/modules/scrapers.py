@@ -12,13 +12,13 @@ from googletrans import Translator
 from gtts import gTTS
 from telethon import TelegramClient, events
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import LOGGER, LOGGER_GROUP
+from userbot.events import register
 
 langi = "en"
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.img (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.img (.*)"))
+@register(outgoing=True, pattern="^.img (.*)")
 async def img_sampler(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Processing...")
@@ -39,14 +39,13 @@ async def img_sampler(e):
         }  # creating list of arguments
         paths = response.download(arguments)  # passing the arguments to the function
         lst = paths[s]
-        await bot.send_file(await bot.get_input_entity(e.chat_id), lst)
+        await e.client.send_file(await e.client.get_input_entity(e.chat_id), lst)
         end = round(time.time() * 1000)
         msstartend = int(end) - int(start)
         await e.delete()
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern=r"^.google (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.google (.*)"))
+@register(outgoing=True, pattern=r"^.google (.*)")
 async def gsearch(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         match = e.pattern_match.group(1)
@@ -62,14 +61,13 @@ async def gsearch(e):
             "**Search Query:**\n`" + match + "`\n\n**Result:**\n" + result
         )
         if LOGGER:
-            await bot.send_message(
+            await e.client.send_message(
                 LOGGER_GROUP,
                 "Google Search query " + match + " was executed successfully",
             )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern=r"^.wiki (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.wiki (.*)"))
+@register(outgoing=True, pattern=r"^.wiki (.*)")
 async def wiki(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         match = e.pattern_match.group(1)
@@ -78,13 +76,12 @@ async def wiki(e):
             "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
         )
         if LOGGER:
-            await bot.send_message(
+            await e.client.send_message(
                 LOGGER_GROUP, "Wiki query " + match + " was executed successfully"
             )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.ud (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.ud (.*)"))
+@register(outgoing=True, pattern="^.ud (.*)")
 async def ud(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Processing...")
@@ -102,15 +99,14 @@ async def ud(e):
                 + "__"
             )
             if LOGGER:
-                await bot.send_message(
+                await e.client.send_message(
                     LOGGER_GROUP, "ud query " + str + " executed successfully."
                 )
         else:
             await e.edit("No result found for **" + str + "**")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.tts"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.tts"))
+@register(outgoing=True, pattern="^.tts")
 async def tts(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         textx = await e.get_reply_message()
@@ -134,17 +130,16 @@ async def tts(e):
                 await e.edit("`Some Internal Error! Try Again!`")
                 return
         with open("k.mp3", "r") as speech:
-            await bot.send_file(e.chat_id, "k.mp3", voice_note=True)
+            await e.client.send_file(e.chat_id, "k.mp3", voice_note=True)
             os.remove("k.mp3")
             if LOGGER:
-                await bot.send_message(
+                await e.client.send_message(
                     LOGGER_GROUP, "tts of " + message + " executed successfully!"
                 )
             await e.delete()
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.trt"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.trt"))
+@register(outgoing=True, pattern="^.trt")
 async def translateme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         global langi
@@ -158,24 +153,23 @@ async def translateme(e):
             message = str(message.message)
         reply_text = translator.translate(message, dest=langi).text
         reply_text = "**Source:** `\n" + message + "`**\n\nTranslation: **`\n" + reply_text  + "`"
-        await bot.send_message(e.chat_id, reply_text)
+        await e.client.send_message(e.chat_id, reply_text)
         await e.delete()
         if LOGGER:
-            await bot.send_message(
+            await e.client.send_message(
                 LOGGER_GROUP,
                 "Translate query " + message + " was executed successfully",
             )
 
 
-@bot.on(events.NewMessage(pattern=".lang", outgoing=True))
-@bot.on(events.MessageEdited(pattern=".lang", outgoing=True))
+@register(pattern=".lang", outgoing=True)
 async def lang(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         global langi
-        message = await bot.get_messages(e.chat_id)
+        message = await e.client.get_messages(e.chat_id)
         langi = str(message[0].message[6:])
         if LOGGER:
-            await bot.send_message(
+            await e.client.send_message(
                 LOGGER_GROUP, "tts language changed to **" + langi + "**"
             )
             await e.edit("tts language changed to **" + langi + "**")

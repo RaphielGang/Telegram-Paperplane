@@ -7,11 +7,11 @@ from sqlalchemy import (Boolean, Column, Integer, String, UnicodeText,
                         distinct, func)
 from telethon import TelegramClient, events
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import LOGGER, LOGGER_GROUP
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+@register(incoming=True)
 async def filter_incoming_handler(e):
     try:
         if not (await e.get_sender()).bot:
@@ -32,8 +32,7 @@ async def filter_incoming_handler(e):
         pass
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.filter\\s.*"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.filter\\s.*"))
+@register(outgoing=True, pattern="^.filter\\s.*")
 async def add_filter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -50,8 +49,7 @@ async def add_filter(e):
         await e.edit("```Filter added successfully```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.stop\\s.*"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.stop\\s.*"))
+@register(outgoing=True, pattern="^.stop\\s.*")
 async def remove_filter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -65,8 +63,7 @@ async def remove_filter(e):
         await e.edit("```Filter removed successfully```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.rmfilters$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.rmfilters$"))
+@register(outgoing=True, pattern="^.rmfilters$")
 async def kick_marie_filter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("```Will be kicking away all Marie filters.```")
@@ -80,13 +77,13 @@ async def kick_marie_filter(e):
             "```Successfully purged Marie filters yaay!```\n Gimme cookies!"
         )
         if LOGGER:
-            await bot.send_message(
-                LOGGER_GROUP, "I cleaned all Marie filters at " + str(e.chat_id)
+            await e.client.send_message(
+                LOGGER_GROUP, "I cleaned all Marie filters at " +
+                str(e.chat_id)
             )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.filters$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.filters$"))
+@register(outgoing=True, pattern="^.filters$")
 async def filters_active(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         try:

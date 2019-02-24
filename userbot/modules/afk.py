@@ -3,10 +3,11 @@ import time
 from telethon import events
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, ISAFK, LOGGER, LOGGER_GROUP, USERS,
-                     bot)
+from userbot import (AFKREASON, COUNT_MSG, ISAFK, LOGGER, LOGGER_GROUP, USERS)
+from userbot.events import register
 
-@bot.on(events.NewMessage(incoming=True))
+
+@register(incoming=True)
 async def mention_afk(e):
     global COUNT_MSG
     global USERS
@@ -37,7 +38,7 @@ async def mention_afk(e):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@bot.on(events.NewMessage(incoming=True))
+@register(incoming=True)
 async def afk_on_pm(e):
     global ISAFK
     global USERS
@@ -68,8 +69,7 @@ async def afk_on_pm(e):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.notafk$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.notafk$"))
+@register(outgoing=True, pattern="^.notafk$")
 async def not_afk(e):
     if not e.text[0].isalpha():
         global ISAFK
@@ -87,7 +87,7 @@ async def not_afk(e):
         time.sleep(2)
         await x.delete()
         if LOGGER:
-            await bot.send_message(
+            await e.client.send_message(
                 LOGGER_GROUP,
                 "You've recieved "
                 + str(COUNT_MSG)
@@ -96,9 +96,9 @@ async def not_afk(e):
                 + " chats while you were away",
             )
             for i in USERS:
-                name = await bot.get_entity(i)
+                name = await e.client.get_entity(i)
                 name0 = str(name.first_name)
-                await bot.send_message(
+                await e.client.send_message(
                     LOGGER_GROUP,
                     "["
                     + name0
@@ -115,8 +115,7 @@ async def not_afk(e):
         AFKREASON = "No Reason"
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.afk"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.afk"))
+@register(outgoing=True, pattern="^.afk")
 async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -129,13 +128,12 @@ async def set_afk(e):
         await e.edit("AFK AF!")
         if string != "":
             AFKREASON = string
-        await bot.send_message(LOGGER_GROUP, "You went AFK!")
+        await e.client.send_message(LOGGER_GROUP, "You went AFK!")
         ISAFK = True
         raise StopPropagation
 
 
-@bot.on(events.NewMessage(outgoing=True))
-@bot.on(events.MessageEdited(outgoing=True))
+@register(outgoing=True)
 async def type_afk_is_not_true(e):
     global ISAFK
     global COUNT_MSG
@@ -153,7 +151,7 @@ async def type_afk_is_not_true(e):
         time.sleep(2)
         await x.delete()
         if LOGGER:
-            await bot.send_message(
+            await e.client.send_message(
                 LOGGER_GROUP,
                 "You've recieved "
                 + str(COUNT_MSG)
@@ -162,9 +160,9 @@ async def type_afk_is_not_true(e):
                 + " chats while you were away",
             )
             for i in USERS:
-                name = await bot.get_entity(i)
+                name = await e.client.get_entity(i)
                 name0 = str(name.first_name)
-                await bot.send_message(
+                await e.client.send_message(
                     LOGGER_GROUP,
                     "["
                     + name0

@@ -7,11 +7,11 @@ from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
 
 from telethon.tl.types import ChatAdminRights, ChatBannedRights
 
-from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, bot)
+from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP)
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.promote$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.promote$"))
+@register(outgoing=True, pattern="^.promote$")
 async def promote(promt):
     """ For .promote command, do promote targeted person """
     if not promt.text[0].isalpha() \
@@ -39,7 +39,7 @@ async def promote(promt):
 
         # Try to promote if current user is admin or creator
         try:
-            await bot(
+            await promt.client(
                 EditAdminRequest(promt.chat_id,
                                  (await promt.get_reply_message()).sender_id,
                                  rights)
@@ -55,8 +55,7 @@ async def promote(promt):
             return
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.demote$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.demote$"))
+@register(outgoing=True, pattern="^.demote$")
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     if not dmod.text[0].isalpha() and dmod.text[0] not in ("/", "#", "@", "!"):
@@ -89,7 +88,7 @@ async def demote(dmod):
         )
         # Edit Admin Permission
         try:
-            await bot(
+            await dmod.client(
                 EditAdminRequest(dmod.chat_id,
                                  (await dmod.get_reply_message()).sender_id,
                                  newrights)
@@ -105,8 +104,7 @@ async def demote(dmod):
         await dmod.edit("`Demoted Successfully!`")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.ban$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.ban$"))
+@register(outgoing=True, pattern="^.ban$")
 async def thanos(bon):
     """ For .ban command, do "thanos" at targeted person """
     if not bon.text[0].isalpha() and bon.text[0] not in ("/", "#", "@", "!"):
@@ -151,7 +149,7 @@ async def thanos(bon):
 
         # Announce that we're going to whacking the pest
         await bon.edit("`Whacking the pest!`")
-        await bot(
+        await bon.client(
             EditBannedRequest(
                 bon.chat_id,
                 sender.sender_id,
@@ -165,15 +163,14 @@ async def thanos(bon):
 
         # Announce to the logging group if we done a banning
         if LOGGER:
-            await bot.send_message(
+            await bon.client.send_message(
                 LOGGER_GROUP,
                 str((await bon.get_reply_message()).sender_id)
                 + " was banned.",
             )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.unban$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.unban$"))
+@register(outgoing=True, pattern="^.unban$")
 async def nothanos(unbon):
     if not unbon.text[0].isalpha() and unbon.text[0] \
             not in ("/", "#", "@", "!"):
@@ -189,7 +186,7 @@ async def nothanos(unbon):
             )
         replymsg = await unbon.get_reply_message()
         try:
-            await bot(EditBannedRequest(
+            await unbon.client(EditBannedRequest(
                 unbon.chat_id,
                 replymsg.sender_id,
                 rights
@@ -197,7 +194,7 @@ async def nothanos(unbon):
             await unbon.edit("```Unbanned Successfully```")
 
             if LOGGER:
-                await bot.send_message(
+                await unbon.client.send_message(
                     LOGGER_GROUP,
                     str((await unbon.get_reply_message()).sender_id)
                     + " was unbanned.",
@@ -206,8 +203,7 @@ async def nothanos(unbon):
             await unbon.edit("`Uh oh my unban logic broke!`")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.mute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.mute$"))
+@register(outgoing=True, pattern="^.mute$")
 async def spider(spdr):
     """
     This function basically muting peeps
@@ -250,15 +246,14 @@ async def spider(spdr):
 
         # Announce to logging group
         if LOGGER:
-            await bot.send_message(
+            await spdr.client.send_message(
                 LOGGER_GROUP,
                 str((await spdr.get_reply_message()).sender_id)
                 + " was muted.",
             )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.unmute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.unmute$"))
+@register(outgoing=True, pattern="^.unmute$")
 async def unmoot(unmot):
     if not unmot.text[0].isalpha() and unmot.text[0] \
             not in ("/", "#", "@", "!"):
@@ -276,7 +271,7 @@ async def unmoot(unmot):
         from userbot.modules.sql_helper.spam_mute_sql import unmute
         unmute(unmot.chat_id, replymsg.sender_id)
         try:
-            await bot(EditBannedRequest(
+            await unmot.client(EditBannedRequest(
                 unmot.chat_id,
                 replymsg.sender_id,
                 rights
@@ -286,8 +281,7 @@ async def unmoot(unmot):
             await unmot.edit("`Uh oh my unmute logic broke!`")
 
 
-@bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+@register(incoming=True)
 async def muter(moot):
     try:
         from userbot.modules.sql_helper.spam_mute_sql import is_muted
@@ -310,7 +304,7 @@ async def muter(moot):
         for i in muted:
             if str(i.sender) == str(moot.sender_id):
                 await moot.delete()
-                await bot(EditBannedRequest(
+                await moot.client(EditBannedRequest(
                     moot.chat_id,
                     moot.sender_id,
                     rights
@@ -320,8 +314,7 @@ async def muter(moot):
             await moot.delete()
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.ungmute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.ungmute$"))
+@register(outgoing=True, pattern="^.ungmute$")
 async def ungmoot(ungmoot):
     if not ungmoot.text[0].isalpha() and ungmoot.text[0] \
             not in ("/", "#", "@", "!"):
@@ -333,8 +326,7 @@ async def ungmoot(ungmoot):
         await ungmoot.edit("```Ungmuted Successfully```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.gmute$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.gmute$"))
+@register(outgoing=True, pattern="^.gmute$")
 async def gspider(gspdr):
     if not gspdr.text[0].isalpha() and gspdr.text[0] not in ("/", "#", "@", "!"):
         if (await gspdr.get_reply_message()).sender_id in BRAIN_CHECKER:
@@ -354,7 +346,7 @@ async def gspider(gspdr):
         await gspdr.respond("`Taped!`")
 
         if LOGGER:
-            await bot.send_message(
+            await gspdr.send_message(
                 LOGGER_GROUP,
                 str((await gspdr.get_reply_message()).sender_id)
                 + " was muted.",

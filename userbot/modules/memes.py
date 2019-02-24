@@ -8,11 +8,11 @@ from telethon import TelegramClient, events
 from zalgo_text import zalgo
 
 from userbot import (DISABLE_RUN, ENABLE_KILLME, LOGGER, LOGGER_GROUP,
-                     WIDE_MAP, bot)
+                     WIDE_MAP)
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^:/$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^:/$"))
+@register(outgoing=True, pattern="^:/$")
 async def kek(keks):
     uio = ["/", "\\"]
     for i in range(1, 15):
@@ -20,8 +20,7 @@ async def kek(keks):
         await keks.edit(":" + uio[i % 2])
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^-_-$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^-_-$"))
+@register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
     ok = "-_-"
     if range(10):
@@ -29,8 +28,7 @@ async def lol(lel):
         await lel.edit(ok)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.cp"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.cp"))
+@register(outgoing=True, pattern="^.cp")
 async def copypasta(cp):
     if not cp.text[0].isalpha() and cp.text[0] not in ("/", "#", "@", "!"):
         textx = await cp.get_reply_message()
@@ -91,8 +89,7 @@ async def copypasta(cp):
         await cp.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.vapor (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.vapor (.*)"))
+@register(outgoing=True, pattern="^.vapor (.*)")
 async def vapor(vpr):
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
         textx = await vpr.get_reply_message()
@@ -110,8 +107,7 @@ async def vapor(vpr):
         await vpr.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.str (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.str (.*)"))
+@register(outgoing=True, pattern="^.str (.*)")
 async def stretch(stret):
     if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
         textx = await stret.get_reply_message()
@@ -130,8 +126,7 @@ async def stretch(stret):
         await stret.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.zal (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.zal (.*)"))
+@register(outgoing=True, pattern="^.zal (.*)")
 async def zal(zgfy):
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
         textx = await zgfy.get_reply_message()
@@ -146,14 +141,12 @@ async def zal(zgfy):
         await zgfy.edit(zalgofied_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^hi$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^hi$"))
+@register(outgoing=True, pattern="^hi$")
 async def hoi(ha):
     await ha.edit("Hoi!😄")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.owo (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.owo (.*)"))
+@register(outgoing=True, pattern="^.owo (.*)")
 async def faces(owo):
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
         textx = await owo.get_reply_message()
@@ -191,8 +184,7 @@ async def faces(owo):
         await owo.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.react$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.react$"))
+@register(outgoing=True, pattern="^.react$")
 async def react_meme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         reactor = [
@@ -301,15 +293,13 @@ async def react_meme(e):
         await e.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.shg$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.shg$"))
+@register(outgoing=True, pattern="^.shg$")
 async def shrugger(shg):
     if not shg.text[0].isalpha() and shg.text[0] not in ("/", "#", "@", "!"):
         await shg.edit(r"¯\_(ツ)_/¯")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.runs$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.runs$"))
+@register(outgoing=True, pattern="^.runs$")
 async def runner_lol(run):
     if not DISABLE_RUN:
         if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
@@ -331,8 +321,7 @@ async def runner_lol(run):
             await run.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.disable runs$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.disable runs$"))
+@register(outgoing=True, pattern="^.disable runs$")
 async def disable_killme(nokill):
     if not nokill.text[0].isalpha() and nokill.text[0] not in ("/", "#", "@", "!"):
         global DISABLE_RUN
@@ -340,8 +329,7 @@ async def disable_killme(nokill):
         await nokill.edit("```Done!```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.enable runs$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.enable runs$"))
+@register(outgoing=True, pattern="^.enable runs$")
 async def enable_killme(killme):
     if not killme.text[0].isalpha() and killme.text[0] not in ("/", "#", "@", "!"):
         global DISABLE_RUN
@@ -349,8 +337,7 @@ async def enable_killme(killme):
         await killme.edit("```Done!```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.metoo"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.metoo"))
+@register(outgoing=True, pattern="^.metoo")
 async def metoo(hahayes):
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         metoostr = [
@@ -367,8 +354,7 @@ async def metoo(hahayes):
         await hahayes.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.mock"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.mock"))
+@register(outgoing=True, pattern="^.mock")
 async def spongemocktext(mock):
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
         textx = await mock.get_reply_message()
@@ -382,8 +368,7 @@ async def spongemocktext(mock):
         await mock.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.clap (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.clap (.*)"))
+@register(outgoing=True, pattern="^.clap (.*)")
 async def claptext(memereview):
     textx = await memereview.get_reply_message()
     message = memereview.text
@@ -398,8 +383,7 @@ async def claptext(memereview):
     await memereview.edit(reply_text)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.bt$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.bt$"))
+@register(outgoing=True, pattern="^.bt$")
 async def bluetext(bt):
     if await bt.get_reply_message():
         await bt.edit(
@@ -408,8 +392,7 @@ async def bluetext(bt):
         )
 
 
-@bot.on(events.NewMessage(pattern='(?i).type'))
-@bot.on(events.MessageEdited(pattern='(?i).type'))
+@register(pattern='.type')
 async def typewriter(typew):
     if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@", "!"):
         textx = await typew.get_reply_message()
