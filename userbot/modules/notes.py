@@ -26,7 +26,7 @@ async def notes_active(svd):
         await svd.edit(message)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^\.clear (\w*)"))
+@register(outgoing=True, pattern="^\.clear (\w*)"))
 async def remove_notes(clr):
     if not clr.text[0].isalpha() and clr.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -39,7 +39,7 @@ async def remove_notes(clr):
         await clr.edit("```Note removed successfully```")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^\.save (\w*)"))
+@register(outgoing=True, pattern="^\.save (\w*)"))
 async def add_filter(fltr):
     if not fltr.text[0].isalpha():
         try:
