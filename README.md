@@ -203,20 +203,12 @@ All that is needed is that your .py file be in the modules folder.
 
 To add commands, make sure to import the the primary bot via
 
-`from userbot import bot`.
-
-
-and
-
-
-telethon's important stuff via
-
-`from telethon import events`
+`from userbot.events import register`.
 
 You can then add commands wrapping them under
 
 ```
-@bot.on(events.NewMessage(outgoing=True,pattern=""))
+@register(outgoing=True, pattern="")
 async def some_function(e):
      Whatever here.
 ```
@@ -224,7 +216,7 @@ async def some_function(e):
 
 You can also set outgoing to incoming incase, you wanna make that command to parse the incoming message.
 
-The command pattern will be regex. Hope you know it, else feel free to hop on [here](https://regexone.com)
+The command pattern will be case-insensitive regex. Hope you know it, else feel free to hop on [here](https://regexone.com)
 
 Use asynchronous functions, and await the functions.
 

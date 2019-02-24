@@ -6,11 +6,12 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName, User, UserFull
 from telethon.utils import get_input_location
 
-from userbot import bot
+from userbot.events import register
 
 TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
-@bot.on(events.NewMessage(pattern="\.whois ?(.*)", outgoing=True))
+
+@register(pattern="\.whois ?(.*)", outgoing=True)
 async def who(event):
     if event.fwd_from:
         return
@@ -20,7 +21,7 @@ async def who(event):
 
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        replied_user = await bot(GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
     else:
         input_str = event.pattern_match.group(1)
         if event.message.entities is not None:
@@ -30,19 +31,19 @@ async def who(event):
             if isinstance(probable_user_mention_entity) == \
                     MessageEntityMentionName:
                 user_id = probable_user_mention_entity.user_id
-                replied_user = await bot(GetFullUserRequest(user_id))
+                replied_user = await event.client(GetFullUserRequest(user_id))
             else:
                 # the disgusting CRAP way, of doing the thing
                 try:
-                    user_object = await bot.get_entity(input_str)
-                    replied_user = await bot(GetFullUserRequest(user_object.id))
+                    user_object = await event.client.get_entity(input_str)
+                    replied_user = await event.client(GetFullUserRequest(user_object.id))
                 except Exception as err:
                     await event.edit(str(err))
                     return None
         else:
             try:
-                user_object = await bot.get_entity(input_str)
-                replied_user = await bot(GetFullUserRequest(user_object.id))
+                user_object = await event.client.get_entity(input_str)
+                replied_user = await event.client(GetFullUserRequest(user_object.id))
             except Exception as err:
                 await event.edit(str(err))
                 return None
@@ -55,7 +56,7 @@ async def who(event):
     user_bio = replied_user.about
 
     try:
-        photo = await bot.download_profile_photo(
+        photo = await event.client.download_profile_photo(
             user_id,
             TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg",
             download_big=True
@@ -96,7 +97,7 @@ async def who(event):
     if not message_id_to_reply:
         message_id_to_reply = event.message.id
 
-    await bot.send_file(
+    await event.client.send_file(
         event.chat_id,
         photo,
         caption=caption,

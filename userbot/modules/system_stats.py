@@ -5,11 +5,11 @@ from shutil import which
 
 from telethon import events
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import LOGGER, LOGGER_GROUP
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.sysd$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
+@register(outgoing=True, pattern="^.sysd$")
 async def sysdetails(sysd):
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -30,8 +30,7 @@ async def sysdetails(sysd):
             await sysd.edit("`Hella install neofetch first kthx`")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.botver$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.botver$"))
+@register(outgoing=True, pattern="^.botver$")
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if which("git") is not None:
@@ -66,11 +65,10 @@ async def bot_ver(e):
         else:
             await e.edit(
                 "Shame that you don't have git, You're running r2.2a anyway"
-                )
+            )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.pip (.+)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
+@register(outgoing=True, pattern="^.pip (.+)")
 async def pipcheck(pip):
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
         await pip.reply("`Searching . . .`")
