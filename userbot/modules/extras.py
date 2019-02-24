@@ -19,3 +19,20 @@ async def leave(e):
         else:
             await e.edit('`Sar This is Not A Chat`')
 
+@bot.on(events.NewMessage(pattern="^.lmg", outgoing=True))
+@bot.on(events.MessageEdited(pattern="^.lmg", outgoing=True))
+async def let_me_google_that_for_you(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        textx = await e.get_reply_message()
+        message = e.text
+        if message[8:]:
+            message = str(message[8:])
+        elif textx:
+            message = str(textx.message)
+        reply_text = 'http://lmgtfy.com/?s=g&iie=1&q=' + message.replace(" ", "+")
+        await e.edit(reply_text)
+        if LOGGER:
+            await bot.send_message(
+                LOGGER_GROUP,
+                "LMGTFY query " + message + " was executed successfully",
+            )
