@@ -4,10 +4,8 @@
 # you may not use this file except in compliance with the License.
 #
 
-import io
 import random
-import re
-import time, sys
+import time
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
 from subprocess import PIPE
@@ -15,10 +13,11 @@ from subprocess import run as runapp
 
 import hastebin
 import pybase64
-from telethon import events
-import time
-from datetime import datetime
+from requests import get, post
+
 from userbot.events import register
+from userbot import LOGGER, LOGGER_GROUP
+
 DOGBIN_URL = "https://del.dog/"
 
 
@@ -36,7 +35,7 @@ async def paste(pstl):
             message = str(textx.message)
 
         # Dogbin
-        r = requests.post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
+        r = post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
 
         if r.status_code == 200:
             response = r.json()
@@ -64,6 +63,7 @@ async def paste(pstl):
                 "Paste query `" + message + "` was executed successfully",
             )
 
+
 @register(outgoing=True, pattern="^.get_dogbin_content")
 async def get_dogbin_content(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -83,7 +83,7 @@ async def get_dogbin_content(e):
         elif message.startswith(format_normal):
             message = message[len(format_normal):]
 
-        r = requests.get(f'{DOGBIN_URL}raw/{message}')
+        r = get(f'{DOGBIN_URL}raw/{message}')
 
         if r.status_code != 200:
             try:
@@ -207,7 +207,7 @@ async def chatidgetter(e):
 async def sleepybot(e):
     message = e.text
     if not message[0].isalpha() and message[0] not in ("/", "#", "@", "!"):
-        if not " " in e.pattern_match.group(1):
+        if " " not in e.pattern_match.group(1):
             await e.reply("Syntax: `.shutdown [seconds]`")
         else:
             counter = int(e.pattern_match.group(1))
@@ -331,4 +331,3 @@ async def botlogs(e):
         reply_to=e.id,
         caption="`Bot logs are here!`",
     )
-
