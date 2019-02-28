@@ -20,9 +20,6 @@ async def promote(promt):
     """ For .promote command, do promote targeted person """
     if not promt.text[0].isalpha() \
             and promt.text[0] not in ("/", "#", "@", "!"):
-        chats = await promt.get_chat()
-        admin = chats.admin_rights
-        creator = chats.creator
         new_rights = ChatAdminRights(
             add_admins=True,
             invite_users=True,
@@ -35,18 +32,15 @@ async def promote(promt):
         # Self explanatory
         if not await promt.get_reply_message():
             await promt.edit("`Give a reply message`")
-        elif not admin and creator:
-            rights = new_rights
-        elif not admin and not creator:
-            rights = None
-        await promt.edit("`Promoting...`")
+        else:
+            await promt.edit("`Promoting...`")
 
         # Try to promote if current user is admin or creator
         try:
             await promt.client(
                 EditAdminRequest(promt.chat_id,
                                  (await promt.get_reply_message()).sender_id,
-                                 rights)
+                                 new_rights)
             )
             await promt.edit("`Promoted Successfully!`")
 
