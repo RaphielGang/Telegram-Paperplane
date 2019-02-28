@@ -7,7 +7,6 @@
 import asyncio
 import time
 
-from async_generator import aclosing
 from telethon.errors import rpcbaseerrors
 
 from userbot import LOGGER, LOGGER_GROUP
@@ -20,17 +19,14 @@ async def fastpurger(purg):
         chat = await purg.get_input_chat()
         msgs = []
         count = 0
-        async with aclosing(
-                purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
-        )as replies:
 
-            async for smsgs in replies:
-                msgs.append(smsgs)
-                count = count + 1
-                msgs.append(purg.reply_to_msg_id)
-                if len(msgs) == 100:
-                    await purg.client.delete_messages(chat, msgs)
-                    msgs = []
+        async for msg in purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id):
+            msgs.append(msg)
+            count = count + 1
+            msgs.append(purg.reply_to_msg_id)
+            if len(msgs) == 100:
+                await purg.client.delete_messages(chat, msgs)
+                msgs = []
 
         if msgs:
             await purg.client.delete_messages(chat, msgs)
