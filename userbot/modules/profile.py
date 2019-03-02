@@ -4,8 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
-import io
-import re
+from re import match
 
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import UsernameOccupiedError
@@ -13,12 +12,10 @@ from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
 from telethon.tl.functions.channels import EditPhotoRequest
 from telethon.tl.functions.photos import UploadProfilePhotoRequest
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import (MessageEntityMentionName, MessageMediaDocument,
-                               MessageMediaPhoto)
-from telethon.utils import get_input_location
-from userbot.events import register
+from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
+
 from userbot import bot
+from userbot.events import register
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
@@ -49,14 +46,10 @@ async def profile_pic(ppic):
         photo = None
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
-                photo = message.photo
-                photo = await bot.download_media(message=photo)
+                photo = await bot.download_media(message=message.photo)
             elif isinstance(message.media, MessageMediaDocument):
                 if message.media.document.mime_type in ["image/jpeg", "image/png"]:
-                    photo = message.media.document
-                    photo = await bot.download_file(photo, file="propic.jpeg")
-                    photo = io.BytesIO(photo)
-                    photo.name = "image.jpeg"  # small hack for documents images
+                    photo = await bot.download_file(message.media.document)
             else:
                 await ppic.edit(INVALID_MEDIA)
 
@@ -78,23 +71,25 @@ async def profile_photo(ppht):
     if not ppht.text[0].isalpha() and ppht.text[0] not in ("/", "#", "@", "!"):
         message = await ppht.get_reply_message()
         photo = None
+        chat = await ppht.get_chat()
+
+        if not chat.admin_rights or chat.creator:
+            await ppht.edit("`You aren't an admin!`")
+            return
+
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
-                photo = message.photo
-                photo = await bot.download_media(message=photo)
+                photo = await bot.download_media(message=message.photo)
             elif isinstance(message.media, MessageMediaDocument):
                 if message.media.document.mime_type in ["image/jpeg", "image/png"]:
-                    photo = message.media.document
-                    photo = await bot.download_file(photo, file="propic.jpeg")
-                    photo = io.BytesIO(photo)
-                    photo.name = "image.jpeg"  # small hack for documents images
+                    photo = await bot.download_file(message.media.document)
             else:
                 await ppht.edit(INVALID_MEDIA)
 
         if photo:
             file = await bot.upload_file(photo)
             try:
-                await bot(EditPhotoRequest(e.chat_id, file))
+                await bot(EditPhotoRequest(ppht.chat_id, file))
                 await ppht.edit(CHAT_PP_CHANGED)
 
             except Exception as exc:
@@ -107,18 +102,18 @@ async def profile_photo(ppht):
 
 
 @register(outgoing=True, pattern="^.set ")
-async def update_bio(e):
-    bio = e.text.split(" ", 1)[1]
+async def update_bio(bio):
+    bio = bio.text.split(" ", 1)[1]
     if len(bio) > 70:
-        await e.edit(BIO_LONG)
+        await bio.edit(BIO_LONG)
     else:
         await bot(UpdateProfileRequest(about=bio))
-        await e.edit(BIO_SUCCESS)
+        await bio.edit(BIO_SUCCESS)
 
 
 @register(outgoing=True, pattern="^.name ")
-async def update_name(e):
-    text = e.text.split(" ", 1)[1]
+async def update_name(name):
+    text = name.text.split(" ", 1)[1]
     name = text.split("\\n", 1)
     firstname = name[0]
     lastname = " "
@@ -126,13 +121,13 @@ async def update_name(e):
         lastname = name[1]
 
     await bot(UpdateProfileRequest(first_name=firstname, last_name=lastname))
-    await e.edit(NAME_OK)
+    await name.edit(NAME_OK)
 
 
 @register(outgoing=True, pattern="^.uname ")
 async def update_username(updtusrnm):
     text = updtusrnm.text.split(" ", 1)[1]
-    allowed_char = re.match(r"[a-zA-Z][\w\d]{3,30}[a-zA-Z\d]", text)
+    allowed_char = match(r"[a-zA-Z][\w\d]{3,30}[a-zA-Z\d]", text)
     if not allowed_char:
         await updtusrnm.edit(INVALID_NAME)
     elif len(text) > 30:
