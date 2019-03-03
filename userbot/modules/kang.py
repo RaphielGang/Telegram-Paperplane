@@ -1,4 +1,3 @@
-import hashlib
 import io
 import math
 from PIL import Image
@@ -18,9 +17,8 @@ async def kang(args):
         userid = user.id
         username = user.username
         if not username:
-            username = "Anonfag"
-        hash = hashlib.sha1(bytearray(userid)).hexdigest()
-        packname = f"a{hash[:20]}_by_{username}"
+            username = user.first_name
+        packname = f"a{userid}_by_{username}"
         response = urllib.request.urlopen(urllib.request.Request(f'http://t.me/addstickers/{packname}'))
         htmlstr = response.read().decode("utf8").split('\n')
         message = await args.get_reply_message()
