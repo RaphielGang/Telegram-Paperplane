@@ -16,6 +16,179 @@ from zalgo_text import zalgo
 from userbot import (DISABLE_RUN, WIDE_MAP)
 from userbot.events import register
 
+#================= CONSTANT =================
+METOOSTR = [
+    "Me too thanks",
+    "Haha yes, me too",
+    "Same lol",
+    "Me irl",
+    "Same here",
+    "Haha yes",
+    "Me rn",
+]
+EMOJIS = [
+    "😂",
+    "😂",
+    "👌",
+    "✌",
+    "💞",
+    "👍",
+    "👌",
+    "💯",
+    "🎶",
+    "👀",
+    "😂",
+    "👓",
+    "👏",
+    "👐",
+    "🍕",
+    "💥",
+    "🍴",
+    "💦",
+    "💦",
+    "🍑",
+    "🍆",
+    "😩",
+    "😏",
+    "👉👌",
+    "👀",
+    "👅",
+    "😩",
+    "🚰",
+]
+UWUS = [
+    "(・`ω´・)",
+    ";;w;;",
+    "owo",
+    "UwU",
+    ">w<",
+    "^w^",
+    r"\(^o\) (/o^)/",
+    "( ^ _ ^)∠☆",
+    "(ô_ô)",
+    "~:o",
+    ";-;",
+    "(*^*)",
+    "(>_",
+    "(♥_♥)",
+    "*(^O^)*",
+    "((+_+))",
+]
+FACEREACTS = [
+    "ʘ‿ʘ",
+    "ヾ(-_- )ゞ",
+    "(っ˘ڡ˘ς)",
+    "(´ж｀ς)",
+    "( ಠ ʖ̯ ಠ)",
+    "(° ͜ʖ͡°)╭∩╮",
+    "(ᵟຶ︵ ᵟຶ)",
+    "(งツ)ว",
+    "ʚ(•｀",
+    "(っ▀¯▀)つ",
+    "(◠﹏◠)",
+    "( ͡ಠ ʖ̯ ͡ಠ)",
+    "( ఠ ͟ʖ ఠ)",
+    "(∩｀-´)⊃━☆ﾟ.*･｡ﾟ",
+    "(⊃｡•́‿•̀｡)⊃",
+    "(._.)",
+    "{•̃_•̃}",
+    "(ᵔᴥᵔ)",
+    "♨_♨",
+    "⥀.⥀",
+    "ح˚௰˚づ ",
+    "(҂◡_◡)",
+    "ƪ(ړײ)‎ƪ​​",
+    "(っ•́｡•́)♪♬",
+    "◖ᵔᴥᵔ◗ ♪ ♫ ",
+    "(☞ﾟヮﾟ)☞",
+    "[¬º-°]¬",
+    "(Ծ‸ Ծ)",
+    "(•̀ᴗ•́)و ̑̑",
+    "ヾ(´〇`)ﾉ♪♪♪",
+    "(ง'̀-'́)ง",
+    "ლ(•́•́ლ)",
+    "ʕ •́؈•̀ ₎",
+    "♪♪ ヽ(ˇ∀ˇ )ゞ",
+    "щ（ﾟДﾟщ）",
+    "( ˇ෴ˇ )",
+    "눈_눈",
+    "(๑•́ ₃ •̀๑) ",
+    "( ˘ ³˘)♥ ",
+    "ԅ(≖‿≖ԅ)",
+    "♥‿♥",
+    "◔_◔",
+    "⁽⁽ଘ( ˊᵕˋ )ଓ⁾⁾",
+    "乁( ◔ ౪◔)「      ┑(￣Д ￣)┍",
+    "( ఠൠఠ )ﾉ",
+    "٩(๏_๏)۶",
+    "┌(ㆆ㉨ㆆ)ʃ",
+    "ఠ_ఠ",
+    "(づ｡◕‿‿◕｡)づ",
+    "(ノಠ ∩ಠ)ノ彡( \\o°o)\\",
+    "“ヽ(´▽｀)ノ”",
+    "༼ ༎ຶ ෴ ༎ຶ༽",
+    "｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡",
+    "(づ￣ ³￣)づ",
+    "(⊙.☉)7",
+    "ᕕ( ᐛ )ᕗ",
+    "t(-_-t)",
+    "(ಥ⌣ಥ)",
+    "ヽ༼ ಠ益ಠ ༽ﾉ",
+    "༼∵༽ ༼⍨༽ ༼⍢༽ ༼⍤༽",
+    "ミ●﹏☉ミ",
+    "(⊙_◎)",
+    "¿ⓧ_ⓧﮌ",
+    "ಠ_ಠ",
+    "(´･_･`)",
+    "ᕦ(ò_óˇ)ᕤ",
+    "⊙﹏⊙",
+    "(╯°□°）╯︵ ┻━┻",
+    r"¯\_(⊙︿⊙)_/¯",
+    "٩◔̯◔۶",
+    "°‿‿°",
+    "ᕙ(⇀‸↼‶)ᕗ",
+    "⊂(◉‿◉)つ",
+    "V•ᴥ•V",
+    "q(❂‿❂)p",
+    "ಥ_ಥ",
+    "ฅ^•ﻌ•^ฅ",
+    "ಥ﹏ಥ",
+    "（ ^_^）o自自o（^_^ ）",
+    "ಠ‿ಠ",
+    "ヽ(´▽`)/",
+    "ᵒᴥᵒ#",
+    "( ͡° ͜ʖ ͡°)",
+    "┬─┬﻿ ノ( ゜-゜ノ)",
+    "ヽ(´ー｀)ノ",
+    "☜(⌒▽⌒)☞",
+    "ε=ε=ε=┌(;*´Д`)ﾉ",
+    "(╬ ಠ益ಠ)",
+    "┬─┬⃰͡ (ᵔᵕᵔ͜ )",
+    "┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻",
+    r"¯\_(ツ)_/¯",
+    "ʕᵔᴥᵔʔ",
+    "(`･ω･´)",
+    "ʕ•ᴥ•ʔ",
+    "ლ(｀ー´ლ)",
+    "ʕʘ̅͜ʘ̅ʔ",
+    "（　ﾟДﾟ）",
+    r"¯\(°_o)/¯",
+    "(｡◕‿◕｡)",
+]
+RUNSREACTS = [
+    "Runs to Thanos",
+    "Runs far, far away from earth",
+    "Running faster than usian bolt coz I'mma Bot",
+    "Runs to Marie",
+    "This Group is too cancerous to deal with.",
+    "Cya bois",
+    "Kys",
+    "I am a mad person. Plox Ban me.",
+    "I go away",
+    "I am just walking off, coz me is too fat.",
+    "I Fugged off!",
+]
+#===========================================
 
 @register(outgoing=True, pattern="^:/$")
 async def kek(keks):
@@ -43,46 +216,16 @@ async def copypasta(cp):
         elif textx:
             message = textx
             message = str(message.message)
-        emojis = [
-            "😂",
-            "😂",
-            "👌",
-            "✌",
-            "💞",
-            "👍",
-            "👌",
-            "💯",
-            "🎶",
-            "👀",
-            "😂",
-            "👓",
-            "👏",
-            "👐",
-            "🍕",
-            "💥",
-            "🍴",
-            "💦",
-            "💦",
-            "🍑",
-            "🍆",
-            "😩",
-            "😏",
-            "👉👌",
-            "👀",
-            "👅",
-            "😩",
-            "🚰",
-        ]
-        reply_text = random.choice(emojis)
+        reply_text = random.choice(EMOJIS)
         b_char = random.choice(
             message
         ).lower()  # choose a random character in the message to be substituted with 🅱️
         for owo in message:
             if owo == " ":
-                reply_text += random.choice(emojis)
-            elif owo in emojis:
+                reply_text += random.choice(EMOJIS)
+            elif owo in EMOJIS:
                 reply_text += owo
-                reply_text += random.choice(emojis)
+                reply_text += random.choice(EMOJIS)
             elif owo.lower() == b_char:
                 reply_text += "🅱️"
             else:
@@ -90,7 +233,7 @@ async def copypasta(cp):
                     reply_text += owo.upper()
                 else:
                     reply_text += owo.lower()
-        reply_text += random.choice(emojis)
+        reply_text += random.choice(EMOJIS)
         await cp.edit(reply_text)
 
 
@@ -161,140 +304,21 @@ async def faces(owo):
         elif textx:
             message = textx
             message = str(message.message)
-        uwus = [
-            "(・`ω´・)",
-            ";;w;;",
-            "owo",
-            "UwU",
-            ">w<",
-            "^w^",
-            r"\(^o\) (/o^)/",
-            "( ^ _ ^)∠☆",
-            "(ô_ô)",
-            "~:o",
-            ";-;",
-            "(*^*)",
-            "(>_",
-            "(♥_♥)",
-            "*(^O^)*",
-            "((+_+))",
-        ]
         reply_text = re.sub(r"(r|l)", "w", message)
         reply_text = re.sub(r"(R|L)", "W", reply_text)
         reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
         reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-        reply_text = re.sub(r"\!+", " " + random.choice(uwus), reply_text)
+        reply_text = re.sub(r"\!+", " " + random.choice(UWUS), reply_text)
         reply_text = reply_text.replace("ove", "uv")
-        reply_text += " " + random.choice(uwus)
+        reply_text += " " + random.choice(UWUS)
         await owo.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.react$")
 async def react_meme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        reactor = [
-            "ʘ‿ʘ",
-            "ヾ(-_- )ゞ",
-            "(っ˘ڡ˘ς)",
-            "(´ж｀ς)",
-            "( ಠ ʖ̯ ಠ)",
-            "(° ͜ʖ͡°)╭∩╮",
-            "(ᵟຶ︵ ᵟຶ)",
-            "(งツ)ว",
-            "ʚ(•｀",
-            "(っ▀¯▀)つ",
-            "(◠﹏◠)",
-            "( ͡ಠ ʖ̯ ͡ಠ)",
-            "( ఠ ͟ʖ ఠ)",
-            "(∩｀-´)⊃━☆ﾟ.*･｡ﾟ",
-            "(⊃｡•́‿•̀｡)⊃",
-            "(._.)",
-            "{•̃_•̃}",
-            "(ᵔᴥᵔ)",
-            "♨_♨",
-            "⥀.⥀",
-            "ح˚௰˚づ ",
-            "(҂◡_◡)",
-            "ƪ(ړײ)‎ƪ​​",
-            "(っ•́｡•́)♪♬",
-            "◖ᵔᴥᵔ◗ ♪ ♫ ",
-            "(☞ﾟヮﾟ)☞",
-            "[¬º-°]¬",
-            "(Ծ‸ Ծ)",
-            "(•̀ᴗ•́)و ̑̑",
-            "ヾ(´〇`)ﾉ♪♪♪",
-            "(ง'̀-'́)ง",
-            "ლ(•́•́ლ)",
-            "ʕ •́؈•̀ ₎",
-            "♪♪ ヽ(ˇ∀ˇ )ゞ",
-            "щ（ﾟДﾟщ）",
-            "( ˇ෴ˇ )",
-            "눈_눈",
-            "(๑•́ ₃ •̀๑) ",
-            "( ˘ ³˘)♥ ",
-            "ԅ(≖‿≖ԅ)",
-            "♥‿♥",
-            "◔_◔",
-            "⁽⁽ଘ( ˊᵕˋ )ଓ⁾⁾",
-            "乁( ◔ ౪◔)「      ┑(￣Д ￣)┍",
-            "( ఠൠఠ )ﾉ",
-            "٩(๏_๏)۶",
-            "┌(ㆆ㉨ㆆ)ʃ",
-            "ఠ_ఠ",
-            "(づ｡◕‿‿◕｡)づ",
-            "(ノಠ ∩ಠ)ノ彡( \\o°o)\\",
-            "“ヽ(´▽｀)ノ”",
-            "༼ ༎ຶ ෴ ༎ຶ༽",
-            "｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡",
-            "(づ￣ ³￣)づ",
-            "(⊙.☉)7",
-            "ᕕ( ᐛ )ᕗ",
-            "t(-_-t)",
-            "(ಥ⌣ಥ)",
-            "ヽ༼ ಠ益ಠ ༽ﾉ",
-            "༼∵༽ ༼⍨༽ ༼⍢༽ ༼⍤༽",
-            "ミ●﹏☉ミ",
-            "(⊙_◎)",
-            "¿ⓧ_ⓧﮌ",
-            "ಠ_ಠ",
-            "(´･_･`)",
-            "ᕦ(ò_óˇ)ᕤ",
-            "⊙﹏⊙",
-            "(╯°□°）╯︵ ┻━┻",
-            r"¯\_(⊙︿⊙)_/¯",
-            "٩◔̯◔۶",
-            "°‿‿°",
-            "ᕙ(⇀‸↼‶)ᕗ",
-            "⊂(◉‿◉)つ",
-            "V•ᴥ•V",
-            "q(❂‿❂)p",
-            "ಥ_ಥ",
-            "ฅ^•ﻌ•^ฅ",
-            "ಥ﹏ಥ",
-            "（ ^_^）o自自o（^_^ ）",
-            "ಠ‿ಠ",
-            "ヽ(´▽`)/",
-            "ᵒᴥᵒ#",
-            "( ͡° ͜ʖ ͡°)",
-            "┬─┬﻿ ノ( ゜-゜ノ)",
-            "ヽ(´ー｀)ノ",
-            "☜(⌒▽⌒)☞",
-            "ε=ε=ε=┌(;*´Д`)ﾉ",
-            "(╬ ಠ益ಠ)",
-            "┬─┬⃰͡ (ᵔᵕᵔ͜ )",
-            "┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻",
-            r"¯\_(ツ)_/¯",
-            "ʕᵔᴥᵔʔ",
-            "(`･ω･´)",
-            "ʕ•ᴥ•ʔ",
-            "ლ(｀ー´ლ)",
-            "ʕʘ̅͜ʘ̅ʔ",
-            "（　ﾟДﾟ）",
-            r"¯\(°_o)/¯",
-            "(｡◕‿◕｡)",
-        ]
-        index = random.randint(0, len(reactor))
-        reply_text = reactor[index]
+        index = random.randint(0, len(FACEREACTS))
+        reply_text = FACEREACTS[index]
         await e.edit(reply_text)
 
 
@@ -308,21 +332,8 @@ async def shrugger(shg):
 async def runner_lol(run):
     if not DISABLE_RUN:
         if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
-            reactor = [
-                "Runs to Thanos",
-                "Runs far, far away from earth",
-                "Running faster than usian bolt coz I'mma Bot",
-                "Runs to Marie",
-                "This Group is too cancerous to deal with.",
-                "Cya bois",
-                "Kys",
-                "I am a mad person. Plox Ban me.",
-                "I go away",
-                "I am just walking off, coz me is too fat.",
-                "I Fugged off!",
-            ]
-            index = random.randint(0, len(reactor) - 1)
-            reply_text = reactor[index]
+            index = random.randint(0, len(RUNSREACTS) - 1)
+            reply_text = RUNSREACTS[index]
             await run.edit(reply_text)
 
 
@@ -345,17 +356,8 @@ async def enable_killme(killme):
 @register(outgoing=True, pattern="^.metoo")
 async def metoo(hahayes):
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
-        metoostr = [
-            "Me too thanks",
-            "Haha yes, me too",
-            "Same lol",
-            "Me irl",
-            "Same here",
-            "Haha yes",
-            "Me rn",
-        ]
-        index = random.randint(0, len(metoostr) - 1)
-        reply_text = metoostr[index]
+        index = random.randint(0, len(METOOSTR) - 1)
+        reply_text = METOOSTR[index]
         await hahayes.edit(reply_text)
 
 

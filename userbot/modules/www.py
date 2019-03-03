@@ -4,10 +4,9 @@
 # you may not use this file except in compliance with the License.
 #
 
-import speedtest
-
 from datetime import datetime
 
+import speedtest
 from telethon import functions
 
 from userbot.events import register
