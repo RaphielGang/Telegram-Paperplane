@@ -4,8 +4,8 @@ import math
 from PIL import Image
 import urllib.request
 
-from telethon import TelegramClient, events
-from telethon.tl.types import InputStickerSetID, InputStickerSetItem, MessageMediaDocument, MessageMediaPhoto
+from telethon import events
+from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import bot
 
@@ -22,15 +22,17 @@ async def kang(args):
         htmlstr = response.read().decode("utf8").split('\n')
         message = await args.get_reply_message()
         photo = None
+        emoji = "🌚"
 
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
                 photo = message.photo
                 photo = await bot.download_media(message=photo)
-            elif isinstance(message.media, MessageMediaDocument):
-                if message.media.document.mime_type in ["image/jpeg", "image/png"]:
-                    photo = io.BytesIO()
-                    await bot.download_file(message.media.document, photo)
+            elif "image" in message.media.document.mime_type.split('/'):
+                photo = io.BytesIO()
+                await bot.download_file(message.media.document, photo)
+                if DocumentAttributeFilename(file_name='sticker.webp') in message.media.document.attributes:
+                    emoji = message.media.document.attributes[1].alt
             else:
                 await args.edit("INVALID MEDIA BOI")
                 return
@@ -68,7 +70,7 @@ async def kang(args):
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
                     await conv.get_response()
-                    await conv.send_message("🌚")
+                    await conv.send_message(emoji)
                     await conv.get_response()
                     await conv.send_message('/done')
                     await conv.get_response()
@@ -82,7 +84,7 @@ async def kang(args):
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
                     await conv.get_response()
-                    await conv.send_message("🌚")
+                    await conv.send_message(emoji)
                     await conv.get_response()
                     await conv.send_message("/publish")
                     await conv.get_response()
