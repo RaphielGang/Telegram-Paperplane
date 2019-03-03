@@ -1,4 +1,3 @@
-import hashlib
 import io
 import math
 from PIL import Image
@@ -14,17 +13,19 @@ from userbot import bot
 @bot.on(events.MessageEdited(pattern="^.kang", outgoing=True))
 async def kang(args):
     if not args.text[0].isalpha() and args.text[0] not in ("/", "#", "@", "!"):
-        userid = args.sender.id
-        username = args.sender.username
-        hash = hashlib.sha1(bytearray(userid)).hexdigest()
-        packname = f"a{hash[:20]}_by_{username}"
+        user = await bot.get_me()
+        userid = user.id
+        username = user.username
+        if not username:
+            username = user.first_name
+        packname = f"a{userid}_by_{username}"
         response = urllib.request.urlopen(urllib.request.Request(f'http://t.me/addstickers/{packname}'))
         htmlstr = response.read().decode("utf8").split('\n')
         message = await args.get_reply_message()
         photo = None
         emoji = "🌚"
 
-        if message.media:
+        if message and message.media:
             if isinstance(message.media, MessageMediaPhoto):
                 photo = message.photo
                 photo = await bot.download_media(message=photo)
@@ -36,6 +37,9 @@ async def kang(args):
             else:
                 await args.edit("INVALID MEDIA BOI")
                 return
+        else:
+            await args.edit("Reply to photo to kang it bruh")
+            return
 
         if photo:
             im = Image.open(photo)
@@ -92,3 +96,4 @@ async def kang(args):
                     await conv.get_response()
 
             await args.edit(f"sticker added! Your pack can be found [here](t.me/addstickers/{packname})", parse_mode='md')
+
