@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-# shellcheck source=/dev/null
-#
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");

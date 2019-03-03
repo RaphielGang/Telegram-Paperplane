@@ -191,12 +191,6 @@ async def randomise(e):
         await e.edit("**Query: **\n`" + e.text + "`\n**Output: **\n`" + r[index] + "`")
 
 
-@register(outgoing=True, pattern="^.alive$")
-async def amialive(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("`Master! I am alive 😁`")
-
-
 @register(outgoing=True, pattern="^.chatid$")
 async def chatidgetter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -224,7 +218,10 @@ async def sleepybot(e):
 async def killdabot(e):
     if not e.text[0].isalpha():
         await e.edit("`Goodbye *Windows XP shutdown sound*....`")
-        await e.client.send_message(LOGGER_GROUP, "You REALLY shutdown the bot")
+        await e.client.send_message(
+            LOGGER_GROUP,
+            "#SHUTDOWN \n"
+            "Bot shutted down")
         await e.client.disconnect()
 
 
@@ -310,24 +307,3 @@ async def keep_read(e):
         for i in K:
             if i.groupid == str(e.chat_id):
                 await e.client.send_read_acknowledge(e.chat_id)
-
-
-@register(outgoing=True, pattern="^.botlog$")
-async def botlogs(e):
-    process = await asyncsh(
-        "sudo systemctl status userbot | tail -n 20",
-        stdout=asyncsh_PIPE,
-        stderr=asyncsh_PIPE
-        )
-
-    stdout, stderr = await process.communicate()
-    result = str(stdout.decode().strip())
-    f = open("err.log", "w+")
-    f.write(result)
-    f.close()
-    await e.client.send_file(
-        e.chat_id,
-        "err.log",
-        reply_to=e.id,
-        caption="`Bot logs are here!`",
-    )
