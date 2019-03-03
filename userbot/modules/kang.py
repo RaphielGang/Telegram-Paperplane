@@ -24,7 +24,7 @@ async def kang(args):
         photo = None
         emoji = "🌚"
 
-        if message.media:
+        if message and message.media:
             if isinstance(message.media, MessageMediaPhoto):
                 photo = message.photo
                 photo = await bot.download_media(message=photo)
@@ -36,6 +36,9 @@ async def kang(args):
             else:
                 await args.edit("INVALID MEDIA BOI")
                 return
+        else:
+            await args.edit("Reply to photo to kang it bruh")
+            return
 
         if photo:
             im = Image.open(photo)
