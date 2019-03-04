@@ -133,7 +133,8 @@ async def set_afk(e):
         await e.edit("AFK AF!")
         if string != "":
             AFKREASON = string
-        await e.client.send_message(LOGGER_GROUP, "You went AFK!")
+        if LOGGER:
+            await e.client.send_message(LOGGER_GROUP, "You went AFK!")
         ISAFK = True
         raise StopPropagation
 

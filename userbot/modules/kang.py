@@ -1,16 +1,16 @@
 import io
 import math
-from PIL import Image
 import urllib.request
 
+from PIL import Image
 from telethon import events
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import bot
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(pattern="^.kang", outgoing=True))
-@bot.on(events.MessageEdited(pattern="^.kang", outgoing=True))
+@register(outgoing=True, pattern="^.kang")
 async def kang(args):
     if not args.text[0].isalpha() and args.text[0] not in ("/", "#", "@", "!"):
         user = await bot.get_me()
@@ -96,4 +96,3 @@ async def kang(args):
                     await conv.get_response()
 
             await args.edit(f"sticker added! Your pack can be found [here](t.me/addstickers/{packname})", parse_mode='md')
-
