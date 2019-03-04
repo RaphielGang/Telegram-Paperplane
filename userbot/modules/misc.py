@@ -49,7 +49,7 @@ async def paste(pstl):
             else:
                 reply_text = (
                     "`Pasted successfully!`\n\n"
-                    f"`Dogbin URL`: {dogbin_final_url}\n`")
+                    f"`Dogbin URL`: {dogbin_final_url}`")
         else:
             reply_text = (
                 "`Failed to reach Dogbin`")
