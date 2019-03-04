@@ -4,19 +4,17 @@
 # you may not use this file except in compliance with the License.
 #
 
-import random
-import time
-from asyncio import create_subprocess_shell as asyncsh
-from asyncio.subprocess import PIPE as asyncsh_PIPE
+from random import randint
 from subprocess import PIPE
 from subprocess import run as runapp
+from time import sleep
 
 import hastebin
 import pybase64
 from requests import get, post
 
-from userbot.events import register
 from userbot import LOGGER, LOGGER_GROUP
+from userbot.events import register
 
 DOGBIN_URL = "https://del.dog/"
 
@@ -117,7 +115,7 @@ async def log(e):
             await e.edit("`Logged Successfully`")
         else:
             await e.edit("`This feature requires Logging to be enabled!`")
-        time.sleep(2)
+        sleep(2)
         await e.delete()
 
 
@@ -187,7 +185,7 @@ async def endecrypt(e):
 async def randomise(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         r = (e.text).split()
-        index = random.randint(1, len(r) - 1)
+        index = randint(1, len(r) - 1)
         await e.edit("**Query: **\n`" + e.text + "`\n**Output: **\n`" + r[index] + "`")
 
 
@@ -202,26 +200,28 @@ async def sleepybot(e):
     message = e.text
     if not message[0].isalpha() and message[0] not in ("/", "#", "@", "!"):
         if " " not in e.pattern_match.group(1):
-            await e.reply("Syntax: `.shutdown [seconds]`")
+            await e.reply("Syntax: `.sleep [seconds]`")
         else:
             counter = int(e.pattern_match.group(1))
             await e.edit("`I am sulking and snoozing....`")
-            time.sleep(2)
-            await e.client.send_message(
-                LOGGER_GROUP,
-                "You put the bot to sleep for " + str(counter) + " seconds",
-            )
-            time.sleep(counter)
+            sleep(2)
+            if LOGGER:
+                await e.client.send_message(
+                    LOGGER_GROUP,
+                    "You put the bot to sleep for " + str(counter) + " seconds",
+                )
+            sleep(counter)
 
 
 @register(outgoing=True, pattern="^.shutdown$")
 async def killdabot(e):
     if not e.text[0].isalpha():
         await e.edit("`Goodbye *Windows XP shutdown sound*....`")
-        await e.client.send_message(
-            LOGGER_GROUP,
-            "#SHUTDOWN \n"
-            "Bot shutted down")
+        if LOGGER:
+            await e.client.send_message(
+                LOGGER_GROUP,
+                "#SHUTDOWN \n"
+                "Bot shutted down")
         await e.client.disconnect()
 
 
