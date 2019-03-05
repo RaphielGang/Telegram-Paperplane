@@ -44,8 +44,6 @@ function check_if_error {
 		finerr
 	fi	
 }
-
-}
 tg_senderror() {
     tg_sendinfo "Build Throwing Error(s)" \
     "@baalajimaestro naaaaa"
