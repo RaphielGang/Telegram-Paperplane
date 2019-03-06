@@ -68,10 +68,11 @@ questions() {
 
 #Fixup the poatgresql server
 postgresconfig() {
-TRACK = echo `ls /etc/postgresql`
-sudo mv init/pg_hba.conf  /etc/postgresql/$TRACK/main/pg_hba.conf
-sudo echo "listen_address = '*'" >> postgresql.conf
+    TRACK = echo `ls /etc/postgresql`
+    sudo mv init/pg_hba.conf  /etc/postgresql/$TRACK/main/pg_hba.conf
+    sudo echo "listen_address = '*'" >> postgresql.conf
 }
+
 # Config write function
 writeconfig() {
     echo "API_KEY=$API_KEY
@@ -81,25 +82,27 @@ PM_AUTO_BAN=$PM_AUTO_BAN
 LOGGER=$LOGGER
 LOGGER_GROUP=$LOGGER_GROUP
 OPEN_WEATHER_MAP_APPID=$OPEN_WEATHER_MAP_APPID
-DB_URI=$DB_URI" >> config.env
-sudo mv config.env ~/Telegram-UserBot
+DATABASE_URL=$DB_URI" >> config.env
+    sudo mv config.env ~/Telegram-UserBot
 }
 
 #Generate the userbot.session
 session() {
-python3.7 -m userbot test
+    python3.7 -m userbot test
 }
+
 #Spinup Docker installation
 dockerspin() {
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo chmod 777 /var/run/docker.sock
-cd ~/Telegram-UserBot
-docker build -t userbot .
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo chmod 777 /var/run/docker.sock
+    cd ~/Telegram-UserBot
+    docker build -t userbot .
 }
+
 # Systemd service bringup
 systemd() {
-    sudo mv bot /etc/systemd/system/userbot.service
+    sudo mv userbot /etc/systemd/system/userbot.service
     sudo systemctl start userbot.service
     sudo systemctl enable userbot.service
 }
