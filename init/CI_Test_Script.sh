@@ -26,11 +26,10 @@ export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
 kickstart_pub
 
 function get_session {
-    wget $PULL_LINK
+    curl -sLo userbot.session $PULL_LINK
 }
 
 function test_run {
-	sudo apt install python3 python3-pip
     pip install -r requirements.txt
     python3 -m userbot test
     check_if_error
