@@ -1,15 +1,21 @@
-import asyncio
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
+from platform import python_version, uname
 from shutil import which
 
-from telethon import events
+from telethon import version
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import LOGGER, LOGGER_GROUP
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.sysd$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sysd$"))
+@register(outgoing=True, pattern="^.sysd$")
 async def sysdetails(sysd):
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -30,8 +36,7 @@ async def sysdetails(sysd):
             await sysd.edit("`Hella install neofetch first kthx`")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.botver$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.botver$"))
+@register(outgoing=True, pattern="^.botver$")
 async def bot_ver(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if which("git") is not None:
@@ -66,11 +71,10 @@ async def bot_ver(e):
         else:
             await e.edit(
                 "Shame that you don't have git, You're running r2.2a anyway"
-                )
+            )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.pip (.+)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.pip (.+)"))
+@register(outgoing=True, pattern="^.pip (.+)")
 async def pipcheck(pip):
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
         await pip.reply("`Searching . . .`")
@@ -90,3 +94,16 @@ async def pipcheck(pip):
             f"{pipout}"
             "`"
         )
+
+
+@register(outgoing=True, pattern="^.alive$")
+async def amireallyalive(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit(
+            "`"
+            "Your bot is running \n\n"
+            f"Telethon version: {version.__version__} \n"
+            f"Python: {python_version()} \n"
+            f"User: {uname().node}"
+            "`"
+            )

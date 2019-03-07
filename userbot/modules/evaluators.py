@@ -1,15 +1,18 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 import asyncio
 import subprocess
 from getpass import getuser
 
-from telethon import events
-
 from userbot import *
-from userbot import bot
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.eval"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.eval"))
+@register(outgoing=True, pattern="^.eval")
 async def evaluate(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.is_channel and not e.is_group:
@@ -22,7 +25,7 @@ async def evaluate(e):
                     f = open("output.txt", "w+")
                     f.write(evaluation)
                     f.close()
-                await bot.send_file(
+                await e.client.send_file(
                     e.chat_id,
                     "output.txt",
                     reply_to=e.id,
@@ -43,13 +46,13 @@ async def evaluate(e):
             + "`\n**Result: **\n`No Result Returned/False`"
         )
     if LOGGER:
-        await bot.send_message(
-            LOGGER_GROUP, "Eval query " + e.text[6:] + " was executed successfully"
+        await e.client.send_message(
+            LOGGER_GROUP, "Eval query " +
+            e.text[6:] + " was executed successfully"
         )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern=r"^.exec (.*)"))
-@bot.on(events.MessageEdited(outgoing=True, pattern=r"^.exec (.*)"))
+@register(outgoing=True, pattern=r"^.exec (.*)")
 async def run(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if e.is_channel and not e.is_group:
@@ -64,7 +67,7 @@ async def run(e):
                 f = open("output.txt", "w+")
                 f.write(result)
                 f.close()
-                await bot.send_file(
+                await e.client.send_file(
                     e.chat_id,
                     "output.txt",
                     reply_to=e.id,
@@ -88,14 +91,13 @@ async def run(e):
             )
 
         if LOGGER:
-            await bot.send_message(
+            await e.client.send_message(
                 LOGGER_GROUP,
                 "Exec query " + e.text[5:] + " was executed successfully"
             )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.term"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.term"))
+@register(outgoing=True, pattern="^.term")
 async def terminal_runner(term):
     if not term.text[0].isalpha() and term.text[0] not in ("/", "#", "@", "!"):
         if term.is_channel and not term.is_group:
@@ -109,7 +111,7 @@ async def terminal_runner(term):
             command,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
-            )
+        )
         stdout, stderr = await process.communicate()
         result = str(stdout.decode().strip()) \
             + str(stderr.decode().strip())
@@ -118,7 +120,7 @@ async def terminal_runner(term):
             output = open("output.txt", "w+")
             output.write(result)
             output.close()
-            await bot.send_file(
+            await term.client.send_file(
                 term.chat_id,
                 "sender.txt",
                 reply_to=term.id,
@@ -134,7 +136,7 @@ async def terminal_runner(term):
         )
 
         if LOGGER:
-            await bot.send_message(
+            await term.client.send_message(
                 LOGGER_GROUP,
                 "Terminal Command " + command + " was executed sucessfully",
             )

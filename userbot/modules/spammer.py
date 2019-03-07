@@ -1,12 +1,16 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 from asyncio import wait
 
-from telethon import events
+from userbot import LOGGER_GROUP, LOGGER
+from userbot.events import register
 
-from userbot import bot
 
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^.spam"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.spam"))
+@register(outgoing=True, pattern="^.spam")
 async def spammer(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
@@ -18,33 +22,46 @@ async def spammer(e):
             )
 
         await e.delete()
-        await bot.send_message(LOGGER_GROUP, "Spammed successfully")
+        if LOGGER:
+            await e.client.send_message(
+                LOGGER_GROUP,
+                "#SPAM \n\n"
+                "Spam was executed successfully"
+                )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.bigspam"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.bigspam"))
+@register(outgoing=True, pattern="^.bigspam")
 async def bigspam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
         counter = int(message[9:13])
         spam_message = str(e.text[13:])
 
-        for i in range(1, counter):
+        if range(1, counter):
             await e.respond(spam_message)
 
         await e.delete()
-        await bot.send_message(LOGGER_GROUP, "bigspam was successful")
+        if LOGGER:
+            await e.client.send_message(
+                LOGGER_GROUP,
+                "#BIGSPAM \n\n"
+                "Bigspam was executed successfully"
+                )
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.picspam"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.picspam"))
+@register(outgoing=True, pattern="^.picspam")
 async def tiny_pic_spam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
         text = message.split()
         counter = int(text[1])
         link = str(text[2])
-        for i in range(1, counter):
-            await bot.send_file(e.chat_id, link)
+        if range(1, counter):
+            await e.client.send_file(e.chat_id, link)
         await e.delete()
-        await bot.send_message(LOGGER_GROUP, "PicSpam was successful")
+        if LOGGER:
+            await e.client.send_message(
+                LOGGER_GROUP,
+                "#PICSPAM \n\n"
+                "PicSpam was executed successfully"
+                )

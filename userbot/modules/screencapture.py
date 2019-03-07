@@ -1,17 +1,17 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
 
 import os
-
 import requests
-from telethon import TelegramClient, events
 
-from userbot import SCREENSHOT_LAYER_ACCESS_KEY, bot
+from userbot import SCREENSHOT_LAYER_ACCESS_KEY
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(pattern=r".screencapture (.*)", outgoing=True))
-@bot.on(events.MessageEdited(pattern=r".screencapture (.*)", outgoing=True))
+@register(pattern=r".screencapture (.*)", outgoing=True)
 async def _(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if SCREENSHOT_LAYER_ACCESS_KEY is None:
@@ -35,7 +35,7 @@ async def _(e):
                 for chunk in response_api.iter_content(chunk_size=128):
                     fd.write(chunk)
             try:
-                await bot.send_file(
+                await e.client.send_file(
                     e.chat_id,
                     temp_file_name,
                     caption=input_str,

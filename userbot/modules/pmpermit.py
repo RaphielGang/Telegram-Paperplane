@@ -1,17 +1,25 @@
-import sqlite3
-import time
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
 
-from telethon import events
 from telethon.tl.functions.contacts import BlockRequest
 from telethon.tl.functions.contacts import UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
-from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, bot
+from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN
+from userbot.events import register
 
+# ========================= CONSTANTS ============================
+UNAPPROVED_MSG = ("`Bleep Blop! This is a Bot. Don't fret. \n\n`"
+                  "`My Master hasn't approved you to PM.`"
+                  "`Please wait for my Master to look in, he would mostly approve PMs.`\n\n"
+                  "`As far as i know, he doesn't usually approve Retards.`")
+#=================================================================
 
-@bot.on(events.NewMessage(incoming=True))
-@bot.on(events.MessageEdited(incoming=True))
+@register(incoming=True)
 async def permitpm(e):
     if PM_AUTO_BAN:
         global COUNT_PM
@@ -22,21 +30,11 @@ async def permitpm(e):
                 return
             apprv = is_approved(e.chat_id)
 
-            if not apprv and e.text != \
-                ("`Bleep Blop! This is a Bot. Don't fret. \n\n`"
-                 "`My Master hasn't approved you to PM.`"
-                 "`Please wait for my Master to look in, he would mostly approve PMs.`\n\n"
-                 "`As far as i know, he doesn't usually approve Retards.`"):
-
-                await e.reply(
-                    "`Bleep Blop! This is a Bot. Don't fret. \n\n`"
-                    "`My Master hasn't approved you to PM.`"
-                    "`Please wait for my Master to look in, he would mostly approve PMs.`\n\n"
-                    "`As far as i know, he doesn't usually approve Retards.`"
-                )
+            if not apprv and e.text != UNAPPROVED_MSG:
+                await e.reply(UNAPPROVED_MSG)
 
                 if NOTIF_OFF:
-                    await bot.send_read_acknowledge(e.chat_id)
+                    await e.client.send_read_acknowledge(e.chat_id)
                 if e.chat_id not in COUNT_PM:
                     COUNT_PM.update({e.chat_id: 1})
                 else:
@@ -47,12 +45,12 @@ async def permitpm(e):
                         "`I'mma Report Spam.`"
                     )
                     del COUNT_PM[e.chat_id]
-                    await bot(BlockRequest(e.chat_id))
-                    await bot(ReportSpamRequest(peer=e.chat_id))
+                    await e.client(BlockRequest(e.chat_id))
+                    await e.client(ReportSpamRequest(peer=e.chat_id))
                     if LOGGER:
-                        name = await bot.get_entity(e.chat_id)
+                        name = await e.client.get_entity(e.chat_id)
                         name0 = str(name.first_name)
-                        await bot.send_message(
+                        await e.client.send_message(
                             LOGGER_GROUP,
                             "["
                             + name0
@@ -63,24 +61,21 @@ async def permitpm(e):
                         )
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.notifoff$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifoff$"))
+@register(outgoing=True, pattern="^.notifoff$")
 async def notifoff(e):
     global NOTIF_OFF
     NOTIF_OFF = True
     await e.edit("`Notifications silenced!`")
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.notifon$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.notifon$"))
+@register(outgoing=True, pattern="^.notifon$")
 async def notifon(e):
     global NOTIF_OFF
     NOTIF_OFF = False
     await e.edit("`Notifications unmuted!`")
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.approve$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.approve$"))
+@register(outgoing=True, pattern="^.approve$")
 async def approvepm(apprvpm):
     if not apprvpm.text[0].isalpha() and apprvpm.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -91,13 +86,13 @@ async def approvepm(apprvpm):
 
         if apprvpm.reply_to_msg_id:
             reply = await apprvpm.get_reply_message()
-            replied_user = await bot(GetFullUserRequest(reply.from_id))
+            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             approve(replied_user.user.id)
         else:
             approve(apprvpm.chat_id)
-            aname = await bot.get_entity(apprvpm.chat_id)
+            aname = await apprvpm.client.get_entity(apprvpm.chat_id)
             name0 = str(aname.first_name)
 
         await apprvpm.edit(
@@ -105,15 +100,14 @@ async def approvepm(apprvpm):
             )
 
         if LOGGER:
-            await bot.send_message(
+            await apprvpm.client.send_message(
                 LOGGER_GROUP,
                 f"[{name0}](tg://user?id={apprvpm.chat_id})"
                 " was approved to PM you.",
             )
 
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.block$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.block$"))
+@register(outgoing=True, pattern="^.block$")
 async def blockpm(block):
     if not block.text[0].isalpha() and block.text[0] not in ("/", "#", "@", "!"):
 
@@ -121,24 +115,34 @@ async def blockpm(block):
 
         if block.reply_to_msg_id:
             reply = await block.get_reply_message()
-            replied_user = await bot(GetFullUserRequest(reply.from_id))
+            replied_user = await block.client(GetFullUserRequest(reply.from_id))
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
-            await bot(BlockRequest(replied_user.user.id))
+            await block.client(BlockRequest(replied_user.user.id))
+            try:
+                from userbot.modules.sql_helper.pm_permit_sql import dissprove
+                dissprove(replied_user.user.id)
+            except Exception:
+                pass
         else:
-            await bot(BlockRequest(block.chat_id))
-            aname = await bot.get_entity(block.chat_id)
+            await block.client(BlockRequest(block.chat_id))
+            aname = await block.client.get_entity(block.chat_id)
             name0 = str(aname.first_name)
+            try:
+                from userbot.modules.sql_helper.pm_permit_sql import dissprove
+                dissprove(block.chat_id)
+            except Exception:
+                pass
 
         if LOGGER:
-            await bot.send_message(
+            await block.client.send_message(
                 LOGGER_GROUP,
                 f"[{name0}](tg://user?id={block.chat_id})"
                 " was blocc'd!.",
             )
 
-@bot.on(events.NewMessage(outgoing=True,pattern="^.unblock$"))
-@bot.on(events.MessageEdited(outgoing=True,pattern="^.unblock$"))
+
+@register(outgoing=True, pattern="^.unblock$")
 async def unblockpm(unblock):
     if not unblock.text[0].isalpha() and unblock.text[0] \
             not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
@@ -147,12 +151,12 @@ async def unblockpm(unblock):
 
         if unblock.reply_to_msg_id:
             reply = await unblock.get_reply_message()
-            replied_user = await bot(GetFullUserRequest(reply.from_id))
+            replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
             name0 = str(replied_user.user.first_name)
-            await bot(UnblockRequest(replied_user.user.id))
+            await unblock.client(UnblockRequest(replied_user.user.id))
 
         if LOGGER:
-            await bot.send_message(
+            await unblock.client.send_message(
                 LOGGER_GROUP,
                 f"[{name0}](tg://user?id={unblock.chat_id})"
                 " was unblocc'd!.",
