@@ -8,11 +8,11 @@
 #
 # Telegram command container
 
-TELEGRAM= `pwd`/init/telegramapi
-
+TELEGRAM=$SEMAPHORE_PROJECT_DIR/init/telegramapi
+export TELEGRAM
 # Caster configurations
 MAINGROUP_ID="-1001372533112"
-BUILDSCAPERER_ID="-1001372657243"
+BUILDSCAPERER_ID="-1001192834712"
 DEBUG_ID="-1001200493978"
 
 # Graphics Interchange Format Assets

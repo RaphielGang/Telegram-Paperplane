@@ -29,9 +29,14 @@ function get_session {
     curl -sLo userbot.session $PULL_LINK
 }
 
+
 function test_run {
+    BUILD_START=$(date +"%s")
     pip install -r requirements.txt
     python3 -m userbot test
+    BUILD_END=$(date +"%s")
+    BUILD_TIME=$(date +"%Y%m%d-%T")
+    DIFF=$((BUILD_END - BUILD_START))	
     check_if_error
 }
 
