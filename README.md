@@ -1,6 +1,6 @@
 # Telegram-UserBot
 
- [![Build Status](https://travis-ci.com/baalajimaestro/Telegram-UserBot.svg?branch=modular)](https://travis-ci.com/baalajimaestro/Telegram-UserBot) [![codecov](https://codecov.io/gh/baalajimaestro/Telegram-UserBot/branch/modular/graph/badge.svg)](https://codecov.io/gh/baalajimaestro/Telegram-UserBot)
+[![Build Status](https://semaphoreci.com/api/v1/baalajimaestro/telegram-userbot/branches/master/badge.svg)](https://semaphoreci.com/baalajimaestro/telegram-userbot)
 
  #### To track Semaphore builds, see the commits section. Since I use Semaphore 2.0, it is not possible to track the progress fully, or put a badge here. Ignore Travis CI for PRs.
 
