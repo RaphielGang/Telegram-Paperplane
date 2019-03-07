@@ -1,12 +1,15 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 import subprocess
 
-from telethon import events
-
-from userbot import bot
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.updatebleeding$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatebleding$"))
+@register(outgoing=True, pattern="^.updatebleeding$")
 async def bleeding_upstream(bleed):
     await bleed.edit("`Please wait while I upstream myself!`")
     subprocess.run(
@@ -49,10 +52,10 @@ async def bleeding_upstream(bleed):
             "origin/staging"
         ], stdout=subprocess.PIPE,)
     await bleed.edit("`Shutting down for the upstream, Restart the bot kthx`")
-    bot.disconnect()
+    bleed.client.disconnect()
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.updatestable$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.updatestable$"))
+
+@register(outgoing=True, pattern="^.updatestable$")
 async def stable_upstream(stable):
     await stable.edit("`Please wait while I upstream myself!`")
     subprocess.run(
@@ -95,4 +98,4 @@ async def stable_upstream(stable):
             "origin/master"
         ], stdout=subprocess.PIPE,)
     await stable.edit("`Shutting down for the upstream, Restart the bot kthx`")
-    bot.disconnect()
+    stable.client.disconnect()

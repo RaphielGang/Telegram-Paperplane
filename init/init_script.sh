@@ -19,27 +19,21 @@ packageinstall() {
     sudo apt --yes --force-yes install python3.7 docker
 }
 
-# Create userbot user
-createuser() {
-    sudo useradd --create-home --home /home/userbot userbot
-    echo "userbot ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
-    clear
-}
-
 # Clone the required repo
 botclone() {
-    sudo -Hu userbot git clone https://github.com/baalajimaestro/Telegram-UserBot
-    cd Telegram-UserBot || exit
+    cd ~
+    git clone https://github.com/baalajimaestro/Telegram-UserBot -b staging
+    cd Telegram-UserBot
 }
 
 # Requirement install function
 reqinstall() {
     echo "***Installing Requirements***"
     sudo python3.7 -m pip install -r requirements.txt
-    sudo -Hu userbot curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
+    curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
     clear
 }
-
+DB = "n"
 # Questionaire
 questions() {
     echo "***Please enter your details***"
@@ -72,12 +66,11 @@ questions() {
     fi
 }
 
-# Checkout to latest tag
-checkout() {
-    read -r -p "Press y to go ahead with bleeding builds. Or press any other key for stable " BUILDS
-    rel=$(git tag -l | cut -f 1 | tail -n 1)
-    [ "$BUILDS" != "y" ] && git checkout tags/"$rel"
-    clear
+#Fixup the poatgresql server
+postgresconfig() {
+    TRACK = echo `ls /etc/postgresql`
+    sudo mv init/pg_hba.conf  /etc/postgresql/$TRACK/main/pg_hba.conf
+    sudo echo "listen_address = '*'" >> postgresql.conf
 }
 
 # Config write function
@@ -89,16 +82,27 @@ PM_AUTO_BAN=$PM_AUTO_BAN
 LOGGER=$LOGGER
 LOGGER_GROUP=$LOGGER_GROUP
 OPEN_WEATHER_MAP_APPID=$OPEN_WEATHER_MAP_APPID
-DB_URI=$DB_URI" >> config.env
-sudo mv config.env /home/userbot/Telegram-UserBot 
-sudo chown userbot /home/userbot/Telegram-Userbot/config.env
+DATABASE_URL=$DB_URI" >> config.env
+    sudo mv config.env ~/Telegram-UserBot
+}
+
+#Generate the userbot.session
+session() {
+    python3.7 -m userbot test
+}
+
+#Spinup Docker installation
+dockerspin() {
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo chmod 777 /var/run/docker.sock
+    cd ~/Telegram-UserBot
+    docker build -t userbot .
 }
 
 # Systemd service bringup
 systemd() {
-    sudo mv bot /etc/systemd/system/userbot.service
-    sudo chown -R userbot /tmp/Telegram-UserBot
-    sudo chmod -R 777 /tmp/Telegram-UserBot
+    sudo mv userbot /etc/systemd/system/userbot.service
     sudo systemctl start userbot.service
     sudo systemctl enable userbot.service
 }
@@ -107,7 +111,7 @@ systemd() {
 close() {
     echo "
 
-Pushed to init.d. Bot must work on reboot too.
+Pushed to systemd service. Bot runs on docker, and it will run across reboots too.
 
 Hope you love using my bot."
     exit
@@ -123,12 +127,18 @@ createuser
 cd /tmp || exit
 botclone
 
-checkout
 reqinstall
 
 questions
 writeconfig
 
-python3.7 -m userbot test
+if [ "$DB" = "y" ]
+then
+postgresconfig
+fi
+ 
+session
+dockerspin
+
 systemd
 close

@@ -1,9 +1,13 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 import re
-import sre_constants
+from sre_constants import error as sre_err
 
-from telethon import events
-
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot.events import register
 
 DELIMITERS = ("/", ":", "|", "_")
 
@@ -54,8 +58,7 @@ def separate_sed(sed_string):
         return replace, replace_with, flags.lower()
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^sed"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^sed"))
+@register(outgoing=True, pattern="^sed")
 async def sed(e):
     sed_result = separate_sed(e.text)
     L = await e.get_reply_message()
@@ -65,7 +68,7 @@ async def sed(e):
         else:
             await e.edit(
                 "`Master, I don't have brains. Well you too don't I guess.`"
-                )
+            )
             return
 
         repl, repl_with, flags = sed_result
@@ -73,7 +76,7 @@ async def sed(e):
         if not repl:
             await e.edit(
                 "`Master, I don't have brains. Well you too don't I guess.`"
-                )
+            )
             return
 
         try:
@@ -81,7 +84,7 @@ async def sed(e):
             if check and check.group(0).lower() == to_fix.lower():
                 await e.edit(
                     "`Boi!, that's a reply. Don't use sed`"
-                    )
+                )
                 return
 
             if "i" in flags and "g" in flags:
@@ -92,9 +95,7 @@ async def sed(e):
                 text = re.sub(repl, repl_with, to_fix).strip()
             else:
                 text = re.sub(repl, repl_with, to_fix, count=1).strip()
-        except sre_constants.error:
-            LOGGER.warning(e.text)
-            LOGGER.exception("SRE constant error")
+        except sre_err:
             await e.edit("B O I! [Learn Regex](https://regexone.com)")
             return
         if text:

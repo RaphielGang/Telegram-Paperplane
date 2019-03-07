@@ -1,15 +1,18 @@
-import subprocess
-import speedtest
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
 
 from datetime import datetime
 
-from telethon import events, functions
+import speedtest
+from telethon import functions
 
-from userbot import bot
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.speed$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.speed$"))
+@register(outgoing=True, pattern="^.speed$")
 async def speedtst(spd):
     if not spd.text[0].isalpha() and spd.text[0] not in ("/", "#", "@", "!"):
         await spd.edit("`Running speed test . . .`")
@@ -43,28 +46,27 @@ def speed_convert(size):
     zero = 0
     units = {
         0: '',
-        1: 'KB',
-        2: 'MB',
-        3: 'GB',
-        4: 'TB'}
+        1: 'KB/s',
+        2: 'MB/s',
+        3: 'GB/s',
+        4: 'TB/s'}
     while size > power:
         size /= power
         zero += 1
     return f"{round(size, 2)} {units[zero]}"
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.nearestdc$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.nearestdc$"))
+@register(outgoing=True, pattern="^.nearestdc$")
 async def neardc(e):
-    result = await bot(functions.help.GetNearestDcRequest())
+    result = await e.client(functions.help.GetNearestDcRequest())
     await e.edit(
         f"Country : `{result.country}` \n"
         f"Nearest Datacenter : `{result.nearest_dc}` \n"
         f"This Datacenter : `{result.this_dc}`"
     )
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.pingme$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.pingme$"))
+
+@register(outgoing=True, pattern="^.pingme$")
 async def pingme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         start = datetime.now()

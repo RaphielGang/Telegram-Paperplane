@@ -1,19 +1,21 @@
-import io
-import re
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
 
-from telethon import TelegramClient, events
+from re import match
+
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import UsernameOccupiedError
 from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
 from telethon.tl.functions.channels import EditPhotoRequest
 from telethon.tl.functions.photos import UploadProfilePhotoRequest
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import (MessageEntityMentionName, MessageMediaDocument,
-                               MessageMediaPhoto)
-from telethon.utils import get_input_location
+from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
 
 from userbot import bot
+from userbot.events import register
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
@@ -37,21 +39,17 @@ USERNAME_SUCCESS = "```Your username was succesfully changed```"
 USERNAME_TAKEN = "```This username is already taken```"
 #===============================================================
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.ppic$"))
+@register(outgoing=True, pattern="^.ppic$")
 async def profile_pic(ppic):
     if not ppic.text[0].isalpha() and ppic.text[0] not in ("/", "#", "@", "!"):
         message = await ppic.get_reply_message()
         photo = None
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
-                photo = message.photo
-                photo = await bot.download_media(message=photo)
+                photo = await bot.download_media(message=message.photo)
             elif isinstance(message.media, MessageMediaDocument):
                 if message.media.document.mime_type in ["image/jpeg", "image/png"]:
-                    photo = message.media.document
-                    photo = await bot.download_file(photo, file="propic.jpeg")
-                    photo = io.BytesIO(photo)
-                    photo.name = "image.jpeg"  # small hack for documents images
+                    photo = await bot.download_file(message.media.document)
             else:
                 await ppic.edit(INVALID_MEDIA)
 
@@ -68,28 +66,30 @@ async def profile_pic(ppic):
                     await ppic.edit(PP_ERROR)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.xpic$"))
+@register(outgoing=True, pattern="^.xpic$")
 async def profile_photo(ppht):
     if not ppht.text[0].isalpha() and ppht.text[0] not in ("/", "#", "@", "!"):
         message = await ppht.get_reply_message()
         photo = None
+        chat = await ppht.get_chat()
+
+        if not chat.admin_rights or chat.creator:
+            await ppht.edit("`You aren't an admin!`")
+            return
+
         if message.media:
             if isinstance(message.media, MessageMediaPhoto):
-                photo = message.photo
-                photo = await bot.download_media(message=photo)
+                photo = await bot.download_media(message=message.photo)
             elif isinstance(message.media, MessageMediaDocument):
                 if message.media.document.mime_type in ["image/jpeg", "image/png"]:
-                    photo = message.media.document
-                    photo = await bot.download_file(photo, file="propic.jpeg")
-                    photo = io.BytesIO(photo)
-                    photo.name = "image.jpeg"  # small hack for documents images
+                    photo = await bot.download_file(message.media.document)
             else:
                 await ppht.edit(INVALID_MEDIA)
 
         if photo:
             file = await bot.upload_file(photo)
             try:
-                await bot(EditPhotoRequest(e.chat_id, file))
+                await bot(EditPhotoRequest(ppht.chat_id, file))
                 await ppht.edit(CHAT_PP_CHANGED)
 
             except Exception as exc:
@@ -101,19 +101,19 @@ async def profile_photo(ppht):
                     await ppht.edit(CHAT_PP_ERROR)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.set "))
-async def update_bio(e):
-    bio = e.text.split(" ", 1)[1]
+@register(outgoing=True, pattern="^.set ")
+async def update_bio(bio):
+    bio = bio.text.split(" ", 1)[1]
     if len(bio) > 70:
-        await e.edit(BIO_LONG)
+        await bio.edit(BIO_LONG)
     else:
         await bot(UpdateProfileRequest(about=bio))
-        await e.edit(BIO_SUCCESS)
+        await bio.edit(BIO_SUCCESS)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.name "))
-async def update_name(e):
-    text = e.text.split(" ", 1)[1]
+@register(outgoing=True, pattern="^.name ")
+async def update_name(name):
+    text = name.text.split(" ", 1)[1]
     name = text.split("\\n", 1)
     firstname = name[0]
     lastname = " "
@@ -121,13 +121,13 @@ async def update_name(e):
         lastname = name[1]
 
     await bot(UpdateProfileRequest(first_name=firstname, last_name=lastname))
-    await e.edit(NAME_OK)
+    await name.edit(NAME_OK)
 
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.uname "))
+@register(outgoing=True, pattern="^.uname ")
 async def update_username(updtusrnm):
     text = updtusrnm.text.split(" ", 1)[1]
-    allowed_char = re.match(r"[a-zA-Z][\w\d]{3,30}[a-zA-Z\d]", text)
+    allowed_char = match(r"[a-zA-Z][\w\d]{3,30}[a-zA-Z\d]", text)
     if not allowed_char:
         await updtusrnm.edit(INVALID_NAME)
     elif len(text) > 30:
