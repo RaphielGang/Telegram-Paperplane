@@ -3,6 +3,9 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+# The entire source code is OSSRPL except 'sed' which is GPLv3
+# License: GPLv3 and OSSRPL
+
 
 import re
 from sre_constants import error as sre_err
