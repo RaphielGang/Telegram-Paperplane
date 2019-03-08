@@ -103,6 +103,7 @@ async def profile_photo(ppht):
 
 @register(outgoing=True, pattern="^.set ")
 async def update_bio(bio):
+  if not bio.text[0].isalpha() and bio.text[0] not in ("/", "#", "@", "!"):
     bio = bio.text.split(" ", 1)[1]
     if len(bio) > 70:
         await bio.edit(BIO_LONG)
@@ -113,6 +114,7 @@ async def update_bio(bio):
 
 @register(outgoing=True, pattern="^.name ")
 async def update_name(name):
+   if not name.text[0].isalpha() and name.text[0] not in ("/", "#", "@", "!"):
     text = name.text.split(" ", 1)[1]
     name = text.split("\\n", 1)
     firstname = name[0]
@@ -126,6 +128,7 @@ async def update_name(name):
 
 @register(outgoing=True, pattern="^.uname ")
 async def update_username(updtusrnm):
+  if not updtusrnm.text[0].isalpha() and updtusrnm.text[0] not in ("/", "#", "@", "!"):
     text = updtusrnm.text.split(" ", 1)[1]
     allowed_char = match(r"[a-zA-Z][\w\d]{3,30}[a-zA-Z\d]", text)
     if not allowed_char:
