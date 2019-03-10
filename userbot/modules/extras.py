@@ -7,6 +7,7 @@ from telethon.tl.functions.messages import ExportChatInviteRequest
 from telethon.tl.functions.contacts import BlockRequest
 from telethon.tl.functions.channels import LeaveChannelRequest, CreateChannelRequest, DeleteMessagesRequest
 from lmgtfy import lmgtfy
+from collections import deque
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.leave$"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.leave$"))
@@ -57,3 +58,15 @@ async def cry(e):
 async def facepalm(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("🤦‍♂")
+
+@bot.on(events.NewMessage(pattern=r"\.moon animation", outgoing=True))
+async def _(event):
+	if event.fwd_from:
+		return
+	deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
+	for _ in range(32):
+		await asyncio.sleep(0.1)
+		await event.edit("".join(deq))
+		deq.rotate(1)
+
+
