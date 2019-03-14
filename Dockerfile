@@ -33,8 +33,6 @@ RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 RUN pip install --upgrade pip && pyenv rehash
 
-# Cleaning pip cache
-RUN rm -rf ~/.cache/pip
 #
 # Install all the required packages
 #
@@ -47,8 +45,8 @@ RUN apk add --no-cache \
     curl neofetch git sudo gcc python-dev python3-dev \
     postgresql postgresql-client php-pgsql \
     musl postgresql-dev
-RUN apk add --no-cache sqlite
-RUN apk add figlet 
+RUN apk add --no-cache sqlite figlet
+
 # Copy Python Requirements to /app
 RUN git clone https://github.com/psycopg/psycopg2 psycopg2 \
 && cd psycopg2 \
@@ -60,11 +58,13 @@ RUN adduser userbot wheel
 USER userbot
 WORKDIR /home/userbot/userbot
 COPY ./requirementsDOCKER.txt /home/userbot/userbot
+
 #
 # Install requirements
 #
 RUN sudo pip3 install -U pip
 RUN sudo pip3 install -r requirementsDOCKER.txt
+
 #
 # Copy bot files to /app
 #
