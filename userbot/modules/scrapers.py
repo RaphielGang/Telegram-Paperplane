@@ -18,7 +18,7 @@ from google_images_download import google_images_download
 from googletrans import Translator
 from gtts import gTTS
 from googleapiclient.discovery import build
-from apiclient.errors import HttpError
+from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY
@@ -183,37 +183,34 @@ async def lang(e):
             )
             await e.edit("tts language changed to **" + langi + "**")
 
+
 @register(outgoing=True, pattern="^.yt (.*)")
 async def yt_search(video_q):
     if not video_q.text[0].isalpha() and video_q.text[0] not in ("/", "#", "@","!"):
         query = video_q.pattern_match.group(1)
-
-        await video_q.edit("```Processing...```")
-
         result = ''
-
+        i = 1
         full_response = youtube_search(query)
         videos_json = full_response[1]
 
-        i = 1
+        await video_q.edit("```Processing...```")
         for video in videos_json:
-            print (video['snippet']['title'])
+            print(video['snippet']['title'])
             result += f"{i}. {video['snippet']['title']} \n   https://www.youtube.com/watch?v={video['id']['videoId']} \n"
-            i+=1
+            i += 1
 
-        reply_text ="**Search Query:**\n`" + query + "`\n\n**Result:**\n" + result
+        reply_text = "**Search Query:**\n`" + query + "`\n\n**Result:**\n" + result
 
         await video_q.edit(reply_text)
 
-def youtube_search(q, max_results=10,order="relevance", token=None, location=None, location_radius=None):
-    youtube = build('youtube', 'v3',
-        developerKey=YOUTUBE_API_KEY)
 
+def youtube_search(q, max_results=10, order="relevance", token=None, location=None, location_radius=None):
+    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
     search_response = youtube.search().list(
         q=q,
         type="video",
         pageToken=token,
-        order = order,
+        order=order,
         part="id,snippet",
         maxResults=max_results,
         location=location,
@@ -228,6 +225,6 @@ def youtube_search(q, max_results=10,order="relevance", token=None, location=Non
     try:
         nexttok = search_response["nextPageToken"]
         return(nexttok, videos)
-    except Exception as e:
+    except Exception:
         nexttok = "last_page"
-        return(nexttok, videos) 
+        return(nexttok, videos)
