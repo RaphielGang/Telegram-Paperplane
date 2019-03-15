@@ -8,9 +8,6 @@ import os
 import re
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
-import time
-import json
-from datetime import datetime, timedelta
 
 import urbandict
 import wikipedia
@@ -19,7 +16,6 @@ from googletrans import Translator
 from gtts import gTTS
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from google_auth_oauthlib.flow import InstalledAppFlow
 
 from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY
 from userbot.events import register
@@ -31,7 +27,6 @@ langi = "en"
 async def img_sampler(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("Processing...")
-        start = round(time.time() * 1000)
         s = e.pattern_match.group(1)
         lim = re.findall(r"lim=\d+", s)
         try:
@@ -41,16 +36,18 @@ async def img_sampler(e):
         except IndexError:
             lim = 2
         response = google_images_download.googleimagesdownload()
+
+        # creating list of arguments
         arguments = {
             "keywords": s,
             "limit": lim,
             "format": "jpg",
-        }  # creating list of arguments
-        paths = response.download(arguments)  # passing the arguments to the function
+        }
+
+        # passing the arguments to the function
+        paths = response.download(arguments)
         lst = paths[s]
         await e.client.send_file(await e.client.get_input_entity(e.chat_id), lst)
-        end = round(time.time() * 1000)
-        msstartend = int(end) - int(start)
         await e.delete()
 
 
@@ -86,7 +83,8 @@ async def wiki(e):
         )
         if LOGGER:
             await e.client.send_message(
-                LOGGER_GROUP, "Wiki query " + match + " was executed successfully"
+                LOGGER_GROUP,
+                f"Wiki query {match} was executed successfully"
             )
 
 
@@ -125,7 +123,6 @@ async def tts(e):
         elif textx:
             message = textx
             message = str(message.message)
-        current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
         tts = gTTS(message, langi)
         tts.save("k.mp3")
         with open("k.mp3", "rb") as f:
@@ -138,7 +135,7 @@ async def tts(e):
             except:
                 await e.edit("`Some Internal Error! Try Again!`")
                 return
-        with open("k.mp3", "r") as speech:
+        with open("k.mp3", "r"):
             await e.client.send_file(e.chat_id, "k.mp3", voice_note=True)
             os.remove("k.mp3")
             if LOGGER:
@@ -160,14 +157,16 @@ async def translateme(e):
         elif textx:
             message = textx
             message = str(message.message)
+
         reply_text = translator.translate(message, dest=langi).text
-        reply_text = "**Source:** `\n" + message + "`**\n\nTranslation: **`\n" + reply_text  + "`"
+        reply_text = f"**Source:** `\n {message} `**\n\nTranslation: **`\n {reply_text} `"
+
         await e.client.send_message(e.chat_id, reply_text)
         await e.delete()
         if LOGGER:
             await e.client.send_message(
                 LOGGER_GROUP,
-                "Translate query " + message + " was executed successfully",
+                f"Translate query {message} was executed successfully",
             )
 
 
@@ -186,7 +185,7 @@ async def lang(e):
 
 @register(outgoing=True, pattern="^.yt (.*)")
 async def yt_search(video_q):
-    if not video_q.text[0].isalpha() and video_q.text[0] not in ("/", "#", "@","!"):
+    if not video_q.text[0].isalpha() and video_q.text[0] not in ("/", "#", "@", "!"):
         query = video_q.pattern_match.group(1)
         result = ''
         i = 1
@@ -199,7 +198,7 @@ async def yt_search(video_q):
             result += f"{i}. {video['snippet']['title']} \n   https://www.youtube.com/watch?v={video['id']['videoId']} \n"
             i += 1
 
-        reply_text = "**Search Query:**\n`" + query + "`\n\n**Result:**\n" + result
+        reply_text = f"**Search Query:**\n` {query} `\n\n**Result:**\n {result}"
 
         await video_q.edit(reply_text)
 
@@ -225,6 +224,6 @@ def youtube_search(q, max_results=10, order="relevance", token=None, location=No
     try:
         nexttok = search_response["nextPageToken"]
         return(nexttok, videos)
-    except Exception:
+    except HttpError:
         nexttok = "last_page"
         return(nexttok, videos)
