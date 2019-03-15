@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
@@ -6,47 +6,43 @@
 #
 # CI Runner Script for baalajimaestro's userbot
 
-function colors() {
-    blue='\033[0;34m' cyan='\033[0;36m'
-    yellow='\033[0;33m'
-    red='\033[0;31m'
-    nocol='\033[0m'
-}
+# We need this directive
+# shellcheck disable=1090
+. "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"/telegram
 
-colors
 PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
-. "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"/telegram
+
 kickstart_pub
 
-function get_session() {
-    curl -sLo userbot.session $PULL_LINK
-}
-
-function test_run() {
-    BUILD_START=$(date +"%s")
+req_install() {
     pip install -r requirements.txt
-    python3 -m userbot test
-    BUILD_END=$(date +"%s")
-    BUILD_TIME=$(date +"%Y%m%d-%T")
-    DIFF=$((BUILD_END - BUILD_START))
-    check_if_error
 }
 
-function check_if_error() {
-    if [ $? = 0 ]; then
-        fin
-    else
-        finerr
-    fi
+get_session() {
+    curl -sLo userbot.session "$PULL_LINK"
 }
+
+test_run() {
+    python3 -m userbot test
+}
+
+trap '{
+    STATUS=${?}
+    tg_senderror
+    finerr
+}' ERR
+
 tg_senderror() {
     tg_sendinfo "Build Throwing Error(s)" \
         "@baalajimaestro naaaaa"
     tg_channelcast "Build Throwing Error(s)"
+
+    [ -n "${STATUS}" ] &&
+    exit "${STATUS}" ||
     exit 1
 }
 
@@ -62,13 +58,26 @@ fin() {
     tg_channelcast "Compilation took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds"
     tg_yay
 }
+
 finerr() {
     echo "My works took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds but it's error..."
     tg_sendinfo "Build took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds" \
         "but it is having error anyways xd"
     tg_senderror
+
+    [ -n "${STATUS}" ] &&
+    exit "${STATUS}" ||
     exit 1
 }
 
+execute() {
+    BUILD_START=$(date +"%s")
+        req_install
+        test_run
+    BUILD_END=$(date +"%s")
+    DIFF=$((BUILD_END - BUILD_START))
+    fin
+}
+
 get_session
-test_run
+execute
