@@ -61,6 +61,8 @@ RUN  sed -e 's;^# \(%wheel.*NOPASSWD.*\);\1;g' -i /etc/sudoers
 RUN adduser userbot --disabled-password --home /home/userbot
 RUN adduser userbot wheel
 USER userbot
+RUN mkdir /home/userbot/userbot
+RUN git clone https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 WORKDIR /home/userbot/userbot
 COPY ./requirementsDOCKER.txt /home/userbot/userbot
 
