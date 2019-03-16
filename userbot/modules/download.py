@@ -19,7 +19,7 @@ from PIL import Image
 from telethon.errors import MessageNotModifiedError
 from telethon.tl.types import DocumentAttributeVideo
 
-from userbot import LOGS
+from userbot import LOGS, HELPER
 from userbot.events import register
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
@@ -327,3 +327,10 @@ async def _(e):
                 await e.edit(str(e))
         else:
             await e.edit("404: File Not Found")
+
+HELPER.update({
+    "download": "Usage: \nDownload file from link to the server."
+})
+HELPER.update({
+    "upload": "Usage: \nUploads a locally stored file to telegram."
+})

@@ -11,7 +11,7 @@ from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
 
 from telethon.tl.types import ChatAdminRights, ChatBannedRights
 
-from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP)
+from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, HELPER)
 from userbot.events import register
 
 
@@ -175,8 +175,9 @@ async def thanos(bon):
         if LOGGER:
             await bon.client.send_message(
                 LOGGER_GROUP,
-                str((await bon.get_reply_message()).sender_id)
-                + " was banned.",
+                "#BAN\n"
+                "ID: `"+ str((await bon.get_reply_message()).sender_id)
+                + "`",
             )
 
 
@@ -206,8 +207,9 @@ async def nothanos(unbon):
             if LOGGER:
                 await unbon.client.send_message(
                     LOGGER_GROUP,
-                    str((await unbon.get_reply_message()).sender_id)
-                    + " was unbanned.",
+                    "#UNBAN\n"
+                    +"ID: `"+ str((await unbon.get_reply_message()).sender_id)
+                    + "`",
                 )
         except UserIdInvalidError:
             await unbon.edit("`Uh oh my unban logic broke!`")
@@ -258,8 +260,9 @@ async def spider(spdr):
         if LOGGER:
             await spdr.client.send_message(
                 LOGGER_GROUP,
-                str((await spdr.get_reply_message()).sender_id)
-                + " was muted.",
+                "#MUTE\n"
+                +"ID: `"+ str((await spdr.get_reply_message()).sender_id)
+                + "`",
             )
 
 
@@ -286,10 +289,17 @@ async def unmoot(unmot):
                 replymsg.sender_id,
                 rights
                 ))
+            unmute(replymsg.sender_id)
             await unmot.edit("```Unmuted Successfully```")
         except UserIdInvalidError:
             await unmot.edit("`Uh oh my unmute logic broke!`")
-
+        if LOGGER:
+            await unmot.client.send_message(
+                LOGGER_GROUP,
+                "#MUTE\n"
+                +"ID: `"+ str((await unmot.get_reply_message()).sender_id)
+                + "`",
+            )       
 
 @register(incoming=True)
 async def muter(moot):
@@ -361,3 +371,28 @@ async def gspider(gspdr):
                 str((await gspdr.get_reply_message()).sender_id)
                 + " was muted.",
             )
+
+HELPER.update({
+    "promote": "Usage: \nReply someone's message with .promote to promote them."
+})
+HELPER.update({
+    "ban": "Usage: \nReply someone's message with .ban to ban them."
+})
+HELPER.update({
+    "demote": "Usage: \nReply someone's message with .demote to revoke their admin permissions."
+})
+HELPER.update({
+    "unban": "Usage: \nReply someone's message with .unban to unban them in this chat."
+})
+HELPER.update({
+    "mute": "Usage: \nReply someone's message with .mute to mute them, works on admins too"
+})
+HELPER.update({
+    "unmute": "Usage: \nReply someone's message with .unmute to remove them from muted list."
+})
+HELPER.update({
+    "gmute": "Usage: \nReply someone's message with .gmute to mute them in all groups you have in common with them."
+})
+HELPER.update({
+    "ungmute": "Usage: \nReply someone's message with .ungmute to remove them from the gmuted list."
+})

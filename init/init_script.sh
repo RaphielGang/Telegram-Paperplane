@@ -88,7 +88,7 @@ DATABASE_URL=$DB_URI" >> config.env
 
 #Generate the userbot.session
 session() {
-    python3.7 -m userbot test
+    python3 windows_startup_script.py
 }
 
 #Spinup Docker installation

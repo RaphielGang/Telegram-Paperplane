@@ -90,3 +90,13 @@ async def purge_notes(prg):
             await prg.client.send_message(
                 LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
             )
+
+HELPER.update({
+    "#<notename>": "get the note with this notename."
+})
+HELPER.update({
+    ".save <notename> <notedata>": "saves notedata as a note with name notename"
+})
+HELPER.update({
+    ".clear <notename>": "clear note with this name."
+})
