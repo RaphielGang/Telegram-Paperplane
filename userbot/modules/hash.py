@@ -64,3 +64,12 @@ async def endecrypt(e):
                 )
             )[2:]
             await e.reply("Decoded: `" + lething[:-1] + "`")
+
+
+HELPER.update({
+    "base64" : "Find the base64 encoding of the given string"
+})
+
+HELPER.update({
+    "hash" : "Find the md5, sha1, sha256, sha512 of the string when written into a txt file."
+})

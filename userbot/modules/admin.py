@@ -5,14 +5,64 @@
 
 from time import sleep
 
-from telethon.errors import BadRequestError
+from telethon.errors import (BadRequestError, ImageProcessFailedError,
+                             PhotoCropSizeSmallError)
 from telethon.errors.rpcerrorlist import UserIdInvalidError
-from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
+from telethon.tl.functions.channels import (EditAdminRequest,
+                                            EditBannedRequest,
+                                            EditPhotoRequest)
+from telethon.tl.types import (ChatAdminRights, ChatBannedRights,
+                               MessageMediaDocument, MessageMediaPhoto)
 
 from telethon.tl.types import ChatAdminRights, ChatBannedRights
 
-from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, HELPER)
+from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, HELPER, bot)
 from userbot.events import register
+
+#=================== CONSTANT ===================
+PP_TOO_SMOL = "`The image is too small`"
+PP_ERROR = "`Failure while processing image`"
+NO_ADMIN = "`You aren't an admin!`"
+
+CHAT_PP_CHANGED = "`Chat Picture Changed`"
+CHAT_PP_ERROR = "`Some issue with updating the pic,`" \
+                "`maybe you aren't an admin,`" \
+                "`or don't have the desired rights.`"
+INVALID_MEDIA = "`Invalid Extension`"
+#================================================
+
+
+@register(outgoing=True, pattern="^.setgrouppic$")
+async def set_group_photo(gpic):
+    if not gpic.text[0].isalpha() and gpic.text[0] not in ("/", "#", "@", "!"):
+        replymsg = await gpic.get_reply_message()
+        chat = await gpic.get_chat()
+        photo = None
+
+        if not chat.admin_rights or chat.creator:
+            await gpic.edit(NO_ADMIN)
+            return
+
+        if replymsg and replymsg.media:
+            if isinstance(replymsg.media, MessageMediaPhoto):
+                photo = await bot.download_media(message=replymsg.photo)
+            elif "image" in replymsg.media.document.mime_type.split('/'):
+                photo = await bot.download_file(replymsg.media.document)
+            else:
+                await gpic.edit(INVALID_MEDIA)
+
+        if photo:
+            try:
+                await EditPhotoRequest(
+                    gpic.chat_id,
+                    await bot.upload_file(photo)
+                    )
+                await gpic.edit(CHAT_PP_CHANGED)
+
+            except PhotoCropSizeSmallError:
+                await gpic.edit(PP_TOO_SMOL)
+            except ImageProcessFailedError:
+                await gpic.edit(PP_ERROR)
 
 
 @register(outgoing=True, pattern="^.promote$")
