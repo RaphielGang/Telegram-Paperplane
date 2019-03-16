@@ -9,7 +9,7 @@ from telethon.tl.functions.contacts import UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
-from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN
+from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, HELPER
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -102,8 +102,9 @@ async def approvepm(apprvpm):
         if LOGGER:
             await apprvpm.client.send_message(
                 LOGGER_GROUP,
-                f"[{name0}](tg://user?id={apprvpm.chat_id})"
-                " was approved to PM you.",
+                "#APPROVE\n"
+                + "User: `" + f"[{name0}](tg://user?id={apprvpm.chat_id})"
+                + "`",
             )
 
 
@@ -158,6 +159,22 @@ async def unblockpm(unblock):
         if LOGGER:
             await unblock.client.send_message(
                 LOGGER_GROUP,
-                f"[{name0}](tg://user?id={unblock.chat_id})"
+                f"[{name0}](tg://user?id={unblock.chat_id})"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
                 " was unblocc'd!.",
             )
+
+HELPER.update({
+    ".approve": "Approve the mentioned/replied person to PM."
+})
+HELPER.update({
+    ".block": "Block the person on the PM."
+})
+HELPER.update({
+    ".unblock": "Unblock the person on the PM."
+})
+HELPER.update({
+    ".notioff": "Clear any notifications for unapproved PMs"
+})
+HELPER.update({
+    ".notifon": "Allow notifications from unapproved PMs"
+})

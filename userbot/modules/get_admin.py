@@ -8,7 +8,7 @@
 
 from telethon.errors import ChatAdminRequiredError
 from telethon.tl.types import ChannelParticipantsAdmins, ChatParticipantCreator, Chat
-
+from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 
@@ -27,3 +27,6 @@ async def get_admin(show):
         except ChatAdminRequiredError as err:
             mentions += " " + str(err) + "\n"
         await show.edit(mentions)
+HELPER.update({
+    "adminlist <parmeter>": "Retrieves all admins, sends to LOGGER, if parameter is 0, tags them, if its 1."
+})
