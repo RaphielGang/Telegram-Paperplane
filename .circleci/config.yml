@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:latest
+    steps:
+      - checkout
+      - run: sudo chmod -R 777 init
+      - run: export SEMAPHORE_PROJECT_DIR=$PWD
+      - run: bash init/CI_Test_Script.sh
