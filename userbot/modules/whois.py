@@ -11,7 +11,7 @@ from telethon.tl.functions.messages import EditMessageRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName, User, UserFull
 from telethon.utils import get_input_location
-
+from userbot import HELPER
 from userbot.events import register
 
 TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")

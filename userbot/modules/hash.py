@@ -1,3 +1,9 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 import pybase64
 from subprocess import PIPE
 from subprocess import run as runapp

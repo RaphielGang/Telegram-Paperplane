@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import LOGGER, LOGGER_GROUP, HELPER, bot
 from userbot.events import register
 
 
