@@ -69,15 +69,13 @@ async def incom_note(getnt):
     try:
         if not (await getnt.get_sender()).bot:
             try:
-                from userbot.modules.sql_helper.notes_sql import get_notes
+                from userbot import MONGO
             except:
                 return
             notename = getnt.text[1:]
-            notes = get_notes(getnt.chat_id)
-            for note in notes:
-                if notename == note.keyword:
-                    await getnt.reply(note.reply)
-                    return
+            note = MONGO.notes.find_one({"chat_id": getnt.chat_id, "name": notename[1]})
+            if note:
+                    await getnt.reply(note['text'])
     except:
         pass
 
