@@ -4,12 +4,14 @@
 # you may not use this file except in compliance with the License.
 
 
-from userbot.events import register
-from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, HELPER, bot)
 from time import sleep
 
+from userbot import HELPER, LOGGER, LOGGER_GROUP
+from userbot.events import register
+
+
 @register(outgoing=True, pattern="^.userid$")
-async def chatidgetter(e):
+async def useridgetter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = await e.get_reply_message()
         if message:

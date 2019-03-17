@@ -33,22 +33,22 @@ async def kang(args):
                 photo = io.BytesIO()
                 await bot.download_file(message.media.document, photo)
                 if DocumentAttributeFilename(file_name='sticker.webp') in message.media.document.attributes:
-                    EMOJI = message.media.document.attributes[1].alt
-                    EMOJIBYPASS = True
+                    emoji = message.media.document.attributes[1].alt
+                    emojibypass = True
             else:
                 await args.edit("`Unsupported File!`")
                 return
         else:
             await args.edit("`Reply to photo to kang it bruh`")
             return
-      
+
         if photo:
-            im = Image.open(photo)
+            image = Image.open(photo)
             maxsize = (512, 512)
-            if (im.width and im.height) < 512:
-                size1 = im.width
-                size2 = im.height
-                if im.width > im.height:
+            if (image.width and image.height) < 512:
+                size1 = image.width
+                size2 = image.height
+                if image.width > image.height:
                     scale = 512/size1
                     size1new = 512
                     size2new = size2 * scale
@@ -59,27 +59,29 @@ async def kang(args):
                 size1new = math.floor(size1new)
                 size2new = math.floor(size2new)
                 sizenew = (size1new, size2new)
-                im = im.resize(sizenew)
+                image = image.resize(sizenew)
             else:
-                im.thumbnail(maxsize)
-            s =args.text.split()
-            if not EMOJIBYPASS:
-                EMOJI = "🤔"
-            PACK = "1"
-            if len(s) == 3:
-              PACK = s[2]     #User sent both
-              EMOJI = s[1]
-            elif len(s) == 2:
-              try:
-                PACK = int(s[1])  #User wants to push into different pack, but is okay with thonk as emote.
-              except:
-                EMOJI = s[1]    #User sent just custom emote, wants to push to default pack
-            packname = f"a{userid}_by_{username}_{PACK}"
+                image.thumbnail(maxsize)
+            splat = args.text.split()
+            if not emojibypass:
+                emoji = "🤔"
+            pack = "1"
+            if len(splat) == 3:
+                pack = splat[2]     #User sent both
+                emoji = splat[1]
+            elif len(splat) == 2:
+                try:
+                    #User wants to push into different pack, but is okay with thonk as emote.
+                    pack = int(s[1])
+                except:
+                    #User sent just custom emote, wants to push to default pack
+                    emoji = splat[1]
+            packname = f"a{userid}_by_{username}_{pack}"
             response = urllib.request.urlopen(urllib.request.Request(f'http://t.me/addstickers/{packname}'))
             htmlstr = response.read().decode("utf8").split('\n')
             file = io.BytesIO()
             file.name = "sticker.png"
-            im.save(file, "PNG")
+            image.save(file, "PNG")
             if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message('/addsticker')
@@ -93,7 +95,7 @@ async def kang(args):
                     await bot.send_read_acknowledge(conv.chat_id)
                     await conv.send_file(file, force_document=True)
                     await conv.get_response()
-                    await conv.send_message(EMOJI)
+                    await conv.send_message(emoji)
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     await conv.get_response()
@@ -108,14 +110,14 @@ async def kang(args):
                     await conv.get_response()
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
-                    await conv.send_message(f"@{username}'s userbot pack {PACK}")
+                    await conv.send_message(f"@{username}'s userbot pack {pack}")
                     await conv.get_response()
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
                     await conv.get_response()
-                    await conv.send_message(EMOJI)
+                    await conv.send_message(emoji)
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     await conv.get_response()

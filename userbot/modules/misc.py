@@ -6,13 +6,7 @@
 # You can find misc modules, which dont fit in anything xD
 
 from random import randint
-from subprocess import PIPE
-from subprocess import run as runapp
 from time import sleep
-
-import hastebin
-import pybase64
-from requests import get, post
 
 from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
