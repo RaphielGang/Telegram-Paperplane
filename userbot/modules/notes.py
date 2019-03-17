@@ -43,7 +43,7 @@ async def remove_notes(clr):
 async def add_filter(fltr):
     if not fltr.text[0].isalpha():
         try:
-            from userbot.modules.sql_helper.notes_sql import add_note
+            from userbot import MONGO
         except:
             await fltr.edit("`Running on Non-SQL mode!`")
             return
@@ -52,9 +52,15 @@ async def add_filter(fltr):
         if fltr.reply_to_msg_id:
             rep_msg = await fltr.get_reply_message()
             string = rep_msg.text
-        add_note(str(fltr.chat_id), notename, string)
+        old = MONGO.notes.find_one({"chat_id": fltr.chat_id, "name": notename[1]})
+        if old:
+            MONGO.notes.delete_one({'_id': old['_id']})
+            status = "updated"
+        else:
+            status = "saved"
+        MONGO.notes.insert_one({"chat_id": fltr.chat_id, "name": notename[1], "text": string})
         await fltr.edit(
-            "`Note added successfully. Use` #{} `to get it`".format(notename)
+            "`Note {} successfully. Use` #{} `to get it`".format(status, notename)
         )
 
 
