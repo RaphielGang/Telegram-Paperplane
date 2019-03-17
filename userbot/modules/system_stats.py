@@ -99,12 +99,20 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern="^.alive$")
 async def amireallyalive(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+
+        try:
+            from userbot import MONGO
+            db = "MongoDB"
+        except:
+            db = "No-SQL mode!"
+            pass
+
         await e.edit(
             "`"
             "Your bot is running \n\n"
             f"Telethon version: {version.__version__} \n"
             f"Python: {python_version()} \n"
             f"User: {uname().node}\n"
-            f"Database: PyMongo"
+            f"Database: {db}"
             "`"
             )
