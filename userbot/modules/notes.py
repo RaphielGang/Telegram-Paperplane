@@ -12,17 +12,17 @@ from userbot.events import register
 async def notes_active(svd):
     if not svd.text[0].isalpha() and svd.text[0] not in ("/", "#", "@", "!"):
         try:
-            from userbot.modules.sql_helper.notes_sql import get_notes
+            from userbot import MONGO
         except:
             await svd.edit("`Running on Non-SQL mode!`")
             return
 
-        notes = get_notes(svd.chat_id)
+        notes = MONGO.notes.find({"chat_id": svd.chat_id})
         message = '`There are no saved notes in this chat`'
         if notes:
             message = "Messages saved in this chat: \n\n"
             for note in notes:
-                message = message + "🔹 " + note.keyword + "\n"
+                message = message + "🔹 " + note['name'] + "\n"
         await svd.edit(message)
 
 
@@ -95,13 +95,17 @@ async def incom_note(getnt):
 @register(outgoing=True, pattern="^\.rmnotes$")
 async def purge_notes(prg):
     try:
-        from userbot.modules.sql_helper.notes_sql import rm_all_notes
+        from userbot import MONGO
     except:
         await prg.edit("`Running on Non-SQL mode!`")
         return
     if not prg.text[0].isalpha():
         await prg.edit("```Purging all notes.```")
-        rm_all_notes(str(prg.chat_id))
+        notes = MONGO.notes.find({"chat_id": prg.chat_id})
+        for note in notes:
+            await prg.edit("```Removing {}...```".format(note['name']))
+            MONGO.notes.delete_one({'_id': note['_id']})
+        await prg.edit("```All notes removed!```")
         if LOGGER:
             await prg.client.send_message(
                 LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
