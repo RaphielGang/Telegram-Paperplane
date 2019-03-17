@@ -29,13 +29,13 @@ get_session() {
 
 test_run() {
     python3 -m userbot test
-}
 
-trap '{
-    STATUS=${?}
-    tg_senderror
-    finerr
-}' ERR
+    trap '{
+        STATUS=${?}
+        tg_senderror
+        finerr
+    }' ERR
+}
 
 tg_senderror() {
     tg_sendinfo "Build Throwing Error(s)" \
