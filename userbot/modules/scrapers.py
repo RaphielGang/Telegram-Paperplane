@@ -17,7 +17,7 @@ from gtts import gTTS
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY
+from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, HELPER
 from userbot.events import register
 
 langi = "en"

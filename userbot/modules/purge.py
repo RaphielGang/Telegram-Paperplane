@@ -8,7 +8,7 @@ import time
 
 from telethon.errors import rpcbaseerrors
 
-from userbot import LOGGER, LOGGER_GROUP
+from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 

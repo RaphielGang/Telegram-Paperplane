@@ -11,7 +11,7 @@ from shutil import which
 
 from telethon import version
 
-from userbot import LOGGER, LOGGER_GROUP
+from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 

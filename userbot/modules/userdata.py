@@ -11,7 +11,7 @@ from telethon.tl.functions.account import (UpdateProfileRequest,
 from telethon.tl.functions.photos import UploadProfilePhotoRequest
 from telethon.tl.types import MessageMediaPhoto
 
-from userbot import bot
+from userbot import bot, HELPER
 from userbot.events import register
 
 
