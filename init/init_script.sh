@@ -29,7 +29,7 @@ botclone() {
 # Requirement install function
 reqinstall() {
     echo "***Installing Requirements***"
-    sudo python3.7 -m pip install -r requirements.txt
+    sudo python3.7 -m pip install -r telethon
     curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
     clear
 }
