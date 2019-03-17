@@ -30,13 +30,19 @@ async def notes_active(svd):
 async def remove_notes(clr):
     if not clr.text[0].isalpha() and clr.text[0] not in ("/", "#", "@", "!"):
         try:
-            from userbot.modules.sql_helper.notes_sql import rm_note
+            from userbot import MONGO
         except:
             await clr.edit("`Running on Non-SQL mode!`")
             return
         notename = clr.pattern_match.group(1)
-        rm_note(clr.chat_id, notename)
-        await clr.edit("```Note removed successfully```")
+        old = MONGO.notes.find_one({"chat_id": clr.chat_id, "name": notename})
+        print(old)
+        print(notename, clr.chat_id)
+        if old:
+            MONGO.notes.delete_one({'_id': old['_id']})
+            await clr.edit("Note removed successfully")
+        else:
+            await clr.edit("I can't find this note!")
 
 
 @register(outgoing=True, pattern="^\.save (\w*)")
@@ -52,13 +58,13 @@ async def add_filter(fltr):
         if fltr.reply_to_msg_id:
             rep_msg = await fltr.get_reply_message()
             string = rep_msg.text
-        old = MONGO.notes.find_one({"chat_id": fltr.chat_id, "name": notename[1]})
+        old = MONGO.notes.find_one({"chat_id": fltr.chat_id, "name": notename})
         if old:
             MONGO.notes.delete_one({'_id': old['_id']})
             status = "updated"
         else:
             status = "saved"
-        MONGO.notes.insert_one({"chat_id": fltr.chat_id, "name": notename[1], "text": string})
+        MONGO.notes.insert_one({"chat_id": fltr.chat_id, "name": notename, "text": string})
         await fltr.edit(
             "`Note {} successfully. Use` #{} `to get it`".format(status, notename)
         )
@@ -73,7 +79,7 @@ async def incom_note(getnt):
             except:
                 return
             notename = getnt.text[1:]
-            note = MONGO.notes.find_one({"chat_id": getnt.chat_id, "name": notename[1]})
+            note = MONGO.notes.find_one({"chat_id": getnt.chat_id, "name": notename})
             if note:
                     await getnt.reply(note['text'])
     except:
