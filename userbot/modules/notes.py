@@ -58,13 +58,17 @@ async def add_filter(fltr):
         if fltr.reply_to_msg_id:
             rep_msg = await fltr.get_reply_message()
             string = rep_msg.text
-        old = MONGO.notes.find_one({"chat_id": fltr.chat_id, "name": notename})
+        old = MONGO.notes.find_one(
+            {"chat_id": fltr.chat_id, "name": notename}
+            )
         if old:
             MONGO.notes.delete_one({'_id': old['_id']})
             status = "updated"
         else:
             status = "saved"
-        MONGO.notes.insert_one({"chat_id": fltr.chat_id, "name": notename, "text": string})
+        MONGO.notes.insert_one(
+            {"chat_id": fltr.chat_id, "name": notename, "text": string}
+            )
         await fltr.edit(
             "`Note {} successfully. Use` #{} `to get it`".format(status, notename)
         )
@@ -79,7 +83,9 @@ async def incom_note(getnt):
             except:
                 return
             notename = getnt.text[1:]
-            note = MONGO.notes.find_one({"chat_id": getnt.chat_id, "name": notename})
+            note = MONGO.notes.find_one(
+                {"chat_id": getnt.chat_id, "name": notename}
+                )
             if note:
                     await getnt.reply(note['text'])
     except:
