@@ -90,6 +90,12 @@ GET = get(URL)
 with open('brains.check', 'wb') as brains:
     brains.write(GET.content)
 
+# Init Mongo
+MONGO = MongoClient('localhost', 27017).bot
+
+# Init Redis
+REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
+
 # Global Variables
 SNIPE_TEXT = ""
 COUNT_MSG = 0
