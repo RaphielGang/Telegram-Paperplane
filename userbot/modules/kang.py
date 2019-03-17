@@ -22,9 +22,12 @@ async def kang(args):
         username = user.username
         if not username:
             username = user.first_name
+<<<<<<< HEAD
         packname = f"a{userid}_by_{username}"
         response = urllib.request.urlopen(urllib.request.Request(f'http://t.me/addstickers/{packname}'))
         htmlstr = response.read().decode("utf8").split('\n')
+=======
+>>>>>>> ed1c24c... kang: fixup multipack
         message = await args.get_reply_message()
         photo = None
         emoji = "🌚"
@@ -37,7 +40,12 @@ async def kang(args):
                 photo = io.BytesIO()
                 await bot.download_file(message.media.document, photo)
                 if DocumentAttributeFilename(file_name='sticker.webp') in message.media.document.attributes:
+<<<<<<< HEAD
                     emoji = message.media.document.attributes[1].alt
+=======
+                    EMOJI = message.media.document.attributes[1].alt
+                    EMOJIBYPASS = True
+>>>>>>> ed1c24c... kang: fixup multipack
             else:
                 await args.edit("INVALID MEDIA BOI")
                 return
@@ -65,7 +73,21 @@ async def kang(args):
                 im = im.resize(sizenew)
             else:
                 im.thumbnail(maxsize)
-
+            s =args.text.split()
+            if not EMOJIBYPASS:
+                EMOJI = "🤔"
+            PACK = "1"
+            if len(s) == 3:
+              PACK = s[2]     #User sent both
+              EMOJI = s[1]
+            elif len(s) == 2:
+              try:
+                PACK = int(s[1])  #User wants to push into different pack, but is okay with thonk as emote.
+              except:
+                EMOJI = s[1]    #User sent just custom emote, wants to push to default pack
+            packname = f"a{userid}_by_{username}_{PACK}"
+            response = urllib.request.urlopen(urllib.request.Request(f'http://t.me/addstickers/{packname}'))
+            htmlstr = response.read().decode("utf8").split('\n')
             file = io.BytesIO()
             file.name = "sticker.png"
             im.save(file, "PNG")
