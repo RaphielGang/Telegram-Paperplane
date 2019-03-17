@@ -1,5 +1,17 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+
+
+from time import sleep
+
+from userbot import HELPER, LOGGER, LOGGER_GROUP
+from userbot.events import register
+
+
 @register(outgoing=True, pattern="^.userid$")
-async def chatidgetter(e):
+async def useridgetter(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = await e.get_reply_message()
         if message:
@@ -41,3 +53,11 @@ async def log(e):
             await e.edit("`This feature requires Logging to be enabled!`")
         sleep(2)
         await e.delete()
+
+HELPER.update({
+    "chatid" : "Fetches the current chat's ID"
+})
+
+HELPER.update({
+    "userid" : "Fetches the ID of the user in reply, if its a forwarded message, finds the ID for the source."
+})

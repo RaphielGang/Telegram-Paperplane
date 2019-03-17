@@ -6,7 +6,6 @@
 
 import time
 
-from telethon import events
 from telethon.events import StopPropagation
 
 from userbot import (AFKREASON, COUNT_MSG, ISAFK, LOGGER, LOGGER_GROUP, USERS, HELPER)
@@ -82,7 +81,7 @@ async def set_afk(e):
         try:
             string = str(message[5:])
         except:
-            string=''
+            string = ''
         global ISAFK
         global AFKREASON
         await e.edit("AFK AF!")

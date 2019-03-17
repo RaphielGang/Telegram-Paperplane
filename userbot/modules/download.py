@@ -6,7 +6,6 @@
 # The entire source code is OSSRPL except 'download, uploadir, uploadas, upload' which is MPL
 # License: MPL and OSSRPL
 
-import asyncio
 import json
 import os
 import subprocess
@@ -15,8 +14,6 @@ from datetime import datetime
 import requests
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from PIL import Image
-from telethon.errors import MessageNotModifiedError
 from telethon.tl.types import DocumentAttributeVideo
 
 from userbot import LOGS, HELPER
@@ -323,8 +320,8 @@ async def _(e):
                 ms = (end - start).seconds
                 os.remove(thumb)
                 await e.edit("Uploaded in {} seconds.".format(ms))
-            except FileNotFoundError as e:
-                await e.edit(str(e))
+            except FileNotFoundError as err:
+                await e.edit(str(err))
         else:
             await e.edit("404: File Not Found")
 
