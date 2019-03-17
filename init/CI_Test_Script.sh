@@ -29,13 +29,11 @@ get_session() {
 
 test_run() {
     python3 -m userbot test
-
-    trap '{
-        STATUS=${?}
-        tg_senderror
-        finerr
-    }' ERR
+    STATUS=${?}
+    export STATUS
 }
+
+# Nuke Trap, coz it not working
 
 tg_senderror() {
     tg_sendinfo "Build Throwing Error(s)" \
@@ -77,7 +75,12 @@ execute() {
         test_run
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
+    if [ $STATUS -eq 0 ];
+    then
     fin
+    else
+    finerr
+    fi
 }
 
 get_session
