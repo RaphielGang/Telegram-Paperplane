@@ -12,6 +12,8 @@ from distutils.util import strtobool as sb
 from dotenv import load_dotenv
 from requests import get
 from telethon import TelegramClient
+from pymongo import MongoClient
+import redis
 
 
 load_dotenv("config.env")
