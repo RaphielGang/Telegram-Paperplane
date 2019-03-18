@@ -8,6 +8,7 @@ import os
 import re
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
+import requests
 
 import urbandict
 import wikipedia
@@ -16,8 +17,9 @@ from googletrans import Translator
 from gtts import gTTS
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from pytube import YouTube
 
-from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, HELPER
+from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, HELPER, bot
 from userbot.events import register
 
 langi = "en"
@@ -227,3 +229,80 @@ def youtube_search(q, max_results=10, order="relevance", token=None, location=No
     except HttpError:
         nexttok = "last_page"
         return(nexttok, videos)
+
+
+@register(outgoing=True, pattern=".yt_dl (\S*)( (\S*))?")
+async def download_video(v_url):
+    if not v_url.text[0].isalpha() and v_url.text[0] not in ("/", "#", "@", "!"):
+        url = v_url.pattern_match.group(1)
+        quality = v_url.pattern_match.group(3)
+
+        await v_url.edit("**Fetching...**")
+
+        video = YouTube(url)
+
+        if quality:
+            video_stream = video.streams.filter(
+                progressive=True,
+                subtype="mp4",
+                res=quality
+            ).first()
+        else:
+            video_stream = video.streams.filter(
+                progressive=True,
+                subtype="mp4"
+            ).first()
+
+        if video_stream is None:
+            all_streams = video.streams.filter(
+                progressive=True,
+                subtype="mp4"
+            ).all()
+            available_qualities = ""
+
+            for item in all_streams[:-1]:
+                available_qualities += f"{item.resolution}, "
+            available_qualities += all_streams[-1].resolution
+
+            await v_url.edit(
+                "**A stream matching your query wasn't found. Try again with different options.\n**"
+                "**Available Qualities:**\n"
+                f"{available_qualities}"
+            )
+            return
+
+        video_size = video_stream.filesize / 1000000
+
+        if video_size >= 50:
+            await v_url.edit(
+                ("**File larger than 50MB. Sending the link instead.\n**"
+                 f"Get the video [here]({video_stream.url})\n\n"
+                 "**If the video opens instead of playing, right-click(or long press) and "
+                 "press 'Save Video As...'(may depend on the browser) to download the video.**")
+            )
+            return
+
+        await v_url.edit("**Downloading...**")
+
+        video_stream.download(filename=video.title)
+
+        url = video.thumbnail_url
+        r = requests.get(url)
+        with open('thumbnail.jpg', 'wb') as fs:
+            fs.write(r.content)
+
+        await v_url.edit("**Uploading...**")
+        await bot.send_file(
+            v_url.chat_id,
+            f'{video.title}.mp4',
+            caption=f"{video.title}",
+            thumb="thumbnail.jpg"
+        )
+
+        os.remove(f"{video.title}.mp4")
+        os.remove('thumbnail.jpg')
+        await v_url.delete()
+
+HELPER.update({
+    'yt_dl <url> <quality>(optional)': "Usage: \nDownload videos from YouTube. If no quality is specified, the highest downloadable quality is downloaded. Will send the link if the video is larger than 50 MB."
+})
