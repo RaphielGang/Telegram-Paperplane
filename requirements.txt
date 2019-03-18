@@ -25,3 +25,4 @@ aiohttp
 telethon-session-sqlalchemy>=0.2.6
 redis
 pymongo
+pytube
