@@ -8,7 +8,7 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, ISAFK, LOGGER, LOGGER_GROUP, USERS, HELPER)
+from userbot import (COUNT_MSG, REDIS, LOGGER, LOGGER_GROUP, USERS, HELPER)
 from userbot.events import register
 
 
@@ -16,14 +16,15 @@ from userbot.events import register
 async def mention_afk(e):
     global COUNT_MSG
     global USERS
-    global ISAFK
+    AFK = REDIS.get('isafk')
     if e.message.mentioned and not (await e.get_sender()).bot:
-        if ISAFK:
+        if AFK:
             if e.sender_id not in USERS:
+                print(str(AFK))
                 await e.reply(
-                    "Sorry! My boss is AFK due to ```"
-                    + AFKREASON
-                    + "```. Would ping him to look into the message soon😉"
+                    "Sorry! My boss is AFK due to "
+                    + AFK
+                    + ". Would ping him to look into the message soon😉"
                 )
                 USERS.update({e.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
@@ -33,7 +34,7 @@ async def mention_afk(e):
                         "Sorry! But my boss is still not here. "
                         "Try to ping him a little later. I am sorry😖."
                         "He told me he was busy with ```"
-                        + AFKREASON
+                        + AFK
                         + "```"
                     )
                     USERS[e.sender_id] = USERS[e.sender_id] + 1
@@ -45,15 +46,15 @@ async def mention_afk(e):
 
 @register(incoming=True)
 async def afk_on_pm(e):
-    global ISAFK
     global USERS
     global COUNT_MSG
+    AFK = REDIS.get('isafk')
     if e.is_private and not (await e.get_sender()).bot:
-        if ISAFK:
+        if AFK:
             if e.sender_id not in USERS:
                 await e.reply(
                     "Sorry! My boss is AFK due to ```"
-                    + AFKREASON
+                    + AFK
                     + "``` I'll ping him to look into the message soon😉"
                 )
                 USERS.update({e.sender_id: 1})
@@ -64,7 +65,7 @@ async def afk_on_pm(e):
                         "Sorry! But my boss is still not here. "
                         "Try to ping him a little later. I am sorry😖."
                         "He told me he was busy with ```"
-                        + AFKREASON
+                        + AFK
                         + "```"
                     )
                     USERS[e.sender_id] = USERS[e.sender_id] + 1
@@ -79,28 +80,28 @@ async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
         try:
-            string = str(message[5:])
+            AFKREASON = str(message[5:])
         except:
-            string = ''
-        global ISAFK
-        global AFKREASON
+            AFKREASON = ''
+        if not AFKREASON:
+            AFKREASON = 'No reason'
         await e.edit("AFK AF!")
-        if string != "":
-            AFKREASON = string
         if LOGGER:
             await e.client.send_message(LOGGER_GROUP, "You went AFK!")
-        ISAFK = True
+        REDIS.set('isafk', AFKREASON)
+        AFK = REDIS.get('isafk')
+        print(str(AFK))
         raise StopPropagation
 
 
 @register(outgoing=True)
 async def type_afk_is_not_true(e):
-    global ISAFK
     global COUNT_MSG
     global USERS
     global AFKREASON
+    ISAFK = REDIS.get('isafk')
     if ISAFK:
-        ISAFK = False
+        REDIS.delete('isafk')
         await e.respond("I'm no longer AFK.")
         x = await e.respond(
             "`You recieved "
