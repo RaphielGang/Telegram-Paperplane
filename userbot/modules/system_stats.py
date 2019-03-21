@@ -15,6 +15,12 @@ from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 
+#alive globals
+defaultuser = uname().node
+defaultheader = 'Your bot is running'
+#
+
+
 @register(outgoing=True, pattern="^.sysd$")
 async def sysdetails(sysd):
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
@@ -101,9 +107,56 @@ async def amireallyalive(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit(
             "`"
-            "Your bot is running \n\n"
+            f"{defaultheader} \n\n"
             f"Telethon version: {version.__version__} \n"
             f"Python: {python_version()} \n"
-            f"User: {uname().node}"
+            f"User: {defaultuser}"
+            "`"
+            )
+
+
+@register(outgoing=True, pattern="^.aliveu")
+async def amireallyaliveuser(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        message = e.text
+        output = '.aliveu [new user without brackets] nor can it be empty'
+        if not (message == '.aliveu' or message[7:8] != ' '):
+            newuser = message[8:]
+            global defaultuser
+            defaultuser = newuser
+            output =  'Successfully changed user to ' + newuser + '!'
+        await e.edit(
+            "`"
+            f"{output}"
+            "`"
+            )
+
+
+@register(outgoing=True, pattern="^.aliveh")
+async def amireallyaliveheader(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        message = e.text
+        output = '.aliveh [new header text without brackets] nor can it be empty'
+        if not (message == '.aliveh' or message[7:8] != ' '):
+            newheader = message[8:]
+            global defaultheader
+            defaultheader = newheader
+            output =  'Successfully changed header text to ' + newheader + '!'
+        await e.edit(
+            "`"
+            f"{output}"
+            "`"
+            )
+
+
+@register(outgoing=True, pattern="^.resetalive$")
+async def amireallyalivereset(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        global defaultuser, defaultheader
+        defaultheader = 'Your bot is running'
+        defaultuser = uname().node
+        await e.edit(
+            "`"
+            "Successfully reset alive!"
             "`"
             )
