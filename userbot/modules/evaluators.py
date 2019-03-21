@@ -140,3 +140,13 @@ async def terminal_runner(term):
                 LOGGER_GROUP,
                 "Terminal Command " + command + " was executed sucessfully",
             )
+
+HELPER.update({
+    "eval": "Evalute mini-expressions. Usage: \n .eval 2 + 3 "
+})
+HELPER.update({
+    "exec": "Execute small python scripts. Usage: \n .exec print('hello')"
+})
+HELPER.update({
+    "term": "Run bash commands and scripts on your server. Usage: \n .term ls"
+})

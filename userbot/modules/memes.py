@@ -13,7 +13,7 @@ import time
 from spongemock import spongemock
 from zalgo_text import zalgo
 
-from userbot import (DISABLE_RUN, WIDE_MAP)
+from userbot import (DISABLE_RUN, WIDE_MAP, HELPER)
 from userbot.events import register
 
 #================= CONSTANT =================
@@ -422,3 +422,7 @@ async def typewriter(typew):
             await asyncio.sleep(sleep_time)
             await typew.edit(old_text)
             await asyncio.sleep(sleep_time)
+
+HELPER.update({
+    "memes": "Ask Thoncc (@Skittles9823Bot) for that."
+})

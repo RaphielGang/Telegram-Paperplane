@@ -3,12 +3,12 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+
 import time
 
-from telethon import events
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, ISAFK, LOGGER, LOGGER_GROUP, USERS)
+from userbot import (AFKREASON, COUNT_MSG, ISAFK, LOGGER, LOGGER_GROUP, USERS, HELPER)
 from userbot.events import register
 
 
@@ -74,52 +74,6 @@ async def afk_on_pm(e):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@register(outgoing=True, pattern="^.notafk$")
-async def not_afk(e):
-    if not e.text[0].isalpha():
-        global ISAFK
-        global COUNT_MSG
-        global USERS
-        global AFKREASON
-        ISAFK = False
-        await e.edit("I'm no longer AFK.")
-        x=await e.respond(
-            "`You recieved "
-            + str(COUNT_MSG)
-            + " messages while you were away. Check log for more details.`"
-            + "`This auto-generated message shall be self destructed in 2 seconds.`"
-        )
-        time.sleep(2)
-        await x.delete()
-        if LOGGER:
-            await e.client.send_message(
-                LOGGER_GROUP,
-                "You've recieved "
-                + str(COUNT_MSG)
-                + " messages from "
-                + str(len(USERS))
-                + " chats while you were away",
-            )
-            for i in USERS:
-                name = await e.client.get_entity(i)
-                name0 = str(name.first_name)
-                await e.client.send_message(
-                    LOGGER_GROUP,
-                    "["
-                    + name0
-                    + "](tg://user?id="
-                    + str(i)
-                    + ")"
-                    + " sent you "
-                    + "`"
-                    + str(USERS[i])
-                    + " messages`",
-                )
-        COUNT_MSG = 0
-        USERS = {}
-        AFKREASON = "No Reason"
-
-
 @register(outgoing=True, pattern="^.afk")
 async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -127,7 +81,7 @@ async def set_afk(e):
         try:
             string = str(message[5:])
         except:
-            string=''
+            string = ''
         global ISAFK
         global AFKREASON
         await e.edit("AFK AF!")
@@ -183,3 +137,7 @@ async def type_afk_is_not_true(e):
         COUNT_MSG = 0
         USERS = {}
         AFKREASON = "No Reason"
+
+HELPER.update({
+    "afk": "Usage: \nSets you as afk. Responds to anyone who tags/PM's you telling that you are afk. Switches off AFK when you type back anything."
+})

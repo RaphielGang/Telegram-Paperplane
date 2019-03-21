@@ -1,63 +1,53 @@
+#!/bin/bash
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+# CI Runner Script for baalajimaestro's userbot
 
- 
-#! /bin/sh
+# We need this directive
+# shellcheck disable=1090
 
-#CI Runner Script for baalajimaestro's userbot
+. "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"/telegram
 
-function colors {
-	blue='\033[0;34m' cyan='\033[0;36m'
-	yellow='\033[0;33m'
-	red='\033[0;31m'
-	nocol='\033[0m'
-}
-
-colors;
 PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
-. "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"/telegram
+
 kickstart_pub
 
-function get_session {
-    curl -sLo userbot.session $PULL_LINK
+req_install() {
+    pip3 install -r requirements.txt
 }
 
+get_session() {
+    curl -sLo userbot.session "$PULL_LINK"
+}
 
-function test_run {
-    BUILD_START=$(date +"%s")
-    pip install -r requirements.txt
+test_run() {
     python3 -m userbot test
-    BUILD_END=$(date +"%s")
-    BUILD_TIME=$(date +"%Y%m%d-%T")
-    DIFF=$((BUILD_END - BUILD_START))	
-    check_if_error
+    STATUS=${?}
+    export STATUS
 }
 
-function check_if_error {
-	if [ $? -eq 0 ]
-    then
-        fin
-	else 
-		finerr
-	fi	
-}
+# Nuke Trap, coz it not working
+
 tg_senderror() {
     tg_sendinfo "Build Throwing Error(s)" \
-    "@baalajimaestro naaaaa"
-     tg_channelcast "Build Throwing Error(s)"
-     exit 1
+        "@baalajimaestro @raphielscape naaaaa"
+    tg_channelcast "Build Throwing Error(s)"
+
+    [ -n "${STATUS}" ] &&
+    exit "${STATUS}" ||
+    exit 1
 }
 
 tg_yay() {
     tg_sendinfo "Python CI Test passed yay" \
-    "Haha yes"
+        "Haha yes"
 }
 
 # Fin Prober
@@ -67,13 +57,31 @@ fin() {
     tg_channelcast "Compilation took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds"
     tg_yay
 }
+
 finerr() {
     echo "My works took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds but it's error..."
     tg_sendinfo "Build took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds" \
-                "but it is having error anyways xd"
+        "but it is having error anyways xd"
     tg_senderror
+
+    [ -n "${STATUS}" ] &&
+    exit "${STATUS}" ||
     exit 1
 }
 
+execute() {
+    BUILD_START=$(date +"%s")
+        req_install
+        test_run
+    BUILD_END=$(date +"%s")
+    DIFF=$((BUILD_END - BUILD_START))
+    if [ $STATUS -eq 0 ];
+    then
+    fin
+    else
+    finerr
+    fi
+}
+
 get_session
-test_run
+execute

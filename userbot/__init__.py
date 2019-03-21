@@ -72,6 +72,9 @@ OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 
 SUDO = os.environ.get("SUDO", None)
 
+YOUTUBE_API_KEY = os.environ.get(
+    "YOUTUBE_API_KEY", None
+    )
 
 bot = TelegramClient("userbot", API_KEY, API_HASH)
 
@@ -101,6 +104,7 @@ ENABLE_KILLME = True
 SNIPE_ID = 0
 MUTING_USERS = {}
 MUTED_USERS = {}
+HELPER = {}
 AFKREASON = "No Reason "
 SPAM_ALLOWANCE = 3
 SPAM_CHAT_ID = []

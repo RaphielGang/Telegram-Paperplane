@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
-from userbot import LOGGER, LOGGER_GROUP, bot
+from userbot import LOGGER, LOGGER_GROUP, HELPER, bot
 from userbot.events import register
 
 
@@ -90,3 +90,13 @@ async def purge_notes(prg):
             await prg.client.send_message(
                 LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
             )
+
+HELPER.update({
+    "#<notename>": "get the note with this notename."
+})
+HELPER.update({
+    ".save <notename> <notedata>": "saves notedata as a note with name notename"
+})
+HELPER.update({
+    ".clear <notename>": "clear note with this name."
+})
