@@ -103,8 +103,7 @@ async def approvepm(apprvpm):
             await apprvpm.client.send_message(
                 LOGGER_GROUP,
                 "#APPROVE\n"
-                + "User: `" + f"[{name0}](tg://user?id={apprvpm.chat_id})"
-                + "`",
+                + "User: " + f"[{name0}](tg://user?id={apprvpm.chat_id})",
             )
 
 
@@ -138,8 +137,8 @@ async def blockpm(block):
         if LOGGER:
             await block.client.send_message(
                 LOGGER_GROUP,
-                f"[{name0}](tg://user?id={block.chat_id})"
-                " was blocc'd!.",
+                "#BLOCK\n"
+                + "User: " + f"[{name0}](tg://user?id={apprvpm.chat_id})",
             )
 
 
