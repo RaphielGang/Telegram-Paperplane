@@ -19,15 +19,7 @@ async def randomise(e):
         index = randint(1, len(r) - 1)
         await e.edit("**Query: **\n`" + e.text + "`\n**Output: **\n`" + r[index] + "`")
 
-@register(outgoing=True, pattern="^.flip$")
-async def repo_is_here(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        toss = randint(0,1)
-        if toss==0:
-            await e.edit("The coin landed on heads!")
-        else:
-            await e.edit("The coin landed on tails!")
-        
+
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
 async def sleepybot(e):
     message = e.text
@@ -44,7 +36,8 @@ async def sleepybot(e):
                     "You put the bot to sleep for " + str(counter) + " seconds",
                 )
             sleep(counter)
-            
+
+
 @register(outgoing=True, pattern="^.shutdown$")
 async def killdabot(e):
     if not e.text[0].isalpha():
@@ -67,3 +60,12 @@ async def bot_support(e):
 async def repo_is_here(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("https://github.com/baalajimaestro/Telegram-UserBot/")
+        
+@register(outgoing=True, pattern="^.flip$")
+async def repo_is_here(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        toss = randint(0,1)
+        if toss==0:
+            await e.edit("The coin landed on heads!")
+        else:
+            await e.edit("The coin landed on tails!")
