@@ -27,8 +27,9 @@ async def kang(args):
 
         if message and message.media:
             if isinstance(message.media, MessageMediaPhoto):
-                photo = message.photo
-                photo = await bot.download_media(message=photo)
+                photo = io.BytesIO()
+                photo = await bot.download_media(message.photo, photo)
+                emojibypass = False
             elif "image" in message.media.document.mime_type.split('/'):
                 photo = io.BytesIO()
                 await bot.download_file(message.media.document, photo)
@@ -70,10 +71,10 @@ async def kang(args):
                 pack = splat[2]     #User sent both
                 emoji = splat[1]
             elif len(splat) == 2:
-                try:
+                if splat[1].isnumeric():
                     #User wants to push into different pack, but is okay with thonk as emote.
-                    pack = int(s[1])
-                except:
+                    pack = int(splat[1])
+                else:
                     #User sent just custom emote, wants to push to default pack
                     emoji = splat[1]
             packname = f"a{userid}_by_{username}_{pack}"
@@ -122,6 +123,10 @@ async def kang(args):
                     await bot.send_read_acknowledge(conv.chat_id)
                     await conv.get_response()
                     await conv.send_message("/publish")
+                    # Ensure user doesn't get spamming notifications
+                    await bot.send_read_acknowledge(conv.chat_id)
+                    await conv.get_response()
+                    await conv.send_message("/skip")
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     await conv.get_response()
