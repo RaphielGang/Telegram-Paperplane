@@ -4,12 +4,12 @@
 # you may not use this file except in compliance with the License.
 #
 
-from telethon.tl.functions.contacts import BlockRequest
-from telethon.tl.functions.contacts import UnblockRequest
+from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
-from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, HELPER
+from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
+                     PM_AUTO_BAN, BRAIN_CHECKER)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -17,7 +17,8 @@ UNAPPROVED_MSG = ("`Bleep Blop! This is a Bot. Don't fret. \n\n`"
                   "`My Master hasn't approved you to PM.`"
                   "`Please wait for my Master to look in, he would mostly approve PMs.`\n\n"
                   "`As far as i know, he doesn't usually approve Retards.`")
-#=================================================================
+# =================================================================
+
 
 @register(incoming=True)
 async def permitpm(e):
@@ -113,6 +114,12 @@ async def blockpm(block):
 
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
+        if (await block.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await block.edit(
+                "`Block Error! Logical Malfunction.`"
+                )
+            return
+
         if block.reply_to_msg_id:
             reply = await block.get_reply_message()
             replied_user = await block.client(GetFullUserRequest(reply.from_id))
@@ -138,7 +145,7 @@ async def blockpm(block):
             await block.client.send_message(
                 LOGGER_GROUP,
                 "#BLOCK\n"
-                + "User: " + f"[{name0}](tg://user?id={apprvpm.chat_id})",
+                + "User: " + f"[{name0}](tg://user?id={block.chat_id})",
             )
 
 
@@ -158,9 +165,17 @@ async def unblockpm(unblock):
         if LOGGER:
             await unblock.client.send_message(
                 LOGGER_GROUP,
-                f"[{name0}](tg://user?id={unblock.chat_id})"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                f"[{name0}](tg://user?id={unblock.chat_id})"
                 " was unblocc'd!.",
             )
+
+
+@register(incoming=True)
+async def sanity_check(scheck):
+    for checker in BRAIN_CHECKER:
+        if str(checker.sender) == str(scheck.sender_id):
+            await scheck.client(UnblockRequest(scheck.sender_id))
+
 
 HELPER.update({
     ".approve": "Approve the mentioned/replied person to PM."
