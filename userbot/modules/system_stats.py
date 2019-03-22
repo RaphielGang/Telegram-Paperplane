@@ -15,9 +15,8 @@ from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 
-#alive globals
+#Alive's user global
 defaultuser = uname().node
-defaultheader = 'Your bot is running'
 #
 
 
@@ -107,7 +106,7 @@ async def amireallyalive(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit(
             "`"
-            f"{defaultheader} \n\n"
+            "Your bot is running \n\n"
             f"Telethon version: {version.__version__} \n"
             f"Python: {python_version()} \n"
             f"User: {defaultuser}"
@@ -132,31 +131,13 @@ async def amireallyaliveuser(e):
             )
 
 
-@register(outgoing=True, pattern="^.aliveh")
-async def amireallyaliveheader(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = e.text
-        output = '.aliveh [new header text without brackets] nor can it be empty'
-        if not (message == '.aliveh' or message[7:8] != ' '):
-            newheader = message[8:]
-            global defaultheader
-            defaultheader = newheader
-            output =  'Successfully changed header text to ' + newheader + '!'
-        await e.edit(
-            "`"
-            f"{output}"
-            "`"
-            )
-
-
 @register(outgoing=True, pattern="^.resetalive$")
 async def amireallyalivereset(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        global defaultuser, defaultheader
-        defaultheader = 'Your bot is running'
+        global defaultuser
         defaultuser = uname().node
         await e.edit(
             "`"
-            "Successfully reset alive!"
+            "Successfully reset user for alive!"
             "`"
             )
