@@ -1,5 +1,29 @@
 #!/usr/bin/env dash
 
+set -e
+
+scr_dir=$(realpath $(dirname $0))
+prog_f=$scr_dir/.progress
+
+reset_prog() {
+    if [ -f "$prog_f" ]; then
+        echo "Cleaning: $prog_f"
+        rm $prog_f
+    fi
+    echo "Al progress has been reset.. now u can re-run the script from start"
+    exit
+}
+
+save_prog() {
+echo "$1=y" >> $prog_f
+}
+
+#reset progress.. if user prompted
+[ "$1" = "--reset" ] && reset_prog
+
+#load progress... if any
+[ -f "$prog_f" ] && source $prog_f
+
 # Welcome Message
 welcome() {
     echo "*****Welcome to baalajimaestro's userbot setup*****
@@ -22,18 +46,28 @@ packageinstall() {
 # Clone the required repo
 botclone() {
     cd ~
-    git clone https://github.com/baalajimaestro/Telegram-UserBot -b staging
+    echo "Cloning bot sources..."
+    if [ -z "$bot_clone" ]; then
+        git clone https://github.com/baalajimaestro/Telegram-UserBot -b staging
+        save_prog "bot_clone"
+    fi
+    echo "DONE!!"
     cd Telegram-UserBot
 }
 
 # Requirement install function
 reqinstall() {
     echo "***Installing Requirements***"
-    sudo python3.7 -m pip install -r telethon
-    curl -sLo bot https://raw.githubusercontent.com/baalajimaestro/Telegram-UserBot/modular/init/userbot
-    clear
+    if [ -z "$req" ]; then
+        sudo python3.7 -m pip install -r requirements.txt
+        clear
+        save_prog "req"
+    fi
+    echo "DONE!!"
 }
-DB = "n"
+
+DB="n"
+
 # Questionaire
 questions() {
     echo "***Please enter your details***"
@@ -66,15 +100,23 @@ questions() {
     fi
 }
 
-#Fixup the poatgresql server
+#Fixup the postgresql server
 postgresconfig() {
-    TRACK = echo `ls /etc/postgresql`
-    sudo mv init/pg_hba.conf  /etc/postgresql/$TRACK/main/pg_hba.conf
-    sudo echo "listen_address = '*'" >> postgresql.conf
+    echo "PostgreSQL config..."
+    if [ -z "$psql" ]; then
+        TRACK = echo `ls /etc/postgresql`
+        sudo mv init/pg_hba.conf  /etc/postgresql/$TRACK/main/pg_hba.conf
+        sudo echo "listen_address = '*'" >> postgresql.conf
+        save_prog "psql"
+    fi
+    echo "DONE!!"
 }
 
 # Config write function
 writeconfig() {
+    echo "Configuring..."
+    if [ -z "$gen_conf" ]; then
+    questions
     echo "API_KEY=$API_KEY
 API_HASH=$API_HASH
 SCREENSHOT_LAYER_ACCESS_KEY=$SCREENSHOT_LAYER_ACCESS_KEY
@@ -84,27 +126,46 @@ LOGGER_GROUP=$LOGGER_GROUP
 OPEN_WEATHER_MAP_APPID=$OPEN_WEATHER_MAP_APPID
 DATABASE_URL=$DB_URI" >> config.env
     sudo mv config.env ~/Telegram-UserBot
+    save_prog "gen_conf"
+    fi
+    echo "DONE!!"
 }
 
 #Generate the userbot.session
 session() {
-    python3 windows_startup_script.py
+    echo "Generating session..."
+    if [ -z "$sess" ]; then
+        python3 windows_startup_script.py
+        python3.7 -m userbot test
+        save_prog "sess"
+    fi
+    echo "DONE!!"
 }
 
 #Spinup Docker installation
 dockerspin() {
+    echo "Docker installation..."
+    if [ -z "$dock" ]; then
     sudo systemctl start docker
     sudo systemctl enable docker
     sudo chmod 777 /var/run/docker.sock
     cd ~/Telegram-UserBot
     docker build -t userbot .
+    save_prog "dock"
+    fi
+    echo "DONE!!"
 }
 
 # Systemd service bringup
 systemd() {
-    sudo mv userbot /etc/systemd/system/userbot.service
+    echo "Sys service..."
+    if [ -z "$sysserv" ]; then
+        sudo mv userbot /etc/systemd/system/userbot.service
+        save_prog "sysserv"
+    fi
     sudo systemctl start userbot.service
     sudo systemctl enable userbot.service
+    echo "DONE!!"
 }
 
 # Close down
@@ -129,7 +190,6 @@ botclone
 
 reqinstall
 
-questions
 writeconfig
 
 if [ "$DB" = "y" ]
