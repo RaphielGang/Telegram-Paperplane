@@ -201,7 +201,7 @@ async def univsaye(cowmsg):
         await cowmsg.edit("`give text to milk the cow bruh`")
         return
 
-    arg = cowmsg.text.split()[0].rstrip("say").lstrip(".")
+    arg = cowmsg.text.split()[0][:-3].lstrip(".")
     text = cowmsg.text.split(" ", 1)[1]
 
     cheese = cow.get_cow(arg)
