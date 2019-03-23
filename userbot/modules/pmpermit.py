@@ -23,6 +23,8 @@ UNAPPROVED_MSG = ("`Bleep Blop! This is a Bot. Don't fret. \n\n`"
 @register(incoming=True)
 async def permitpm(e):
     if PM_AUTO_BAN:
+        if e.sender_id in BRAIN_CHECKER:
+            return
         global COUNT_PM
         if e.is_private and not (await e.get_sender()).bot:
             try:
@@ -168,13 +170,6 @@ async def unblockpm(unblock):
                 f"[{name0}](tg://user?id={unblock.chat_id})"
                 " was unblocc'd!.",
             )
-
-
-@register(incoming=True)
-async def sanity_check(scheck):
-    for checker in BRAIN_CHECKER:
-        if str(checker.sender) == str(scheck.sender_id):
-            await scheck.client(UnblockRequest(scheck.sender_id))
 
 
 HELPER.update({
