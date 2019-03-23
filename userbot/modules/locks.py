@@ -1,9 +1,10 @@
 from telethon import events, functions, types
 import asyncio
+from userbot import bot
 # import datetime
 
 
-@borg.on(events.NewMessage(pattern=r"\.lock ?(.*)", outgoing=True))
+@bot.on(events.NewMessage(pattern=r"\.lock ?(.*)", outgoing=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -54,7 +55,7 @@ async def _(event):
         change_info=changeinfo,
     )
     try:
-        result = await borg(functions.messages.EditChatDefaultBannedRightsRequest(
+        result = await bot(functions.messages.EditChatDefaultBannedRightsRequest(
             peer=peer_id,
             banned_rights=banned_rights
         ))
