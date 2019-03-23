@@ -24,3 +24,4 @@ python-dotenv
 aiohttp
 telethon-session-sqlalchemy>=0.2.6
 pytube
+cowpy
