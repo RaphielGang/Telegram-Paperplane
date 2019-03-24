@@ -46,10 +46,10 @@ def speed_convert(size):
     zero = 0
     units = {
         0: '',
-        1: 'KB/s',
-        2: 'MB/s',
-        3: 'GB/s',
-        4: 'TB/s'}
+        1: 'Kb/s',
+        2: 'Mb/s',
+        3: 'Gb/s',
+        4: 'Tb/s'}
     while size > power:
         size /= power
         zero += 1
