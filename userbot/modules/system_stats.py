@@ -15,9 +15,9 @@ from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 
-#Alive's user global
+#================= CONSTANT =================
 defaultuser = uname().node
-#
+#============================================
 
 
 @register(outgoing=True, pattern="^.sysd$")
