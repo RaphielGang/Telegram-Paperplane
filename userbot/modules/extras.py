@@ -36,3 +36,11 @@ async def let_me_google_that_for_you(e):
                 LOGGER_GROUP,
                 "LMGTFY query " + message + " was executed successfully",
             )
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^;__;$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^;__;$"))
+async def fun(e):
+    t = ";__;"
+    for j in range(10):
+        t = t[:-1] + "_;"
+        await e.edit(t)
