@@ -18,6 +18,7 @@ from gtts import gTTS
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from pytube import YouTube
+from pytube.helpers import safe_filename
 
 from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, HELPER, bot
 from userbot.events import register
@@ -294,12 +295,12 @@ async def download_video(v_url):
         await v_url.edit("**Uploading...**")
         await bot.send_file(
             v_url.chat_id,
-            f'{video.title}.mp4',
+            f'{safe_filename(video.title)}.mp4',
             caption=f"{video.title}",
             thumb="thumbnail.jpg"
         )
 
-        os.remove(f"{video.title}.mp4")
+        os.remove(f"{safe_filename(video.title)}.mp4")
         os.remove('thumbnail.jpg')
         await v_url.delete()
 

@@ -13,6 +13,8 @@ import time
 from spongemock import spongemock
 from zalgo_text import zalgo
 
+from cowpy import cow
+
 from userbot import (DISABLE_RUN, WIDE_MAP, HELPER)
 from userbot.events import register
 
@@ -189,6 +191,25 @@ RUNSREACTS = [
     "I Fugged off!",
 ]
 #===========================================
+
+@register(outgoing=True, pattern="^.(.*)say")
+async def univsaye(cowmsg):
+    if not cowmsg.text.startswith("."):
+        return
+
+    if len(cowmsg.text.split()) < 2:
+        await cowmsg.edit("`give text to milk the cow bruh`")
+        return
+
+    arg = cowmsg.text.split()[0][:-3].lstrip(".")
+    text = cowmsg.text.split(" ", 1)[1]
+
+    cheese = cow.get_cow(arg)
+    if isinstance(cheese, str):
+        cheese = cow.get_cow('default')
+    cheese = cheese()
+
+    await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 @register(outgoing=True, pattern="^:/$")
 async def kek(keks):
