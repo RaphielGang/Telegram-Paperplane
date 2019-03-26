@@ -44,3 +44,16 @@ async def fun(e):
     for j in range(10):
         t = t[:-1] + "_;"
         await e.edit(t)
+
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.cry$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.cry$"))
+async def cry(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit("(;´༎ຶД༎ຶ)")
+
+@bot.on(events.NewMessage(outgoing=True, pattern="^.fp$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.fp$"))
+async def facepalm(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit("🤦‍♂")
