@@ -69,4 +69,14 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
 
+@bot.on(events.NewMessage(outgoing=True, pattern="^.sauce$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.sauce$"))
+async def source(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit("https://github.com/Yasir-siddiqui/Userbot/")
 
+@bot.on(events.NewMessage(outgoing=True, pattern="^.readme$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^.readme$"))
+async def reedme(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit("https://github.com/Yasir-siddiqui/UserBot/blob/master/README.md")
