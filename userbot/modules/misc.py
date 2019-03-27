@@ -18,9 +18,9 @@ from userbot.events import register
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
     if not items.text[0].isalpha() and items.text[0] not in ("/", "#", "@", "!"):
-        itemo = (items.text[8:]).split()
-        index = randint(1, len(itemo) - 1)
-        await items.edit("**Query: **\n`" + items.text[8:] + "`\n**Output: **\n`" + itemo[index] + "`")
+        items = (items.text).split()
+        index = randint(1, len(items) - 1)
+        await items.edit("**Query: **\n`" + items.text + "`\n**Output: **\n`" + items[index] + "`")
 
 
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
@@ -69,27 +69,24 @@ async def repo_is_here(wannasee):
         await wannasee.edit("https://github.com/baalajimaestro/Telegram-UserBot/")
 
 HELPER.update({
-    'random': '.random <item1> <item2> ... <itemN>\
-\nUsage: Get a random item from the list of items.'
+    'random <items>': 'Get a random item from the list of items.\
+        \nUsage: .random <item1> <item2> ... <itemN>'
 })
 
 HELPER.update({
-    'sleep': '.sleep 10\
-\nUsage: Userbots get tired too. Let yours snooze for a few seconds.'
+    'sleep <seconds>': 'Userbots get tired too. Let yours snooze for a few seconds.\
+        \nUsage: .sleep 10'
 })
 
 HELPER.update({
-    "shutdown": ".shutdown\
-\nUsage: Sometimes you need to restart your bot. Sometimes you just hope to\
-hear Windows XP shutdown sound... but you don't."
+    "shutdown": "Sometimes you need to restart your bot. Sometimes you just hope to\
+        hear Windows XP shutdown sound... but you don't."
 })
 
 HELPER.update({
-    'support': ".support\
-\nUsage: If you need help, use this command."
+    'support': "If you need help, use this command."
 })
 
 HELPER.update({
-    'repo': '.repo\
-\nUsage: If you are curious what makes the Userbot work, this is what you need.'
+    'repo': 'If you are curious what makes the Userbot work, this is what you need.'
 })

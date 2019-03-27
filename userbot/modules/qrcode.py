@@ -50,7 +50,7 @@ async def parseqr(qr_e):
         )
 
 
-@register(pattern=r".makeqr(?: |$)(.*)", outgoing=True)
+@register(pattern=r".makeqr ?(.*)", outgoing=True)
 async def make_qr(qrcode):
     """ For .makeqr command, make a QR Code containing the given content. """
     if not qrcode.text[0].isalpha() and qrcode.text[0] not in ("/", "#", "@", "!"):
@@ -101,12 +101,9 @@ async def make_qr(qrcode):
         await qrcode.delete()
 
 HELPER.update({
-    'getqr': ".getqr\
-\nUsage: Get the QR Code content from the replied QR Code."
+    'getqr': "Get the QR Code content from the replied QR Code."
 })
 
 HELPER.update({
-    'makeqr': ".makeqr <content>)\
-\nUsage: Make a QR Code from the given content.\
-\nExample: .makeqr www.google.com"
+    'makeqr <content>': "Make a QR Code from the given content.\nUsage: .makeqr www.google.com"
 })

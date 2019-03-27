@@ -112,23 +112,15 @@ async def pipcheck(pip):
 
 
 @register(outgoing=True, pattern="^.alive$")
-async def amireallyalive(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-
-        try:
-            from userbot import MONGO
-            db = "MongoDB"
-        except:
-            db = "No-SQL mode!"
-            pass
-
-        await e.edit(
+async def amireallyalive(alive):
+    """ For .alive command, check if the bot is running.  """
+    if not alive.text[0].isalpha() and alive.text[0] not in ("/", "#", "@", "!"):
+        await alive.edit(
             "`"
             "Your bot is running \n\n"
             f"Telethon version: {version.__version__} \n"
             f"Python: {python_version()} \n"
-            f"User: {defaultuser} \n"
-            f"Database: {db}"
+            f"User: {DEFAULTUSER}"
             "`"
             )
 
@@ -162,21 +154,3 @@ async def amireallyalivereset(ureset):
             "Successfully reset user for alive!"
             "`"
         )
-
-HELPER.update({
-    "sysd": ".sysd\
-    \nUsage: Shows system information using neofetch."
-})
-HELPER.update({
-    "botver": ".botver\
-    \nUsage: Shows the userbot version."
-})
-HELPER.update({
-    "pip": ".pip <module(s)>\
-    \nUsage: Does a search of pip modules(s)."
-})
-HELPER.update({
-    "alive": ".alive\
-    \nUsage: It's used to check if your bot is working or not. \
-Use .aliveu <new_user> to change user or .resetalive to reset .alive."
-})

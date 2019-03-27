@@ -6,7 +6,7 @@
 
 """ Userbot module for muting chats. """
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO
+from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 @register(outgoing=True, pattern="^.unmutechat$")
@@ -14,13 +14,11 @@ async def unmute_chat(unm_e):
     """ For .unmutechat command, unmute a muted chat. """
     if not unm_e.text[0].isalpha() and unm_e.text[0] not in ("/", "#", "@", "!"):
         try:
-             from userbot import MONGO
+            from userbot.modules.sql_helper.keep_read_sql import unkread
         except AttributeError:
             await unm_e.edit('`Running on Non-SQL Mode!`')
             return
-         MONGO.mute_chats.delete_one(
-                {"chat_id":unm_e.chat_id}
-                )
+        unkread(str(unm_e.chat_id))
         await unm_e.edit("```Unmuted this chat Successfully```")
 
 
@@ -29,14 +27,12 @@ async def mute_chat(mute_e):
     """ For .mutechat command, mute any chat. """
     if not mute_e.text[0].isalpha() and mute_e.text[0] not in ("/", "#", "@", "!"):
         try:
-             from userbot import MONGO
-        except AttributeError:
+            from userbot.modules.sql_helper.keep_read_sql import kread
+        except AttributeError as error:
             await mute_e.edit("`Running on Non-SQL mode!`")
             return
         await mute_e.edit(str(mute_e.chat_id))
-        MONGO.mute_chats.insert_one(
-                {"chat_id":e.chat_id}
-                )
+        kread(str(mute_e.chat_id))
         await mute_e.edit("`Shush! This chat will be silenced!`")
         if LOGGER:
             await mute_e.client.send_message(
@@ -48,22 +44,19 @@ async def mute_chat(mute_e):
 async def keep_read(message):
     """ The mute logic. """
     try:
-         from userbot import MONGO
+        from userbot.modules.sql_helper.keep_read_sql import is_kread
     except AttributeError:
         return
-    kread =  MONGO.mute_chats.find(
-            {"chat_id":e.chat_id})
+    kread = is_kread()
     if kread:
         for i in kread:
             if i.groupid == str(message.chat_id):
                 await message.client.send_read_acknowledge(message.chat_id)
 
 HELPER.update({
-    'unmutechat': '.unmutechat\
-\nUsage: Unmutes a muted chat.'
+    'unmutechat': 'Unmute a muted chat.'
 })
 
 HELPER.update({
-    'mutechat': '.mutechat\
-\nUsage: Allows you to mute any chat.'
+    'mutechat': 'Allows you to mute any chat.'
 })

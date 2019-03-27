@@ -15,12 +15,11 @@ async def notes_active(svd):
     """ For .saved command, list all of the notes saved in a chat. """
     if not svd.text[0].isalpha() and svd.text[0] not in ("/", "#", "@", "!"):
         try:
-            from userbot import MONGO
-        except:
+            from userbot.modules.sql_helper.notes_sql import get_notes
+        except AttributeError:
             await svd.edit("`Running on Non-SQL mode!`")
             return
-
-        notes = MONGO.notes.find({"chat_id": svd.chat_id})
+        notes = get_notes(svd.chat_id)
         message = '`There are no saved notes in this chat`'
         if notes:
             message = "Notes saved in this chat: \n\n"
@@ -34,8 +33,8 @@ async def remove_notes(clr):
     """ For .clear command, clear note with the given name."""
     if not clr.text[0].isalpha() and clr.text[0] not in ("/", "#", "@", "!"):
         try:
-            from userbot import MONGO
-        except:
+            from userbot.modules.sql_helper.notes_sql import rm_note
+        except AttributeError:
             await clr.edit("`Running on Non-SQL mode!`")
             return
         notename = clr.pattern_match.group(1)
@@ -52,10 +51,10 @@ async def remove_notes(clr):
 @register(outgoing=True, pattern=r"^.save (\w*)")
 async def add_filter(fltr):
     """ For .save command, saves notes in a chat. """
-    if not fltr.text[0].isalpha() and fltr.text[0] not in ("/", "#", "@", "!"):
+    if not fltr.text[0].isalpha():
         try:
-            from userbot import MONGO
-        except:
+            from userbot.modules.sql_helper.notes_sql import add_note
+        except AttributeError:
             await fltr.edit("`Running on Non-SQL mode!`")
             return
 
@@ -75,30 +74,32 @@ async def add_filter(fltr):
             {"chat_id": fltr.chat_id, "name": notename, "text": string}
             )
         await fltr.edit(
+            "`Note added successfully. Use` #{} `to get it`".format(notename)
+        )
+
+
 @register(pattern=r"#\w*")
 async def incom_note(getnt):
     """ Notes logic. """
-    try:
-        if not (await getnt.get_sender()).bot:
-            try:
-                from userbot import MONGO
-            except:
+    if not (await getnt.get_sender()).bot:
+        try:
+            from userbot.modules.sql_helper.notes_sql import get_notes
+        except AttributeError:
+            return
+        notename = getnt.text[1:]
+        notes = get_notes(getnt.chat_id)
+        for note in notes:
+            if notename == note.keyword:
+                await getnt.reply(note.reply)
                 return
-            notename = getnt.text[1:]
-            note = MONGO.notes.find_one(
-                {"chat_id": getnt.chat_id, "name": notename}
-                )
-            if note:
-                    await getnt.reply(note['text'])
-    except:
-        pass
 
 
 @register(outgoing=True, pattern="^.rmnotes$")
 async def purge_notes(prg):
+    """ For .rmnotes command, remove every note in the chat at once. """
     try:
-        from userbot import MONGO
-    except:
+        from userbot.modules.sql_helper.notes_sql import rm_all_notes
+    except AttributeError:
         await prg.edit("`Running on Non-SQL mode!`")
         return
     if not prg.text[0].isalpha():
@@ -114,12 +115,11 @@ async def purge_notes(prg):
             )
 
 HELPER.update({
-    "notes": "\
-#<notename>\
-\nUsage: Gets the note with name notename\
-\n\n.save <notename> <notedata>\
-\nUsage: Saves notedata as a note with the name notename\
-\n\n.clear <notename>\
-\nUsage: Deletes the note with name notename.\
-"
+    "#<notename>": "Get the note with name notename."
+})
+HELPER.update({
+    ".save <notename> <notedata>": "Saves notedata as a note with name notename"
+})
+HELPER.update({
+    ".clear <notename>": "Clear note with name notename."
 })

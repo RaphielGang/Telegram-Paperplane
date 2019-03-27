@@ -18,21 +18,20 @@ async def mention_afk(mention):
     """ This function takes care of notifying the people who mention you that you are AFK."""
     global COUNT_MSG
     global USERS
-    AFK = REDIS.get('isafk')
-    if e.message.mentioned and not (await e.get_sender()).bot:
-        if AFK:
-            if e.sender_id not in USERS:
-                print(str(AFK))
-                await e.reply(
-                    "Sorry! My boss is AFK due to "
-                    + AFK
-                    + ". Would ping him to look into the message soon😉"
+    global ISAFK
+    if mention.message.mentioned and not (await mention.get_sender()).bot:
+        if ISAFK:
+            if mention.sender_id not in USERS:
+                await mention.reply(
+                    "Sorry! My boss is AFK due to ```"
+                    + AFKREASON
+                    + "```. Would ping him to look into the message soon😉"
                 )
                 USERS.update({mention.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
-            elif e.sender_id in USERS:
-                if USERS[e.sender_id] % 5 == 0:
-                    await e.reply(
+            elif mention.sender_id in USERS:
+                if USERS[mention.sender_id] % 5 == 0:
+                    await mention.reply(
                         "Sorry! But my boss is still not here. "
                         "Try to ping him a little later. I am sorry😖."
                         "He told me he was busy with ```"
@@ -47,23 +46,24 @@ async def mention_afk(mention):
 
 
 @register(incoming=True)
-async def afk_on_pm(e):
+async def afk_on_pm(sender):
+    """ Function which informs people that you are AFK in PM """
+    global ISAFK
     global USERS
     global COUNT_MSG
-    AFK = REDIS.get('isafk')
-    if e.is_private and not (await e.get_sender()).bot:
-        if AFK:
-            if e.sender_id not in USERS:
-                await e.reply(
+    if sender.is_private and not (await sender.get_sender()).bot:
+        if ISAFK:
+            if sender.sender_id not in USERS:
+                await sender.reply(
                     "Sorry! My boss is AFK due to ```"
                     + AFK
                     + "``` I'll ping him to look into the message soon😉"
                 )
                 USERS.update({sender.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
-            elif e.sender_id in USERS:
-                if USERS[e.sender_id] % 5 == 0:
-                    await e.reply(
+            elif sender.sender_id in USERS:
+                if USERS[sender.sender_id] % 5 == 0:
+                    await sender.reply(
                         "Sorry! But my boss is still not here. "
                         "Try to ping him a little later. I am sorry😖."
                         "He told me he was busy with ```"
@@ -78,34 +78,34 @@ async def afk_on_pm(e):
 
 
 @register(outgoing=True, pattern="^.afk")
-async def set_afk(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = e.text
-        try:
-            AFKREASON = str(message[5:])
-        except:
-            AFKREASON = ''
-        if not AFKREASON:
-            AFKREASON = 'No reason'
-        await e.edit("AFK AF!")
+async def set_afk(afk_e):
+    """ For .afk command, allows you to inform people that you are afk when they message you """
+    if not afk_e.text[0].isalpha() and afk_e.text[0] not in ("/", "#", "@", "!"):
+        message = afk_e.text
+        string = str(message[5:])
+        global ISAFK
+        global AFKREASON
+        await afk_e.edit("AFK AF!")
+        if string != "":
+            AFKREASON = string
         if LOGGER:
-            await e.client.send_message(LOGGER_GROUP, "You went AFK!")
-        REDIS.set('isafk', AFKREASON)
-        AFK = REDIS.get('isafk')
-        print(str(AFK))
+            await afk_e.client.send_message(LOGGER_GROUP, "You went AFK!")
+        ISAFK = True
         raise StopPropagation
 
 
 @register(outgoing=True)
-async def type_afk_is_not_true(e):
+async def type_afk_is_not_true(notafk):
+    """ This sets your status as not afk automatically when you write something while being afk """
+    global ISAFK
     global COUNT_MSG
     global USERS
     global AFKREASON
     ISAFK = REDIS.get('isafk')
     if ISAFK:
-        REDIS.delete('isafk')
-        await e.respond("I'm no longer AFK.")
-        x = await e.respond(
+        ISAFK = False
+        await notafk.respond("I'm no longer AFK.")
+        afk_info = await notafk.respond(
             "`You recieved "
             + str(COUNT_MSG)
             + " messages while you were away. Check log for more details.`"
@@ -142,8 +142,6 @@ async def type_afk_is_not_true(e):
         AFKREASON = "No Reason"
 
 HELPER.update({
-    "afk": ".afk <reason>(reason is optional)\
-\nUsage: Sets you as afk. Responds to anyone who tags/PM's \
-you telling that you are afk. Switches off AFK when you type back anything.\
-"
+    "afk": "Usage: \nSets you as afk. Responds to anyone who tags/PM's \
+            you telling that you are afk. Switches off AFK when you type back anything."
 })

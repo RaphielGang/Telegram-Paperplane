@@ -197,9 +197,15 @@ RUNSREACTS = [
 @register(outgoing=True, pattern="^.(.*)say (.*)")
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
-    if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("/", "#", "@", "!"):
-        arg = cowmsg.pattern_match.group(1)
-        text = cowmsg.pattern_match.group(2)
+    if not cowmsg.text.startswith("."):
+        return
+
+    if len(cowmsg.text.split()) < 2:
+        await cowmsg.edit("`give text to milk the cow bruh`")
+        return
+
+    arg = cowmsg.text.split()[0][:-3].lstrip(".")
+    text = cowmsg.text.split(" ", 1)[1]
 
         cheese = cow.get_cow(arg)
         if isinstance(cheese, str):
@@ -210,7 +216,7 @@ async def univsaye(cowmsg):
 
 @register(outgoing=True, pattern="^:/$")
 async def kek(keks):
-    """ Check yourself ;)"""
+    """ Chech yourself ;)"""
     uio = ["/", "\\"]
     for i in range(1, 15):
         time.sleep(0.3)
@@ -221,20 +227,19 @@ async def kek(keks):
 async def lol(lel):
     """ Ok... """
     okay = "-_-"
-    for _ in range(10):
+    if range(10):
         okay = okay[:-1] + "_-"
         await lel.edit(okay)
 
 
-@register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+@register(outgoing=True, pattern="^.cp")
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
         textx = await cp_e.get_reply_message()
-        message = cp_e.pattern_match.group(1)
-
-        if message:
-            pass
+        message = cp_e.text
+        if message[3:]:
+            message = str(message[3:])
         elif textx:
             message = textx.text
         else:
@@ -429,8 +434,9 @@ async def spongemocktext(mock):
 @register(outgoing=True, pattern="^.clap(?: |$)(.*)")
 async def claptext(memereview):
     """ Praise people! """
-    if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
-        textx = await memereview.get_reply_message()
+    textx = await memereview.get_reply_message()
+    message = memereview.text
+    if message[6:]:
         message = memereview.pattern_match.group(1)
         if message:
             pass
@@ -448,12 +454,11 @@ async def claptext(memereview):
 @register(outgoing=True, pattern="^.bt$")
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
-    if not bt_e.text[0].isalpha() and bt_e.text[0] not in ("/", "#", "@", "!"):
-        if await bt_e.get_reply_message():
-            await bt_e.edit(
-                "`BLUETEXT MUST CLICK.`\n"
-                "`Are you a stupid animal which is attracted to colours?`"
-            )
+    if await bt_e.get_reply_message():
+        await bt_e.edit(
+            "`BLUETEXT MUST CLICK.`\n"
+            "`Are you a stupid animal which is attracted to colours?`"
+        )
 
 
 @register(pattern='.type(?: |$)(.*)')

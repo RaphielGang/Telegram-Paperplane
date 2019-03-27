@@ -17,7 +17,7 @@ from userbot.events import register
 TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
 
-@register(pattern=".whois(?: |$)(.*)", outgoing=True)
+@register(pattern=".whois ?(.*)", outgoing=True)
 async def who(event):
     """ For .whois command, get info about a user. """
     if event.fwd_from:
@@ -72,13 +72,21 @@ async def get_user(event):
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user
-        try:
-            user_object = await event.client.get_entity(user)
-            replied_user = await event.client(GetFullUserRequest(user_object.id))
-        except (TypeError, ValueError) as err:
-            await event.edit(str(err))
-            return None
+            else:
+                # the disgusting CRAP way, of doing the thing
+                try:
+                    user_object = await event.client.get_entity(user)
+                    replied_user = await event.client(GetFullUserRequest(user_object.id))
+                except (TypeError, ValueError) as err:
+                    await event.edit(str(err))
+                    return None
+        else:
+            try:
+                user_object = await event.client.get_entity(user)
+                replied_user = await event.client(GetFullUserRequest(user_object.id))
+            except (TypeError, ValueError) as err:
+                await event.edit(str(err))
+                return None
 
     return replied_user
 
@@ -119,8 +127,3 @@ async def fetch_info(replied_user, event):
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
 
     return photo, caption
-
-HELPER.update({
-    "whois": ".whois <username> or reply to someones text with .whois\
-    \nUsage: Gets info of an user."
-})

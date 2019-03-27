@@ -103,23 +103,21 @@ async def filters_active(event):
         except AttributeError:
             await event.edit("`Running on Non-SQL mode!`")
             return
-        transact = "`There are no filters in this chat.`"
+        transact = "Filters active on this chat: \n\n"
         filters = get_filters(event.chat_id)
         for i in filters:
-            message = "Active filters in this chat: \n\n"
-            transact = message + "🔹 " + i.keyword + "\n"
+            transact = transact + "🔹 " + i.keyword + "\n"
         await event.edit(transact)
 
 HELPER.update({
-    "filters": "\
-.filters\
-\nUsage: List all active filters in this chat.\
-\n\n.filter <keyword> <reply message>\
-\nUsage: Add a filter to this chat. \
-The bot will now reply that message whenever 'keyword' is mentioned. \
-If you reply to a sticker with a keyword, the bot will reply with that sticker.\
-\nNOTE: all filter keywords are in lowercase.\
-\n\n.stop <filter>\
-\nUsage: Stops that filter.\
-"
+    "filters": "List all active filters in this chat."
+})
+HELPER.update({
+    "filter <keyword> <reply message>": "Add a filter to this chat. \
+        The bot will now reply that message whenever 'keyword' is mentioned. \
+        If you reply to a sticker with a keyword, the bot will reply with that sticker. \
+        NOTE: all filter keywords are in lowercase."
+})
+HELPER.update({
+    "stop  <filter>": "Stop that filter."
 })

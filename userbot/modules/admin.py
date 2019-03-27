@@ -13,8 +13,7 @@ from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
-from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
-                               ChatBannedRights, MessageEntityMentionName,
+from telethon.tl.types import (ChatAdminRights, ChatBannedRights,
                                MessageMediaPhoto)
 
 from userbot import BRAIN_CHECKER, HELPER, LOGGER, LOGGER_GROUP, bot
@@ -244,6 +243,7 @@ async def thanos(bon):
             await bon.client(
                 EditBannedRequest(
                     bon.chat_id,
+<<<<<<< HEAD
                     user.id,
                     BANNED_RIGHTS
                 )
@@ -257,6 +257,20 @@ async def thanos(bon):
             if reply:
                 await reply.delete()
         except BadRequestError:
+=======
+                    sender.sender_id,
+                    banned_rights
+                )
+            )
+        except Exception:
+            await bon.edit("`I couldn't ban this user! Possible reasons: \
+                             Maybe the admin status was appointed by someone else.`")
+            return
+        # Helps ban group join spammers more easily
+        try:
+            await sender.delete()
+        except Exception:
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
             await bon.edit("`I dont have message nuking rights! But still he was banned!`")
             return
         # Delete message and then tell that the command
@@ -339,7 +353,11 @@ async def spider(spdr):
         try:
             from userbot.modules.sql_helper.spam_mute_sql import mute
         except AttributeError:
+<<<<<<< HEAD
             await spdr.edit(NO_SQL)
+=======
+            await spdr.edit("`Running on Non-SQL mode!`")
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
             return
 
         # Admin or creator check
@@ -410,6 +428,7 @@ async def unmoot(unmot):
 
         # Check if the function running under SQL mode
         try:
+<<<<<<< HEAD
             from userbot.modules.sql_helper.spam_mute_sql import unmute
         except AttributeError:
             await unmot.edit(NO_SQL)
@@ -430,6 +449,12 @@ async def unmoot(unmot):
                 EditBannedRequest(
                     unmot.chat_id,
                     user.id,
+=======
+            await unmot.client(
+                EditBannedRequest(
+                    unmot.chat_id,
+                    replymsg.sender_id,
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
                     rights
                 )
             )
@@ -441,11 +466,18 @@ async def unmoot(unmot):
         if LOGGER:
             await unmot.client.send_message(
                 LOGGER_GROUP,
+<<<<<<< HEAD
                 "#UNMUTE\n"
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)"
             )
 
+=======
+                "#MUTE\n"
+                +"ID: `"+ str((await unmot.get_reply_message()).sender_id)
+                + "`",
+            )
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
 
 @register(incoming=True)
 async def muter(moot):
@@ -480,8 +512,12 @@ async def muter(moot):
         if i.sender == str(moot.sender_id):
             await moot.delete()
 
+<<<<<<< HEAD
 
 @register(outgoing=True, pattern="^.ungmute(?: |$)(.*)")
+=======
+@register(outgoing=True, pattern="^.ungmute$")
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
 async def ungmoot(un_gmute):
     """ For .ungmute command, ungmutes the target in the userbot """
     if not un_gmute.text[0].isalpha() and un_gmute.text[0] \
@@ -500,7 +536,13 @@ async def ungmoot(un_gmute):
         try:
             from userbot.modules.sql_helper.gmute_sql import ungmute
         except AttributeError:
+<<<<<<< HEAD
             await un_gmute.edit(NO_SQL)
+=======
+            await un_gmute.edit('`Running on Non-SQL Mode!`')
+        ungmute(str((await un_gmute.get_reply_message()).sender_id))
+        await un_gmute.edit("```Ungmuted Successfully```")
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
 
         user = await get_user(un_gmute)
         if user:
@@ -542,6 +584,7 @@ async def gspider(gspdr):
         # Check if the function running under SQL mode
         try:
             from userbot.modules.sql_helper.gmute_sql import gmute
+<<<<<<< HEAD
         except AttributeError:
             await gspdr.edit(NO_SQL)
             return
@@ -555,6 +598,10 @@ async def gspider(gspdr):
         # If the targeted user is a SUDO
         if user.id in BRAIN_CHECKER:
             await gspdr.edit("`Gmute Error! Couldn't gmute this user`")
+=======
+        except AttributeError as err:
+            await gspdr.edit("`Running on Non-SQL mode!`")
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
             return
 
         # If pass, inform and start gmuting
@@ -725,6 +772,7 @@ HELPER.update({
     "unmute": "Usage: Reply to someone's message with .unmute to remove them from muted list."
 })
 HELPER.update({
+<<<<<<< HEAD
     "gmute": "Usage: Reply to someone's message with .gmute to mute them in all \
 groups you have in common with them."
 })
@@ -749,3 +797,11 @@ HELPER.update(
         "adminlist" : "Usage: Retrieves all admins in the chat."
     }
 )
+=======
+    "gmute": "Usage: \nReply someone's message with .gmute to mute them in all \
+              groups you have in common with them."
+})
+HELPER.update({
+    "ungmute": "Usage: \nReply someone's message with .ungmute to remove them from the gmuted list."
+})
+>>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
