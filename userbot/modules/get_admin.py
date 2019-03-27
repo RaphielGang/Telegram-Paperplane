@@ -6,6 +6,8 @@
 # The entire source code is OSSRPL except 'adminlist' which is MPL
 # License: MPL and OSSRPL
 
+""" Userbot module allowing you to get the admin list in a chat. """
+
 from telethon.errors import ChatAdminRequiredError
 from telethon.tl.types import ChannelParticipantsAdmins
 from userbot import HELPER
@@ -14,6 +16,7 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^.adminlist")
 async def get_admin(show):
+    """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
         mentions = "Admins in {}: \n".format(show.chat.title or "this chat")
         try:

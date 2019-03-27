@@ -3,6 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+""" Userbot module for updating the userbot. Userbots can update themselves :)"""
 
 import subprocess
 
@@ -11,6 +12,7 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^.updatebleeding$")
 async def bleeding_upstream(bleed):
+    """ For .updatebleeding command, update from the staging branch. """
     await bleed.edit("`Please wait while I upstream myself!`")
     subprocess.run(
         [
@@ -57,6 +59,7 @@ async def bleeding_upstream(bleed):
 
 @register(outgoing=True, pattern="^.updatestable$")
 async def stable_upstream(stable):
+    """ For .updatestable command, update from the master branch. """
     await stable.edit("`Please wait while I upstream myself!`")
     subprocess.run(
         [

@@ -4,19 +4,21 @@
 # you may not use this file except in compliance with the License.
 #
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER, bot
+""" Userbot module containing commands for keeping notes. """
+
+from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^\.saved$")
+@register(outgoing=True, pattern="^.saved$")
 async def notes_active(svd):
+    """ For .saved command, list all of the notes saved in a chat. """
     if not svd.text[0].isalpha() and svd.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.notes_sql import get_notes
-        except:
+        except AttributeError:
             await svd.edit("`Running on Non-SQL mode!`")
             return
-
         notes = get_notes(svd.chat_id)
         message = '`There are no saved notes in this chat`'
         if notes:
@@ -26,12 +28,13 @@ async def notes_active(svd):
         await svd.edit(message)
 
 
-@register(outgoing=True, pattern="^\.clear (\w*)")
+@register(outgoing=True, pattern=r"^.clear (\w*)")
 async def remove_notes(clr):
+    """ For .clear command, clear note with the given name."""
     if not clr.text[0].isalpha() and clr.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.notes_sql import rm_note
-        except:
+        except AttributeError:
             await clr.edit("`Running on Non-SQL mode!`")
             return
         notename = clr.pattern_match.group(1)
@@ -39,12 +42,13 @@ async def remove_notes(clr):
         await clr.edit("```Note removed successfully```")
 
 
-@register(outgoing=True, pattern="^\.save (\w*)")
+@register(outgoing=True, pattern=r"^.save (\w*)")
 async def add_filter(fltr):
+    """ For .save command, saves notes in a chat. """
     if not fltr.text[0].isalpha():
         try:
             from userbot.modules.sql_helper.notes_sql import add_note
-        except:
+        except AttributeError:
             await fltr.edit("`Running on Non-SQL mode!`")
             return
         notename = fltr.pattern_match.group(1)
@@ -58,29 +62,28 @@ async def add_filter(fltr):
         )
 
 
-@register(pattern="#\w*")
+@register(pattern=r"#\w*")
 async def incom_note(getnt):
-    try:
-        if not (await getnt.get_sender()).bot:
-            try:
-                from userbot.modules.sql_helper.notes_sql import get_notes
-            except:
+    """ Notes logic. """
+    if not (await getnt.get_sender()).bot:
+        try:
+            from userbot.modules.sql_helper.notes_sql import get_notes
+        except AttributeError:
+            return
+        notename = getnt.text[1:]
+        notes = get_notes(getnt.chat_id)
+        for note in notes:
+            if notename == note.keyword:
+                await getnt.reply(note.reply)
                 return
-            notename = getnt.text[1:]
-            notes = get_notes(getnt.chat_id)
-            for note in notes:
-                if notename == note.keyword:
-                    await getnt.reply(note.reply)
-                    return
-    except:
-        pass
 
 
-@register(outgoing=True, pattern="^\.rmnotes$")
+@register(outgoing=True, pattern="^.rmnotes$")
 async def purge_notes(prg):
+    """ For .rmnotes command, remove every note in the chat at once. """
     try:
         from userbot.modules.sql_helper.notes_sql import rm_all_notes
-    except:
+    except AttributeError:
         await prg.edit("`Running on Non-SQL mode!`")
         return
     if not prg.text[0].isalpha():
@@ -92,11 +95,11 @@ async def purge_notes(prg):
             )
 
 HELPER.update({
-    "#<notename>": "get the note with this notename."
+    "#<notename>": "Get the note with name notename."
 })
 HELPER.update({
-    ".save <notename> <notedata>": "saves notedata as a note with name notename"
+    ".save <notename> <notedata>": "Saves notedata as a note with name notename"
 })
 HELPER.update({
-    ".clear <notename>": "clear note with this name."
+    ".clear <notename>": "Clear note with name notename."
 })

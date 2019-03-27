@@ -4,6 +4,8 @@
 # you may not use this file except in compliance with the License.
 #
 
+""" Userbot module containing various scrapers. """
+
 import os
 import re
 from asyncio import create_subprocess_shell as asyncsh
@@ -23,41 +25,43 @@ from pytube.helpers import safe_filename
 from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, HELPER, bot
 from userbot.events import register
 
-langi = "en"
+LANG = "en"
 
 
 @register(outgoing=True, pattern="^.img (.*)")
-async def img_sampler(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("Processing...")
-        s = e.pattern_match.group(1)
-        lim = re.findall(r"lim=\d+", s)
+async def img_sampler(event):
+    """ For .img command, search and return images matching the query. """
+    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
+        await event.edit("Processing...")
+        query = event.pattern_match.group(1)
+        lim = re.findall(r"lim=\d+", query)
         try:
             lim = lim[0]
             lim = lim.replace("lim=", "")
-            s = s.replace("lim=" + lim[0], "")
+            query = query.replace("lim=" + lim[0], "")
         except IndexError:
             lim = 2
         response = google_images_download.googleimagesdownload()
 
         # creating list of arguments
         arguments = {
-            "keywords": s,
+            "keywords": query,
             "limit": lim,
             "format": "jpg",
         }
 
         # passing the arguments to the function
         paths = response.download(arguments)
-        lst = paths[s]
-        await e.client.send_file(await e.client.get_input_entity(e.chat_id), lst)
-        await e.delete()
+        lst = paths[query]
+        await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst)
+        await event.delete()
 
 
 @register(outgoing=True, pattern=r"^.google (.*)")
-async def gsearch(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        match = e.pattern_match.group(1)
+async def gsearch(q_event):
+    """ For .google command, do a Google search. """
+    if not q_event.text[0].isalpha() and q_event.text[0] not in ("/", "#", "@", "!"):
+        match = q_event.pattern_match.group(1)
         result_ = await asyncsh(
             f"gsearch {match}",
             stdout=asyncsh_PIPE,
@@ -66,41 +70,43 @@ async def gsearch(e):
         stdout, stderr = await result_.communicate()
         result = str(stdout.decode().strip()) \
             + str(stderr.decode().strip())
-        await e.edit(
+        await q_event.edit(
             "**Search Query:**\n`" + match + "`\n\n**Result:**\n" + result
         )
         if LOGGER:
-            await e.client.send_message(
+            await q_event.client.send_message(
                 LOGGER_GROUP,
                 "Google Search query " + match + " was executed successfully",
             )
 
 
 @register(outgoing=True, pattern=r"^.wiki (.*)")
-async def wiki(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        match = e.pattern_match.group(1)
+async def wiki(wiki_q):
+    """ For .google command, fetch content from Wikipedia. """
+    if not wiki_q.text[0].isalpha() and wiki_q.text[0] not in ("/", "#", "@", "!"):
+        match = wiki_q.pattern_match.group(1)
         result = wikipedia.summary(match)
-        await e.edit(
+        await wiki_q.edit(
             "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
         )
         if LOGGER:
-            await e.client.send_message(
+            await wiki_q.client.send_message(
                 LOGGER_GROUP,
                 f"Wiki query {match} was executed successfully"
             )
 
 
 @register(outgoing=True, pattern="^.ud (.*)")
-async def ud(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("Processing...")
-        str = e.pattern_match.group(1)
-        mean = urbandict.define(str)
+async def urban_dict(ud_e):
+    """ For .ud command, fetch content from Urban Dictionary. """
+    if not ud_e.text[0].isalpha() and ud_e.text[0] not in ("/", "#", "@", "!"):
+        await ud_e.edit("Processing...")
+        query = ud_e.pattern_match.group(1)
+        mean = urbandict.define(query)
         if len(mean) >= 0:
-            await e.edit(
+            await ud_e.edit(
                 "Text: **"
-                + str
+                + query
                 + "**\n\nMeaning: **"
                 + mean[0]["def"]
                 + "**\n\n"
@@ -109,85 +115,85 @@ async def ud(e):
                 + "__"
             )
             if LOGGER:
-                await e.client.send_message(
-                    LOGGER_GROUP, "ud query " + str + " executed successfully."
+                await ud_e.client.send_message(
+                    LOGGER_GROUP, "ud query " + query + " executed successfully."
                 )
         else:
-            await e.edit("No result found for **" + str + "**")
+            await ud_e.edit("No result found for **" + query + "**")
 
 
 @register(outgoing=True, pattern="^.tts")
-async def tts(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        replye = e.text
+async def text_to_speech(query):
+    """ For .tts command, a wrapper for Google Text-to-Speech. """
+    if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
+        textx = await query.get_reply_message()
+        replye = query.text
         if replye[5:]:
             message = str(replye[5:])
         elif textx:
             message = textx
             message = str(message.message)
-        tts = gTTS(message, langi)
+        tts = gTTS(message, LANG)
         tts.save("k.mp3")
-        with open("k.mp3", "rb") as f:
-            linelist = list(f)
+        with open("k.mp3", "rb") as audio:
+            linelist = list(audio)
             linecount = len(linelist)
         if linecount == 1:
-            try:  # tts on personal chats is broken
-                tts = gTTS(message, langi)
-                tts.save("k.mp3")
-            except:
-                await e.edit("`Some Internal Error! Try Again!`")
-                return
+            tts = gTTS(message, LANG)
+            tts.save("k.mp3")
         with open("k.mp3", "r"):
-            await e.client.send_file(e.chat_id, "k.mp3", voice_note=True)
+            await query.client.send_file(query.chat_id, "k.mp3", voice_note=True)
             os.remove("k.mp3")
             if LOGGER:
-                await e.client.send_message(
+                await query.client.send_message(
                     LOGGER_GROUP, "tts of " + message + " executed successfully!"
                 )
-            await e.delete()
+            await query.delete()
 
 
 @register(outgoing=True, pattern="^.trt")
-async def translateme(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        global langi
+async def translateme(trans):
+    """ For .trt command, translate the given text using Google Translate. """
+    if not trans.text[0].isalpha() and trans.text[0] not in ("/", "#", "@", "!"):
+        global LANG
         translator = Translator()
-        textx = await e.get_reply_message()
-        message = e.text
+        textx = await trans.get_reply_message()
+        message = trans.text
         if message[4:]:
             message = str(message[4:])
         elif textx:
             message = textx
             message = str(message.message)
 
-        reply_text = translator.translate(message, dest=langi).text
+        reply_text = translator.translate(message, dest=LANG).text
         reply_text = f"**Source:** `\n {message} `**\n\nTranslation: **`\n {reply_text} `"
 
-        await e.client.send_message(e.chat_id, reply_text)
-        await e.delete()
+        await trans.client.send_message(trans.chat_id, reply_text)
+        await trans.delete()
         if LOGGER:
-            await e.client.send_message(
+            await trans.client.send_message(
                 LOGGER_GROUP,
                 f"Translate query {message} was executed successfully",
             )
 
 
 @register(pattern=".lang", outgoing=True)
-async def lang(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        global langi
-        message = await e.client.get_messages(e.chat_id)
-        langi = str(message[0].message[6:])
+async def lang(value):
+    """ For .lang command, change the default langauge of userbot scrapers. """
+    if not value.text[0].isalpha() and value.text[0] not in ("/", "#", "@", "!"):
+        global LANG
+        message = await value.client.get_messages(value.chat_id)
+        LANG = str(message[0].message[6:])
         if LOGGER:
-            await e.client.send_message(
-                LOGGER_GROUP, "tts language changed to **" + langi + "**"
+            await value.client.send_message(
+                LOGGER_GROUP, "tts language changed to **" + LANG + "**"
             )
-            await e.edit("tts language changed to **" + langi + "**")
+            await value.edit("tts language changed to **" + LANG + "**")
 
 
 @register(outgoing=True, pattern="^.yt (.*)")
 async def yt_search(video_q):
+    """ For .yt command, do a YouTube search from Telegram. """
     if not video_q.text[0].isalpha() and video_q.text[0] not in ("/", "#", "@", "!"):
         query = video_q.pattern_match.group(1)
         result = ''
@@ -198,7 +204,8 @@ async def yt_search(video_q):
         await video_q.edit("```Processing...```")
         for video in videos_json:
             print(video['snippet']['title'])
-            result += f"{i}. {video['snippet']['title']} \n   https://www.youtube.com/watch?v={video['id']['videoId']} \n"
+            result += f"{i}. {video['snippet']['title']} \
+                \n   https://www.youtube.com/watch?v={video['id']['videoId']} \n"
             i += 1
 
         reply_text = f"**Search Query:**\n` {query} `\n\n**Result:**\n {result}"
@@ -206,15 +213,22 @@ async def yt_search(video_q):
         await video_q.edit(reply_text)
 
 
-def youtube_search(q, max_results=10, order="relevance", token=None, location=None, location_radius=None):
+def youtube_search(
+        query,
+        order="relevance",
+        token=None,
+        location=None,
+        location_radius=None
+    ):
+    """ Do a YouTube search. """
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
     search_response = youtube.search().list(
-        q=q,
+        q=query,
         type="video",
         pageToken=token,
         order=order,
         part="id,snippet",
-        maxResults=max_results,
+        maxResults=10,
         location=location,
         locationRadius=location_radius
     ).execute()
@@ -232,8 +246,9 @@ def youtube_search(q, max_results=10, order="relevance", token=None, location=No
         return(nexttok, videos)
 
 
-@register(outgoing=True, pattern=".yt_dl (\S*)( (\S*))?")
+@register(outgoing=True, pattern=r".yt_dl (\S*) ?(\S*)")
 async def download_video(v_url):
+    """ For .yt_dl command, download videos from YouTube. """
     if not v_url.text[0].isalpha() and v_url.text[0] not in ("/", "#", "@", "!"):
         url = v_url.pattern_match.group(1)
         quality = v_url.pattern_match.group(3)
@@ -288,9 +303,9 @@ async def download_video(v_url):
         video_stream.download(filename=video.title)
 
         url = video.thumbnail_url
-        r = requests.get(url)
-        with open('thumbnail.jpg', 'wb') as fs:
-            fs.write(r.content)
+        resp = requests.get(url)
+        with open('thumbnail.jpg', 'wb') as file:
+            file.write(resp.content)
 
         await v_url.edit("**Uploading...**")
         await bot.send_file(
@@ -305,5 +320,7 @@ async def download_video(v_url):
         await v_url.delete()
 
 HELPER.update({
-    'yt_dl <url> <quality>(optional)': "Usage: \nDownload videos from YouTube. If no quality is specified, the highest downloadable quality is downloaded. Will send the link if the video is larger than 50 MB."
+    'yt_dl <url> <quality>(optional)': "Usage: \nDownload videos from YouTube. \
+        If no quality is specified, the highest downloadable quality is downloaded. \
+        Will send the link if the video is larger than 50 MB."
 })

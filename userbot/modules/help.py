@@ -3,22 +3,26 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+""" Userbot help command """
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+
+from userbot import HELPER
 from userbot.events import register
 
-@register(outgoing=True, pattern="^.help")
-async def help(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        s = e.text.split()
-        if len(s) == 2:
-            if HELPER[s[1]]:
-                await e.edit(str(HELPER[s[1]]))
+@register(outgoing=True, pattern="^.help (.*)?")
+async def helper(event):
+    """ For .help command,"""
+    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
+        args = event.pattern_match.group(2)
+        if args:
+            if args in HELPER:
+                await event.edit(str(HELPER[args]))
+            else:
+                await event.edit("Please specify a valid module name.")
         else:
-            t = await e.edit("Please specify which module do you want help for!")
+            await event.edit("Please specify which module do you want help for!")
             string = ""
-            print(HELPER.keys())
-            for i in HELPER.keys():
+            for i in HELPER:
                 string += str(i)
                 string += "\n"
-            await t.reply(string)
+            await event.reply(string)

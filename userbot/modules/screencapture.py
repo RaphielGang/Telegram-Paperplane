@@ -6,6 +6,8 @@
 # The entire source code is OSSRPL except 'screencapture' which is MPL
 # License: MPL and OSSRPL
 
+""" Userbot module for ScreenshotLayer API """
+
 import os
 import requests
 
@@ -14,39 +16,41 @@ from userbot.events import register
 
 
 @register(pattern=r".screencapture (.*)", outgoing=True)
-async def _(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def capture(url):
+    """ For .screencapture command, capture a website and send the photo. """
+    if not url.text[0].isalpha() and url.text[0] not in ("/", "#", "@", "!"):
         if SCREENSHOT_LAYER_ACCESS_KEY is None:
-            await e.edit(
+            await url.edit(
                 "Need to get an API key from https://screenshotlayer.com/product \nModule stopping!"
             )
             return
-        await e.edit("Processing ...")
-        sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&url={}&fullpage={}&format={}&viewport={}"
-        input_str = e.pattern_match.group(1)
+        await url.edit("Processing ...")
+        sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&\
+            url={}&fullpage={}&format={}&viewport={}"
+        input_str = url.pattern_match.group(1)
         response_api = requests.get(
             sample_url.format(
                 SCREENSHOT_LAYER_ACCESS_KEY, input_str, "1", "PNG", "2560x1440"
             ),
             stream=True,
         )
-        contentType = response_api.headers["content-type"]
-        if "image" in contentType:
+        content_type = response_api.headers["content-type"]
+        if "image" in content_type:
             temp_file_name = "screencapture.png"
-            with open(temp_file_name, "wb") as fd:
+            with open(temp_file_name, "wb") as file:
                 for chunk in response_api.iter_content(chunk_size=128):
-                    fd.write(chunk)
+                    file.write(chunk)
             try:
-                await e.client.send_file(
-                    e.chat_id,
+                await url.client.send_file(
+                    url.chat_id,
                     temp_file_name,
                     caption=input_str,
                     force_document=True,
-                    reply_to=e.message.reply_to_msg_id,
+                    reply_to=url.message.reply_to_msg_id,
                 )
-                await e.delete()
+                await url.delete()
             except:
-                await e.edit(response_api.text)
+                await url.edit(response_api.text)
             os.remove(temp_file_name)
         else:
-            await e.edit(response_api.text)
+            await url.edit(response_api.text)
