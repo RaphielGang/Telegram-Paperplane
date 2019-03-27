@@ -2,7 +2,7 @@
 #
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
-
+""" Userbot module containing userid, chatid and log commands"""
 
 from time import sleep
 
@@ -11,9 +11,10 @@ from userbot.events import register
 
 
 @register(outgoing=True, pattern="^.userid$")
-async def useridgetter(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        message = await e.get_reply_message()
+async def useridgetter(target):
+    """ For .userid command, returns the ID of the target user. """
+    if not target.text[0].isalpha() and target.text[0] not in ("/", "#", "@", "!"):
+        message = await target.get_reply_message()
         if message:
             if not message.forward:
                 user_id = message.sender.id
@@ -28,36 +29,39 @@ async def useridgetter(e):
                     name = "@" + message.forward.sender.username
                 else:
                     name = "*" + message.forward.sender.first_name + "*"
-            await e.edit(
+            await target.edit(
                 "**Name:** {} \n**User ID:** `{}`"
                 .format(name, user_id)
             )
 
 
 @register(outgoing=True, pattern="^.chatid$")
-async def chatidgetter(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("Chat ID: `" + str(e.chat_id) + "`")
+async def chatidgetter(chat):
+    """ For .chatid, returns the ID of the chat you are in at that moment. """
+    if not chat.text[0].isalpha() and chat.text[0] not in ("/", "#", "@", "!"):
+        await chat.edit("Chat ID: `" + str(chat.chat_id) + "`")
 
 
 @register(outgoing=True, pattern="^.log")
-async def log(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
+async def log(log_text):
+    """ For .log command, forwards a message or the command argument to the logger group """
+    if not log_text.text[0].isalpha() and log_text.text[0] not in ("/", "#", "@", "!"):
+        textx = await log_text.get_reply_message()
         message = textx
         message = str(message.message)
         if LOGGER:
-            await (await e.get_reply_message()).forward_to(LOGGER_GROUP)
-            await e.edit("`Logged Successfully`")
+            await (await log_text.get_reply_message()).forward_to(LOGGER_GROUP)
+            await log_text.edit("`Logged Successfully`")
         else:
-            await e.edit("`This feature requires Logging to be enabled!`")
+            await log_text.edit("`This feature requires Logging to be enabled!`")
         sleep(2)
-        await e.delete()
+        await log_text.delete()
 
 HELPER.update({
     "chatid" : "Fetches the current chat's ID"
 })
 
 HELPER.update({
-    "userid" : "Fetches the ID of the user in reply, if its a forwarded message, finds the ID for the source."
+    "userid" : "Fetches the ID of the user in reply, if its a \
+                forwarded message, finds the ID for the source."
 })

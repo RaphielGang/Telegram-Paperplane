@@ -3,6 +3,8 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+""" Userbot initialization. """
+
 import os
 
 from sys import version_info

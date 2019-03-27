@@ -3,6 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+""" Userbot module for changing your Telegram profile details. """
 
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import UsernameOccupiedError
@@ -30,6 +31,7 @@ USERNAME_TAKEN = "```This username is already taken```"
 
 @register(outgoing=True, pattern="^.name ")
 async def update_name(name):
+    """ For .name command, change your name in Telegram. """
     if not name.text[0].isalpha() and name.text[0] not in ("/", "#", "@", "!"):
         text = name.text.split(" ", 1)[1]
         name = text.split("\\n", 1)
@@ -46,6 +48,7 @@ async def update_name(name):
 
 @register(outgoing=True, pattern="^.profilepic$")
 async def set_profilepic(propic):
+    """ For .profilepic command, change your profile picture in Telegram. """
     if not propic.text[0].isalpha() and propic.text[0] not in ("/", "#", "@", "!"):
         replymsg = await propic.get_reply_message()
         photo = None
@@ -71,6 +74,7 @@ async def set_profilepic(propic):
 
 @register(outgoing=True, pattern="^.setbio ")
 async def set_biograph(setbio):
+    """ For .setbio command, set a new bio for your profile in Telegram. """
     if not setbio.text[0].isalpha() and setbio.text[0] not in ("/", "#", "@", "!"):
         newbio = setbio.text.split(" ", 1)[1]
         await UpdateProfileRequest(about=newbio)
@@ -79,6 +83,7 @@ async def set_biograph(setbio):
 
 @register(outgoing=True, pattern="^.username ")
 async def update_username(username):
+    """ For .username command, set a new username in Telegram. """
     if not username.text[0].isalpha() and username.text[0] not in ("/", "#", "@", "!"):
         text = username.text.split(" ", 1)[1]
         try:

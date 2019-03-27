@@ -4,16 +4,19 @@
 # you may not use this file except in compliance with the License.
 #
 
-import pybase64
+""" Userbot module containing hash and encode/decode commands. """
+
 from subprocess import PIPE
 from subprocess import run as runapp
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+import pybase64
+from userbot import HELPER
 from userbot.events import register
 
 @register(outgoing=True, pattern="^.hash (.*)")
-async def hash(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        hashtxt_ = e.pattern_match.group(1)
+async def gethash(hash_q):
+    """ For .hash command, find the md5, sha1, sha256, sha512 of the string. """
+    if not hash_q.text[0].isalpha() and hash_q.text[0] not in ("/", "#", "@", "!"):
+        hashtxt_ = hash_q.pattern_match.group(1)
         hashtxt = open("hashdis.txt", "w+")
         hashtxt.write(hashtxt_)
         hashtxt.close()
@@ -40,36 +43,36 @@ async def hash(e):
             + "`"
         )
         if len(ans) > 4096:
-            f = open("hashes.txt", "w+")
-            f.write(ans)
-            f.close()
-            await e.client.send_file(
-                e.chat_id,
+            hashfile = open("hashes.txt", "w+")
+            hashfile.write(ans)
+            hashfile.close()
+            await hash_q.client.send_file(
+                hash_q.chat_id,
                 "hashes.txt",
-                reply_to=e.id,
-                caption="`It's too big, in a text file and hastebin instead. `"
-                + hastebin.post(ans[1:-1]),
+                reply_to=hash_q.id,
+                caption="`It's too big, sending a text file instead. `"
             )
             runapp(["rm", "hashes.txt"], stdout=PIPE)
         else:
-            await e.reply(ans)
+            await hash_q.reply(ans)
 
 
 @register(outgoing=True, pattern="^.base64 (en|de) (.*)")
-async def endecrypt(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if e.pattern_match.group(1) == "en":
-            lething = str(pybase64.b64encode(bytes(e.pattern_match.group(2), "utf-8")))[
+async def endecrypt(query):
+    """ For .base64 command, find the base64 encoding of the given string. """
+    if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
+        if query.pattern_match.group(1) == "en":
+            lething = str(pybase64.b64encode(bytes(query.pattern_match.group(2), "utf-8")))[
                 2:
             ]
-            await e.reply("Encoded: `" + lething[:-1] + "`")
+            await query.reply("Encoded: `" + lething[:-1] + "`")
         else:
             lething = str(
                 pybase64.b64decode(
-                    bytes(e.pattern_match.group(2), "utf-8"), validate=True
+                    bytes(query.pattern_match.group(2), "utf-8"), validate=True
                 )
             )[2:]
-            await e.reply("Decoded: `" + lething[:-1] + "`")
+            await query.reply("Decoded: `" + lething[:-1] + "`")
 
 
 HELPER.update({
