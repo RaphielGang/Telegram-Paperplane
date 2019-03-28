@@ -117,7 +117,8 @@ async def amireallyalive(e):
             "Your bot is running \n\n"
             f"Telethon version: {version.__version__} \n"
             f"Python: {python_version()} \n"
-            f"User: {defaultuser}"
+            f"User: {defaultuser} \n"
+            f"Database: {db}"
             "`"
             )
 
