@@ -5,6 +5,8 @@
 #
 # module created by @aragon12
 
+""" Userbot module for getting the date and time of any country or the userbot server.  """
+
 from datetime import datetime as dt
 from pytz import country_names as c_n, country_timezones as c_tz, timezone as tz
 from userbot.events import register
@@ -12,12 +14,17 @@ from userbot.events import register
 COUNTRY = ''
 
 """ returns the timezone for a given country """
-def get_tz(con):
+async def get_tz(con):
     for c_code in c_n:
         if con == c_n[c_code]:
             return tz(c_tz[c_code][0])
     return 0
 
+""" For .time command, return the time of
+        1. The country passed as an argument,
+        2. The default userbot country(set it by using .timec),
+        3. The server where the userbot runs.
+"""
 @register(outgoing=True, pattern="^.time ?(.*)")
 async def time_func(tdata):
     if not tdata.text[0].isalpha() and tdata.text[0] not in ("/", "#", "@", "!"):
@@ -29,17 +36,17 @@ async def time_func(tdata):
                 await tdata.edit(f"`it's` **{dt.now().strftime(t_form)}**  `here.`")
                 return
 
-            time_zone = get_tz(COUNTRY)
+            time_zone = await get_tz(COUNTRY)
             await tdata.edit(
                 f"`It's`  **{dt.now(time_zone).strftime(t_form)}**  `here, in {COUNTRY}`"
             )
             return
 
-        time_zone = get_tz(con)
+        time_zone = await get_tz(con)
         if not time_zone:
             return
 
-        await tdata.edit("`it's` **"+dt.now(time_zone).strftime(t_form)+"**  `in "+con+"`")
+        await tdata.edit("`it's` **"+dt.now(time_zone).strftime(t_form)+"**  `here, in "+con+"`")
 
 @register(outgoing=True, pattern="^.date$")
 async def date_func(dat):
@@ -55,7 +62,7 @@ async def set_time_country(loc):
         global COUNTRY
         temp_country = loc.pattern_match.group(1)
 
-        time_zone = get_tz(temp_country.title())
+        time_zone = await get_tz(temp_country.title())
         if not time_zone:
             await loc.edit("``` Wrong country given! Try again! ```")
             return
