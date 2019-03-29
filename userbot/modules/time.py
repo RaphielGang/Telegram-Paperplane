@@ -1,0 +1,40 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#
+# module created by @aragon12
+
+from datetime import datetime as dt
+from pytz import country_names as c_n, country_timezones as c_tz, timezone as tz
+from userbot.events import register
+
+def get_tz(con):
+    for c_code in c_n:
+        if con == c_n[c_code]:
+            return tz(c_tz[c_code][0])
+    return 0
+
+@register(outgoing=True, pattern="^.time")
+async def time_func(tdata):
+    if not tdata.text[0].isalpha() and tdata.text[0] not in ("/", "#", "@", "!"):
+        msg = str(tdata.text)
+        con = str(msg[6:]).title()
+        t_form = "%l:%M %p"
+
+        if not con:
+            await tdata.edit("`it's` **"+dt.now().strftime(t_form)+"**")
+            return
+
+        time_zone = get_tz(con)
+        if not time_zone:
+            return
+
+        await tdata.edit("`it's` **"+dt.now(time_zone).strftime(t_form)+"**  `in "+con+"`")
+
+@register(outgoing=True, pattern="^.date$")
+async def date_func(dat):
+    if not dat.text[0].isalpha() and dat.text[0] not in ("/", "#", "@", "!"):
+        d_form="%d/%m/%y - %A"
+
+        await dat.edit("`it's`  **"+dt.now().strftime(d_form)+"**")
