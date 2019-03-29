@@ -93,7 +93,7 @@ async def kang(args):
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
             else:
-                await args.edit("userbot sticker pack doesn't exist! Making a new one!")
+                await args.edit("Userbot sticker pack doesn't exist! Making a new one!")
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message('/newpack')
                     await conv.get_response()
@@ -126,7 +126,7 @@ async def kang(args):
                     await bot.send_read_acknowledge(conv.chat_id)
 
             await args.edit(
-                f"sticker added! Your pack can be found [here](t.me/addstickers/{packname})",
+                f"Sticker added! Your pack can be found [here](t.me/addstickers/{packname})",
                 parse_mode='md'
             )
 

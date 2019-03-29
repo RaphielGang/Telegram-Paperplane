@@ -80,7 +80,7 @@ async def purgeme(delme):
 
 
 @register(outgoing=True, pattern="^.del$")
-async def del(delme):
+async def delete_it(delme): 
     """ For .del command, delete the replied message. """
     if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
         msg_src = await delme.get_reply_message()
