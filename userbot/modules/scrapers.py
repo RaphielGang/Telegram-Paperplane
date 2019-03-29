@@ -203,7 +203,6 @@ async def yt_search(video_q):
 
         await video_q.edit("```Processing...```")
         for video in videos_json:
-            print(video['snippet']['title'])
             result += f"{i}. {video['snippet']['title']} \
                 \n   https://www.youtube.com/watch?v={video['id']['videoId']} \n"
             i += 1
@@ -221,7 +220,7 @@ def youtube_search(
         location_radius=None
     ):
     """ Do a YouTube search. """
-    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
+    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY, cache_discovery=False)
     search_response = youtube.search().list(
         q=query,
         type="video",

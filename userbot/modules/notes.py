@@ -65,17 +65,20 @@ async def add_filter(fltr):
 @register(pattern=r"#\w*")
 async def incom_note(getnt):
     """ Notes logic. """
-    if not (await getnt.get_sender()).bot:
-        try:
-            from userbot.modules.sql_helper.notes_sql import get_notes
-        except AttributeError:
-            return
-        notename = getnt.text[1:]
-        notes = get_notes(getnt.chat_id)
-        for note in notes:
-            if notename == note.keyword:
-                await getnt.reply(note.reply)
+    try:
+        if not (await getnt.get_sender()).bot:
+            try:
+                from userbot.modules.sql_helper.notes_sql import get_notes
+            except AttributeError:
                 return
+            notename = getnt.text[1:]
+            notes = get_notes(getnt.chat_id)
+            for note in notes:
+                if notename == note.keyword:
+                    await getnt.reply(note.reply)
+                    return
+    except AttributeError:
+        pass
 
 
 @register(outgoing=True, pattern="^.rmnotes$")
