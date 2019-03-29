@@ -16,14 +16,4 @@ pybase64>=0.4.0
 python-dotenv
 pytube
 pytz
-requests>=2.18.4
-speedtest-cli>=2.0.2
-spongemock
-sqlalchemy>=1.2
-telegraph
-telethon-session-sqlalchemy>=0.2.6
-telethon>=1.6.2
-urbandict>=0.5
-wikipedia>=1.4.0
-zalgo_text>=0.6
-spotify_token
+cowpy
