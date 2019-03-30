@@ -32,7 +32,7 @@ async def time_func(tdata):
     """
     if not tdata.text[0].isalpha() and tdata.text[0] not in ("/", "#", "@", "!"):
         con = tdata.pattern_match.group(1)
-        t_form = "%l:%M %p"
+        t_form = "%I:%M %p"
 
         if not con:
             if not COUNTRY:
