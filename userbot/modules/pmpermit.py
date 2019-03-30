@@ -132,7 +132,13 @@ async def blockpm(block):
 
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
-        if block.reply_to_msg_id:
+        if (await block.get_reply_message()).sender_id in BRAIN_CHECKER:
+            await block.edit(
+                "`Block Error! Logical Malfunction.`"
+                )
+            return
+
+        elif block.reply_to_msg_id:
             reply = await block.get_reply_message()
             replied_user = await block.client(GetFullUserRequest(reply.from_id))
             aname = replied_user.user.id
