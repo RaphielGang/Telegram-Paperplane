@@ -41,7 +41,7 @@ RUN apk add --no-cache \
     jpeg-dev curl neofetch git sudo \
     gcc python-dev python3-dev \
     postgresql postgresql-client php-pgsql \
-    musl postgresql-dev py-tz py3-aiohttp
+    musl postgresql-dev
 RUN apk add --no-cache sqlite figlet libwebp-dev
 
 # Copy Python Requirements to /app
