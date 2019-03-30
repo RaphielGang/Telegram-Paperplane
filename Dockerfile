@@ -60,6 +60,10 @@ RUN mkdir /home/userbot/userbot
 RUN git clone -b staging https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 WORKDIR /home/userbot/userbot
 #
+#Clones session and config(if it exists)
+#
+COPY ./userbot.session ./config.env* /home/userbot/userbot/
+#
 # Install requirements
 #
 RUN sudo pip3 install -U pip
