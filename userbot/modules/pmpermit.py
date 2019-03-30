@@ -130,7 +130,7 @@ async def blockpm(block):
                 )
             return
 
-        if block.reply_to_msg_id:
+        elif block.reply_to_msg_id:
             reply = await block.get_reply_message()
             replied_user = await block.client(GetFullUserRequest(reply.from_id))
             aname = replied_user.user.id
