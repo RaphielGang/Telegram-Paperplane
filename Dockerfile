@@ -63,7 +63,7 @@ COPY ./requirementsDOCKER.txt /home/userbot/userbot
 #
 COPY ./userbot.session ./config.env* /home/userbot/userbot/
 #
-#Clones session and config(if it exists)
+#Copies session and config(if it exists)
 #
 COPY ./userbot.session ./config.env* /home/userbot/userbot/
 #
