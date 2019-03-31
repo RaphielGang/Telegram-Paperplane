@@ -1,0 +1,59 @@
+# Copyright (C) 2019 The LifeIsWar.
+#
+# Licensed under the LifeIsWar Public License, Version 1.b (the "License");
+# you may not use this file except in compliance with the License.
+#\
+
+import binascii
+from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot.events import register
+
+def int2bytes(i):
+    hex_string = '%x' % i
+    n = len(hex_string)
+    return binascii.unhexlify(hex_string.zfill(n + (n & 1)))
+
+def text_to_bin(text, encoding='utf-8', errors='surrogatepass'):
+    bits = bin(int(binascii.hexlify(text.encode(encoding, errors)), 16))[2:]
+    return bits.zfill(8 * ((len(bits) + 7) // 8))
+
+def encrypt(string, length):
+    return ' '.join(string[i:i + length] for i in range(0, len(string), length))
+
+def texts_to_bin(text, encoding='utf-8', errors='surrogatepass'):
+    bits = bin(int(binascii.hexlify(text.encode(encoding, errors)), 16))[2:]
+    return bits.zfill(8 * ((len(bits) + 7) // 8))
+
+def bin_to_text(bits, encoding='utf-8', errors='surrogatepass'):
+    n = int(bits, 2)
+    return int2bytes(n).decode(encoding, errors)
+    
+@register(outgoing=True, pattern="\.bin ?(.*)")
+async def binner_to_text(event):
+  try:
+     argh = event.pattern_match.group(1)
+     result = texts_to_bin(argh)
+     result = "`{result}`".format(result)
+     await event.edit(result)
+  except:
+     await event.edit('`Unexpected error, only ascii characters can be translated to binary, please check your text.`')
+      
+@register(outgoing=True, pattern="\.bin_text ?(.*)")
+async def text_to_binner(event):
+  try:
+    argh = event.pattern_match.group(1)
+    result = texts_to_bin(argh)
+    result = "`{result}`".format(result)
+    await event.edit(encrypt("{}".format(result), 8))
+  except:
+    await event.edit('`Unexpected error, only binary can be translated to text, please check your binary code.`')
+
+
+HELPER.update({
+    "bin": "Convert text to binary code"
+})
+
+HELPER.update({
+    "bin_text": "Convert binary code to text"
+})
+
