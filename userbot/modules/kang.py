@@ -62,7 +62,7 @@ async def kang(args):
                     #User sent just custom emote, wants to push to default pack
                     emoji = splat[1]
 
-            packname = f"a{user.id}_by_{user.username}"
+            packname = f"a{user.id}_by_{user.username}_{pack}"
             response = urllib.request.urlopen(
                 urllib.request.Request(f'http://t.me/addstickers/{packname}')
             )
@@ -70,8 +70,7 @@ async def kang(args):
             file = io.BytesIO()
             file.name = "sticker.png"
             image.save(file, "PNG")
-            if "  A <strong>Telegram</strong> user has \
-                created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
+            if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message('/addsticker')
                     await conv.get_response()
