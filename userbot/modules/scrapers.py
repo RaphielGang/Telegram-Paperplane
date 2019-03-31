@@ -11,6 +11,8 @@ import re
 import urllib
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
+import requests
+import urllib
 
 import requests
 import urbandict
@@ -63,7 +65,8 @@ async def img_sampler(event):
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     if not q_event.text[0].isalpha() and q_event.text[0] not in ("/", "#", "@", "!"):
-        match = q_event.pattern_match.group(1)
+        match_ = q_event.pattern_match.group(1)
+        match = urllib.parse.quote_plus(match_)
         result_ = await asyncsh(
             f"gsearch {match}",
             stdout=asyncsh_PIPE,
@@ -73,7 +76,7 @@ async def gsearch(q_event):
         result = str(stdout.decode().strip()) \
             + str(stderr.decode().strip())
         await q_event.edit(
-            "**Search Query:**\n`" + match + "`\n\n**Result:**\n" + result
+            "**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" + result
         )
         if LOGGER:
             await q_event.client.send_message(
