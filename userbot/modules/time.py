@@ -31,7 +31,7 @@ async def time_func(tdata):
         3. The server where the userbot runs.
     """
     if not tdata.text[0].isalpha() and tdata.text[0] not in ("/", "#", "@", "!"):
-        con = tdata.pattern_match.group(1)
+        con = tdata.pattern_match.group(1).title()
         t_form = "%I:%M %p"
 
         if not con:
