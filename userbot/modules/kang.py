@@ -25,12 +25,12 @@ async def kang(args):
             user.username = user.first_name
         message = await args.get_reply_message()
         photo = None
+        emojibypass = False
 
         if message and message.media:
             if isinstance(message.media, MessageMediaPhoto):
                 photo = io.BytesIO()
                 photo = await bot.download_media(message.photo, photo)
-                emojibypass = False
             elif "image" in message.media.document.mime_type.split('/'):
                 photo = io.BytesIO()
                 await bot.download_file(message.media.document, photo)
