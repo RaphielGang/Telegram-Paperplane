@@ -16,44 +16,59 @@ from userbot import HELPER, LOGGER, LOGGER_GROUP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.eval")
+@register(outgoing=True, pattern="^.eval ?(.*)")
 async def evaluate(query):
     """ For .eval command, evaluates the given Python expression. """
     if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
         if query.is_channel and not query.is_group:
             await query.edit("`Eval isn't permitted on channels`")
             return
-        evaluation = eval(query.text[6:])
-        if evaluation:
-            if isinstance(evaluation) == "str":
-                if len(evaluation) > 4096:
-                    file = open("output.txt", "w+")
-                    file.write(evaluation)
-                    file.close()
-                await query.client.send_file(
-                    query.chat_id,
-                    "output.txt",
-                    reply_to=query.id,
-                    caption="`Output too large, sending as file`",
+        if query.pattern_match.group(1):
+            expression = query.pattern_match.group(1)
+        else:
+            await query.edit("``` Give an expression to evaluate. ```")
+            return
+
+        try:
+            evaluation = str(eval(expression))
+            if evaluation:            
+                if isinstance(evaluation, str):
+                    if len(evaluation) >= 4096:
+                        file = open("output.txt", "w+")
+                        file.write(evaluation)
+                        file.close()
+                        await query.client.send_file(
+                            query.chat_id,
+                            "output.txt",
+                            reply_to=query.id,
+                            caption="`Output too large, sending as file`",
+                        )
+                        subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+                        return
+                    await query.edit(
+                        "**Query: **\n`"
+                        f"{expression}"
+                        "`\n**Result: **\n`"
+                        f"{evaluation}"
+                        "`"
+                    )
+            else:
+                await query.edit(
+                    "**Query: **\n`"
+                    f"{expression}"
+                    "`\n**Result: **\n`No Result Returned/False`"
                 )
-                subprocess.run(["rm", "sender.txt"], stdout=subprocess.PIPE)
-        await query.edit(
-            "**Query: **\n`"
-            + query.text[6:]
-            + "`\n**Result: **\n`"
-            + str(evaluation)
-            + "`"
-        )
-    else:
-        await query.edit(
-            "**Query: **\n`"
-            + query.text[6:]
-            + "`\n**Result: **\n`No Result Returned/False`"
-        )
+        except Exception as e:
+                await query.edit(
+                    "**Query: **\n`"
+                    f"{expression}"
+                    "`\n**Exception: **\n"
+                    f"`{e}`"
+                )
+
     if LOGGER:
         await query.client.send_message(
-            LOGGER_GROUP, "Eval query " +
-            query.text[6:] + " was executed successfully"
+            LOGGER_GROUP, f"Eval query {expression} was executed successfully"
         )
 
 
