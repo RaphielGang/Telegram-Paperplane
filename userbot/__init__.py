@@ -81,16 +81,16 @@ YOUTUBE_API_KEY = os.environ.get(
 bot = TelegramClient("userbot", API_KEY, API_HASH)
 
 
-if os.path.exists("brains.check"):
-    os.remove("brains.check")
+if os.path.exists("learning-data-root.check"):
+    os.remove("learning-data-root.check")
 else:
     LOGS.info("Braincheck file does not exist, fetching...")
 
-URL = 'https://storage.googleapis.com/project-aiml-bot/brains.check'
+URL = 'https://raw.githubusercontent.com/RaphielGang/databasescape/master/learning-data-root.check'
 GET = get(URL)
 
-with open('brains.check', 'wb') as brains:
-    brains.write(GET.content)
+with open('learning-data-root.check', 'wb') as load:
+    load.write(GET.content)
 
 # Global Variables
 SNIPE_TEXT = ""
