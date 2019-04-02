@@ -56,13 +56,8 @@ RUN  sed -e 's;^# \(%wheel.*NOPASSWD.*\);\1;g' -i /etc/sudoers
 RUN adduser userbot --disabled-password --home /home/userbot
 RUN adduser userbot wheel
 USER userbot
-RUN mkdir /home/userbot/userbot
-RUN git clone -b staging https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 WORKDIR /home/userbot/userbot
-#
-#Copies session and config(if it exists)
-#
-COPY ./userbot.session ./config.env* /home/userbot/userbot/
+COPY . /home/userbot/userbot/
 #
 # Install requirements
 #
