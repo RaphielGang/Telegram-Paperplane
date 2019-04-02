@@ -104,7 +104,7 @@ HELPER.update({
     "paste": "Create a paste or a shortened url using dogbin (https://del.dog/)"
 })
 HELPER.update({
-    "getpaste": "Get the content of a paste or shortened url from dogbin (https://del.dog/)"
+    "get_dogbin_content": "Get the content of a paste or shortened url from dogbin (https://del.dog/)"
 })
 HELPER.update({
     "pastestats": "Get stats of a paste or shortened url from dogbin (https://del.dog/)"

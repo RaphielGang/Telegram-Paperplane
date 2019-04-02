@@ -155,5 +155,7 @@ async def resize_photo(photo):
 
 
 HELPER.update({
-    "kang": "Kang very important module. Please kang this. Made by @rupansh"
+    "kang": "Kang's a very important module since it kangs a sticker \
+by just replying with .kang to a sticker or image.\
+\nPlease kang this. Made by @rupansh"
 })
