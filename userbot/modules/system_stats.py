@@ -82,7 +82,7 @@ async def bot_ver(event):
             )
 
 
-@register(outgoing=True, pattern="^.pip(?: |$)(.*)")
+@register(outgoing=True, pattern="^.pip ?(.*)")
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
@@ -154,3 +154,21 @@ async def amireallyalivereset(ureset):
             "Successfully reset user for alive!"
             "`"
         )
+
+HELPER.update({
+    "sysd": ".sysd\
+    \nUsage: Shows system information using neofetch."
+})
+HELPER.update({
+    "botver": ".botver\
+    \nUsage: Shows the userbot version."
+})
+HELPER.update({
+    "pip": ".pip <module(s)>\
+    \nUsage: Does a search of pip modules(s)."
+})
+HELPER.update({
+    "alive": ".alive\
+    \nUsage: It's used to check if your bot is working or not. \
+Use .aliveu <new_user> to change user or .resetalive to reset .alive."
+})

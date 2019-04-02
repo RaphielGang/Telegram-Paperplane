@@ -155,11 +155,7 @@ async def resize_photo(photo):
 
 
 HELPER.update({
-    "kang": ".kang\
-\nUsage: Reply .kang to a sticker or an image to kang it to your userbot pack.\
-\n\n.kang [emoji('s)]\
-\nUsage: Works just like .kang but uses the emoji('s) you picked.\
-\n\n.kang [number]\
-\nUsage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
-\n\n\nPlease kang this. Made by @rupansh."
+    "kang": "Kang's a very important module since it kangs a sticker \
+by just replying with .kang to a sticker or image.\
+\nPlease kang this. Made by @rupansh"
 })

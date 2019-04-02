@@ -7,6 +7,7 @@
 
 import subprocess
 
+from userbot import HELPER
 from userbot.events import register
 
 
@@ -102,3 +103,12 @@ async def stable_upstream(stable):
         ], stdout=subprocess.PIPE,)
     await stable.edit("`Shutting down for the upstream, Restart the bot kthx`")
     stable.client.disconnect()
+
+HELPER.update({
+    "updatestable": ".updatestable\
+    \nUsage: Updates the bot to the latest master branch."
+})
+HELPER.update({
+    "updatebleeding": ".updatebleeding\
+    \nUpdates the bot to the latest staging branch."
+})

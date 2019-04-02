@@ -101,9 +101,12 @@ async def make_qr(qrcode):
         await qrcode.delete()
 
 HELPER.update({
-    'getqr': "Get the QR Code content from the replied QR Code."
+    'getqr': ".getqr\
+\nUsage: Get the QR Code content from the replied QR Code."
 })
 
 HELPER.update({
-    'makeqr <content>': "Make a QR Code from the given content.\nUsage: .makeqr www.google.com"
+    'makeqr': ".makeqr <content>)\
+\nUsage: Make a QR Code from the given content.\
+\nExample: .makeqr www.google.com"
 })
