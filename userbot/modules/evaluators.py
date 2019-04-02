@@ -6,6 +6,7 @@
 
 """ Userbot module for executing code and terminal commands from Telegram. """
 
+import sys
 import asyncio
 import subprocess
 from getpass import getuser
@@ -72,50 +73,65 @@ async def evaluate(query):
         )
 
 
-@register(outgoing=True, pattern=r"^.exec (.*)")
+@register(outgoing=True, pattern=r"^.exec")
 async def run(run_q):
     """ For .exec command, which executes the dynamically created program """
     if not run_q.text[0].isalpha() and run_q.text[0] not in ("/", "#", "@", "!"):
         if run_q.is_channel and not run_q.is_group:
             await run_q.edit("`Exec isn't permitted on channels`")
             return
-        code = run_q.raw_text[5:]
-        exec(f"async def __ex(e): " + ""
-             .join(f"\n {l}" for l in code.split("\n")))
-        result = await locals()["__ex"](run_q)
-        if result:
-            if len(result) > 4096:
-                file = open("output.txt", "w+")
-                file.write(result)
-                file.close()
-                await run_q.client.send_file(
-                    run_q.chat_id,
-                    "output.txt",
-                    reply_to=run_q.id,
-                    caption="`Output too large, sending as file`",
+        if run_q.text[1:] != 'exec':
+            code = str(run_q.text[6:])
+            if len(code.splitlines()) <= 5:
+                codepre = code
+            else:
+                clines = code.splitlines()
+                codepre = clines[0] + "\n" + clines[1] + "\n" + clines[2] + \
+"\n" + clines[3] + "..."
+            command = "".join(f"\n {l}" for l in code.split("\n.strip()"))
+            process = await asyncio.create_subprocess_exec(
+                sys.executable, '-c', command.strip(),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await process.communicate()
+            result = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
+            if result:
+                if len(result) > 4096:
+                    file = open("output.txt", "w+")
+                    file.write(result)
+                    file.close()
+                    await run_q.client.send_file(
+                        run_q.chat_id,
+                        "output.txt",
+                        reply_to=run_q.id,
+                        caption="`Output too large, sending as file`",
+                    )
+                    subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+
+                await run_q.edit(
+                    "**Query: **\n`"
+                    f"{codepre}"
+                    "`\n**Result: **\n`"
+                    f"{result}"
+                    "`"
                 )
-                subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
-
-            await run_q.edit(
-                "**Query: **\n`"
-                + run_q.text[5:]
-                + "`\n**Result: **\n`"
-                + str(result) + "`"
-            )
+            else:
+                await run_q.edit(
+                    "**Query: **\n`"
+                    f"{codepre}"
+                    "`\n**Result: **\n`No Result Returned/False`"
+                )
         else:
-            await run_q.edit(
-                "**Query: **\n`"
-                + run_q.text[5:]
-                + "`\n**Result: **\n`"
-                + "No Result Returned/False"
-                + "`"
-            )
-
-        if LOGGER:
-            await run_q.client.send_message(
-                LOGGER_GROUP,
-                "Exec query " + run_q.text[5:] + " was executed successfully"
-            )
+            await run_q.edit("``` At least a variable is required \
+to execute. Use .help exec for an example.```")
+            return
+    if LOGGER:
+        await run_q.client.send_message(
+            LOGGER_GROUP,
+            "Exec query " + codepre + " was executed successfully"
+        )
 
 
 @register(outgoing=True, pattern="^.term")
@@ -125,50 +141,52 @@ async def terminal_runner(term):
         if term.is_channel and not term.is_group:
             await term.edit("`Term Commands aren't permitted on channels`")
             return
-        message = term.text
-        curruser = getuser()
-        command = str(message)
-        command = str(command[6:])
-        process = await asyncio.create_subprocess_shell(
-            command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        stdout, stderr = await process.communicate()
-        result = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
-
-        if len(result) > 4096:
-            output = open("output.txt", "w+")
-            output.write(result)
-            output.close()
-            await term.client.send_file(
-                term.chat_id,
-                "sender.txt",
-                reply_to=term.id,
-                caption="`Output too large, sending as file`",
+        if term.text[1:] != 'term':
+            curruser = getuser()
+            command = str(term.text[6:])
+            process = await asyncio.create_subprocess_shell(
+                command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
             )
-            subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+            stdout, stderr = await process.communicate()
+            result = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
 
-        await term.edit(
-            f"`{curruser}:~# "
-            + command
-            + "`\n`"
-            + result + "`"
-        )
+            if len(result) > 4096:
+                output = open("output.txt", "w+")
+                output.write(result)
+                output.close()
+                await term.client.send_file(
+                    term.chat_id,
+                    "sender.txt",
+                    reply_to=term.id,
+                    caption="`Output too large, sending as file`",
+                )
+                subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
 
-        if LOGGER:
-            await term.client.send_message(
-                LOGGER_GROUP,
-                "Terminal Command " + command + " was executed sucessfully",
+            await term.edit(
+                "`"
+                f"{curruser}:~# {command}"
+                f"\n{result}"
+                "`"
             )
+        else:
+            await term.edit("``` Give a command or use .help term for \
+an example.```")
+            return            
+    if LOGGER:
+        await term.client.send_message(
+            LOGGER_GROUP,
+            "Terminal Command " + command + " was executed sucessfully",
+        )
 
 HELPER.update({
-    "eval": "Evalute mini-expressions. Usage: \n .eval 2 + 3 "
+    "eval": ".eval 2 + 3\nUsage: Evalute mini-expressions."
 })
 HELPER.update({
-    "exec": "Execute small python scripts. Usage: \n .exec print('hello')"
+    "exec": ".exec print('hello')\nUsage: Execute small python scripts."
 })
 HELPER.update({
-    "term": "Run bash commands and scripts on your server. Usage: \n .term ls"
+    "term": ".term ls\nUsage: Run bash commands and scripts on your server."
 })

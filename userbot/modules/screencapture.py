@@ -54,3 +54,8 @@ async def capture(url):
             os.remove(temp_file_name)
         else:
             await url.edit(response_api.text)
+
+HELPER.update({
+    "screencapture": ".screencapture <url>\
+    \nUsage: Takes a screenshot of a website and sends the screenshot."
+})

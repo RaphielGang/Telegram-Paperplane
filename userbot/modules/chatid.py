@@ -60,8 +60,11 @@ async def log(log_text):
 HELPER.update({
     "chatid" : "Fetches the current chat's ID"
 })
-
 HELPER.update({
     "userid" : "Fetches the ID of the user in reply, if its a \
-                forwarded message, finds the ID for the source."
+forwarded message, finds the ID for the source."
+})
+HELPER.update({
+    "log" : "Forwards the message you've replied to in your \
+logger group."
 })

@@ -15,10 +15,10 @@ from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
-UNAPPROVED_MSG = ("`Bleep Blop! This is a Bot. Don't fret. \n\n`"
-                  "`My Master hasn't approved you to PM.`"
-                  "`Please wait for my Master to look in, he would mostly approve PMs.`\n\n"
-                  "`As far as i know, he doesn't usually approve Retards.`")
+UNAPPROVED_MSG = ("`Bleep blop! This is a bot. Don't fret. \n\n`"
+                  "`My master hasn't approved you to PM.`"
+                  "`Please wait for my Master to look in, he mostly approves PMs.`\n\n"
+                  "`As far as I know, he doesn't usually approve retards though.`")
 # =================================================================
 
 
@@ -180,19 +180,17 @@ async def unblockpm(unblock):
                 " was unblocc'd!.",
             )
 
-
 HELPER.update({
-    ".approve": "Approve the mentioned/replied person to PM."
-})
-HELPER.update({
-    ".block": "Block the person on the PM."
-})
-HELPER.update({
-    ".unblock": "Unblock the person on the PM."
-})
-HELPER.update({
-    ".notioff": "Clear any notifications for unapproved PMs"
-})
-HELPER.update({
-    ".notifon": "Allow notifications from unapproved PMs"
+    "pmpermit": "\
+.approve\
+\nUsage: Approves the mentioned/replied person to PM.\
+\n\n.block\
+\nUsage: Blocks the person from PMing you.\
+\n\n.unblock\
+\nUsage: Unblocks the person so they can PM you.\
+\n\n.notifoff\
+\nUsage: Clears any notifications of unapproved PMs.\
+\n\n.notifon\
+\nUsage: Allows notifications for unapproved PMs.\
+"
 })

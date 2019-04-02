@@ -14,7 +14,7 @@ from userbot import HELPER
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.adminlist")
+@register(outgoing=True, pattern="^.adminlist$")
 async def get_admin(show):
     """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
@@ -32,5 +32,6 @@ async def get_admin(show):
         await show.edit(mentions)
 
 HELPER.update({
-    "adminlist <parmeter>": "Retrieves all admins, if parameter is 0, tags them, if its 1."
+    "adminlist": ".adminlist\
+    \nUsage: Retrieves all admins in the chat."
 })

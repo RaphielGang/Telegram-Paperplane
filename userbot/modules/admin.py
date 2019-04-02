@@ -429,27 +429,27 @@ async def gspider(gspdr):
             )
 
 HELPER.update({
-    "promote": "Usage: \nReply someone's message with .promote to promote them."
+    "promote": "Usage: Reply to someone's message with .promote to promote them."
 })
 HELPER.update({
-    "ban": "Usage: \nReply someone's message with .ban to ban them."
+    "ban": "Usage: Reply to someone's message with .ban to ban them."
 })
 HELPER.update({
-    "demote": "Usage: \nReply someone's message with .demote to revoke their admin permissions."
+    "demote": "Usage: Reply to someone's message with .demote to revoke their admin permissions."
 })
 HELPER.update({
-    "unban": "Usage: \nReply someone's message with .unban to unban them in this chat."
+    "unban": "Usage: Reply to someone's message with .unban to unban them in this chat."
 })
 HELPER.update({
-    "mute": "Usage: \nReply someone's message with .mute to mute them, works on admins too"
+    "mute": "Usage: Reply to someone's message with .mute to mute them, works on admins too"
 })
 HELPER.update({
-    "unmute": "Usage: \nReply someone's message with .unmute to remove them from muted list."
+    "unmute": "Usage: Reply to someone's message with .unmute to remove them from muted list."
 })
 HELPER.update({
-    "gmute": "Usage: \nReply someone's message with .gmute to mute them in all \
-              groups you have in common with them."
+    "gmute": "Usage: Reply to someone's message with .gmute to mute them in all \
+groups you have in common with them."
 })
 HELPER.update({
-    "ungmute": "Usage: \nReply someone's message with .ungmute to remove them from the gmuted list."
+    "ungmute": "Usage: Reply someone's message with .ungmute to remove them from the gmuted list."
 })

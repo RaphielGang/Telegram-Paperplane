@@ -6,7 +6,7 @@
 """ Userbot module for changing your Telegram profile details. """
 
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.errors.rpcerrorlist import UsernameOccupiedError
+from telethon.errors.rpcerrorlist import UsernameOccupiedError, PhotoExtInvalidError
 from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
 from telethon.tl.functions.photos import UploadProfilePhotoRequest
@@ -18,32 +18,33 @@ from userbot.events import register
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
-PP_CHANGED = "```Profile Picture Changed```"
-PP_TOO_SMOL = "```The image is too small```"
-PP_ERROR = "```Failure while processing image```"
+PP_CHANGED = "```Profile picture changed successfully.```"
+PP_TOO_SMOL = "```This image is too small, use a bigger image.```"
+PP_ERROR = "```Failure occured while processing image.```"
 
-BIO_SUCCESS = "```Successfully edited Bio```"
+BIO_SUCCESS = "```Successfully edited Bio.```"
 
-NAME_OK = "```Your name was succesfully changed```"
-USERNAME_SUCCESS = "```Your username was succesfully changed```"
-USERNAME_TAKEN = "```This username is already taken```"
+NAME_OK = "```Your name was succesfully changed.```"
+USERNAME_SUCCESS = "```Your username was succesfully changed.```"
+USERNAME_TAKEN = "```This username is already taken.```"
 #===============================================================
 
-@register(outgoing=True, pattern="^.name ")
+@register(outgoing=True, pattern="^.name")
 async def update_name(name):
     """ For .name command, change your name in Telegram. """
     if not name.text[0].isalpha() and name.text[0] not in ("/", "#", "@", "!"):
-        text = name.text.split(" ", 1)[1]
-        name = text.split("\\n", 1)
+        newname = name.text[6:]
+        if(" " not in newname):
+            firstname = newname
+            lastname = ""
+        else:
+            namesplit = newname.split(" ")
+            firstname = namesplit[0]
+            lastname = namesplit[1]
 
-        firstname = name[0]
-        lastname = " "
-        if len(name) == 2:
-            lastname = name[1]
-
-        await UpdateProfileRequest(
+        await bot(UpdateProfileRequest(
             first_name=firstname,
-            last_name=lastname)
+            last_name=lastname))
         await name.edit(NAME_OK)
 
 @register(outgoing=True, pattern="^.profilepic$")
@@ -70,24 +71,45 @@ async def set_profilepic(propic):
                 await propic.edit(PP_TOO_SMOL)
             except ImageProcessFailedError:
                 await propic.edit(PP_ERROR)
+            except PhotoExtInvalidError:
+                await propic.edit(INVALID_MEDIA)
 
 
-@register(outgoing=True, pattern="^.setbio ")
+@register(outgoing=True, pattern="^.setbio (.*)")
 async def set_biograph(setbio):
     """ For .setbio command, set a new bio for your profile in Telegram. """
     if not setbio.text[0].isalpha() and setbio.text[0] not in ("/", "#", "@", "!"):
-        newbio = setbio.text.split(" ", 1)[1]
-        await UpdateProfileRequest(about=newbio)
+        newbio = setbio.pattern_match.group(1)
+        await bot(UpdateProfileRequest(about=newbio))
         await setbio.edit(BIO_SUCCESS)
 
 
-@register(outgoing=True, pattern="^.username ")
+@register(outgoing=True, pattern="^.username (.*)")
 async def update_username(username):
     """ For .username command, set a new username in Telegram. """
     if not username.text[0].isalpha() and username.text[0] not in ("/", "#", "@", "!"):
-        text = username.text.split(" ", 1)[1]
+        newusername = username.pattern_match.group(1)
         try:
-            await bot(UpdateUsernameRequest(text))
+            await bot(UpdateUsernameRequest(newusername))
             await username.edit(USERNAME_SUCCESS)
         except UsernameOccupiedError:
             await username.edit(USERNAME_TAKEN)
+
+HELPER.update({
+    "username": ".username <new_username>\
+    \nUsage: Changes your Telegram username."
+})
+HELPER.update({
+    "name": ".name <firstname> or .name <firstname> <lastname>\
+    \nUsage: Changes your Telegram name.\
+    \n(First and last name will get split by a space)"
+})
+HELPER.update({
+    "profilepic": ".profilepic\
+    \nUsage: Reply with .profilepic to an image to change \
+your Telegram profie picture."
+})
+HELPER.update({
+    "setbio": ".setbio <new_bio>\
+    \nUsage: Changes your Telegram bio."
+})

@@ -82,27 +82,33 @@ async def bot_ver(event):
             )
 
 
-@register(outgoing=True, pattern="^.pip (.+)")
+@register(outgoing=True, pattern="^.pip ?(.*)")
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
-        await pip.reply("`Searching . . .`")
-        invokepip = f"pip3 search {pip.pattern_match_group(1)}"
-        pipc = await asyncrunapp(
-            invokepip,
-            stdout=asyncPIPE,
-            stderr=asyncPIPE,
-        )
+        pipmodule = pip.pattern_match.group(1)
+        if pipmodule:
+            await pip.edit("`Searching . . .`")
+            invokepip = f"pip3 search {pipmodule}"
+            pipc = await asyncrunapp(
+                invokepip,
+                stdout=asyncPIPE,
+                stderr=asyncPIPE,
+            )
 
-        stdout, stderr = await pipc.communicate()
-        pipout = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+            stdout, stderr = await pipc.communicate()
+            pipout = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
 
-        await pip.edit(
-            "`"
-            f"{pipout}"
-            "`"
-        )
+            await pip.edit(
+                "**Query: **\n`"
+                f"{invokepip}"
+                "`\n**Result: **\n`"
+                f"{pipout}"
+                "`"
+            )
+        else:
+            await pip.edit("`Use .help pip to see an example`")
 
 
 @register(outgoing=True, pattern="^.alive$")
@@ -148,3 +154,21 @@ async def amireallyalivereset(ureset):
             "Successfully reset user for alive!"
             "`"
         )
+
+HELPER.update({
+    "sysd": ".sysd\
+    \nUsage: Shows system information using neofetch."
+})
+HELPER.update({
+    "botver": ".botver\
+    \nUsage: Shows the userbot version."
+})
+HELPER.update({
+    "pip": ".pip <module(s)>\
+    \nUsage: Does a search of pip modules(s)."
+})
+HELPER.update({
+    "alive": ".alive\
+    \nUsage: It's used to check if your bot is working or not. \
+Use .aliveu <new_user> to change user or .resetalive to reset .alive."
+})

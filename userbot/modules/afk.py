@@ -23,9 +23,8 @@ async def mention_afk(mention):
         if ISAFK:
             if mention.sender_id not in USERS:
                 await mention.reply(
-                    "Sorry! My boss is AFK due to ```"
-                    + AFKREASON
-                    + "```. Would ping him to look into the message soon😉"
+                    f"Sorry! My boss is AFK due to `{AFKREASON}`."
+                    + " Would ping him to look into the message soon😉"
                 )
                 USERS.update({mention.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
@@ -34,9 +33,7 @@ async def mention_afk(mention):
                     await mention.reply(
                         "Sorry! But my boss is still not here. "
                         "Try to ping him a little later. I am sorry😖."
-                        "He told me he was busy with ```"
-                        + AFKREASON
-                        + "```"
+                        f"He told me he was busy with `{AFKREASON}`."
                     )
                     USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
@@ -55,9 +52,8 @@ async def afk_on_pm(sender):
         if ISAFK:
             if sender.sender_id not in USERS:
                 await sender.reply(
-                    "Sorry! My boss is AFK due to ```"
-                    + AFKREASON
-                    + "``` I'll ping him to look into the message soon😉"
+                    f"Sorry! My boss is AFK due to `{AFKREASON}`."
+                    + " I'll ping him to look into the message soon😉"
                 )
                 USERS.update({sender.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
@@ -66,9 +62,7 @@ async def afk_on_pm(sender):
                     await sender.reply(
                         "Sorry! But my boss is still not here. "
                         "Try to ping him a little later. I am sorry😖."
-                        "He told me he was busy with ```"
-                        + AFKREASON
-                        + "```"
+                        f"He told me he was busy with `{AFKREASON}`."
                     )
                     USERS[sender.sender_id] = USERS[sender.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
@@ -141,6 +135,8 @@ async def type_afk_is_not_true(notafk):
         AFKREASON = "No Reason"
 
 HELPER.update({
-    "afk": "Usage: \nSets you as afk. Responds to anyone who tags/PM's \
-            you telling that you are afk. Switches off AFK when you type back anything."
+    "afk": ".afk <reason>(reason is optional)\
+\nUsage: Sets you as afk. Responds to anyone who tags/PM's \
+you telling that you are afk. Switches off AFK when you type back anything.\
+"
 })

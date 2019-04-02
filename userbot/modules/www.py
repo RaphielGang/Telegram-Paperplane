@@ -79,3 +79,16 @@ async def pingme(pong):
         end = datetime.now()
         duration = (end - start).microseconds / 1000
         await pong.edit("Pong!\n%sms" % (duration))
+
+HELPER.update({
+    "speed": ".speed\
+    \nUsage: Does a speedtest and shows the results."
+})
+HELPER.update({
+    "nearestdc": ".nearestdc\
+    \nUsage: Finds the nearest datacenter from your server."
+})
+HELPER.update({
+    "pingme": ".pingme\
+    \nUsage: Shows how long it takes to ping your bot."
+})

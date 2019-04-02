@@ -333,8 +333,8 @@ async def uploadas(uas_event):
             await uas_event.edit("404: File Not Found")
 
 HELPER.update({
-    "download": "Usage: \nDownload file from link to the server."
+    "download": ".download <link>\nUsage: Downloads file from link to the server."
 })
 HELPER.update({
-    "upload": "Usage: \nUploads a locally stored file to telegram."
+    "upload": ".upload <link>\nUsage: Uploads a locally stored file to telegram."
 })

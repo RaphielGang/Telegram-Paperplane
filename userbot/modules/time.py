@@ -8,6 +8,7 @@
 
 from datetime import datetime as dt
 from pytz import country_names as c_n, country_timezones as c_tz, timezone as tz
+from userbot import HELPER
 from userbot.events import register
 
 COUNTRY = ''
@@ -124,3 +125,16 @@ async def set_time_country(loc):
         COUNTRY = c_name
 
         await loc.edit(f"``` Default country for date and time set to {COUNTRY} successfully! ```")
+
+HELPER.update({
+    "time": ".time <country name/code>\
+    \nUsage: Gets the time of a country."
+})
+HELPER.update({
+    "date": ".date <country name/code>\
+    \nUsage: Gets the date of a country."
+})
+HELPER.update({
+    "ctime": ".ctime <country name/code>\
+    \nUsage: Sets a default country for your userbot so you can do .time/.date."
+})

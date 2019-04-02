@@ -129,7 +129,7 @@ async def selfdestruct(destroy):
         text = str(destroy.text[6:])
         text = (
             text
-            + "`This message shall be self-destructed in "
+            + "\n\n`This message shall be self-destructed in "
             + str(counter)
             + " seconds`"
         )
@@ -139,3 +139,29 @@ async def selfdestruct(destroy):
         await smsg.delete()
         if LOGGER:
             await destroy.client.send_message(LOGGER_GROUP, "sd query done successfully")
+
+HELPER.update({
+    'purge': '.purge\
+        \nUsage: Purges all messages starting from the reply.'
+})
+
+HELPER.update({
+    'purgeme': '.purgeme <x>\
+        \nUsage: Deletes x amount of your latest messages.'
+})
+
+HELPER.update({
+    "del": ".del\
+\nUsage: Deletes the message you replied to."
+})
+
+HELPER.update({
+    'editme': ".editme <newmessage>\
+\nUsage: Edits the text you replied to with newtext."
+})
+
+HELPER.update({
+    'sd': '.sd <x> <message>\
+\nUsage: Creates a message that selfdestructs in x seconds.\
+\nKeep the seconds under 100 since it puts your bot to sleep.'
+})

@@ -136,3 +136,8 @@ async def fetch_info(replied_user, event):
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
 
     return photo, caption
+
+HELPER.update({
+    "whois": ".whois <username> or reply to someones text with .whois\
+    \nUsage: Gets info of an user."
+})

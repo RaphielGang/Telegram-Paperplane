@@ -98,11 +98,12 @@ async def purge_notes(prg):
             )
 
 HELPER.update({
-    "#<notename>": "Get the note with name notename."
-})
-HELPER.update({
-    ".save <notename> <notedata>": "Saves notedata as a note with name notename"
-})
-HELPER.update({
-    ".clear <notename>": "Clear note with name notename."
+    "notes": "\
+#<notename>\
+\nUsage: Gets the note with name notename\
+\n\n.save <notename> <notedata>\
+\nUsage: Saves notedata as a note with the name notename\
+\n\n.clear <notename>\
+\nUsage: Deletes the note with name notename.\
+"
 })

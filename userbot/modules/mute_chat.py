@@ -54,9 +54,11 @@ async def keep_read(message):
                 await message.client.send_read_acknowledge(message.chat_id)
 
 HELPER.update({
-    'unmutechat': 'Unmute a muted chat.'
+    'unmutechat': '.unmutechat\
+\nUsage: Unmutes a muted chat.'
 })
 
 HELPER.update({
-    'mutechat': 'Allows you to mute any chat.'
+    'mutechat': '.mutechat\
+\nUsage: Allows you to mute any chat.'
 })
