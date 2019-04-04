@@ -17,7 +17,7 @@ from telethon import TelegramClient
 load_dotenv("config.env")
 
 # Logger setup:
-CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
+CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "True"))
 
 
 if CONSOLE_LOGGER_VERBOSE:
@@ -59,7 +59,7 @@ LOGGER = sb(os.environ.get(
 PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
 CONSOLE_LOGGER_VERBOSE = sb(
-    os.environ.get("CONSOLE_LOGGER_VERBOSE", "False")
+    os.environ.get("CONSOLE_LOGGER_VERBOSE", "True")
     )
 
 DB_URI = os.environ.get("DATABASE_URL", None)
