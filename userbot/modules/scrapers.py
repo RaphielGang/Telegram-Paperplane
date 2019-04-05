@@ -16,7 +16,7 @@ import urllib
 import urbandict
 import wikipedia
 from google_images_download import google_images_download
-from googletrans import Translator
+from googletrans import Translator, LANGUAGES
 from gtts import gTTS
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -49,12 +49,20 @@ async def img_sampler(event):
             "keywords": query,
             "limit": lim,
             "format": "jpg",
+            "no_directory": "no_directory",
+            "safe_search": "safe_search"
         }
 
         # passing the arguments to the function
         paths = response.download(arguments)
         lst = paths[query]
         await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst)
+        try:
+            os.remove(lst[0])
+            os.remove(lst[1])
+            os.rmdir(os.path.dirname(os.path.abspath(lst[0])))
+        except:
+            None
         await event.delete()
 
 
@@ -161,14 +169,17 @@ async def translateme(trans):
         translator = Translator()
         textx = await trans.get_reply_message()
         message = trans.text
-        if message[4:]:
-            message = str(message[4:])
+        if message[5:]:
+            message = str(message[5:])
         elif textx:
             message = textx
             message = str(message.message)
 
-        reply_text = translator.translate(message, dest=LANG).text
-        reply_text = f"**Source:** `\n {message} `**\n\nTranslation: **`\n {reply_text} `"
+        reply_text = translator.translate(message, dest=LANG)
+        source_lan = LANGUAGES[f'{reply_text.src}']
+        transl_lan = LANGUAGES[f'{reply_text.dest}']
+        reply_text = f"**Source ({source_lan.title()}):**`\n{message}`**\n\
+\nTranslation ({transl_lan.title()}):**`\n{reply_text.text}`"
 
         await trans.client.send_message(trans.chat_id, reply_text)
         await trans.delete()
@@ -188,9 +199,9 @@ async def lang(value):
         LANG = str(message[0].message[6:])
         if LOGGER:
             await value.client.send_message(
-                LOGGER_GROUP, "tts language changed to **" + LANG + "**"
+                LOGGER_GROUP, "Default language changed to **" + LANG + "**"
             )
-            await value.edit("tts language changed to **" + LANG + "**")
+            await value.edit("Default language changed to **" + LANG + "**")
 
 
 @register(outgoing=True, pattern="^.yt (.*)")

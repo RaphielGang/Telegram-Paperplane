@@ -24,16 +24,16 @@ async def mention_afk(mention):
             if mention.sender_id not in USERS:
                 await mention.reply(
                     f"Sorry! My boss is AFK due to `{AFKREASON}`."
-                    + " Would ping him to look into the message soon😉"
+                    + " Would ping him to look into the message soon 😉."
                 )
                 USERS.update({mention.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif mention.sender_id in USERS:
                 if USERS[mention.sender_id] % 5 == 0:
                     await mention.reply(
-                        "Sorry! But my boss is still not here. "
-                        "Try to ping him a little later. I am sorry😖."
-                        f"He told me he was busy with `{AFKREASON}`."
+                        "Sorry! But my boss is still not here."
+                        " Try to ping him a little later. I am sorry 😖."
+                        f" He told me he was busy with `{AFKREASON}`."
                     )
                     USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
@@ -53,16 +53,16 @@ async def afk_on_pm(sender):
             if sender.sender_id not in USERS:
                 await sender.reply(
                     f"Sorry! My boss is AFK due to `{AFKREASON}`."
-                    + " I'll ping him to look into the message soon😉"
+                    + " I'll ping him to look into the message soon 😉."
                 )
                 USERS.update({sender.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif sender.sender_id in USERS:
                 if USERS[sender.sender_id] % 5 == 0:
                     await sender.reply(
-                        "Sorry! But my boss is still not here. "
-                        "Try to ping him a little later. I am sorry😖."
-                        f"He told me he was busy with `{AFKREASON}`."
+                        "Sorry! But my boss is still not here."
+                        " Try to ping him a little later. I am sorry 😖."
+                        f" He told me he was busy with `{AFKREASON}`."
                     )
                     USERS[sender.sender_id] = USERS[sender.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
@@ -102,7 +102,7 @@ async def type_afk_is_not_true(notafk):
             "`You recieved "
             + str(COUNT_MSG)
             + " messages while you were away. Check log for more details.`"
-            + "`This auto-generated message shall be self destructed in 2 seconds.`"
+            + " `This auto-generated message shall be self destructed in 2 seconds.`"
         )
         time.sleep(2)
         await afk_info.delete()
