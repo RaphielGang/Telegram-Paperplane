@@ -26,7 +26,7 @@ for module_name in ALL_MODULES:
     imported_module = import_module("userbot.modules." + module_name)
 
 LOGS.info("Your Bot is alive! Test it by typing .alive on any chat."
-          "Should you need assistance, head to https://t.me/userbot_support")
+          " Should you need assistance, head to https://t.me/userbot_support")
 LOGS.info("Your Bot Version is 2.4.1")
 
 if len(argv) not in (1, 3, 4):

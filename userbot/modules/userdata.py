@@ -5,6 +5,7 @@
 #
 """ Userbot module for changing your Telegram profile details. """
 
+import os
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import UsernameOccupiedError, PhotoExtInvalidError
 from telethon.tl.functions.account import (UpdateProfileRequest,
@@ -38,7 +39,7 @@ async def update_name(name):
             firstname = newname
             lastname = ""
         else:
-            namesplit = newname.split(" ")
+            namesplit = newname.split(" ", 1)
             firstname = namesplit[0]
             lastname = namesplit[1]
 
@@ -66,6 +67,7 @@ async def set_profilepic(propic):
                 await bot(UploadProfilePhotoRequest(
                     await bot.upload_file(photo)
                     ))
+                os.remove(photo)
                 await propic.edit(PP_CHANGED)
             except PhotoCropSizeSmallError:
                 await propic.edit(PP_TOO_SMOL)
@@ -102,7 +104,7 @@ HELPER.update({
 HELPER.update({
     "name": ".name <firstname> or .name <firstname> <lastname>\
     \nUsage: Changes your Telegram name.\
-    \n(First and last name will get split by a space)"
+    \n(First and last name will get split by the first space)"
 })
 HELPER.update({
     "profilepic": ".profilepic\
