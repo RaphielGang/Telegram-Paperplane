@@ -143,6 +143,20 @@ async def text_to_speech(query):
         elif textx:
             message = textx
             message = str(message.message)
+        try:
+            gTTS(message, LANG)
+        except AssertionError:
+            await query.edit(
+                'The text is empty.\n'
+                'Nothing left to speak after pre-precessing, tokenizing and cleaning.'
+                )
+            return
+        except ValueError:
+            await query.edit('Language is not supported.')
+            return
+        except RuntimeError:
+            await query.edit('Error loading the languages dictionnary.')
+            return
         tts = gTTS(message, LANG)
         tts.save("k.mp3")
         with open("k.mp3", "rb") as audio:
@@ -175,6 +189,12 @@ async def translateme(trans):
             message = textx
             message = str(message.message)
 
+        try:
+            translator.translate(message, dest=LANG)
+        except ValueError:
+            trans.edit("Invalid destination location.")
+            return
+        
         reply_text = translator.translate(message, dest=LANG)
         source_lan = LANGUAGES[f'{reply_text.src}']
         transl_lan = LANGUAGES[f'{reply_text.dest}']
@@ -190,18 +210,17 @@ async def translateme(trans):
             )
 
 
-@register(pattern=".lang", outgoing=True)
+@register(pattern=".lang (.*)", outgoing=True)
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
     if not value.text[0].isalpha() and value.text[0] not in ("/", "#", "@", "!"):
         global LANG
-        message = await value.client.get_messages(value.chat_id)
-        LANG = str(message[0].message[6:])
-        await value.edit("Default language changed to **" + LANG + "**")
+        LANG = value.pattern_match.group(1)
         if LOGGER:
             await value.client.send_message(
                 LOGGER_GROUP, "Default language changed to **" + LANG + "**"
             )
+            await value.edit("Default language changed to **" + LANG + "**")
 
 
 @register(outgoing=True, pattern="^.yt (.*)")
