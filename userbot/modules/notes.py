@@ -46,23 +46,22 @@ async def remove_notes(clr):
 async def add_filter(fltr):
     """ For .save command, saves notes in a chat. """
     if not fltr.text[0].isalpha() and fltr.text[0] not in ("/", "#", "@", "!"):
-        if not fltr.text[0].isalpha():
-            try:
-                from userbot.modules.sql_helper.notes_sql import add_note
-            except AttributeError:
-                await fltr.edit("`Running on Non-SQL mode!`")
-                return
+        try:
+            from userbot.modules.sql_helper.notes_sql import add_note
+        except AttributeError:
+            await fltr.edit("`Running on Non-SQL mode!`")
+            return
 
-            notename = fltr.pattern_match.group(1)
-            string = fltr.text.partition(notename)[2]
-            if fltr.reply_to_msg_id:
-                rep_msg = await fltr.get_reply_message()
-                string = rep_msg.text
-            add_note(str(fltr.chat_id), notename, string)
+        notename = fltr.pattern_match.group(1)
+        string = fltr.text.partition(notename)[2]
+        if fltr.reply_to_msg_id:
+            rep_msg = await fltr.get_reply_message()
+            string = rep_msg.text
+        add_note(str(fltr.chat_id), notename, string)
 
-            await fltr.edit(
-                "`Note added successfully. Use` #{} `to get it`".format(notename)
-            )
+        await fltr.edit(
+            "`Note added successfully. Use` #{} `to get it`".format(notename)
+        )
 
 
 @register(pattern=r"#\w*")
