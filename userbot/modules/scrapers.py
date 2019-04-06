@@ -132,24 +132,25 @@ async def urban_dict(ud_e):
             await ud_e.edit("No result found for **" + query + "**")
 
 
-@register(outgoing=True, pattern="^.tts")
+@register(outgoing=True, pattern="^.tts ?(.*)")
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
     if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
         textx = await query.get_reply_message()
-        replye = query.text
-        if replye[5:]:
-            message = str(replye[5:])
-        elif textx:
-            message = textx
-            message = str(message.message)
+        message = query.pattern_match.group(1)
+        if message: pass
+        elif textx: message = textx.text
+        else:
+            await query.edit("`Give a text or reply to a message for Text-to-Speech!`")
+            return
+
         try:
             gTTS(message, LANG)
         except AssertionError:
             await query.edit(
                 'The text is empty.\n'
                 'Nothing left to speak after pre-precessing, tokenizing and cleaning.'
-                )
+            )
             return
         except ValueError:
             await query.edit('Language is not supported.')
@@ -175,11 +176,10 @@ async def text_to_speech(query):
             await query.delete()
 
 
-@register(outgoing=True, pattern="^.trt")
+@register(outgoing=True, pattern="^.trt ?(.*)")
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     if not trans.text[0].isalpha() and trans.text[0] not in ("/", "#", "@", "!"):
-        global LANG
         translator = Translator()
         textx = await trans.get_reply_message()
         message = trans.text
@@ -188,6 +188,13 @@ async def translateme(trans):
         elif textx:
             message = textx
             message = str(message.message)
+
+        message = trans.pattern_match.group(1)
+        if message: pass
+        elif textx: message = textx.text
+        else:
+            await trans.edit("`Give a text or reply to a message for Translate!`")
+            return
 
         try:
             translator.translate(message, dest=LANG)
