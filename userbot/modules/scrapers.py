@@ -197,11 +197,11 @@ async def lang(value):
         global LANG
         message = await value.client.get_messages(value.chat_id)
         LANG = str(message[0].message[6:])
+        await value.edit("Default language changed to **" + LANG + "**")
         if LOGGER:
             await value.client.send_message(
                 LOGGER_GROUP, "Default language changed to **" + LANG + "**"
             )
-            await value.edit("Default language changed to **" + LANG + "**")
 
 
 @register(outgoing=True, pattern="^.yt (.*)")
