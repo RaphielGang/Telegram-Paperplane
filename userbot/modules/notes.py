@@ -51,7 +51,7 @@ async def remove_notes(clr):
 @register(outgoing=True, pattern=r"^.save (\w*)")
 async def add_filter(fltr):
     """ For .save command, saves notes in a chat. """
-    if not fltr.text[0].isalpha():
+    if not fltr.text[0].isalpha() and fltr.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.notes_sql import add_note
         except AttributeError:
@@ -63,16 +63,8 @@ async def add_filter(fltr):
         if fltr.reply_to_msg_id:
             rep_msg = await fltr.get_reply_message()
             string = rep_msg.text
-        old = MONGO.notes.find_one(
-            {"chat_id": fltr.chat_id, "name": notename}
-            )
-        if old:
-            status = "updated"
-        else:
-            status = "saved"
-        MONGO.notes.insert_one(
-            {"chat_id": fltr.chat_id, "name": notename, "text": string}
-            )
+        add_note(str(fltr.chat_id), notename, string)
+
         await fltr.edit(
             "`Note added successfully. Use` #{} `to get it`".format(notename)
         )
@@ -100,22 +92,19 @@ async def incom_note(getnt):
 @register(outgoing=True, pattern="^.rmnotes$")
 async def purge_notes(prg):
     """ For .rmnotes command, remove every note in the chat at once. """
-    try:
-        from userbot.modules.sql_helper.notes_sql import rm_all_notes
-    except AttributeError:
-        await prg.edit("`Running on Non-SQL mode!`")
-        return
-    if not prg.text[0].isalpha():
-        await prg.edit("```Purging all notes.```")
-        notes = MONGO.notes.find({"chat_id": prg.chat_id})
-        for note in notes:
-            await prg.edit("```Removing {}...```".format(note['name']))
-            MONGO.notes.delete_one({'_id': note['_id']})
-        await prg.edit("```All notes removed!```")
-        if LOGGER:
-            await prg.client.send_message(
-                LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
-            )
+    if not prg.text[0].isalpha() and prg.text[0] not in ("/", "#", "@", "!"):
+        try:
+            from userbot.modules.sql_helper.notes_sql import rm_all_notes
+        except AttributeError:
+            await prg.edit("`Running on Non-SQL mode!`")
+            return
+        if not prg.text[0].isalpha():
+            await prg.edit("```Purging all notes.```")
+            rm_all_notes(str(prg.chat_id))
+            if LOGGER:
+                await prg.client.send_message(
+                    LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
+                )
 
 HELPER.update({
     "notes": "\
