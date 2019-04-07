@@ -28,7 +28,7 @@ async def mute_chat(mute_e):
     if not mute_e.text[0].isalpha() and mute_e.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.keep_read_sql import kread
-        except AttributeError as error:
+        except AttributeError:
             await mute_e.edit("`Running on Non-SQL mode!`")
             return
         await mute_e.edit(str(mute_e.chat_id))
