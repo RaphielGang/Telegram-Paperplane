@@ -11,7 +11,11 @@ from pytz import country_names as c_n, country_timezones as c_tz, timezone as tz
 from userbot import HELPER
 from userbot.events import register
 
+
+#===== CONSTANT =====
 COUNTRY = ''
+#===== CONSTANT =====
+
 
 async def get_tz(con):
     """ Get time zone of the given country. """
