@@ -13,6 +13,8 @@ from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
 import requests
 import urllib
+import html
+import subprocess
 
 import requests
 import urbandict
@@ -99,7 +101,27 @@ async def wiki(wiki_q):
     """ For .google command, fetch content from Wikipedia. """
     if not wiki_q.text[0].isalpha() and wiki_q.text[0] not in ("/", "#", "@", "!"):
         match = wiki_q.pattern_match.group(1)
+        try:
+            wikipedia.summary(match)
+        except wikipedia.exceptions.DisambiguationError as e:
+            await wiki_q.edit(f"Disambiguated page found.\n\n{e}")
+            return
+        except wikipedia.exceptions.PageError as p:
+            await wiki_q.edit(f"Page not found.\n\n{p}")
+            return
         result = wikipedia.summary(match)
+        if len(result) >= 4096:
+            file = open("output.txt", "w+")
+            file.write(result)
+            file.close()
+            await wiki_q.client.send_file(
+                wiki_q.chat_id,
+                "output.txt",
+                reply_to=wiki_q.id,
+                caption="`Output too large, sending as file`",
+            )
+            subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+            return
         await wiki_q.edit(
             "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
         )
@@ -116,8 +138,37 @@ async def urban_dict(ud_e):
     if not ud_e.text[0].isalpha() and ud_e.text[0] not in ("/", "#", "@", "!"):
         await ud_e.edit("Processing...")
         query = ud_e.pattern_match.group(1)
+        try:
+            urbandict.define(query)
+        except urllib.error.HTTPError:
+            await ud_e.edit(f"Sorry, couldn't find any results for: {query}")
+            return
         mean = urbandict.define(query)
-        if len(mean) >= 0:
+        deflen = sum(len(i) for i in mean[0]["def"])
+        exalen = sum(len(i) for i in mean[0]["example"])
+        meanlen = deflen + exalen
+        if int(meanlen) >= 0:
+            if int(meanlen) >= 4096:
+                await ud_e.edit("`Output too large, sending as file.`")
+                file = open("output.txt", "w+")
+                file.write(
+                "Text: "
+                + query
+                + "\n\nMeaning: "
+                + mean[0]["def"]
+                + "\n\n"
+                + "Example: \n"
+                + mean[0]["example"]
+                )
+                file.close()
+                await ud_e.client.send_file(
+                    ud_e.chat_id,
+                    "output.txt",
+                    caption="`Output was too large, sent it as a file.`"
+                )
+                subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+                await ud_e.delete()
+                return
             await ud_e.edit(
                 "Text: **"
                 + query
@@ -160,7 +211,7 @@ async def text_to_speech(query):
             await query.edit('Language is not supported.')
             return
         except RuntimeError:
-            await query.edit('Error loading the languages dictionnary.')
+            await query.edit('Error loading the languages dictionary.')
             return
         tts = gTTS(message, LANG)
         tts.save("k.mp3")
@@ -205,13 +256,13 @@ async def translateme(trans):
         if message: pass
         elif textx: message = textx.text
         else:
-            await trans.edit("`Give a text or reply to a message for Translate!`")
+            await trans.edit("`Give a text or reply to a message to translate!`")
             return
 
         try:
             translator.translate(message, dest=LANG)
         except ValueError:
-            trans.edit("Invalid destination location.")
+            await trans.edit("Invalid destination language.")
             return
         
         reply_text = translator.translate(message, dest=LANG)
@@ -254,8 +305,8 @@ async def yt_search(video_q):
 
         await video_q.edit("```Processing...```")
         for video in videos_json:
-            result += f"{i}. {video['snippet']['title']} \
-                \n   https://www.youtube.com/watch?v={video['id']['videoId']} \n"
+            result += f"{i}. {html.unescape(video['snippet']['title'])} \
+                \nhttps://www.youtube.com/watch?v={video['id']['videoId']}\n"
             i += 1
 
         reply_text = f"**Search Query:**\n`{query}`\n\n**Result:**\n{result}"
