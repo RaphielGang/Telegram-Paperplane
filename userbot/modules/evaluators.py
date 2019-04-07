@@ -109,7 +109,7 @@ async def run(run_q):
                         caption="`Output too large, sending as file`",
                     )
                     subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
-
+                    return
                 await run_q.edit(
                     "**Query: **\n`"
                     f"{codepre}"
@@ -164,7 +164,7 @@ async def terminal_runner(term):
                     caption="`Output too large, sending as file`",
                 )
                 subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
-
+                return
             await term.edit(
                 "`"
                 f"{curruser}:~# {command}"

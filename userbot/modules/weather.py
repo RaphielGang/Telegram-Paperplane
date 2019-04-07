@@ -91,8 +91,7 @@ async def get_weather(weather):
     wind = result['wind']['speed']
 
     ctimezone = tz(c_tz[country][0])
-    time = datetime.now(ctimezone).strftime("%I:%M %p")
-    day = datetime.now(ctimezone).strftime("%A")
+    time = datetime.now(ctimezone).strftime("%A, %I:%M %p")
     fullc_n = c_n[f"{country}"]
 
     fahrenheit = str(((curtemp - 273.15) * 9/5 + 32)).split(".")
@@ -103,7 +102,7 @@ async def get_weather(weather):
         +f"**Wind:** {wind} m/s\n\n\n"
         +f"**{desc}**\n"
         +f"`{cityname}, {fullc_n}`\n"
-        +f"`{day}, {time}`")
+        +f"`{time}`")
 
 @register(outgoing=True, pattern="^.setcity ?(.*)")
 async def set_default_city(city):
