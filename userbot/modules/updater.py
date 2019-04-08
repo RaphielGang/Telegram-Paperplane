@@ -78,8 +78,10 @@ async def upstream(ups):
 
     await ups.edit('`New update found, updating...`')
 
-    ups_rem.pull(ac_br)
-    ups_rem.git.reset('--hard')
+    try:
+        ups_rem.pull(ac_br)
+    except GitCommandError:
+        ups_rem.git.reset('--hard')
 
     await ups.edit('`Successfully Updated!!\nBot is switching off now.. restart kthx`')
     await ups.client.disconnect()
