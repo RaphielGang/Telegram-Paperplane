@@ -30,7 +30,7 @@ async def get_tz(con):
     if "Minor Outlying Islands" in con:
         con = con.replace("Minor Outlying Islands", "minor outlying islands")
     if "Nl" in con:
-        con  = con.replace("Nl", "NL")
+        con = con.replace("Nl", "NL")
 
     for c_code in c_n:
         if con == c_n[c_code]:
@@ -120,7 +120,7 @@ async def set_time_country(loc):
         if not time_zone:
             await loc.edit("``` Wrong country given! Try again! ```")
             return
-        
+
         try:
             c_name = c_n[temp_country]
         except KeyError:

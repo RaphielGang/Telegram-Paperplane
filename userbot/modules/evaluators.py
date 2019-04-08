@@ -32,7 +32,7 @@ async def evaluate(query):
 
         try:
             evaluation = str(eval(expression))
-            if evaluation:            
+            if evaluation:
                 if isinstance(evaluation, str):
                     if len(evaluation) >= 4096:
                         file = open("output.txt", "w+")
@@ -60,12 +60,12 @@ async def evaluate(query):
                     "`\n**Result: **\n`No Result Returned/False`"
                 )
         except Exception as e:
-                await query.edit(
-                    "**Query: **\n`"
-                    f"{expression}"
-                    "`\n**Exception: **\n"
-                    f"`{e}`"
-                )
+            await query.edit(
+                "**Query: **\n`"
+                f"{expression}"
+                "`\n**Exception: **\n"
+                f"`{e}`"
+            )
 
     if LOGGER:
         await query.client.send_message(
@@ -177,7 +177,7 @@ async def terminal_runner(term):
         else:
             await term.edit("``` Give a command or use .help term for \
 an example.```")
-            return            
+            return
     if LOGGER:
         await term.client.send_message(
             LOGGER_GROUP,

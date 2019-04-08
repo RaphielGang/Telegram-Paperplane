@@ -152,13 +152,13 @@ async def urban_dict(ud_e):
                 await ud_e.edit("`Output too large, sending as file.`")
                 file = open("output.txt", "w+")
                 file.write(
-                "Text: "
-                + query
-                + "\n\nMeaning: "
-                + mean[0]["def"]
-                + "\n\n"
-                + "Example: \n"
-                + mean[0]["example"]
+                    "Text: "
+                    + query
+                    + "\n\nMeaning: "
+                    + mean[0]["def"]
+                    + "\n\n"
+                    + "Example: \n"
+                    + mean[0]["example"]
                 )
                 file.close()
                 await ud_e.client.send_file(
@@ -264,7 +264,7 @@ async def translateme(trans):
         except ValueError:
             await trans.edit("Invalid destination language.")
             return
-        
+
         reply_text = translator.translate(message, dest=LANG)
         source_lan = LANGUAGES[f'{reply_text.src}']
         transl_lan = LANGUAGES[f'{reply_text.dest}']
@@ -486,7 +486,8 @@ HELPER.update({
 })
 HELPER.update({
     'lang': ".lang <lang>\
-    \nUsage: Changes the default language of userbot scrapers used for Google TRT, TTS may not work."
+    \nUsage: Changes the default language of userbot scrapers used for Google TRT, \
+    TTS may not work."
 })
 HELPER.update({
     'yt': ".yt <search_query>\

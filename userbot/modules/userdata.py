@@ -36,7 +36,7 @@ async def update_name(name):
     """ For .name command, change your name in Telegram. """
     if not name.text[0].isalpha() and name.text[0] not in ("/", "#", "@", "!"):
         newname = name.text[6:]
-        if(" " not in newname):
+        if " " not in newname:
             firstname = newname
             lastname = ""
         else:
