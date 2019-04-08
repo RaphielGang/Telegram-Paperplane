@@ -80,11 +80,16 @@ async def upstream(ups):
 
     try:
         ups_rem.pull(ac_br)
+        await ups.edit(
+            '`Successfully Updated without casualties\nBot is switching off now.. restart kthx`'
+            )
+        await ups.client.disconnect()
     except GitCommandError:
         ups_rem.git.reset('--hard')
-
-    await ups.edit('`Successfully Updated!!\nBot is switching off now.. restart kthx`')
-    await ups.client.disconnect()
+        await ups.edit(
+            '`Successfully Updated with casualties\nBot is switching off now.. restart kthx`'
+            )
+        await ups.client.disconnect()
 
 
 HELPER.update({
