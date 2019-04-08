@@ -40,17 +40,13 @@ async def upstream(ups):
         txt = "`Oops.. Updater cannot continue due to some problems occured`\n\n**LOGTRACE:**\n"
         repo = Repo()
     except NoSuchPathError as error:
-        await ups.edit(f'{txt}    `directory {error} is not found`')
+        await ups.edit(f'{txt}\n`directory {error} is not found`')
         return
     except InvalidGitRepositoryError as error:
-        await ups.edit(f'{txt}    `directory {error} does not seems to be a git repository`')
+        await ups.edit(f'{txt}\n`directory {error} does not seems to be a git repository`')
         return
-
-    if (repo.is_dirty() or len(repo.untracked_files)):
-        await ups.edit(
-            '**[UPDATER]:** `Looks like you have some un-committed files and changes. \
-            you have to commit them first, then updater can continue`'
-            )
+    except GitCommandError as error:
+        await ups.edit(f'{txt}\n`Early failure! {error}`')
         return
 
     ac_br = repo.active_branch.name
@@ -82,12 +78,8 @@ async def upstream(ups):
 
     await ups.edit('`New update found, updating...`')
 
-    try:
-        ups_rem.pull(ac_br)
-    except GitCommandError:
-        await ups.edit('`Update failed.. due to merge conflicts \nreverting all temp changes`')
-        repo.git.reset('--hard')
-        return
+    ups_rem.pull(ac_br)
+    ups_rem.git.reset('--hard')
 
     await ups.edit('`Successfully Updated!!\nBot is switching off now.. restart kthx`')
     await ups.client.disconnect()
