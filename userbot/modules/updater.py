@@ -3,10 +3,15 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+"""
+This module updates the userbot based on Upstream revision
+"""
+
+from git import Repo
+from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from userbot import HELPER
 from userbot.events import register
-from git import Repo, exc
 
 
 async def gen_chlog(repo, diff):
@@ -34,20 +39,27 @@ async def upstream(ups):
     try:
         txt = "`Oops.. Updater cannot continue due to some problems occured`\n\n**LOGTRACE:**\n"
         repo = Repo()
-    except exc.NoSuchPathError as e:
-        await ups.edit(f'{txt}    `directory {e} is not found`')
+    except NoSuchPathError as error:
+        await ups.edit(f'{txt}    `directory {error} is not found`')
         return
-    except exc.InvalidGitRepositoryError as e:
-        await ups.edit(f'{txt}    `directory {e} does not seems to be a git repository`')
+    except InvalidGitRepositoryError as error:
+        await ups.edit(f'{txt}    `directory {error} does not seems to be a git repository`')
         return
 
     if (repo.is_dirty() or len(repo.untracked_files)):
-        await ups.edit('**[UPDATER]:** `Looks like you have some un-committed files and changes. you have to commit them first, then updater can continue`')
+        await ups.edit(
+            '**[UPDATER]:** `Looks like you have some un-committed files and changes. \
+            you have to commit them first, then updater can continue`'
+            )
         return
 
     ac_br = repo.active_branch.name
     if not await is_off_br(ac_br):
-        await ups.edit(f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). in that case, Updater is unable to identify which branch is to be merged. please checkout to any official branch`')
+        await ups.edit(
+            f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). \
+            in that case, Updater is unable to identify which branch is to be merged. \
+            please checkout to any official branch`'
+            )
         return
 
     try:
@@ -72,7 +84,7 @@ async def upstream(ups):
 
     try:
         ups_rem.pull(ac_br)
-    except exc.GitCommandError:
+    except GitCommandError:
         await ups.edit('`Update failed.. due to merge conflicts \nreverting all temp changes`')
         repo.git.reset('--hard')
         return
