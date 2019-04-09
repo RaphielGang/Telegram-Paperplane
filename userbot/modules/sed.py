@@ -109,7 +109,7 @@ async def sed(command):
             await command.edit("Did you mean? \n\n`" + text + "`")
 
 HELPER.update({
-    "sed": ".sed<delimiter><old word(s)><delimiter><new word(s)>\
+    "sed": "sed<delimiter><old word(s)><delimiter><new word(s)>\
     \nUsage: Replaces a word or words using sed.\
     \nDelimiters: `/, :, |, _`"
 })
