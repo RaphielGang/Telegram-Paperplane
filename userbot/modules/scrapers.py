@@ -55,8 +55,7 @@ async def img_sampler(event):
             "keywords": query,
             "limit": lim,
             "format": "jpg",
-            "no_directory": "no_directory",
-            "safe_search": "safe_search"
+            "no_directory": "no_directory"
         }
 
         # passing the arguments to the function
@@ -187,7 +186,7 @@ async def urban_dict(ud_e):
             await ud_e.edit("No result found for **" + query + "**")
 
 
-@register(outgoing=True, pattern="^.tts ?(.*)")
+@register(outgoing=True, pattern=r"^.tts ?([\s\S]*)")
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
     if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
@@ -231,7 +230,7 @@ async def text_to_speech(query):
             await query.delete()
 
 
-@register(outgoing=True, pattern="^.trt ?(.*)")
+@register(outgoing=True, pattern=r"^.trt ?([\s\S]*)")
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     if not trans.text[0].isalpha() and trans.text[0] not in ("/", "#", "@", "!"):
