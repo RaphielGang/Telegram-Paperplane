@@ -18,18 +18,25 @@ from userbot.events import register
 async def get_admin(show):
     """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
-        mentions = "Admins in {}: \n".format(show.chat.title or "this chat")
+        if not show.is_group:
+            await show.edit("Are you sure this is a group?")
+            return
+        info = await show.client.get_entity(show.chat_id)
+        title = info.title if info.title else "this chat"
+        mentions = f'<b>Admins in {title}:</b> \n'
         try:
             async for user in show.client.iter_participants(
                     show.chat_id, filter=ChannelParticipantsAdmins
             ):
                 if not user.deleted:
-                    mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
+                    link =f"<a href=\"tg://user?id={user.id}\">{user.first_name}</a>"
+                    ID = f"<code>{user.id}</code>"
+                    mentions += f"\n{link} {ID}"
                 else:
-                    mentions += f"\nDeleted Account `{user.id}`"
+                    mentions += f"\nDeleted Account <code>{user.id}</code>"
         except ChatAdminRequiredError as err:
             mentions += " " + str(err) + "\n"
-        await show.edit(mentions)
+        await show.edit(mentions, parse_mode="html")
 
 HELPER.update({
     "adminlist": ".adminlist\
