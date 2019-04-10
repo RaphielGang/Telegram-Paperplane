@@ -4,83 +4,94 @@
 # you may not use this file except in compliance with the License.
 #
 
-from telethon.tl.functions.contacts import BlockRequest
-from telethon.tl.functions.contacts import UnblockRequest
+""" Userbot module for keeping control who PM you. """
+
+from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
-from userbot import COUNT_PM, LOGGER, LOGGER_GROUP, NOTIF_OFF, PM_AUTO_BAN, HELPER
+from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
+                     PM_AUTO_BAN, BRAIN_CHECKER)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
-UNAPPROVED_MSG = ("`Bleep Blop! This is a Bot. Don't fret. \n\n`"
-                  "`My Master hasn't approved you to PM.`"
-                  "`Please wait for my Master to look in, he would mostly approve PMs.`\n\n"
-                  "`As far as i know, he doesn't usually approve Retards.`")
-#=================================================================
+UNAPPROVED_MSG = ("Bleep blop! This is a bot. Don't fret.\n\n"
+                  "My master hasn't approved you to PM."
+                  " Please wait for my master to look in, he mostly approves PMs.\n\n"
+                  "As far as I know, he doesn't usually approve retards though.")
+# =================================================================
+
 
 @register(incoming=True)
-async def permitpm(e):
+async def permitpm(event):
+    """ Permits people from PMing you without approval. \
+        Will block retarded nibbas automatically. """
     if PM_AUTO_BAN:
+        if event.sender_id in BRAIN_CHECKER:
+            return
         global COUNT_PM
-        if e.is_private and not (await e.get_sender()).bot:
+        if event.is_private and not (await event.get_sender()).bot:
             try:
                 from userbot.modules.sql_helper.pm_permit_sql import is_approved
-            except:
+            except AttributeError:
                 return
-            apprv = is_approved(e.chat_id)
+            apprv = is_approved(event.chat_id)
 
-            if not apprv and e.text != UNAPPROVED_MSG:
-                await e.reply(UNAPPROVED_MSG)
+            if not apprv:
+                if event.raw_text != UNAPPROVED_MSG:
+                    await event.reply("`" + UNAPPROVED_MSG + "`")
 
                 if NOTIF_OFF:
-                    await e.client.send_read_acknowledge(e.chat_id)
-                if e.chat_id not in COUNT_PM:
-                    COUNT_PM.update({e.chat_id: 1})
+                    await event.client.send_read_acknowledge(event.chat_id)
+                if event.chat_id not in COUNT_PM:
+                    COUNT_PM.update({event.chat_id: 1})
                 else:
-                    COUNT_PM[e.chat_id] = COUNT_PM[e.chat_id] + 1
-                if COUNT_PM[e.chat_id] > 4:
-                    await e.respond(
-                        "`You were spamming my Master's PM, which I don't like.`"
-                        "`I'mma Report Spam.`"
+                    COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
+                if COUNT_PM[event.chat_id] > 4:
+                    await event.respond(
+                        "`You were spamming my master's PM, which I don't like.`"
+                        " `I'mma Report Spam.`"
                     )
-                    del COUNT_PM[e.chat_id]
-                    await e.client(BlockRequest(e.chat_id))
-                    await e.client(ReportSpamRequest(peer=e.chat_id))
+                    del COUNT_PM[event.chat_id]
+                    await event.client(BlockRequest(event.chat_id))
+                    await event.client(ReportSpamRequest(peer=event.chat_id))
                     if LOGGER:
-                        name = await e.client.get_entity(e.chat_id)
+                        name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
-                        await e.client.send_message(
+                        await event.client.send_message(
                             LOGGER_GROUP,
                             "["
                             + name0
                             + "](tg://user?id="
-                            + str(e.chat_id)
+                            + str(event.chat_id)
                             + ")"
                             + " was just another retarded nibba",
                         )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
-async def notifoff(e):
+async def notifoff(noff_event):
+    """ For .notifoff command, stop getting notifications from unapproved PMs. """
     global NOTIF_OFF
     NOTIF_OFF = True
-    await e.edit("`Notifications silenced!`")
+    await noff_event.edit("`Notifications silenced!`")
 
 
 @register(outgoing=True, pattern="^.notifon$")
-async def notifon(e):
+async def notifon(non_event):
+    """ For .notifoff command, get notifications from unapproved PMs. """
     global NOTIF_OFF
     NOTIF_OFF = False
-    await e.edit("`Notifications unmuted!`")
+    await non_event.edit("`Notifications unmuted!`")
 
 
 @register(outgoing=True, pattern="^.approve$")
 async def approvepm(apprvpm):
+    """ For .approve command, give someone the permissions to PM you. """
     if not apprvpm.text[0].isalpha() and apprvpm.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.pm_permit_sql import approve
-        except:
+        except AttributeError:
             await apprvpm.edit("`Running on Non-SQL mode!`")
             return
 
@@ -96,19 +107,20 @@ async def approvepm(apprvpm):
             name0 = str(aname.first_name)
 
         await apprvpm.edit(
-            f"[{name0}](tg://user?id={apprvpm.chat_id}) `Approved to PM!`"
+            f"[{name0}](tg://user?id={apprvpm.chat_id}) `approved to PM!`"
             )
 
         if LOGGER:
             await apprvpm.client.send_message(
                 LOGGER_GROUP,
-                "#APPROVE\n"
+                "#APPROVED\n"
                 + "User: " + f"[{name0}](tg://user?id={apprvpm.chat_id})",
             )
 
 
 @register(outgoing=True, pattern="^.block$")
 async def blockpm(block):
+    """ For .block command, block people from PMing you! """
     if not block.text[0].isalpha() and block.text[0] not in ("/", "#", "@", "!"):
 
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
@@ -137,13 +149,14 @@ async def blockpm(block):
         if LOGGER:
             await block.client.send_message(
                 LOGGER_GROUP,
-                "#BLOCK\n"
-                + "User: " + f"[{name0}](tg://user?id={apprvpm.chat_id})",
+                "#BLOCKED\n"
+                + "User: " + f"[{name0}](tg://user?id={block.chat_id})",
             )
 
 
 @register(outgoing=True, pattern="^.unblock$")
 async def unblockpm(unblock):
+    """ For .unblock command, let people PMing you again! """
     if not unblock.text[0].isalpha() and unblock.text[0] \
             not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
 
@@ -158,22 +171,21 @@ async def unblockpm(unblock):
         if LOGGER:
             await unblock.client.send_message(
                 LOGGER_GROUP,
-                f"[{name0}](tg://user?id={unblock.chat_id})"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                f"[{name0}](tg://user?id={unblock.chat_id})"
                 " was unblocc'd!.",
             )
 
 HELPER.update({
-    ".approve": "Approve the mentioned/replied person to PM."
-})
-HELPER.update({
-    ".block": "Block the person on the PM."
-})
-HELPER.update({
-    ".unblock": "Unblock the person on the PM."
-})
-HELPER.update({
-    ".notioff": "Clear any notifications for unapproved PMs"
-})
-HELPER.update({
-    ".notifon": "Allow notifications from unapproved PMs"
+    "pmpermit": "\
+.approve\
+\nUsage: Approves the mentioned/replied person to PM.\
+\n\n.block\
+\nUsage: Blocks the person from PMing you.\
+\n\n.unblock\
+\nUsage: Unblocks the person so they can PM you.\
+\n\n.notifoff\
+\nUsage: Clears any notifications of unapproved PMs.\
+\n\n.notifon\
+\nUsage: Allows notifications for unapproved PMs.\
+"
 })

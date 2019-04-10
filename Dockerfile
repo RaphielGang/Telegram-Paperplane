@@ -45,7 +45,7 @@ RUN apk add --no-cache \
     curl neofetch git sudo gcc python-dev python3-dev \
     postgresql postgresql-client php-pgsql \
     musl postgresql-dev
-RUN apk add --no-cache sqlite figlet
+RUN apk add --no-cache sqlite figlet libwebp-dev
 
 # Copy Python Requirements to /app
 RUN git clone https://github.com/psycopg/psycopg2 psycopg2 \
@@ -57,8 +57,12 @@ RUN adduser userbot --disabled-password --home /home/userbot
 RUN adduser userbot wheel
 USER userbot
 RUN mkdir /home/userbot/userbot
-RUN git clone https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
+RUN git clone -b staging https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 WORKDIR /home/userbot/userbot
+#
+#Copies session and config(if it exists)
+#
+COPY ./userbot.session ./config.env* /home/userbot/userbot/
 #
 # Install requirements
 #

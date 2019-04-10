@@ -6,28 +6,39 @@
 # The entire source code is OSSRPL except 'adminlist' which is MPL
 # License: MPL and OSSRPL
 
+""" Userbot module allowing you to get the admin list in a chat. """
+
 from telethon.errors import ChatAdminRequiredError
 from telethon.tl.types import ChannelParticipantsAdmins
 from userbot import HELPER
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.adminlist")
+@register(outgoing=True, pattern="^.adminlist$")
 async def get_admin(show):
+    """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
-        mentions = "Admins in {}: \n".format(show.chat.title or "this chat")
+        if not show.is_group:
+            await show.edit("Are you sure this is a group?")
+            return
+        info = await show.client.get_entity(show.chat_id)
+        title = info.title if info.title else "this chat"
+        mentions = f'<b>Admins in {title}:</b> \n'
         try:
             async for user in show.client.iter_participants(
                     show.chat_id, filter=ChannelParticipantsAdmins
             ):
                 if not user.deleted:
-                    mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
+                    link =f"<a href=\"tg://user?id={user.id}\">{user.first_name}</a>"
+                    ID = f"<code>{user.id}</code>"
+                    mentions += f"\n{link} {ID}"
                 else:
-                    mentions += f"\nDeleted Account `{user.id}`"
+                    mentions += f"\nDeleted Account <code>{user.id}</code>"
         except ChatAdminRequiredError as err:
             mentions += " " + str(err) + "\n"
-        await show.edit(mentions)
+        await show.edit(mentions, parse_mode="html")
 
 HELPER.update({
-    "adminlist <parmeter>": "Retrieves all admins, if parameter is 0, tags them, if its 1."
+    "adminlist": ".adminlist\
+    \nUsage: Retrieves all admins in the chat."
 })
