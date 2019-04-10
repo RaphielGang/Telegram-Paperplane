@@ -78,6 +78,10 @@ YOUTUBE_API_KEY = os.environ.get(
     "YOUTUBE_API_KEY", None
     )
 
+DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
+SPOTIFY_AUTH_KEY = os.environ.get("SPOTIFY_AUTH_KEY", None)
+SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
+
 bot = TelegramClient("userbot", API_KEY, API_HASH)
 
 
