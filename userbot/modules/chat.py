@@ -6,7 +6,9 @@
 
 from time import sleep
 
-from userbot import HELPER, LOGGER, LOGGER_GROUP
+from telethon.tl.functions.channels import LeaveChannelRequest
+
+from userbot import HELPER, LOGGER, LOGGER_GROUP, bot
 from userbot.events import register
 
 
@@ -57,6 +59,15 @@ async def log(log_text):
         sleep(2)
         await log_text.delete()
 
+
+@register(outgoing=True, pattern="^.kickme$")
+async def kickme(leave):
+    """ Basically it's .kickme command """
+    if not leave.text[0].isalpha() and leave.text[0] not in ("/", "#", "@", "!"):
+        await leave.edit("`Nope, no, no, I go away`")
+        await bot(LeaveChannelRequest(leave.chat_id))
+
+
 HELPER.update({
     "chatid" : "Fetches the current chat's ID"
 })
@@ -67,4 +78,7 @@ forwarded message, finds the ID for the source."
 HELPER.update({
     "log" : "Forwards the message you've replied to in your \
 logger group."
+})
+HELPER.update({
+    "kickme" : "Leave from a targeted group."
 })
