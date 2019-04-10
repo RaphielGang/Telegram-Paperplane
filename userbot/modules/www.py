@@ -3,6 +3,8 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
+""" Userbot module containing commands related to the \
+    Information Superhighway(yes, Internet). """
 
 from datetime import datetime
 
@@ -14,6 +16,7 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^.speed$")
 async def speedtst(spd):
+    """ For .speed command, use SpeedTest to check server speeds. """
     if not spd.text[0].isalpha() and spd.text[0] not in ("/", "#", "@", "!"):
         await spd.edit("`Running speed test . . .`")
         test = speedtest.Speedtest()
@@ -57,9 +60,10 @@ def speed_convert(size):
 
 
 @register(outgoing=True, pattern="^.nearestdc$")
-async def neardc(e):
-    result = await e.client(functions.help.GetNearestDcRequest())
-    await e.edit(
+async def neardc(event):
+    """ For .nearestdc command, get the nearest datacenter information. """
+    result = await event.client(functions.help.GetNearestDcRequest())
+    await event.edit(
         f"Country : `{result.country}` \n"
         f"Nearest Datacenter : `{result.nearest_dc}` \n"
         f"This Datacenter : `{result.this_dc}`"
@@ -67,10 +71,24 @@ async def neardc(e):
 
 
 @register(outgoing=True, pattern="^.pingme$")
-async def pingme(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def pingme(pong):
+    """ FOr .pingme command, ping the userbot from any chat.  """
+    if not pong.text[0].isalpha() and pong.text[0] not in ("/", "#", "@", "!"):
         start = datetime.now()
-        await e.edit("`Pong!`")
+        await pong.edit("`Pong!`")
         end = datetime.now()
-        ms = (end - start).microseconds / 1000
-        await e.edit("Pong!\n%sms" % (ms))
+        duration = (end - start).microseconds / 1000
+        await pong.edit("Pong!\n%sms" % (duration))
+
+HELPER.update({
+    "speed": ".speed\
+    \nUsage: Does a speedtest and shows the results."
+})
+HELPER.update({
+    "nearestdc": ".nearestdc\
+    \nUsage: Finds the nearest datacenter from your server."
+})
+HELPER.update({
+    "pingme": ".pingme\
+    \nUsage: Shows how long it takes to ping your bot."
+})

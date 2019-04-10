@@ -4,46 +4,61 @@
 # you may not use this file except in compliance with the License.
 #
 
+""" Userbot module for muting chats. """
+
 from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 @register(outgoing=True, pattern="^.unmutechat$")
-async def unmute_chat(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def unmute_chat(unm_e):
+    """ For .unmutechat command, unmute a muted chat. """
+    if not unm_e.text[0].isalpha() and unm_e.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.keep_read_sql import unkread
-        except:
-            await e.edit('`Running on Non-SQL Mode!`')
-        unkread(str(e.chat_id))
-        await e.edit("```Unmuted this chat Successfully```")
+        except AttributeError:
+            await unm_e.edit('`Running on Non-SQL Mode!`')
+            return
+        unkread(str(unm_e.chat_id))
+        await unm_e.edit("```Unmuted this chat Successfully```")
 
 
 @register(outgoing=True, pattern="^.mutechat$")
-async def mute_chat(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def mute_chat(mute_e):
+    """ For .mutechat command, mute any chat. """
+    if not mute_e.text[0].isalpha() and mute_e.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot.modules.sql_helper.keep_read_sql import kread
-        except Exception as er:
-            print(er)
-            await e.edit("`Running on Non-SQL mode!`")
+        except AttributeError:
+            await mute_e.edit("`Running on Non-SQL mode!`")
             return
-        await e.edit(str(e.chat_id))
-        kread(str(e.chat_id))
-        await e.edit("`Shush! This chat will be silenced!`")
+        await mute_e.edit(str(mute_e.chat_id))
+        kread(str(mute_e.chat_id))
+        await mute_e.edit("`Shush! This chat will be silenced!`")
         if LOGGER:
-            await e.client.send_message(
+            await mute_e.client.send_message(
                 LOGGER_GROUP,
-                str(e.chat_id) + " was silenced.")
+                str(mute_e.chat_id) + " was silenced.")
 
 
 @register(incoming=True)
-async def keep_read(e):
+async def keep_read(message):
+    """ The mute logic. """
     try:
         from userbot.modules.sql_helper.keep_read_sql import is_kread
-    except:
+    except AttributeError:
         return
-    K = is_kread()
-    if K:
-        for i in K:
-            if i.groupid == str(e.chat_id):
-                await e.client.send_read_acknowledge(e.chat_id)
+    kread = is_kread()
+    if kread:
+        for i in kread:
+            if i.groupid == str(message.chat_id):
+                await message.client.send_read_acknowledge(message.chat_id)
+
+HELPER.update({
+    'unmutechat': '.unmutechat\
+\nUsage: Unmutes a muted chat.'
+})
+
+HELPER.update({
+    'mutechat': '.mutechat\
+\nUsage: Allows you to mute any chat.'
+})
