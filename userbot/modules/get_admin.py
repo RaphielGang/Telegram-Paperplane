@@ -114,6 +114,9 @@ async def get_admin(show):
                             banned_rights
                         )
                     )
+                except ChatAdminRequiredError:
+                    await show.edit("`you don't have ban rights in this group`")
+                    return
                 except UserAdminInvalidError:
                     del_u -= 1
                     del_a += 1
