@@ -101,13 +101,18 @@ async def approvepm(apprvpm):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             approve(replied_user.user.id)
+
+            await apprvpm.edit(
+                f"[{name0}](tg://user?id={replied_user.user.id}) `approved to PM!`"
+            )
+
         else:
             approve(apprvpm.chat_id)
             aname = await apprvpm.client.get_entity(apprvpm.chat_id)
             name0 = str(aname.first_name)
 
-        await apprvpm.edit(
-            f"[{name0}](tg://user?id={apprvpm.chat_id}) `approved to PM!`"
+            await apprvpm.edit(
+                f"[{name0}](tg://user?id={apprvpm.chat_id}) `approved to PM!`"
             )
 
         if LOGGER:
