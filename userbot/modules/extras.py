@@ -1,7 +1,7 @@
 import asyncio, subprocess
 import time
 from userbot import bot, LOGGER, LOGGER_GROUP
-from telethon import events
+from telethon import events, functions, types
 from telethon.events import StopPropagation
 from telethon.tl.functions.messages import ExportChatInviteRequest
 from telethon.tl.functions.contacts import BlockRequest
@@ -123,3 +123,14 @@ async def _(event):
 		await asyncio.sleep(0.1)
 		await event.edit("".join(deq))
 		deq.rotate(1)
+
+@bot.on(events.NewMessage(pattern=r"\.myusernames", outgoing=True))
+async def _(event):
+    if event.fwd_from:
+        return
+    result = await bot(functions.channels.GetAdminedPublicChannelsRequest())
+    output_str = ""
+    for channel_obj in result.chats:
+        output_str += f"- {channel_obj.title} @{channel_obj.username} \n"
+    await event.edit(output_str)
+
