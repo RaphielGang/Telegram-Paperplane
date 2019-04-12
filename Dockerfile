@@ -18,20 +18,14 @@ RUN apk add --no-cache --update \
     sqlite-dev \
     build-base
 
-# Set Python version
-ARG PYTHON_VERSION='3.8-dev'
-# Set pyenv home
-ARG PYENV_HOME=/root/.pyenv
-# Note installing THROUGH THIS METHOD WILL DELAY DEPLOYING
-# Install pyenv, then install python versions
-RUN git clone --depth 1 https://github.com/pyenv/pyenv.git $PYENV_HOME && \
-    rm -rfv $PYENV_HOME/.git
-
-ENV PATH $PYENV_HOME/shims:$PYENV_HOME/bin:$PATH
-
-RUN pyenv install $PYTHON_VERSION
-RUN pyenv global $PYTHON_VERSION
-RUN pip install --upgrade pip && pyenv rehash
+# Setup Python 3.6.8
+RUN apk add --no-cache python3 \
+&& python3 -m ensurepip \
+&& pip3 install --upgrade pip setuptools \
+&& rm -r /usr/lib/python*/ensurepip && \
+if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+rm -r /root/.cache
 
 #
 # Install all the required packages
