@@ -11,7 +11,7 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
-                     PM_AUTO_BAN, BRAIN_CHECKER)
+                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -29,7 +29,6 @@ async def permitpm(event):
     if PM_AUTO_BAN:
         if event.sender_id in BRAIN_CHECKER:
             return
-        global COUNT_PM
         if event.is_private and not (await event.get_sender()).bot:
             try:
                 from userbot.modules.sql_helper.pm_permit_sql import is_approved
@@ -37,9 +36,20 @@ async def permitpm(event):
                 return
             apprv = is_approved(event.chat_id)
 
-            if not apprv:
-                if event.raw_text != UNAPPROVED_MSG:
-                    await event.reply("`" + UNAPPROVED_MSG + "`")
+            # This part basically is a sanity check
+            # If the message that sent before is Unapproved Message
+            # then stop sending it again to prevent FloodHit
+            if not apprv and event.text != UNAPPROVED_MSG:
+                if event.chat_id in LASTMSG:
+                    prevmsg = LASTMSG[event.chat_id]
+                    # If the message doesn't same as previous one
+                    # Send the Unapproved Message again
+                    if event.text != prevmsg:
+                        await event.reply(UNAPPROVED_MSG)
+                    LASTMSG.update({event.chat_id: event.text})
+                else:
+                    await event.reply(UNAPPROVED_MSG)
+                    LASTMSG.update({event.chat_id: event.text})
 
                 if NOTIF_OFF:
                     await event.client.send_read_acknowledge(event.chat_id)
@@ -47,14 +57,19 @@ async def permitpm(event):
                     COUNT_PM.update({event.chat_id: 1})
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
+
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
                         "`You were spamming my master's PM, which I don't like.`"
                         " `I'mma Report Spam.`"
                     )
+
                     del COUNT_PM[event.chat_id]
+                    del LASTMSG[event.chat_id]
+
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
+
                     if LOGGER:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
