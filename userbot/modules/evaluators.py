@@ -183,7 +183,7 @@ async def terminal_runner(term):
             output.close()
             await term.client.send_file(
                 term.chat_id,
-                "sender.txt",
+                "output.txt",
                 reply_to=term.id,
                 caption="`Output too large, sending as file`",
             )
