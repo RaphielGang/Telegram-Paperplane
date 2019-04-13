@@ -153,7 +153,7 @@ async def terminal_runner(term):
     """ For .term command, runs bash commands and scripts on your server. """
     if not term.text[0].isalpha() and term.text[0] not in ("/", "#", "@", "!"):
         curruser = getuser()
-        command = str(term.text[6:])
+        command = term.pattern_match.group(1)
 
         if term.is_channel and not term.is_group:
             await term.edit("`Term commands aren't permitted on channels!`")
