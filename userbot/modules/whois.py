@@ -72,21 +72,13 @@ async def get_user(event):
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
-            else:
-                # the disgusting CRAP way, of doing the thing
-                try:
-                    user_object = await event.client.get_entity(user)
-                    replied_user = await event.client(GetFullUserRequest(user_object.id))
-                except (TypeError, ValueError) as err:
-                    await event.edit(str(err))
-                    return None
-        else:
-            try:
-                user_object = await event.client.get_entity(user)
-                replied_user = await event.client(GetFullUserRequest(user_object.id))
-            except (TypeError, ValueError) as err:
-                await event.edit(str(err))
-                return None
+                return replied_user
+        try:
+            user_object = await event.client.get_entity(user)
+            replied_user = await event.client(GetFullUserRequest(user_object.id))
+        except (TypeError, ValueError) as err:
+            await event.edit(str(err))
+            return None
 
     return replied_user
 
