@@ -11,7 +11,7 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
-                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG)
+                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -64,8 +64,12 @@ async def permitpm(event):
                         " `I'mma Report Spam.`"
                     )
 
-                    del COUNT_PM[event.chat_id]
-                    del LASTMSG[event.chat_id]
+                    try:
+                        del COUNT_PM[event.chat_id]
+                        del LASTMSG[event.chat_id]
+                    except KeyError:
+                        LOGS.info("CountPM wen't rarted boi")
+                        return
 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
