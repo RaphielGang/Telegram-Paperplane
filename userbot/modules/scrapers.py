@@ -186,7 +186,7 @@ async def urban_dict(ud_e):
             await ud_e.edit("No result found for **" + query + "**")
 
 
-@register(outgoing=True, pattern=r"^.tts ?([\s\S]*)")
+@register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
     if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
@@ -230,17 +230,15 @@ async def text_to_speech(query):
             await query.delete()
 
 
-@register(outgoing=True, pattern=r"^.trt ?([\s\S]*)")
+@register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)") # ^.promote(?: |$)(.*)
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     if not trans.text[0].isalpha() and trans.text[0] not in ("/", "#", "@", "!"):
         translator = Translator()
         textx = await trans.get_reply_message()
-        message = trans.text
-        if message[5:]:
-            message = str(message[5:])
-        elif textx:
-            message = textx.text
+        message = trans.pattern_match.group(1)
+        if message: pass
+        elif textx: message = textx.text
         else:
             await trans.edit("`Give a text or reply to a message to translate!`")
             return
@@ -251,20 +249,6 @@ async def translateme(trans):
             await trans.edit("Invalid destination language.")
             return
 
-        message = trans.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
-        else:
-            await trans.edit("`Give a text or reply to a message to translate!`")
-            return
-
-        try:
-            translator.translate(message, dest=LANG)
-        except ValueError:
-            await trans.edit("Invalid destination language.")
-            return
-
-        reply_text = translator.translate(message, dest=LANG)
         source_lan = LANGUAGES[f'{reply_text.src}']
         transl_lan = LANGUAGES[f'{reply_text.dest}']
         reply_text = f"**Source ({source_lan.title()}):**`\n{message}`**\n\
@@ -426,39 +410,6 @@ def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return inputString.encode('ascii', 'ignore').decode('ascii')
 
-HELPER.update({
-    'img': ".img <search_query>\
-    \nUsage: Does an image search on Google and shows two images."
-})
-HELPER.update({
-    'google': ".google <search_query>\
-    \nUsage: Does a search on Google."
-})
-HELPER.update({
-    'wiki': ".wiki <search_query>\
-    \nUsage: Does a Wikipedia search."
-})
-HELPER.update({
-    'ud': ".ud <search_query>\
-    \nUsage: Does a search on Urban Dictionary."
-})
-HELPER.update({
-    'tts': ".tts <text> or reply to someones text with .trt\
-    \nUsage: Translates text to speech for the default language which is set."
-})
-HELPER.update({
-    'trt': ".trt <text> or reply to someones text with .trt\
-    \nUsage: Translates text to the default language which is set."
-})
-HELPER.update({
-    'lang': ".lang <lang>\
-    \nUsage: Changes the default language of userbot scrapers used for Google TRT, \
-    TTS may not work."
-})
-HELPER.update({
-    'yt': ".yt <search_query>\
-    \nUsage: Does a YouTube search. "
-})
 HELPER.update({
     'img': ".img <search_query>\
     \nUsage: Does an image search on Google and shows two images."
