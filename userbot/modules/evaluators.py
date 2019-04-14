@@ -17,7 +17,7 @@ from userbot import HELPER, LOGGER, LOGGER_GROUP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.eval ?(.*)")
+@register(outgoing=True, pattern="^.eval(?: |$)(.*)")
 async def evaluate(query):
     """ For .eval command, evaluates the given Python expression. """
     if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
@@ -78,7 +78,7 @@ async def evaluate(query):
             )
 
 
-@register(outgoing=True, pattern=r"^.exec ?(.*)")
+@register(outgoing=True, pattern=r"^.exec(?: |$)(.*)")
 async def run(run_q):
     """ For .exec command, which executes the dynamically created program """
     if not run_q.text[0].isalpha() and run_q.text[0] not in ("/", "#", "@", "!"):
@@ -148,7 +148,7 @@ execute. Use .help exec for an example.```")
             )
 
 
-@register(outgoing=True, pattern="^.term ?(.*)")
+@register(outgoing=True, pattern="^.term(?: |$)(.*)")
 async def terminal_runner(term):
     """ For .term command, runs bash commands and scripts on your server. """
     if not term.text[0].isalpha() and term.text[0] not in ("/", "#", "@", "!"):

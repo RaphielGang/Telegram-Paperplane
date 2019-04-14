@@ -82,7 +82,7 @@ async def bot_ver(event):
             )
 
 
-@register(outgoing=True, pattern="^.pip ?(.*)")
+@register(outgoing=True, pattern="^.pip(?: |$)(.*)")
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):

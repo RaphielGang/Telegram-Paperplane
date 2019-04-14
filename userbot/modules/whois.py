@@ -17,7 +17,7 @@ from userbot.events import register
 TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
 
-@register(pattern=".whois ?(.*)", outgoing=True)
+@register(pattern=".whois(?: |$)(.*)", outgoing=True)
 async def who(event):
     """ For .whois command, get info about a user. """
     if event.fwd_from:
