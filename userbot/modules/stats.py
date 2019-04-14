@@ -38,9 +38,9 @@ async def _(event):
     end = datetime.now()
     ms = (end - start).seconds
     await event.edit("""`Your Stats Obtained in {} seconds`
-You have \t{} Private Messages.
-You are in \t{} Groups.
-You are in \t{} Super Groups.
-You Are in \t{} Channels.
-And finally Bots = \t{}""".format(ms, u, g, c, bc, b))
+`You have {} Private Messages`
+`You are in {} Groups`
+`You are in {} Super Groups`
+`You Are in {} Channels`
+`And finally Bots = {}`""".format(ms, u, g, c, bc, b))
 

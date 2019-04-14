@@ -1,6 +1,6 @@
 import asyncio, subprocess
 import time
-from userbot import bot, LOGGER, LOGGER_GROUP
+from userbot import bot, LOGGER, LOGGER_GROUP, HELPER
 from telethon import events, functions, types
 from telethon.events import StopPropagation
 from telethon.tl.functions.messages import ExportChatInviteRequest
@@ -9,9 +9,9 @@ from telethon.tl.functions.channels import LeaveChannelRequest, CreateChannelReq
 from lmgtfy import lmgtfy
 from collections import deque
 from telethon.tl.functions.users import GetFullUserRequest
+from userbot.events import register
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.leave$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.leave$"))
+@register(outgoing=True, pattern="^.leave$")
 async def leave(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("`I iz Leaving dis Group kek!`")
@@ -21,46 +21,24 @@ async def leave(e):
         else:
             await e.edit('`Sar This is Not A Chat`')
 
-@bot.on(events.NewMessage(pattern="^.lmg", outgoing=True))
-@bot.on(events.MessageEdited(pattern="^.lmg", outgoing=True))
-async def let_me_google_that_for_you(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
-        if message[8:]:
-            message = str(message[8:])
-        elif textx:
-            message = str(textx.message)
-        reply_text = 'http://lmgtfy.com/?s=g&iie=1&q=' + message.replace(" ", "+")
-        await e.edit(reply_text)
-        if LOGGER:
-            await bot.send_message(
-                LOGGER_GROUP,
-                "LMGTFY query " + message + " was executed successfully",
-            )
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^;__;$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^;__;$"))
+@register(outgoing=True, pattern="^;__;$")
 async def fun(e):
     t = ";__;"
     for j in range(10):
         t = t[:-1] + "_;"
         await e.edit(t)
 
-
-@bot.on(events.NewMessage(outgoing=True, pattern="^.cry$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.cry$"))
+@register(outgoing=True, pattern="^.cry$")
 async def cry(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("(;´༎ຶД༎ຶ)")
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.fp$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.fp$"))
+@register(outgoing=True, pattern="^.fp$")
 async def facepalm(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("🤦‍♂")
 
-@bot.on(events.NewMessage(pattern=r"\.moon animation", outgoing=True))
+@register(outgoing=True, pattern="^.moon$")
 async def _(event):
 	if event.fwd_from:
 		return
@@ -70,20 +48,17 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.sauce$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.sauce$"))
+@register(outgoing=True, pattern="^.sauce$")
 async def source(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("https://github.com/Yasir-siddiqui/Userbot/")
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.readme$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.readme$"))
+@register(outgoing=True, pattern="^.readme$")
 async def reedme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("https://github.com/Yasir-siddiqui/UserBot/blob/master/README.md")
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^.disapprove$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^.disapprove$"))
+@register(outgoing=True, pattern="^.disapprove$")
 async def disapprovepm(disapprvpm):
     if not disapprvpm.text[0].isalpha() and disapprvpm.text[0] not in ("/", "#", "@", "!"):
         try:
@@ -114,7 +89,7 @@ async def disapprovepm(disapprvpm):
                 " was disapproved to PM you.",
             )
 
-@bot.on(events.NewMessage(pattern=r"\.clock animation", outgoing=True))
+@register(outgoing=True, pattern="^.clock$")
 async def _(event):
 	if event.fwd_from:
 		return
@@ -124,7 +99,7 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
 
-@bot.on(events.NewMessage(pattern=r"\.myusernames", outgoing=True))
+@register(outgoing=True, pattern="^.myusernames$")
 async def _(event):
     if event.fwd_from:
         return
@@ -134,3 +109,33 @@ async def _(event):
         output_str += f"- {channel_obj.title} @{channel_obj.username} \n"
     await event.edit(output_str)
 
+HELPER.update({
+    "leave": "Leave a Chat"
+})
+HELPER.update({
+    ";__;": "You try it!"
+})
+HELPER.update({
+    "cry": "Cry"
+})
+HELPER.update({
+    "fp": "Send face palm emoji."
+})
+HELPER.update({
+    "moon": "Bot will send a cool moon animation."
+})
+HELPER.update({
+    "clock": "Bot will send a cool clock animation."
+})
+HELPER.update({
+    "readme": "Reedme."
+})
+HELPER.update({
+    "sauce": "source."
+})
+HELPER.update({
+    "disapprove": "Disapprove anyone in PM."
+})
+HELPER.update({
+    "myusernames": "List of Usernames owned by you."
+})
