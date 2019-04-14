@@ -63,7 +63,7 @@ async def get_admin(show):
         await show.edit(mentions, parse_mode="html")
 
 
-@register(outgoing=True, pattern="^.delusers ?(.*)")
+@register(outgoing=True, pattern="^.delusers(?: |$)(.*)")
 async def get_admin(show):
     """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):

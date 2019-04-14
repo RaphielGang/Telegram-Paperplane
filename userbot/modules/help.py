@@ -9,7 +9,7 @@
 from userbot import HELPER
 from userbot.events import register
 
-@register(outgoing=True, pattern="^.help ?(.*)")
+@register(outgoing=True, pattern="^.help(?: |$)(.*)")
 async def helper(event):
     """ For .help command,"""
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
