@@ -41,7 +41,7 @@ async def get_tz(con):
     except KeyError:
         return
 
-@register(outgoing=True, pattern="^.time ?(.*)")
+@register(outgoing=True, pattern="^.time(?: |$)(.*)")
 async def time_func(tdata):
     """ For .time command, return the time of
         1. The country passed as an argument,
@@ -75,7 +75,7 @@ async def time_func(tdata):
 
         await tdata.edit(f"`It's`  **{dt.now(time_zone).strftime(t_form)}**  `in {c_name}`")
 
-@register(outgoing=True, pattern="^.date ?(.*)")
+@register(outgoing=True, pattern="^.date(?: |$)(.*)")
 async def date_func(dat):
     """ For .date command, return the date of
         1. The country passed as an argument,

@@ -33,7 +33,7 @@ async def get_tz(con):
         return
 
 
-@register(outgoing=True, pattern="^.weather ?(.*)")
+@register(outgoing=True, pattern="^.weather(?: |$)(.*)")
 async def get_weather(weather):
     """ For .weather command, gets the current weather of a city. """
     if not weather.text.startswith("."):
@@ -104,7 +104,7 @@ async def get_weather(weather):
                        +f"`{cityname}, {fullc_n}`\n"
                        +f"`{time}`")
 
-@register(outgoing=True, pattern="^.setcity ?(.*)")
+@register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
 async def set_default_city(city):
     """ For .ctime command, change the default userbot country for date and time commands. """
     if not city.text.startswith("."):

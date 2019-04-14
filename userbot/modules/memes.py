@@ -226,7 +226,7 @@ async def lol(lel):
         await lel.edit(okay)
 
 
-@register(outgoing=True, pattern="^.cp ?(.*)")
+@register(outgoing=True, pattern="^.cp(?: |$)(.*)")
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
@@ -260,7 +260,7 @@ async def copypasta(cp_e):
         await cp_e.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.vapor ?(.*)")
+@register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
@@ -276,7 +276,7 @@ async def vapor(vpr):
         await vpr.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.str ?(.*)")
+@register(outgoing=True, pattern="^.str(?: |$)(.*)")
 async def stretch(stret):
     """ Stretch it."""
     if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
@@ -298,7 +298,7 @@ async def stretch(stret):
         await stret.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.zal ?(.*)")
+@register(outgoing=True, pattern="^.zal(?: |$)(.*)")
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
@@ -323,7 +323,7 @@ async def hoi(hello):
     await hello.edit("Hoi!😄")
 
 
-@register(outgoing=True, pattern="^.owo ?(.*)")
+@register(outgoing=True, pattern="^.owo(?: |$)(.*)")
 async def faces(owo):
     """ UwU """
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
@@ -398,7 +398,7 @@ async def metoo(hahayes):
         await hahayes.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.mock ?(.*)")
+@register(outgoing=True, pattern="^.mock(?: |$)(.*)")
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
@@ -414,7 +414,7 @@ async def spongemocktext(mock):
         await mock.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.clap ?(.*)")
+@register(outgoing=True, pattern="^.clap(?: |$)(.*)")
 async def claptext(memereview):
     """ Praise people! """
     textx = await memereview.get_reply_message()
@@ -440,7 +440,7 @@ async def bluetext(bt_e):
         )
 
 
-@register(pattern='.type ?(.*)')
+@register(pattern='.type(?: |$)(.*)')
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
     if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@", "!"):
