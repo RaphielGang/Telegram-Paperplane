@@ -92,7 +92,7 @@ async def set_group_photo(gpic):
                 await gpic.edit(PP_ERROR)
 
 
-@register(outgoing=True, pattern="^.promote ?(.*)")
+@register(outgoing=True, pattern="^.promote(?: |$)(.*)")
 async def promote(promt):
     """ For .promote command, do promote targeted person """
     if not promt.text[0].isalpha() \
@@ -145,12 +145,12 @@ async def promote(promt):
             await promt.client.send_message(
                 LOGGER_GROUP,
                 "#PROMOTE\n"
-                f"USER: `{user.id}`"
-                f"CHAT: {promt.chat_id}"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {promt.chat.title}(`{promt.chat_id}`)"
             )
 
 
-@register(outgoing=True, pattern="^.demote ?(.*)")
+@register(outgoing=True, pattern="^.demote(?: |$)(.*)")
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     if not dmod.text[0].isalpha() and dmod.text[0] not in ("/", "#", "@", "!"):
@@ -201,12 +201,12 @@ async def demote(dmod):
             await dmod.client.send_message(
                 LOGGER_GROUP,
                 "#DEMOTE\n"
-                f"USER: `{user.id}`"
-                f"CHAT: {dmod.chat_id}"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)"
             )
 
 
-@register(outgoing=True, pattern="^.ban ?(.*)")
+@register(outgoing=True, pattern="^.ban(?: |$)(.*)")
 async def thanos(bon):
     """ For .ban command, do "thanos" at targeted person """
     if not bon.text[0].isalpha() and bon.text[0] not in ("/", "#", "@", "!"):
@@ -248,7 +248,8 @@ async def thanos(bon):
         # Helps ban group join spammers more easily
         try:
             reply = await bon.get_reply_message()
-            await reply.delete()
+            if reply:
+                await reply.delete()
         except BadRequestError:
             await bon.edit("`I dont have message nuking rights! But still he was banned!`")
             return
@@ -263,12 +264,12 @@ async def thanos(bon):
             await bon.client.send_message(
                 LOGGER_GROUP,
                 "#BAN\n"
-                f"USER: `{user.id}`"
-                f"CHAT: {bon.chat_id}"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {bon.chat.title}(`{bon.chat_id}`)"
             )
 
 
-@register(outgoing=True, pattern="^.unban ?(.*)")
+@register(outgoing=True, pattern="^.unban(?: |$)(.*)")
 async def nothanos(unbon):
     """ For .unban command, undo "thanos" on target """
     if not unbon.text[0].isalpha() and unbon.text[0] \
@@ -313,14 +314,14 @@ async def nothanos(unbon):
                 await unbon.client.send_message(
                     LOGGER_GROUP,
                     "#UNBAN\n"
-                    f"USER: `{user.id}`"
-                    f"CHAT: `{unbon.chat_id}``"
+                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                    f"CHAT: {unbon.chat.title}(`{unbon.chat_id}`)"
                 )
         except UserIdInvalidError:
             await unbon.edit("`Uh oh my unban logic broke!`")
 
 
-@register(outgoing=True, pattern="^.mute ?(.*)")
+@register(outgoing=True, pattern="^.mute(?: |$)(.*)")
 async def spider(spdr):
     """
     This function is basically muting peeps
@@ -366,12 +367,12 @@ async def spider(spdr):
             await spdr.client.send_message(
                 LOGGER_GROUP,
                 "#MUTE\n"
-                f"USER: `{user.id}`"
-                f"CHAT: `{spdr.chat_id}",
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)"
             )
 
 
-@register(outgoing=True, pattern="^.unmute ?(.*)")
+@register(outgoing=True, pattern="^.unmute(?: |$)(.*)")
 async def unmoot(unmot):
     """ For .unmute command, unmute the target """
     if not unmot.text[0].isalpha() and unmot.text[0] \
@@ -429,8 +430,8 @@ async def unmoot(unmot):
             await unmot.client.send_message(
                 LOGGER_GROUP,
                 "#UNMUTE\n"
-                f"USER: `{user.id}`"
-                f"CHAT: `{unmot.chat_id}`",
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)"
             )
 
 @register(incoming=True)
@@ -466,7 +467,7 @@ async def muter(moot):
         if i.sender == str(moot.sender_id):
             await moot.delete()
 
-@register(outgoing=True, pattern="^.ungmute ?(.*)")
+@register(outgoing=True, pattern="^.ungmute(?: |$)(.*)")
 async def ungmoot(un_gmute):
     """ For .ungmute command, ungmutes the target in the userbot """
     if not un_gmute.text[0].isalpha() and un_gmute.text[0] \
@@ -503,12 +504,12 @@ async def ungmoot(un_gmute):
             await un_gmute.client.send_message(
                 LOGGER_GROUP,
                 "#UNGMUTE\n"
-                f"USER: `{user.id}`"
-                f"CHAT: `{un_gmute.chat_id}`",
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {un_gmute.chat.title}(`{un_gmute.chat_id}`)"
             )
 
 
-@register(outgoing=True, pattern="^.gmute ?(.*)")
+@register(outgoing=True, pattern="^.gmute(?: |$)(.*)")
 async def gspider(gspdr):
     """ For .gmute command, gmutes the target in the userbot """
     if not gspdr.text[0].isalpha() and gspdr.text[0] not in ("/", "#", "@", "!"):
@@ -550,8 +551,8 @@ async def gspider(gspdr):
             await gspdr.client.send_message(
                 LOGGER_GROUP,
                 "#GMUTE\n"
-                f"USER: `{user.id}`"
-                f"CHAT: `{gspdr.chat_id}`",
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {gspdr.chat.title}(`{gspdr.chat_id}`)"
             )
 
 async def get_user(event):
