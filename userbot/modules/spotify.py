@@ -13,17 +13,6 @@ SPO_BIO_CONFIG_ERROR = "```Error.```"
 username = SPOTIFY_USERNAME
 passw = SPOTIFY_PASS
 
-sptoken = st.start_session(username,passw)
-access_token = sptoken[0]
-expiration_date = sptoken[1]
-
-os.environ["spftoken"] = access_token
-
-spftoken = os.environ.get("spftoken", None)
-
-hed = {'Authorization': 'Bearer ' + spftoken}
-url = 'https://api.spotify.com/v1/me/player/currently-playing'
-
 artist = 0
 song = 0
 
@@ -48,6 +37,9 @@ async def update_spotify_info():
 	while spotifycheck:
 		try:
 			running = True
+			spftoken = os.environ.get("spftoken", None)
+			hed = {'Authorization': 'Bearer ' + spftoken}
+			url = 'https://api.spotify.com/v1/me/player/currently-playing'
 			response = requests.get(url, headers=hed)
 			data = json.loads(response.content)
 			artist = data['item']['album']['artists'][0]['name']
