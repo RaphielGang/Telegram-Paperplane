@@ -28,6 +28,13 @@ async def fun(e):
         t = t[:-1] + "_;"
         await e.edit(t)
 
+@register(outgoing=True, pattern="^Oof$")
+async def Oof(e):
+    t = "Oof"
+    for j in range(15):
+        t = t[:-1] + "of"
+        await e.edit(t)
+
 @register(outgoing=True, pattern="^.cry$")
 async def cry(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -138,4 +145,7 @@ HELPER.update({
 })
 HELPER.update({
     "myusernames": "List of Usernames owned by you."
+})
+HELPER.update({
+    "oof": "Same as ;__; but ooof"
 })
