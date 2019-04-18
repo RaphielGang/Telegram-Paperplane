@@ -8,6 +8,7 @@ Userbot module which has commands related to and requiring admin privileges to u
 
 from telethon.errors import (BadRequestError, ImageProcessFailedError,
                              PhotoCropSizeSmallError)
+from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
 from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
@@ -15,12 +16,10 @@ from telethon.tl.functions.channels import (EditAdminRequest,
 from telethon.tl.types import (ChatAdminRights, ChatBannedRights,
                                MessageMediaPhoto, MessageEntityMentionName)
 
-#from telethon.tl.patched import Message
-
 from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, HELPER, bot)
 from userbot.events import register
 
-#=================== CONSTANT ===================
+# =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing image`"
 NO_ADMIN = "`You aren't an admin!`"
@@ -32,7 +31,30 @@ CHAT_PP_ERROR = "`Some issue with updating the pic,`" \
                 "`maybe you aren't an admin,`" \
                 "`or don't have the desired rights.`"
 INVALID_MEDIA = "`Invalid Extension`"
-#================================================
+
+BANNED_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=True,
+    send_messages=True,
+    send_media=True,
+    send_stickers=True,
+    send_gifs=True,
+    send_games=True,
+    send_inline=True,
+    embed_links=True,
+)
+
+UNBAN_RIGHTS = ChatBannedRights(
+    until_date=None,
+    send_messages=None,
+    send_media=None,
+    send_stickers=None,
+    send_gifs=None,
+    send_games=None,
+    send_inline=None,
+    embed_links=None,
+)
+# ================================================
 
 
 @register(outgoing=True, pattern="^.setgrouppic$")
@@ -60,7 +82,7 @@ async def set_group_photo(gpic):
                 await EditPhotoRequest(
                     gpic.chat_id,
                     await bot.upload_file(photo)
-                    )
+                )
                 await gpic.edit(CHAT_PP_CHANGED)
 
             except PhotoCropSizeSmallError:
@@ -97,8 +119,10 @@ async def promote(promt):
         await promt.edit("`Promoting...`")
 
         user = await get_user(promt)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
         # Try to promote if current user is admin or creator
         try:
@@ -144,8 +168,10 @@ async def demote(dmod):
         await dmod.edit("`Demoting...`")
 
         user = await get_user(dmod)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
         # New rights after demotion
         newrights = ChatAdminRights(
@@ -187,18 +213,6 @@ async def demote(dmod):
 async def thanos(bon):
     """ For .ban command, do "thanos" at targeted person """
     if not bon.text[0].isalpha() and bon.text[0] not in ("/", "#", "@", "!"):
-        banned_rights = ChatBannedRights(
-            until_date=None,
-            view_messages=True,
-            send_messages=True,
-            send_media=True,
-            send_stickers=True,
-            send_gifs=True,
-            send_games=True,
-            send_inline=True,
-            embed_links=True,
-        )
-
         # Here laying the sanity check
         chat = await bon.get_chat()
         admin = chat.admin_rights
@@ -210,8 +224,10 @@ async def thanos(bon):
             return
 
         user = await get_user(bon)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
         # If the user is a sudo
         if user.id in BRAIN_CHECKER:
@@ -228,7 +244,7 @@ async def thanos(bon):
                 EditBannedRequest(
                     bon.chat_id,
                     user.id,
-                    banned_rights
+                    BANNED_RIGHTS
                 )
             )
         except BadRequestError:
@@ -272,7 +288,7 @@ async def nothanos(unbon):
             send_games=None,
             send_inline=None,
             embed_links=None,
-            )
+        )
 
         # Here laying the sanity check
         chat = await unbon.get_chat()
@@ -284,19 +300,21 @@ async def nothanos(unbon):
             await unbon.edit(NO_ADMIN)
             return
 
-        #If everything goes well...
+        # If everything goes well...
         await unbon.edit("`Unbanning...`")
 
         user = await get_user(unbon)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
         try:
             await unbon.client(EditBannedRequest(
                 unbon.chat_id,
                 user.id,
                 rights
-                ))
+            ))
             await unbon.edit("```Unbanned Successfully```")
 
             if LOGGER:
@@ -334,8 +352,10 @@ async def spider(spdr):
             return
 
         user = await get_user(spdr)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
         # If the targeted user is a Sudo
         if user.id in BRAIN_CHECKER:
@@ -375,7 +395,7 @@ async def unmoot(unmot):
             send_games=None,
             send_inline=None,
             embed_links=None,
-            )
+        )
 
         # Admin or creator check
         chat = await unmot.get_chat()
@@ -394,11 +414,13 @@ async def unmoot(unmot):
             await unmot.edit(NO_SQL)
             return
 
-        #If admin or creator, inform the user and start unmuting
+        # If admin or creator, inform the user and start unmuting
         await unmot.edit('```Unmuting...```')
         user = await get_user(unmot)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
         unmute(unmot.chat_id, user.id)
 
@@ -423,6 +445,7 @@ async def unmoot(unmot):
                 f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)"
             )
 
+
 @register(incoming=True)
 async def muter(moot):
     """ Used for deleting the messages of muted people """
@@ -434,15 +457,15 @@ async def muter(moot):
     muted = is_muted(moot.chat_id)
     gmuted = is_gmuted(moot.sender_id)
     rights = ChatBannedRights(
-                until_date=None,
-                send_messages=True,
-                send_media=True,
-                send_stickers=True,
-                send_gifs=True,
-                send_games=True,
-                send_inline=True,
-                embed_links=True,
-                )
+        until_date=None,
+        send_messages=True,
+        send_media=True,
+        send_stickers=True,
+        send_gifs=True,
+        send_games=True,
+        send_inline=True,
+        embed_links=True,
+    )
     if muted:
         for i in muted:
             if str(i.sender) == str(moot.sender_id):
@@ -455,6 +478,7 @@ async def muter(moot):
     for i in gmuted:
         if i.sender == str(moot.sender_id):
             await moot.delete()
+
 
 @register(outgoing=True, pattern="^.ungmute(?: |$)(.*)")
 async def ungmoot(un_gmute):
@@ -478,15 +502,17 @@ async def ungmoot(un_gmute):
             await un_gmute.edit(NO_SQL)
 
         user = await get_user(un_gmute)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
-        #If pass, inform and start ungmuting
+        # If pass, inform and start ungmuting
         await un_gmute.edit('```Ungmuting...```')
 
         ungmute(user.id)
 
-        #Inform about success
+        # Inform about success
         await un_gmute.edit("```Ungmuted Successfully```")
 
         if LOGGER:
@@ -520,19 +546,21 @@ async def gspider(gspdr):
             return
 
         user = await get_user(gspdr)
-        if user: pass
-        else: return
+        if user:
+            pass
+        else:
+            return
 
-        #If the targeted user is a SUDO
+        # If the targeted user is a SUDO
         if user.id in BRAIN_CHECKER:
             await gspdr.edit("`Gmute Error! Couldn't gmute this user`")
             return
 
-        #If pass, inform and start gmuting
+        # If pass, inform and start gmuting
         await gspdr.edit("`Grabs a huge, sticky duct tape!`")
         gmute(user.id)
 
-        #Delete the replied message and inform about success
+        # Delete the replied message and inform about success
         await gspdr.delete()
         await gspdr.respond("`Globally taped!`")
 
@@ -543,6 +571,84 @@ async def gspider(gspdr):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {gspdr.chat.title}(`{gspdr.chat_id}`)"
             )
+
+
+@register(outgoing=True, pattern="^.delusers(?: |$)(.*)")
+async def get_admin(show):
+    """ For .adminlist command, list all of the admins of the chat. """
+    if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
+        con = show.pattern_match.group(1)
+        del_u = 0
+        del_status = "`No deleted accounts found, Group is cleaned as Hell`"
+
+        if not show.is_group:
+            await show.edit("`This command is only for groups!`")
+            return
+
+        if con != "clean":
+            await show.edit("`Searching for zombie accounts...`")
+            async for user in show.client.iter_participants(
+                    show.chat_id
+            ):
+                if user.deleted:
+                    del_u += 1
+
+            if del_u > 0:
+                del_status = f"found **{del_u}** deleted account(s) in this group \
+                \nclean them by using .delusers clean"
+            await show.edit(del_status)
+            return
+
+        # Here laying the sanity check
+        chat = await show.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+
+        # Well
+        if not admin and not creator:
+            await show.edit("`You aren't an admin here!`")
+            return
+
+        await show.edit("`Cleaning deleted accounts...`")
+        del_u = 0
+        del_a = 0
+
+        async for user in show.client.iter_participants(
+                show.chat_id
+        ):
+            if user.deleted:
+                try:
+                    await show.client(
+                        EditBannedRequest(
+                            show.chat_id,
+                            user.id,
+                            BANNED_RIGHTS
+                        )
+                    )
+                except ChatAdminRequiredError:
+                    await show.edit("`you don't have ban rights in this group`")
+                    return
+                except UserAdminInvalidError:
+                    del_u -= 1
+                    del_a += 1
+                await show.client(
+                    EditBannedRequest(
+                        show.chat_id,
+                        user.id,
+                        UNBAN_RIGHTS
+                    )
+                )
+                del_u += 1
+
+        if del_u > 0:
+            del_status = f"cleaned **{del_u}** deleted account(s)"
+
+        if del_a > 0:
+            del_status = f"cleaned **{del_u}** deleted account(s) \
+            \n**{del_a}** deleted admin accounts are not removed"
+
+        await show.edit(del_status)
+
 
 async def get_user(event):
     """ Get the user from argument or replied message. """
@@ -599,3 +705,15 @@ groups you have in common with them."
 HELPER.update({
     "ungmute": "Usage: Reply someone's message with .ungmute to remove them from the gmuted list."
 })
+
+HELPER.update(
+    {
+        "delusers": "Usage: Searches for deleted accounts in a group."
+    }
+)
+
+HELPER.update(
+    {
+        "delusers clean": "Usage: Searches and removes deleted accounts from the group"
+    }
+)
