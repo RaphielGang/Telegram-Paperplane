@@ -6,22 +6,17 @@
 
 """ Userbot module containing various scrapers. """
 
+import html
 import os
 import re
 import urllib
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
-import requests
-import urllib
-import html
-import subprocess
 
 import requests
 import urbandict
 import wikipedia
 from google_images_download import google_images_download
-from googletrans import Translator, LANGUAGES
-from gtts import gTTS
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
@@ -62,12 +57,9 @@ async def img_sampler(event):
         paths = response.download(arguments)
         lst = paths[query]
         await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst)
-        try:
-            os.remove(lst[0])
-            os.remove(lst[1])
-            os.rmdir(os.path.dirname(os.path.abspath(lst[0])))
-        except:
-            None
+        os.remove(lst[0])
+        os.remove(lst[1])
+        os.rmdir(os.path.dirname(os.path.abspath(lst[0])))
         await event.delete()
 
 
@@ -102,11 +94,11 @@ async def wiki(wiki_q):
         match = wiki_q.pattern_match.group(1)
         try:
             wikipedia.summary(match)
-        except wikipedia.exceptions.DisambiguationError as e:
-            await wiki_q.edit(f"Disambiguated page found.\n\n{e}")
+        except wikipedia.exceptions.DisambiguationError as error:
+            await wiki_q.edit(f"Disambiguated page found.\n\n{error}")
             return
-        except wikipedia.exceptions.PageError as p:
-            await wiki_q.edit(f"Page not found.\n\n{p}")
+        except wikipedia.exceptions.PageError as pageerror:
+            await wiki_q.edit(f"Page not found.\n\n{pageerror}")
             return
         result = wikipedia.summary(match)
         if len(result) >= 4096:
@@ -119,7 +111,8 @@ async def wiki(wiki_q):
                 reply_to=wiki_q.id,
                 caption="`Output too large, sending as file`",
             )
-            subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+            if os.path.exists("output.txt"):
+                os.remove("output.txt")
             return
         await wiki_q.edit(
             "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
@@ -165,7 +158,8 @@ async def urban_dict(ud_e):
                     "output.txt",
                     caption="`Output was too large, sent it as a file.`"
                 )
-                subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+                if os.path.exists("output.txt"):
+                    os.remove("output.txt")
                 await ud_e.delete()
                 return
             await ud_e.edit(
@@ -192,8 +186,10 @@ async def text_to_speech(query):
     if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
         textx = await query.get_reply_message()
         message = query.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await query.edit("`Give a text or reply to a message for Text-to-Speech!`")
             return
@@ -237,8 +233,10 @@ async def translateme(trans):
         translator = Translator()
         textx = await trans.get_reply_message()
         message = trans.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await trans.edit("`Give a text or reply to a message to translate!`")
             return
@@ -305,8 +303,8 @@ def youtube_search(
         location_radius=None
     ):
     """ Do a YouTube search. """
-    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY, cache_discovery=False)
-    search_response = youtube.search().list(
+    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY, cache_discovery=False).search()
+    search_response = youtube.list(
         q=query,
         type="video",
         pageToken=token,
