@@ -6,17 +6,18 @@
 Userbot module which has commands related to and requiring admin privileges to use
 """
 
-from telethon.errors import (BadRequestError, ImageProcessFailedError,
-                             PhotoCropSizeSmallError)
-from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError
+from telethon.errors import (BadRequestError, ChatAdminRequiredError,
+                             ImageProcessFailedError, PhotoCropSizeSmallError,
+                             UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
-from telethon.tl.types import (ChatAdminRights, ChatBannedRights,
-                               MessageMediaPhoto, MessageEntityMentionName)
+from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
+                               ChatBannedRights, MessageEntityMentionName,
+                               MessageMediaPhoto)
 
-from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, HELPER, bot)
+from userbot import BRAIN_CHECKER, HELPER, LOGGER, LOGGER_GROUP, bot
 from userbot.events import register
 
 # =================== CONSTANT ===================
@@ -574,7 +575,7 @@ async def gspider(gspdr):
 
 
 @register(outgoing=True, pattern="^.delusers(?: |$)(.*)")
-async def get_admin(show):
+async def rm_deletedacc(show):
     """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
         con = show.pattern_match.group(1)
@@ -650,6 +651,31 @@ async def get_admin(show):
         await show.edit(del_status)
 
 
+@register(outgoing=True, pattern="^.adminlist$")
+async def get_admin(show):
+    """ For .adminlist command, list all of the admins of the chat. """
+    if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
+        if not show.is_group:
+            await show.edit("Are you sure this is a group?")
+            return
+        info = await show.client.get_entity(show.chat_id)
+        title = info.title if info.title else "this chat"
+        mentions = f'<b>Admins in {title}:</b> \n'
+        try:
+            async for user in show.client.iter_participants(
+                    show.chat_id, filter=ChannelParticipantsAdmins
+            ):
+                if not user.deleted:
+                    link = f"<a href=\"tg://user?id={user.id}\">{user.first_name}</a>"
+                    userid = f"<code>{user.id}</code>"
+                    mentions += f"\n{link} {userid}"
+                else:
+                    mentions += f"\nDeleted Account <code>{user.id}</code>"
+        except ChatAdminRequiredError as err:
+            mentions += " " + str(err) + "\n"
+        await show.edit(mentions, parse_mode="html")
+
+
 async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
@@ -681,7 +707,9 @@ async def get_user(event):
     return user_obj
 
 HELPER.update({
-<<<<<<< HEAD
+    "promote": "Usage: Reply to someone's message with .promote to promote them."
+})
+HELPER.update({
     "ban": "Usage: Reply to someone's message with .ban to ban them."
 })
 HELPER.update({
@@ -697,7 +725,6 @@ HELPER.update({
     "unmute": "Usage: Reply to someone's message with .unmute to remove them from muted list."
 })
 HELPER.update({
-<<<<<<< HEAD
     "gmute": "Usage: Reply to someone's message with .gmute to mute them in all \
 groups you have in common with them."
 })
@@ -722,48 +749,3 @@ HELPER.update(
         "adminlist" : "Usage: Retrieves all admins in the chat."
     }
 )
-=======
-    "gmute": "Usage: \nReply someone's message with .gmute to mute them in all \
-              groups you have in common with them."
-=======
-    "promote": "Usage: Reply to someone's message with .promote to promote them."
-})
-HELPER.update({
-    "ban": "Usage: Reply to someone's message with .ban to ban them."
-})
-HELPER.update({
-    "demote": "Usage: Reply to someone's message with .demote to revoke their admin permissions."
-})
-HELPER.update({
-    "unban": "Usage: Reply to someone's message with .unban to unban them in this chat."
-})
-HELPER.update({
-    "mute": "Usage: Reply to someone's message with .mute to mute them, works on admins too"
-})
-HELPER.update({
-    "unmute": "Usage: Reply to someone's message with .unmute to remove them from muted list."
-})
-HELPER.update({
-    "gmute": "Usage: Reply to someone's message with .gmute to mute them in all \
-groups you have in common with them."
->>>>>>> 7a94d02... Add more coms in help, fix some functions and fix a bit of afk
-})
-HELPER.update({
-    "ungmute": "Usage: Reply someone's message with .ungmute to remove them from the gmuted list."
-})
-<<<<<<< HEAD
->>>>>>> 1a69233... treewide: userbot: modules: cleanup and some fixups
-=======
-
-HELPER.update(
-    {
-        "delusers": "Usage: Searches for deleted accounts in a group."
-    }
-)
-
-HELPER.update(
-    {
-        "delusers clean": "Usage: Searches and removes deleted accounts from the group"
-    }
-)
->>>>>>> cc5cbb3... admin, getadmin: move deluser to admin
