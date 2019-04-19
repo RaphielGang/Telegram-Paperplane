@@ -39,12 +39,15 @@ RUN pip install --upgrade pip && pyenv rehash
 RUN apk --no-cache add build-base
 
 RUN apk add --no-cache \
-    py-pillow py-requests py-sqlalchemy py-psycopg2 git py-lxml \
-    libxslt-dev py-pip libxml2 libxml2-dev libpq postgresql-dev \
-    postgresql build-base linux-headers jpeg-dev \
-    curl neofetch git sudo gcc python-dev python3-dev \
+    py-pillow py-requests \
+    py-sqlalchemy py-psycopg2 git py-lxml \
+    libxslt-dev py-pip libxml2 libxml2-dev \
+    libpq postgresql-dev \
+    postgresql build-base linux-headers \
+    jpeg-dev curl neofetch git sudo \
+    gcc python-dev python3-dev \
     postgresql postgresql-client php-pgsql \
-    musl postgresql-dev
+    musl postgresql-dev py-tz py3-aiohttp
 RUN apk add --no-cache sqlite figlet libwebp-dev
 
 # Copy Python Requirements to /app
