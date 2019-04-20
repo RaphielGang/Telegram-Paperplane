@@ -303,8 +303,8 @@ def youtube_search(
         location_radius=None
     ):
     """ Do a YouTube search. """
-    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY, cache_discovery=False).search()
-    search_response = youtube.list(
+    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY, cache_discovery=False)
+    search_response = youtube.search().list(
         q=query,
         type="video",
         pageToken=token,

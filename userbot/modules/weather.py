@@ -89,17 +89,37 @@ async def get_weather(weather):
     sunrise = result['sys']['sunrise']
     sunset = result['sys']['sunset']
     wind = result['wind']['speed']
+    winddir = result['wind']['deg']
 
     ctimezone = tz(c_tz[country][0])
     time = datetime.now(ctimezone).strftime("%A, %I:%M %p")
     fullc_n = c_n[f"{country}"]
+    #dirs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
+    #        "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+    dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
-    fahrenheit = str(((curtemp - 273.15) * 9/5 + 32)).split(".")
-    celsius = str((curtemp - 273.15)).split(".")
+    div = (360/len(dirs))
+    funmath = int((winddir + (div/2))/div)
+    findir = dirs[funmath % len(dirs)]
+    kmph = str(wind * 3.6).split(".")
+    mph = str(wind * 2.237).split(".")
+    def fahrenheit(f):   
+        temp = str(((f - 273.15) * 9/5 + 32)).split(".")
+        return temp[0]
+    def celsius(c):
+        temp = str((c - 273.15)).split(".")
+        return temp[0]
+    def sun(unix):
+        xx = datetime.fromtimestamp(unix, tz=ctimezone).strftime("%I:%M %p")
+        return xx
 
-    await weather.edit(f"**Temperature:** {celsius[0]}°C / {fahrenheit[0]}°F\n"
-                       +f"**Humidity:** {humidity}%\n"
-                       +f"**Wind:** {wind} m/s\n\n\n"
+    await weather.edit(f"**Temperature:** `{celsius(curtemp)}°C | {fahrenheit(curtemp)}°F`\n"
+                       +f"**Min. Temp.:** `{celsius(min_temp)}°C | {fahrenheit(min_temp)}°F`\n"
+                       +f"**Max. Temp.:** `{celsius(max_temp)}°C | {fahrenheit(max_temp)}°F`\n"
+                       +f"**Humidity:** `{humidity}%`\n"
+                       +f"**Wind:** `{kmph[0]} kmh | {mph[0]} mph, {findir}`\n"
+                       +f"**Sunrise:** `{sun(sunrise)}`\n"
+                       +f"**Sunset:** `{sun(sunset)}`\n\n\n"
                        +f"**{desc}**\n"
                        +f"`{cityname}, {fullc_n}`\n"
                        +f"`{time}`")
