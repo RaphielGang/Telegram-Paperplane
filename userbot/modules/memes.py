@@ -429,29 +429,31 @@ async def spongemocktext(mock):
 @register(outgoing=True, pattern="^.clap(?: |$)(.*)")
 async def claptext(memereview):
     """ Praise people! """
-    textx = await memereview.get_reply_message()
-    message = memereview.pattern_match.group(1)
-    if message:
-        pass
-    elif textx:
-        message = textx.text
-    else:
-        await memereview.edit("`Hah, I don't clap pointlessly!`")
-        return
-    reply_text = "👏 "
-    reply_text += message.replace(" ", " 👏 ")
-    reply_text += " 👏"
-    await memereview.edit(reply_text)
+    if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
+        textx = await memereview.get_reply_message()
+        message = memereview.pattern_match.group(1)
+        if message:
+            pass
+        elif textx:
+            message = textx.text
+        else:
+            await memereview.edit("`Hah, I don't clap pointlessly!`")
+            return
+        reply_text = "👏 "
+        reply_text += message.replace(" ", " 👏 ")
+        reply_text += " 👏"
+        await memereview.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.bt$")
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
-    if await bt_e.get_reply_message():
-        await bt_e.edit(
-            "`BLUETEXT MUST CLICK.`\n"
-            "`Are you a stupid animal which is attracted to colours?`"
-        )
+    if not bt_e.text[0].isalpha() and bt_e.text[0] not in ("/", "#", "@", "!"):
+        if await bt_e.get_reply_message():
+            await bt_e.edit(
+                "`BLUETEXT MUST CLICK.`\n"
+                "`Are you a stupid animal which is attracted to colours?`"
+            )
 
 
 @register(pattern='.type(?: |$)(.*)')

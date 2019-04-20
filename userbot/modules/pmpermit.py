@@ -119,26 +119,28 @@ async def approvepm(apprvpm):
             replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
-            approve(replied_user.user.id)
-
-            await apprvpm.edit(
-                f"[{name0}](tg://user?id={replied_user.user.id}) `approved to PM!`"
-            )
+            uid = replied_user.user.id
 
         else:
-            approve(apprvpm.chat_id)
             aname = await apprvpm.client.get_entity(apprvpm.chat_id)
             name0 = str(aname.first_name)
+            uid = apprvpm.chat_id
 
-            await apprvpm.edit(
-                f"[{name0}](tg://user?id={apprvpm.chat_id}) `approved to PM!`"
-            )
+        try:
+            approve(uid)
+        except Exception:
+            await apprvpm.edit("`User may already be approved.`")
+            return
+
+        await apprvpm.edit(
+            f"[{name0}](tg://user?id={uid}) `approved to PM!`"
+        )
 
         if LOGGER:
             await apprvpm.client.send_message(
                 LOGGER_GROUP,
                 "#APPROVED\n"
-                + "User: " + f"[{name0}](tg://user?id={apprvpm.chat_id})",
+                + "User: " + f"[{name0}](tg://user?id={uid})",
             )
 
 
@@ -155,26 +157,24 @@ async def blockpm(block):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             await block.client(BlockRequest(replied_user.user.id))
-            try:
-                from userbot.modules.sql_helper.pm_permit_sql import dissprove
-                dissprove(replied_user.user.id)
-            except Exception:
-                pass
+            uid = replied_user.user.id
         else:
             await block.client(BlockRequest(block.chat_id))
             aname = await block.client.get_entity(block.chat_id)
             name0 = str(aname.first_name)
-            try:
-                from userbot.modules.sql_helper.pm_permit_sql import dissprove
-                dissprove(block.chat_id)
-            except Exception:
-                pass
+            uid = block.chat_id
+
+        try:
+            from userbot.modules.sql_helper.pm_permit_sql import dissprove
+            dissprove(uid)
+        except Exception:
+            pass
 
         if LOGGER:
             await block.client.send_message(
                 LOGGER_GROUP,
                 "#BLOCKED\n"
-                + "User: " + f"[{name0}](tg://user?id={block.chat_id})",
+                + "User: " + f"[{name0}](tg://user?id={uid})",
             )
 
 
@@ -195,7 +195,7 @@ async def unblockpm(unblock):
         if LOGGER:
             await unblock.client.send_message(
                 LOGGER_GROUP,
-                f"[{name0}](tg://user?id={unblock.chat_id})"
+                f"[{name0}](tg://user?id={replied_user.user.id})"
                 " was unblocc'd!.",
             )
 

@@ -97,7 +97,12 @@ async def uploadir(udir_event):
         if os.path.exists(input_str):
             start = datetime.now()
             await udir_event.edit("Processing ...")
-            lst_of_files = lst_of_files(input_str, [])
+            lst_of_files = []
+            for r, d, f in os.walk(input_str):
+                for file in f:
+                    lst_of_files.append(os.path.join(r, file))
+                for file in d:
+                    lst_of_files.append(os.path.join(r, file))
             LOGS.info(lst_of_files)
             uploaded = 0
             await udir_event.edit(
