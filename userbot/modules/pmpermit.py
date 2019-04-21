@@ -128,7 +128,7 @@ async def approvepm(apprvpm):
 
         try:
             approve(uid)
-        except Exception:
+        except:
             await apprvpm.edit("`User may already be approved.`")
             return
 
@@ -167,7 +167,7 @@ async def blockpm(block):
         try:
             from userbot.modules.sql_helper.pm_permit_sql import dissprove
             dissprove(uid)
-        except Exception:
+        except:
             pass
 
         if LOGGER:
