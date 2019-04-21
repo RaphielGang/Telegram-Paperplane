@@ -129,7 +129,7 @@ async def approvepm(apprvpm):
 
         try:
             approve(uid)
-        except:
+        except IntegrityError:
             await apprvpm.edit("`User may already be approved.`")
             return
 
@@ -168,7 +168,7 @@ async def blockpm(block):
         try:
             from userbot.modules.sql_helper.pm_permit_sql import dissprove
             dissprove(uid)
-        except:
+        except AttributeError: #Non-SQL mode.
             pass
 
         if LOGGER:
