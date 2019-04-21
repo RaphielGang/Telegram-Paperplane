@@ -1,5 +1,7 @@
 # Telegram-UserBot
 
+((( Migrating to GitLab soon )))
+
 ### If the CI builds pass, but you still get syntax errors when running locally it's most probably not a problem with the source but with your version of python
 
 
