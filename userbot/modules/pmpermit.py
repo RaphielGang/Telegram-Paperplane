@@ -9,6 +9,7 @@
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
+from sqlalchemy.exc import IntegrityError 
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
@@ -128,7 +129,7 @@ async def approvepm(apprvpm):
 
         try:
             approve(uid)
-        except:
+        except IntegrityError:
             await apprvpm.edit("`User may already be approved.`")
             return
 
@@ -167,7 +168,7 @@ async def blockpm(block):
         try:
             from userbot.modules.sql_helper.pm_permit_sql import dissprove
             dissprove(uid)
-        except:
+        except AttributeError: #Non-SQL mode.
             pass
 
         if LOGGER:
