@@ -164,7 +164,6 @@ async def sedit_blankx(e):
 		await f.delete()
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.send (.*? )'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.send (.*? )'))
 async def send_blankx(e):
 	usir=e.pattern_match.group(1)[:-1]
 	skep=7+len(usir)
