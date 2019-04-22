@@ -1,0 +1,75 @@
+{
+  "name": "UserBot",
+  "description": "Telegram UserBot",
+  "logo": "https://i.imgur.com/ZLi4nDP.jpg",
+  "keywords": [
+    "telegram",
+    "userbot",
+    "plugin",
+    "modular",
+    "productivity"
+  ],
+  "repository": "https://github.com/Yasir-siddiqui/UserBot",
+  "website":   "https://github.com/RaphielGang/Telegram-UserBot/wiki",
+  "success_url": "https://t.me/userbot_announcements",
+  "env": {
+    "API_KEY": {
+      "description": "Get this value from my.telegram.org.",
+      "value": ""
+    },
+    "API_HASH": {
+      "description": "Get this value from my.telegram.org.",
+      "value": ""
+    },
+    "STRING_SESSION": {
+      "description": "Get this value by running python3 string_session.py locally",
+      "value": ""
+    },
+    "OPEN_WEATHER_MAP_APPID": {
+      "description": "Get your own APPID from https://api.openweathermap.org/data/2.5/weather",
+      "required": false
+    },
+    "SCREEN_SHOT_LAYER_ACCESS_KEY": {
+      "description": "Get your own ACCESS_KEY from http://api.screenshotlayer.com/api/capture",
+      "required": false
+    },
+    "LOGGER": {
+      "description": "Incase you want to turn off logging, put this to false",
+      "value": "",
+      "required": false
+    },
+    "LOGGER_GROUP": {
+      "description": "ChatID for the Log group",
+      "value": "",
+      "required": false
+    },
+    "CONSOLE_LOGGER_VERBOSE": {
+      "description": "If you need Verbosity on the Logging",
+      "value": "",
+      "required": false
+    },
+    "PM_AUTO_BAN": {
+      "description": "PM Auto-Ban Feature Switch",
+      "required": false
+    },
+    "BUILD_CHOICE": {
+      "description": "Build Choice Bleeding or Stable",
+      "required": false
+    },
+    "UPDATER": {
+      "description": "*cough* Heroku *cough*.",
+      "value": "False"
+    }
+  },
+  "addons": [{
+    "plan": "heroku-postgresql",
+    "options": {
+      "version": "9.5"
+    }
+  }],
+  "buildpacks": [{
+    "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+  }, {
+    "url": "heroku/python"
+  }]
+}
