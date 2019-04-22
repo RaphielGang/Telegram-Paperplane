@@ -4,6 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
+import asyncio
 from asyncio import wait
 
 from userbot import LOGGER_GROUP, LOGGER, HELPER
