@@ -5,6 +5,8 @@
 #
 #
 
+""" Userbot module for having some fun. """
+
 import asyncio
 import random
 import re
@@ -192,27 +194,23 @@ RUNSREACTS = [
 ]
 #===========================================
 
-@register(outgoing=True, pattern="^.(.*)say")
+@register(outgoing=True, pattern="^.(.*)say (.*)")
 async def univsaye(cowmsg):
-    if not cowmsg.text.startswith("."):
-        return
+    """ For .cowsay module, userbot wrapper for cow which says things. """
+    if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("/", "#", "@", "!"):
+        arg = cowmsg.pattern_match.group(1)
+        text = cowmsg.pattern_match.group(2)
 
-    if len(cowmsg.text.split()) < 2:
-        await cowmsg.edit("`give text to milk the cow bruh`")
-        return
+        cheese = cow.get_cow(arg)
+        if isinstance(cheese, str):
+            cheese = cow.get_cow('default')
+        cheese = cheese()
 
-    arg = cowmsg.text.split()[0][:-3].lstrip(".")
-    text = cowmsg.text.split(" ", 1)[1]
-
-    cheese = cow.get_cow(arg)
-    if isinstance(cheese, str):
-        cheese = cow.get_cow('default')
-    cheese = cheese()
-
-    await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
+        await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 @register(outgoing=True, pattern="^:/$")
 async def kek(keks):
+    """ Check yourself ;)"""
     uio = ["/", "\\"]
     for i in range(1, 15):
         time.sleep(0.3)
@@ -221,22 +219,28 @@ async def kek(keks):
 
 @register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
-    ok = "-_-"
-    if range(10):
-        ok = ok[:-1] + "_-"
-        await lel.edit(ok)
+    """ Ok... """
+    okay = "-_-"
+    for _ in range(10):
+        okay = okay[:-1] + "_-"
+        await lel.edit(okay)
 
 
-@register(outgoing=True, pattern="^.cp")
-async def copypasta(cp):
-    if not cp.text[0].isalpha() and cp.text[0] not in ("/", "#", "@", "!"):
-        textx = await cp.get_reply_message()
-        message = cp.text
-        if message[3:]:
-            message = str(message[3:])
+@register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+async def copypasta(cp_e):
+    """ Copypasta the famous meme """
+    if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
+        textx = await cp_e.get_reply_message()
+        message = cp_e.pattern_match.group(1)
+
+        if message:
+            pass
         elif textx:
-            message = textx
-            message = str(message.message)
+            message = textx.text
+        else:
+            await cp_e.edit("`😂🅱️IvE👐sOME👅text👅for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
+            return
+
         reply_text = random.choice(EMOJIS)
         b_char = random.choice(
             message
@@ -255,76 +259,92 @@ async def copypasta(cp):
                 else:
                     reply_text += owo.lower()
         reply_text += random.choice(EMOJIS)
-        await cp.edit(reply_text)
+        await cp_e.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.vapor (.*)")
+@register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
 async def vapor(vpr):
+    """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
         textx = await vpr.get_reply_message()
-        message = vpr.text
-        if message[7:]:
-            message = vpr.pattern_match.group(1)
-        elif textx:
-            message = textx
-            message = str(message.message)
+        message = vpr.pattern_match.group(1)
         if message:
-            data = message
+            pass
+        elif textx:
+            message = textx.text
         else:
-            data = ""
-        reply_text = str(data).translate(WIDE_MAP)
+            await vpr.edit("`Ｇｉｖｅ ｓｏｍｅ ｔｅｘｔ ｆｏｒ ｖａｐｏｒ！`")
+            return
+
+        reply_text = str(message).translate(WIDE_MAP)
         await vpr.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.str (.*)")
+@register(outgoing=True, pattern="^.str(?: |$)(.*)")
 async def stretch(stret):
+    """ Stretch it."""
     if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
         textx = await stret.get_reply_message()
         message = stret.text
-        if message[5:]:
-            message = stret.pattern_match.group(1)
+        message = stret.pattern_match.group(1)
+        if message:
+            pass
         elif textx:
-            message = textx
-            message = str(message.message)
+            message = textx.text
+        else:
+            await stret.edit("`GiiiiiiiB sooooooomeeeeeee teeeeeeext!`")
+            return
+
         count = random.randint(3, 10)
         reply_text = re.sub(
             r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])",
             (r"\1"*count),
             message
-            )
+        )
         await stret.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.zal (.*)")
+@register(outgoing=True, pattern="^.zal(?: |$)(.*)")
 async def zal(zgfy):
+    """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
         textx = await zgfy.get_reply_message()
-        message = zgfy.text
-        if message[4:]:
-            message = zgfy.pattern_match.group(1)
+        message = zgfy.pattern_match.group(1)
+        if message:
+            pass
         elif textx:
-            message = textx
-            message = str(message.message)
+            message = textx.text
+        else:
+            await zgfy.edit(
+                "`gͫ ̆ i̛ ̺ v͇̆ ȅͅ   a̢ͦ   s̴̪ c̸̢ ä̸ rͩͣ y͖͞   t̨͚ é̠ x̢͖  t͔͛`"
+            )
+            return
+
         input_text = " ".join(message).lower()
         zalgofied_text = zalgo.zalgo().zalgofy(input_text)
         await zgfy.edit(zalgofied_text)
 
 
 @register(outgoing=True, pattern="^hi$")
-async def hoi(ha):
-    await ha.edit("Hoi!😄")
+async def hoi(hello):
+    """ Greet everyone! """
+    await hello.edit("Hoi!😄")
 
 
-@register(outgoing=True, pattern="^.owo (.*)")
+@register(outgoing=True, pattern="^.owo(?: |$)(.*)")
 async def faces(owo):
+    """ UwU """
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
         textx = await owo.get_reply_message()
-        message = owo.text
-        if message[5:]:
-            message = owo.pattern_match.group(1)
+        message = owo.pattern_match.group(1)
+        if message:
+            pass
         elif textx:
-            message = textx
-            message = str(message.message)
+            message = textx.text
+        else:
+            await owo.edit("` UwU no text given! `")
+            return
+
         reply_text = re.sub(r"(r|l)", "w", message)
         reply_text = re.sub(r"(R|L)", "W", reply_text)
         reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
@@ -336,21 +356,24 @@ async def faces(owo):
 
 
 @register(outgoing=True, pattern="^.react$")
-async def react_meme(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+async def react_meme(react):
+    """ Make your userbot react to everything. """
+    if not react.text[0].isalpha() and react.text[0] not in ("/", "#", "@", "!"):
         index = random.randint(0, len(FACEREACTS))
         reply_text = FACEREACTS[index]
-        await e.edit(reply_text)
+        await react.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.shg$")
 async def shrugger(shg):
+    r""" ¯\_(ツ)_/¯ """
     if not shg.text[0].isalpha() and shg.text[0] not in ("/", "#", "@", "!"):
         await shg.edit(r"¯\_(ツ)_/¯")
 
 
 @register(outgoing=True, pattern="^.runs$")
 async def runner_lol(run):
+    """ Run, run, RUNNN! """
     if not DISABLE_RUN:
         if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
             index = random.randint(0, len(RUNSREACTS) - 1)
@@ -359,78 +382,93 @@ async def runner_lol(run):
 
 
 @register(outgoing=True, pattern="^.disable runs$")
-async def disable_killme(nokill):
-    if not nokill.text[0].isalpha() and nokill.text[0] not in ("/", "#", "@", "!"):
+async def disable_runs(norun):
+    """ Some people don't like running... """
+    if not norun.text[0].isalpha() and norun.text[0] not in ("/", "#", "@", "!"):
         global DISABLE_RUN
         DISABLE_RUN = True
-        await nokill.edit("```Done!```")
+        await norun.edit("```Done!```")
 
 
 @register(outgoing=True, pattern="^.enable runs$")
-async def enable_killme(killme):
-    if not killme.text[0].isalpha() and killme.text[0] not in ("/", "#", "@", "!"):
+async def enable_runs(run):
+    """ But some do! """
+    if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
         global DISABLE_RUN
         DISABLE_RUN = False
-        await killme.edit("```Done!```")
+        await run.edit("```Done!```")
 
 
-@register(outgoing=True, pattern="^.metoo")
+@register(outgoing=True, pattern="^.metoo$")
 async def metoo(hahayes):
+    """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@", "!"):
         index = random.randint(0, len(METOOSTR) - 1)
         reply_text = METOOSTR[index]
         await hahayes.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.mock")
+@register(outgoing=True, pattern="^.mock(?: |$)(.*)")
 async def spongemocktext(mock):
+    """ Do it and find the real fun. """
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
         textx = await mock.get_reply_message()
-        message = mock.text
-        if message[6:]:
-            message = str(message[6:])
+        message = mock.pattern_match.group(1)
+        if message:
+            pass
         elif textx:
-            message = textx
-            message = str(message.message)
+            message = textx.text
+        else:
+            await mock.edit("`gIvE sOMEtHInG tO MoCk!`")
+            return
+
         reply_text = spongemock.mock(message)
         await mock.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.clap (.*)")
+@register(outgoing=True, pattern="^.clap(?: |$)(.*)")
 async def claptext(memereview):
-    textx = await memereview.get_reply_message()
-    message = memereview.text
-    if message[6:]:
+    """ Praise people! """
+    if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
+        textx = await memereview.get_reply_message()
         message = memereview.pattern_match.group(1)
-    elif textx:
-        message = textx
-        message = str(message.message)
-    reply_text = "👏 "
-    reply_text += message.replace(" ", " 👏 ")
-    reply_text += " 👏"
-    await memereview.edit(reply_text)
+        if message:
+            pass
+        elif textx:
+            message = textx.text
+        else:
+            await memereview.edit("`Hah, I don't clap pointlessly!`")
+            return
+        reply_text = "👏 "
+        reply_text += message.replace(" ", " 👏 ")
+        reply_text += " 👏"
+        await memereview.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.bt$")
-async def bluetext(bt):
-    if await bt.get_reply_message():
-        await bt.edit(
-            "`BLUETEXT MUST CLICK.`\n"
-            "`Are you a stupid animal which is attracted to colours?`"
-        )
+async def bluetext(bt_e):
+    """ Believe me, you will find this useful. """
+    if not bt_e.text[0].isalpha() and bt_e.text[0] not in ("/", "#", "@", "!"):
+        if await bt_e.get_reply_message():
+            await bt_e.edit(
+                "`BLUETEXT MUST CLICK.`\n"
+                "`Are you a stupid animal which is attracted to colours?`"
+            )
 
 
-@register(pattern='.type')
+@register(pattern='.type(?: |$)(.*)')
 async def typewriter(typew):
+    """ Just a small command to make your keyboard become a typewriter! """
     if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@", "!"):
         textx = await typew.get_reply_message()
-        message = typew.text
-
-        if message[6:]:
-            message = str(message[6:])
+        message = typew.pattern_match.group(1)
+        if message:
+            pass
         elif textx:
-            message = textx
-            message = str(message.message)
+            message = textx.text
+        else:
+            await typew.edit("`Give a text to type!`")
+            return
         sleep_time = 0.03
         typing_symbol = "|"
         old_text = ''
