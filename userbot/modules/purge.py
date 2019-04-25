@@ -4,6 +4,8 @@
 # you may not use this file except in compliance with the License.
 #
 
+""" Userbot module for purging unneeded messages(usually spam or ot). """
+
 import time
 
 from telethon.errors import rpcbaseerrors
@@ -14,6 +16,7 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^.purge$")
 async def fastpurger(purg):
+    """ For .purge command, purge all messages starting from the reply. """
     if not purg.text[0].isalpha() and purg.text[0] not in ("/", "#", "@", "!"):
         chat = await purg.get_input_chat()
         msgs = []
@@ -47,13 +50,13 @@ async def fastpurger(purg):
 
 @register(outgoing=True, pattern="^.purgeme")
 async def purgeme(delme):
+    """ For .purgeme, delete x count of your latest message."""
     if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
         message = delme.text
-        self_id = await delme.client.get_peer_id('me')
         count = int(message[9:])
         i = 1
 
-        async for message in delme.client.iter_messages(delme.chat_id, self_id):
+        async for message in delme.client.iter_messages(delme.chat_id, from_user='me'):
             if i > count + 1:
                 break
             i = i + 1
@@ -75,8 +78,9 @@ async def purgeme(delme):
         await smsg.delete()
 
 
-@register(outgoing=True, pattern="^.delmsg$")
-async def delmsg(delme):
+@register(outgoing=True, pattern="^.del$")
+async def delete_it(delme):
+    """ For .del command, delete the replied message. """
     if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
         msg_src = await delme.get_reply_message()
         if delme.reply_to_msg_id:
@@ -98,6 +102,7 @@ async def delmsg(delme):
 
 @register(outgoing=True, pattern="^.editme")
 async def editer(edit):
+    """ For .editme command, edit your last message. """
     if not edit.text[0].isalpha() and edit.text[0] not in ("/", "#", "@", "!"):
         message = edit.text
         chat = await edit.get_input_chat()
@@ -116,13 +121,14 @@ async def editer(edit):
 
 @register(outgoing=True, pattern="^.sd")
 async def selfdestruct(destroy):
+    """ For .sd command, make seflf-destructable messages. """
     if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
         message = destroy.text
         counter = int(message[4:6])
         text = str(destroy.text[6:])
         text = (
             text
-            + "`This message shall be self-destructed in "
+            + "\n\n`This message shall be self-destructed in "
             + str(counter)
             + " seconds`"
         )
@@ -132,3 +138,29 @@ async def selfdestruct(destroy):
         await smsg.delete()
         if LOGGER:
             await destroy.client.send_message(LOGGER_GROUP, "sd query done successfully")
+
+HELPER.update({
+    'purge': '.purge\
+        \nUsage: Purges all messages starting from the reply.'
+})
+
+HELPER.update({
+    'purgeme': '.purgeme <x>\
+        \nUsage: Deletes x amount of your latest messages.'
+})
+
+HELPER.update({
+    "del": ".del\
+\nUsage: Deletes the message you replied to."
+})
+
+HELPER.update({
+    'editme': ".editme <newmessage>\
+\nUsage: Edits the text you replied to with newtext."
+})
+
+HELPER.update({
+    'sd': '.sd <x> <message>\
+\nUsage: Creates a message that selfdestructs in x seconds.\
+\nKeep the seconds under 100 since it puts your bot to sleep.'
+})

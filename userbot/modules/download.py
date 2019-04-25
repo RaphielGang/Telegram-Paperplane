@@ -5,6 +5,8 @@
 #
 # The entire source code is OSSRPL except 'download, uploadir, uploadas, upload' which is MPL
 # License: MPL and OSSRPL
+""" Userbot module which contains everything related to \
+    downloading/uploading from/to the server. """
 
 import json
 import os
@@ -23,33 +25,33 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
 
 def progress(current, total):
+    """ Logs the download progress """
     LOGS.info(
-        "Downloaded {} of {}\nCompleted {}".format(
-            current, total, (current / total) * 100
-        )
+        "Downloaded %s of %s\nCompleted %s",
+        current, total, (current / total) * 100
     )
 
-
-@register(pattern=r".download ?(.*)", outgoing=True)
-async def download(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if e.fwd_from:
+@register(pattern=r".download(?: |$)(.*)", outgoing=True)
+async def download(target_file):
+    """ For .download command, download files to the userbot's server. """
+    if not target_file.text[0].isalpha() and target_file.text[0] not in ("/", "#", "@", "!"):
+        if target_file.fwd_from:
             return
-        await e.edit("Processing ...")
-        input_str = e.pattern_match.group(1)
+        await target_file.edit("Processing ...")
+        input_str = target_file.pattern_match.group(1)
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-        if e.reply_to_msg_id:
+        if target_file.reply_to_msg_id:
             start = datetime.now()
-            downloaded_file_name = await e.client.download_media(
-                await e.get_reply_message(),
+            downloaded_file_name = await target_file.client.download_media(
+                await target_file.get_reply_message(),
                 TEMP_DOWNLOAD_DIRECTORY,
                 progress_callback=progress,
             )
             end = datetime.now()
-            ms = (end - start).seconds
-            await e.edit(
-                "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms)
+            duration = (end - start).seconds
+            await target_file.edit(
+                "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, duration)
             )
         elif "|" in input_str:
             url, file_name = input_str.split("|")
@@ -58,46 +60,52 @@ async def download(e):
             file_name = file_name.strip()
             required_file_name = TEMP_DOWNLOAD_DIRECTORY + "" + file_name
             start = datetime.now()
-            r = requests.get(url, stream=True)
-            with open(required_file_name, "wb") as fd:
-                total_length = r.headers.get("content-length")
+            resp = requests.get(url, stream=True)
+            with open(required_file_name, "wb") as file:
+                total_length = resp.headers.get("content-length")
                 # https://stackoverflow.com/a/15645088/4723940
                 if total_length is None:  # no content length header
-                    fd.write(r.content)
+                    file.write(resp.content)
                 else:
-                    dl = 0
+                    downloaded = 0
                     total_length = int(total_length)
-                    for chunk in r.iter_content(chunk_size=128):
-                        dl += len(chunk)
-                        fd.write(chunk)
-                        done = int(100 * dl / total_length)
+                    for chunk in resp.iter_content(chunk_size=128):
+                        downloaded += len(chunk)
+                        file.write(chunk)
+                        done = int(100 * downloaded / total_length)
                         download_progress_string = "Downloading ... [%s%s]" % (
                             "=" * done,
                             " " * (50 - done),
                         )
                         LOGS.info(download_progress_string)
             end = datetime.now()
-            ms = (end - start).seconds
-            await e.edit(
-                "Downloaded to `{}` in {} seconds.".format(required_file_name, ms)
+            duration = (end - start).seconds
+            await target_file.edit(
+                "Downloaded to `{}` in {} seconds.".format(required_file_name, duration)
             )
         else:
-            await e.edit("Reply to a message to download to my local server.")
+            await target_file.edit("Reply to a message to download to my local server.")
 
 
 @register(pattern=r".uploadir (.*)", outgoing=True)
-async def _(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if e.fwd_from:
+async def uploadir(udir_event):
+    """ For .uploadir command, allows you to upload everything from a folder in the server"""
+    if not udir_event.text[0].isalpha() and udir_event.text[0] not in ("/", "#", "@", "!"):
+        if udir_event.fwd_from:
             return
-        input_str = e.pattern_match.group(1)
+        input_str = udir_event.pattern_match.group(1)
         if os.path.exists(input_str):
             start = datetime.now()
-            await e.edit("Processing ...")
-            lst_of_files = lst_of_files(input_str, [])
+            await udir_event.edit("Processing ...")
+            lst_of_files = []
+            for r, d, f in os.walk(input_str):
+                for file in f:
+                    lst_of_files.append(os.path.join(r, file))
+                for file in d:
+                    lst_of_files.append(os.path.join(r, file))
             LOGS.info(lst_of_files)
-            u = 0
-            await e.edit(
+            uploaded = 0
+            await udir_event.edit(
                 "Found {} files. Uploading will start soon. Please wait!".format(
                     len(lst_of_files)
                 )
@@ -107,13 +115,13 @@ async def _(e):
                     # https://stackoverflow.com/a/678242/4723940
                     caption_rts = os.path.basename(single_file)
                     if not caption_rts.lower().endswith(".mp4"):
-                        await e.client.send_file(
-                            e.chat_id,
+                        await udir_event.client.send_file(
+                            udir_event.chat_id,
                             single_file,
                             caption=caption_rts,
                             force_document=False,
                             allow_cache=False,
-                            reply_to=e.message.id,
+                            reply_to=udir_event.message.id,
                             progress_callback=progress,
                         )
                     else:
@@ -128,14 +136,14 @@ async def _(e):
                             width = metadata.get("width")
                         if metadata.has("height"):
                             height = metadata.get("height")
-                        await e.client.send_file(
-                            e.chat_id,
+                        await udir_event.client.send_file(
+                            udir_event.chat_id,
                             single_file,
                             caption=caption_rts,
                             thumb=thumb_image,
                             force_document=False,
                             allow_cache=False,
-                            reply_to=e.message.id,
+                            reply_to=udir_event.message.id,
                             attributes=[
                                 DocumentAttributeVideo(
                                     duration=duration,
@@ -148,47 +156,48 @@ async def _(e):
                             progress_callback=progress,
                         )
                     os.remove(single_file)
-                    u = u + 1
+                    uploaded = uploaded + 1
             end = datetime.now()
-            ms = (end - start).seconds
-            await e.edit("Uploaded {} files in {} seconds.".format(u, ms))
+            duration = (end - start).seconds
+            await udir_event.edit("Uploaded {} files in {} seconds.".format(uploaded, duration))
         else:
-            await e.edit("404: Directory Not Found")
+            await udir_event.edit("404: Directory Not Found")
 
 
 @register(pattern=r".upload (.*)", outgoing=True)
-async def _(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if e.fwd_from:
+async def upload(u_event):
+    """ For .upload command, allows you to upload a file from the userbot's server """
+    if not u_event.text[0].isalpha() and u_event.text[0] not in ("/", "#", "@", "!"):
+        if u_event.fwd_from:
             return
-        if e.is_channel and not e.is_group:
-            await e.edit("`Uploading isn't permitted on channels`")
+        if u_event.is_channel and not u_event.is_group:
+            await u_event.edit("`Uploading isn't permitted on channels`")
             return
-        await e.edit("Processing ...")
-        input_str = e.pattern_match.group(1)
+        await u_event.edit("Processing ...")
+        input_str = u_event.pattern_match.group(1)
         if input_str in ("userbot.session", "config.env"):
-            await e.edit("`That's a dangerous operation! Not Permitted!`")
+            await u_event.edit("`That's a dangerous operation! Not Permitted!`")
             return
         if os.path.exists(input_str):
             start = datetime.now()
-            await e.client.send_file(
-                e.chat_id,
+            await u_event.client.send_file(
+                u_event.chat_id,
                 input_str,
                 force_document=True,
                 allow_cache=False,
-                reply_to=e.message.id,
+                reply_to=u_event.message.id,
                 progress_callback=progress,
             )
             end = datetime.now()
-            ms = (end - start).seconds
-            await e.edit("Uploaded in {} seconds.".format(ms))
+            duration = (end - start).seconds
+            await u_event.edit("Uploaded in {} seconds.".format(duration))
         else:
-            await e.edit("404: File Not Found")
-
+            await u_event.edit("404: File Not Found")
 
 def get_video_thumb(file, output=None, width=90):
+    """ Get video thhumbnail """
     metadata = extractMetadata(createParser(file))
-    p = subprocess.Popen(
+    popen = subprocess.Popen(
         [
             "ffmpeg",
             "-i",
@@ -206,11 +215,13 @@ def get_video_thumb(file, output=None, width=90):
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
     )
-    if not p.returncode and os.path.lexists(file):
+    if not popen.returncode and os.path.lexists(file):
         return output
+    return None
 
 
 def extract_w_h(file):
+    """ Get width and height of media """
     command_to_run = [
         "ffprobe",
         "-v",
@@ -225,7 +236,7 @@ def extract_w_h(file):
     try:
         t_response = subprocess.check_output(command_to_run, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
-        LOGS.warn(exc)
+        LOGS.warning(exc)
     else:
         x_reponse = t_response.decode("UTF-8")
         response_json = json.loads(x_reponse)
@@ -235,12 +246,13 @@ def extract_w_h(file):
 
 
 @register(pattern=r".uploadas(stream|vn|all) (.*)", outgoing=True)
-async def _(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if e.fwd_from:
+async def uploadas(uas_event):
+    """ For .uploadas command, allows you to specify some arguments for upload. """
+    if not uas_event.text[0].isalpha() and uas_event.text[0] not in ("/", "#", "@", "!"):
+        if uas_event.fwd_from:
             return
-        await e.edit("Processing ...")
-        type_of_upload = e.pattern_match.group(1)
+        await uas_event.edit("Processing ...")
+        type_of_upload = uas_event.pattern_match.group(1)
         supports_streaming = False
         round_message = False
         spam_big_messages = False
@@ -250,7 +262,7 @@ async def _(e):
             round_message = True
         if type_of_upload == "all":
             spam_big_messages = True
-        input_str = e.pattern_match.group(2)
+        input_str = uas_event.pattern_match.group(2)
         thumb = None
         file_name = None
         if "|" in input_str:
@@ -275,14 +287,14 @@ async def _(e):
                 height = metadata.get("height")
             try:
                 if supports_streaming:
-                    await e.client.send_file(
-                        e.chat_id,
+                    await uas_event.client.send_file(
+                        uas_event.chat_id,
                         file_name,
                         thumb=thumb,
                         caption=input_str,
                         force_document=False,
                         allow_cache=False,
-                        reply_to=e.message.id,
+                        reply_to=uas_event.message.id,
                         attributes=[
                             DocumentAttributeVideo(
                                 duration=duration,
@@ -295,12 +307,12 @@ async def _(e):
                         progress_callback=progress,
                     )
                 elif round_message:
-                    await e.client.send_file(
-                        e.chat_id,
+                    await uas_event.client.send_file(
+                        uas_event.chat_id,
                         file_name,
                         thumb=thumb,
                         allow_cache=False,
-                        reply_to=e.message.id,
+                        reply_to=uas_event.message.id,
                         video_note=True,
                         attributes=[
                             DocumentAttributeVideo(
@@ -314,20 +326,20 @@ async def _(e):
                         progress_callback=progress,
                     )
                 elif spam_big_messages:
-                    await e.edit("TBD: Not (yet) Implemented")
+                    await uas_event.edit("TBD: Not (yet) Implemented")
                     return
                 end = datetime.now()
-                ms = (end - start).seconds
+                duration = (end - start).seconds
                 os.remove(thumb)
-                await e.edit("Uploaded in {} seconds.".format(ms))
+                await uas_event.edit("Uploaded in {} seconds.".format(duration))
             except FileNotFoundError as err:
-                await e.edit(str(err))
+                await uas_event.edit(str(err))
         else:
-            await e.edit("404: File Not Found")
+            await uas_event.edit("404: File Not Found")
 
 HELPER.update({
-    "download": "Usage: \nDownload file from link to the server."
+    "download": ".download <link>\nUsage: Downloads file from link to the server."
 })
 HELPER.update({
-    "upload": "Usage: \nUploads a locally stored file to telegram."
+    "upload": ".upload <link>\nUsage: Uploads a locally stored file to telegram."
 })

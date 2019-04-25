@@ -4,6 +4,8 @@
 # you may not use this file except in compliance with the License.
 #
 
+""" Userbot module for kanging stickers or making new ones. """
+
 import io
 import math
 import urllib.request
@@ -16,27 +18,26 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^.kang")
 async def kang(args):
+    """ For .kang command, kangs stickers or creates new ones. """
     if not args.text[0].isalpha() and args.text[0] not in ("/", "#", "@", "!"):
         user = await bot.get_me()
-        userid = user.id
-        username = user.username
-        if not username:
-            username = user.first_name
+        if not user.username:
+            user.username = user.first_name
         message = await args.get_reply_message()
         photo = None
-        emoji = "🌚"
+        emojibypass = False
 
         if message and message.media:
             if isinstance(message.media, MessageMediaPhoto):
                 photo = io.BytesIO()
                 photo = await bot.download_media(message.photo, photo)
-                emojibypass = False
             elif "image" in message.media.document.mime_type.split('/'):
                 photo = io.BytesIO()
                 await bot.download_file(message.media.document, photo)
-                if DocumentAttributeFilename(file_name='sticker.webp') in message.media.document.attributes:
-                    EMOJI = message.media.document.attributes[1].alt
-                    EMOJIBYPASS = True
+                if (DocumentAttributeFilename(file_name='sticker.webp')
+                        in message.media.document.attributes):
+                    emoji = message.media.document.attributes[1].alt
+                    emojibypass = True
             else:
                 await args.edit("INVALID MEDIA BOI")
                 return
@@ -45,25 +46,7 @@ async def kang(args):
             return
 
         if photo:
-            image = Image.open(photo)
-            maxsize = (512, 512)
-            if (image.width and image.height) < 512:
-                size1 = image.width
-                size2 = image.height
-                if image.width > image.height:
-                    scale = 512/size1
-                    size1new = 512
-                    size2new = size2 * scale
-                else:
-                    scale = 512/size2
-                    size1new = size1 * scale
-                    size2new = 512
-                size1new = math.floor(size1new)
-                size2new = math.floor(size2new)
-                sizenew = (size1new, size2new)
-                image = image.resize(sizenew)
-            else:
-                image.thumbnail(maxsize)
+            image = await resize_photo(photo)
             splat = args.text.split()
             if not emojibypass:
                 emoji = "🤔"
@@ -78,8 +61,11 @@ async def kang(args):
                 else:
                     #User sent just custom emote, wants to push to default pack
                     emoji = splat[1]
-            packname = f"a{userid}_by_{username}_{pack}"
-            response = urllib.request.urlopen(urllib.request.Request(f'http://t.me/addstickers/{packname}'))
+
+            packname = f"a{user.id}_by_{user.username}_{pack}"
+            response = urllib.request.urlopen(
+                urllib.request.Request(f'http://t.me/addstickers/{packname}')
+            )
             htmlstr = response.read().decode("utf8").split('\n')
             file = io.BytesIO()
             file.name = "sticker.png"
@@ -106,13 +92,13 @@ async def kang(args):
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
             else:
-                await args.edit("userbot sticker pack doesn't exist! Making a new one!")
+                await args.edit("Userbot sticker pack doesn't exist! Making a new one!")
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message('/newpack')
                     await conv.get_response()
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
-                    await conv.send_message(f"@{username}'s userbot pack {pack}")
+                    await conv.send_message(f"@{user.username}'s userbot pack {pack}")
                     await conv.get_response()
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
@@ -138,8 +124,42 @@ async def kang(args):
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
 
-            await args.edit(f"sticker added! Your pack can be found [here](t.me/addstickers/{packname})", parse_mode='md')
+            await args.edit(
+                f"Sticker added! Your pack can be found [here](t.me/addstickers/{packname})",
+                parse_mode='md'
+            )
+
+async def resize_photo(photo):
+    """ Resize the given photo to 512x512 """
+    image = Image.open(photo)
+    maxsize = (512, 512)
+    if (image.width and image.height) < 512:
+        size1 = image.width
+        size2 = image.height
+        if image.width > image.height:
+            scale = 512/size1
+            size1new = 512
+            size2new = size2 * scale
+        else:
+            scale = 512/size2
+            size1new = size1 * scale
+            size2new = 512
+        size1new = math.floor(size1new)
+        size2new = math.floor(size2new)
+        sizenew = (size1new, size2new)
+        image = image.resize(sizenew)
+    else:
+        image.thumbnail(maxsize)
+
+    return image
+
 
 HELPER.update({
-    "kang": "Kang very important module. Please kang this. Made by @rupansh"
+    "kang": ".kang\
+\nUsage: Reply .kang to a sticker or an image to kang it to your userbot pack.\
+\n\n.kang [emoji('s)]\
+\nUsage: Works just like .kang but uses the emoji('s) you picked.\
+\n\n.kang [number]\
+\nUsage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
+\n\n\nPlease kang this. Made by @rupansh."
 })

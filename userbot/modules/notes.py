@@ -4,12 +4,15 @@
 # you may not use this file except in compliance with the License.
 #
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER, bot
+""" Userbot module containing commands for keeping notes. """
+
+from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^\.saved$")
+@register(outgoing=True, pattern="^.saved$")
 async def notes_active(svd):
+    """ For .saved command, list all of the notes saved in a chat. """
     if not svd.text[0].isalpha() and svd.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot import MONGO
@@ -20,14 +23,15 @@ async def notes_active(svd):
         notes = MONGO.notes.find({"chat_id": svd.chat_id})
         message = '`There are no saved notes in this chat`'
         if notes:
-            message = "Messages saved in this chat: \n\n"
+            message = "Notes saved in this chat: \n\n"
             for note in notes:
                 message = message + "🔹 " + note['name'] + "\n"
         await svd.edit(message)
 
 
-@register(outgoing=True, pattern="^\.clear (\w*)")
+@register(outgoing=True, pattern=r"^.clear (\w*)")
 async def remove_notes(clr):
+    """ For .clear command, clear note with the given name."""
     if not clr.text[0].isalpha() and clr.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot import MONGO
@@ -45,14 +49,16 @@ async def remove_notes(clr):
             await clr.edit("I can't find this note!")
 
 
-@register(outgoing=True, pattern="^\.save (\w*)")
+@register(outgoing=True, pattern=r"^.save (\w*)")
 async def add_filter(fltr):
-    if not fltr.text[0].isalpha():
+    """ For .save command, saves notes in a chat. """
+    if not fltr.text[0].isalpha() and fltr.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot import MONGO
         except:
             await fltr.edit("`Running on Non-SQL mode!`")
             return
+
         notename = fltr.pattern_match.group(1)
         string = fltr.text.partition(notename)[2]
         if fltr.reply_to_msg_id:
@@ -62,7 +68,6 @@ async def add_filter(fltr):
             {"chat_id": fltr.chat_id, "name": notename}
             )
         if old:
-            MONGO.notes.delete_one({'_id': old['_id']})
             status = "updated"
         else:
             status = "saved"
@@ -70,12 +75,9 @@ async def add_filter(fltr):
             {"chat_id": fltr.chat_id, "name": notename, "text": string}
             )
         await fltr.edit(
-            "`Note {} successfully. Use` #{} `to get it`".format(status, notename)
-        )
-
-
-@register(pattern="#\w*")
+@register(pattern=r"#\w*")
 async def incom_note(getnt):
+    """ Notes logic. """
     try:
         if not (await getnt.get_sender()).bot:
             try:
@@ -92,7 +94,7 @@ async def incom_note(getnt):
         pass
 
 
-@register(outgoing=True, pattern="^\.rmnotes$")
+@register(outgoing=True, pattern="^.rmnotes$")
 async def purge_notes(prg):
     try:
         from userbot import MONGO
@@ -112,11 +114,12 @@ async def purge_notes(prg):
             )
 
 HELPER.update({
-    "#<notename>": "get the note with this notename."
-})
-HELPER.update({
-    ".save <notename> <notedata>": "saves notedata as a note with name notename"
-})
-HELPER.update({
-    ".clear <notename>": "clear note with this name."
+    "notes": "\
+#<notename>\
+\nUsage: Gets the note with name notename\
+\n\n.save <notename> <notedata>\
+\nUsage: Saves notedata as a note with the name notename\
+\n\n.clear <notename>\
+\nUsage: Deletes the note with name notename.\
+"
 })

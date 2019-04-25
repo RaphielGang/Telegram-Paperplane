@@ -3,7 +3,9 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #\
+""" Userbot module containing commands for interacting with dogbin(https://del.dog)"""
 
+import json
 from requests import get, post
 
 from userbot import LOGGER, LOGGER_GROUP, HELPER
@@ -14,6 +16,7 @@ DOGBIN_URL = "https://del.dog/"
 
 @register(outgoing=True, pattern="^.paste")
 async def paste(pstl):
+    """ For .paste command, allows using dogbin functionality with the command. """
     if not pstl.text[0].isalpha() and pstl.text[0] not in ("/", "#", "@", "!"):
         dogbin_final_url = ""
 
@@ -26,10 +29,10 @@ async def paste(pstl):
             message = str(textx.message)
 
         # Dogbin
-        r = post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
+        resp = post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
 
-        if r.status_code == 200:
-            response = r.json()
+        if resp.status_code == 200:
+            response = resp.json()
             key = response['key']
             dogbin_final_url = DOGBIN_URL + key
 
@@ -56,11 +59,12 @@ async def paste(pstl):
 
 
 @register(outgoing=True, pattern="^.get_dogbin_content")
-async def get_dogbin_content(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        textx = await e.get_reply_message()
-        message = e.text
-        await e.edit("`Getting dogbin content . . .`")
+async def get_dogbin_content(dog_url):
+    """ For .get_dogbin_content command, fetches the content of a dogbin URL. """
+    if not dog_url.text[0].isalpha() and dog_url.text[0] not in ("/", "#", "@", "!"):
+        textx = await dog_url.get_reply_message()
+        message = dog_url.text
+        await dog_url.edit("`Getting dogbin content . . .`")
         if message[7:]:
             message = str(message[20:])
         elif textx:
@@ -74,24 +78,24 @@ async def get_dogbin_content(e):
         elif message.startswith(format_normal):
             message = message[len(format_normal):]
 
-        r = get(f'{DOGBIN_URL}raw/{message}')
+        resp = get(f'{DOGBIN_URL}raw/{message}')
 
-        if r.status_code != 200:
+        if resp.status_code != 200:
             try:
-                res = r.json()
-                await e.reply(res['message'])
-            except Exception:
-                if r.status_code == 404:
-                    await e.edit('`Failed to reach dogbin`')
+                res = resp.json()
+                await dog_url.reply(res['message'])
+            except json.decoder.JSONDecodeError:
+                if resp.status_code == 404:
+                    await dog_url.edit('`Failed to reach dogbin`')
                 else:
-                    await e.edit('`Unknown error occured`')
-            r.raise_for_status()
+                    await dog_url.edit('`Unknown error occured`')
+            resp.raise_for_status()
 
-        reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + r.text
+        reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
 
-        await e.reply(reply_text)
+        await dog_url.reply(reply_text)
         if LOGGER:
-            await e.client.send_message(
+            await dog_url.client.send_message(
                 LOGGER_GROUP,
                 "Get dogbin content query for `" + message + "` was executed successfully",
             )
@@ -100,7 +104,7 @@ HELPER.update({
     "paste": "Create a paste or a shortened url using dogbin (https://del.dog/)"
 })
 HELPER.update({
-    "getpaste": "Get the content of a paste or shortened url from dogbin (https://del.dog/)"
+    "get_dogbin_content": "Get the content of a paste or shortened url from dogbin (https://del.dog/)"
 })
 HELPER.update({
     "pastestats": "Get stats of a paste or shortened url from dogbin (https://del.dog/)"
