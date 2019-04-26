@@ -20,9 +20,9 @@ async def notes_active(svd):
             await svd.edit("`Running on Non-SQL mode!`")
             return
         notes = get_notes(svd.chat_id)
-        message = '`There are no saved notes in this chat`'
+        message = '`There are no saved notes in this chat.`'
         if notes:
-            message = "Messages saved in this chat: \n\n"
+            message = "Notes saved in this chat: \n\n"
             for note in notes:
                 message = message + "🔹 " + note.keyword + "\n"
         await svd.edit(message)

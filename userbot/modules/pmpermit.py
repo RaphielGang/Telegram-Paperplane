@@ -9,9 +9,10 @@
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
+from sqlalchemy.exc import IntegrityError 
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
-                     PM_AUTO_BAN, BRAIN_CHECKER)
+                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -29,7 +30,6 @@ async def permitpm(event):
     if PM_AUTO_BAN:
         if event.sender_id in BRAIN_CHECKER:
             return
-        global COUNT_PM
         if event.is_private and not (await event.get_sender()).bot:
             try:
                 from userbot.modules.sql_helper.pm_permit_sql import is_approved
@@ -37,9 +37,20 @@ async def permitpm(event):
                 return
             apprv = is_approved(event.chat_id)
 
-            if not apprv:
-                if event.raw_text != UNAPPROVED_MSG:
-                    await event.reply("`" + UNAPPROVED_MSG + "`")
+            # This part basically is a sanity check
+            # If the message that sent before is Unapproved Message
+            # then stop sending it again to prevent FloodHit
+            if not apprv and event.text != UNAPPROVED_MSG:
+                if event.chat_id in LASTMSG:
+                    prevmsg = LASTMSG[event.chat_id]
+                    # If the message doesn't same as previous one
+                    # Send the Unapproved Message again
+                    if event.text != prevmsg:
+                        await event.reply(UNAPPROVED_MSG)
+                    LASTMSG.update({event.chat_id: event.text})
+                else:
+                    await event.reply(UNAPPROVED_MSG)
+                    LASTMSG.update({event.chat_id: event.text})
 
                 if NOTIF_OFF:
                     await event.client.send_read_acknowledge(event.chat_id)
@@ -47,14 +58,23 @@ async def permitpm(event):
                     COUNT_PM.update({event.chat_id: 1})
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
+
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
                         "`You were spamming my master's PM, which I don't like.`"
                         " `I'mma Report Spam.`"
                     )
-                    del COUNT_PM[event.chat_id]
+
+                    try:
+                        del COUNT_PM[event.chat_id]
+                        del LASTMSG[event.chat_id]
+                    except KeyError:
+                        LOGS.info("CountPM wen't rarted boi")
+                        return
+
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
+
                     if LOGGER:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
@@ -100,21 +120,28 @@ async def approvepm(apprvpm):
             replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
-            approve(replied_user.user.id)
+            uid = replied_user.user.id
+
         else:
-            approve(apprvpm.chat_id)
             aname = await apprvpm.client.get_entity(apprvpm.chat_id)
             name0 = str(aname.first_name)
+            uid = apprvpm.chat_id
+
+        try:
+            approve(uid)
+        except IntegrityError:
+            await apprvpm.edit("`User may already be approved.`")
+            return
 
         await apprvpm.edit(
-            f"[{name0}](tg://user?id={apprvpm.chat_id}) `approved to PM!`"
-            )
+            f"[{name0}](tg://user?id={uid}) `approved to PM!`"
+        )
 
         if LOGGER:
             await apprvpm.client.send_message(
                 LOGGER_GROUP,
                 "#APPROVED\n"
-                + "User: " + f"[{name0}](tg://user?id={apprvpm.chat_id})",
+                + "User: " + f"[{name0}](tg://user?id={uid})",
             )
 
 
@@ -131,26 +158,24 @@ async def blockpm(block):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             await block.client(BlockRequest(replied_user.user.id))
-            try:
-                from userbot.modules.sql_helper.pm_permit_sql import dissprove
-                dissprove(replied_user.user.id)
-            except Exception:
-                pass
+            uid = replied_user.user.id
         else:
             await block.client(BlockRequest(block.chat_id))
             aname = await block.client.get_entity(block.chat_id)
             name0 = str(aname.first_name)
-            try:
-                from userbot.modules.sql_helper.pm_permit_sql import dissprove
-                dissprove(block.chat_id)
-            except Exception:
-                pass
+            uid = block.chat_id
+
+        try:
+            from userbot.modules.sql_helper.pm_permit_sql import dissprove
+            dissprove(uid)
+        except AttributeError: #Non-SQL mode.
+            pass
 
         if LOGGER:
             await block.client.send_message(
                 LOGGER_GROUP,
                 "#BLOCKED\n"
-                + "User: " + f"[{name0}](tg://user?id={block.chat_id})",
+                + "User: " + f"[{name0}](tg://user?id={uid})",
             )
 
 
@@ -171,7 +196,7 @@ async def unblockpm(unblock):
         if LOGGER:
             await unblock.client.send_message(
                 LOGGER_GROUP,
-                f"[{name0}](tg://user?id={unblock.chat_id})"
+                f"[{name0}](tg://user?id={replied_user.user.id})"
                 " was unblocc'd!.",
             )
 

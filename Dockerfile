@@ -1,5 +1,5 @@
 # We're using Alpine stable
-FROM alpine:3.9
+FROM alpine:edge
 
 #
 # We have to uncomment Community repo for some packages
@@ -16,22 +16,16 @@ RUN apk add --no-cache --update \
     zlib-dev \
     readline-dev \
     sqlite-dev \
-    build-base
+    build-base \
+    python3
 
-# Set Python version
-ARG PYTHON_VERSION='3.8-dev'
-# Set pyenv home
-ARG PYENV_HOME=/root/.pyenv
-# Note installing THROUGH THIS METHOD WILL DELAY DEPLOYING
-# Install pyenv, then install python versions
-RUN git clone --depth 1 https://github.com/pyenv/pyenv.git $PYENV_HOME && \
-    rm -rfv $PYENV_HOME/.git
+RUN python3 -m ensurepip \
+    && pip3 install --upgrade pip setuptools \
+    && rm -r /usr/lib/python*/ensurepip && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+    rm -r /root/.cache
 
-ENV PATH $PYENV_HOME/shims:$PYENV_HOME/bin:$PATH
-
-RUN pyenv install $PYTHON_VERSION
-RUN pyenv global $PYTHON_VERSION
-RUN pip install --upgrade pip && pyenv rehash
 
 #
 # Install all the required packages
@@ -39,12 +33,15 @@ RUN pip install --upgrade pip && pyenv rehash
 RUN apk --no-cache add build-base
 
 RUN apk add --no-cache \
-    py-pillow py-requests py-sqlalchemy py-psycopg2 git py-lxml \
-    libxslt-dev py-pip libxml2 libxml2-dev libpq postgresql-dev \
-    postgresql build-base linux-headers jpeg-dev \
-    curl neofetch git sudo gcc python-dev python3-dev \
+    py-pillow py-requests \
+    py-sqlalchemy py-psycopg2 git py-lxml \
+    libxslt-dev py-pip libxml2 libxml2-dev \
+    libpq postgresql-dev \
+    postgresql build-base linux-headers \
+    jpeg-dev curl neofetch git sudo \
+    gcc python-dev python3-dev \
     postgresql postgresql-client php-pgsql \
-    musl postgresql-dev
+    musl postgresql-dev py-tz py3-aiohttp
 RUN apk add --no-cache sqlite figlet libwebp-dev
 
 # Copy Python Requirements to /app
