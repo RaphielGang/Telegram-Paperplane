@@ -86,10 +86,8 @@ tg_debugcast() {
 }
 
 kickstart_pub() {
-    tg_buildmain_sendgif
-    tg_build_sendsticker
 
-    tg_channelcast "I am starting build" \
+    tg_sendinfo "I am starting build" \
     "Branch <code>${PARSE_BRANCH}</code>" \
     "Commit Point <code>${COMMIT_POINT}</code>" \
     "Under <code>$(hostname)</code>" \
