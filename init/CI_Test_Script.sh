@@ -35,9 +35,9 @@ test_run() {
 # Nuke Trap, coz it not working
 
 tg_senderror() {
-    tg_sendinfo "Build Throwing Error(s)" \
-        "@baalajimaestro naaaaa"
-    tg_channelcast "Build Throwing Error(s)"
+    tg_sendinfo "<code>Build Throwing Error(s)</code>" \
+        "@baalajimaestro @raphielscape @MrYacha please look in!" \
+        "Logs: https://semaphoreci.com/baalajimaestro/telegram-userbot"
 
     [ -n "${STATUS}" ] &&
     exit "${STATUS}" ||
@@ -45,22 +45,17 @@ tg_senderror() {
 }
 
 tg_yay() {
-    tg_sendinfo "Python CI Test passed yay" \
-        "Haha yes"
+    tg_sendinfo "<code>Compilation Success!</code>"
 }
 
 # Fin Prober
 fin() {
     echo "Yay! My works took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds.~"
-    tg_sendinfo "Compilation took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds"
-    tg_channelcast "Compilation took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds"
     tg_yay
 }
 
 finerr() {
     echo "My works took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds but it's error..."
-    tg_sendinfo "Build took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds" \
-        "but it is having error anyways xd"
     tg_senderror
 
     [ -n "${STATUS}" ] &&
