@@ -90,8 +90,10 @@ kickstart_pub() {
     tg_sendinfo "I am starting build" \
     "Branch <code>${PARSE_BRANCH}</code>" \
     "Commit Point <code>${COMMIT_POINT}</code>" \
-    "Under <code>$(hostname)</code>" \
-    "Started on <code>$(whoami)</code>"
+    " " \
+    "<b>Github Link: </b> https://github.com/raphielgang/telegram-userbot/commit/${COMMIT_HASH}" \
+    " " \
+    "<b>CI Link: </b> https://semaphoreci.com/baalajimaestro/telegram-userbot"
 }
 
 kickstart_priv() {
