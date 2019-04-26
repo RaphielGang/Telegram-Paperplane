@@ -114,7 +114,7 @@ async def type_afk_is_not_true(e):
         time.sleep(2)
         await afk_info.delete()
         if LOGGER:
-            await e.client.send_message(
+            await notafk.client.send_message(
                 LOGGER_GROUP,
                 "You've recieved "
                 + str(COUNT_MSG)
@@ -123,9 +123,9 @@ async def type_afk_is_not_true(e):
                 + " chats while you were away",
             )
             for i in USERS:
-                name = await e.client.get_entity(i)
+                name = await notafk.client.get_entity(i)
                 name0 = str(name.first_name)
-                await e.client.send_message(
+                await notafk.client.send_message(
                     LOGGER_GROUP,
                     "["
                     + name0
