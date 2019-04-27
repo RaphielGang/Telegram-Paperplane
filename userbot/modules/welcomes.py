@@ -23,8 +23,8 @@ Spambot=False
 @bot.on(events.ChatAction)
 async def welcome_mute(welcm):
   if welcm.user_joined or welcm.user_added:
-    from time import sleep
-    sleep(10)
+    from asyncio import sleep
+    await sleep(5)
     if not WELCOME_MUTE:
         return
     async for message in bot.iter_messages(welcm.chat_id, from_user=welcm.action_message.from_id):
