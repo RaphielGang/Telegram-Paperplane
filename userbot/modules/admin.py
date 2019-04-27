@@ -280,16 +280,6 @@ async def nothanos(unbon):
     """ For .unban command, undo "thanos" on target """
     if not unbon.text[0].isalpha() and unbon.text[0] \
             not in ("/", "#", "@", "!"):
-        rights = ChatBannedRights(
-            until_date=None,
-            send_messages=None,
-            send_media=None,
-            send_stickers=None,
-            send_gifs=None,
-            send_games=None,
-            send_inline=None,
-            embed_links=None,
-        )
 
         # Here laying the sanity check
         chat = await unbon.get_chat()
@@ -314,7 +304,7 @@ async def nothanos(unbon):
             await unbon.client(EditBannedRequest(
                 unbon.chat_id,
                 user.id,
-                rights
+                UNBAN_RIGHTS
             ))
             await unbon.edit("```Unbanned Successfully```")
 
@@ -387,16 +377,6 @@ async def unmoot(unmot):
     """ For .unmute command, unmute the target """
     if not unmot.text[0].isalpha() and unmot.text[0] \
             not in ("/", "#", "@", "!"):
-        rights = ChatBannedRights(
-            until_date=None,
-            send_messages=None,
-            send_media=None,
-            send_stickers=None,
-            send_gifs=None,
-            send_games=None,
-            send_inline=None,
-            embed_links=None,
-        )
 
         # Admin or creator check
         chat = await unmot.get_chat()
@@ -430,7 +410,7 @@ async def unmoot(unmot):
                 EditBannedRequest(
                     unmot.chat_id,
                     user.id,
-                    rights
+                    UNBAN_RIGHTS
                 )
             )
             await unmot.edit("```Unmuted Successfully```")
