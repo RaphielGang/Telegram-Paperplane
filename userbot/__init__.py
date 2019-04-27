@@ -74,6 +74,8 @@ OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 
 SUDO = os.environ.get("SUDO", None)
 
+WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", None))
+
 YOUTUBE_API_KEY = os.environ.get(
     "YOUTUBE_API_KEY", None
     )
