@@ -103,10 +103,11 @@ async def filters_active(event):
         except AttributeError:
             await event.edit("`Running on Non-SQL mode!`")
             return
-        transact = "Filters active on this chat: \n\n"
+        transact = "`There are no filters in this chat.`"
         filters = get_filters(event.chat_id)
         for i in filters:
-            transact = transact + "🔹 " + i.keyword + "\n"
+            message = "Active filters in this chat: \n\n"
+            transact = message + "🔹 " + i.keyword + "\n"
         await event.edit(transact)
 
 HELPER.update({

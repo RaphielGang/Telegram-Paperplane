@@ -10,8 +10,9 @@ from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
 from telethon.errors.rpcerrorlist import UsernameOccupiedError, PhotoExtInvalidError
 from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
-from telethon.tl.functions.photos import UploadProfilePhotoRequest
-from telethon.tl.types import MessageMediaPhoto
+from telethon.tl.functions.photos import (UploadProfilePhotoRequest,
+                                          DeletePhotosRequest, GetUserPhotosRequest)
+from telethon.tl.types import MessageMediaPhoto, InputPhoto
 
 from userbot import bot, HELPER
 from userbot.events import register
@@ -97,6 +98,37 @@ async def update_username(username):
         except UsernameOccupiedError:
             await username.edit(USERNAME_TAKEN)
 
+
+@register(outgoing=True, pattern=r"^.delpfp")
+async def remove_profilepic(delpfp):
+    """ For .delpfp command, delete your current profile picture in Telegram. """
+    if not delpfp.text[0].isalpha() and delpfp.text[0] not in ("/", "#", "@", "!"):
+        group = delpfp.text[8:]
+        if group == 'all':
+            lim = 0
+        elif group.isdigit():
+            lim = int(group)
+        else:
+            lim = 1
+
+        pfplist = await bot(GetUserPhotosRequest(
+            user_id=delpfp.from_id,
+            offset=0,
+            max_id=0,
+            limit=lim))
+        input_photos = []
+        for sep in pfplist.photos:
+            input_photos.append(
+                InputPhoto(
+                    id=sep.id,
+                    access_hash=sep.access_hash,
+                    file_reference=sep.file_reference
+                )
+            )
+        await bot(DeletePhotosRequest(id=input_photos))
+        await delpfp.edit(f"`Successfully deleted {len(input_photos)} profile picture(s).`")
+
+
 HELPER.update({
     "username": ".username <new_username>\
     \nUsage: Changes your Telegram username."
@@ -114,4 +146,8 @@ your Telegram profie picture."
 HELPER.update({
     "setbio": ".setbio <new_bio>\
     \nUsage: Changes your Telegram bio."
+})
+HELPER.update({
+    "delpfp": ".delpfp or .delpfp <number>/<all>\
+    \nUsage: Deletes your Telegram profile picture(s)."
 })

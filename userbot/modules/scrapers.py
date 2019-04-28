@@ -6,26 +6,25 @@
 
 """ Userbot module containing various scrapers. """
 
+import html
 import os
 import re
+import urllib
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
-import requests
-import urllib
-import html
-import subprocess
 
+import requests
 import urbandict
 import wikipedia
 from google_images_download import google_images_download
-from googletrans import Translator, LANGUAGES
-from gtts import gTTS
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from googletrans import LANGUAGES, Translator
+from gtts import gTTS
 from pytube import YouTube
 from pytube.helpers import safe_filename
 
-from userbot import LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, HELPER, bot
+from userbot import HELPER, LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, bot
 from userbot.events import register
 
 LANG = "en"
@@ -58,12 +57,9 @@ async def img_sampler(event):
         paths = response.download(arguments)
         lst = paths[query]
         await event.client.send_file(await event.client.get_input_entity(event.chat_id), lst)
-        try:
-            os.remove(lst[0])
-            os.remove(lst[1])
-            os.rmdir(os.path.dirname(os.path.abspath(lst[0])))
-        except:
-            None
+        os.remove(lst[0])
+        os.remove(lst[1])
+        os.rmdir(os.path.dirname(os.path.abspath(lst[0])))
         await event.delete()
 
 
@@ -98,11 +94,11 @@ async def wiki(wiki_q):
         match = wiki_q.pattern_match.group(1)
         try:
             wikipedia.summary(match)
-        except wikipedia.exceptions.DisambiguationError as e:
-            await wiki_q.edit(f"Disambiguated page found.\n\n{e}")
+        except wikipedia.exceptions.DisambiguationError as error:
+            await wiki_q.edit(f"Disambiguated page found.\n\n{error}")
             return
-        except wikipedia.exceptions.PageError as p:
-            await wiki_q.edit(f"Page not found.\n\n{p}")
+        except wikipedia.exceptions.PageError as pageerror:
+            await wiki_q.edit(f"Page not found.\n\n{pageerror}")
             return
         result = wikipedia.summary(match)
         if len(result) >= 4096:
@@ -115,7 +111,8 @@ async def wiki(wiki_q):
                 reply_to=wiki_q.id,
                 caption="`Output too large, sending as file`",
             )
-            subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+            if os.path.exists("output.txt"):
+                os.remove("output.txt")
             return
         await wiki_q.edit(
             "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
@@ -161,7 +158,8 @@ async def urban_dict(ud_e):
                     "output.txt",
                     caption="`Output was too large, sent it as a file.`"
                 )
-                subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+                if os.path.exists("output.txt"):
+                    os.remove("output.txt")
                 await ud_e.delete()
                 return
             await ud_e.edit(
@@ -182,14 +180,16 @@ async def urban_dict(ud_e):
             await ud_e.edit("No result found for **" + query + "**")
 
 
-@register(outgoing=True, pattern=r"^.tts ?([\s\S]*)")
+@register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
     if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
         textx = await query.get_reply_message()
         message = query.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await query.edit("`Give a text or reply to a message for Text-to-Speech!`")
             return
@@ -226,33 +226,27 @@ async def text_to_speech(query):
             await query.delete()
 
 
-@register(outgoing=True, pattern=r"^.trt ?([\s\S]*)")
+@register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)") # ^.promote(?: |$)(.*)
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     if not trans.text[0].isalpha() and trans.text[0] not in ("/", "#", "@", "!"):
         translator = Translator()
         textx = await trans.get_reply_message()
-        message = trans.text
-        if message[5:]:
-            message = str(message[5:])
-        elif textx:
-            message = textx
-            message = str(message.message)
-
         message = trans.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await trans.edit("`Give a text or reply to a message to translate!`")
             return
 
         try:
-            translator.translate(message, dest=LANG)
+            reply_text = translator.translate(deEmojify(message), dest=LANG)
         except ValueError:
             await trans.edit("Invalid destination language.")
             return
 
-        reply_text = translator.translate(message, dest=LANG)
         source_lan = LANGUAGES[f'{reply_text.src}']
         transl_lan = LANGUAGES[f'{reply_text.dest}']
         reply_text = f"**Source ({source_lan.title()}):**`\n{message}`**\n\
@@ -409,6 +403,10 @@ async def download_video(v_url):
         os.remove(f"{safe_filename(video.title)}.mp4")
         os.remove('thumbnail.jpg')
         await v_url.delete()
+
+def deEmojify(inputString):
+    """ Remove emojis and other non-safe characters from string """
+    return inputString.encode('ascii', 'ignore').decode('ascii')
 
 HELPER.update({
     'img': ".img <search_query>\
