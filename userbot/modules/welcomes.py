@@ -19,45 +19,56 @@ from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
 async def welcome_mute(welcm):
     ''' Ban a recently joined user if it matches the spammer checking algorithm. '''
     if welcm.user_joined or welcm.user_added:
+        users = []
+
+        if welcm.user_added:
+            for i in welcm.action_message.action.users:
+                users.append(i)
+
+        print(users)
         spambot = False
 
         await sleep(5)
 
         if not WELCOME_MUTE:
             return
-        async for message in bot.iter_messages(
-                welcm.chat_id,
-                from_user=welcm.action_message.from_id
-        ):
-            user = await welcm.client.get_entity(welcm.action_message.from_id)
-            print(message.text)
-            if "http://" in message.text:
-                spambot = True
-            elif "t.me" in message.text:
-                spambot = True
-            elif message.fwd_from:
-                spambot = True
-            elif "https://" in message.text:
-                spambot = True
-            else:
-                if user.first_name in (
-                        "Bitmex",
-                        "Promotion",
-                        "Information",
-                        "Dex",
-                        "Announcements"
-                ):
-                    if user.last_name == "Bot":
-                        spambot = True
 
-            if spambot:
-                await message.delete()
-            continue
+        for user_id in users:
+            async for message in bot.iter_messages(
+                    welcm.chat_id,
+                    from_user=user_id
+            ):
+                if not message: break
+                user = await welcm.client.get_entity(user_id)
+                if "http://" in message.text:
+                    spambot = True
+                elif "t.me" in message.text:
+                    spambot = True
+                elif message.fwd_from:
+                    spambot = True
+                elif "https://" in message.text:
+                    spambot = True
+                else:
+                    if user.first_name in (
+                            "Bitmex",
+                            "Promotion",
+                            "Information",
+                            "Dex",
+                            "Announcements"
+                    ):
+                        if user.last_name == "Bot":
+                            spambot = True
+
+                if spambot:
+                    print(message.text)
+                    await message.delete()
+                    break
+                continue
 
         if spambot:
             await welcm.reply(
                 "`Potential SpamBot Detected! Kicking away! "
-                "Will log the ID for further purposes!`")
+                f"Will log the ID for further purposes! User ID:{user.id}`")
 
             chat = await welcm.get_chat()
             admin = chat.admin_rights
@@ -67,35 +78,33 @@ async def welcome_mute(welcm):
                     "@admins\n"
                     "`ANTI SPAMBOT DETECTOR!\n"
                     "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
-                return
-
-            try:
-                await welcm.client(
-                    EditBannedRequest(
-                        welcm.chat_id,
-                        welcm.action_message.from_id,
-                        BANNED_RIGHTS
+            else:
+                try:
+                    await welcm.client(
+                        EditBannedRequest(
+                            welcm.chat_id,
+                            user.id,
+                            BANNED_RIGHTS
+                        )
                     )
-                )
-                await welcm.client(
-                    EditBannedRequest(
-                        welcm.chat_id,
-                        welcm.action_message.from_id,
-                        UNBAN_RIGHTS
+                    await welcm.client(
+                        EditBannedRequest(
+                            welcm.chat_id,
+                            user.id,
+                            UNBAN_RIGHTS
+                        )
                     )
-                )
-            except:
-                await welcm.reply(
-                    "@admins\n"
-                    "`ANTI SPAMBOT DETECTOR!\n"
-                    "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
-                return
+                except:
+                    await welcm.reply(
+                        "@admins\n"
+                        "`ANTI SPAMBOT DETECTOR!\n"
+                        "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
 
             if LOGGER:
                 await welcm.client.send_message(
                     LOGGER_GROUP,
                     "#SPAMBOT-KICK\n"
-                    f"USER: [{user.first_name}](tg://user?id={welcm.action_message.from_id})\n"
+                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {welcm.chat.title}(`{welcm.chat_id}`)"
                 )
 
