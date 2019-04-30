@@ -6,12 +6,10 @@
 
 """ Userbot module for executing code and terminal commands from Telegram. """
 
-import sys
 import asyncio
-import subprocess
 from getpass import getuser
-
-# from userbot import *
+from os import geteuid, remove
+from sys import executable
 
 from userbot import HELPER, LOGGER, LOGGER_GROUP
 from userbot.events import register
@@ -49,7 +47,7 @@ async def evaluate(query):
                             reply_to=query.id,
                             caption="`Output too large, sending as file`",
                         )
-                        subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+                        remove("output.txt")
                         return
                     await query.edit(
                         "**Query: **\n`"
@@ -106,7 +104,7 @@ execute. Use .help exec for an example.```")
 
         command = "".join(f"\n {l}" for l in code.split("\n.strip()"))
         process = await asyncio.create_subprocess_exec(
-            sys.executable, '-c', command.strip(),
+            executable, '-c', command.strip(),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
         )
@@ -125,7 +123,7 @@ execute. Use .help exec for an example.```")
                     reply_to=run_q.id,
                     caption="`Output too large, sending as file`",
                 )
-                subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+                remove("output.txt")
                 return
             await run_q.edit(
                 "**Query: **\n`"
@@ -187,14 +185,23 @@ async def terminal_runner(term):
                 reply_to=term.id,
                 caption="`Output too large, sending as file`",
             )
-            subprocess.run(["rm", "output.txt"], stdout=subprocess.PIPE)
+            remove("output.txt")
             return
-        await term.edit(
-            "`"
-            f"{curruser}:~# {command}"
-            f"\n{result}"
-            "`"
-        )
+
+        if geteuid() is 0:
+            await term.edit(
+                "`"
+                f"{curruser}:~# {command}"
+                f"\n{result}"
+                "`"
+            )
+        else:
+            await term.edit(
+                "`"
+                f"{curruser}:~$ {command}"
+                f"\n{result}"
+                "`"
+            )
 
         if LOGGER:
             await term.client.send_message(
