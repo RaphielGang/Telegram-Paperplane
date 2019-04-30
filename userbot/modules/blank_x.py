@@ -20,7 +20,6 @@ announcelive = '/tmp'
 bcool = False
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.csse(t ?)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.csse(t ?)'))
 async def chatstalkset_blankx(e):
 	global cstalk
 	if e.pattern_match.group(1) != 't':
@@ -63,7 +62,6 @@ async def cssuper_blankx(e):
 		p.close()
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.delall (Tru|Fals)e'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.delall (Tru|Fals)e'))
 async def delallc_blankx(e):
 	global delall
 	if e.pattern_match.group(1) == 'Tru':
@@ -88,7 +86,6 @@ async def delall_blankx(e):
 		dt = False
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.cs$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.cs$'))
 async def cs_blankx(e):
 	global cstalk
 	ori='`Chat stalk ID: '
@@ -103,7 +100,6 @@ async def cs_blankx(e):
 	await e.edit(ori)
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.(f?t)imer '))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.(f?t)imer '))
 async def timer_blankx(e):
 	txt=e.text[7:] + '\nDeleting in '
 	j=10
@@ -118,14 +114,12 @@ async def timer_blankx(e):
 		await e.edit(txt + 'NaN')
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.stimer '))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.stimer '))
 async def stimer_blankx(e):
 	await e.edit(e.text[7:])
 	await asyncio.sleep(10)
 	await e.delete()
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.(f?t)ime$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.(f?t)ime$'))
 async def time_blankx(e):
 	if e.reply_to_msg_id != None:
 		thed='Deleting replied to message in '
@@ -141,7 +135,6 @@ async def time_blankx(e):
 			await e.edit(thed + 'NaN')
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.stime$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.stime$'))
 async def stime_blankx(e):
 	await e.delete()
 	if e.reply_to_msg_id != None:
@@ -149,13 +142,11 @@ async def stime_blankx(e):
 		await bot.delete_messages(e.input_chat, [e.reply_to_msg_id])
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.sedit '))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.sedit '))
 async def sedit_blankx(e):
 	await e.edit('s/\X+/' + e.text[7:])
 	await e.delete()
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.sedita '))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.sedita '))
 async def sedit_blankx(e):
 	await e.delete()
 	if e.reply_to_msg_id != None:
@@ -194,18 +185,15 @@ async def send_blankx(e):
 		await e.edit('Failed to send' + f)
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.edit '))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.edit '))
 async def edit_blankx(e):
 	await e.edit(e.raw_text[6:])
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.lchatid$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.lchatid$'))
 async def lchatid_blankx(e):
 	await e.delete()
 	await bot.send_message(LOGGER_GROUP, 'Chat ID by .lchatid: ' + str(e.chat_id))
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.restart$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.restart$'))
 async def restart_blankx(e):
 	await e.edit('`Alrighty then.`')
 	global RESTART_CMD, announcelive
@@ -215,7 +203,6 @@ async def restart_blankx(e):
 	os.system(RESTART_CMD)
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.enviro(n .*)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.enviro(n .*)'))
 async def environ_blankx(e):
 	if len(e.raw_text) < 9:
 		await e.edit('`Syntax: .environ env_var`')
@@ -231,7 +218,6 @@ async def environ_blankx(e):
 			await e.edit('`Failed to get the environment ' + e.pattern_match.group(1)[2:] + '`')
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.sendspa(m2?)'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.sendspa(m2?)'))
 async def sendspam_blankx(e):
 	yeye = True
 	if e.pattern_match.group(1) == 'm2':
@@ -248,7 +234,6 @@ async def sendspam_blankx(e):
 			await r.delete()
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.sendspam2'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.sendspam2'))
 async def sendspam2_blankx(e):
 	p=25
 	o=[e.id]
@@ -263,7 +248,6 @@ async def sendspam2_blankx(e):
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern='^\.cool (Tru|Fals)e$'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='^\.cool (Tru|Fals)e$'))
 async def coolc_blankx(e):
 	global bcool
 	if e.pattern_match.group(1) == 'Tru':
@@ -274,7 +258,6 @@ async def coolc_blankx(e):
 		bcool = False
 
 @bot.on(events.NewMessage(outgoing=True, pattern='.'))
-@bot.on(events.MessageEdited(outgoing=True, pattern='.'))
 async def cool_blankx(e):
 	global bcool
 	if bcool == True:
