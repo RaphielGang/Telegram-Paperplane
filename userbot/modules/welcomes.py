@@ -25,7 +25,6 @@ async def welcome_mute(welcm):
             for i in welcm.action_message.action.users:
                 users.append(i)
 
-        print(users)
         spambot = False
 
         await sleep(5)
@@ -60,15 +59,15 @@ async def welcome_mute(welcm):
                             spambot = True
 
                 if spambot:
-                    print(message.text)
                     await message.delete()
                     break
                 continue
 
         if spambot:
             await welcm.reply(
-                "`Potential SpamBot Detected! Kicking away! "
-                f"Will log the ID for further purposes! User ID:{user.id}`")
+                "`Potential Spambot Detected! Kicking away! "
+                "Will log the ID for further purposes!\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})`")
 
             chat = await welcm.get_chat()
             admin = chat.admin_rights
@@ -110,6 +109,6 @@ async def welcome_mute(welcm):
 
 HELPER.update({
     'welcome_mute': "If enabled in config.env or env var, \
-        this module will ban(or inform admins) group join \
+        this module will ban(or inform admins) the group join \
         spammers if they match the userbot's algorithm of banning"
 })
