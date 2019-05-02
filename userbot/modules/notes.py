@@ -75,6 +75,10 @@ async def add_filter(fltr):
             {"chat_id": fltr.chat_id, "name": notename, "text": string}
             )
         await fltr.edit(
+            "`Note added successfully. Use` #{} `to get it`".format(notename)
+        )
+
+
 @register(pattern=r"#\w*")
 async def incom_note(getnt):
     """ Notes logic. """

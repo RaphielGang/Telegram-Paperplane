@@ -18,9 +18,9 @@ async def unmute_chat(unm_e):
         except AttributeError:
             await unm_e.edit('`Running on Non-SQL Mode!`')
             return
-         MONGO.mute_chats.delete_one(
-                {"chat_id":unm_e.chat_id}
-                )
+        MONGO.mute_chats.delete_one({
+            "chat_id":unm_e.chat_id
+            })
         await unm_e.edit("```Unmuted this chat Successfully```")
 
 
@@ -35,7 +35,7 @@ async def mute_chat(mute_e):
             return
         await mute_e.edit(str(mute_e.chat_id))
         MONGO.mute_chats.insert_one(
-                {"chat_id":e.chat_id}
+                {"chat_id":mute_e.chat_id}
                 )
         await mute_e.edit("`Shush! This chat will be silenced!`")
         if LOGGER:
@@ -52,7 +52,7 @@ async def keep_read(message):
     except AttributeError:
         return
     kread =  MONGO.mute_chats.find(
-            {"chat_id":e.chat_id})
+            {"chat_id":message.chat_id})
     if kread:
         for i in kread:
             if i.groupid == str(message.chat_id):
