@@ -18,22 +18,26 @@ async def mention_afk(mention):
     """ This function takes care of notifying the people who mention you that you are AFK."""
     global COUNT_MSG
     global USERS
-    global ISAFK
+    AFK = REDIS.get('isafk')
     if mention.message.mentioned and not (await mention.get_sender()).bot:
-        if ISAFK:
+        if AFK:
             if mention.sender_id not in USERS:
+                print(str(AFK))
                 await mention.reply(
-                    f"Sorry! My boss is AFK due to `{AFKREASON}`."
-                    "\nWould ping him to look into the message soon 😉."
+                    "Sorry! My boss is AFK due to "
+                    + AFK
+                    + ". Would ping him to look into the message soon😉"
                 )
                 USERS.update({mention.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif mention.sender_id in USERS:
                 if USERS[mention.sender_id] % 5 == 0:
                     await mention.reply(
-                        "Sorry! But my boss is still not here."
-                        "\nTry to ping him a little later. I am sorry 😖."
-                        f"\nHe told me he was busy with `{AFKREASON}`."
+                        "Sorry! But my boss is still not here. "
+                        "Try to ping him a little later. I am sorry😖."
+                        "He told me he was busy with ```"
+                        + AFK
+                        + "```"
                     )
                     USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
