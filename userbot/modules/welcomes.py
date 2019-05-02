@@ -38,6 +38,18 @@ async def welcome_mute(welcm):
                     from_user=user_id
             ):
                 if not message: break
+                
+                join_time = welcm.action_message.date
+                message_date = message.date
+
+                if message_date < join_time:
+                    continue # The message was sent before the user joined, thus ignore it
+
+                ### DEBUGGING. LEAVING IT HERE FOR SOME TIME ###
+                print(f"User Joined: {join_time}")
+                print(f"Spam Message Sent: {message_date}")
+                ###
+                
                 user = await welcm.client.get_entity(user_id)
                 if "http://" in message.text:
                     spambot = True
@@ -53,21 +65,24 @@ async def welcome_mute(welcm):
                             "Promotion",
                             "Information",
                             "Dex",
-                            "Announcements"
+                            "Announcements", 
+                            "Info"
                     ):
                         if user.last_name == "Bot":
                             spambot = True
 
                 if spambot:
+                    print(f"Potential Spam Message: {message.text}")
                     await message.delete()
                     break
-                continue
+
+                continue # Check the next messsage
 
         if spambot:
             await welcm.reply(
                 "`Potential Spambot Detected! Kicking away! "
                 "Will log the ID for further purposes!\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})`")
+                f"USER:` [{user.first_name}](tg://user?id={user.id})")
 
             chat = await welcm.get_chat()
             admin = chat.admin_rights
