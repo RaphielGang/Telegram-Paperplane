@@ -8,10 +8,10 @@
 
 """ Userbot module containing commands related to QR Codes. """
 
-import asyncio
 import os
+from asyncio import sleep
 from datetime import datetime
-import requests
+from requests import post, get
 
 from userbot import HELPER
 from userbot.events import register
@@ -40,7 +40,7 @@ async def parseqr(qr_e):
         )
         url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
         files = {"file": open(downloaded_file_name, "rb")}
-        resp = requests.post(url, files=files).json()
+        resp = post(url, files=files).json()
         qr_contents = resp[0]["symbol"][0]["data"]
         os.remove(downloaded_file_name)
         end = datetime.now()
@@ -83,7 +83,7 @@ async def make_qr(qrcode):
         url = "https://api.qrserver.com/v1/create-qr-code/?data={}&size=200x200&\
                 charset-source=UTF-8&charset-target=UTF-8&ecc=L&color=0-0-0\
                 &bgcolor=255-255-255&margin=1&qzone=0&format=jpg"
-        resp = requests.get(url.format(message), stream=True)
+        resp = get(url.format(message), stream=True)
         required_file_name = DL_DIRECTORY + " " + str(datetime.now()) + ".webp"
         with open(required_file_name, "wb") as file:
             for chunk in resp.iter_content(chunk_size=128):
@@ -97,7 +97,7 @@ async def make_qr(qrcode):
         os.remove(required_file_name)
         duration = (datetime.now() - start).seconds
         await qrcode.edit("Created QRCode in {} seconds".format(duration))
-        await asyncio.sleep(5)
+        await sleep(5)
         await qrcode.delete()
 
 HELPER.update({

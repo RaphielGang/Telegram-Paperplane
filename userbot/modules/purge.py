@@ -6,7 +6,7 @@
 
 """ Userbot module for purging unneeded messages(usually spam or ot). """
 
-import time
+from asyncio import sleep
 
 from telethon.errors import rpcbaseerrors
 
@@ -44,7 +44,7 @@ async def fastpurger(purg):
                 LOGGER_GROUP, "Purge of " +
                 str(count) + " messages done successfully."
             )
-        time.sleep(2)
+        sleep(2)
         await done.delete()
 
 
@@ -73,7 +73,7 @@ async def purgeme(delme):
                 LOGGER_GROUP, "Purge of " +
                 str(count) + " messages done successfully."
             )
-        time.sleep(2)
+        sleep(2)
         i = 1
         await smsg.delete()
 
@@ -134,7 +134,7 @@ async def selfdestruct(destroy):
         )
         await destroy.delete()
         smsg = await destroy.client.send_message(destroy.chat_id, text)
-        time.sleep(counter)
+        sleep(counter)
         await smsg.delete()
         if LOGGER:
             await destroy.client.send_message(LOGGER_GROUP, "sd query done successfully")
