@@ -34,7 +34,7 @@ async def is_off_br(br):
 async def upstream(ups):
     await ups.edit("`Checking for updates, please wait....`")
     conf = ups.pattern_match.group(1)
-    off_repo = 'https://github.com/baalajimaestro/Telegram-UserBot.git'
+    off_repo = 'https://github.com/RaphielGang/Telegram-UserBot.git'
 
     try:
         txt = "`Oops.. Updater cannot continue due to some problems occured`\n\n**LOGTRACE:**\n"
