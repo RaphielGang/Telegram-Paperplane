@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from userbot import DB_URI
 
+BASE = declarative_base()
 
 def start() -> scoped_session:
     engine = create_engine(DB_URI)
@@ -10,5 +11,4 @@ def start() -> scoped_session:
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
 
-BASE = declarative_base()
 SESSION = start()
