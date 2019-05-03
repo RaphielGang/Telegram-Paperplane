@@ -37,8 +37,10 @@ async def welcome_mute(welcm):
                     welcm.chat_id,
                     from_user=user_id
             ):
+
+                #pylint: disable=multiple-statements
                 if not message: break
-                
+
                 join_time = welcm.action_message.date
                 message_date = message.date
 
@@ -49,7 +51,7 @@ async def welcome_mute(welcm):
                 print(f"User Joined: {join_time}")
                 print(f"Spam Message Sent: {message_date}")
                 ###
-                
+
                 user = await welcm.client.get_entity(user_id)
                 if "http://" in message.text:
                     spambot = True
@@ -65,7 +67,7 @@ async def welcome_mute(welcm):
                             "Promotion",
                             "Information",
                             "Dex",
-                            "Announcements", 
+                            "Announcements",
                             "Info"
                     ):
                         if user.last_name == "Bot":

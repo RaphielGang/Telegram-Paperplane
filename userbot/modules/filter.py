@@ -5,13 +5,8 @@
 #
 """ Userbot module for filter commands """
 
-import asyncio
-import re
-import sqlite3
-import time
-
-from sqlalchemy import (Boolean, Column, Integer, String, UnicodeText,
-                        distinct, func)
+from asyncio import sleep
+from re import fullmatch, IGNORECASE
 
 from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
@@ -33,7 +28,7 @@ async def filter_incoming_handler(handler):
                 return
             for trigger in filters['keyword']:
                 for item in listes:
-                    pro = re.fullmatch(trigger['keyword'], item, flags=re.IGNORECASE)
+                    pro = fullmatch(trigger.keyword, item, flags=IGNORECASE)
                     if pro:
                         await handler.reply(trigger['msg'])
                         return
@@ -93,12 +88,12 @@ async def kick_marie_filter(kick):
         Marie(or her clones) filters from a chat. """
     if not kick.text[0].isalpha() and kick.text[0] not in ("/", "#", "@", "!"):
         await kick.edit("```Will be kicking away all Marie filters.```")
-        time.sleep(3)
+        sleep(3)
         resp = await kick.get_reply_message()
         filters = resp.text.split("-")[1:]
         for i in filters:
             await kick.reply("/stop %s" % (i.strip()))
-            await asyncio.sleep(0.3)
+            await sleep(0.3)
         await kick.respond(
             "```Successfully purged bots filters yaay!```\n Gimme cookies!"
         )
