@@ -6,16 +6,18 @@
 
 """ Userbot module containing various scrapers. """
 
-import html
 import os
-import re
-import urllib
+from html import unescape
+from re import findall
+from urllib import parse
+from urllib.error import HTTPError
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
 
-import requests
-import urbandict
-import wikipedia
+from wikipedia import summary
+from wikipedia.exceptions import DisambiguationError, PageError
+from urbandict import define
+from requests import get
 from google_images_download import google_images_download
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -36,7 +38,7 @@ async def img_sampler(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         await event.edit("Processing...")
         query = event.pattern_match.group(1)
-        lim = re.findall(r"lim=\d+", query)
+        lim = findall(r"lim=\d+", query)
         try:
             lim = lim[0]
             lim = lim.replace("lim=", "")
@@ -68,7 +70,7 @@ async def gsearch(q_event):
     """ For .google command, do a Google search. """
     if not q_event.text[0].isalpha() and q_event.text[0] not in ("/", "#", "@", "!"):
         match_ = q_event.pattern_match.group(1)
-        match = urllib.parse.quote_plus(match_)
+        match = parse.quote_plus(match_)
         result_ = await asyncsh(
             f"gsearch {match}",
             stdout=asyncsh_PIPE,
@@ -93,14 +95,14 @@ async def wiki(wiki_q):
     if not wiki_q.text[0].isalpha() and wiki_q.text[0] not in ("/", "#", "@", "!"):
         match = wiki_q.pattern_match.group(1)
         try:
-            wikipedia.summary(match)
-        except wikipedia.exceptions.DisambiguationError as error:
+            summary(match)
+        except DisambiguationError as error:
             await wiki_q.edit(f"Disambiguated page found.\n\n{error}")
             return
-        except wikipedia.exceptions.PageError as pageerror:
+        except PageError as pageerror:
             await wiki_q.edit(f"Page not found.\n\n{pageerror}")
             return
-        result = wikipedia.summary(match)
+        result = summary(match)
         if len(result) >= 4096:
             file = open("output.txt", "w+")
             file.write(result)
@@ -131,11 +133,11 @@ async def urban_dict(ud_e):
         await ud_e.edit("Processing...")
         query = ud_e.pattern_match.group(1)
         try:
-            urbandict.define(query)
-        except urllib.error.HTTPError:
+            define(query)
+        except HTTPError:
             await ud_e.edit(f"Sorry, couldn't find any results for: {query}")
             return
-        mean = urbandict.define(query)
+        mean = define(query)
         deflen = sum(len(i) for i in mean[0]["def"])
         exalen = sum(len(i) for i in mean[0]["example"])
         meanlen = deflen + exalen
@@ -286,7 +288,7 @@ async def yt_search(video_q):
 
         await video_q.edit("```Processing...```")
         for video in videos_json:
-            result += f"{i}. {html.unescape(video['snippet']['title'])} \
+            result += f"{i}. {unescape(video['snippet']['title'])} \
                 \nhttps://www.youtube.com/watch?v={video['id']['videoId']}\n"
             i += 1
 
@@ -388,7 +390,7 @@ async def download_video(v_url):
         video_stream.download(filename=video.title)
 
         url = video.thumbnail_url
-        resp = requests.get(url)
+        resp = get(url)
         with open('thumbnail.jpg', 'wb') as file:
             file.write(resp.content)
 
