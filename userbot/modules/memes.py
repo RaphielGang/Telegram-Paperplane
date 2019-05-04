@@ -217,6 +217,16 @@ async def kek(keks):
         await keks.edit(":" + uio[i % 2])
 
 
+@register(outgoing=True, pattern="^.kill$")
+async def killing (killed):
+    """ Believe me, you will find this useful. """
+    if not killed.text[0].isalpha() and killed.text[0] not in ("/", "#", "@", "!"):
+        if await killed.get_reply_message():
+            await killed.edit(
+                "`KILLED SUCCESSFULLY , MASTER 😈`\n"
+            )
+
+
 @register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
     """ Ok... """
