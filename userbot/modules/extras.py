@@ -56,7 +56,7 @@ async def _(event):
 		await event.edit("".join(deq))
 		deq.rotate(1)
 
-@register(outgoing=True, pattern="^.sauce$")
+@register(outgoing=True, pattern="^.source$")
 async def source(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         await e.edit("https://github.com/noobvishal/Userbot/")
