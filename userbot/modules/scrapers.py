@@ -374,9 +374,9 @@ async def download_video(v_url):
 
         video_size = video_stream.filesize / 1000000
 
-        if video_size >= 50:
+        if video_size >= 200:
             await v_url.edit(
-                ("**File larger than 50MB. Sending the link instead.\n**"
+                ("**File larger than 200MB. Sending the link instead.\n**"
                  f"Get the video [here]({video_stream.url})\n\n"
                  "**If the video opens instead of playing, right-click(or long press) and "
                  "press 'Save Video As...'(may depend on the browser) to download the video.**")
