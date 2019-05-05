@@ -20,7 +20,7 @@ from cowpy import cow
 from userbot import (DISABLE_RUN, WIDE_MAP, HELPER)
 from userbot.events import register
 
-#================= CONSTANT =================
+# ================= CONSTANT =================
 METOOSTR = [
     "Me too thanks",
     "Haha yes, me too",
@@ -192,7 +192,8 @@ RUNSREACTS = [
     "I am just walking off, coz me is too fat.",
     "I Fugged off!",
 ]
-#===========================================
+# ===========================================
+
 
 @register(outgoing=True, pattern="^.(.*)say (.*)")
 async def univsaye(cowmsg):
@@ -207,6 +208,7 @@ async def univsaye(cowmsg):
         cheese = cheese()
 
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
+
 
 @register(outgoing=True, pattern="^:/$")
 async def kek(keks):

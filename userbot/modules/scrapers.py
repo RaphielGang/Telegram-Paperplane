@@ -75,7 +75,7 @@ async def gsearch(q_event):
             f"gsearch {match}",
             stdout=asyncsh_PIPE,
             stderr=asyncsh_PIPE
-            )
+        )
         stdout, stderr = await result_.communicate()
         result = str(stdout.decode().strip()) \
             + str(stderr.decode().strip())
@@ -146,13 +146,13 @@ async def urban_dict(ud_e):
                 await ud_e.edit("`Output too large, sending as file.`")
                 file = open("output.txt", "w+")
                 file.write(
-                    "Text: "
-                    + query
-                    + "\n\nMeaning: "
-                    + mean[0]["def"]
-                    + "\n\n"
-                    + "Example: \n"
-                    + mean[0]["example"]
+                    "Text: " +
+                    query +
+                    "\n\nMeaning: " +
+                    mean[0]["def"] +
+                    "\n\n" +
+                    "Example: \n" +
+                    mean[0]["example"]
                 )
                 file.close()
                 await ud_e.client.send_file(
@@ -165,14 +165,14 @@ async def urban_dict(ud_e):
                 await ud_e.delete()
                 return
             await ud_e.edit(
-                "Text: **"
-                + query
-                + "**\n\nMeaning: **"
-                + mean[0]["def"]
-                + "**\n\n"
-                + "Example: \n__"
-                + mean[0]["example"]
-                + "__"
+                "Text: **" +
+                query +
+                "**\n\nMeaning: **" +
+                mean[0]["def"] +
+                "**\n\n" +
+                "Example: \n__" +
+                mean[0]["example"] +
+                "__"
             )
             if LOGGER:
                 await ud_e.client.send_message(
@@ -228,7 +228,7 @@ async def text_to_speech(query):
             await query.delete()
 
 
-@register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)") # ^.promote(?: |$)(.*)
+@register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)")
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     if not trans.text[0].isalpha() and trans.text[0] not in ("/", "#", "@", "!"):
@@ -298,14 +298,15 @@ async def yt_search(video_q):
 
 
 def youtube_search(
-        query,
-        order="relevance",
-        token=None,
-        location=None,
-        location_radius=None
-    ):
+    query,
+    order="relevance",
+    token=None,
+    location=None,
+    location_radius=None
+):
     """ Do a YouTube search. """
-    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY, cache_discovery=False)
+    youtube = build('youtube', 'v3',
+                    developerKey=YOUTUBE_API_KEY, cache_discovery=False)
     search_response = youtube.search().list(
         q=query,
         type="video",
@@ -406,9 +407,11 @@ async def download_video(v_url):
         os.remove('thumbnail.jpg')
         await v_url.delete()
 
+
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return inputString.encode('ascii', 'ignore').decode('ascii')
+
 
 HELPER.update({
     'img': ".img <search_query>\

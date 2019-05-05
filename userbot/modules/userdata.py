@@ -6,17 +6,19 @@
 """ Userbot module for changing your Telegram profile details. """
 
 import os
+
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.errors.rpcerrorlist import UsernameOccupiedError, PhotoExtInvalidError
+from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
+                                          UsernameOccupiedError)
 from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
-from telethon.tl.functions.photos import (UploadProfilePhotoRequest,
-                                          DeletePhotosRequest, GetUserPhotosRequest)
-from telethon.tl.types import MessageMediaPhoto, InputPhoto
+from telethon.tl.functions.photos import (DeletePhotosRequest,
+                                          GetUserPhotosRequest,
+                                          UploadProfilePhotoRequest)
+from telethon.tl.types import InputPhoto, MessageMediaPhoto
 
-from userbot import bot, HELPER
+from userbot import HELPER, bot
 from userbot.events import register
-
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
@@ -29,7 +31,8 @@ BIO_SUCCESS = "```Successfully edited Bio.```"
 NAME_OK = "```Your name was succesfully changed.```"
 USERNAME_SUCCESS = "```Your username was succesfully changed.```"
 USERNAME_TAKEN = "```This username is already taken.```"
-#===============================================================
+# ===============================================================
+
 
 @register(outgoing=True, pattern="^.name")
 async def update_name(name):
@@ -49,6 +52,7 @@ async def update_name(name):
             last_name=lastname))
         await name.edit(NAME_OK)
 
+
 @register(outgoing=True, pattern="^.profilepic$")
 async def set_profilepic(propic):
     """ For .profilepic command, change your profile picture in Telegram. """
@@ -67,7 +71,7 @@ async def set_profilepic(propic):
             try:
                 await bot(UploadProfilePhotoRequest(
                     await bot.upload_file(photo)
-                    ))
+                ))
                 os.remove(photo)
                 await propic.edit(PP_CHANGED)
             except PhotoCropSizeSmallError:

@@ -3,8 +3,10 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
-# The entire source code is OSSRPL except 'download, uploadir, uploadas, upload' which is MPL
+# The entire source code is OSSRPL except
+# 'download, uploadir, uploadas, upload' which is MPL
 # License: MPL and OSSRPL
+
 """ Userbot module which contains everything related to \
     downloading/uploading from/to the server. """
 
@@ -31,6 +33,7 @@ def progress(current, total):
         current, total, (current / total) * 100
     )
 
+
 @register(pattern=r".download(?: |$)(.*)", outgoing=True)
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
@@ -51,7 +54,8 @@ async def download(target_file):
             end = datetime.now()
             duration = (end - start).seconds
             await target_file.edit(
-                "Downloaded to `{}` in {} seconds.".format(downloaded_file_name, duration)
+                "Downloaded to `{}` in {} seconds.".format(
+                    downloaded_file_name, duration)
             )
         elif "|" in input_str:
             url, file_name = input_str.split("|")
@@ -81,7 +85,8 @@ async def download(target_file):
             end = datetime.now()
             duration = (end - start).seconds
             await target_file.edit(
-                "Downloaded to `{}` in {} seconds.".format(required_file_name, duration)
+                "Downloaded to `{}` in {} seconds.".format(
+                    required_file_name, duration)
             )
         else:
             await target_file.edit("Reply to a message to download to my local server.")
@@ -194,6 +199,7 @@ async def upload(u_event):
         else:
             await u_event.edit("404: File Not Found")
 
+
 def get_video_thumb(file, output=None, width=90):
     """ Get video thhumbnail """
     metadata = extractMetadata(createParser(file))
@@ -204,7 +210,8 @@ def get_video_thumb(file, output=None, width=90):
             file,
             "-ss",
             str(
-                int((0, metadata.get("duration").seconds)[metadata.has("duration")] / 2)
+                int((0, metadata.get("duration").seconds)
+                    [metadata.has("duration")] / 2)
             ),
             "-filter:v",
             "scale={}:-1".format(width),
@@ -234,7 +241,8 @@ def extract_w_h(file):
     ]
     # https://stackoverflow.com/a/11236144/4723940
     try:
-        t_response = subprocess.check_output(command_to_run, stderr=subprocess.STDOUT)
+        t_response = subprocess.check_output(
+            command_to_run, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
         LOGS.warning(exc)
     else:

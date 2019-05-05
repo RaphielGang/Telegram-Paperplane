@@ -9,7 +9,8 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, ISAFK, LOGGER, LOGGER_GROUP, USERS, HELPER)
+from userbot import (AFKREASON, COUNT_MSG, HELPER, ISAFK, LOGGER, LOGGER_GROUP,
+                     USERS)
 from userbot.events import register
 
 
@@ -99,36 +100,36 @@ async def type_afk_is_not_true(notafk):
         ISAFK = False
         await notafk.respond("I'm no longer AFK.")
         afk_info = await notafk.respond(
-            "`You recieved "
-            + str(COUNT_MSG)
-            + " messages while you were away. Check log for more details.`"
-            + " `This auto-generated message shall be self destructed in 2 seconds.`"
+            "`You recieved " +
+            str(COUNT_MSG) +
+            " messages while you were away. Check log for more details.`" +
+            " `This auto-generated message shall be self destructed in 2 seconds.`"
         )
         time.sleep(2)
         await afk_info.delete()
         if LOGGER:
             await notafk.client.send_message(
                 LOGGER_GROUP,
-                "You've recieved "
-                + str(COUNT_MSG)
-                + " messages from "
-                + str(len(USERS))
-                + " chats while you were away",
+                "You've recieved " +
+                str(COUNT_MSG) +
+                " messages from " +
+                str(len(USERS)) +
+                " chats while you were away",
             )
             for i in USERS:
                 name = await notafk.client.get_entity(i)
                 name0 = str(name.first_name)
                 await notafk.client.send_message(
                     LOGGER_GROUP,
-                    "["
-                    + name0
-                    + "](tg://user?id="
-                    + str(i)
-                    + ")"
-                    + " sent you "
-                    + "`"
-                    + str(USERS[i])
-                    + " messages`",
+                    "[" +
+                    name0 +
+                    "](tg://user?id=" +
+                    str(i) +
+                    ")" +
+                    " sent you " +
+                    "`" +
+                    str(USERS[i]) +
+                    " messages`",
                 )
         COUNT_MSG = 0
         USERS = {}

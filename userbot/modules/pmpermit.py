@@ -9,7 +9,7 @@
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from sqlalchemy.exc import IntegrityError 
+from sqlalchemy.exc import IntegrityError
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)

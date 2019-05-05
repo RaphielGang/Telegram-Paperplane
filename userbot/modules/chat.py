@@ -69,16 +69,16 @@ async def kickme(leave):
 
 
 HELPER.update({
-    "chatid" : "Fetches the current chat's ID"
+    "chatid": "Fetches the current chat's ID"
 })
 HELPER.update({
-    "userid" : "Fetches the ID of the user in reply, if its a \
+    "userid": "Fetches the ID of the user in reply, if its a \
 forwarded message, finds the ID for the source."
 })
 HELPER.update({
-    "log" : "Forwards the message you've replied to in your \
+    "log": "Forwards the message you've replied to in your \
 logger group."
 })
 HELPER.update({
-    "kickme" : "Leave from a targeted group."
+    "kickme": "Leave from a targeted group."
 })
