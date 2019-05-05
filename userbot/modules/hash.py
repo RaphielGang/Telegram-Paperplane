@@ -12,6 +12,7 @@ import pybase64
 from userbot import HELPER
 from userbot.events import register
 
+
 @register(outgoing=True, pattern="^.hash (.*)")
 async def gethash(hash_q):
     """ For .hash command, find the md5, sha1, sha256, sha512 of the string. """
@@ -30,17 +31,17 @@ async def gethash(hash_q):
         runapp(["rm", "hashdis.txt"], stdout=PIPE)
         sha512 = sha512.stdout.decode()
         ans = (
-            "Text: `"
-            + hashtxt_
-            + "`\nMD5: `"
-            + md5
-            + "`SHA1: `"
-            + sha1
-            + "`SHA256: `"
-            + sha256
-            + "`SHA512: `"
-            + sha512[:-1]
-            + "`"
+            "Text: `" +
+            hashtxt_ +
+            "`\nMD5: `" +
+            md5 +
+            "`SHA1: `" +
+            sha1 +
+            "`SHA256: `" +
+            sha256 +
+            "`SHA512: `" +
+            sha512[:-1] +
+            "`"
         )
         if len(ans) > 4096:
             hashfile = open("hashes.txt", "w+")
@@ -76,9 +77,9 @@ async def endecrypt(query):
 
 
 HELPER.update({
-    "base64" : "Find the base64 encoding of the given string"
+    "base64": "Find the base64 encoding of the given string"
 })
 
 HELPER.update({
-    "hash" : "Find the md5, sha1, sha256, sha512 of the string when written into a txt file."
+    "hash": "Find the md5, sha1, sha256, sha512 of the string when written into a txt file."
 })

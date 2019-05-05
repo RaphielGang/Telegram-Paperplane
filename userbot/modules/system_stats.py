@@ -16,9 +16,9 @@ from userbot import HELPER
 from userbot.events import register
 
 
-#================= CONSTANT =================
+# ================= CONSTANT =================
 DEFAULTUSER = uname().node
-#============================================
+# ============================================
 
 
 @register(outgoing=True, pattern="^.sysd$")
