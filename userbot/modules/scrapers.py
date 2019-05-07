@@ -21,6 +21,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
+import emoji
 from pytube import YouTube
 from pytube.helpers import safe_filename
 
