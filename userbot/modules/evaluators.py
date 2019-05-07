@@ -8,7 +8,7 @@
 
 import asyncio
 from getpass import getuser
-from os import geteuid, remove
+from os import remove
 from sys import executable
 
 from userbot import HELPER, LOGGER, LOGGER_GROUP
@@ -152,6 +152,11 @@ async def terminal_runner(term):
     if not term.text[0].isalpha() and term.text[0] not in ("/", "#", "@", "!"):
         curruser = getuser()
         command = term.pattern_match.group(1)
+        try:
+            from os import geteuid
+            uid = geteuid()
+        except:
+            uid = "This ain't it chief!"
 
         if term.is_channel and not term.is_group:
             await term.edit("`Term commands aren't permitted on channels!`")
@@ -188,7 +193,7 @@ async def terminal_runner(term):
             remove("output.txt")
             return
 
-        if geteuid() is 0:
+        if uid is 0:
             await term.edit(
                 "`"
                 f"{curruser}:~# {command}"
