@@ -407,7 +407,7 @@ async def download_video(v_url):
 
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
-    return inputString.encode('ascii', 'ignore').decode('ascii')
+    return emoji.get_emoji_regexp().sub(u'', inputString)
 
 HELPER.update({
     'img': ".img <search_query>\
