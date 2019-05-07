@@ -261,6 +261,7 @@ async def translateme(trans):
             )
 
 
+
 @register(pattern=".lang (.*)", outgoing=True)
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
