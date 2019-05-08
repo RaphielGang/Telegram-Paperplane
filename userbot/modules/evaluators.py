@@ -155,7 +155,7 @@ async def terminal_runner(term):
         try:
             from os import geteuid
             uid = geteuid()
-        except:
+        except ImportError:
             uid = "This ain't it chief!"
 
         if term.is_channel and not term.is_group:
