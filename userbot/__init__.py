@@ -19,7 +19,7 @@ from telethon.sessions import StringSession
 load_dotenv("config.env")
 
 # Logger setup:
-CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "True"))
+CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
 
 if CONSOLE_LOGGER_VERBOSE:
@@ -48,11 +48,11 @@ if CONFIG_CHECK:
     LOGS.error("Please remove the line mentioned in the first hashtag from the config.env file")
     quit(1)
 
-STRING_SESSION = os.environ.get("STRING_SESSION", None)
-
 API_KEY = os.environ.get("API_KEY", None)
 
 API_HASH = os.environ.get("API_HASH", None)
+
+STRING_SESSION = os.environ.get("STRING_SESSION", None)
 
 LOGGER_GROUP = int(os.environ.get("LOGGER_GROUP", "0"))
 
@@ -63,7 +63,7 @@ LOGGER = sb(os.environ.get(
 PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
 CONSOLE_LOGGER_VERBOSE = sb(
-    os.environ.get("CONSOLE_LOGGER_VERBOSE", "True")
+    os.environ.get("CONSOLE_LOGGER_VERBOSE", "False")
     )
 
 DB_URI = os.environ.get("DATABASE_URL", None)
@@ -80,6 +80,12 @@ YOUTUBE_API_KEY = os.environ.get(
     "YOUTUBE_API_KEY", None
     )
 
+SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
+SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
+SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
+DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
+
+# pylint: disable=invalid-name
 bot = TelegramClient(StringSession(STRING_SESSION), API_KEY, API_HASH)
 
 if os.path.exists("learning-data-root.check"):
@@ -102,6 +108,7 @@ SPAM = False
 WIDE_MAP = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
 COUNT_PM = {}
+LASTMSG = {}
 ISAFK = False
 ENABLE_KILLME = True
 SNIPE_ID = 0

@@ -17,7 +17,7 @@ from userbot.events import register
 TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
 
-@register(pattern=".whois ?(.*)", outgoing=True)
+@register(pattern=".whois(?: |$)(.*)", outgoing=True)
 async def who(event):
     """ For .whois command, get info about a user. """
     if event.fwd_from:
@@ -72,21 +72,13 @@ async def get_user(event):
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
-            else:
-                # the disgusting CRAP way, of doing the thing
-                try:
-                    user_object = await event.client.get_entity(user)
-                    replied_user = await event.client(GetFullUserRequest(user_object.id))
-                except (TypeError, ValueError) as err:
-                    await event.edit(str(err))
-                    return None
-        else:
-            try:
-                user_object = await event.client.get_entity(user)
-                replied_user = await event.client(GetFullUserRequest(user_object.id))
-            except (TypeError, ValueError) as err:
-                await event.edit(str(err))
-                return None
+                return replied_user
+        try:
+            user_object = await event.client.get_entity(user)
+            replied_user = await event.client(GetFullUserRequest(user_object.id))
+        except (TypeError, ValueError) as err:
+            await event.edit(str(err))
+            return None
 
     return replied_user
 
@@ -108,22 +100,13 @@ async def fetch_info(replied_user, event):
     except TypeError:
         photo = "https://thumbs.dreamstime.com/b/no-user-profile-picture-24185395.jpg"
 
-    if first_name:
-        first_name = first_name.replace("\u2060", "")
-    else:
-        first_name = "This User has no First Name"
-    if last_name:
-        last_name = last_name.replace("\u2060", "")
-    else:
-        last_name = "This User has no Last Name"
-    if username:
-        username = "@{}".format(username)
-    else:
-        username = "This User has no Username"
-    if user_bio:
-        user_bio = user_bio
-    else:
-        user_bio = "This User has no About"
+    first_name = first_name.replace("\u2060", "") if first_name else (
+        "This User has no First Name")
+    last_name = last_name.replace("\u2060", "") if last_name else (
+        "This User has no Last Name")
+    username = "@{}".format(username) if username else (
+        "This User has no Username")
+    user_bio = "This User has no About" if not user_bio else user_bio
 
     caption = "<b>USER INFO:</b> \n"
     caption += f"First Name: {first_name} \n"

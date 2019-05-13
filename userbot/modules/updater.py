@@ -30,7 +30,7 @@ async def is_off_br(br):
     return
 
 
-@register(outgoing=True, pattern="^.update ?(.*)")
+@register(outgoing=True, pattern="^.update(?: |$)(.*)")
 async def upstream(ups):
     await ups.edit("`Checking for updates, please wait....`")
     conf = ups.pattern_match.group(1)

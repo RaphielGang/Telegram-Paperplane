@@ -226,15 +226,17 @@ async def lol(lel):
         await lel.edit(okay)
 
 
-@register(outgoing=True, pattern="^.cp ?(.*)")
+@register(outgoing=True, pattern="^.cp(?: |$)(.*)")
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
         textx = await cp_e.get_reply_message()
         message = cp_e.pattern_match.group(1)
 
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await cp_e.edit("`😂🅱️IvE👐sOME👅text👅for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
             return
@@ -260,14 +262,16 @@ async def copypasta(cp_e):
         await cp_e.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.vapor ?(.*)")
+@register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
         textx = await vpr.get_reply_message()
         message = vpr.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await vpr.edit("`Ｇｉｖｅ ｓｏｍｅ ｔｅｘｔ ｆｏｒ ｖａｐｏｒ！`")
             return
@@ -276,15 +280,17 @@ async def vapor(vpr):
         await vpr.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.str ?(.*)")
+@register(outgoing=True, pattern="^.str(?: |$)(.*)")
 async def stretch(stret):
     """ Stretch it."""
     if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@", "!"):
         textx = await stret.get_reply_message()
         message = stret.text
         message = stret.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await stret.edit("`GiiiiiiiB sooooooomeeeeeee teeeeeeext!`")
             return
@@ -298,14 +304,16 @@ async def stretch(stret):
         await stret.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.zal ?(.*)")
+@register(outgoing=True, pattern="^.zal(?: |$)(.*)")
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
         textx = await zgfy.get_reply_message()
         message = zgfy.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await zgfy.edit(
                 "`gͫ ̆ i̛ ̺ v͇̆ ȅͅ   a̢ͦ   s̴̪ c̸̢ ä̸ rͩͣ y͖͞   t̨͚ é̠ x̢͖  t͔͛`"
@@ -323,14 +331,16 @@ async def hoi(hello):
     await hello.edit("Hoi!😄")
 
 
-@register(outgoing=True, pattern="^.owo ?(.*)")
+@register(outgoing=True, pattern="^.owo(?: |$)(.*)")
 async def faces(owo):
     """ UwU """
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
         textx = await owo.get_reply_message()
         message = owo.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await owo.edit("` UwU no text given! `")
             return
@@ -398,14 +408,16 @@ async def metoo(hahayes):
         await hahayes.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.mock ?(.*)")
+@register(outgoing=True, pattern="^.mock(?: |$)(.*)")
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
         textx = await mock.get_reply_message()
         message = mock.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await mock.edit("`gIvE sOMEtHInG tO MoCk!`")
             return
@@ -414,40 +426,46 @@ async def spongemocktext(mock):
         await mock.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.clap ?(.*)")
+@register(outgoing=True, pattern="^.clap(?: |$)(.*)")
 async def claptext(memereview):
     """ Praise people! """
-    textx = await memereview.get_reply_message()
-    message = memereview.pattern_match.group(1)
-    if message: pass
-    elif textx: message = textx.text
-    else:
-        await memereview.edit("`Hah, I don't clap pointlessly!`")
-        return
-    reply_text = "👏 "
-    reply_text += message.replace(" ", " 👏 ")
-    reply_text += " 👏"
-    await memereview.edit(reply_text)
+    if not memereview.text[0].isalpha() and memereview.text[0] not in ("/", "#", "@", "!"):
+        textx = await memereview.get_reply_message()
+        message = memereview.pattern_match.group(1)
+        if message:
+            pass
+        elif textx:
+            message = textx.text
+        else:
+            await memereview.edit("`Hah, I don't clap pointlessly!`")
+            return
+        reply_text = "👏 "
+        reply_text += message.replace(" ", " 👏 ")
+        reply_text += " 👏"
+        await memereview.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.bt$")
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
-    if await bt_e.get_reply_message():
-        await bt_e.edit(
-            "`BLUETEXT MUST CLICK.`\n"
-            "`Are you a stupid animal which is attracted to colours?`"
-        )
+    if not bt_e.text[0].isalpha() and bt_e.text[0] not in ("/", "#", "@", "!"):
+        if await bt_e.get_reply_message():
+            await bt_e.edit(
+                "`BLUETEXT MUST CLICK.`\n"
+                "`Are you a stupid animal which is attracted to colours?`"
+            )
 
 
-@register(pattern='.type ?(.*)')
+@register(pattern='.type(?: |$)(.*)')
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
     if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@", "!"):
         textx = await typew.get_reply_message()
         message = typew.pattern_match.group(1)
-        if message: pass
-        elif textx: message = textx.text
+        if message:
+            pass
+        elif textx:
+            message = textx.text
         else:
             await typew.edit("`Give a text to type!`")
             return

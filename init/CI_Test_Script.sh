@@ -14,6 +14,7 @@
 PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
+COMMIT_HASH="$(git rev-parse --verify HEAD)"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
 
@@ -36,9 +37,9 @@ test_run() {
 # Nuke Trap, coz it not working
 
 tg_senderror() {
-    tg_sendinfo "Build Throwing Error(s)" \
-        "@baalajimaestro @raphielscape naaaaa"
-    tg_channelcast "Build Throwing Error(s)"
+    tg_sendinfo "<code>Build Throwing Error(s)</code>" \
+        "@baalajimaestro @raphielscape @MrYacha please look in!" \
+        "Logs: https://semaphoreci.com/baalajimaestro/telegram-userbot"
 
     [ -n "${STATUS}" ] &&
     exit "${STATUS}" ||
@@ -46,22 +47,17 @@ tg_senderror() {
 }
 
 tg_yay() {
-    tg_sendinfo "Python CI Test passed yay" \
-        "Haha yes"
+    tg_sendinfo "<code>Compilation Success!</code>"
 }
 
 # Fin Prober
 fin() {
     echo "Yay! My works took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds.~"
-    tg_sendinfo "Compilation took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds"
-    tg_channelcast "Compilation took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds"
     tg_yay
 }
 
 finerr() {
     echo "My works took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds but it's error..."
-    tg_sendinfo "Build took $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds" \
-        "but it is having error anyways xd"
     tg_senderror
 
     [ -n "${STATUS}" ] &&
