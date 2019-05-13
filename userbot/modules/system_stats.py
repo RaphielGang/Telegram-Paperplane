@@ -26,8 +26,7 @@ async def sysdetails(sysd):
     """ For .sysd command, get system info using neofetch. """
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
-            neo = "neofetch --off --color_blocks off --bold off --cpu_temp C \
-                    --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
+            neo = "neofetch --stdout"
             fetch = await asyncrunapp(
                 neo,
                 stdout=asyncPIPE,
