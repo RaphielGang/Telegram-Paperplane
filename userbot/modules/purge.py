@@ -44,7 +44,7 @@ async def fastpurger(purg):
                 LOGGER_GROUP, "Purge of " +
                 str(count) + " messages done successfully."
             )
-        sleep(2)
+        await sleep(2)
         await done.delete()
 
 
