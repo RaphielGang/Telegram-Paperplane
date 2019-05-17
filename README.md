@@ -37,7 +37,7 @@ Please head to the wiki on instructions to setting it up!
 
 ### Credits:
 
-I would like to thank people who assisted me throughout this project:
+This is just a fork of balajimastro userbot ;)
 
 * [@YouTwitFace](https://github.com/YouTwitFace)
 * [@TheDevXen](https://github.com/TheDevXen)
