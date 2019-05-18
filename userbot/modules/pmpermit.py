@@ -13,7 +13,7 @@ from sqlalchemy.exc import IntegrityError
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
-from userbot.events import register
+from userbot.events import register, noabuse
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = ("Bleep blop! This is a bot. Don't fret.\n\n"
@@ -23,7 +23,7 @@ UNAPPROVED_MSG = ("Bleep blop! This is a bot. Don't fret.\n\n"
 # =================================================================
 
 
-@register(incoming=True)
+@noabuse(incoming=True)
 async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
