@@ -299,12 +299,13 @@ async def yt_search(video_q):
 
 
 def youtube_search(
-    query,
-    order="relevance",
-    token=None,
-    location=None,
-    location_radius=None
-):
+        query,
+        order="relevance",
+        token=None,
+        location=None,
+        location_radius=None
+    ):
+
     """ Do a YouTube search. """
     youtube = build('youtube', 'v3',
                     developerKey=YOUTUBE_API_KEY, cache_discovery=False)
