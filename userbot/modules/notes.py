@@ -7,7 +7,7 @@
 """ Userbot module containing commands for keeping notes. """
 
 from userbot import LOGGER, LOGGER_GROUP, HELPER
-from userbot.events import register
+from userbot.events import register, noabuse
 
 
 @register(outgoing=True, pattern="^.saved$")
@@ -64,7 +64,7 @@ async def add_filter(fltr):
         )
 
 
-@register(pattern=r"#\w*")
+@noabuse(incoming=True, pattern=r"#\w*")
 async def incom_note(getnt):
     """ Notes logic. """
     try:
