@@ -66,7 +66,7 @@ CONSOLE_LOGGER_VERBOSE = sb(
     os.environ.get("CONSOLE_LOGGER_VERBOSE", "False")
     )
 
-DB_URI = os.environ.get("DATABASE_URL", None)
+MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
 
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get(
     "SCREENSHOT_LAYER_ACCESS_KEY", None
@@ -101,6 +101,15 @@ URL = 'https://raw.githubusercontent.com/RaphielGang/databasescape/master/learni
 
 with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)
+
+# Init Mongo
+MONGO = MongoClient(MONGO_DB_URI, 27017).bot
+
+# Init Redis
+####### Redis will be hosted inside the docker container that hosts the bot
+####### We need redis for just caching, so we just leave it to non-persistent
+
+REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 # Global Variables
 SNIPE_TEXT = ""
