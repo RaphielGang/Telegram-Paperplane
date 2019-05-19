@@ -19,6 +19,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 
 from userbot import BRAIN_CHECKER, HELPER, LOGGER, LOGGER_GROUP, bot
 from userbot.events import register
+import pymongo
 
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
@@ -328,8 +329,9 @@ async def spider(spdr):
     if not spdr.text[0].isalpha() and spdr.text[0] not in ("/", "#", "@", "!"):
         # Check if the function running under SQL mode
         try:
-            from userbot.modules.sql_helper.spam_mute_sql import mute
-        except AttributeError:
+            from userbot import MONGO
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
             await spdr.edit(NO_SQL)
             return
 
@@ -358,7 +360,10 @@ async def spider(spdr):
 
         # If everything goes well, do announcing and mute
         await spdr.edit("`Gets a tape!`")
-        mute(spdr.chat_id, user.id)
+        MONGO.bot.filters.insert_one({
+            'chat_id': new_handler.chat_id,
+            'user_id': user.id
+        })
 
         # Announce that the function is done
         await spdr.edit("`Safely taped!`")
@@ -391,11 +396,11 @@ async def unmoot(unmot):
 
         # Check if the function running under SQL mode
         try:
-            from userbot.modules.sql_helper.spam_mute_sql import unmute
-        except AttributeError:
+            from userbot import MONGO
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
             await unmot.edit(NO_SQL)
             return
-
         # If admin or creator, inform the user and start unmuting
         await unmot.edit('```Unmuting...```')
         user = await get_user(unmot)
@@ -404,7 +409,11 @@ async def unmoot(unmot):
         else:
             return
 
-        unmute(unmot.chat_id, user.id)
+        old = MONGO.filters.find_one({
+            'chat_id': unmot.chat_id,
+            'user_id': user_id})
+        if old:
+            MONGO.user_list.delete_one({'_id': old['_id']})
 
         try:
             await unmot.client(
@@ -432,10 +441,10 @@ async def unmoot(unmot):
 async def muter(moot):
     """ Used for deleting the messages of muted people """
     try:
-        from userbot.modules.sql_helper.spam_mute_sql import is_muted
-        from userbot.modules.sql_helper.gmute_sql import is_gmuted
-    except AttributeError:
-        return
+            from userbot import MONGO
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
+            return
     muted = is_muted(moot.chat_id)
     gmuted = is_gmuted(moot.sender_id)
     rights = ChatBannedRights(
@@ -479,8 +488,9 @@ async def ungmoot(un_gmute):
 
         # Check if the function running under SQL mode
         try:
-            from userbot.modules.sql_helper.gmute_sql import ungmute
-        except AttributeError:
+            from userbot import MONGO
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
             await un_gmute.edit(NO_SQL)
 
         user = await get_user(un_gmute)
@@ -522,8 +532,9 @@ async def gspider(gspdr):
 
         # Check if the function running under SQL mode
         try:
-            from userbot.modules.sql_helper.gmute_sql import gmute
-        except AttributeError:
+            from userbot import MONGO
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
             await gspdr.edit(NO_SQL)
             return
 

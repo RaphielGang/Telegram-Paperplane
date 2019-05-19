@@ -32,8 +32,9 @@ async def permitpm(event):
             return
         if event.is_private and not (await event.get_sender()).bot:
             try:
-                from userbot.modules.sql_helper.pm_permit_sql import is_approved
-            except AttributeError:
+                from userbot import MONGO
+                MONGO.server_info()
+            except pymongo.errors.ServerSelectionTimeoutError:
                 return
             apprv = is_approved(event.chat_id)
 
@@ -110,8 +111,9 @@ async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     if not apprvpm.text[0].isalpha() and apprvpm.text[0] not in ("/", "#", "@", "!"):
         try:
-            from userbot.modules.sql_helper.pm_permit_sql import approve
-        except AttributeError:
+            from userbot import MONGO
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
             await apprvpm.edit("`Running on Non-SQL mode!`")
             return
 
@@ -166,10 +168,10 @@ async def blockpm(block):
             uid = block.chat_id
 
         try:
-            from userbot.modules.sql_helper.pm_permit_sql import dissprove
-            dissprove(uid)
-        except AttributeError: #Non-SQL mode.
-            pass
+            from userbot import MONGO
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
+            await block.edit("`Running on No-SQL mode!`")
 
         if LOGGER:
             await block.client.send_message(

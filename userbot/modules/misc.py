@@ -66,7 +66,7 @@ async def bot_support(wannahelp):
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
     if not wannasee.text[0].isalpha() and wannasee.text[0] not in ("/", "#", "@", "!"):
-        await wannasee.edit("https://github.com/baalajimaestro/Telegram-UserBot/")
+        await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
 
 HELPER.update({
     'random': '.random <item1> <item2> ... <itemN>\

@@ -103,7 +103,8 @@ with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)
 
 # Init Mongo
-MONGO = MongoClient(MONGO_DB_URI, 27017).bot
+MONGO = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=maxSevSelDelay)
+
 
 # Init Redis
 ####### Redis will be hosted inside the docker container that hosts the bot

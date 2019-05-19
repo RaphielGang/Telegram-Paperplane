@@ -7,7 +7,7 @@
 
 from asyncio import sleep
 from re import fullmatch, IGNORECASE
-
+import pymongo
 from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register, noabuse
 
@@ -19,11 +19,12 @@ async def filter_incoming_handler(handler):
         if not (await handler.get_sender()).bot:
             try:
                 from userbot import MONGO
-            except AttributeError:
+                MONGO.server_info()
+            except pymongo.errors.ServerSelectionTimeoutError:
                 await handler.edit("`Running on Non-SQL mode!`")
                 return
             listes = handler.text.split(" ")
-            filters = MONGO.filters.find_one({'chat_id': handler.chat_id})
+            filters = MONGO.bot.filters.find_one({'chat_id': handler.chat_id})
             if not filters:
                 return
             for trigger in filters['keyword']:
@@ -42,7 +43,8 @@ async def add_new_filter(new_handler):
     if not new_handler.text[0].isalpha() and new_handler.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot import MONGO
-        except AttributeError:
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
             await new_handler.edit("`Running on Non-SQL mode!`")
             return
         message = new_handler.text
@@ -55,7 +57,7 @@ async def add_new_filter(new_handler):
             'keyword': keyword[1]})
         if old:
             MONGO.user_list.delete_one({'_id': old['_id']})
-        MONGO.filters.insert_one({
+        MONGO.bot.filters.insert_one({
             'chat_id': new_handler.chat_id,
             'keyword': keyword[1],
             'msg': string
@@ -69,7 +71,8 @@ async def remove_a_filter(r_handler):
     if not r_handler.text[0].isalpha() and r_handler.text[0] not in ("/", "#", "@", "!"):
         try:
             from userbot import MONGO
-        except AttributeError:
+            MONGO.server_info()
+        except pymongo.errors.ServerSelectionTimeoutError:
             await r_handler.edit("`Running on Non-SQL mode!`")
             return
         message = r_handler.text
