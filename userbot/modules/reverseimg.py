@@ -46,7 +46,7 @@ async def okgoogle(img):
             try:
                 image = Image.open(photo)
             except OSError:
-                await img.edit('`Gifs and videos aren't supported.`')
+                await img.edit("Gifs and videos aren't supported.")
                 return
             name = "okgoogle.png"
             image.save(name, "PNG")
