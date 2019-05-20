@@ -27,7 +27,7 @@ opener.addheaders = [('User-agent', useragent)]
 
 @register(outgoing=True, pattern=r"^.reverse(?: |$)(\d*)")
 async def okgoogle(img):
-    """ For .kang command, kangs stickers or creates new ones. """
+    """ For .reverse command, reverse image search on google"""
     if not img.text[0].isalpha() and img.text[0] not in ("/", "#", "@", "!"):
 
         if os.path.isfile("okgoogle.png"):
