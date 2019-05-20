@@ -38,7 +38,7 @@ async def okgoogle(img):
             photo = io.BytesIO()
             await bot.download_media(message, photo)
         else:
-            await img.edit("`Reply to photo or sticker nigger.`")
+            await img.edit("`Reply to photo or sticker nibba.`")
             return
 
         if photo:
@@ -46,7 +46,7 @@ async def okgoogle(img):
             try:
                 image = Image.open(photo)
             except OSError:
-                await img.edit('`Unsupported sexuality, most likely.`')
+                await img.edit('`Gifs And Videos aren't supported yet:/`')
                 return
             name = "okgoogle.png"
             image.save(name, "PNG")
@@ -72,7 +72,7 @@ async def okgoogle(img):
             if guess and imgspage:
                 await img.edit(f"[{guess}]({fetchUrl})\n\n`Looking for images...`")
             else:
-                await img.edit("`Couldn't find anything for your uglyass.`")
+                await img.edit("`Couldn't find anything for your search.`")
                 return
 
             if img.pattern_match.group(1):
