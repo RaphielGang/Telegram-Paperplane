@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
-""" Userbot module for kanging stickers or making new ones. """
+""" Userbot module for reverse image search from google. """
 
 import io
 import os
