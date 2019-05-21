@@ -50,6 +50,8 @@ if CONFIG_CHECK:
 
 API_KEY = os.environ.get("API_KEY", None)
 
+OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
+
 API_HASH = os.environ.get("API_HASH", None)
 
 STRING_SESSION = os.environ.get("STRING_SESSION", None)
