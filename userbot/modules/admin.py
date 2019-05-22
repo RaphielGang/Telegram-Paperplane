@@ -13,9 +13,12 @@ from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
+
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
+
+from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 
 from userbot import BRAIN_CHECKER, HELPER, LOGGER, LOGGER_GROUP, bot
 from userbot.events import register
@@ -54,6 +57,11 @@ UNBAN_RIGHTS = ChatBannedRights(
     send_games=None,
     send_inline=None,
     embed_links=None,
+)
+
+KICK_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=True
 )
 # ================================================
 
@@ -120,7 +128,7 @@ async def promote(promt):
 
         await promt.edit("`Promoting...`")
 
-        user = await get_user(promt)
+        user = await get_user_from_event(promt)
         if user:
             pass
         else:
@@ -169,7 +177,7 @@ async def demote(dmod):
         # If passing, declare that we're going to demote
         await dmod.edit("`Demoting...`")
 
-        user = await get_user(dmod)
+        user = await get_user_from_event(dmod)
         if user:
             pass
         else:
@@ -225,7 +233,7 @@ async def thanos(bon):
             await bon.edit(NO_ADMIN)
             return
 
-        user = await get_user(bon)
+        user = await get_user_from_event(bon)
         if user:
             pass
         else:
@@ -295,7 +303,7 @@ async def nothanos(unbon):
         # If everything goes well...
         await unbon.edit("`Unbanning...`")
 
-        user = await get_user(unbon)
+        user = await get_user_from_event(unbon)
         if user:
             pass
         else:
@@ -343,7 +351,7 @@ async def spider(spdr):
             await spdr.edit(NO_ADMIN)
             return
 
-        user = await get_user(spdr)
+        user = await get_user_from_event(spdr)
         if user:
             pass
         else:
@@ -398,7 +406,7 @@ async def unmoot(unmot):
 
         # If admin or creator, inform the user and start unmuting
         await unmot.edit('```Unmuting...```')
-        user = await get_user(unmot)
+        user = await get_user_from_event(unmot)
         if user:
             pass
         else:
@@ -483,7 +491,7 @@ async def ungmoot(un_gmute):
         except AttributeError:
             await un_gmute.edit(NO_SQL)
 
-        user = await get_user(un_gmute)
+        user = await get_user_from_event(un_gmute)
         if user:
             pass
         else:
@@ -527,7 +535,7 @@ async def gspider(gspdr):
             await gspdr.edit(NO_SQL)
             return
 
-        user = await get_user(gspdr)
+        user = await get_user_from_event(gspdr)
         if user:
             pass
         else:
@@ -657,7 +665,101 @@ async def get_admin(show):
         await show.edit(mentions, parse_mode="html")
 
 
-async def get_user(event):
+@register(outgoing=True, pattern="^.pin(?: |$)(.*)")
+async def pin(msg):
+    if not msg.text[0].isalpha() and msg.text[0] not in ("/", "#", "@", "!"):
+        # Admin or creator check
+        chat = await msg.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+
+        # If not admin and not creator, return
+        if not admin and not creator:
+            await msg.edit(NO_ADMIN)
+            return
+        
+        to_pin = await msg.get_reply_message()
+
+        options = msg.pattern_match.group(1)
+
+        is_loud = False
+
+        if options == "loud":
+            is_loud = True
+
+        try:
+            await msg.client(UpdatePinnedMessageRequest(msg.to_id, to_pin.id, is_loud))
+        except BadRequestError:
+            to_pin.edit(NO_PERM)
+            return        
+
+        await msg.edit("`Pinned Successfully!`")
+
+        user = await get_user_from_id(msg.from_id, msg)
+
+        if LOGGER:
+            await msg.client.send_message(
+                LOGGER_GROUP,
+                "#PIN\n"
+                f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
+                f"LOUD: {is_loud}"
+            )
+
+
+@register(outgoing=True, pattern="^.kick(?: |$)(.*)")
+async def kick(usr):
+    """ For .kick command, kick someone from the group using the userbot. """
+    if not usr.text[0].isalpha() and usr.text[0] not in ("/", "#", "@", "!"):
+        # Admin or creator check
+        chat = await usr.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+
+        # If not admin and not creator, return
+        if not admin and not creator:
+            await usr.edit(NO_ADMIN)
+            return
+
+        user = await get_user_from_event(usr)
+        if user:
+            pass
+        else:
+            return
+
+        # If the targeted user is a Sudo
+        if user.id in BRAIN_CHECKER:
+            await usr.edit(
+                "`Kick Error! I am not supposed to mute this user`"
+            )
+            return
+
+        await usr.edit("`Kicking...`")
+
+        try:
+            await usr.client(
+                EditBannedRequest(
+                    usr.chat_id,
+                    user.id,
+                    KICK_RIGHTS
+                )
+            )
+        except BadRequestError:
+            await usr.edit(NO_PERM)
+            return
+
+        await usr.edit(f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`")
+
+        if LOGGER:
+            await usr.client.send_message(
+                LOGGER_GROUP,
+                "#KICK\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n"
+            )
+
+
+async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
@@ -686,6 +788,20 @@ async def get_user(event):
             return None
 
     return user_obj
+
+async def get_user_from_id(user, event):
+    if type(id) == str:
+        user = int(user)
+
+    try:
+        user_obj = await event.client.get_entity(user)
+    except (TypeError, ValueError) as err:
+        await event.edit(str(err))
+        return None
+
+    return user_obj
+
+        
 
 HELPER.update({
     "promote": "Usage: Reply to someone's message with .promote to promote them."
