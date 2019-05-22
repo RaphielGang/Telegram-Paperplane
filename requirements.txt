@@ -7,7 +7,7 @@ gTTS>=2.0.1
 gitpython
 google-api-python-client
 google_auth_oauthlib
-google_images_download>=2.4.2
+google_images_download>=2.7.1
 googletrans>=2.4.0
 gsearch>=1.6.0
 gtts>=2.0.1
