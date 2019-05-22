@@ -21,7 +21,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
-import emoji
+from emoji import get_emoji_regexp
 from pytube import YouTube
 from pytube.helpers import safe_filename
 
@@ -303,6 +303,7 @@ def youtube_search(
         location=None,
         location_radius=None
     ):
+
     """ Do a YouTube search. """
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY, cache_discovery=False)
     search_response = youtube.search().list(
@@ -407,7 +408,8 @@ async def download_video(v_url):
 
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
-    return emoji.get_emoji_regexp().sub(u'', inputString)
+    return get_emoji_regexp().sub(u'', inputString)
+
 
 HELPER.update({
     'img': ".img <search_query>\
