@@ -103,7 +103,7 @@ with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)
 
 # Init Mongo
-MONGO = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=maxSevSelDelay)
+MONGO = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
 
 
 # Init Redis
