@@ -76,7 +76,7 @@ async def evaluate(query):
             )
 
 
-@register(outgoing=True, pattern=r"^.exec(?: |$)([\s\S]+)")
+@register(outgoing=True, pattern=r"^.exec(?: |$)([\s\S]*)")
 async def run(run_q):
     """ For .exec command, which executes the dynamically created program """
     if not run_q.text[0].isalpha() and run_q.text[0] not in ("/", "#", "@", "!"):

@@ -678,20 +678,24 @@ async def pin(msg):
             await msg.edit(NO_ADMIN)
             return
         
-        to_pin = await msg.get_reply_message()
+        to_pin = msg.reply_to_msg_id
+
+        if not to_pin:
+            await msg.edit("`Reply to a message which you want to pin.`")
+            return
 
         options = msg.pattern_match.group(1)
 
-        is_loud = False
+        is_silent = True
 
-        if options == "loud":
-            is_loud = True
+        if options.lower() == "loud":
+            is_silent = False
 
         try:
-            await msg.client(UpdatePinnedMessageRequest(msg.to_id, to_pin.id, is_loud))
+            await msg.client(UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
         except BadRequestError:
-            to_pin.edit(NO_PERM)
-            return        
+            await msg.edit(NO_PERM)
+            return
 
         await msg.edit("`Pinned Successfully!`")
 
@@ -703,7 +707,7 @@ async def pin(msg):
                 "#PIN\n"
                 f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
-                f"LOUD: {is_loud}"
+                f"LOUD: {not is_silent}"
             )
 
 
@@ -722,9 +726,8 @@ async def kick(usr):
             return
 
         user = await get_user_from_event(usr)
-        if user:
-            pass
-        else:
+        if not user:
+            await usr.edit("`Couldn't fetch user.`")
             return
 
         # If the targeted user is a Sudo
@@ -790,7 +793,7 @@ async def get_user_from_event(event):
     return user_obj
 
 async def get_user_from_id(user, event):
-    if type(id) == str:
+    if isinstance(user, str):
         user = int(user)
 
     try:

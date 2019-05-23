@@ -11,10 +11,10 @@ from telethon.events import StopPropagation
 
 from userbot import (AFKREASON, COUNT_MSG, HELPER, ISAFK, LOGGER, LOGGER_GROUP,
                      USERS)
-from userbot.events import register, noabuse
+from userbot.events import register
 
 
-@noabuse(incoming=True)
+@register(incoming=True, disable_edited=True)
 async def mention_afk(mention):
     """ This function takes care of notifying the people who mention you that you are AFK."""
     global COUNT_MSG
@@ -43,7 +43,7 @@ async def mention_afk(mention):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@noabuse(incoming=True)
+@register(incoming=True, disable_edited=True)
 async def afk_on_pm(sender):
     """ Function which informs people that you are AFK in PM """
     global ISAFK
