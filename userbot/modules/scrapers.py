@@ -250,8 +250,8 @@ async def translateme(trans):
             await trans.edit("Invalid destination language.")
             return
 
-        source_lan = LANGUAGES[f'{reply_text.src}']
-        transl_lan = LANGUAGES[f'{reply_text.dest}']
+        source_lan = LANGUAGES[f'{reply_text.src.lower()}']
+        transl_lan = LANGUAGES[f'{reply_text.dest.lower()}']
         reply_text = f"**Source ({source_lan.title()}):**`\n{message}`**\n\
 \nTranslation ({transl_lan.title()}):**`\n{reply_text.text}`"
 

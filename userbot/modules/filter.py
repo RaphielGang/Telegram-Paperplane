@@ -9,10 +9,10 @@ from asyncio import sleep
 from re import fullmatch, IGNORECASE
 
 from userbot import LOGGER, LOGGER_GROUP, HELPER
-from userbot.events import register, noabuse
+from userbot.events import register
 
 
-@noabuse(incoming=True)
+@register(incoming=True, disable_edited=True)
 async def filter_incoming_handler(handler):
     """ Checks if the incoming message contains handler of a filter """
     try:
