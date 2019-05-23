@@ -195,16 +195,18 @@ RUNSREACTS = [
 # ===========================================
 
 
-@register(outgoing=True, pattern="^.(.*)say (.*)")
+@register(outgoing=True, pattern=r"^.(\w+)say (.*)")
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
     if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("/", "#", "@", "!"):
-        arg = cowmsg.pattern_match.group(1)
+        arg = cowmsg.pattern_match.group(1).lower()
         text = cowmsg.pattern_match.group(2)
 
+        if arg == "cow":
+            arg = "default"
+        if arg not in cow.COWACTERS:
+            return
         cheese = cow.get_cow(arg)
-        if isinstance(cheese, str):
-            cheese = cow.get_cow('default')
         cheese = cheese()
 
         await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
