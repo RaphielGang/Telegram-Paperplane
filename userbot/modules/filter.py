@@ -12,7 +12,7 @@ from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, 
 from userbot.events import register, noabuse
 
 
-@noabuse(incoming=True)
+@register(incoming=True, disable_edited=True)
 async def filter_incoming_handler(handler):
     """ Checks if the incoming message contains handler of a filter """
     try:
