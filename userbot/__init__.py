@@ -105,12 +105,24 @@ with open('learning-data-root.check', 'wb') as load:
 # Init Mongo
 MONGO = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
 
-
+def is_mongo_alive():
+    try:
+        MONGO.server_info()
+    except:
+        return False
+    return True
 # Init Redis
 ####### Redis will be hosted inside the docker container that hosts the bot
 ####### We need redis for just caching, so we just leave it to non-persistent
 
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
+
+def is_redis_alive():
+    try:
+        REDIS.ping()
+    except:
+        return False
+    return True
 
 # Global Variables
 SNIPE_TEXT = ""

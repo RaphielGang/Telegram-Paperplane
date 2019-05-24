@@ -8,7 +8,7 @@
 from asyncio import sleep
 from re import fullmatch, IGNORECASE
 import pymongo
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register, noabuse
 
 
@@ -17,11 +17,8 @@ async def filter_incoming_handler(handler):
     """ Checks if the incoming message contains handler of a filter """
     try:
         if not (await handler.get_sender()).bot:
-            try:
-                from userbot import MONGO
-                MONGO.server_info()
-            except pymongo.errors.ServerSelectionTimeoutError:
-                await handler.edit("`Running on Non-SQL mode!`")
+            if not is_mongo_alive() or not is_redis_alive():
+                await handler.edit("`Database connections failing!`")
                 return
             listes = handler.text.split(" ")
             filters = MONGO.bot.filters.find_one({'chat_id': handler.chat_id})
@@ -41,11 +38,8 @@ async def filter_incoming_handler(handler):
 async def add_new_filter(new_handler):
     """ For .filter command, allows adding new filters in a chat """
     if not new_handler.text[0].isalpha() and new_handler.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
-            await new_handler.edit("`Running on Non-SQL mode!`")
+        if not is_mongo_alive() or not is_redis_alive():
+            await new_handler.edit("`Database connections failing!`")
             return
         message = new_handler.text
         keyword = message.split()
@@ -69,11 +63,8 @@ async def add_new_filter(new_handler):
 async def remove_a_filter(r_handler):
     """ For .stop command, allows you to remove a filter from a chat. """
     if not r_handler.text[0].isalpha() and r_handler.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
-            await r_handler.edit("`Running on Non-SQL mode!`")
+        if not is_mongo_alive() or not is_redis_alive():
+            await r_handler.edit("`Database connections failing!`")
             return
         message = r_handler.text
         kek = message.split(" ")
@@ -111,10 +102,8 @@ async def kick_marie_filter(kick):
 async def filters_active(event):
     """ For .filters command, lists all of the active filters in a chat. """
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot import MONGO
-        except AttributeError:
-            await event.edit("`Running on Non-SQL mode!`")
+        if not is_mongo_alive() or not is_redis_alive():
+            await event.edit("`Database connections failing!`")
             return
         transact = "`There are no filters in this chat.`"
         filters = MONGO.filters.find({'chat_id': event.chat_id})

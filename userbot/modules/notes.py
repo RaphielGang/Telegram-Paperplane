@@ -6,7 +6,7 @@
 
 """ Userbot module containing commands for keeping notes. """
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register, noabuse
 
 
@@ -14,10 +14,8 @@ from userbot.events import register, noabuse
 async def notes_active(svd):
     """ For .saved command, list all of the notes saved in a chat. """
     if not svd.text[0].isalpha() and svd.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot.modules.sql_helper.notes_sql import get_notes
-        except AttributeError:
-            await svd.edit("`Running on Non-SQL mode!`")
+        if not is_mongo_alive() or not is_redis_alive():
+            await svd.edit("`Database connections failing!`")
             return
         notes = get_notes(svd.chat_id)
         message = '`There are no saved notes in this chat.`'
@@ -32,10 +30,8 @@ async def notes_active(svd):
 async def remove_notes(clr):
     """ For .clear command, clear note with the given name."""
     if not clr.text[0].isalpha() and clr.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot.modules.sql_helper.notes_sql import rm_note
-        except AttributeError:
-            await clr.edit("`Running on Non-SQL mode!`")
+        if not is_mongo_alive() or not is_redis_alive():
+            await clr.edit("`Database connections failing!`")
             return
         notename = clr.pattern_match.group(1)
         old = MONGO.notes.find_one({"chat_id": clr.chat_id, "name": notename})
@@ -52,10 +48,8 @@ async def remove_notes(clr):
 async def add_filter(fltr):
     """ For .save command, saves notes in a chat. """
     if not fltr.text[0].isalpha() and fltr.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot.modules.sql_helper.notes_sql import add_note
-        except AttributeError:
-            await fltr.edit("`Running on Non-SQL mode!`")
+        if not is_mongo_alive() or not is_redis_alive():
+            await fltr.edit("`Database connections failing!`")
             return
 
         notename = fltr.pattern_match.group(1)
@@ -75,9 +69,7 @@ async def incom_note(getnt):
     """ Notes logic. """
     try:
         if not (await getnt.get_sender()).bot:
-            try:
-                from userbot.modules.sql_helper.notes_sql import get_notes
-            except AttributeError:
+            if not is_mongo_alive() or not is_redis_alive():
                 return
             notename = getnt.text[1:]
             notes = get_notes(getnt.chat_id)
@@ -91,20 +83,20 @@ async def incom_note(getnt):
 
 @register(outgoing=True, pattern="^.rmnotes$")
 async def purge_notes(prg):
-    """ For .rmnotes command, remove every note in the chat at once. """
-    if not prg.text[0].isalpha() and prg.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot.modules.sql_helper.notes_sql import rm_all_notes
-        except AttributeError:
-            await prg.edit("`Running on Non-SQL mode!`")
-            return
-        if not prg.text[0].isalpha():
-            await prg.edit("```Purging all notes.```")
-            rm_all_notes(str(prg.chat_id))
-            if LOGGER:
-                await prg.client.send_message(
-                    LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
-                )
+    if not is_mongo_alive() or not is_redis_alive():
+        await prg.edit("`Database connections failing!`")
+        return
+    if not prg.text[0].isalpha():
+        await prg.edit("```Purging all notes.```")
+        notes = MONGO.notes.find({"chat_id": prg.chat_id})
+        for note in notes:
+            await prg.edit("```Removing {}...```".format(note['name']))
+            MONGO.notes.delete_one({'_id': note['_id']})
+        await prg.edit("```All notes removed!```")
+        if LOGGER:
+            await prg.client.send_message(
+                LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
+            )
 
 HELPER.update({
     "notes": "\

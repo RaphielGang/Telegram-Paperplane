@@ -9,8 +9,7 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, HELPER, ISAFK, LOGGER, LOGGER_GROUP,
-                     USERS)
+from userbot import (COUNT_MSG, REDIS, LOGGER, LOGGER_GROUP, USERS, HELPER, REDIS, is_redis_alive)
 from userbot.events import register, noabuse
 
 
@@ -19,6 +18,8 @@ async def mention_afk(mention):
     """ This function takes care of notifying the people who mention you that you are AFK."""
     global COUNT_MSG
     global USERS
+    if not is_redis_alive():
+        return
     AFK = REDIS.get('isafk')
     if mention.message.mentioned and not (await mention.get_sender()).bot:
         if AFK:
@@ -53,12 +54,16 @@ async def afk_on_pm(sender):
     global ISAFK
     global USERS
     global COUNT_MSG
-    if sender.is_private and not (await sender.get_sender()).bot:
-        if ISAFK:
-            if sender.sender_id not in USERS:
-                await sender.reply(
-                    f"Sorry! My boss is AFK due to `{AFKREASON}`."
-                    "\nI'll ping him to look into the message soon 😉."
+    if not is_redis_alive():
+        return
+    AFK = REDIS.get('isafk')
+    if e.is_private and not (await e.get_sender()).bot:
+        if AFK:
+            if e.sender_id not in USERS:
+                await e.reply(
+                    "Sorry! My boss is AFK due to ```"
+                    + AFK
+                    + "``` I'll ping him to look into the message soon😉"
                 )
                 USERS.update({sender.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
@@ -77,16 +82,19 @@ async def afk_on_pm(sender):
 
 
 @register(outgoing=True, pattern="^.afk")
-async def set_afk(afk_e):
-    """ For .afk command, allows you to inform people that you are afk when they message you """
-    if not afk_e.text[0].isalpha() and afk_e.text[0] not in ("/", "#", "@", "!"):
-        message = afk_e.text
-        string = str(message[5:])
-        global ISAFK
-        global AFKREASON
-        await afk_e.edit("AFK AF!")
-        if string != "":
-            AFKREASON = string
+async def set_afk(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        if not is_redis_alive():
+            await e.edit("`Database connections failing!`")
+            return
+        message = e.text
+        try:
+            AFKREASON = str(message[5:])
+        except:
+            AFKREASON = ''
+        if not AFKREASON:
+            AFKREASON = 'No reason'
+        await e.edit("AFK AF!")
         if LOGGER:
             await afk_e.client.send_message(LOGGER_GROUP, "You went AFK!")
         ISAFK = True
@@ -100,6 +108,8 @@ async def type_afk_is_not_true(notafk):
     global COUNT_MSG
     global USERS
     global AFKREASON
+    if is_redis_alive():
+        return
     ISAFK = REDIS.get('isafk')
     if ISAFK:
         ISAFK = False

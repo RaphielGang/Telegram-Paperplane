@@ -12,7 +12,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from sqlalchemy.exc import IntegrityError
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP, NOTIF_OFF,
-                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
+                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS, is_mongo_alive, is_redis_alive)
 from userbot.events import register, noabuse
 
 # ========================= CONSTANTS ============================
@@ -31,10 +31,7 @@ async def permitpm(event):
         if event.sender_id in BRAIN_CHECKER:
             return
         if event.is_private and not (await event.get_sender()).bot:
-            try:
-                from userbot import MONGO
-                MONGO.server_info()
-            except pymongo.errors.ServerSelectionTimeoutError:
+            if not is_mongo_alive() or not is_redis_alive():
                 return
             apprv = is_approved(event.chat_id)
 
@@ -110,11 +107,8 @@ async def notifon(non_event):
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     if not apprvpm.text[0].isalpha() and apprvpm.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
-            await apprvpm.edit("`Running on Non-SQL mode!`")
+        if not is_mongo_alive() or not is_redis_alive():
+            await apprvpm.edit("`Database connections failing!`")
             return
 
         if apprvpm.reply_to_msg_id:
@@ -167,12 +161,9 @@ async def blockpm(block):
             name0 = str(aname.first_name)
             uid = block.chat_id
 
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
-            await block.edit("`Running on No-SQL mode!`")
-
+        if not is_mongo_alive() or not is_redis_alive():
+            await block.edit("`Database connections failing!`")
+            return
         if LOGGER:
             await block.client.send_message(
                 LOGGER_GROUP,

@@ -20,7 +20,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 
 from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 
-from userbot import BRAIN_CHECKER, HELPER, LOGGER, LOGGER_GROUP, bot
+from userbot import BRAIN_CHECKER, HELPER, LOGGER, LOGGER_GROUP, bot, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register
 import pymongo
 
@@ -29,7 +29,7 @@ PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing image`"
 NO_ADMIN = "`You aren't an admin!`"
 NO_PERM = "`You don't have sufficient permissions!`"
-NO_SQL = "`Running on Non-SQL mode!`"
+NO_SQL = "`Database connections failing!`"
 
 CHAT_PP_CHANGED = "`Chat Picture Changed`"
 CHAT_PP_ERROR = "`Some issue with updating the pic,`" \
@@ -336,13 +336,9 @@ async def spider(spdr):
     """
     if not spdr.text[0].isalpha() and spdr.text[0] not in ("/", "#", "@", "!"):
         # Check if the function running under SQL mode
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
+        if not is_mongo_alive() or not is_redis_alive():
             await spdr.edit(NO_SQL)
             return
-
         # Admin or creator check
         chat = await spdr.get_chat()
         admin = chat.admin_rights
@@ -403,10 +399,7 @@ async def unmoot(unmot):
             return
 
         # Check if the function running under SQL mode
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
+        if not is_mongo_alive() or not is_redis_alive():
             await unmot.edit(NO_SQL)
             return
         # If admin or creator, inform the user and start unmuting
@@ -448,10 +441,8 @@ async def unmoot(unmot):
 @register(incoming=True)
 async def muter(moot):
     """ Used for deleting the messages of muted people """
-    try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
+    if not is_mongo_alive() or not is_redis_alive():
+            await moot.edit(NO_SQL)
             return
     muted = is_muted(moot.chat_id)
     gmuted = is_gmuted(moot.sender_id)
@@ -495,11 +486,9 @@ async def ungmoot(un_gmute):
             return
 
         # Check if the function running under SQL mode
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
+        if not is_mongo_alive() or not is_redis_alive():
             await un_gmute.edit(NO_SQL)
+            return
 
         user = await get_user_from_event(un_gmute)
         if user:
@@ -539,13 +528,9 @@ async def gspider(gspdr):
             return
 
         # Check if the function running under SQL mode
-        try:
-            from userbot import MONGO
-            MONGO.server_info()
-        except pymongo.errors.ServerSelectionTimeoutError:
+        if not is_mongo_alive() or not is_redis_alive():
             await gspdr.edit(NO_SQL)
             return
-
         user = await get_user_from_event(gspdr)
         if user:
             pass
