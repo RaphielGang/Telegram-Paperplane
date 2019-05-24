@@ -8,7 +8,7 @@ import spotify_token as st
 from requests import get
 from telethon.tl.functions.account import UpdateProfileRequest
 
-from userbot import (DEFAULT_BIO, HELPER, BOTLOG, BOTLOG_CHATID,
+from userbot import (DEFAULT_BIO, CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      SPOTIFY_BIO_PREFIX, SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
 from userbot.events import register
 
@@ -127,13 +127,13 @@ async def set_biodgraph(setdbio):
     await bot(UpdateProfileRequest(about=DEFAULT_BIO))
     await setdbio.edit(SPO_BIO_DISABLED)
 
-HELPER.update(
+CMD_HELP.update(
     {
         "enablespotify": "Usage: Enable spotify bio updating"
     }
 )
 
-HELPER.update(
+CMD_HELP.update(
     {
         "disablespotify": "Usage: Disable spotify bio updating"
     }

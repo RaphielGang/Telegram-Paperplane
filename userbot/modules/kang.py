@@ -12,7 +12,7 @@ import urllib.request
 
 from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
-from userbot import bot, HELPER
+from userbot import bot, CMD_HELP
 from userbot.events import register
 
 
@@ -155,7 +155,7 @@ async def resize_photo(photo):
     return image
 
 
-HELPER.update({
+CMD_HELP.update({
     "kang": ".kang\
 \nUsage: Reply .kang to a sticker or an image to kang it to your userbot pack.\
 \n\n.kang [emoji('s)]\

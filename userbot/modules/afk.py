@@ -9,7 +9,7 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, HELPER, ISAFK, BOTLOG, BOTLOG_CHATID,
+from userbot import (AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG, BOTLOG_CHATID,
                      USERS)
 from userbot.events import register
 
@@ -135,7 +135,7 @@ async def type_afk_is_not_true(notafk):
         USERS = {}
         AFKREASON = "No Reason"
 
-HELPER.update({
+CMD_HELP.update({
     "afk": ".afk <reason>(reason is optional)\
 \nUsage: Sets you as afk. Responds to anyone who tags/PM's \
 you telling that you are afk. Switches off AFK when you type back anything.\

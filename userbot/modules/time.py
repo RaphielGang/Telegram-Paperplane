@@ -12,7 +12,7 @@ from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
-from userbot import HELPER
+from userbot import CMD_HELP
 from userbot.events import register
 
 # ===== CONSTANT =====
@@ -136,15 +136,15 @@ async def set_time_country(loc):
 
         await loc.edit(f"``` Default country for date and time set to {COUNTRY} successfully! ```")
 
-HELPER.update({
+CMD_HELP.update({
     "time": ".time <country name/code>\
     \nUsage: Gets the time of a country."
 })
-HELPER.update({
+CMD_HELP.update({
     "date": ".date <country name/code>\
     \nUsage: Gets the date of a country."
 })
-HELPER.update({
+CMD_HELP.update({
     "ctime": ".ctime <country name/code>\
     \nUsage: Sets a default country for your userbot so you can do .time/.date."
 })

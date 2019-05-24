@@ -8,7 +8,7 @@
 from asyncio import sleep
 from re import fullmatch, IGNORECASE
 
-from userbot import BOTLOG, BOTLOG_CHATID, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
 
 
@@ -105,7 +105,7 @@ async def filters_active(event):
             transact = message + "🔹 " + i.keyword + "\n"
         await event.edit(transact)
 
-HELPER.update({
+CMD_HELP.update({
     "filters": "\
 .filters\
 \nUsage: List all active filters in this chat.\

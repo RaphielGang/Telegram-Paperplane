@@ -6,7 +6,7 @@
 
 """ Userbot module containing commands for keeping notes. """
 
-from userbot import BOTLOG, BOTLOG_CHATID, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
 
 
@@ -100,7 +100,7 @@ async def purge_notes(prg):
                     BOTLOG_CHATID, "I cleaned all notes at " + str(prg.chat_id)
                 )
 
-HELPER.update({
+CMD_HELP.update({
     "notes": "\
 #<notename>\
 \nUsage: Gets the note with name notename\

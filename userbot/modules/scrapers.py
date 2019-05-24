@@ -27,7 +27,7 @@ from emoji import get_emoji_regexp
 from pytube import YouTube
 from pytube.helpers import safe_filename
 
-from userbot import HELPER, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
 from userbot.events import register
 
 LANG = "en"
@@ -415,40 +415,40 @@ def deEmojify(inputString):
     return get_emoji_regexp().sub(u'', inputString)
 
 
-HELPER.update({
+CMD_HELP.update({
     'img': ".img <search_query>\
     \nUsage: Does an image search on Google and shows two images."
 })
-HELPER.update({
+CMD_HELP.update({
     'google': ".google <search_query>\
     \nUsage: Does a search on Google."
 })
-HELPER.update({
+CMD_HELP.update({
     'wiki': ".wiki <search_query>\
     \nUsage: Does a Wikipedia search."
 })
-HELPER.update({
+CMD_HELP.update({
     'ud': ".ud <search_query>\
     \nUsage: Does a search on Urban Dictionary."
 })
-HELPER.update({
+CMD_HELP.update({
     'tts': ".tts <text> or reply to someones text with .trt\
     \nUsage: Translates text to speech for the default language which is set."
 })
-HELPER.update({
+CMD_HELP.update({
     'trt': ".trt <text> or reply to someones text with .trt\
     \nUsage: Translates text to the default language which is set."
 })
-HELPER.update({
+CMD_HELP.update({
     'lang': ".lang <lang>\
     \nUsage: Changes the default language of userbot scrapers used for Google TRT, \
     TTS may not work."
 })
-HELPER.update({
+CMD_HELP.update({
     'yt': ".yt <search_query>\
     \nUsage: Does a YouTube search. "
 })
-HELPER.update({
+CMD_HELP.update({
     'yt_dl': ".yt_dl <url> <quality>(optional)\
     \nUsage: Download videos from YouTube. \
 If no quality is specified, the highest downloadable quality is downloaded. \

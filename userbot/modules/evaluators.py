@@ -11,7 +11,7 @@ from getpass import getuser
 from os import remove
 from sys import executable
 
-from userbot import HELPER, BOTLOG, BOTLOG_CHATID
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID
 from userbot.events import register
 
 
@@ -214,12 +214,12 @@ async def terminal_runner(term):
                 "Terminal Command " + command + " was executed sucessfully",
             )
 
-HELPER.update({
+CMD_HELP.update({
     "eval": ".eval 2 + 3\nUsage: Evalute mini-expressions."
 })
-HELPER.update({
+CMD_HELP.update({
     "exec": ".exec print('hello')\nUsage: Execute small python scripts."
 })
-HELPER.update({
+CMD_HELP.update({
     "term": ".term ls\nUsage: Run bash commands and scripts on your server."
 })

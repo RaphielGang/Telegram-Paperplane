@@ -11,7 +11,7 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from sqlalchemy.exc import IntegrityError
 
-from userbot import (COUNT_PM, HELPER, BOTLOG, BOTLOG_CHATID,
+from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
 from userbot.events import register
 
@@ -215,7 +215,7 @@ async def unblockpm(unblock):
                 " was unblocc'd!.",
             )
 
-HELPER.update({
+CMD_HELP.update({
     "pmpermit": "\
 .approve\
 \nUsage: Approves the mentioned/replied person to PM.\

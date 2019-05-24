@@ -17,7 +17,7 @@ from zalgo_text import zalgo
 
 from cowpy import cow
 
-from userbot import (DISABLE_RUN, WIDE_MAP, HELPER)
+from userbot import (DISABLE_RUN, WIDE_MAP, CMD_HELP)
 from userbot.events import register
 
 # ================= CONSTANT =================
@@ -486,6 +486,6 @@ async def typewriter(typew):
             await typew.edit(old_text)
             await asyncio.sleep(sleep_time)
 
-HELPER.update({
+CMD_HELP.update({
     "memes": "Ask Thoncc (@Skittles9823Bot) for that."
 })

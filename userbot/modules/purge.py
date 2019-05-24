@@ -10,7 +10,7 @@ from asyncio import sleep
 
 from telethon.errors import rpcbaseerrors
 
-from userbot import BOTLOG, BOTLOG_CHATID, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
 
 
@@ -139,27 +139,27 @@ async def selfdestruct(destroy):
         if BOTLOG:
             await destroy.client.send_message(BOTLOG_CHATID, "sd query done successfully")
 
-HELPER.update({
+CMD_HELP.update({
     'purge': '.purge\
         \nUsage: Purges all messages starting from the reply.'
 })
 
-HELPER.update({
+CMD_HELP.update({
     'purgeme': '.purgeme <x>\
         \nUsage: Deletes x amount of your latest messages.'
 })
 
-HELPER.update({
+CMD_HELP.update({
     "del": ".del\
 \nUsage: Deletes the message you replied to."
 })
 
-HELPER.update({
+CMD_HELP.update({
     'editme': ".editme <newmessage>\
 \nUsage: Edits the text you replied to with newtext."
 })
 
-HELPER.update({
+CMD_HELP.update({
     'sd': '.sd <x> <message>\
 \nUsage: Creates a message that selfdestructs in x seconds.\
 \nKeep the seconds under 100 since it puts your bot to sleep.'

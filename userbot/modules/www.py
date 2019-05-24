@@ -10,7 +10,7 @@ from datetime import datetime
 
 import speedtest
 from telethon import functions
-from userbot import HELPER
+from userbot import CMD_HELP
 from userbot.events import register
 
 
@@ -80,15 +80,15 @@ async def pingme(pong):
         duration = (end - start).microseconds / 1000
         await pong.edit("`Pong!\n%sms`" % (duration))
 
-HELPER.update({
+CMD_HELP.update({
     "speed": ".speed\
     \nUsage: Does a speedtest and shows the results."
 })
-HELPER.update({
+CMD_HELP.update({
     "nearestdc": ".nearestdc\
     \nUsage: Finds the nearest datacenter from your server."
 })
-HELPER.update({
+CMD_HELP.update({
     "pingme": ".pingme\
     \nUsage: Shows how long it takes to ping your bot."
 })

@@ -20,7 +20,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
-from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, HELPER, bot
+from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP, bot
 from userbot.events import register
 
 # =================== CONSTANT ===================
@@ -814,45 +814,45 @@ async def get_user_from_id(user, event):
 
 
 
-HELPER.update({
+CMD_HELP.update({
     "promote": "Usage: Reply to someone's message with .promote to promote them."
 })
-HELPER.update({
+CMD_HELP.update({
     "ban": "Usage: Reply to someone's message with .ban to ban them."
 })
-HELPER.update({
+CMD_HELP.update({
     "demote": "Usage: Reply to someone's message with .demote to revoke their admin permissions."
 })
-HELPER.update({
+CMD_HELP.update({
     "unban": "Usage: Reply to someone's message with .unban to unban them in this chat."
 })
-HELPER.update({
+CMD_HELP.update({
     "mute": "Usage: Reply to someone's message with .mute to mute them, works on admins too"
 })
-HELPER.update({
+CMD_HELP.update({
     "unmute": "Usage: Reply to someone's message with .unmute to remove them from muted list."
 })
-HELPER.update({
+CMD_HELP.update({
     "gmute": "Usage: Reply to someone's message with .gmute to mute them in all \
 groups you have in common with them."
 })
-HELPER.update({
+CMD_HELP.update({
     "ungmute": "Usage: Reply someone's message with .ungmute to remove them from the gmuted list."
 })
 
-HELPER.update(
+CMD_HELP.update(
     {
         "delusers": "Usage: Searches for deleted accounts in a group."
     }
 )
 
-HELPER.update(
+CMD_HELP.update(
     {
         "delusers clean": "Usage: Searches and removes deleted accounts from the group"
     }
 )
 
-HELPER.update(
+CMD_HELP.update(
     {
         "adminlist" : "Usage: Retrieves all admins in the chat."
     }

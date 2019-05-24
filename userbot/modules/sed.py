@@ -10,7 +10,7 @@
 
 import re
 from sre_constants import error as sre_err
-from userbot import HELPER
+from userbot import CMD_HELP
 from userbot.events import register
 
 DELIMITERS = ("/", ":", "|", "_")
@@ -109,7 +109,7 @@ async def sed(command):
         if text:
             await command.edit("Did you mean? \n\n`" + text + "`")
 
-HELPER.update({
+CMD_HELP.update({
     "sed": "sed<delimiter><old word(s)><delimiter><new word(s)>\
     \nUsage: Replaces a word or words using sed.\
     \nDelimiters: `/, :, |, _`"
