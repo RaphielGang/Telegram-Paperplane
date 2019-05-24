@@ -11,7 +11,7 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from sqlalchemy.exc import IntegrityError
 
-from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP,
+from userbot import (COUNT_PM, HELPER, BOTLOG, BOTLOG_CHATID,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
 from userbot.events import register
 
@@ -37,7 +37,7 @@ async def permitpm(event):
             except AttributeError:
                 return
             apprv = is_approved(event.chat_id)
-            NOTIF_OFF = gvarstatus("NOTIF_OFF")
+            notifsoff = gvarstatus("NOTIF_OFF")
 
             # This part basically is a sanity check
             # If the message that sent before is Unapproved Message
@@ -54,7 +54,7 @@ async def permitpm(event):
                     await event.reply(UNAPPROVED_MSG)
                     LASTMSG.update({event.chat_id: event.text})
 
-                if NOTIF_OFF:
+                if notifsoff:
                     await event.client.send_read_acknowledge(event.chat_id)
                 if event.chat_id not in COUNT_PM:
                     COUNT_PM.update({event.chat_id: 1})
@@ -71,22 +71,22 @@ async def permitpm(event):
                         del COUNT_PM[event.chat_id]
                         del LASTMSG[event.chat_id]
                     except KeyError:
-                        if LOGGER:
-                             await event.client.send_message(
-                              LOGGER_GROUP,
-                              "Count PM is seemingly going retard, plis restart bot!",
-                              )
+                        if BOTLOG:
+                            await event.client.send_message(
+                                BOTLOG_CHATID,
+                                "Count PM is seemingly going retard, plis restart bot!",
+                            )
                         LOGS.info("CountPM wen't rarted boi")
                         return
 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
 
-                    if LOGGER:
+                    if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
                         await event.client.send_message(
-                            LOGGER_GROUP,
+                            BOTLOG_CHATID,
                             "["
                             + name0
                             + "](tg://user?id="
@@ -152,9 +152,9 @@ async def approvepm(apprvpm):
             f"[{name0}](tg://user?id={uid}) `approved to PM!`"
         )
 
-        if LOGGER:
+        if BOTLOG:
             await apprvpm.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "#APPROVED\n"
                 + "User: " + f"[{name0}](tg://user?id={uid})",
             )
@@ -183,12 +183,12 @@ async def blockpm(block):
         try:
             from userbot.modules.sql_helper.pm_permit_sql import dissprove
             dissprove(uid)
-        except AttributeError: #Non-SQL mode.
+        except AttributeError:  # Non-SQL mode.
             pass
 
-        if LOGGER:
+        if BOTLOG:
             await block.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "#BLOCKED\n"
                 + "User: " + f"[{name0}](tg://user?id={uid})",
             )
@@ -208,9 +208,9 @@ async def unblockpm(unblock):
             name0 = str(replied_user.user.first_name)
             await unblock.client(UnblockRequest(replied_user.user.id))
 
-        if LOGGER:
+        if BOTLOG:
             await unblock.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 f"[{name0}](tg://user?id={replied_user.user.id})"
                 " was unblocc'd!.",
             )
