@@ -12,10 +12,14 @@ from telethon.tl.functions.users import GetFullUserRequest
 from sqlalchemy.exc import IntegrityError
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS, is_mongo_alive, is_redis_alive)
 =======
 from userbot import (COUNT_PM, HELPER, BOTLOG, BOTLOG_CHATID,
+=======
+from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
+>>>>>>> 113bd84... treewide: refactor helper to cmd_help
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
 >>>>>>> 00eafd6... pmpermit: amend aaa5b0f2552a and lint the module
 from userbot.events import register
@@ -234,7 +238,7 @@ async def unblockpm(unblock):
                 " was unblocc'd!.",
             )
 
-HELPER.update({
+CMD_HELP.update({
     "pmpermit": "\
 .approve\
 \nUsage: Approves the mentioned/replied person to PM.\

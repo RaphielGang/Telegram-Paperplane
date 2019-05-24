@@ -8,7 +8,7 @@
 import json
 from requests import get, post
 
-from userbot import BOTLOG, BOTLOG_CHATID, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
 
 DOGBIN_URL = "https://del.dog/"
@@ -100,12 +100,12 @@ async def get_dogbin_content(dog_url):
                 "Get dogbin content query for `" + message + "` was executed successfully",
             )
 
-HELPER.update({
+CMD_HELP.update({
     "paste": "Create a paste or a shortened url using dogbin (https://del.dog/)"
 })
-HELPER.update({
+CMD_HELP.update({
     "get_dogbin_content": "Get the content of a paste or shortened url from dogbin (https://del.dog/)"
 })
-HELPER.update({
+CMD_HELP.update({
     "pastestats": "Get stats of a paste or shortened url from dogbin (https://del.dog/)"
 })

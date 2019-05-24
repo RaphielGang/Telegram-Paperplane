@@ -11,7 +11,7 @@ import requests
 from datetime import datetime
 from pytz import country_timezones as c_tz, timezone as tz, country_names as c_n
 
-from userbot import OPEN_WEATHER_MAP_APPID as OWM_API, HELPER
+from userbot import OPEN_WEATHER_MAP_APPID as OWM_API, CMD_HELP
 from userbot.events import register
 
 
@@ -183,7 +183,7 @@ async def set_default_city(city):
     await city.edit(f"Set default city as {cityname}, {fullc_n}.")
 
 
-HELPER.update({
+CMD_HELP.update({
     "weather": ".weather <city> or .weather <city>, <country name/code>\
     \nUsage: Gets the weather of a city.\n\
     \n.setcity <city> or .setcity <city>, <country name/code>\

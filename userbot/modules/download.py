@@ -20,7 +20,7 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 
-from userbot import LOGS, HELPER
+from userbot import LOGS, CMD_HELP
 from userbot.events import register
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
@@ -345,9 +345,9 @@ async def uploadas(uas_event):
         else:
             await uas_event.edit("404: File Not Found")
 
-HELPER.update({
+CMD_HELP.update({
     "download": ".download <link>\nUsage: Downloads file from link to the server."
 })
-HELPER.update({
+CMD_HELP.update({
     "upload": ".upload <link>\nUsage: Uploads a locally stored file to telegram."
 })

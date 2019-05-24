@@ -11,7 +11,7 @@
 import os
 from requests import get
 
-from userbot import SCREENSHOT_LAYER_ACCESS_KEY, HELPER
+from userbot import SCREENSHOT_LAYER_ACCESS_KEY, CMD_HELP
 from userbot.events import register
 
 
@@ -55,7 +55,7 @@ async def capture(url):
         else:
             await url.edit(response_api.text)
 
-HELPER.update({
+CMD_HELP.update({
     "screencapture": ".screencapture <url>\
     \nUsage: Takes a screenshot of a website and sends the screenshot."
 })

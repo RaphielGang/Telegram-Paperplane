@@ -136,6 +136,6 @@ ENABLE_KILLME = True
 SNIPE_ID = 0
 MUTING_USERS = {}
 MUTED_USERS = {}
-HELPER = {}
+CMD_HELP = {}
 AFKREASON = "no reason"
 DISABLE_RUN = False

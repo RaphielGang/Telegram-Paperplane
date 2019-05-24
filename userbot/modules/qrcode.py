@@ -13,7 +13,7 @@ from asyncio import sleep
 from datetime import datetime
 from requests import post, get
 
-from userbot import HELPER
+from userbot import CMD_HELP
 from userbot.events import register
 
 DL_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
@@ -100,12 +100,12 @@ async def make_qr(qrcode):
         await sleep(5)
         await qrcode.delete()
 
-HELPER.update({
+CMD_HELP.update({
     'getqr': ".getqr\
 \nUsage: Get the QR Code content from the replied QR Code."
 })
 
-HELPER.update({
+CMD_HELP.update({
     'makeqr': ".makeqr <content>)\
 \nUsage: Make a QR Code from the given content.\
 \nExample: .makeqr www.google.com"

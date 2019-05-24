@@ -17,7 +17,7 @@ from telethon.tl.functions.photos import (DeletePhotosRequest,
                                           UploadProfilePhotoRequest)
 from telethon.tl.types import InputPhoto, MessageMediaPhoto
 
-from userbot import HELPER, bot
+from userbot import CMD_HELP, bot
 from userbot.events import register
 
 # ====================== CONSTANT ===============================
@@ -133,25 +133,25 @@ async def remove_profilepic(delpfp):
         await delpfp.edit(f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
 
-HELPER.update({
+CMD_HELP.update({
     "username": ".username <new_username>\
     \nUsage: Changes your Telegram username."
 })
-HELPER.update({
+CMD_HELP.update({
     "name": ".name <firstname> or .name <firstname> <lastname>\
     \nUsage: Changes your Telegram name.\
     \n(First and last name will get split by the first space)"
 })
-HELPER.update({
+CMD_HELP.update({
     "profilepic": ".profilepic\
     \nUsage: Reply with .profilepic to an image to change \
 your Telegram profie picture."
 })
-HELPER.update({
+CMD_HELP.update({
     "setbio": ".setbio <new_bio>\
     \nUsage: Changes your Telegram bio."
 })
-HELPER.update({
+CMD_HELP.update({
     "delpfp": ".delpfp or .delpfp <number>/<all>\
     \nUsage: Deletes your Telegram profile picture(s)."
 })
