@@ -9,12 +9,8 @@ import time
 
 from telethon.events import StopPropagation
 
-<<<<<<< HEAD
-from userbot import (COUNT_MSG, REDIS, LOGGER, LOGGER_GROUP, USERS, HELPER, REDIS, is_redis_alive)
-=======
 from userbot import (AFKREASON, COUNT_MSG, HELPER, ISAFK, BOTLOG, BOTLOG_CHATID,
                      USERS)
->>>>>>> 1ad7400... treewide: refactor LOGGER variable to BOTLOG to reduce confusion
 from userbot.events import register
 
 
@@ -87,23 +83,6 @@ async def afk_on_pm(sender):
 
 
 @register(outgoing=True, pattern="^.afk")
-<<<<<<< HEAD
-async def set_afk(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if not is_redis_alive():
-            await e.edit("`Database connections failing!`")
-            return
-        message = e.text
-        try:
-            AFKREASON = str(message[5:])
-        except:
-            AFKREASON = ''
-        if not AFKREASON:
-            AFKREASON = 'No reason'
-        await e.edit("AFK AF!")
-        if LOGGER:
-            await afk_e.client.send_message(LOGGER_GROUP, "You went AFK!")
-=======
 async def set_afk(afk_e):
     """ For .afk command, allows you to inform people that you are afk when they message you """
     if not afk_e.text[0].isalpha() and afk_e.text[0] not in ("/", "#", "@", "!"):
@@ -116,7 +95,6 @@ async def set_afk(afk_e):
             AFKREASON = string
         if BOTLOG:
             await afk_e.client.send_message(BOTLOG_CHATID, "You went AFK!")
->>>>>>> 1ad7400... treewide: refactor LOGGER variable to BOTLOG to reduce confusion
         ISAFK = True
         raise StopPropagation
 

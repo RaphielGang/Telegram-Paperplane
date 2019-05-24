@@ -6,11 +6,7 @@
 
 """ Userbot module for muting chats. """
 
-<<<<<<< HEAD
-from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
-=======
 from userbot import BOTLOG, BOTLOG_CHATID, HELPER
->>>>>>> 1ad7400... treewide: refactor LOGGER variable to BOTLOG to reduce confusion
 from userbot.events import register
 
 @register(outgoing=True, pattern="^.unmutechat$")

@@ -7,13 +7,8 @@
 
 from asyncio import sleep
 from re import fullmatch, IGNORECASE
-<<<<<<< HEAD
-import pymongo
-from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
-=======
 
 from userbot import BOTLOG, BOTLOG_CHATID, HELPER
->>>>>>> 1ad7400... treewide: refactor LOGGER variable to BOTLOG to reduce confusion
 from userbot.events import register
 
 
@@ -106,11 +101,7 @@ async def kick_marie_filter(kick):
         )
         if BOTLOG:
             await kick.client.send_message(
-<<<<<<< HEAD
-                LOGGER_GROUP, "I cleaned all filters at " +
-=======
                 BOTLOG_CHATID, "I cleaned all Marie filters at " +
->>>>>>> 1ad7400... treewide: refactor LOGGER variable to BOTLOG to reduce confusion
                 str(kick.chat_id)
             )
 

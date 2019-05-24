@@ -11,8 +11,13 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from sqlalchemy.exc import IntegrityError
 
+<<<<<<< HEAD
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS, is_mongo_alive, is_redis_alive)
+=======
+from userbot import (COUNT_PM, HELPER, BOTLOG, BOTLOG_CHATID,
+                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
+>>>>>>> 00eafd6... pmpermit: amend aaa5b0f2552a and lint the module
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -36,13 +41,8 @@ async def permitpm(event):
                 from userbot.modules.sql_helper.globals import gvarstatus
             except AttributeError:
                 return
-            apprv = MONGO.bot.pmpermit.find_one(
-                {"user_id": event.chat_id}
-                )
-            
-            NOTIF_OFF = MONGO.bot.notifoff.find_one(
-                {"status": "True"}
-                )
+            apprv = is_approved(event.chat_id)
+            notifsoff = gvarstatus("NOTIF_OFF")
 
             # This part basically is a sanity check
             # If the message that sent before is Unapproved Message
@@ -59,7 +59,7 @@ async def permitpm(event):
                     await event.reply(UNAPPROVED_MSG)
                     LASTMSG.update({event.chat_id: event.text})
 
-                if NOTIF_OFF:
+                if notifsoff:
                     await event.client.send_read_acknowledge(event.chat_id)
                 if event.chat_id not in COUNT_PM:
                     COUNT_PM.update({event.chat_id: 1})
@@ -76,22 +76,22 @@ async def permitpm(event):
                         del COUNT_PM[event.chat_id]
                         del LASTMSG[event.chat_id]
                     except KeyError:
-                        if LOGGER:
-                             await event.client.send_message(
-                              LOGGER_GROUP,
-                              "Count PM is seemingly going retard, plis restart bot!",
-                              )
+                        if BOTLOG:
+                            await event.client.send_message(
+                                BOTLOG_CHATID,
+                                "Count PM is seemingly going retard, plis restart bot!",
+                            )
                         LOGS.info("CountPM wen't rarted boi")
                         return
 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
 
-                    if LOGGER:
+                    if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
                         await event.client.send_message(
-                            LOGGER_GROUP,
+                            BOTLOG_CHATID,
                             "["
                             + name0
                             + "](tg://user?id="
@@ -158,9 +158,9 @@ async def approvepm(apprvpm):
             f"[{name0}](tg://user?id={uid}) `approved to PM!`"
         )
 
-        if LOGGER:
+        if BOTLOG:
             await apprvpm.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "#APPROVED\n"
                 + "User: " + f"[{name0}](tg://user?id={uid})",
             )
@@ -186,6 +186,7 @@ async def blockpm(block):
             name0 = str(aname.first_name)
             uid = block.chat_id
 
+<<<<<<< HEAD
         if not is_mongo_alive() or not is_redis_alive():
             await block.edit("`Database connections failing!`")
             return
@@ -196,8 +197,17 @@ async def blockpm(block):
         else:
             await block.edit("`First approve, before blocc'ing`")
         if LOGGER:
+=======
+        try:
+            from userbot.modules.sql_helper.pm_permit_sql import dissprove
+            dissprove(uid)
+        except AttributeError:  # Non-SQL mode.
+            pass
+
+        if BOTLOG:
+>>>>>>> 00eafd6... pmpermit: amend aaa5b0f2552a and lint the module
             await block.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "#BLOCKED\n"
                 + "User: " + f"[{name0}](tg://user?id={uid})",
             )
@@ -217,9 +227,9 @@ async def unblockpm(unblock):
             name0 = str(replied_user.user.first_name)
             await unblock.client(UnblockRequest(replied_user.user.id))
 
-        if LOGGER:
+        if BOTLOG:
             await unblock.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 f"[{name0}](tg://user?id={replied_user.user.id})"
                 " was unblocc'd!.",
             )
