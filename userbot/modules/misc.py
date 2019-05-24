@@ -10,7 +10,7 @@
 from random import randint
 from time import sleep
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, HELPER
 from userbot.events import register
 
 
@@ -34,9 +34,9 @@ async def sleepybot(time):
             counter = int(time.pattern_match.group(1))
             await time.edit("`I am sulking and snoozing....`")
             sleep(2)
-            if LOGGER:
+            if BOTLOG:
                 await time.client.send_message(
-                    LOGGER_GROUP,
+                    BOTLOG_CHATID,
                     "You put the bot to sleep for " + str(counter) + " seconds",
                 )
             sleep(counter)
@@ -47,9 +47,9 @@ async def killdabot(event):
     """ For .shutdown command, shut the bot down."""
     if not event.text[0].isalpha():
         await event.edit("`Goodbye *Windows XP shutdown sound*....`")
-        if LOGGER:
+        if BOTLOG:
             await event.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "#SHUTDOWN \n"
                 "Bot shut down")
         await event.client.disconnect()

@@ -6,7 +6,7 @@
 
 """ Userbot module containing commands for keeping notes. """
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
+from userbot import BOTLOG, BOTLOG_CHATID, HELPER
 from userbot.events import register
 
 
@@ -96,25 +96,13 @@ async def kick_marie_notes(kick):
         if bot_type not in ["marie","rose"]:
             await kick.edit("`That bot is not yet supported!`")
             return
-        await kick.edit("```Will be kicking away all Notes!```")
-        sleep(3)
-        resp = await kick.get_reply_message()
-        filters = resp.text.split("-")[1:]
-        for i in filters:
-            if bot_type == "marie":   
-                await kick.reply("/clear %s" % (i.strip()))
-            if bot_type == "rose":
-                i = i.replace('`', '')     #### Rose filters are wrapped under this, to make it touch to copy
-                await kick.reply("/clear %s" % (i.strip()))
-            await sleep(0.3)
-        await kick.respond(
-            "```Successfully purged bots notes yaay!```\n Gimme cookies!"
-        )
-        if LOGGER:
-            await kick.client.send_message(
-                LOGGER_GROUP, "I cleaned all Notes at " +
-                str(kick.chat_id)
-            )
+        if not prg.text[0].isalpha():
+            await prg.edit("```Purging all notes.```")
+            rm_all_notes(str(prg.chat_id))
+            if BOTLOG:
+                await prg.client.send_message(
+                    BOTLOG_CHATID, "I cleaned all notes at " + str(prg.chat_id)
+                )
 
 HELPER.update({
     "notes": "\

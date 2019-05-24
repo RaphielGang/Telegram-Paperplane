@@ -6,7 +6,11 @@
 
 """ Userbot module for muting chats. """
 
+<<<<<<< HEAD
 from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
+=======
+from userbot import BOTLOG, BOTLOG_CHATID, HELPER
+>>>>>>> 1ad7400... treewide: refactor LOGGER variable to BOTLOG to reduce confusion
 from userbot.events import register
 
 @register(outgoing=True, pattern="^.unmutechat$")
@@ -34,9 +38,9 @@ async def mute_chat(mute_e):
                 {"chat_id":mute_e.chat_id}
                 )
         await mute_e.edit("`Shush! This chat will be silenced!`")
-        if LOGGER:
+        if BOTLOG:
             await mute_e.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 str(mute_e.chat_id) + " was silenced.")
 
 

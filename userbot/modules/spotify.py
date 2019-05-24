@@ -8,7 +8,7 @@ import spotify_token as st
 from requests import get
 from telethon.tl.functions.account import UpdateProfileRequest
 
-from userbot import (DEFAULT_BIO, HELPER, LOGGER, LOGGER_GROUP,
+from userbot import (DEFAULT_BIO, HELPER, BOTLOG, BOTLOG_CHATID,
                      SPOTIFY_BIO_PREFIX, SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
 from userbot.events import register
 
@@ -75,9 +75,9 @@ async def update_spotify_info():
                 SPOTIFYCHECK = False
                 await bot(UpdateProfileRequest(about=DEFAULT_BIO))
                 print(ERROR_MSG)
-                if LOGGER:
+                if BOTLOG:
                     await bot.send_message(
-                        LOGGER_GROUP,
+                        BOTLOG_CHATID,
                         ERROR_MSG)
         except JSONDecodeError:
             OLDEXCEPT = True
