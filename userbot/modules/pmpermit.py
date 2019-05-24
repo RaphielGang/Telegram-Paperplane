@@ -71,6 +71,11 @@ async def permitpm(event):
                         del COUNT_PM[event.chat_id]
                         del LASTMSG[event.chat_id]
                     except KeyError:
+                        if LOGGER:
+                             await event.client.send_message(
+                              LOGGER_GROUP,
+                              "Count PM is seemingly going retard, plis restart bot!",
+                              )
                         LOGS.info("CountPM wen't rarted boi")
                         return
 
