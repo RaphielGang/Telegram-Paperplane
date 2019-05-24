@@ -6,7 +6,7 @@
 
 """ Userbot module containing commands for keeping notes. """
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, HELPER
 from userbot.events import register
 
 
@@ -95,9 +95,9 @@ async def purge_notes(prg):
         if not prg.text[0].isalpha():
             await prg.edit("```Purging all notes.```")
             rm_all_notes(str(prg.chat_id))
-            if LOGGER:
+            if BOTLOG:
                 await prg.client.send_message(
-                    LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
+                    BOTLOG_CHATID, "I cleaned all notes at " + str(prg.chat_id)
                 )
 
 HELPER.update({

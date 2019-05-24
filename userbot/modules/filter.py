@@ -8,7 +8,7 @@
 from asyncio import sleep
 from re import fullmatch, IGNORECASE
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, HELPER
 from userbot.events import register
 
 
@@ -82,9 +82,9 @@ async def kick_marie_filter(kick):
         await kick.respond(
             "```Successfully purged Marie filters yaay!```\n Gimme cookies!"
         )
-        if LOGGER:
+        if BOTLOG:
             await kick.client.send_message(
-                LOGGER_GROUP, "I cleaned all Marie filters at " +
+                BOTLOG_CHATID, "I cleaned all Marie filters at " +
                 str(kick.chat_id)
             )
 

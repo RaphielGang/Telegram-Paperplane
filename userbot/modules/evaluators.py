@@ -11,7 +11,7 @@ from getpass import getuser
 from os import remove
 from sys import executable
 
-from userbot import HELPER, LOGGER, LOGGER_GROUP
+from userbot import HELPER, BOTLOG, BOTLOG_CHATID
 from userbot.events import register
 
 
@@ -70,9 +70,9 @@ async def evaluate(query):
                 f"`{err}`"
             )
 
-        if LOGGER:
+        if BOTLOG:
             await query.client.send_message(
-                LOGGER_GROUP, f"Eval query {expression} was executed successfully"
+                BOTLOG_CHATID, f"Eval query {expression} was executed successfully"
             )
 
 
@@ -139,9 +139,9 @@ execute. Use .help exec for an example.```")
                 "`\n**Result: **\n`No Result Returned/False`"
             )
 
-        if LOGGER:
+        if BOTLOG:
             await run_q.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "Exec query " + codepre + " was executed successfully"
             )
 
@@ -208,9 +208,9 @@ async def terminal_runner(term):
                 "`"
             )
 
-        if LOGGER:
+        if BOTLOG:
             await term.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "Terminal Command " + command + " was executed sucessfully",
             )
 

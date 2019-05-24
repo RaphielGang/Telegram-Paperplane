@@ -9,7 +9,7 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, HELPER, ISAFK, LOGGER, LOGGER_GROUP,
+from userbot import (AFKREASON, COUNT_MSG, HELPER, ISAFK, BOTLOG, BOTLOG_CHATID,
                      USERS)
 from userbot.events import register
 
@@ -83,8 +83,8 @@ async def set_afk(afk_e):
         await afk_e.edit("AFK AF!")
         if string != "":
             AFKREASON = string
-        if LOGGER:
-            await afk_e.client.send_message(LOGGER_GROUP, "You went AFK!")
+        if BOTLOG:
+            await afk_e.client.send_message(BOTLOG_CHATID, "You went AFK!")
         ISAFK = True
         raise StopPropagation
 
@@ -107,9 +107,9 @@ async def type_afk_is_not_true(notafk):
         )
         time.sleep(2)
         await afk_info.delete()
-        if LOGGER:
+        if BOTLOG:
             await notafk.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "You've recieved " +
                 str(COUNT_MSG) +
                 " messages from " +
@@ -120,7 +120,7 @@ async def type_afk_is_not_true(notafk):
                 name = await notafk.client.get_entity(i)
                 name0 = str(name.first_name)
                 await notafk.client.send_message(
-                    LOGGER_GROUP,
+                    BOTLOG_CHATID,
                     "[" +
                     name0 +
                     "](tg://user?id=" +

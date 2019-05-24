@@ -8,7 +8,7 @@
 import json
 from requests import get, post
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot import BOTLOG, BOTLOG_CHATID, HELPER
 from userbot.events import register
 
 DOGBIN_URL = "https://del.dog/"
@@ -51,9 +51,9 @@ async def paste(pstl):
                 "`Failed to reach Dogbin`")
 
         await pstl.edit(reply_text)
-        if LOGGER:
+        if BOTLOG:
             await pstl.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "Paste query `" + message + "` was executed successfully",
             )
 
@@ -94,9 +94,9 @@ async def get_dogbin_content(dog_url):
         reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
 
         await dog_url.reply(reply_text)
-        if LOGGER:
+        if BOTLOG:
             await dog_url.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "Get dogbin content query for `" + message + "` was executed successfully",
             )
 

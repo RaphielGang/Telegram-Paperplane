@@ -11,7 +11,7 @@ from asyncio import sleep
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon import events
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER, WELCOME_MUTE, bot
+from userbot import BOTLOG, BOTLOG_CHATID, HELPER, WELCOME_MUTE, bot
 from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
 
 
@@ -116,9 +116,9 @@ async def welcome_mute(welcm):
                         "`ANTI SPAMBOT DETECTOR!\n"
                         "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
 
-            if LOGGER:
+            if BOTLOG:
                 await welcm.client.send_message(
-                    LOGGER_GROUP,
+                    BOTLOG_CHATID,
                     "#SPAMBOT-KICK\n"
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {welcm.chat.title}(`{welcm.chat_id}`)"

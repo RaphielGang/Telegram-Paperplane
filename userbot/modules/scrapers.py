@@ -27,7 +27,7 @@ from emoji import get_emoji_regexp
 from pytube import YouTube
 from pytube.helpers import safe_filename
 
-from userbot import HELPER, LOGGER, LOGGER_GROUP, YOUTUBE_API_KEY, bot
+from userbot import HELPER, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
 from userbot.events import register
 
 LANG = "en"
@@ -83,9 +83,9 @@ async def gsearch(q_event):
         await q_event.edit(
             "**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" + result
         )
-        if LOGGER:
+        if BOTLOG:
             await q_event.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 "Google Search query " + match_ + " was executed successfully",
             )
 
@@ -120,9 +120,9 @@ async def wiki(wiki_q):
         await wiki_q.edit(
             "**Search:**\n`" + match + "`\n\n**Result:**\n" + result
         )
-        if LOGGER:
+        if BOTLOG:
             await wiki_q.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 f"Wiki query {match} was executed successfully"
             )
 
@@ -175,9 +175,9 @@ async def urban_dict(ud_e):
                 mean[0]["example"] +
                 "__"
             )
-            if LOGGER:
+            if BOTLOG:
                 await ud_e.client.send_message(
-                    LOGGER_GROUP, "ud query " + query + " executed successfully."
+                    BOTLOG_CHATID, "ud query " + query + " executed successfully."
                 )
         else:
             await ud_e.edit("No result found for **" + query + "**")
@@ -222,9 +222,9 @@ async def text_to_speech(query):
         with open("k.mp3", "r"):
             await query.client.send_file(query.chat_id, "k.mp3", voice_note=True)
             os.remove("k.mp3")
-            if LOGGER:
+            if BOTLOG:
                 await query.client.send_message(
-                    LOGGER_GROUP, "tts of " + message + " executed successfully!"
+                    BOTLOG_CHATID, "tts of " + message + " executed successfully!"
                 )
             await query.delete()
 
@@ -257,9 +257,9 @@ async def translateme(trans):
 
         await trans.client.send_message(trans.chat_id, reply_text)
         await trans.delete()
-        if LOGGER:
+        if BOTLOG:
             await trans.client.send_message(
-                LOGGER_GROUP,
+                BOTLOG_CHATID,
                 f"Translate query {message} was executed successfully",
             )
 
@@ -270,9 +270,9 @@ async def lang(value):
     if not value.text[0].isalpha() and value.text[0] not in ("/", "#", "@", "!"):
         global LANG
         LANG = value.pattern_match.group(1)
-        if LOGGER:
+        if BOTLOG:
             await value.client.send_message(
-                LOGGER_GROUP, "Default language changed to **" + LANG + "**"
+                BOTLOG_CHATID, "Default language changed to **" + LANG + "**"
             )
             await value.edit("Default language changed to **" + LANG + "**")
 
