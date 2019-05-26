@@ -6,7 +6,7 @@
 
 """ Userbot module containing commands for keeping notes. """
 
-from userbot import LOGGER, LOGGER_GROUP, HELPER
+from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register
 
 

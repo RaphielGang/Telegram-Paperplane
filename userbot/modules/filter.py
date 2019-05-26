@@ -9,7 +9,7 @@ from asyncio import sleep
 from re import fullmatch, IGNORECASE
 import pymongo
 from userbot import LOGGER, LOGGER_GROUP, HELPER, MONGO, REDIS, is_mongo_alive, is_redis_alive
-from userbot.events import register, noabuse
+from userbot.events import register
 
 
 @register(incoming=True, disable_edited=True)

@@ -12,7 +12,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from sqlalchemy.exc import IntegrityError
 
 from userbot import (COUNT_PM, HELPER, LOGGER, LOGGER_GROUP,
-                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS)
+                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS, is_mongo_alive, is_redis_alive)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
