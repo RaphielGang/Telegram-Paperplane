@@ -76,24 +76,32 @@ async def remove_a_filter(r_handler):
         await r_handler.edit("```Filter removed successfully```")
 
 
-@register(outgoing=True, pattern="^.rmfilters$")
+@register(outgoing=True, pattern="^.rmfilters (.*)")
 async def kick_marie_filter(kick):
     """ For .rmfilters command, allows you to kick all \
         Marie(or her clones) filters from a chat. """
     if not kick.text[0].isalpha() and kick.text[0] not in ("/", "#", "@", "!"):
-        await kick.edit("```Will be kicking away all Marie filters.```")
+        bot_type=kick.pattern_match.group(1)
+        if bot_type not in ["marie","rose"]:
+            await kick.edit("`That bot is not yet supported!`")
+            return
+        await kick.edit("```Will be kicking away all Filters!```")
         sleep(3)
         resp = await kick.get_reply_message()
         filters = resp.text.split("-")[1:]
         for i in filters:
-            await kick.reply("/stop %s" % (i.strip()))
+            if bot_type == "marie":   
+                await kick.reply("/stop %s" % (i.strip()))
+            if bot_type == "rose":
+                i = i.replace('`', '')     #### Rose filters are wrapped under this, to make it touch to copy
+                await kick.reply("/stop %s" % (i.strip()))
             await sleep(0.3)
         await kick.respond(
             "```Successfully purged bots filters yaay!```\n Gimme cookies!"
         )
         if LOGGER:
             await kick.client.send_message(
-                LOGGER_GROUP, "I cleaned all Marie filters at " +
+                LOGGER_GROUP, "I cleaned all filters at " +
                 str(kick.chat_id)
             )
 

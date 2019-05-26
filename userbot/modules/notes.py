@@ -81,21 +81,33 @@ async def incom_note(getnt):
         pass
 
 
-@register(outgoing=True, pattern="^.rmnotes$")
-async def purge_notes(prg):
-    if not is_mongo_alive() or not is_redis_alive():
-        await prg.edit("`Database connections failing!`")
-        return
-    if not prg.text[0].isalpha():
-        await prg.edit("```Purging all notes.```")
-        notes = MONGO.notes.find({"chat_id": prg.chat_id})
-        for note in notes:
-            await prg.edit("```Removing {}...```".format(note['name']))
-            MONGO.notes.delete_one({'_id': note['_id']})
-        await prg.edit("```All notes removed!```")
+@register(outgoing=True, pattern="^.rmnotes (.*)")
+async def kick_marie_notes(kick):
+    """ For .rmfilters command, allows you to kick all \
+        Marie(or her clones) filters from a chat. """
+    if not kick.text[0].isalpha() and kick.text[0] not in ("/", "#", "@", "!"):
+        bot_type=kick.pattern_match.group(1)
+        if bot_type not in ["marie","rose"]:
+            await kick.edit("`That bot is not yet supported!`")
+            return
+        await kick.edit("```Will be kicking away all Notes!```")
+        sleep(3)
+        resp = await kick.get_reply_message()
+        filters = resp.text.split("-")[1:]
+        for i in filters:
+            if bot_type == "marie":   
+                await kick.reply("/clear %s" % (i.strip()))
+            if bot_type == "rose":
+                i = i.replace('`', '')     #### Rose filters are wrapped under this, to make it touch to copy
+                await kick.reply("/clear %s" % (i.strip()))
+            await sleep(0.3)
+        await kick.respond(
+            "```Successfully purged bots notes yaay!```\n Gimme cookies!"
+        )
         if LOGGER:
-            await prg.client.send_message(
-                LOGGER_GROUP, "I cleaned all notes at " + str(prg.chat_id)
+            await kick.client.send_message(
+                LOGGER_GROUP, "I cleaned all Notes at " +
+                str(kick.chat_id)
             )
 
 HELPER.update({
