@@ -8,6 +8,7 @@
 
 # We need this directive
 # shellcheck disable=1090
+
 . "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"/telegram
 
 PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"

@@ -7,8 +7,8 @@
 
 from asyncio import sleep
 from re import fullmatch, IGNORECASE
-
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+import pymongo
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register
 
 
@@ -26,7 +26,7 @@ async def filter_incoming_handler(handler):
                 return
             for trigger in filters['keyword']:
                 for item in listes:
-                    pro = fullmatch(trigger.keyword, item, flags=IGNORECASE)
+                    pro = re.fullmatch(trigger['keyword'], item, flags=re.IGNORECASE)
                     if pro:
                         await handler.reply(trigger['msg'])
                         return
@@ -101,7 +101,7 @@ async def kick_marie_filter(kick):
         )
         if BOTLOG:
             await kick.client.send_message(
-                BOTLOG_CHATID, "I cleaned all Marie filters at " +
+                BOTLOG_CHATID, "I cleaned all filters at " +
                 str(kick.chat_id)
             )
 

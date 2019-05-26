@@ -6,7 +6,7 @@
 
 """ Userbot module for muting chats. """
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register
 
 @register(outgoing=True, pattern="^.unmutechat$")
@@ -16,7 +16,7 @@ async def unmute_chat(unm_e):
         if not is_mongo_alive() or not is_redis_alive():
             await unm_e.edit("`Database connections failing!`")
             return
-        MONGO.mute_chats.delete_one({
+        MONGO.bot.mute_chats.delete_one({
             "chat_id":unm_e.chat_id
             })
         await unm_e.edit("```Unmuted this chat Successfully```")
@@ -30,7 +30,7 @@ async def mute_chat(mute_e):
             await mute_e.edit("`Database connections failing!`")
             return
         await mute_e.edit(str(mute_e.chat_id))
-        MONGO.mute_chats.insert_one(
+        MONGO.bot.mute_chats.insert_one(
                 {"chat_id":mute_e.chat_id}
                 )
         await mute_e.edit("`Shush! This chat will be silenced!`")
@@ -45,7 +45,7 @@ async def keep_read(message):
     """ The mute logic. """
     if not is_mongo_alive() or not is_redis_alive():
             return
-    kread =  MONGO.mute_chats.find(
+    kread =  MONGO.bot.mute_chats.find(
             {"chat_id":message.chat_id})
     if kread:
         for i in kread:

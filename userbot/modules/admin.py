@@ -20,7 +20,9 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
-from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP, bot
+from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+
+from userbot import BRAIN_CHECKER, CMD_HELP, BOTLOG, BOTLOG_CHATID, bot, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register
 import pymongo
 
@@ -441,9 +443,6 @@ async def unmoot(unmot):
 @register(incoming=True)
 async def muter(moot):
     """ Used for deleting the messages of muted people """
-    if not is_mongo_alive() or not is_redis_alive():
-            await moot.edit(NO_SQL)
-            return
     muted = is_muted(moot.chat_id)
     gmuted = is_gmuted(moot.sender_id)
     rights = ChatBannedRights(

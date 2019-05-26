@@ -9,8 +9,7 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG, BOTLOG_CHATID,
-                     USERS)
+from userbot import (COUNT_MSG, REDIS, BOTLOG, BOTLOG_CHATID, USERS, CMD_HELP, REDIS, is_redis_alive)
 from userbot.events import register
 
 
@@ -49,10 +48,8 @@ async def mention_afk(mention):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@register(incoming=True, disable_edited=True)
-async def afk_on_pm(sender):
-    """ Function which informs people that you are AFK in PM """
-    global ISAFK
+@register(incoming=True)
+async def afk_on_pm(e):
     global USERS
     global COUNT_MSG
     if not is_redis_alive():
@@ -68,12 +65,14 @@ async def afk_on_pm(sender):
                 )
                 USERS.update({sender.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
-            elif sender.sender_id in USERS:
-                if USERS[sender.sender_id] % 5 == 0:
-                    await sender.reply(
-                        "Sorry! But my boss is still not here."
-                        "\nTry to ping him a little later. I am sorry 😖."
-                        f"\nHe told me he was busy with `{AFKREASON}`."
+            elif e.sender_id in USERS:
+                if USERS[e.sender_id] % 5 == 0:
+                    await e.reply(
+                        "Sorry! But my boss is still not here. "
+                        "Try to ping him a little later. I am sorry😖."
+                        "He told me he was busy with ```"
+                        + AFK
+                        + "```"
                     )
                     USERS[sender.sender_id] = USERS[sender.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
@@ -83,26 +82,29 @@ async def afk_on_pm(sender):
 
 
 @register(outgoing=True, pattern="^.afk")
-async def set_afk(afk_e):
-    """ For .afk command, allows you to inform people that you are afk when they message you """
-    if not afk_e.text[0].isalpha() and afk_e.text[0] not in ("/", "#", "@", "!"):
-        message = afk_e.text
-        string = str(message[5:])
-        global ISAFK
-        global AFKREASON
-        await afk_e.edit("AFK AF!")
-        if string != "":
-            AFKREASON = string
+async def set_afk(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        if not is_redis_alive():
+            await e.edit("`Database connections failing!`")
+            return
+        message = e.text
+        try:
+            AFKREASON = str(message[5:])
+        except:
+            AFKREASON = ''
+        if not AFKREASON:
+            AFKREASON = 'No reason'
+        await e.edit("AFK AF!")
         if BOTLOG:
-            await afk_e.client.send_message(BOTLOG_CHATID, "You went AFK!")
-        ISAFK = True
+            await e.client.send_message(BOTLOG_CHATID, "You went AFK!")
+        REDIS.set('isafk', AFKREASON)
+        AFK = REDIS.get('isafk')
+        print(str(AFK))
         raise StopPropagation
 
 
 @register(outgoing=True)
-async def type_afk_is_not_true(notafk):
-    """ This sets your status as not afk automatically when you write something while being afk """
-    global ISAFK
+async def type_afk_is_not_true(e):
     global COUNT_MSG
     global USERS
     global AFKREASON
@@ -110,13 +112,13 @@ async def type_afk_is_not_true(notafk):
         return
     ISAFK = REDIS.get('isafk')
     if ISAFK:
-        ISAFK = False
-        await notafk.respond("I'm no longer AFK.")
-        afk_info = await notafk.respond(
-            "`You recieved " +
-            str(COUNT_MSG) +
-            " messages while you were away. Check log for more details.`" +
-            " `This auto-generated message shall be self destructed in 2 seconds.`"
+        REDIS.delete('isafk')
+        await e.respond("I'm no longer AFK.")
+        x = await e.respond(
+            "`You recieved "
+            + str(COUNT_MSG)
+            + " messages while you were away. Check log for more details.`"
+            + " `This auto-generated message shall be self destructed in 2 seconds.`"
         )
         time.sleep(2)
         await afk_info.delete()

@@ -39,10 +39,10 @@ async def kang(args):
                     emoji = message.media.document.attributes[1].alt
                     emojibypass = True
             else:
-                await args.edit("INVALID MEDIA BOI")
+                await args.edit("`Unsupported File!`")
                 return
         else:
-            await args.edit("Reply to photo to kang it bruh")
+            await args.edit("`Reply to photo to kang it bruh`")
             return
 
         if photo:

@@ -56,12 +56,6 @@ USER userbot
 RUN mkdir /home/userbot/userbot
 RUN git clone -b staging https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 WORKDIR /home/userbot/userbot
-COPY ./requirementsDOCKER.txt /home/userbot/userbot
-
-#
-#Copies session and config(if it exists)
-#
-COPY ./userbot.session ./config.env* /home/userbot/userbot/
 #
 #Copies session and config(if it exists)
 #
@@ -71,11 +65,6 @@ COPY ./userbot.session ./config.env* /home/userbot/userbot/
 #
 RUN sudo pip3 install -U pip
 RUN sudo pip3 install -r requirementsDOCKER.txt
-
-#
-# Copy bot files to /app
-#
-COPY . /home/userbot/userbot
 RUN sudo chown -R userbot /home/userbot/userbot
 RUN sudo chmod -R 777 /home/userbot/userbot
-cmd ["python3","-m","userbot"]
+CMD ["python3","-m","userbot"]

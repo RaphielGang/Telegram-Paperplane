@@ -12,7 +12,7 @@ from shutil import which
 
 from telethon import version
 
-from userbot import CMD_HELP
+from userbot import CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register
 
 
