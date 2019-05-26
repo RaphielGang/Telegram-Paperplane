@@ -201,7 +201,7 @@ async def univsaye(cowmsg):
         return
 
     if len(cowmsg.text.split()) < 2:
-        await cowmsg.edit("`give text to milk the cow bruh`")
+        await cowmsg.edit("`Give text to milk the cow bruh.`")
         return
 
     arg = cowmsg.text.split()[0][:-3].lstrip(".")
@@ -227,7 +227,7 @@ async def kek(keks):
 async def lol(lel):
     """ Ok... """
     okay = "-_-"
-    if range(10):
+    for i in range(10):
         okay = okay[:-1] + "_-"
         await lel.edit(okay)
 

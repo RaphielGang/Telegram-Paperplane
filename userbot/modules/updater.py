@@ -4,6 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
+from userbot import HELPER
 from userbot.events import register
 from git import Repo, exc
 
@@ -78,3 +79,11 @@ async def upstream(ups):
 
     await ups.edit('`Successfully Updated!!\nBot is switching off now.. restart kthx`')
     await ups.client.disconnect()
+
+
+HELPER.update({
+    'update': '.update\
+\nUsage: Checks if the main userbot repository has any updates and shows changelog if so.\
+\n\n.update now\
+\nUsage: Updates your userbot if there are any updates in the main userbot repository.'
+})
