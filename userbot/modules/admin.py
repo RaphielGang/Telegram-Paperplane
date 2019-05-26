@@ -415,7 +415,7 @@ async def unmoot(unmot):
             'chat_id': unmot.chat_id,
             'user_id': user_id})
         if old:
-            MONGO.user_list.delete_one({'_id': old['_id']})
+            MONGO.bot.mute.delete_one({'_id': old['_id']})
 
         try:
             await unmot.client(

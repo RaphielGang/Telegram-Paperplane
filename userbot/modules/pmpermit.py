@@ -36,8 +36,13 @@ async def permitpm(event):
                 from userbot.modules.sql_helper.globals import gvarstatus
             except AttributeError:
                 return
-            apprv = is_approved(event.chat_id)
-            NOTIF_OFF = gvarstatus("NOTIF_OFF")
+            apprv = MONGO.bot.pmpermit.find_one(
+                {"user_id": event.chat_id}
+                )
+            
+            NOTIF_OFF = MONGO.bot.notifoff.find_one(
+                {"status": "True"}
+                )
 
             # This part basically is a sanity check
             # If the message that sent before is Unapproved Message
@@ -140,12 +145,15 @@ async def approvepm(apprvpm):
             name0 = str(aname.first_name)
             uid = apprvpm.chat_id
 
-        try:
-            approve(uid)
-        except IntegrityError:
-            await apprvpm.edit("`User may already be approved.`")
+        old = MONGO.bot.pmpermit.find_one(
+            {"user_id": apprvpm.chat_id}
+            )
+        if old:
+            await apprvpm.edit("`User was already approved!`")
             return
-
+        MONGO.bot.pmpermit.insert_one(
+            {"user_id": apprvpm.chat_id }
+            )
         await apprvpm.edit(
             f"[{name0}](tg://user?id={uid}) `approved to PM!`"
         )
@@ -181,6 +189,12 @@ async def blockpm(block):
         if not is_mongo_alive() or not is_redis_alive():
             await block.edit("`Database connections failing!`")
             return
+        old = MONGO.bot.pmpermit.find_one({"user_id": block.chat_id })
+        if old:
+            MONGO.bot.pmpermit.delete_one({'_id': old['_id']})
+            await block.edit("`Blocc'ed`")
+        else:
+            await block.edit("`First approve, before blocc'ing`")
         if LOGGER:
             await block.client.send_message(
                 LOGGER_GROUP,

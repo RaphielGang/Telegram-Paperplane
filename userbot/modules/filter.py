@@ -46,11 +46,11 @@ async def add_new_filter(new_handler):
         string = ""
         for i in range(2, len(keyword)):
             string = string + " " + str(keyword[i])
-        old = MONGO.filters.find_one({
+        old = MONGO.bot.filters.find_one({
             'chat_id': new_handler.chat_id,
             'keyword': keyword[1]})
         if old:
-            MONGO.user_list.delete_one({'_id': old['_id']})
+            MONGO.bot.filters.delete_one({'_id': old['_id']})
         MONGO.bot.filters.insert_one({
             'chat_id': new_handler.chat_id,
             'keyword': keyword[1],
@@ -68,11 +68,11 @@ async def remove_a_filter(r_handler):
             return
         message = r_handler.text
         kek = message.split(" ")
-        old = MONGO.filters.find_one({
+        old = MONGO.bot.filters.find_one({
             'chat_id': r_handler.chat_id,
             'keyword': kek})
         if old:
-            MONGO.user_list.delete_one({'_id': old['_id']})
+            MONGO.bot.filters.delete_one({'_id': old['_id']})
         await r_handler.edit("```Filter removed successfully```")
 
 
@@ -114,7 +114,7 @@ async def filters_active(event):
             await event.edit("`Database connections failing!`")
             return
         transact = "`There are no filters in this chat.`"
-        filters = MONGO.filters.find({'chat_id': event.chat_id})
+        filters = MONGO.bot.filters.find({'chat_id': event.chat_id})
         for i in filters:
             message = "Active filters in this chat: \n\n"
             transact = message + "🔹 " + i['keyword'] + "\n"

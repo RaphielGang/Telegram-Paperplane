@@ -34,11 +34,9 @@ async def remove_notes(clr):
             await clr.edit("`Database connections failing!`")
             return
         notename = clr.pattern_match.group(1)
-        old = MONGO.notes.find_one({"chat_id": clr.chat_id, "name": notename})
-        print(old)
-        print(notename, clr.chat_id)
+        old = MONGO.bot.notes.find_one({"chat_id": clr.chat_id, "name": notename})
         if old:
-            MONGO.notes.delete_one({'_id': old['_id']})
+            MONGO.bot.notes.delete_one({'_id': old['_id']})
             await clr.edit("Note removed successfully")
         else:
             await clr.edit("I can't find this note!")
@@ -57,8 +55,16 @@ async def add_filter(fltr):
         if fltr.reply_to_msg_id:
             rep_msg = await fltr.get_reply_message()
             string = rep_msg.text
-        add_note(str(fltr.chat_id), notename, string)
-
+        old = MONGO.bot.notes.find_one(
+            {"chat_id": fltr.chat_id, "name": notename}
+            )
+        if old:
+            status = "updated"
+        else:
+            status = "saved"
+        MONGO.bot.notes.insert_one(
+            {"chat_id": fltr.chat_id, "name": notename, "text": string}
+            )
         await fltr.edit(
             "`Note added successfully. Use` #{} `to get it`".format(notename)
         )
@@ -72,12 +78,12 @@ async def incom_note(getnt):
             if not is_mongo_alive() or not is_redis_alive():
                 return
             notename = getnt.text[1:]
-            notes = get_notes(getnt.chat_id)
-            for note in notes:
-                if notename == note.keyword:
-                    await getnt.reply(note.reply)
-                    return
-    except AttributeError:
+            note = MONGO.bot.notes.find_one(
+                {"chat_id": getnt.chat_id, "name": notename}
+                )
+            if note:
+                    await getnt.reply(note['text'])
+    except:
         pass
 
 
