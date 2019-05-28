@@ -12,11 +12,10 @@ googletrans>=2.4.0
 gsearch>=1.6.0
 gtts>=2.0.1
 hachoir
-psycopg2-binary
+psycopg2
 pybase64>=0.4.0
 python-dotenv
 pytube
-lmgtfy
 pytz
 requests>=2.18.4
 speedtest-cli>=2.0.2
@@ -24,6 +23,8 @@ spongemock
 sqlalchemy>=1.2
 telegraph
 telethon-session-sqlalchemy>=0.2.6
+pytube
+lmgtfy
 telethon>=1.6.2
 urbandict>=0.5
 wikipedia>=1.4.0
