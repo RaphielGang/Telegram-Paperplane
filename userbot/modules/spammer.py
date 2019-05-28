@@ -11,6 +11,24 @@ from userbot import LOGGER_GROUP, LOGGER, HELPER
 from userbot.events import register
 
 
+@register(outgoing=True, pattern="^.tspam")
+async def tmeme(e):
+    tspam = str(e.text[7:])
+    message = tspam.replace(" ", "")
+    for letter in message:
+        await e.respond(letter)
+    await e.delete()
+
+
+@register(outgoing=True, pattern="^.repeat")
+async def repeat(e):
+    message = e.text[10:]
+    count = int(e.text[8:10])
+    repmessage = message * count
+    await e.respond(repmessage)
+    await e.delete()
+
+
 @register(outgoing=True, pattern="^.spam")
 async def spammer(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -25,7 +43,8 @@ async def spammer(e):
                 "#SPAM \n\n"
                 "Spam was executed successfully"
                 )
-                               
+                  
+             
 @register(outgoing=True, pattern="^.bigspam")
 async def bigspam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
@@ -41,7 +60,25 @@ async def bigspam(e):
                 "#BIGSPAM \n\n"
                 "Bigspam was executed successfully"
                 )
-        
+
+
+@register(outgoing=True, pattern="^.gang$")
+async def whoizme(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        await e.edit("EVERyBOdy")
+        await asyncio.sleep(0.3)
+        await e.edit("iZ")
+        await asyncio.sleep(0.2)
+        await e.edit("GangSTur")
+        await asyncio.sleep(0.5)
+        await e.edit("UNtIL ")
+        await asyncio.sleep(0.2)
+        await e.edit("I")
+        await asyncio.sleep(0.3)
+        await e.edit("ArRivE")
+        await asyncio.sleep(0.3)
+        await e.edit("EVERyBOdy iZ GangSTur UNtIL I ArRivE")
+
         
 @register(outgoing=True, pattern="^.picspam")
 async def tiny_pic_spam(e):
