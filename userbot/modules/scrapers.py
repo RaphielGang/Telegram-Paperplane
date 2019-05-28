@@ -124,24 +124,6 @@ async def wiki(wiki_q):
                 f"Wiki query {match} was executed successfully"
             )
 
-@register(outgoing=True, pattern="^.gang$")
-async def whoizme(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        await e.edit("EVERyBOdy")
-        await asyncio.sleep(0.3)
-        await e.edit("iZ")
-        await asyncio.sleep(0.2)
-        await e.edit("GangSTur")
-        await asyncio.sleep(0.5)
-        await e.edit("UNtIL ")
-        await asyncio.sleep(0.2)
-        await e.edit("I")
-        await asyncio.sleep(0.3)
-        await e.edit("ArRivE")
-        await asyncio.sleep(0.3)
-        await e.edit("EVERyBOdy iZ GangSTur UNtIL I ArRivE")
-
-
 @register(outgoing=True, pattern="^.ud (.*)")
 async def urban_dict(ud_e):
     """ For .ud command, fetch content from Urban Dictionary. """
