@@ -37,7 +37,7 @@ async def img_sampler(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         await event.edit("Processing...")
         query = event.pattern_match.group(1)
-        lim = re.findall(r"lim=\d+", query)
+        lim = findall(r"lim=\d+", query)
         try:
             lim = lim[0]
             lim = lim.replace("lim=", "")
