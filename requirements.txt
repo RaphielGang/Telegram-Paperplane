@@ -16,6 +16,7 @@ psycopg2-binary
 pybase64>=0.4.0
 python-dotenv
 pytube
+lmgtfy
 pytz
 requests>=2.18.4
 speedtest-cli>=2.0.2
