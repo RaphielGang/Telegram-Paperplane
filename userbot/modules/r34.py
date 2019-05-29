@@ -28,6 +28,10 @@ async def r34(tags):
             toproc = xmlET.fromstring(xmlresp.content)
             imglist = [url.attrib['file_url'] for url in toproc]
 
+            if len(imglist) == 0:
+                tags.edit("`Weird fetish. Looks like it doesn't exist!(or you are a pedo)`")
+                return
+
             imgreq = requests.get(imglist[randint(0, len(imglist)-1)], stream=True)
             buf = BytesIO()
             buf.name = "hentai.jpeg"
