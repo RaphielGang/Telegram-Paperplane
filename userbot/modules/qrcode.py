@@ -12,8 +12,6 @@ import os
 from asyncio import sleep
 from datetime import datetime
 from requests import post, get
-from telethon import events
-import asyncio
 ￼import requests
 from userbot import CMD_HELP
 from userbot.events import register
