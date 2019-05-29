@@ -12,11 +12,13 @@ import os
 from asyncio import sleep
 from datetime import datetime
 from requests import post, get
-
+from telethon import events
+import asyncio
+￼import requests
 from userbot import CMD_HELP
 from userbot.events import register
 
-DL_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
+DL_DIRECTORY = "./"
 
 
 def progress(current, total):
@@ -83,7 +85,7 @@ async def make_qr(qrcode):
         url = "https://api.qrserver.com/v1/create-qr-code/?data={}&size=200x200&\
                 charset-source=UTF-8&charset-target=UTF-8&ecc=L&color=0-0-0\
                 &bgcolor=255-255-255&margin=1&qzone=0&format=jpg"
-        resp = get(url.format(message), stream=True)
+        resp = requests.get(url.format(message), stream=True)
         required_file_name = DL_DIRECTORY + " " + str(datetime.now()) + ".webp"
         with open(required_file_name, "wb") as file:
             for chunk in resp.iter_content(chunk_size=128):
