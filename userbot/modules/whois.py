@@ -14,7 +14,7 @@ from telethon.tl.types import MessageEntityMentionName
 from userbot import CMD_HELP
 from userbot.events import register
 
-TMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
+TMP_DOWNLOAD_DIRECTORY = "./"
 
 
 @register(pattern=".whois(?: |$)(.*)", outgoing=True)
@@ -35,21 +35,23 @@ async def who(event):
     if not message_id_to_reply:
         message_id_to_reply = None
 
-    await event.client.send_file(
-        event.chat_id,
-        photo,
-        caption=caption,
-        link_preview=False,
-        force_document=False,
-        reply_to=message_id_to_reply,
-        parse_mode="html"
-    )
+    try:
+        await event.client.send_file(
+            event.chat_id,
+            photo,
+            caption=caption,
+            link_preview=False,
+            force_document=False,
+            reply_to=message_id_to_reply,
+            parse_mode="html"
+        )
 
-    if not photo.startswith("http"):
-        os.remove(photo)
-
-    await event.delete()
-
+        if not photo.startswith("http"):
+            os.remove(photo)
+        await event.delete()
+        
+    except TypeError:
+        await event.edit(caption, parse_mode="html")
 
 async def get_user(event):
     """ Get the user from argument or replied message. """
@@ -90,16 +92,14 @@ async def fetch_info(replied_user, event):
     common_chat = replied_user.common_chats_count
     username = replied_user.user.username
     user_bio = replied_user.about
-
-    try:
-        photo = await event.client.download_profile_photo(
-            user_id,
-            TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg",
-            download_big=True
-        )
-    except TypeError:
-        photo = "https://thumbs.dreamstime.com/b/no-user-profile-picture-24185395.jpg"
-
+    is_bot = replied_user.user.bot
+    restricted = replied_user.user.restricted
+    verified = replied_user.user.verified
+    photo = await event.client.download_profile_photo(
+        user_id,
+        TMP_DOWNLOAD_DIRECTORY + str(user_id) + ".jpg",
+        download_big=True
+    )
     first_name = first_name.replace("\u2060", "") if first_name else (
         "This User has no First Name")
     last_name = last_name.replace("\u2060", "") if last_name else (
@@ -112,6 +112,9 @@ async def fetch_info(replied_user, event):
     caption += f"First Name: {first_name} \n"
     caption += f"Last Name: {last_name} \n"
     caption += f"Username: {username} \n"
+    caption += f"Is Bot: {is_bot} \n"
+    caption += f"Is Restricted: {restricted} \n"
+    caption += f"Is Verified by Telegram: {verified} \n"
     caption += f"ID: <code>{user_id}</code> \n \n"
     caption += f"Bio: \n<code>{user_bio}</code> \n \n"
     caption += f"Common Chats with this user: {common_chat} \n"
