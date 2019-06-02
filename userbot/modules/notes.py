@@ -64,7 +64,7 @@ async def add_filter(fltr):
         )
 
 
-@register(incoming=True, pattern=r"#\w*", disable_edited=True)
+@register(pattern=r"#\w*", disable_edited=True)
 async def incom_note(getnt):
     """ Notes logic. """
     try:
@@ -81,7 +81,6 @@ async def incom_note(getnt):
                     return
     except AttributeError:
         pass
-
 
 @register(outgoing=True, pattern="^.rmnotes$")
 async def purge_notes(prg):
