@@ -71,7 +71,7 @@ async def add_filter(fltr):
         )
 
 
-@register(incoming=True, pattern=r"#\w*", disable_edited=True)
+@register(pattern=r"#\w*", disable_edited=True)
 async def incom_note(getnt):
     """ Notes logic. """
     try:
