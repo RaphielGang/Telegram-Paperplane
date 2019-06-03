@@ -24,6 +24,6 @@ async def help(event):
             await event.edit("Please specify which module do you want help for!")
             string = ""
             for i in CMD_HELP:
-                string += str(i)
-                string += "\n"
+                string += "`"+str(i)
+                string += "`\n"
             await event.reply(string)
