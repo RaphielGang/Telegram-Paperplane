@@ -16,7 +16,7 @@ from requests import post, get
 from userbot import CMD_HELP
 from userbot.events import register
 
-DL_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
+DL_DIRECTORY = "./"
 
 
 def progress(current, total):
