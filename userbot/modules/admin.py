@@ -24,6 +24,7 @@ from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 
 from userbot import BRAIN_CHECKER, CMD_HELP, BOTLOG, BOTLOG_CHATID, bot, MONGO, REDIS, is_mongo_alive, is_redis_alive
 from userbot.events import register
+from userbot.modules.dbhelper import *
 import pymongo
 
 # =================== CONSTANT ===================
@@ -65,6 +66,16 @@ UNBAN_RIGHTS = ChatBannedRights(
 KICK_RIGHTS = ChatBannedRights(
     until_date=None,
     view_messages=True
+)
+    
+MUTE_RIGHTS = ChatBannedRights(
+    until_date=None,
+    send_messages=True
+)
+
+UNMUTE_RIGHTS = ChatBannedRights(
+        until_date=None,
+        send_messages=False
 )
 # ================================================
 
@@ -366,22 +377,30 @@ async def spider(spdr):
 
         # If everything goes well, do announcing and mute
         await spdr.edit("`Gets a tape!`")
-        MONGO.bot.filters.insert_one({
-            'chat_id': new_handler.chat_id,
-            'user_id': user.id
-        })
-
-        # Announce that the function is done
-        await spdr.edit("`Safely taped!`")
-
-        # Announce to logging group
-        if BOTLOG:
-            await spdr.client.send_message(
-                BOTLOG_CHATID,
-                "#MUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)"
-            )
+        if await mute(spdr.chat_id, user.id) is False:
+            return await spdr.edit('`Error! User probably already muted.`')
+        else:
+            try:
+                await spdr.client(
+                    EditBannedRequest(
+                        spdr.chat_id,
+                        user.id,
+                        MUTE_RIGHTS
+                    )
+                )
+                # Announce that the function is done
+                await spdr.edit("`Safely taped!`")
+    
+                # Announce to logging group
+                if BOTLOG:
+                    await spdr.client.send_message(
+                        BOTLOG_CHATID,
+                        "#MUTE\n"
+                        f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                        f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)"
+                    )
+            except UserIdInvalidError:
+                return await unmot.edit("`Uh oh my unmute logic broke!`")
 
 
 @register(outgoing=True, pattern="^.unmute(?: |$)(.*)")
@@ -412,39 +431,37 @@ async def unmoot(unmot):
         else:
             return
 
-        old = MONGO.filters.find_one({
-            'chat_id': unmot.chat_id,
-            'user_id': user_id})
-        if old:
-            MONGO.bot.mute.delete_one({'_id': old['_id']})
+        if await unmute(unmot.chat_id, user.id) is False:
+            return await unmot.edit("`Error! User probably already unmuted.`")
+        else:
 
-        try:
-            await unmot.client(
-                EditBannedRequest(
-                    unmot.chat_id,
-                    user.id,
-                    UNBAN_RIGHTS
+            try:
+                await unmot.client(
+                    EditBannedRequest(
+                        unmot.chat_id,
+                        user.id,
+                        UNMUTE_RIGHTS
+                    )
                 )
-            )
-            await unmot.edit("```Unmuted Successfully```")
-        except UserIdInvalidError:
-            await unmot.edit("`Uh oh my unmute logic broke!`")
-            return
-
-        if BOTLOG:
-            await unmot.client.send_message(
-                BOTLOG_CHATID,
-                "#UNMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)"
-            )
+                await unmot.edit("```Unmuted Successfully```")
+            except UserIdInvalidError:
+                await unmot.edit("`Uh oh my unmute logic broke!`")
+                return
+    
+            if BOTLOG:
+                await unmot.client.send_message(
+                    BOTLOG_CHATID,
+                    "#UNMUTE\n"
+                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                    f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)"
+                )
 
 
 @register(incoming=True)
 async def muter(moot):
     """ Used for deleting the messages of muted people """
-    muted = is_muted(moot.chat_id)
-    gmuted = is_gmuted(moot.sender_id)
+    muted = await get_muted(moot.chat_id)
+    gmuted = await get_gmuted()
     rights = ChatBannedRights(
         until_date=None,
         send_messages=True,
@@ -457,7 +474,7 @@ async def muter(moot):
     )
     if muted:
         for i in muted:
-            if str(i.sender) == str(moot.sender_id):
+            if i == moot.sender_id:
                 await moot.delete()
                 await moot.client(EditBannedRequest(
                     moot.chat_id,
@@ -465,7 +482,7 @@ async def muter(moot):
                     rights
                 ))
     for i in gmuted:
-        if i.sender == str(moot.sender_id):
+        if i == moot.sender_id:
             await moot.delete()
 
 
@@ -498,18 +515,20 @@ async def ungmoot(un_gmute):
         # If pass, inform and start ungmuting
         await un_gmute.edit('```Ungmuting...```')
 
-        ungmute(user.id)
-
-        # Inform about success
-        await un_gmute.edit("```Ungmuted Successfully```")
-
-        if BOTLOG:
-            await un_gmute.client.send_message(
-                BOTLOG_CHATID,
-                "#UNGMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {un_gmute.chat.title}(`{un_gmute.chat_id}`)"
-            )
+        if await ungmute(user.id) is False:
+            await un_gmute.edit("`Error! User probably not gmuted.`")
+        else:
+    
+            # Inform about success
+            await un_gmute.edit("```Ungmuted Successfully```")
+    
+            if BOTLOG:
+                await un_gmute.client.send_message(
+                    BOTLOG_CHATID,
+                    "#UNGMUTE\n"
+                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                    f"CHAT: {un_gmute.chat.title}(`{un_gmute.chat_id}`)"
+                )
 
 
 @register(outgoing=True, pattern="^.gmute(?: |$)(.*)")
@@ -543,19 +562,20 @@ async def gspider(gspdr):
 
         # If pass, inform and start gmuting
         await gspdr.edit("`Grabs a huge, sticky duct tape!`")
-        gmute(user.id)
-
-        # Delete the replied message and inform about success
-        await gspdr.delete()
-        await gspdr.respond("`Globally taped!`")
-
-        if BOTLOG:
-            await gspdr.client.send_message(
-                BOTLOG_CHATID,
-                "#GMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {gspdr.chat.title}(`{gspdr.chat_id}`)"
-            )
+        
+        if await gmute(user.id) is False:
+            await gspdr.edit('`Error! User probably already gmuted.`')
+        else:
+    
+            await gspdr.edit("`Globally taped!`")
+    
+            if BOTLOG:
+                await gspdr.client.send_message(
+                    BOTLOG_CHATID,
+                    "#GMUTE\n"
+                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                    f"CHAT: {gspdr.chat.title}(`{gspdr.chat_id}`)"
+                )
 
 
 @register(outgoing=True, pattern="^.delusers(?: |$)(.*)")
@@ -806,8 +826,6 @@ async def get_user_from_id(user, event):
         return None
 
     return user_obj
-
-
 
 CMD_HELP.update({
     "promote": "Usage: Reply to someone's message with .promote to promote them."

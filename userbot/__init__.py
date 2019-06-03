@@ -101,11 +101,12 @@ with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)
 
 # Init Mongo
-MONGO = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
+MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
+MONGO = MONGOCLIENT.userbot
 
 def is_mongo_alive():
     try:
-        MONGO.server_info()
+        MONGOCLIENT.server_info()
     except:
         return False
     return True
