@@ -134,7 +134,7 @@ async def selfdestruct(destroy):
         )
         await destroy.delete()
         smsg = await destroy.client.send_message(destroy.chat_id, text)
-        sleep(counter)
+        await sleep(counter)
         await smsg.delete()
         if BOTLOG:
             await destroy.client.send_message(BOTLOG_CHATID, "sd query done successfully")
