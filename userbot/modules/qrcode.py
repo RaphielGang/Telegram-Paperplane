@@ -17,6 +17,9 @@ from userbot import CMD_HELP
 from userbot.events import register
 
 DL_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
+# makes qr download directory if doesnt exists.
+if not os.path.exists(DL_DIRECTORY):
+    os.makedirs(DL_DIRECTORY)
 
 
 def progress(current, total):
