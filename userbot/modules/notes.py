@@ -24,7 +24,7 @@ async def notes_active(svd):
         if notes:
             message = "Notes saved in this chat: \n\n"
             for note in notes:
-                message = message + "🔹 " + note.keyword + "\n"
+                message = message + "-` " + note.keyword + "`\n"
         await svd.edit(message)
 
 
