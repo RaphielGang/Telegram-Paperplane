@@ -72,7 +72,7 @@ async def evaluate(query):
 
         if BOTLOG:
             await query.client.send_message(
-                BOTLOG_CHATID, f"Eval query {expression} was executed successfully"
+                BOTLOG_CHATID, f"Eval query `{expression}` was executed successfully"
             )
 
 
@@ -142,7 +142,7 @@ execute. Use .help exec for an example.```")
         if BOTLOG:
             await run_q.client.send_message(
                 BOTLOG_CHATID,
-                "Exec query " + codepre + " was executed successfully"
+                "Exec query `" + codepre + "` was executed successfully"
             )
 
 
@@ -211,7 +211,7 @@ async def terminal_runner(term):
         if BOTLOG:
             await term.client.send_message(
                 BOTLOG_CHATID,
-                "Terminal Command " + command + " was executed sucessfully",
+                "Terminal Command `" + command + "` was executed successfully",
             )
 
 CMD_HELP.update({
