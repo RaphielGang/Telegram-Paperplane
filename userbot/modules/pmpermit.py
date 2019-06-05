@@ -9,6 +9,7 @@
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.types import User
 from sqlalchemy.exc import IntegrityError
 
 from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
@@ -94,6 +95,30 @@ async def permitpm(event):
                             + ")"
                             + " was just another retarded nibba",
                         )
+
+
+@register(disable_edited=True, outgoing=True)
+async def auto_accept(event):
+    """ Will approve nibbas automatically if you texted them first. """
+    try:
+        from userbot.modules.sql_helper.pm_permit_sql import is_approved
+        from userbot.modules.sql_helper.pm_permit_sql import approve
+    except AttributeError:
+        return
+
+    chat = await event.get_chat()
+    if isinstance(chat, User):
+        if is_approved(event.chat_id):
+            return
+        async for message in event.client.iter_messages(chat.id, reverse=True, limit=1):
+            if message.from_id == (await event.client.get_me()).id:
+                approve(chat.id)
+                if BOTLOG:
+                    await event.client.send_message(
+                        BOTLOG_CHATID,
+                        "#AUTO-APPROVED\n"
+                        + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
+                    )
 
 
 @register(outgoing=True, pattern="^.notifoff$")

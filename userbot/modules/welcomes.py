@@ -9,28 +9,35 @@
 from asyncio import sleep
 
 from telethon.tl.functions.channels import EditBannedRequest
-from telethon import events
+from telethon.tl.types import ChannelParticipantsAdmins
+from telethon.events import ChatAction
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
 from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
 
 
-@bot.on(events.ChatAction)
+@bot.on(ChatAction)
 async def welcome_mute(welcm):
     ''' Ban a recently joined user if it matches the spammer checking algorithm. '''
     if welcm.user_joined or welcm.user_added:
-        users = []
 
-        if welcm.user_added:
-            for i in welcm.action_message.action.users:
-                users.append(i)
+        if welcm.user_added and WELCOME_MUTE:
+            ignore = False
+            adder = welcm.action_message.from_id
+
+            async for admin in bot.iter_participants(welcm.chat_id, filter=ChannelParticipantsAdmins):
+                if admin.id == adder:
+                    ignore = True
+                    break
+
+            if ignore:
+                return
+            
+            # It returns a list to begin with. Don't iter it and append the id's to a new one.
+            users = welcm.action_message.action.users
 
         spambot = False
-
         await sleep(5)
-
-        if not WELCOME_MUTE:
-            return
 
         for user_id in users:
             async for message in bot.iter_messages(
@@ -103,6 +110,8 @@ async def welcome_mute(welcm):
                             BANNED_RIGHTS
                         )
                     )
+                    # Telegram doesn't unban if the requests are sent instantly
+                    sleep(1)
                     await welcm.client(
                         EditBannedRequest(
                             welcm.chat_id,
