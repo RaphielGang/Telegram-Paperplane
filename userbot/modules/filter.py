@@ -52,9 +52,13 @@ async def add_new_filter(event):
         string = ""
         for i in range(2, len(keyword)):
             string = string + " " + str(keyword[i])
-        await add_filter(event.chat_id, keyword[1], string[1:])
-        await event.edit("`Filter` **{}** `added successfully`"
-                         .format(keyword[1]))
+
+        msg = "`Filter` **{}** `{} successfully`"
+
+        if await add_filter(event.chat_id, keyword[1], string[1:]) is True:
+            await event.edit(msg.format(keyword[1], 'added'))
+        else:
+            await event.edit(msg.format(keyword[1], 'updated'))
 
 
 @register(outgoing=True, pattern="^.stop\\s.*")
@@ -68,7 +72,7 @@ async def remove_filter(event):
         filt = event.text[6:]
 
         if await delete_filter(event.chat_id, filt) is False:
-            await event.edit("`Filter` **{}** `doesn't exist."
+            await event.edit("`Filter` **{}** `doesn't exist.`"
                              .format(filt))
         else:
             await event.edit("`Filter` **{}** `was deleted successfully`"

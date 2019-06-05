@@ -1,6 +1,7 @@
 from userbot import MONGO
 
 
+# Mutes
 async def mute(chatid, userid):
     if await is_muted(chatid, userid) is True:
         return False
@@ -47,6 +48,7 @@ async def get_muted(chatid):
         return muted
 
 
+# GMutes
 async def gmute(userid):
     if await is_gmuted(userid) is True:
         return False
@@ -88,16 +90,17 @@ async def get_gmuted():
     return gmuted
 
 
+# Filters
+async def get_filters(chatid):
+    return MONGO.filters.find({
+        'chat_id': chatid
+    })
+
+
 async def get_filter(chatid, keyword):
     return MONGO.filters.find_one({
         'chat_id': chatid,
         'keyword': keyword
-    })
-
-
-async def get_filters(chatid):
-    return MONGO.filters.find({
-        'chat_id': chatid
     })
 
 
@@ -110,15 +113,17 @@ async def add_filter(chatid, keyword, msg):
             'keyword': keyword,
             'msg': msg
         })
+        return True
     else:
         MONGO.filters.update_one({
             '_id': to_check["_id"],
             'chat_id': to_check["chat_id"],
             'keyword': to_check["keyword"],
-            "$set": {
-                'msg': msg
-            }
-        })
+        }, {"$set": {
+            'msg': msg
+        }})
+
+        return False
 
 
 async def delete_filter(chatid, keyword):
@@ -135,3 +140,54 @@ async def delete_filter(chatid, keyword):
         })
 
         return True
+
+
+# Notes
+async def get_notes(chatid):
+    return MONGO.notes.find({
+        'chat_id': chatid
+    })
+
+
+async def get_note(chatid, name):
+    return MONGO.notes.find_one({
+        'chat_id': chatid,
+        'name': name
+    })
+
+
+async def add_note(chatid, name, text):
+    to_check = await get_note(chatid, name)
+
+    if not to_check:
+        MONGO.notes.insert_one({
+            'chat_id': chatid,
+            'name': name,
+            'text': text
+        })
+
+        return True
+    else:
+        MONGO.notes.update_one({
+            '_id': to_check["_id"],
+            'chat_id': to_check["chat_id"],
+            'name': to_check["name"],
+        }, {"$set": {
+            'text': text
+        }})
+
+        return False
+
+
+async def delete_note(chatid, name):
+    to_check = await get_note(chatid, name)
+
+    if not to_check:
+        return False
+    else:
+        MONGO.notes.delete_one({
+            '_id': to_check["_id"],
+            'chat_id': to_check["chat_id"],
+            'name': to_check["name"],
+            'text': to_check["text"],
+        })
