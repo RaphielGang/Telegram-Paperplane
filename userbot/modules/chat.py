@@ -56,14 +56,6 @@ async def log(log_text):
                 user = f"#LOG / Chat ID: {log_text.chat_id}\n\n"
                 textx = user + log_text.pattern_match.group(1)
                 await bot.send_message(BOTLOG_CHATID, textx)
-            else:
-                await log_text.edit("`What am I supposed to log?`")
-                return
-            await log_text.edit("`Logged Successfully`")
-        else:
-            await log_text.edit("`This feature requires Logging to be enabled!`")
-        sleep(2)
-        await log_text.delete()
 
 
 @register(outgoing=True, pattern="^.kickme$")
