@@ -17,10 +17,10 @@ from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
-UNAPPROVED_MSG = ("Bleep blop! This is a bot. Don't fret.\n\n"
-                  "My master hasn't approved you to PM."
-                  " Please wait for my master to look in, he mostly approves PMs.\n\n"
-                  "As far as I know, he doesn't usually approve retards though.")
+UNAPPROVED_MSG = ("`Bleep blop! This is a bot. Don't fret.\n\n`"
+                  "`My master hasn't approved you to PM.`"
+                  "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
+                  "`As far as I know, he doesn't usually approve retards though.`")
 # =================================================================
 
 
