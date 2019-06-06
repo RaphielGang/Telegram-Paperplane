@@ -119,9 +119,9 @@ REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 def is_redis_alive():
     try:
         REDIS.ping()
+        return True
     except:
         return False
-    return True
 
 # Global Variables
 COUNT_MSG = 0

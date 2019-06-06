@@ -1,4 +1,4 @@
-from userbot import MONGO
+from userbot import MONGO, REDIS
 
 
 # Mutes
@@ -191,3 +191,130 @@ async def delete_note(chatid, name):
             'name': to_check["name"],
             'text': to_check["text"],
         })
+
+
+async def approval(userid):
+    to_check = MONGO.pmpermit.find_one({
+        'user_id': userid
+    })
+
+    if to_check is None:
+        MONGO.pmpermit.insert_one({
+            'user_id': userid,
+            'approval': False
+        })
+
+        return False
+    elif to_check['approval'] is False:
+        return False
+    elif to_check['approval'] is True:
+        return True
+
+
+async def approve(userid):
+    if await approval(userid) is True:
+        return False
+    else:
+        MONGO.pmpermit.update_one({
+            'user_id': userid
+        }, {
+            "$set": {
+                'approval': True
+            }
+        })
+        return True
+
+
+async def block_pm(userid):
+    if await approval(userid) is False:
+        return False
+    else:
+        MONGO.pmpermit.update_one({
+            'user_id': userid
+        }, {
+            "$set": {
+                'approval': False
+            }
+        })
+
+        return True
+
+
+async def notif_state():
+    state = dict()
+    state_db = MONGO.notif.find()
+
+    for stat in state_db:
+        state.update(stat)
+
+    if not state:
+        MONGO.notif.insert_one({
+            'state': False
+        })
+        return False
+    elif state["state"] is False:
+        return False
+    elif state["state"] is True:
+        return True
+
+
+async def __notif_id():
+    id_real = dict()
+    id_db = MONGO.notif.find()
+
+    for id_s in id_db:
+        id_real.update(id_s)
+
+    return id_real["_id"]
+
+
+async def notif_on():
+    if await notif_state() is True:
+        return False
+    else:
+        MONGO.notif.update({
+            '_id': await __notif_id()
+        }, {
+            "$set": {
+                'state': True
+            }
+        })
+        return True
+
+
+async def notif_off():
+    if await notif_state() is False:
+        return False
+    else:
+        MONGO.notif.update({
+            '_id': await __notif_id()
+        }, {
+            "$set": {
+                'state': False
+            }
+        })
+        return True
+
+
+def strb(redis_string):
+    return str(redis_string)[2:-1]
+
+
+async def is_afk():
+    to_check = REDIS.get('is_afk')
+    if to_check:
+        return True
+    else:
+        return False
+
+
+async def afk(reason):
+    REDIS.set('is_afk', reason)
+
+
+async def afk_reason():
+    return strb(REDIS.get('is_afk'))
+
+
+async def no_afk():
+    REDIS.delete('is_afk')

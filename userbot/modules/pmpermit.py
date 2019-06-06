@@ -13,6 +13,9 @@ from sqlalchemy.exc import IntegrityError
 
 from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS, is_mongo_alive, is_redis_alive)
+
+from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, notif_off, notif_on
+
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -33,13 +36,8 @@ async def permitpm(event):
         if event.is_private and not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
                 return
-            apprv = MONGO.bot.pmpermit.find_one(
-                {"user_id": event.chat_id}
-                )
-            
-            NOTIF_OFF = MONGO.bot.notifoff.find_one(
-                {"status": "True"}
-                )
+            apprv = await approval(event.chat_id)
+            print(await notif_state())
 
             # This part basically is a sanity check
             # If the message that sent before is Unapproved Message
@@ -56,7 +54,7 @@ async def permitpm(event):
                     await event.reply(UNAPPROVED_MSG)
                     LASTMSG.update({event.chat_id: event.text})
 
-                if notifsoff:
+                if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
                 if event.chat_id not in COUNT_PM:
                     COUNT_PM.update({event.chat_id: 1})
@@ -102,24 +100,20 @@ async def permitpm(event):
 async def notifoff(noff_event):
     """ For .notifoff command, stop getting notifications from unapproved PMs. """
     if not noff_event.text[0].isalpha() and noff_event.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot.modules.sql_helper.globals import addgvar
-        except AttributeError:
-            return
-        addgvar("NOTIF_OFF", True)
-        await noff_event.edit("`Notifications silenced!`")
+        if await notif_off() is False:
+            return await noff_event.edit('`Notifications already silenced!`')
+        else:
+            return await noff_event.edit("`Notifications silenced!`")
 
 
 @register(outgoing=True, pattern="^.notifon$")
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if not non_event.text[0].isalpha() and non_event.text[0] not in ("/", "#", "@", "!"):
-        try:
-            from userbot.modules.sql_helper.globals import delgvar
-        except AttributeError:
-            return
-        delgvar("NOTIF_OFF")
-        await non_event.edit("`Notifications unmuted!`")
+        if await notif_on() is False:
+            return await non_event.edit("`Notifications ain't muted!")
+        else:
+            return await non_event.edit("`Notifications unmuted!`")
 
 
 @register(outgoing=True, pattern="^.approve$")
@@ -130,74 +124,66 @@ async def approvepm(apprvpm):
             await apprvpm.edit("`Database connections failing!`")
             return
 
-        if apprvpm.reply_to_msg_id:
-            reply = await apprvpm.get_reply_message()
-            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-
+        if await approve(apprvpm.chat_id) == False:
+            return await apprvpm.edit("`User was already approved!`")
         else:
-            aname = await apprvpm.client.get_entity(apprvpm.chat_id)
-            name0 = str(aname.first_name)
-            uid = apprvpm.chat_id
-
-        old = MONGO.bot.pmpermit.find_one(
-            {"user_id": apprvpm.chat_id}
-            )
-        if old:
-            await apprvpm.edit("`User was already approved!`")
-            return
-        MONGO.bot.pmpermit.insert_one(
-            {"user_id": apprvpm.chat_id }
-            )
-        await apprvpm.edit(
-            f"[{name0}](tg://user?id={uid}) `approved to PM!`"
-        )
-
-        if BOTLOG:
-            await apprvpm.client.send_message(
-                BOTLOG_CHATID,
-                "#APPROVED\n"
-                + "User: " + f"[{name0}](tg://user?id={uid})",
-            )
+            if apprvpm.reply_to_msg_id:
+                reply = await apprvpm.get_reply_message()
+                replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+                aname = replied_user.user.id
+                name0 = str(replied_user.user.first_name)
+                uid = replied_user.user.id
+    
+            else:
+                aname = await apprvpm.client.get_entity(apprvpm.chat_id)
+                name0 = str(aname.first_name)
+                uid = apprvpm.chat_id
+    
+                await apprvpm.edit(
+                    f"[{name0}](tg://user?id={uid}) `approved to PM!`"
+                )
+    
+            if BOTLOG:
+                await apprvpm.client.send_message(
+                    BOTLOG_CHATID,
+                    "#APPROVED\n"
+                    + "User: " + f"[{name0}](tg://user?id={uid})",
+                )
 
 
 @register(outgoing=True, pattern="^.block$")
 async def blockpm(block):
     """ For .block command, block people from PMing you! """
     if not block.text[0].isalpha() and block.text[0] not in ("/", "#", "@", "!"):
-
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
-        if block.reply_to_msg_id:
-            reply = await block.get_reply_message()
-            replied_user = await block.client(GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            await block.client(BlockRequest(replied_user.user.id))
-            uid = replied_user.user.id
+        if await block_pm(block.chat_id) is False:
+            return await block.edit("`First approve, before blocc'ing`")
         else:
-            await block.client(BlockRequest(block.chat_id))
-            aname = await block.client.get_entity(block.chat_id)
-            name0 = str(aname.first_name)
-            uid = block.chat_id
+            return await block.edit("`Blocked.`")
 
-        if not is_mongo_alive() or not is_redis_alive():
-            await block.edit("`Database connections failing!`")
-            return
-        old = MONGO.bot.pmpermit.find_one({"user_id": block.chat_id })
-        if old:
-            MONGO.bot.pmpermit.delete_one({'_id': old['_id']})
-            await block.edit("`Blocc'ed`")
-        else:
-            await block.edit("`First approve, before blocc'ing`")
-        if BOTLOG:
-            await block.client.send_message(
-                BOTLOG_CHATID,
-                "#BLOCKED\n"
-                + "User: " + f"[{name0}](tg://user?id={uid})",
-            )
+            if block.reply_to_msg_id:
+                reply = await block.get_reply_message()
+                replied_user = await block.client(GetFullUserRequest(reply.from_id))
+                aname = replied_user.user.id
+                name0 = str(replied_user.user.first_name)
+                await block.client(BlockRequest(replied_user.user.id))
+                uid = replied_user.user.id
+            else:
+                await block.client(BlockRequest(block.chat_id))
+                aname = await block.client.get_entity(block.chat_id)
+                name0 = str(aname.first_name)
+                uid = block.chat_id
+    
+            if not is_mongo_alive() or not is_redis_alive():
+                await block.edit("`Database connections failing!`")
+                return
+            if BOTLOG:
+                await block.client.send_message(
+                    BOTLOG_CHATID,
+                    "#BLOCKED\n"
+                    + "User: " + f"[{name0}](tg://user?id={uid})",
+                )
 
 
 @register(outgoing=True, pattern="^.unblock$")
@@ -205,13 +191,15 @@ async def unblockpm(unblock):
     """ For .unblock command, let people PMing you again! """
     if not unblock.text[0].isalpha() and unblock.text[0] \
             not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
-
-        await unblock.edit("`My Master has forgiven you to PM now`")
-
         if unblock.reply_to_msg_id:
             reply = await unblock.get_reply_message()
             replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
             name0 = str(replied_user.user.first_name)
+            if await approve(reply.from_id) == False:
+                return await unblock.edit("`You haven't blocked this user yet!`")
+            else:
+                return await unblock.edit("`My Master has forgiven you to PM now`")
+
             await unblock.client(UnblockRequest(replied_user.user.id))
 
         if BOTLOG:
