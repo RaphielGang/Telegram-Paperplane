@@ -9,7 +9,7 @@
 from asyncio import sleep
 
 from telethon.tl.functions.channels import EditBannedRequest
-from telethon.tl.types import ChannelParticipantsAdmins
+from telethon.tl.types import ChannelParticipantsAdmins, Message
 from telethon.events import ChatAction
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
@@ -19,9 +19,11 @@ from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
 @bot.on(ChatAction)
 async def welcome_mute(welcm):
     ''' Ban a recently joined user if it matches the spammer checking algorithm. '''
-    if welcm.user_joined or welcm.user_added:
+    if not WELCOME_MUTE:
+        return
 
-        if welcm.user_added and WELCOME_MUTE:
+    if welcm.user_joined or welcm.user_added:
+        if welcm.user_added:
             ignore = False
             adder = welcm.action_message.from_id
 
@@ -32,9 +34,15 @@ async def welcome_mute(welcm):
 
             if ignore:
                 return
-            
+
             # It returns a list to begin with. Don't iter it and append the id's to a new one.
             users = welcm.action_message.action.users
+        elif welcm.user_joined:
+            users_list = hasattr(welcm.action_message.action, "users")
+            if users_list:
+                users = welcm.action_message.action.users
+            else:
+                users = [welcm.action_message.from_id]
 
         spambot = False
         await sleep(5)
@@ -45,7 +53,8 @@ async def welcome_mute(welcm):
                     from_user=user_id
             ):
 
-                if not message:
+                correct_type = isinstance(message, Message)
+                if not message or not correct_type:
                     break
 
                 join_time = welcm.action_message.date
@@ -56,7 +65,7 @@ async def welcome_mute(welcm):
 
                 # DEBUGGING. LEAVING IT HERE FOR SOME TIME ###
                 print(f"User Joined: {join_time}")
-                print(f"Spam Message Sent: {message_date}")
+                print(f"Message Sent: {message_date}")
                 #
 
                 user = await welcm.client.get_entity(user_id)
@@ -111,7 +120,7 @@ async def welcome_mute(welcm):
                         )
                     )
                     # Telegram doesn't unban if the requests are sent instantly
-                    sleep(1)
+                    await sleep(1)
                     await welcm.client(
                         EditBannedRequest(
                             welcm.chat_id,
