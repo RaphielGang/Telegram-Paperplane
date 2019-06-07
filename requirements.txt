@@ -26,6 +26,6 @@ urbandict>=0.5
 wikipedia>=1.4.0
 zalgo_text>=0.6
 spotify_token
-pymongo
+pymongo[srv]
 redis
 dnspython
