@@ -12,7 +12,6 @@ googletrans>=2.4.0
 gsearch>=1.6.0
 gtts>=2.0.1
 hachoir
-psycopg2-binary
 pybase64>=0.4.0
 python-dotenv
 pytube
