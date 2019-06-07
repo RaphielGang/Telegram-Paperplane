@@ -4,11 +4,15 @@
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for filter commands """
+import re
+
 
 from asyncio import sleep
-from re import fullmatch, IGNORECASE
-import pymongo
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
+                     is_mongo_alive, is_redis_alive)
+from userbot.modules.dbhelper import (get_filters,
+                                      add_filter,
+                                      delete_filter)
 from userbot.events import register
 
 
@@ -21,104 +25,112 @@ async def filter_incoming_handler(handler):
                 await handler.edit("`Database connections failing!`")
                 return
             listes = handler.text.split(" ")
-            filters = MONGO.bot.filters.find_one({'chat_id': handler.chat_id})
+            filters = await get_filters(handler.chat_id)
             if not filters:
                 return
-            for trigger in filters['keyword']:
+            for trigger in filters:
                 for item in listes:
-                    pro = re.fullmatch(trigger['keyword'], item, flags=re.IGNORECASE)
+                    pro = re.fullmatch(trigger["keyword"],
+                                       item, flags=re.IGNORECASE)
                     if pro:
-                        await handler.reply(trigger['msg'])
+                        await handler.reply(trigger["msg"])
                         return
     except AttributeError:
         pass
 
 
 @register(outgoing=True, pattern="^.filter\\s.*")
-async def add_new_filter(new_handler):
-    """ For .filter command, allows adding new filters in a chat """
-    if not new_handler.text[0].isalpha() and new_handler.text[0] not in ("/", "#", "@", "!"):
+async def add_new_filter(event):
+    """ Command for adding a new filter """
+    cmd = event.text[0]
+    if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await new_handler.edit("`Database connections failing!`")
+            await event.edit("`Database connections failing!`")
             return
-        message = new_handler.text
+        message = event.text
         keyword = message.split()
         string = ""
         for i in range(2, len(keyword)):
             string = string + " " + str(keyword[i])
-        old = MONGO.bot.filters.find_one({
-            'chat_id': new_handler.chat_id,
-            'keyword': keyword[1]})
-        if old:
-            MONGO.bot.filters.delete_one({'_id': old['_id']})
-        MONGO.bot.filters.insert_one({
-            'chat_id': new_handler.chat_id,
-            'keyword': keyword[1],
-            'msg': string
-        })
-        await new_handler.edit("```Filter added successfully```")
+
+        msg = "`Filter` **{}** `{} successfully`"
+
+        if await add_filter(event.chat_id, keyword[1], string[1:]) is True:
+            await event.edit(msg.format(keyword[1], 'added'))
+        else:
+            await event.edit(msg.format(keyword[1], 'updated'))
 
 
 @register(outgoing=True, pattern="^.stop\\s.*")
-async def remove_a_filter(r_handler):
-    """ For .stop command, allows you to remove a filter from a chat. """
-    if not r_handler.text[0].isalpha() and r_handler.text[0] not in ("/", "#", "@", "!"):
+async def remove_filter(event):
+    """ Command for removing a filter """
+    cmd = event.text[0]
+    if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await r_handler.edit("`Database connections failing!`")
+            await event.edit("`Database connections failing!`")
             return
-        message = r_handler.text
-        kek = message.split(" ")
-        old = MONGO.bot.filters.find_one({
-            'chat_id': r_handler.chat_id,
-            'keyword': kek})
-        if old:
-            MONGO.bot.filters.delete_one({'_id': old['_id']})
-        await r_handler.edit("```Filter removed successfully```")
+        filt = event.text[6:]
+
+        if await delete_filter(event.chat_id, filt) is False:
+            await event.edit("`Filter` **{}** `doesn't exist.`"
+                             .format(filt))
+        else:
+            await event.edit("`Filter` **{}** `was deleted successfully`"
+                             .format(filt))
 
 
 @register(outgoing=True, pattern="^.rmfilters (.*)")
-async def kick_marie_filter(kick):
+async def kick_marie_filter(event):
     """ For .rmfilters command, allows you to kick all \
         Marie(or her clones) filters from a chat. """
-    if not kick.text[0].isalpha() and kick.text[0] not in ("/", "#", "@", "!"):
-        bot_type=kick.pattern_match.group(1)
-        if bot_type not in ["marie","rose"]:
-            await kick.edit("`That bot is not yet supported!`")
+    cmd = event.text[0]
+    if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
+        bot_type = event.pattern_match.group(1)
+        if bot_type not in ["marie", "rose"]:
+            await event.edit("`That bot is not yet supported!`")
             return
-        await kick.edit("```Will be kicking away all Filters!```")
+        await event.edit("```Will be kicking away all Filters!```")
         sleep(3)
-        resp = await kick.get_reply_message()
+        resp = await event.get_reply_message()
         filters = resp.text.split("-")[1:]
         for i in filters:
-            if bot_type == "marie":   
-                await kick.reply("/stop %s" % (i.strip()))
+            if bot_type == "marie":
+                await event.reply("/stop %s" % (i.strip()))
             if bot_type == "rose":
-                i = i.replace('`', '')     #### Rose filters are wrapped under this, to make it touch to copy
-                await kick.reply("/stop %s" % (i.strip()))
+                i = i.replace('`', '')
+                await event.reply("/stop %s" % (i.strip()))
             await sleep(0.3)
-        await kick.respond(
+        await event.respond(
             "```Successfully purged bots filters yaay!```\n Gimme cookies!"
         )
         if BOTLOG:
-            await kick.client.send_message(
+            await event.client.send_message(
                 BOTLOG_CHATID, "I cleaned all filters at " +
-                str(kick.chat_id)
+                str(event.chat_id)
             )
 
 
 @register(outgoing=True, pattern="^.filters$")
 async def filters_active(event):
     """ For .filters command, lists all of the active filters in a chat. """
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
+    cmd = event.text[0]
+    if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
             await event.edit("`Database connections failing!`")
             return
         transact = "`There are no filters in this chat.`"
-        filters = MONGO.bot.filters.find({'chat_id': event.chat_id})
-        for i in filters:
-            message = "Active filters in this chat: \n\n"
-            transact = message + "🔹 " + i['keyword'] + "\n"
+        filters = await get_filters(event.chat_id)
+        for filt in filters:
+            if transact == "`There are no filters in this chat.`":
+                transact = "Active filters in this chat:\n"
+                transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
+                                                       filt["msg"])
+            else:
+                transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
+                                                       filt["msg"])
+
         await event.edit(transact)
+
 
 CMD_HELP.update({
     "filters": "\
@@ -127,7 +139,7 @@ CMD_HELP.update({
 \n\n.filter <keyword> <reply message>\
 \nUsage: Add a filter to this chat. \
 The bot will now reply that message whenever 'keyword' is mentioned. \
-If you reply to a sticker with a keyword, the bot will reply with that sticker.\
+If you reply to sticker with keyword, bot will reply with that sticker.\
 \nNOTE: all filter keywords are in lowercase.\
 \n\n.stop <filter>\
 \nUsage: Stops that filter.\
