@@ -249,9 +249,9 @@ async def notif_state():
 
     if not state:
         MONGO.notif.insert_one({
-            'state': False
+            'state': True
         })
-        return False
+        return True
     elif state["state"] is False:
         return False
     elif state["state"] is True:

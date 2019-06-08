@@ -38,7 +38,6 @@ async def permitpm(event):
             if not is_mongo_alive() or not is_redis_alive():
                 return
             apprv = await approval(event.chat_id)
-            print(await notif_state())
 
             # This part basically is a sanity check
             # If the message that sent before is Unapproved Message
