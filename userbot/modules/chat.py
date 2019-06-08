@@ -15,8 +15,7 @@ from userbot.events import register
 @register(outgoing=True, pattern="^.userid$")
 async def useridgetter(target):
     """ For .userid command, returns the ID of the target user. """
-    if not target.text[0].isalpha() and target.text[0] not in (
-            "/", "#", "@", "!"):
+    if not target.text[0].isalpha() and target.text[0] not in ("/", "#", "@", "!"):
         message = await target.get_reply_message()
         if message:
             if not message.forward:
@@ -48,8 +47,7 @@ async def chatidgetter(chat):
 @register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
 async def log(log_text):
     """ For .log command, forwards a message or the command argument to the bot logs group """
-    if not log_text.text[0].isalpha(
-    ) and log_text.text[0] not in ("/", "#", "@", "!"):
+    if not log_text.text[0].isalpha() and log_text.text[0] not in ("/", "#", "@", "!"):
         if BOTLOG:
             if log_text.reply_to_msg_id:
                 reply_msg = await log_text.get_reply_message()
@@ -71,8 +69,7 @@ async def log(log_text):
 @register(outgoing=True, pattern="^.kickme$")
 async def kickme(leave):
     """ Basically it's .kickme command """
-    if not leave.text[0].isalpha() and leave.text[0] not in (
-            "/", "#", "@", "!"):
+    if not leave.text[0].isalpha() and leave.text[0] not in ("/", "#", "@", "!"):
         await leave.edit("`Nope, no, no, I go away`")
         await bot(LeaveChannelRequest(leave.chat_id))
 

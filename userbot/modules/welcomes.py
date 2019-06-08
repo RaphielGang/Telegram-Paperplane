@@ -9,7 +9,7 @@
 from asyncio import sleep
 
 from telethon.tl.functions.channels import EditBannedRequest
-from telethon.tl.types import ChannelParticipantsAdmins, Message
+from telethon.tl.types import ChannelParticipantsAdmins
 from telethon.events import ChatAction
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
@@ -19,27 +19,23 @@ from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
 @bot.on(ChatAction)
 async def welcome_mute(welcm):
     ''' Ban a recently joined user if it matches the spammer checking algorithm. '''
-    if not WELCOME_MUTE:
-        return
     if welcm.user_joined or welcm.user_added:
-        if welcm.user_added:
+        users = []
+
+        if welcm.user_added and WELCOME_MUTE:
             ignore = False
             adder = welcm.action_message.from_id
 
         async for admin in bot.iter_participants(welcm.chat_id, filter=ChannelParticipantsAdmins):
-            if admin.id == adder:
-                ignore = True
-                break
+                if admin.id == adder:
+                    ignore = True
+                    break
         if ignore:
             return
-        elif welcm.user_joined:
-            users_list = hasattr(welcm.action_message.action, "users")
-            if users_list:
-                users = welcm.action_message.action.users
-            else:
-                users = [welcm.action_message.from_id]
         await sleep(5)
         spambot = False
+        if not WELCOME_MUTE:
+            return
 
         for user_id in users:
             async for message in bot.iter_messages(
@@ -47,8 +43,7 @@ async def welcome_mute(welcm):
                     from_user=user_id
             ):
 
-                correct_type = isinstance(message, Message)
-                if not message or not correct_type:
+                if not message:
                     break
 
                 join_time = welcm.action_message.date
@@ -59,7 +54,7 @@ async def welcome_mute(welcm):
 
                 # DEBUGGING. LEAVING IT HERE FOR SOME TIME ###
                 print(f"User Joined: {join_time}")
-                print(f"Message Sent: {message_date}")
+                print(f"Spam Message Sent: {message_date}")
                 #
 
                 user = await welcm.client.get_entity(user_id)
@@ -114,8 +109,8 @@ async def welcome_mute(welcm):
                         )
                     )
 
-                    await sleep(1)
-
+                    sleep(1)
+                    
                     await welcm.client(
                         EditBannedRequest(
                             welcm.chat_id,
@@ -123,8 +118,8 @@ async def welcome_mute(welcm):
                             UNBAN_RIGHTS
                         )
                     )
-
-                except BaseException:
+                    
+                except:
                     await welcm.reply(
                         "@admins\n"
                         "`ANTI SPAMBOT DETECTOR!\n"
