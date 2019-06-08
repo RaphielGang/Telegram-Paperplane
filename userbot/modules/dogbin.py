@@ -90,17 +90,17 @@ async def get_dogbin_content(dog_url):
 
         resp = get(f'{DOGBIN_URL}raw/{message}')
 
-            try:
-                resp.raise_for_status()
-            except exceptions.HTTPError as HTTPErr:
-                await dog_url.edit("Request returned an unsuccessful status code.\n\n" + str(HTTPErr))
-                return
-            except exceptions.Timeout as TimeoutErr:
-                await dog_url.edit("Request timed out."+ str(TimeoutErr))
-                return
-            except exceptions.TooManyRedirects as RedirectsErr:
-                await dog_url.edit("Request exceeded the configured number of maximum redirections." + str(RedirectsErr))
-                return
+        try:
+            resp.raise_for_status()
+        except exceptions.HTTPError as HTTPErr:
+            await dog_url.edit("Request returned an unsuccessful status code.\n\n" + str(HTTPErr))
+            return
+        except exceptions.Timeout as TimeoutErr:
+            await dog_url.edit("Request timed out."+ str(TimeoutErr))
+            return
+        except exceptions.TooManyRedirects as RedirectsErr:
+            await dog_url.edit("Request exceeded the configured number of maximum redirections." + str(RedirectsErr))
+            return
             
         reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
 

@@ -20,10 +20,10 @@ from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, n
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
-UNAPPROVED_MSG = ("Bleep blop! This is a bot. Don't fret.\n\n"
-                  "My master hasn't approved you to PM."
-                  " Please wait for my master to look in, he mostly approves PMs.\n\n"
-                  "As far as I know, he doesn't usually approve retards though.")
+UNAPPROVED_MSG = ("`Bleep blop! This is a bot. Don't fret.`\n\n"
+                  "`My master hasn't approved you to PM.`"
+                  "`Please wait for my master to look in, he mostly approves PMs.`\n\n"
+                  "`As far as I know, he doesn't usually approve retards though.`")
 # =================================================================
 
 
@@ -100,8 +100,8 @@ async def permitpm(event):
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if event.is_private and not (await event.get_sender()).bot:
-            if not is_mongo_alive() or not is_redis_alive():
-                return
+        if not is_mongo_alive() or not is_redis_alive():
+            return
         chat = await event.get_chat()
         if isinstance(chat, User):
             if is_approved(event.chat_id):
