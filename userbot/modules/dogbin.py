@@ -6,7 +6,7 @@
 """ Userbot module containing commands for interacting with dogbin(https://del.dog)"""
 
 import json
-from requests import get, post
+from requests import get, post, exceptions
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
@@ -20,15 +20,20 @@ async def paste(pstl):
     if not pstl.text[0].isalpha() and pstl.text[0] not in ("/", "#", "@", "!"):
         dogbin_final_url = ""
 
-        textx = await pstl.get_reply_message()
-        message = pstl.text
-        await pstl.edit("`Pasting text . . .`")
-        if message[7:]:
-            message = str(message[7:])
-        elif textx:
-            message = str(textx.message)
+        match = pstl.pattern_match.group(1).strip()
+        reply_id = pstl.reply_to_msg_id
+        if not match and not reply_id:
+            await pstl.edit("There's nothing to paste.")
+            return
+
+        if match:
+            message = match
+        elif reply_id:
+            message = (await pstl.get_reply_message()).message
+
 
         # Dogbin
+        await pstl.edit("`Pasting text . . .`")
         resp = post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
 
         if resp.status_code == 200:
@@ -58,16 +63,15 @@ async def paste(pstl):
             )
 
 
-@register(outgoing=True, pattern="^.get_dogbin_content")
+@register(outgoing=True, pattern="^.get_dogbin_content (.*)")
 async def get_dogbin_content(dog_url):
     """ For .get_dogbin_content command, fetches the content of a dogbin URL. """
     if not dog_url.text[0].isalpha() and dog_url.text[0] not in ("/", "#", "@", "!"):
         textx = await dog_url.get_reply_message()
-        message = dog_url.text
+        message = dog_url.text.pattern_match.group(1)
         await dog_url.edit("`Getting dogbin content . . .`")
-        if message[7:]:
-            message = str(message[20:])
-        elif textx:
+
+        if textx:
             message = str(textx.message)
 
         format_normal = f'{DOGBIN_URL}'
@@ -77,20 +81,27 @@ async def get_dogbin_content(dog_url):
             message = message[len(format_view):]
         elif message.startswith(format_normal):
             message = message[len(format_normal):]
+        else:
+            if message.startswith("del.dog/"):
+                message = message[len("del.dog/"):]
+            else:
+                await dog_url.edit("`Are you sure you're using a valid dogbin URL?`")
+                return
 
         resp = get(f'{DOGBIN_URL}raw/{message}')
 
-        if resp.status_code != 200:
             try:
-                res = resp.json()
-                await dog_url.reply(res['message'])
-            except json.decoder.JSONDecodeError:
-                if resp.status_code == 404:
-                    await dog_url.edit('`Failed to reach dogbin`')
-                else:
-                    await dog_url.edit('`Unknown error occured`')
-            resp.raise_for_status()
-
+                resp.raise_for_status()
+            except exceptions.HTTPError as HTTPErr:
+                await dog_url.edit("Request returned an unsuccessful status code.\n\n" + str(HTTPErr))
+                return
+            except exceptions.Timeout as TimeoutErr:
+                await dog_url.edit("Request timed out."+ str(TimeoutErr))
+                return
+            except exceptions.TooManyRedirects as RedirectsErr:
+                await dog_url.edit("Request exceeded the configured number of maximum redirections." + str(RedirectsErr))
+                return
+            
         reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
 
         await dog_url.reply(reply_text)

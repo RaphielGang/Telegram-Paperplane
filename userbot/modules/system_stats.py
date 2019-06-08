@@ -9,7 +9,7 @@ from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 from platform import python_version, uname
 from shutil import which
-
+from os import remove
 from telethon import version
 
 from userbot import CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
@@ -99,13 +99,32 @@ async def pipcheck(pip):
             pipout = str(stdout.decode().strip()) \
                 + str(stderr.decode().strip())
 
-            await pip.edit(
-                "**Query: **\n`"
-                f"{invokepip}"
-                "`\n**Result: **\n`"
-                f"{pipout}"
-                "`"
-            )
+            if pipout:
+                if len(pipout) > 4096:
+                    await pip.edit("`Output too large, sending as file`")
+                    file = open("output.txt", "w+")
+                    file.write(pipout)
+                    file.close()
+                    await pip.client.send_file(
+                        pip.chat_id,
+                        "output.txt",
+                        reply_to=pip.id,
+                    )
+                    remove("output.txt")
+                    return
+                await pip.edit(
+                    "**Query: **\n`"
+                    f"{invokepip}"
+                    "`\n**Result: **\n`"
+                    f"{pipout}"
+                    "`"
+                )
+            else:
+                await pip.edit(
+                    "**Query: **\n`"
+                    f"{invokepip}"
+                    "`\n**Result: **\n`No Result Returned/False`"
+                )
         else:
             await pip.edit("`Use .help pip to see an example`")
 
