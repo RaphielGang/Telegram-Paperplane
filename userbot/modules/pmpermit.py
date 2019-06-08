@@ -139,9 +139,9 @@ async def approvepm(apprvpm):
                 name0 = str(aname.first_name)
                 uid = apprvpm.chat_id
     
-                await apprvpm.edit(
+            await apprvpm.edit(
                     f"[{name0}](tg://user?id={uid}) `approved to PM!`"
-                )
+            )
     
             if BOTLOG:
                 await apprvpm.client.send_message(
