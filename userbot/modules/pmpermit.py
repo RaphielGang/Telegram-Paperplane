@@ -9,7 +9,7 @@
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from sqlalchemy.exc import IntegrityError
+from telethon.tl.types import User
 
 from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS, is_mongo_alive, is_redis_alive)
@@ -19,10 +19,10 @@ from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, n
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
-UNAPPROVED_MSG = ("Bleep blop! This is a bot. Don't fret.\n\n"
-                  "My master hasn't approved you to PM."
-                  " Please wait for my master to look in, he mostly approves PMs.\n\n"
-                  "As far as I know, he doesn't usually approve retards though.")
+UNAPPROVED_MSG = ("`Bleep blop! This is a bot. Don't fret.`\n\n"
+                  "`My master hasn't approved you to PM.`"
+                  "`Please wait for my master to look in, he mostly approves PMs.`\n\n"
+                  "`As far as I know, he doesn't usually approve retards though.`")
 # =================================================================
 
 
@@ -94,6 +94,25 @@ async def permitpm(event):
                             + " was just another retarded nibba",
                         )
 
+@register(disable_edited=True, outgoing=True)
+async def auto_accept(event):
+    """ Will approve automatically if you texted them first. """
+    if event.is_private and not (await event.get_sender()).bot:
+        if not is_mongo_alive() or not is_redis_alive():
+            return
+        chat = await event.get_chat()
+        if isinstance(chat, User):
+            if await is_approved(event.chat_id):
+                return
+            async for message in event.client.iter_messages(chat.id, reverse=True, limit=1):
+                if message.from_id == (await event.client.get_me()).id:
+                    await approve(chat.id)
+                if BOTLOG:
+                    await event.client.send_message(
+                        BOTLOG_CHATID,
+                        "#AUTO-APPROVED\n"
+                        + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
+                    )
 
 @register(outgoing=True, pattern="^.notifoff$")
 async def notifoff(noff_event):
