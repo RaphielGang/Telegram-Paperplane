@@ -53,6 +53,9 @@ async def add_new_filter(event):
         for i in range(2, len(keyword)):
             string = string + " " + str(keyword[i])
 
+        if event.reply_to_msg_id:
+            string = " " + (await event.get_reply_message()).text
+
         msg = "`Filter` **{}** `{} successfully`"
 
         if await add_filter(event.chat_id, keyword[1], string[1:]) is True:
@@ -71,7 +74,7 @@ async def remove_filter(event):
             return
         filt = event.text[6:]
 
-        if await delete_filter(event.chat_id, filt) is False:
+        if not await delete_filter(event.chat_id, filt):
             await event.edit("`Filter` **{}** `doesn't exist.`"
                              .format(filt))
         else:
@@ -90,7 +93,7 @@ async def kick_marie_filter(event):
             await event.edit("`That bot is not yet supported!`")
             return
         await event.edit("```Will be kicking away all Filters!```")
-        sleep(3)
+        await sleep(3)
         resp = await event.get_reply_message()
         filters = resp.text.split("-")[1:]
         for i in filters:
