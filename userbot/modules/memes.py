@@ -17,7 +17,7 @@ from zalgo_text import zalgo
 
 from cowpy import cow
 
-from userbot import (DISABLE_RUN, WIDE_MAP, CMD_HELP)
+from userbot import (WIDE_MAP, CMD_HELP)
 from userbot.events import register
 
 # ================= CONSTANT =================
