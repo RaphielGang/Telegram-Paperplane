@@ -71,10 +71,10 @@ async def permitpm(event):
                         del LASTMSG[event.chat_id]
                     except KeyError:
                         if BOTLOG:
-                             await event.client.send_message(
-                              BOTLOG_CHATID,
-                              "Count PM is seemingly going retard, plis restart bot!",
-                              )
+                            await event.client.send_message(
+                                BOTLOG_CHATID,
+                                "Count PM is seemingly going retard, plis restart bot!",
+                            )
                         LOGS.info("CountPM wen't rarted boi")
                         return
 
@@ -94,13 +94,14 @@ async def permitpm(event):
                             + " was just another retarded nibba",
                         )
 
+
 @register(disable_edited=True, outgoing=True)
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if event.is_private and not (await event.get_sender()).bot:
-            if not is_mongo_alive() or not is_redis_alive():
-                return
         chat = await event.get_chat()
+        if not is_mongo_alive() or not is_redis_alive():
+            return
         if isinstance(chat, User):
             if is_approved(event.chat_id):
                 return
@@ -111,8 +112,10 @@ async def auto_accept(event):
                     await event.client.send_message(
                         BOTLOG_CHATID,
                         "#AUTO-APPROVED\n"
-                        + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
+                        + "User: " +
+                        f"[{chat.first_name}](tg://user?id={chat.id})",
                     )
+
 
 @register(outgoing=True, pattern="^.notifoff$")
 async def notifoff(noff_event):
@@ -142,7 +145,7 @@ async def approvepm(apprvpm):
             await apprvpm.edit("`Database connections failing!`")
             return
 
-        if await approve(apprvpm.chat_id) == False:
+        if await approve(apprvpm.chat_id) is False:
             return await apprvpm.edit("`User was already approved!`")
         else:
             if apprvpm.reply_to_msg_id:
@@ -151,16 +154,16 @@ async def approvepm(apprvpm):
                 aname = replied_user.user.id
                 name0 = str(replied_user.user.first_name)
                 uid = replied_user.user.id
-    
+
             else:
                 aname = await apprvpm.client.get_entity(apprvpm.chat_id)
                 name0 = str(aname.first_name)
                 uid = apprvpm.chat_id
-    
+
             await apprvpm.edit(
-                    f"[{name0}](tg://user?id={uid}) `approved to PM!`"
+                f"[{name0}](tg://user?id={uid}) `approved to PM!`"
             )
-    
+
             if BOTLOG:
                 await apprvpm.client.send_message(
                     BOTLOG_CHATID,
@@ -192,7 +195,7 @@ async def blockpm(block):
                 aname = await block.client.get_entity(block.chat_id)
                 name0 = str(aname.first_name)
                 uid = block.chat_id
-    
+
             if not is_mongo_alive() or not is_redis_alive():
                 await block.edit("`Database connections failing!`")
                 return
@@ -213,7 +216,7 @@ async def unblockpm(unblock):
             reply = await unblock.get_reply_message()
             replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
             name0 = str(replied_user.user.first_name)
-            if await approve(reply.from_id) == False:
+            if await approve(reply.from_id) is False:
                 return await unblock.edit("`You haven't blocked this user yet!`")
             else:
                 return await unblock.edit("`My Master has forgiven you to PM now`")
