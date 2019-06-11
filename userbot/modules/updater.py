@@ -7,6 +7,7 @@
 This module updates the userbot based on Upstream revision
 """
 
+from os import remove
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
@@ -72,7 +73,20 @@ async def upstream(ups):
         return
 
     if conf != "now":
-        await ups.edit(f'**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`')
+        changelog_str = f'**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`'
+        if len(changelog_str) > 4096:
+            await ups.edit("`Changelog is too big, view the file to see it.`")
+            file = open("output.txt", "w+")
+            file.write(changelog_str)
+            file.close()
+            await ups.client.send_file(
+                ups.chat_id,
+                "output.txt",
+                reply_to=ups.id,
+            )
+            remove("output.txt")
+        else:
+            await ups.edit(changelog_str)
         await ups.respond('`do \".update now\" to update`')
         return
 
