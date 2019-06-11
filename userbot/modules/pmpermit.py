@@ -113,6 +113,8 @@ async def auto_accept(event):
         if not is_mongo_alive() or not is_redis_alive():
             return
         chat = await event.get_chat()
+        if not is_mongo_alive() or not is_redis_alive():
+            return
         if isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
                 return
@@ -125,6 +127,7 @@ async def auto_accept(event):
                         "#AUTO-APPROVED\n"
                         + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
                          )
+
 
 
 @register(outgoing=True, pattern="^.notifoff$")
@@ -158,7 +161,7 @@ async def approvepm(apprvpm):
             await apprvpm.edit("`Database connections failing!`")
             return
 
-        if await approve(apprvpm.chat_id) == False:
+        if await approve(apprvpm.chat_id) is False:
             return await apprvpm.edit("`User was already approved!`")
         else:
             if apprvpm.reply_to_msg_id:
@@ -230,7 +233,7 @@ async def unblockpm(unblock):
             reply = await unblock.get_reply_message()
             replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
             name0 = str(replied_user.user.first_name)
-            if await approve(reply.from_id) == False:
+            if await approve(reply.from_id) is False:
                 return await unblock.edit("`You haven't blocked this user yet!`")
             else:
                 return await unblock.edit("`My Master has forgiven you to PM now`")
