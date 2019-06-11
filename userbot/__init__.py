@@ -110,10 +110,10 @@ MONGO = MONGOCLIENT.userbot
 def is_mongo_alive():
     try:
         MONGOCLIENT.server_info()
-    except BaseException:
+    except:
+        print("MONGO!!!!!!!!!!")
         return False
     return True
-
 
 # Init Redis
 # Redis will be hosted inside the docker container that hosts the bot
@@ -125,7 +125,8 @@ def is_redis_alive():
     try:
         REDIS.ping()
         return True
-    except BaseException:
+    except:
+        print("REDIS!!!!!!!!!!!")
         return False
 
 
@@ -140,3 +141,4 @@ LASTMSG = {}
 ENABLE_KILLME = True
 CMD_HELP = {}
 AFKREASON = "no reason"
+DISABLE_RUN = False

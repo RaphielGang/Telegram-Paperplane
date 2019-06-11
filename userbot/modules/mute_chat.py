@@ -6,7 +6,8 @@
 
 """ Userbot module for muting chats. """
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, REDIS,
+                     is_mongo_alive, is_redis_alive)
 from userbot.events import register
 
 
