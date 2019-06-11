@@ -64,8 +64,7 @@ async def add_filter(event):
         notename = event.pattern_match.group(1)
         string = event.text.partition(notename)[2]
         if event.reply_to_msg_id:
-            rep_msg = await event.get_reply_message()
-            string = rep_msg.text
+            string = " " + (await event.get_reply_message()).text
 
         msg = "`Note {} successfully. Use` #{} `to get it`"
 
