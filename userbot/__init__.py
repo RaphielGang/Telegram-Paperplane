@@ -139,4 +139,3 @@ LASTMSG = {}
 ENABLE_KILLME = True
 CMD_HELP = {}
 AFKREASON = "no reason"
-DISABLE_RUN = False
