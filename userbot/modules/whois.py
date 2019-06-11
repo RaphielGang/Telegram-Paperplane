@@ -49,7 +49,7 @@ async def who(event):
         if not photo.startswith("http"):
             os.remove(photo)
         await event.delete()
-        
+
     except TypeError:
         await event.edit(caption, parse_mode="html")
 
