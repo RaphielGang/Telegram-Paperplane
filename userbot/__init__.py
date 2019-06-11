@@ -111,7 +111,6 @@ def is_mongo_alive():
     try:
         MONGOCLIENT.server_info()
     except:
-        print("MONGO!!!!!!!!!!")
         return False
     return True
 
@@ -126,7 +125,6 @@ def is_redis_alive():
         REDIS.ping()
         return True
     except:
-        print("REDIS!!!!!!!!!!!")
         return False
 
 
@@ -141,4 +139,3 @@ LASTMSG = {}
 ENABLE_KILLME = True
 CMD_HELP = {}
 AFKREASON = "no reason"
-DISABLE_RUN = False
