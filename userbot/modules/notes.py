@@ -71,7 +71,7 @@ async def add_filter(event):
         if await add_note(event.chat_id, notename, string[1:]) is False:
             return await event.edit(msg.format('updated', notename))
         else:
-            return await event.edit(msg.format('addded', notename))
+            return await event.edit(msg.format('added', notename))
 
 
 @register(outgoing=True, pattern="^.note (\w*)")
@@ -92,7 +92,7 @@ async def save_note(event):
                                     .format(note, note_db["text"]))
 
 
-@register(incoming=True, pattern=r"#\w*", disable_edited=True)
+@register(pattern=r"#\w*", disable_edited=True)
 async def note(event):
     """ Notes logic. """
     try:
