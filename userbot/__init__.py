@@ -15,8 +15,8 @@ from dotenv import load_dotenv
 from requests import get
 from telethon import TelegramClient
 from pymongo import MongoClient
+from urllib.parse import quote_plus
 import redis
-
 
 load_dotenv("config.env")
 
@@ -69,6 +69,15 @@ CONSOLE_LOGGER_VERBOSE = sb(
 )
 
 MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+if MONGO_DB_URI != "":
+    try:
+        MONGO_DB_URI = MONGO_DB_URI.strip("test?retryWrites=true&w=majority")
+        MONGO_DB_PASS = MONGO_DB_URI.split(":", 2)[2]
+        MONGO_DB_PASS = MONGO_DB_PASS.rsplit("@", 1)[0] 
+        MONGO_DB_URI = MONGO_DB_URI.replace(MONGO_DB_PASS, quote_plus(MONGO_DB_PASS), 1)
+    except IndexError:
+        MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+        LOGS.info("Failed to parse URI password, falling back to default URI")
 
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get(
     "SCREENSHOT_LAYER_ACCESS_KEY", None
