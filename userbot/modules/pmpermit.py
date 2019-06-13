@@ -108,12 +108,13 @@ async def permitpm(event):
 @register(disable_edited=True, outgoing=True)
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
-    if event.is_private and not (await event.get_sender()).bot:
+    if event.is_private:
+        chat = await event.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             return
         chat = await event.get_chat()
         if isinstance(chat, User):
-            if await approval(event.chat_id):
+            if await approval(event.chat_id) or chat.bot:
                 return
             async for message in event.client.iter_messages(chat.id, reverse=True, limit=1):
                 if message.from_id == (await event.client.get_me()).id:
