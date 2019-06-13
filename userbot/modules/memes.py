@@ -192,6 +192,7 @@ RUNSREACTS = [
     "I am just walking off, coz me is too fat.",
     "I Fugged off!",
 ]
+DISABLE_RUN = False
 # ===========================================
 
 

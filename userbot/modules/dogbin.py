@@ -14,7 +14,7 @@ from userbot.events import register
 DOGBIN_URL = "https://del.dog/"
 
 
-@register(outgoing=True, pattern="^.paste")
+@register(outgoing=True, pattern=r"^.paste(?: |$)([\s\S]*)")
 async def paste(pstl):
     """ For .paste command, allows using dogbin functionality with the command. """
     if not pstl.text[0].isalpha() and pstl.text[0] not in ("/", "#", "@", "!"):
@@ -62,12 +62,12 @@ async def paste(pstl):
             )
 
 
-@register(outgoing=True, pattern="^.get_dogbin_content (.*)")
+@register(outgoing=True, pattern="^.get_dogbin_content(?: |$)(.*)")
 async def get_dogbin_content(dog_url):
     """ For .get_dogbin_content command, fetches the content of a dogbin URL. """
     if not dog_url.text[0].isalpha() and dog_url.text[0] not in ("/", "#", "@", "!"):
         textx = await dog_url.get_reply_message()
-        message = dog_url.text.pattern_match.group(1)
+        message = dog_url.pattern_match.group(1)
         await dog_url.edit("`Getting dogbin content . . .`")
 
         if textx:
@@ -80,12 +80,11 @@ async def get_dogbin_content(dog_url):
             message = message[len(format_view):]
         elif message.startswith(format_normal):
             message = message[len(format_normal):]
+        elif message.startswith("del.dog/"):
+            message = message[len("del.dog/"):]
         else:
-            if message.startswith("del.dog/"):
-                message = message[len("del.dog/"):]
-            else:
-                await dog_url.edit("`Are you sure you're using a valid dogbin URL?`")
-                return
+            await dog_url.edit("`Are you sure you're using a valid dogbin URL?`")
+            return
 
         resp = get(f'{DOGBIN_URL}raw/{message}')
 
@@ -103,7 +102,7 @@ async def get_dogbin_content(dog_url):
 
         reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
 
-        await dog_url.reply(reply_text)
+        await dog_url.edit(reply_text)
         if BOTLOG:
             await dog_url.client.send_message(
                 BOTLOG_CHATID,
