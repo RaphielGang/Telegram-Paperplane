@@ -16,8 +16,6 @@ from requests import post, get
 from userbot import CMD_HELP
 from userbot.events import register
 
-DL_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads/")
-
 
 def progress(current, total):
     """ Calculate and return the download progress with given arguments. """
@@ -36,12 +34,14 @@ async def parseqr(qr_e):
             return
         start = datetime.now()
         downloaded_file_name = await qr_e.client.download_media(
-            await qr_e.get_reply_message(), DL_DIRECTORY, progress_callback=progress
+            await qr_e.get_reply_message(), progress_callback=progress
         )
         url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
-        files = {"file": open(downloaded_file_name, "rb")}
+        file = open(downloaded_file_name, "rb")
+        files = {"file": file}
         resp = post(url, files=files).json()
         qr_contents = resp[0]["symbol"][0]["data"]
+        file.close()
         os.remove(downloaded_file_name)
         end = datetime.now()
         duration = (end - start).seconds
@@ -50,7 +50,7 @@ async def parseqr(qr_e):
         )
 
 
-@register(pattern=r".makeqr(?: |$)(.*)", outgoing=True)
+@register(pattern=r".makeqr(?: |$)([\s\S]*)", outgoing=True)
 async def make_qr(qrcode):
     """ For .makeqr command, make a QR Code containing the given content. """
     if not qrcode.text[0].isalpha() and qrcode.text[0] not in ("/", "#", "@", "!"):
@@ -59,7 +59,7 @@ async def make_qr(qrcode):
         start = datetime.now()
         input_str = qrcode.pattern_match.group(1)
         message = "SYNTAX: `.makeqr <long text to include>`"
-        reply_msg_id = qrcode.message.id
+        reply_msg_id = None
         if input_str:
             message = input_str
         elif qrcode.reply_to_msg_id:
@@ -67,7 +67,7 @@ async def make_qr(qrcode):
             reply_msg_id = previous_message.id
             if previous_message.media:
                 downloaded_file_name = await qrcode.client.download_media(
-                    previous_message, DL_DIRECTORY, progress_callback=progress
+                    previous_message, progress_callback=progress
                 )
                 m_list = None
                 with open(downloaded_file_name, "rb") as file:
@@ -78,14 +78,13 @@ async def make_qr(qrcode):
                 os.remove(downloaded_file_name)
             else:
                 message = previous_message.message
-        else:
-            message = "SYNTAX: `.makeqr <long text to include>`"
+
         url = "https://api.qrserver.com/v1/create-qr-code/?data={}&size=200x200&\
                 charset-source=UTF-8&charset-target=UTF-8&ecc=L&color=0-0-0\
                 &bgcolor=255-255-255&margin=1&qzone=0&format=jpg"
         resp = get(url.format(message), stream=True)
-        required_file_name = DL_DIRECTORY + " " + str(datetime.now()) + ".webp"
-        with open(required_file_name, "wb") as file:
+        required_file_name = "temp_qr.webp"
+        with open(required_file_name, "w+b") as file:
             for chunk in resp.iter_content(chunk_size=128):
                 file.write(chunk)
         await qrcode.client.send_file(
