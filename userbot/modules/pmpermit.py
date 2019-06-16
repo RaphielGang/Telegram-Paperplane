@@ -73,9 +73,9 @@ async def permitpm(event):
                         if BOTLOG:
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "Count PM is seemingly going retard, plis restart bot!",
+                                "Count PM is seemingly going retard, please restart bot!",
                             )
-                        LOGS.info("CountPM wen't rarted boi")
+                        LOGS.info("CountPM gone rarted boy")
                         return
 
                     await event.client(BlockRequest(event.chat_id))
@@ -179,7 +179,7 @@ async def blockpm(block):
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
         if await block_pm(block.chat_id) is False:
-            return await block.edit("`First approve, before blocc'ing`")
+            return await block.edit("`First approve, before blocking`")
         else:
             return await block.edit("`Blocked.`")
 
@@ -227,7 +227,7 @@ async def unblockpm(unblock):
             await unblock.client.send_message(
                 BOTLOG_CHATID,
                 f"[{name0}](tg://user?id={replied_user.user.id})"
-                " was unblocc'd!.",
+                " was unblocked!.",
             )
 
 CMD_HELP.update({
