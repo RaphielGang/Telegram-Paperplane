@@ -51,7 +51,7 @@ async def keep_read(message):
         {"chat_id": message.chat_id})
     if kread:
         for i in kread:
-            if i.groupid == str(message.chat_id):
+            if i["chat_id"]==message.chat_id:
                 await message.client.send_read_acknowledge(message.chat_id)
 
 CMD_HELP.update({
