@@ -22,6 +22,7 @@ kickstart_pub
 
 req_install() {
     pip3 install -r requirements.txt
+    pip3 install pep8 autopep8
 }
 
 get_session() {
@@ -46,8 +47,27 @@ tg_senderror() {
     exit 1
 }
 
+lint() {
+  num_errors_before=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
+  echo $num_errors_before
+  git config --global user.email "baalajimaestro@computer4u.com"
+  git config --global user.name "baalajimaestro"
+  find . -name \*.py -exec autopep8 --recursive --aggressive --aggressive --in-place {} +
+  num_errors_after=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
+  echo $num_errors_after
+  if [ "$num_errors_after" -lt "$num_errors_before" ]; then
+            git add .
+            git commit -m "[MaestroCI]: Lint"
+            git remote rm origin
+            git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
+            git push --quiet origin $PARSE_BRANCH
+            tg_sendinfo "<code>Code has been linted and Committed</code>"
+  fi
+
+}
 tg_yay() {
-    tg_sendinfo "<code>Compilation Success!</code>"
+    tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
+    lint
 }
 
 # Fin Prober

@@ -98,14 +98,14 @@ async def get_weather(weather):
     #        "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
     dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
-    div = (360/len(dirs))
-    funmath = int((winddir + (div/2))/div)
+    div = (360 / len(dirs))
+    funmath = int((winddir + (div / 2)) / div)
     findir = dirs[funmath % len(dirs)]
     kmph = str(wind * 3.6).split(".")
     mph = str(wind * 2.237).split(".")
 
     def fahrenheit(f):
-        temp = str(((f - 273.15) * 9/5 + 32)).split(".")
+        temp = str(((f - 273.15) * 9 / 5 + 32)).split(".")
         return temp[0]
 
     def celsius(c):

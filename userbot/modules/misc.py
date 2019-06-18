@@ -17,7 +17,8 @@ from userbot.events import register
 @register(outgoing=True, pattern="^.random")
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
-    if not items.text[0].isalpha() and items.text[0] not in ("/", "#", "@", "!"):
+    if not items.text[0].isalpha() and items.text[0] not in (
+            "/", "#", "@", "!"):
         itemo = (items.text[8:]).split()
         index = randint(1, len(itemo) - 1)
         await items.edit("**Query: **\n`" + items.text[8:] + "`\n**Output: **\n`" + itemo[index] + "`")
@@ -58,14 +59,16 @@ async def killdabot(event):
 @register(outgoing=True, pattern="^.support$")
 async def bot_support(wannahelp):
     """ For .support command, just returns the group link. """
-    if not wannahelp.text[0].isalpha() and wannahelp.text[0] not in ("/", "#", "@", "!"):
+    if not wannahelp.text[0].isalpha(
+    ) and wannahelp.text[0] not in ("/", "#", "@", "!"):
         await wannahelp.edit("Link Portal: @userbot_support")
 
 
 @register(outgoing=True, pattern="^.repo$")
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
-    if not wannasee.text[0].isalpha() and wannasee.text[0] not in ("/", "#", "@", "!"):
+    if not wannasee.text[0].isalpha(
+    ) and wannasee.text[0] not in ("/", "#", "@", "!"):
         await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
 
 CMD_HELP.update({

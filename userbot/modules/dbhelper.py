@@ -37,15 +37,15 @@ async def unmute(chatid, userid):
 
 
 async def get_muted(chatid):
-        muted_db = MONGO.mutes.find({
-            'chat_id': int(chatid)
-        })
+    muted_db = MONGO.mutes.find({
+        'chat_id': int(chatid)
+    })
 
-        muted = []
-        for user in muted_db:
-            muted.append(user["user_id"])
+    muted = []
+    for user in muted_db:
+        muted.append(user["user_id"])
 
-        return muted
+    return muted
 
 
 # GMutes

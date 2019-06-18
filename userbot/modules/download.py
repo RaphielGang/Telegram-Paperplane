@@ -37,7 +37,8 @@ def progress(current, total):
 @register(pattern=r".download(?: |$)(.*)", outgoing=True)
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
-    if not target_file.text[0].isalpha() and target_file.text[0] not in ("/", "#", "@", "!"):
+    if not target_file.text[0].isalpha(
+    ) and target_file.text[0] not in ("/", "#", "@", "!"):
         if target_file.fwd_from:
             return
         await target_file.edit("Processing ...")
@@ -95,7 +96,8 @@ async def download(target_file):
 @register(pattern=r".uploadir (.*)", outgoing=True)
 async def uploadir(udir_event):
     """ For .uploadir command, allows you to upload everything from a folder in the server"""
-    if not udir_event.text[0].isalpha() and udir_event.text[0] not in ("/", "#", "@", "!"):
+    if not udir_event.text[0].isalpha(
+    ) and udir_event.text[0] not in ("/", "#", "@", "!"):
         if udir_event.fwd_from:
             return
         input_str = udir_event.pattern_match.group(1)
@@ -172,7 +174,8 @@ async def uploadir(udir_event):
 @register(pattern=r".upload (.*)", outgoing=True)
 async def upload(u_event):
     """ For .upload command, allows you to upload a file from the userbot's server """
-    if not u_event.text[0].isalpha() and u_event.text[0] not in ("/", "#", "@", "!"):
+    if not u_event.text[0].isalpha() and u_event.text[0] not in (
+            "/", "#", "@", "!"):
         if u_event.fwd_from:
             return
         if u_event.is_channel and not u_event.is_group:
@@ -256,7 +259,8 @@ def extract_w_h(file):
 @register(pattern=r".uploadas(stream|vn|all) (.*)", outgoing=True)
 async def uploadas(uas_event):
     """ For .uploadas command, allows you to specify some arguments for upload. """
-    if not uas_event.text[0].isalpha() and uas_event.text[0] not in ("/", "#", "@", "!"):
+    if not uas_event.text[0].isalpha(
+    ) and uas_event.text[0] not in ("/", "#", "@", "!"):
         if uas_event.fwd_from:
             return
         await uas_event.edit("Processing ...")

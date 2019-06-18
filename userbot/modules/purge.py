@@ -51,7 +51,8 @@ async def fastpurger(purg):
 @register(outgoing=True, pattern="^.purgeme")
 async def purgeme(delme):
     """ For .purgeme, delete x count of your latest message."""
-    if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
+    if not delme.text[0].isalpha() and delme.text[0] not in (
+            "/", "#", "@", "!"):
         message = delme.text
         count = int(message[9:])
         i = 1
@@ -81,7 +82,8 @@ async def purgeme(delme):
 @register(outgoing=True, pattern="^.del$")
 async def delete_it(delme):
     """ For .del command, delete the replied message. """
-    if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@", "!"):
+    if not delme.text[0].isalpha() and delme.text[0] not in (
+            "/", "#", "@", "!"):
         msg_src = await delme.get_reply_message()
         if delme.reply_to_msg_id:
             try:
@@ -122,7 +124,8 @@ async def editer(edit):
 @register(outgoing=True, pattern="^.sd")
 async def selfdestruct(destroy):
     """ For .sd command, make seflf-destructable messages. """
-    if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@", "!"):
+    if not destroy.text[0].isalpha() and destroy.text[0] not in (
+            "/", "#", "@", "!"):
         message = destroy.text
         counter = int(message[4:6])
         text = str(destroy.text[6:])

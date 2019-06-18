@@ -49,7 +49,7 @@ async def capture(url):
                     reply_to=url.message.reply_to_msg_id,
                 )
                 await url.delete()
-            except:
+            except BaseException:
                 await url.edit(response_api.text)
             os.remove(temp_file_name)
         else:

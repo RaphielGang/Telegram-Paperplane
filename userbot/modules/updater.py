@@ -55,12 +55,12 @@ async def upstream(ups):
             f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). \
             in that case, Updater is unable to identify which branch is to be merged. \
             please checkout to any official branch`'
-            )
+        )
         return
 
     try:
         repo.create_remote('upstream', off_repo)
-    except:
+    except BaseException:
         pass
 
     ups_rem = repo.remote('upstream')
@@ -82,13 +82,13 @@ async def upstream(ups):
         ups_rem.pull(ac_br)
         await ups.edit(
             '`Successfully Updated without casualties\nBot is switching off now.. restart kthx`'
-            )
+        )
         await ups.client.disconnect()
     except GitCommandError:
         ups_rem.git.reset('--hard')
         await ups.edit(
             '`Successfully Updated with casualties\nBot is switching off now.. restart kthx`'
-            )
+        )
         await ups.client.disconnect()
 
 

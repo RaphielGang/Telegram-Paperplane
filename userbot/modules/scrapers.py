@@ -36,7 +36,8 @@ LANG = "en"
 @register(outgoing=True, pattern="^.img (.*)")
 async def img_sampler(event):
     """ For .img command, search and return images matching the query. """
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
+    if not event.text[0].isalpha() and event.text[0] not in (
+            "/", "#", "@", "!"):
         await event.edit("Processing...")
         query = event.pattern_match.group(1)
         lim = findall(r"lim=\d+", query)
@@ -69,7 +70,8 @@ async def img_sampler(event):
 @register(outgoing=True, pattern=r"^.google (.*)")
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
-    if not q_event.text[0].isalpha() and q_event.text[0] not in ("/", "#", "@", "!"):
+    if not q_event.text[0].isalpha() and q_event.text[0] not in (
+            "/", "#", "@", "!"):
         match_ = q_event.pattern_match.group(1)
         match = parse.quote_plus(match_)
         result_ = await asyncsh(
@@ -93,7 +95,8 @@ async def gsearch(q_event):
 @register(outgoing=True, pattern=r"^.wiki (.*)")
 async def wiki(wiki_q):
     """ For .google command, fetch content from Wikipedia. """
-    if not wiki_q.text[0].isalpha() and wiki_q.text[0] not in ("/", "#", "@", "!"):
+    if not wiki_q.text[0].isalpha() and wiki_q.text[0] not in (
+            "/", "#", "@", "!"):
         match = wiki_q.pattern_match.group(1)
         try:
             summary(match)
@@ -186,7 +189,8 @@ async def urban_dict(ud_e):
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
-    if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
+    if not query.text[0].isalpha() and query.text[0] not in (
+            "/", "#", "@", "!"):
         textx = await query.get_reply_message()
         message = query.pattern_match.group(1)
         if message:
@@ -232,7 +236,8 @@ async def text_to_speech(query):
 @register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)")
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
-    if not trans.text[0].isalpha() and trans.text[0] not in ("/", "#", "@", "!"):
+    if not trans.text[0].isalpha() and trans.text[0] not in (
+            "/", "#", "@", "!"):
         translator = Translator()
         textx = await trans.get_reply_message()
         message = trans.pattern_match.group(1)
@@ -267,7 +272,8 @@ async def translateme(trans):
 @register(pattern=".lang (.*)", outgoing=True)
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
-    if not value.text[0].isalpha() and value.text[0] not in ("/", "#", "@", "!"):
+    if not value.text[0].isalpha() and value.text[0] not in (
+            "/", "#", "@", "!"):
         global LANG
         LANG = value.pattern_match.group(1)
         await value.edit("Default language changed to **" + LANG + "**")
@@ -277,11 +283,11 @@ async def lang(value):
             )
 
 
-
 @register(outgoing=True, pattern="^.yt (.*)")
 async def yt_search(video_q):
     """ For .yt command, do a YouTube search from Telegram. """
-    if not video_q.text[0].isalpha() and video_q.text[0] not in ("/", "#", "@", "!"):
+    if not video_q.text[0].isalpha() and video_q.text[0] not in (
+            "/", "#", "@", "!"):
         query = video_q.pattern_match.group(1)
         result = ''
         i = 1
@@ -300,13 +306,12 @@ async def yt_search(video_q):
 
 
 def youtube_search(
-        query,
-        order="relevance",
-        token=None,
-        location=None,
-        location_radius=None
-    ):
-
+    query,
+    order="relevance",
+    token=None,
+    location=None,
+    location_radius=None
+):
     """ Do a YouTube search. """
     youtube = build('youtube', 'v3',
                     developerKey=YOUTUBE_API_KEY, cache_discovery=False)
@@ -340,7 +345,8 @@ def youtube_search(
 @register(outgoing=True, pattern=r".yt_dl (\S*) ?(\S*)")
 async def download_video(v_url):
     """ For .yt_dl command, download videos from YouTube. """
-    if not v_url.text[0].isalpha() and v_url.text[0] not in ("/", "#", "@", "!"):
+    if not v_url.text[0].isalpha() and v_url.text[0] not in (
+            "/", "#", "@", "!"):
         url = v_url.pattern_match.group(1)
         quality = v_url.pattern_match.group(2)
 

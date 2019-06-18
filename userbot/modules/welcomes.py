@@ -27,9 +27,9 @@ async def welcome_mute(welcm):
             adder = welcm.action_message.from_id
 
         async for admin in bot.iter_participants(welcm.chat_id, filter=ChannelParticipantsAdmins):
-                if admin.id == adder:
-                    ignore = True
-                    break
+            if admin.id == adder:
+                ignore = True
+                break
         if ignore:
             return
         elif welcm.user_joined:
@@ -115,7 +115,7 @@ async def welcome_mute(welcm):
                     )
 
                     await sleep(1)
-                    
+
                     await welcm.client(
                         EditBannedRequest(
                             welcm.chat_id,
@@ -123,8 +123,8 @@ async def welcome_mute(welcm):
                             UNBAN_RIGHTS
                         )
                     )
-                    
-                except:
+
+                except BaseException:
                     await welcm.reply(
                         "@admins\n"
                         "`ANTI SPAMBOT DETECTOR!\n"

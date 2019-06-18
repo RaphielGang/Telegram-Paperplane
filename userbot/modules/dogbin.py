@@ -31,7 +31,6 @@ async def paste(pstl):
         elif reply_id:
             message = (await pstl.get_reply_message()).message
 
-
         # Dogbin
         await pstl.edit("`Pasting text . . .`")
         resp = post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
@@ -66,7 +65,8 @@ async def paste(pstl):
 @register(outgoing=True, pattern="^.get_dogbin_content (.*)")
 async def get_dogbin_content(dog_url):
     """ For .get_dogbin_content command, fetches the content of a dogbin URL. """
-    if not dog_url.text[0].isalpha() and dog_url.text[0] not in ("/", "#", "@", "!"):
+    if not dog_url.text[0].isalpha() and dog_url.text[0] not in (
+            "/", "#", "@", "!"):
         textx = await dog_url.get_reply_message()
         message = dog_url.text.pattern_match.group(1)
         await dog_url.edit("`Getting dogbin content . . .`")
@@ -96,12 +96,12 @@ async def get_dogbin_content(dog_url):
             await dog_url.edit("Request returned an unsuccessful status code.\n\n" + str(HTTPErr))
             return
         except exceptions.Timeout as TimeoutErr:
-            await dog_url.edit("Request timed out."+ str(TimeoutErr))
+            await dog_url.edit("Request timed out." + str(TimeoutErr))
             return
         except exceptions.TooManyRedirects as RedirectsErr:
             await dog_url.edit("Request exceeded the configured number of maximum redirections." + str(RedirectsErr))
             return
-            
+
         reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
 
         await dog_url.reply(reply_text)
