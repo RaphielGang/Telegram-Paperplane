@@ -86,7 +86,15 @@ tg_debugcast() {
 }
 
 kickstart_pub() {
-
+  if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
+     tg_sendinfo "I am starting build" \
+     "PR: <code>${PULL_REQUEST_NUMBER}</code>" \
+     "Commit Point <code>${COMMIT_POINT}</code>" \
+     " " \
+     "<b>Github Link: </b> https://github.com/raphielgang/telegram-userbot/commit/${COMMIT_HASH}" \
+     " " \
+     "<b>CI Link: </b> https://semaphoreci.com/baalajimaestro/telegram-userbot"
+  else
     tg_sendinfo "I am starting build" \
     "Branch <code>${PARSE_BRANCH}</code>" \
     "Commit Point <code>${COMMIT_POINT}</code>" \
@@ -94,6 +102,7 @@ kickstart_pub() {
     "<b>Github Link: </b> https://github.com/raphielgang/telegram-userbot/commit/${COMMIT_HASH}" \
     " " \
     "<b>CI Link: </b> https://semaphoreci.com/baalajimaestro/telegram-userbot"
+fi
 }
 
 kickstart_priv() {
