@@ -17,7 +17,6 @@ COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 COMMIT_HASH="$(git rev-parse --verify HEAD)"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
-
 kickstart_pub
 
 req_install() {
@@ -48,6 +47,9 @@ tg_senderror() {
 }
 
 lint() {
+  if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
+    exit 0
+  fi
   num_errors_before=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
   echo $num_errors_before
   git config --global user.email "baalajimaestro@computer4u.com"
