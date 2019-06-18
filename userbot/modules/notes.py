@@ -75,7 +75,7 @@ async def add_filter(event):
             return await event.edit(msg.format('addded', notename))
 
 
-@register(outgoing=True, pattern="^.note (\w*)")
+@register(outgoing=True, pattern=r"^.note (\w*)")
 async def save_note(event):
     """ For .save command, saves notes in a chat. """
     cmd = event.text[0]
@@ -104,8 +104,8 @@ async def note(event):
             notename = event.text[1:]
             note = await get_note(event.chat_id, notename)
             if note:
-                    await event.reply(note["text"])
-    except:
+                await event.reply(note["text"])
+    except BaseException:
         pass
 
 

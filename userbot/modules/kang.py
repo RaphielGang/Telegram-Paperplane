@@ -56,10 +56,12 @@ async def kang(args):
                 emoji = splat[1]
             elif len(splat) == 2:
                 if splat[1].isnumeric():
-                    # User wants to push into different pack, but is okay with thonk as emote.
+                    # User wants to push into different pack, but is okay with
+                    # thonk as emote.
                     pack = int(splat[1])
                 else:
-                    # User sent just custom emote, wants to push to default pack
+                    # User sent just custom emote, wants to push to default
+                    # pack
                     emoji = splat[1]
 
             packname = f"a{user.id}_by_{user.username}_{pack}"
@@ -138,11 +140,11 @@ async def resize_photo(photo):
         size1 = image.width
         size2 = image.height
         if image.width > image.height:
-            scale = 512/size1
+            scale = 512 / size1
             size1new = 512
             size2new = size2 * scale
         else:
-            scale = 512/size2
+            scale = 512 / size2
             size1new = size1 * scale
             size2new = 512
         size1new = math.floor(size1new)

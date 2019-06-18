@@ -75,8 +75,8 @@ MUTE_RIGHTS = ChatBannedRights(
 )
 
 UNMUTE_RIGHTS = ChatBannedRights(
-        until_date=None,
-        send_messages=False
+    until_date=None,
+    send_messages=False
 )
 # ================================================
 

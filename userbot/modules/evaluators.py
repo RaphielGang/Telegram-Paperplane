@@ -18,7 +18,8 @@ from userbot.events import register
 @register(outgoing=True, pattern="^.eval(?: |$)(.*)")
 async def evaluate(query):
     """ For .eval command, evaluates the given Python expression. """
-    if not query.text[0].isalpha() and query.text[0] not in ("/", "#", "@", "!"):
+    if not query.text[0].isalpha() and query.text[0] not in (
+            "/", "#", "@", "!"):
         if query.is_channel and not query.is_group:
             await query.edit("`Eval isn't permitted on channels`")
             return
@@ -79,7 +80,8 @@ async def evaluate(query):
 @register(outgoing=True, pattern=r"^.exec(?: |$)([\s\S]*)")
 async def run(run_q):
     """ For .exec command, which executes the dynamically created program """
-    if not run_q.text[0].isalpha() and run_q.text[0] not in ("/", "#", "@", "!"):
+    if not run_q.text[0].isalpha() and run_q.text[0] not in (
+            "/", "#", "@", "!"):
         code = run_q.pattern_match.group(1)
 
         if run_q.is_channel and not run_q.is_group:

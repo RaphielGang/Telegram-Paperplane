@@ -45,7 +45,8 @@ async def sysdetails(sysd):
 @register(outgoing=True, pattern="^.botver$")
 async def bot_ver(event):
     """ For .botver command, get the bot version. """
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
+    if not event.text[0].isalpha() and event.text[0] not in (
+            "/", "#", "@", "!"):
         if which("git") is not None:
             invokever = "git describe --all --long"
             ver = await asyncrunapp(
@@ -125,13 +126,14 @@ async def amireallyalive(e):
             f"User: {DEFAULTUSER} \n"
             f"Database Status: {db}"
             "`"
-            )
+        )
 
 
 @register(outgoing=True, pattern="^.aliveu")
 async def amireallyaliveuser(username):
     """ For .aliveu command, change the username in the .alive command. """
-    if not username.text[0].isalpha() and username.text[0] not in ("/", "#", "@", "!"):
+    if not username.text[0].isalpha(
+    ) and username.text[0] not in ("/", "#", "@", "!"):
         message = username.text
         output = '.aliveu [new user without brackets] nor can it be empty'
         if not (message == '.aliveu' or message[7:8] != ' '):
@@ -149,7 +151,8 @@ async def amireallyaliveuser(username):
 @register(outgoing=True, pattern="^.resetalive$")
 async def amireallyalivereset(ureset):
     """ For .resetalive command, reset the username in the .alive command. """
-    if not ureset.text[0].isalpha() and ureset.text[0] not in ("/", "#", "@", "!"):
+    if not ureset.text[0].isalpha() and ureset.text[0] not in (
+            "/", "#", "@", "!"):
         global DEFAULTUSER
         DEFAULTUSER = uname().node
         await ureset.edit(

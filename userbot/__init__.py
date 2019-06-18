@@ -44,10 +44,12 @@ if version_info[0] < 3 or version_info[1] < 6:
     quit(1)
 
 # Check if the config was edited by using the already used variable
-CONFIG_CHECK = os.environ.get("___________PLOX_______REMOVE_____THIS_____LINE__________", None)
+CONFIG_CHECK = os.environ.get(
+    "___________PLOX_______REMOVE_____THIS_____LINE__________", None)
 
 if CONFIG_CHECK:
-    LOGS.error("Please remove the line mentioned in the first hashtag from the config.env file")
+    LOGS.error(
+        "Please remove the line mentioned in the first hashtag from the config.env file")
     quit(1)
 
 API_KEY = os.environ.get("API_KEY", None)
@@ -64,13 +66,13 @@ PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
 CONSOLE_LOGGER_VERBOSE = sb(
     os.environ.get("CONSOLE_LOGGER_VERBOSE", "False")
-    )
+)
 
 MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
 
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get(
     "SCREENSHOT_LAYER_ACCESS_KEY", None
-    )
+)
 
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 
@@ -80,7 +82,7 @@ WELCOME_MUTE = sb(os.environ.get(
 
 YOUTUBE_API_KEY = os.environ.get(
     "YOUTUBE_API_KEY", None
-    )
+)
 
 SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
 SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
@@ -104,26 +106,28 @@ with open('learning-data-root.check', 'wb') as load:
 MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
 MONGO = MONGOCLIENT.userbot
 
+
 def is_mongo_alive():
     try:
         MONGOCLIENT.server_info()
-    except:
-        print("MONGO!!!!!!!!!!")
+    except BaseException:
         return False
     return True
 # Init Redis
-####### Redis will be hosted inside the docker container that hosts the bot
-####### We need redis for just caching, so we just leave it to non-persistent
+# Redis will be hosted inside the docker container that hosts the bot
+# We need redis for just caching, so we just leave it to non-persistent
+
 
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
+
 
 def is_redis_alive():
     try:
         REDIS.ping()
         return True
-    except:
-        print("REDIS!!!!!!!!!!!")
+    except BaseException:
         return False
+
 
 # Global Variables
 COUNT_MSG = 0

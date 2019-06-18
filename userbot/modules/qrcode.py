@@ -53,7 +53,8 @@ async def parseqr(qr_e):
 @register(pattern=r".makeqr(?: |$)(.*)", outgoing=True)
 async def make_qr(qrcode):
     """ For .makeqr command, make a QR Code containing the given content. """
-    if not qrcode.text[0].isalpha() and qrcode.text[0] not in ("/", "#", "@", "!"):
+    if not qrcode.text[0].isalpha() and qrcode.text[0] not in (
+            "/", "#", "@", "!"):
         if qrcode.fwd_from:
             return
         start = datetime.now()
