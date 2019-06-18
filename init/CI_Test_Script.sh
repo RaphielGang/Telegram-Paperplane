@@ -59,8 +59,10 @@ lint() {
             git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
             git push --quiet
             tg_sendinfo "<code>Code has been linted and Committed</code>"
+  else
+    tg_sendinfo "<code>Auto-Linter didn't lint anything</code>"
   fi
-
+tg_sendinfo "<code>$num_errors_after code problems detected, but couldn't be auto-linted</code>"
 }
 tg_yay() {
     tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
