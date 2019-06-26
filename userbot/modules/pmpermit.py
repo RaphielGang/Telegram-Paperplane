@@ -118,13 +118,12 @@ async def auto_accept(event):
             async for message in event.client.iter_messages(chat.id, reverse=True, limit=1):
                 if message.from_id == (await event.client.get_me()).id:
                     await approve(chat.id)
-                if BOTLOG:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        "#AUTO-APPROVED\n"
-                        + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
-                    )
-
+                    if BOTLOG:
+                        await event.client.send_message(
+                            BOTLOG_CHATID,
+                            "#AUTO-APPROVED\n"
+                            + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
+                        )
 
 @register(outgoing=True, pattern="^.notifoff$")
 async def notifoff(noff_event):
