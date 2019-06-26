@@ -19,7 +19,6 @@ from userbot.modules.dbhelper import is_afk, afk, afk_reason, no_afk
 from userbot.events import register
 
 
-
 @register(incoming=True, disable_edited=True)
 async def mention_afk(mention):
     """ This function takes care of notifying the people who mention you that you are AFK."""
