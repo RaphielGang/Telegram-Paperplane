@@ -285,10 +285,17 @@ async def yt_search(video_q):
         query = video_q.pattern_match.group(1)
         result = ''
         i = 1
+
+        if not YOUTUBE_API_KEY:
+            await video_q.edit("`Error: YouTube API key missing! Add it to environment vars or config.env.`")
+            return
+
+        await video_q.edit("```Processing...```")
+
         full_response = youtube_search(query)
         videos_json = full_response[1]
 
-        await video_q.edit("```Processing...```")
+        
         for video in videos_json:
             result += f"{i}. {unescape(video['snippet']['title'])} \
                 \nhttps://www.youtube.com/watch?v={video['id']['videoId']}\n"
@@ -384,7 +391,7 @@ async def download_video(v_url):
             await v_url.edit(
                 ("**File larger than 50MB. Sending the link instead.\n**"
                  f"Get the video [here]({video_stream.url})\n\n"
-                 "**If the video opens instead of playing, right-click(or long press) and "
+                 "**If the video plays instead of downloading, right click(or long press on touchscreen) and "
                  "press 'Save Video As...'(may depend on the browser) to download the video.**")
             )
             return
