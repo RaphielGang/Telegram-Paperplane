@@ -355,6 +355,7 @@ async def spider(spdr):
         if not is_mongo_alive() or not is_redis_alive():
             await spdr.edit(NO_SQL)
             return
+
         # Admin or creator check
         chat = await spdr.get_chat()
         admin = chat.admin_rights
@@ -369,6 +370,12 @@ async def spider(spdr):
         if user:
             pass
         else:
+            return
+
+        self_user = await spdr.client.get_me()
+
+        if user.id == self_user.id:
+            await spdr.edit("`Mute Error! You are not supposed to mute yourself!`")
             return
 
         # If the targeted user is a Sudo
