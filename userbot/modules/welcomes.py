@@ -22,6 +22,8 @@ async def welcome_mute(welcm):
     if not WELCOME_MUTE:
         return
     if welcm.user_joined or welcm.user_added:
+        adder = None
+
         if welcm.user_added:
             ignore = False
             adder = welcm.action_message.from_id

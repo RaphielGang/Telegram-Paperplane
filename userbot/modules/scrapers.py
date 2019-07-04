@@ -287,7 +287,10 @@ async def yt_search(video_q):
         i = 1
 
         if not YOUTUBE_API_KEY:
-            await video_q.edit("`Error: YouTube API key missing! Add it to environment vars or config.env.`")
+            await video_q.edit(
+                "`Error: YouTube API key missing!\
+                Add it to environment vars or config.env.`"
+            )
             return
 
         await video_q.edit("```Processing...```")
