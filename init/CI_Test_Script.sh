@@ -17,7 +17,6 @@ COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 COMMIT_HASH="$(git rev-parse --verify HEAD)"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
-
 kickstart_pub
 
 req_install() {
@@ -48,6 +47,9 @@ tg_senderror() {
 }
 
 lint() {
+  if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
+    exit 0
+  fi
   num_errors_before=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
   echo $num_errors_before
   git config --global user.email "baalajimaestro@computer4u.com"
@@ -62,8 +64,10 @@ lint() {
             git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
             git push --quiet origin $PARSE_BRANCH
             tg_sendinfo "<code>Code has been linted and Committed</code>"
+  else
+    tg_sendinfo "<code>Auto-Linter didn't lint anything</code>"
   fi
-
+tg_sendinfo "<code>$num_errors_after code problems detected, but couldn't be auto-linted</code>"
 }
 tg_yay() {
     tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
