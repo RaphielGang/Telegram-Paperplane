@@ -81,7 +81,7 @@ async def gsearch(q_event):
         )
         stdout, stderr = await result_.communicate()
         result = str(stdout.decode().strip()) \
-                 + str(stderr.decode().strip())
+            + str(stderr.decode().strip())
         await q_event.edit(
             "**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" + result
         )

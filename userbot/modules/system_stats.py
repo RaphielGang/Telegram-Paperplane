@@ -37,7 +37,7 @@ async def sysdetails(sysd):
 
             stdout, stderr = await fetch.communicate()
             result = str(stdout.decode().strip()) \
-                     + str(stderr.decode().strip())
+                + str(stderr.decode().strip())
 
             await sysd.edit("`" + result + "`")
         except FileNotFoundError:
@@ -58,7 +58,7 @@ async def bot_ver(event):
             )
             stdout, stderr = await ver.communicate()
             verout = str(stdout.decode().strip()) \
-                     + str(stderr.decode().strip())
+                + str(stderr.decode().strip())
 
             invokerev = "git rev-list --all --count"
             rev = await asyncrunapp(
@@ -68,7 +68,7 @@ async def bot_ver(event):
             )
             stdout, stderr = await rev.communicate()
             revout = str(stdout.decode().strip()) \
-                     + str(stderr.decode().strip())
+                + str(stderr.decode().strip())
 
             await event.edit(
                 "`Userbot Version: "
@@ -100,7 +100,7 @@ async def pipcheck(pip):
 
             stdout, stderr = await pipc.communicate()
             pipout = str(stdout.decode().strip()) \
-                     + str(stderr.decode().strip())
+                + str(stderr.decode().strip())
 
             if pipout:
                 if len(pipout) > 4096:

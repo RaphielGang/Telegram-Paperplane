@@ -33,7 +33,7 @@ async def useridgetter(target):
                     name = "*" + message.forward.sender.first_name + "*"
             await target.edit(
                 "**Name:** {} \n**User ID:** `{}`"
-                    .format(name, user_id)
+                .format(name, user_id)
             )
 
 
