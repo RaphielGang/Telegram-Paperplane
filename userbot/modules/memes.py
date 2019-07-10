@@ -12,7 +12,6 @@ import random
 import re
 import time
 
-from spongemock import spongemock
 from zalgo_text import zalgo
 
 from cowpy import cow
@@ -417,6 +416,7 @@ async def metoo(hahayes):
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
+        reply_text = list()
         textx = await mock.get_reply_message()
         message = mock.pattern_match.group(1)
         if message:
@@ -427,8 +427,14 @@ async def spongemocktext(mock):
             await mock.edit("`gIvE sOMEtHInG tO MoCk!`")
             return
 
-        reply_text = spongemock.mock(message)
-        await mock.edit(reply_text)
+        for charac in message:
+            if charac.isalpha() and random.randint(0, 1):
+                to_app = charac.upper() if charac.islower() else charac.lower()
+                reply_text.append(to_app)
+            else:
+                reply_text.append(charac)
+
+        await mock.edit("".join(reply_text))
 
 
 @register(outgoing=True, pattern="^.clap(?: |$)(.*)")
