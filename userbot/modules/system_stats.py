@@ -7,17 +7,19 @@
 
 from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
+from os import remove
 from platform import python_version, uname
 from shutil import which
-from os import remove
+
 from telethon import version
 
-from userbot import CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
+from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
 from userbot.events import register
-
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
+
+
 # ============================================
 
 
@@ -35,7 +37,7 @@ async def sysdetails(sysd):
 
             stdout, stderr = await fetch.communicate()
             result = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             await sysd.edit("`" + result + "`")
         except FileNotFoundError:
@@ -56,7 +58,7 @@ async def bot_ver(event):
             )
             stdout, stderr = await ver.communicate()
             verout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             invokerev = "git rev-list --all --count"
             rev = await asyncrunapp(
@@ -66,7 +68,7 @@ async def bot_ver(event):
             )
             stdout, stderr = await rev.communicate()
             revout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             await event.edit(
                 "`Userbot Version: "
@@ -98,7 +100,7 @@ async def pipcheck(pip):
 
             stdout, stderr = await pipc.communicate()
             pipout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             if pipout:
                 if len(pipout) > 4096:
@@ -179,6 +181,7 @@ async def amireallyalivereset(ureset):
             "Successfully reset user for alive!"
             "`"
         )
+
 
 CMD_HELP.update({
     "sysd": ".sysd\

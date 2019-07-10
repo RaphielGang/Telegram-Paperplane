@@ -102,7 +102,7 @@ execute. Use .help exec for an example.```")
         else:
             clines = code.splitlines()
             codepre = clines[0] + "\n" + clines[1] + "\n" + clines[2] + \
-                "\n" + clines[3] + "..."
+                      "\n" + clines[3] + "..."
 
         command = "".join(f"\n {l}" for l in code.split("\n.strip()"))
         process = await asyncio.create_subprocess_exec(
@@ -112,7 +112,7 @@ execute. Use .help exec for an example.```")
         )
         stdout, stderr = await process.communicate()
         result = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+                 + str(stderr.decode().strip())
 
         if result:
             if len(result) > 4096:
@@ -180,7 +180,7 @@ async def terminal_runner(term):
         )
         stdout, stderr = await process.communicate()
         result = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+                 + str(stderr.decode().strip())
 
         if len(result) > 4096:
             output = open("output.txt", "w+")
@@ -215,6 +215,7 @@ async def terminal_runner(term):
                 BOTLOG_CHATID,
                 "Terminal Command " + command + " was executed sucessfully",
             )
+
 
 CMD_HELP.update({
     "eval": ".eval 2 + 3\nUsage: Evalute mini-expressions."

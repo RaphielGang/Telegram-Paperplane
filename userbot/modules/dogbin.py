@@ -5,7 +5,6 @@
 #
 """ Userbot module containing commands for interacting with dogbin(https://del.dog)"""
 
-import json
 from requests import get, post, exceptions
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
@@ -108,6 +107,7 @@ async def get_dogbin_content(dog_url):
                 BOTLOG_CHATID,
                 "Get dogbin content query for `" + message + "` was executed successfully",
             )
+
 
 CMD_HELP.update({
     "paste": "Create a paste or a shortened url using dogbin (https://del.dog/)"

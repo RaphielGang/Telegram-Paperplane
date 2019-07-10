@@ -23,7 +23,6 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 from userbot import (BRAIN_CHECKER,
                      CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
                      is_mongo_alive, is_redis_alive)
-
 from userbot.events import register
 from userbot.modules.dbhelper import (mute, unmute, get_muted,
                                       gmute, ungmute, get_gmuted)
@@ -78,6 +77,8 @@ UNMUTE_RIGHTS = ChatBannedRights(
     until_date=None,
     send_messages=False
 )
+
+
 # ================================================
 
 
@@ -844,6 +845,7 @@ async def get_user_from_id(user, event):
         return None
 
     return user_obj
+
 
 CMD_HELP.update({
     "promote": "Usage: Reply to message with .promote to promote them."

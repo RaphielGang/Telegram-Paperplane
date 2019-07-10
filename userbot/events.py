@@ -6,6 +6,7 @@
 """ Userbot module for managing events. One of the main components of the userbot. """
 
 from telethon import events
+
 from userbot import bot
 
 

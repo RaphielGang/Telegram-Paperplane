@@ -9,6 +9,7 @@
 """ Userbot module for ScreenshotLayer API """
 
 import os
+
 from requests import get
 
 from userbot import SCREENSHOT_LAYER_ACCESS_KEY, CMD_HELP
@@ -54,6 +55,7 @@ async def capture(url):
             os.remove(temp_file_name)
         else:
             await url.edit(response_api.text)
+
 
 CMD_HELP.update({
     "screencapture": ".screencapture <url>\

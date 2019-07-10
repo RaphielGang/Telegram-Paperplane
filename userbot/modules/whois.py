@@ -11,6 +11,7 @@ import os
 
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
+
 from userbot import CMD_HELP
 from userbot.events import register
 
@@ -126,6 +127,7 @@ async def fetch_info(replied_user, event):
     caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
 
     return photo, caption
+
 
 CMD_HELP.update({
     "whois": ".whois <username> or reply to someones text with .whois\

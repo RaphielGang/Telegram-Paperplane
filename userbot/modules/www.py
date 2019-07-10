@@ -10,6 +10,7 @@ from datetime import datetime
 
 import speedtest
 from telethon import functions
+
 from userbot import CMD_HELP
 from userbot.events import register
 
@@ -45,7 +46,7 @@ def speed_convert(size):
     """
     Hi human, you can't read bytes?
     """
-    power = 2**10
+    power = 2 ** 10
     zero = 0
     units = {
         0: '',
@@ -79,6 +80,7 @@ async def pingme(pong):
         end = datetime.now()
         duration = (end - start).microseconds / 1000
         await pong.edit("`Pong!\n%sms`" % (duration))
+
 
 CMD_HELP.update({
     "speed": ".speed\

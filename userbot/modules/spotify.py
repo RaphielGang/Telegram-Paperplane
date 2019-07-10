@@ -6,8 +6,8 @@ from sys import setrecursionlimit
 
 import spotify_token as st
 from requests import get
-from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.errors import AboutTooLongError
+from telethon.tl.functions.account import UpdateProfileRequest
 
 from userbot import (DEFAULT_BIO, CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      SPOTIFY_BIO_PREFIX, SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
@@ -31,6 +31,8 @@ SPOTIFYCHECK = False
 RUNNING = False
 OLDEXCEPT = False
 PARSE = False
+
+
 # ================================================
 
 
@@ -130,6 +132,7 @@ async def set_biodgraph(setdbio):
     RUNNING = False
     await bot(UpdateProfileRequest(about=DEFAULT_BIO))
     await setdbio.edit(SPO_BIO_DISABLED)
+
 
 CMD_HELP.update(
     {

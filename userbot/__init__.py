@@ -6,23 +6,20 @@
 """ Userbot initialization. """
 
 import os
-
-from sys import version_info
-from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
+from logging import basicConfig, getLogger, INFO, DEBUG
+from sys import version_info
 
+import redis
 from dotenv import load_dotenv
+from pymongo import MongoClient
 from requests import get
 from telethon import TelegramClient
-from pymongo import MongoClient
-import redis
-
 
 load_dotenv("config.env")
 
 # Bot Logs setup:
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
-
 
 if CONSOLE_LOGGER_VERBOSE:
     basicConfig(

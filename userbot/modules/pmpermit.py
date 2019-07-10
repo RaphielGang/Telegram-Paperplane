@@ -11,12 +11,19 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
-from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
-                     PM_AUTO_BAN, BRAIN_CHECKER, LASTMSG, LOGS, is_mongo_alive, is_redis_alive)
-
-from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, notif_off, notif_on
-
+from userbot import (
+    COUNT_PM,
+    CMD_HELP,
+    BOTLOG,
+    BOTLOG_CHATID,
+    PM_AUTO_BAN,
+    BRAIN_CHECKER,
+    LASTMSG,
+    LOGS,
+    is_mongo_alive,
+    is_redis_alive)
 from userbot.events import register
+from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, notif_off, notif_on
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
@@ -24,6 +31,8 @@ UNAPPROVED_MSG = (
     "`My master hasn't approved you to PM.`"
     "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
     "`As far as I know, he doesn't usually approve retards though.`")
+
+
 # =================================================================
 
 
@@ -109,19 +118,19 @@ async def auto_accept(event):
             async for message in event.client.iter_messages(chat.id, reverse=True, limit=1):
                 if message.from_id == (await event.client.get_me()).id:
                     await approve(chat.id)
-                if BOTLOG:
-                    await event.client.send_message(
-                        BOTLOG_CHATID,
-                        "#AUTO-APPROVED\n"
-                        + "User: " +
-                        f"[{chat.first_name}](tg://user?id={chat.id})",
-                    )
+                    if BOTLOG:
+                        await event.client.send_message(
+                            BOTLOG_CHATID,
+                            "#AUTO-APPROVED\n"
+                            + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
+                        )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
 async def notifoff(noff_event):
     """ For .notifoff command, stop getting notifications from unapproved PMs. """
-    if not noff_event.text[0].isalpha() and noff_event.text[0] not in ("/", "#", "@", "!"):
+    if not noff_event.text[0].isalpha(
+    ) and noff_event.text[0] not in ("/", "#", "@", "!"):
         if await notif_off() is False:
             return await noff_event.edit('`Notifications already silenced!`')
         else:
@@ -131,7 +140,8 @@ async def notifoff(noff_event):
 @register(outgoing=True, pattern="^.notifon$")
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
-    if not non_event.text[0].isalpha() and non_event.text[0] not in ("/", "#", "@", "!"):
+    if not non_event.text[0].isalpha(
+    ) and non_event.text[0] not in ("/", "#", "@", "!"):
         if await notif_on() is False:
             return await non_event.edit("`Notifications ain't muted!")
         else:
@@ -141,7 +151,8 @@ async def notifon(non_event):
 @register(outgoing=True, pattern="^.approve$")
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
-    if not apprvpm.text[0].isalpha() and apprvpm.text[0] not in ("/", "#", "@", "!"):
+    if not apprvpm.text[0].isalpha() and apprvpm.text[0] not in (
+            "/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
             await apprvpm.edit("`Database connections failing!`")
             return
@@ -176,7 +187,8 @@ async def approvepm(apprvpm):
 @register(outgoing=True, pattern="^.block$")
 async def blockpm(block):
     """ For .block command, block people from PMing you! """
-    if not block.text[0].isalpha() and block.text[0] not in ("/", "#", "@", "!"):
+    if not block.text[0].isalpha() and block.text[0] not in (
+            "/", "#", "@", "!"):
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
         if await block_pm(block.chat_id) is False:
@@ -230,6 +242,7 @@ async def unblockpm(unblock):
                 f"[{name0}](tg://user?id={replied_user.user.id})"
                 " was unblocc'd!.",
             )
+
 
 CMD_HELP.update({
     "pmpermit": "\

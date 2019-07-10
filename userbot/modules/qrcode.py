@@ -11,6 +11,7 @@
 import os
 from asyncio import sleep
 from datetime import datetime
+
 from requests import post, get
 
 from userbot import CMD_HELP
@@ -99,6 +100,7 @@ async def make_qr(qrcode):
         await qrcode.edit("Created QRCode in {} seconds".format(duration))
         await sleep(5)
         await qrcode.delete()
+
 
 CMD_HELP.update({
     'getqr': ".getqr\

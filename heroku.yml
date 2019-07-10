@@ -1,5 +1,5 @@
-build: 
-  docker: 
-      worker: Dockerfile
+build:
+  docker:
+    worker: Dockerfile
 run:
-   worker: dash init/start.sh
+  worker: dash init/start.sh

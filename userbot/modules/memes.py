@@ -190,6 +190,8 @@ RUNSREACTS = [
     "I Fugged off!",
 ]
 DISABLE_RUN = False
+
+
 # ===========================================
 
 
@@ -341,13 +343,13 @@ async def zal(zgfy):
 
                 if randint == 0:
                     charac = charac.strip() + \
-                        random.choice(ZALG_LIST[0]).strip()
+                             random.choice(ZALG_LIST[0]).strip()
                 elif randint == 1:
                     charac = charac.strip() + \
-                        random.choice(ZALG_LIST[1]).strip()
+                             random.choice(ZALG_LIST[1]).strip()
                 else:
                     charac = charac.strip() + \
-                        random.choice(ZALG_LIST[2]).strip()
+                             random.choice(ZALG_LIST[2]).strip()
 
             reply_text.append(charac)
 
@@ -517,6 +519,7 @@ async def typewriter(typew):
             await asyncio.sleep(sleep_time)
             await typew.edit(old_text)
             await asyncio.sleep(sleep_time)
+
 
 CMD_HELP.update({
     "memes": "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."

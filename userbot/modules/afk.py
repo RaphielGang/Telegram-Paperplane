@@ -9,10 +9,13 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_MSG, USERS,
-                     is_redis_alive)
+from userbot import (
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    is_redis_alive)
 from userbot.events import register
-from userbot.modules.dbhelper import afk, afk_reason, is_afk, no_afk
+from userbot.modules.dbhelper import is_afk, afk, afk_reason, no_afk
 
 
 @register(incoming=True, disable_edited=True)
@@ -91,7 +94,7 @@ async def set_afk(e):
         message = e.text
         try:
             AFKREASON = str(message[5:])
-        except:
+        except BaseException:
             AFKREASON = ''
         if not AFKREASON:
             AFKREASON = 'No reason'
@@ -149,6 +152,7 @@ async def type_afk_is_not_true(e):
         COUNT_MSG = 0
         USERS = {}
         AFKREASON = "No Reason"
+
 
 CMD_HELP.update({
     "afk": ".afk <reason>(reason is optional)\

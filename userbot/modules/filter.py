@@ -5,15 +5,14 @@
 #
 """ Userbot module for filter commands """
 import re
-
-
 from asyncio import sleep
+
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
                      is_mongo_alive, is_redis_alive)
+from userbot.events import register
 from userbot.modules.dbhelper import (get_filters,
                                       add_filter,
                                       delete_filter)
-from userbot.events import register
 
 
 @register(incoming=True, disable_edited=True)
@@ -109,7 +108,7 @@ async def kick_marie_filter(event):
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID, "I cleaned all filters at " +
-                str(event.chat_id)
+                               str(event.chat_id)
             )
 
 
@@ -127,10 +126,10 @@ async def filters_active(event):
             if transact == "`There are no filters in this chat.`":
                 transact = "Active filters in this chat:\n"
                 transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
-                                                       filt["msg"])
+                                                        filt["msg"])
             else:
                 transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
-                                                       filt["msg"])
+                                                        filt["msg"])
 
         await event.edit(transact)
 

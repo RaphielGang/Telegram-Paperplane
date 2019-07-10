@@ -7,11 +7,12 @@
 """ Userbot module for kanging stickers or making new ones. """
 
 import io
-import math
 import urllib.request
 
+import math
 from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
+
 from userbot import bot, CMD_HELP
 from userbot.events import register
 

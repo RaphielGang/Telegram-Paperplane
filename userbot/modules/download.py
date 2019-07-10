@@ -349,6 +349,7 @@ async def uploadas(uas_event):
         else:
             await uas_event.edit("404: File Not Found")
 
+
 CMD_HELP.update({
     "download": ".download <link>\nUsage: Downloads file from link to the server."
 })

@@ -7,25 +7,25 @@
 """ Userbot module containing various scrapers. """
 
 import os
+from asyncio import create_subprocess_shell as asyncsh
+from asyncio.subprocess import PIPE as asyncsh_PIPE
 from html import unescape
 from re import findall
 from urllib import parse
 from urllib.error import HTTPError
-from asyncio import create_subprocess_shell as asyncsh
-from asyncio.subprocess import PIPE as asyncsh_PIPE
 
-from wikipedia import summary
-from wikipedia.exceptions import DisambiguationError, PageError
-from urbandict import define
-from requests import get
+from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
-from emoji import get_emoji_regexp
 from pytube import YouTube
 from pytube.helpers import safe_filename
+from requests import get
+from urbandict import define
+from wikipedia import summary
+from wikipedia.exceptions import DisambiguationError, PageError
 
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
 from userbot.events import register
@@ -81,7 +81,7 @@ async def gsearch(q_event):
         )
         stdout, stderr = await result_.communicate()
         result = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+                 + str(stderr.decode().strip())
         await q_event.edit(
             "**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" + result
         )
@@ -315,11 +315,11 @@ async def yt_search(video_q):
 
 
 def youtube_search(
-    query,
-    order="relevance",
-    token=None,
-    location=None,
-    location_radius=None
+        query,
+        order="relevance",
+        token=None,
+        location=None,
+        location_radius=None
 ):
     """ Do a YouTube search. """
     youtube = build('youtube', 'v3',
@@ -342,13 +342,13 @@ def youtube_search(
             videos.append(search_result)
     try:
         nexttok = search_response["nextPageToken"]
-        return(nexttok, videos)
+        return (nexttok, videos)
     except HttpError:
         nexttok = "last_page"
-        return(nexttok, videos)
+        return (nexttok, videos)
     except KeyError:
         nexttok = "KeyError, try again."
-        return(nexttok, videos)
+        return (nexttok, videos)
 
 
 @register(outgoing=True, pattern=r".yt_dl (\S*) ?(\S*)")

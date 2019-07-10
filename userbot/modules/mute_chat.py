@@ -6,8 +6,7 @@
 
 """ Userbot module for muting chats. """
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, REDIS,
-                     is_mongo_alive, is_redis_alive)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, is_mongo_alive, is_redis_alive)
 from userbot.events import register
 
 
@@ -55,6 +54,7 @@ async def keep_read(message):
         for i in kread:
             if i["chat_id"] == message.chat_id:
                 await message.client.send_read_acknowledge(message.chat_id)
+
 
 CMD_HELP.update({
     'unmutechat': '.unmutechat\

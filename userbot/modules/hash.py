@@ -8,7 +8,9 @@
 
 from subprocess import PIPE
 from subprocess import run as runapp
+
 import pybase64
+
 from userbot import CMD_HELP
 from userbot.events import register
 
@@ -32,17 +34,17 @@ async def gethash(hash_q):
         runapp(["rm", "hashdis.txt"], stdout=PIPE)
         sha512 = sha512.stdout.decode()
         ans = (
-            "Text: `" +
-            hashtxt_ +
-            "`\nMD5: `" +
-            md5 +
-            "`SHA1: `" +
-            sha1 +
-            "`SHA256: `" +
-            sha256 +
-            "`SHA512: `" +
-            sha512[:-1] +
-            "`"
+                "Text: `" +
+                hashtxt_ +
+                "`\nMD5: `" +
+                md5 +
+                "`SHA1: `" +
+                sha1 +
+                "`SHA256: `" +
+                sha256 +
+                "`SHA512: `" +
+                sha512[:-1] +
+                "`"
         )
         if len(ans) > 4096:
             hashfile = open("hashes.txt", "w+")
