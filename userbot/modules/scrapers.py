@@ -304,7 +304,6 @@ async def yt_search(video_q):
         full_response = youtube_search(query)
         videos_json = full_response[1]
 
-        
         for video in videos_json:
             result += f"{i}. {unescape(video['snippet']['title'])} \
                 \nhttps://www.youtube.com/watch?v={video['id']['videoId']}\n"
