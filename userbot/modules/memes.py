@@ -12,11 +12,9 @@ import random
 import re
 import time
 
-from zalgo_text import zalgo
-
 from cowpy import cow
 
-from userbot import CMD_HELP
+from userbot import CMD_HELP, ZALG_LIST
 from userbot.events import register
 
 # ================= CONSTANT =================
@@ -320,6 +318,7 @@ async def stretch(stret):
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
+        reply_text = list()
         textx = await zgfy.get_reply_message()
         message = zgfy.pattern_match.group(1)
         if message:
@@ -332,9 +331,24 @@ async def zal(zgfy):
             )
             return
 
-        input_text = " ".join(message).lower()
-        zalgofied_text = zalgo.zalgo().zalgofy(input_text)
-        await zgfy.edit(zalgofied_text)
+        for charac in message:
+            if not charac.isalpha():
+                reply_text.append(charac)
+                continue
+
+            for _ in range(0, 3):
+                randint = random.randint(0, 2)
+
+                if randint == 0:
+                    charac = charac.strip() + random.choice(ZALG_LIST[0]).strip()
+                elif randint == 1:
+                    charac = charac.strip() + random.choice(ZALG_LIST[1]).strip()
+                else:
+                    charac = charac.strip() + random.choice(ZALG_LIST[2]).strip()
+
+            reply_text.append(charac)
+
+        await zgfy.edit("".join(reply_text))
 
 
 @register(outgoing=True, pattern="^hi$")
