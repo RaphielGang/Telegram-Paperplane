@@ -16,7 +16,7 @@ from zalgo_text import zalgo
 
 from cowpy import cow
 
-from userbot import (WIDE_MAP, CMD_HELP)
+from userbot import CMD_HELP
 from userbot.events import register
 
 # ================= CONSTANT =================
@@ -270,6 +270,7 @@ async def copypasta(cp_e):
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
+        reply_text = list()
         textx = await vpr.get_reply_message()
         message = vpr.pattern_match.group(1)
         if message:
@@ -280,8 +281,15 @@ async def vapor(vpr):
             await vpr.edit("`Ｇｉｖｅ ｓｏｍｅ ｔｅｘｔ ｆｏｒ ｖａｐｏｒ！`")
             return
 
-        reply_text = str(message).translate(WIDE_MAP)
-        await vpr.edit(reply_text)
+        for charac in message:
+            if 0x21 <= ord(charac) <= 0x7F:
+                reply_text.append(chr(ord(charac) + 0xFEE0))
+            elif ord(charac) == 0x20:
+                reply_text.append(chr(0x3000))
+            else:
+                reply_text.append(charac)
+
+        await vpr.edit("".join(reply_text))
 
 
 @register(outgoing=True, pattern="^.str(?: |$)(.*)")
