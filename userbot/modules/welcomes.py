@@ -117,7 +117,6 @@ async def welcome_mute(welcm):
                     )
 
                     await sleep(1)
-                    
                     await welcm.client(
                         EditBannedRequest(
                             welcm.chat_id,
@@ -125,8 +124,8 @@ async def welcome_mute(welcm):
                             UNBAN_RIGHTS
                         )
                     )
-                    
-                except:
+
+                except BaseException:
                     await welcm.reply(
                         "@admins\n"
                         "`ANTI SPAMBOT DETECTOR!\n"
