@@ -190,6 +190,8 @@ RUNSREACTS = [
     "I Fugged off!",
 ]
 DISABLE_RUN = False
+
+
 # ===========================================
 
 
@@ -517,6 +519,7 @@ async def typewriter(typew):
             await asyncio.sleep(sleep_time)
             await typew.edit(old_text)
             await asyncio.sleep(sleep_time)
+
 
 CMD_HELP.update({
     "memes": "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."

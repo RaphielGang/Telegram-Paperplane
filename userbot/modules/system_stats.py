@@ -7,17 +7,19 @@
 
 from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
+from os import remove
 from platform import python_version, uname
 from shutil import which
-from os import remove
+
 from telethon import version
 
-from userbot import CMD_HELP, MONGO, REDIS, is_mongo_alive, is_redis_alive
+from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
 from userbot.events import register
-
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
+
+
 # ============================================
 
 
@@ -179,6 +181,7 @@ async def amireallyalivereset(ureset):
             "Successfully reset user for alive!"
             "`"
         )
+
 
 CMD_HELP.update({
     "sysd": ".sysd\

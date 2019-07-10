@@ -8,9 +8,9 @@
 
 from asyncio import sleep
 
+from telethon.events import ChatAction
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChannelParticipantsAdmins, Message
-from telethon.events import ChatAction
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
 from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
@@ -139,6 +139,7 @@ async def welcome_mute(welcm):
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {welcm.chat.title}(`{welcm.chat_id}`)"
                 )
+
 
 CMD_HELP.update({
     'welcome_mute': "If enabled in config.env or env var, \

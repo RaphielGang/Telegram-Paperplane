@@ -71,6 +71,7 @@ async def repo_is_here(wannasee):
     ) and wannasee.text[0] not in ("/", "#", "@", "!"):
         await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
 
+
 CMD_HELP.update({
     'random': '.random <item1> <item2> ... <itemN>\
 \nUsage: Get a random item from the list of items.'

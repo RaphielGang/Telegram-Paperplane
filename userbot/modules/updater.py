@@ -8,6 +8,7 @@ This module updates the userbot based on Upstream revision
 """
 
 from os import remove
+
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 

@@ -7,16 +7,18 @@
 """ Userbot module for getting the weather of a city. """
 
 import json
-import requests
 from datetime import datetime
+
+import requests
 from pytz import country_timezones as c_tz, timezone as tz, country_names as c_n
 
 from userbot import OPEN_WEATHER_MAP_APPID as OWM_API, CMD_HELP
 from userbot.events import register
 
-
 # ===== CONSTANT =====
 DEFCITY = ''
+
+
 # ====================
 
 

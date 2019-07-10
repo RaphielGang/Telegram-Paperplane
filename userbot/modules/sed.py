@@ -10,6 +10,7 @@
 
 import re
 from sre_constants import error as sre_err
+
 from userbot import CMD_HELP
 from userbot.events import register
 
@@ -108,6 +109,7 @@ async def sed(command):
             return
         if text:
             await command.edit("Did you mean? \n\n`" + text + "`")
+
 
 CMD_HELP.update({
     "sed": "sed<delimiter><old word(s)><delimiter><new word(s)>\
