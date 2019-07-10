@@ -29,9 +29,9 @@ async def welcome_mute(welcm):
             adder = welcm.action_message.from_id
 
         async for admin in bot.iter_participants(welcm.chat_id, filter=ChannelParticipantsAdmins):
-                if admin.id == adder:
-                    ignore = True
-                    break
+            if admin.id == adder:
+                ignore = True
+                break
         if ignore:
             return
         elif welcm.user_joined:
