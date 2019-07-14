@@ -88,13 +88,6 @@ async def sed(command):
             return
 
         try:
-            check = re.match(repl, to_fix, flags=re.IGNORECASE)
-            if check and check.group(0).lower() == to_fix.lower():
-                await command.edit(
-                    "`Boi!, that's a reply. Don't use sed`"
-                )
-                return
-
             if "i" in flags and "g" in flags:
                 text = re.sub(repl, repl_with, to_fix, flags=re.I).strip()
             elif "i" in flags:

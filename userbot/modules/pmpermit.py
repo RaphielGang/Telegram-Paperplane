@@ -27,10 +27,10 @@ from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, n
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
-    "`Bleep blop! This is a bot. Don't fret.\n\n`"
-    "`My master hasn't approved you to PM.`"
-    "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
-    "`As far as I know, he doesn't usually approve retards though.`")
+    "`Bleep Blop! This is a Bot. Don't fret.` \n\"
+    "Skittles hasn't approved you to PM. \n\n\"
+    "Please wait for him to look in. **If he doesn\'t know you, he likely won\'t approve PMs.**\n\n\"
+    "If you\'d like to be approved please be **descriptive** in what you need!")
 
 
 # =================================================================
@@ -72,8 +72,7 @@ async def permitpm(event):
 
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
-                        "`You were spamming my master's PM, which I don't like.`"
-                        " `I'mma Report Spam.`"
+                        "`You were spamming Skittles. Imma report spam!`"
                     )
 
                     try:
@@ -189,7 +188,7 @@ async def blockpm(block):
     """ For .block command, block people from PMing you! """
     if not block.text[0].isalpha() and block.text[0] not in (
             "/", "#", "@", "!"):
-        await block.edit("`You are gonna be blocked from PM-ing my Master!`")
+        await block.edit("`You are gonna be blocked from PM-ing Skittles!`")
 
         if await block_pm(block.chat_id) is False:
             return await block.edit("`First approve, before blocc'ing`")
@@ -232,7 +231,7 @@ async def unblockpm(unblock):
             if await approve(reply.from_id) is False:
                 return await unblock.edit("`You haven't blocked this user yet!`")
             else:
-                return await unblock.edit("`My Master has forgiven you to PM now`")
+                return await unblock.edit("`Skittles has forgiven you to PM now`")
 
             await unblock.client(UnblockRequest(replied_user.user.id))
 
