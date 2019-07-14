@@ -27,10 +27,11 @@ from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, n
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
-    "`Bleep Blop! This is a Bot. Don't fret.` \n\"
-    "Skittles hasn't approved you to PM. \n\n\"
-    "Please wait for him to look in. **If he doesn\'t know you, he likely won\'t approve PMs.**\n\n\"
-    "If you\'d like to be approved please be **descriptive** in what you need!")
+    """`Bleep Blop! This is a Bot. Don't fret.` \n\
+    Skittles hasn't approved you to PM. \n\n\
+    Please wait for him to look in. **If he doesn\'t know you, he likely won\'t approve PMs.**\n\n\
+    If you\'d like to be approved please be **descriptive** in what you need!"""
+)
 
 
 # =================================================================
