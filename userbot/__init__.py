@@ -10,6 +10,7 @@ from distutils.util import strtobool as sb
 from logging import basicConfig, getLogger, INFO, DEBUG
 from sys import version_info
 
+import pylast
 import redis
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -85,6 +86,18 @@ SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
 SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
 SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
+
+LASTFM_API = os.environ.get("LASTFM_API", None)
+LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
+LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
+LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
+LASTFM_PASS = pylast.md5(LASTFM_PASSWORD_PLAIN)
+lastfm = pylast.LastFMNetwork(
+    api_key=LASTFM_API,
+    api_secret=LASTFM_SECRET,
+    username=LASTFM_USERNAME,
+    password_hash=LASTFM_PASS
+)
 
 # pylint: disable=invalid-name
 bot = TelegramClient("userbot", API_KEY, API_HASH)

@@ -10,7 +10,7 @@ import os
 from asyncio import create_subprocess_shell as asyncsh
 from asyncio.subprocess import PIPE as asyncsh_PIPE
 from html import unescape
-from re import findall
+from re import findall, sub
 from urllib import parse
 from urllib.error import HTTPError
 
@@ -20,6 +20,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
+from pylast import User
 from pytube import YouTube
 from pytube.helpers import safe_filename
 from requests import get
@@ -27,7 +28,8 @@ from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
+
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, lastfm, LASTFM_USERNAME, bot
 from userbot.events import register
 
 LANG = "en"
@@ -424,6 +426,64 @@ async def download_video(v_url):
         os.remove(f"{safe_filename(video.title)}.mp4")
         os.remove('thumbnail.jpg')
         await v_url.delete()
+
+
+@register(outgoing=True, pattern="^.lastfm")
+async def last_fm(lastFM):
+    """ For .lastfm command, fetch scrobble data from last.fm. """
+    if not lastFM.text[0].isalpha() and lastFM.text[0] not in ("/", "#", "@", "!"):
+        await lastFM.edit("Processing...")
+        preview = None
+        playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
+        username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
+        if playing is not None:
+            image = User(LASTFM_USERNAME, lastfm).get_now_playing().get_cover_image()
+            tags = gettags(isNowPlaying=True, playing=playing)
+            rectrack = parse.quote_plus(f"{playing}")
+            rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
+            if image:
+                output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
+                preview = True
+            else:
+                output = f"[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
+        else:
+            recent = User(LASTFM_USERNAME, lastfm).get_recent_tracks(limit=3)
+            playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
+            output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
+            for i, track in enumerate(recent):
+                printable = artist_and_song(track)
+                tags = gettags(track)
+                rectrack = parse.quote_plus(str(printable))
+                rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
+                output += f"• [{printable}]({rectrack})\n"
+                if tags:
+                    output += f"`{tags}`\n\n"
+        if preview is not None:
+            await lastFM.edit(f"{output}", parse_mode='md', link_preview=True)
+        else:
+            await lastFM.edit(f"{output}", parse_mode='md')
+        
+
+
+def gettags(track=None, isNowPlaying=None, playing=None):
+    if isNowPlaying:
+        tags = playing.get_top_tags()
+        arg = playing
+        if not tags:
+            tags = playing.artist.get_top_tags()
+    else:
+        tags = track.track.get_top_tags()
+        arg = track.track
+    if not tags:
+        tags = arg.artist.get_top_tags()
+    tags = "".join([" #" + t.item.__str__() for t in tags[:5]])
+    tags = sub("^ ", "", tags)
+    tags = sub(" ", "_", tags)
+    tags = sub("_#", " #", tags)
+    return tags
+
+def artist_and_song(track):
+    return f"{track.track}"
 
 
 def deEmojify(inputString):
