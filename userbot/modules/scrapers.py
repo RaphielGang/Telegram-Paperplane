@@ -437,7 +437,11 @@ async def last_fm(lastFM):
         playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
         username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
         if playing is not None:
-            image = User(LASTFM_USERNAME, lastfm).get_now_playing().get_cover_image()
+            try:
+                image = User(LASTFM_USERNAME, lastfm).get_now_playing().get_cover_image()
+            except IndexError:
+                image = None
+                pass
             tags = gettags(isNowPlaying=True, playing=playing)
             rectrack = parse.quote_plus(f"{playing}")
             rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
