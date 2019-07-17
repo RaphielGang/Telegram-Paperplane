@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
-""" Userbot module for keeping control who PM you. """
+""" Userbot module for keeping control on who can PM you. """
 
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
@@ -31,8 +31,6 @@ UNAPPROVED_MSG = (
     "`My master hasn't approved you to PM.`"
     "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
     "`As far as I know, he doesn't usually approve retards though.`")
-
-
 # =================================================================
 
 
@@ -57,10 +55,13 @@ async def permitpm(event):
                     # If the message doesn't same as previous one
                     # Send the Unapproved Message again
                     if event.text != prevmsg:
-                        async for message in event.client.iter_messages(event.chat_id,
-                                                                        from_user='me',
-                                                                        search=UNAPPROVED_MSG):
-                            # Deletes previous UNAPPROVED_MSG
+                        # Searches for previously sent UNAPPROVED_MSGs
+                        async for message in event.client.iter_messages(
+                            event.chat_id,
+                            from_user='me',
+                            search=UNAPPROVED_MSG
+                        ):
+                            # ... and deletes them !!
                             await message.delete()
                         await event.reply(UNAPPROVED_MSG)
                     LASTMSG.update({event.chat_id: event.text})
