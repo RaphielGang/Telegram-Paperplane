@@ -6,7 +6,8 @@
 """ Userbot module containing various sites direct links generators"""
 
 import re
-from requests import get
+import urllib.parse
+import requests
 from bs4 import BeautifulSoup
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
@@ -32,7 +33,7 @@ async def gdrive(request):
         reply = ''
         links = re.findall(r'\bhttps?://drive\.google\.com\S+', message)
         if not links:
-            reply = "No Google drive link found"
+            reply = "No Google drive links found"
             await request.edit(reply)
         for link in links:
             file_id = ''
@@ -43,7 +44,7 @@ async def gdrive(request):
             elif link.find("uc?id=") != -1:
                 file_id = link.split("uc?id=")[1].strip()
             url = f'{DRIVE}/uc?export=download&id={file_id}'
-            download = get(url, stream=True, allow_redirects=False)
+            download = requests.get(url, stream=True, allow_redirects=False)
             cookies = download.cookies
             try:
                 # In case of small file size, Google downloads directly
@@ -57,7 +58,7 @@ async def gdrive(request):
                 page = BeautifulSoup(download.content, 'html.parser')
                 export = DRIVE + page.find('a', {'id': 'uc-download-link'}).get('href')
                 name = page.find('span', {'class': 'uc-name-size'}).text
-                response = get(export, stream=True, allow_redirects=False, cookies=cookies)
+                response = requests.get(export, stream=True, allow_redirects=False, cookies=cookies)
                 direct = response.headers['location']
                 if 'accounts.google.com' in direct:
                     reply += 'Link is not public!'
@@ -66,6 +67,48 @@ async def gdrive(request):
         await request.edit(reply)
 
 
+@register(outgoing=True, pattern=r"^.zippy(?: |$)([\s\S]*)")
+async def zippy_share(request):
+    """ ZippyShare direct links generator
+    Based on https://github.com/LameLemon/ziggy"""
+    if not request.text[0].isalpha(
+    ) and request.text[0] not in ("/", "#", "@", "!"):
+        textx = await request.get_reply_message()
+        message = request.pattern_match.group(1)
+        if message:
+            pass
+        elif textx:
+            message = textx.text
+        else:
+            await request.edit("`Usage: .zippy url`")
+            return
+        reply = ''
+        dl_url = ''
+        links = re.findall(r'\bhttps?://.*zippyshare\.com\S+', message)
+        if not links:
+            reply = "No ZippyShare links found"
+            await request.edit(reply)
+        for link in links:
+            session = requests.Session()
+            base_url = re.search('http.+.com', link).group()
+            response = session.get(link)
+            page_soup = BeautifulSoup(response.content, "lxml")
+            scripts = page_soup.find_all("script", {"type": "text/javascript"})
+            for script in scripts:
+                if "getElementById('dlbutton')" in script.text:
+                    url_raw = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);', script.text).group('url')
+                    math = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);', script.text).group('math')
+                    dl_url = url_raw.replace(math, '"' + str(eval(math)) + '"')
+                    break
+            dl_url = base_url + eval(dl_url)
+            name = urllib.parse.unquote(dl_url.split('/')[-1])
+            reply += f'[{name}]({dl_url})\n'
+        await request.edit(reply)
+
+
 CMD_HELP.update({
     "gdrive": ".gdrive <url> <url>\nUsage: Generate direct download link from Google Drive URL(s)"
+})
+CMD_HELP.update({
+    "zippy": ".gdrive <url> <url>\nUsage: Generate direct download link from ZippyShare URL(s)"
 })
