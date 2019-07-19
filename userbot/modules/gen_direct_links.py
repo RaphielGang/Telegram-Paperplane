@@ -48,8 +48,8 @@ async def gdrive(request):
             cookies = download.cookies
             try:
                 # In case of small file size, Google downloads directly
-                direct = download.headers["location"]
-                if 'accounts.google.com' in direct:  # non-public file
+                dl_url = download.headers["location"]
+                if 'accounts.google.com' in dl_url:  # non-public file
                     reply += 'Link is not public!'
                     continue
                 name = 'Direct Download Link'
@@ -59,11 +59,11 @@ async def gdrive(request):
                 export = DRIVE + page.find('a', {'id': 'uc-download-link'}).get('href')
                 name = page.find('span', {'class': 'uc-name-size'}).text
                 response = requests.get(export, stream=True, allow_redirects=False, cookies=cookies)
-                direct = response.headers['location']
-                if 'accounts.google.com' in direct:
+                dl_url = response.headers['location']
+                if 'accounts.google.com' in dl_url:
                     reply += 'Link is not public!'
                     continue
-            reply += f'[{name}]({direct})\n'
+            reply += f'[{name}]({dl_url})\n'
         await request.edit(reply)
 
 
@@ -106,8 +106,43 @@ async def zippy_share(request):
         await request.edit(reply)
 
 
+@register(outgoing=True, pattern=r"^.yadisk(?: |$)([\s\S]*)")
+async def yandex_disk(request):
+    """ Yandex.Disk direct links generator
+    Based on https://github.com/wldhx/yadisk-direct"""
+    if not request.text[0].isalpha(
+    ) and request.text[0] not in ("/", "#", "@", "!"):
+        textx = await request.get_reply_message()
+        message = request.pattern_match.group(1)
+        if message:
+            pass
+        elif textx:
+            message = textx.text
+        else:
+            await request.edit("`Usage: .yadisk url`")
+            return
+        reply = ''
+        links = re.findall(r'\bhttps?://.*yadi\.sk\S+', message)
+        if not links:
+            reply = "No Yandex.Disk links found"
+            await request.edit(reply)
+        for link in links:
+            api = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key={}'
+            try:
+                dl_url = requests.get(api.format(link)).json()['href']
+                name = dl_url.split('filename=')[1].split('&disposition')[0]
+                reply += f'[{name}]({dl_url})\n'
+            except KeyError:
+                reply += 'Error: File not found / Download limit reached'
+                continue
+        await request.edit(reply)
+
+
 CMD_HELP.update({
     "gdrive": ".gdrive <url> <url>\nUsage: Generate direct download link from Google Drive URL(s)"
+})
+CMD_HELP.update({
+    "yadisk": ".yadisk <url> <url>\nUsage: Generate direct download link from Yandex.Disk URL(s)"
 })
 CMD_HELP.update({
     "zippy": ".gdrive <url> <url>\nUsage: Generate direct download link from ZippyShare URL(s)"
