@@ -436,8 +436,7 @@ async def currency(cconvert):
         amount = cconvert.pattern_match.group(1)
         currency_from = cconvert.pattern_match.group(2)
         currency_to = cconvert.pattern_match.group(3)
-        URL = f'https://free.currconv.com/api/v7/convert?apiKey={CURRENCY_API}&q={currency_from}_{currency_to}&compact=ultra'
-        data = get(URL).json()
+        data = get(f"https://free.currconv.com/api/v7/convert?apiKey={CURRENCY_API}&q={currency_from}_{currency_to}&compact=ultra").json()
         result = data[f'{currency_from}_{currency_to}']
         result = float(amount) / float(result)
         result = round(result, 5)
