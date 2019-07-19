@@ -29,7 +29,7 @@ from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, lastfm, LASTFM_USERNAME, bot
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, lastfm, LASTFM_USERNAME, CURRENCY_API, bot
 from userbot.events import register
 
 LANG = "en"
@@ -426,6 +426,22 @@ async def download_video(v_url):
         os.remove(f"{safe_filename(video.title)}.mp4")
         os.remove('thumbnail.jpg')
         await v_url.delete()
+
+
+@register(outgoing=True, pattern=r".cr (\S*) ?(\S*) ?(\S*)")
+async def currency(cconvert):
+    """ For .cr command, convert amount, from, to. """
+    if not cconvert.text[0].isalpha() and cconvert.text[0] not in (
+            "/", "#", "@", "!"):
+        amount = cconvert.pattern_match.group(1)
+        currency_from = cconvert.pattern_match.group(2)
+        currency_to = cconvert.pattern_match.group(3)
+        URL = f'https://free.currconv.com/api/v7/convert?apiKey={CURRENCY_API}&q={currency_from}_{currency_to}&compact=ultra'
+        data = get(URL).json()
+        result = data[f'{currency_from}_{currency_to}']
+        result = float(amount) / float(result)
+        result = round(result, 5)
+        await cconvert.edit(f"{amount} {currency_from} is:\n`{result} {currency_to}`")
 
 
 @register(outgoing=True, pattern="^.lastfm")
