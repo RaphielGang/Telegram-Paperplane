@@ -5,12 +5,15 @@
 #
 """ Userbot module containing various sites direct links generators"""
 
+import asyncio
 import re
 import urllib.parse
+import json
 import requests
 from bs4 import BeautifulSoup
+from humanize import naturalsize
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from userbot import CMD_HELP
 from userbot.events import register
 
 DRIVE = 'https://drive.google.com'
@@ -96,8 +99,10 @@ async def zippy_share(request):
             scripts = page_soup.find_all("script", {"type": "text/javascript"})
             for script in scripts:
                 if "getElementById('dlbutton')" in script.text:
-                    url_raw = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);', script.text).group('url')
-                    math = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);', script.text).group('math')
+                    url_raw = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
+                                        script.text).group('url')
+                    math = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
+                                     script.text).group('math')
                     dl_url = url_raw.replace(math, '"' + str(eval(math)) + '"')
                     break
             dl_url = base_url + eval(dl_url)
@@ -138,12 +143,103 @@ async def yandex_disk(request):
         await request.edit(reply)
 
 
+@register(outgoing=True, pattern=r"^.mega(?: |$)([\s\S]*)")
+async def mega_dl(request):
+    """ MEGA.nz direct links generator
+    Using https://github.com/tonikelope/megadown"""
+    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@", "!"):
+        textx = await request.get_reply_message()
+        message = request.pattern_match.group(1)
+        if message:
+            pass
+        elif textx:
+            message = textx.text
+        else:
+            await request.edit("`Usage: .mega url`")
+            return
+        reply = ''
+        links = re.findall(r'\bhttps?://.*mega.*\.nz\S+', message)
+        if not links:
+            reply = "No MEGA.nz links found"
+            await request.edit(reply)
+        for link in links:
+            command = f'megadown -q -m {link}'
+            process = await asyncio.create_subprocess_shell(
+                command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await process.communicate()
+            result = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
+            print(result)
+            try:
+                data = json.loads(result)
+                print(data)
+            except json.JSONDecodeError:
+                reply += "Error: Can't extract the link"
+                continue
+            dl_url = data['url']
+            name = data['name']
+            size = naturalsize(int(data['file_size']))
+            reply += f'[{name} ({size})]({dl_url})\n'
+        await request.edit(reply)
+
+
+@register(outgoing=True, pattern=r"^.cmru(?: |$)([\s\S]*)")
+async def cm_ru(request):
+    """ cloud.mail.ru direct links generator
+    Using https://github.com/JrMasterModelBuilder/cmrudl.py"""
+    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@", "!"):
+        textx = await request.get_reply_message()
+        message = request.pattern_match.group(1)
+        if message:
+            pass
+        elif textx:
+            message = textx.text
+        else:
+            await request.edit("`Usage: .cmru url`")
+            return
+        reply = ''
+        links = re.findall(r'\bhttps?://.*cloud\.mail\.ru\S+', message)
+        if not links:
+            reply = "No cloud.mail.ru links found"
+            await request.edit(reply)
+        for link in links:
+            command = f'cmrudl -s {link}'
+            process = await asyncio.create_subprocess_shell(
+                command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await process.communicate()
+            result = str(stdout.decode().strip()) \
+                + str(stderr.decode().strip())
+            result = result.splitlines()[-1]
+            try:
+                data = json.loads(result)
+            except json.decoder.JSONDecodeError:
+                reply += "Error: Can't extract the link"
+                continue
+            dl_url = data['download']
+            name = data['file_name']
+            size = naturalsize(int(data['file_size']))
+            reply += f'[{name} ({size})]({dl_url})\n'
+        await request.edit(reply)
+
+
+CMD_HELP.update({
+    "cmru": ".cmru <url> <url>\nUsage: Generate direct download link from cloud.mail.ru URL(s)"
+})
 CMD_HELP.update({
     "gdrive": ".gdrive <url> <url>\nUsage: Generate direct download link from Google Drive URL(s)"
+})
+CMD_HELP.update({
+    "mega": ".mega <url> <url>\nUsage: Generate direct download link from MEGA.nz URL(s)"
 })
 CMD_HELP.update({
     "yadisk": ".yadisk <url> <url>\nUsage: Generate direct download link from Yandex.Disk URL(s)"
 })
 CMD_HELP.update({
-    "zippy": ".gdrive <url> <url>\nUsage: Generate direct download link from ZippyShare URL(s)"
+    "zippy": ".zippy <url> <url>\nUsage: Generate direct download link from ZippyShare URL(s)"
 })

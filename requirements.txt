@@ -27,3 +27,4 @@ pymongo[srv]
 redis
 dnspython
 lxml
+humanize

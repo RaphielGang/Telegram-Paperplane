@@ -36,7 +36,12 @@ RUN apk add --no-cache --update \
     musl \
     sqlite \
     figlet \
-    libwebp-dev
+    libwebp-dev \
+    openssl \
+    pv \
+    jq \
+    wget \
+    bash
 
 RUN pip3 install --upgrade pip setuptools
 
@@ -47,6 +52,7 @@ RUN adduser userbot --disabled-password --home /home/userbot
 RUN adduser userbot wheel
 USER userbot
 RUN mkdir /home/userbot/userbot
+RUN mkdir /home/userbot/bin
 RUN git clone -b master https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 WORKDIR /home/userbot/userbot
 ADD ./requirements.txt /home/userbot/userbot/requirements.txt
@@ -65,4 +71,11 @@ RUN sudo pip3 install -r requirements.txt
 ADD . /home/userbot/userbot
 
 RUN sudo chmod -R 777 /home/userbot/userbot
+
+#
+# Clone helper scripts
+#
+RUN curl -s https://raw.githubusercontent.com/yshalsager/megadown/master/megadown -o /home/userbot/bin/megadown && sudo chmod a+x /home/userbot/bin/megadown
+RUN curl -s https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py -o /home/userbot/bin/cmrudl && sudo chmod a+x /home/userbot/bin/cmrudl
+ENV PATH="/home/userbot/bin:$PATH"
 CMD ["dash","init/start.sh"]
