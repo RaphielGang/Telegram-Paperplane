@@ -49,6 +49,7 @@ USER userbot
 RUN mkdir /home/userbot/userbot
 RUN git clone -b master https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 WORKDIR /home/userbot/userbot
+ADD ./requirements.txt /home/userbot/userbot/requirements.txt
 
 #
 #Copies session and config(if it exists)
@@ -61,5 +62,7 @@ COPY ./userbot.session ./config.env* /home/userbot/userbot/
 #
 
 RUN sudo pip3 install -r requirements.txt
+ADD . /home/userbot/userbot
+
 RUN sudo chmod -R 777 /home/userbot/userbot
 CMD ["dash","init/start.sh"]
