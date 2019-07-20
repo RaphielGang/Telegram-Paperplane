@@ -440,7 +440,7 @@ async def currency(cconvert):
         result = data[f'{currency_from}_{currency_to}']
         result = float(amount) / float(result)
         result = round(result, 5)
-        await cconvert.edit(f"{amount} {currency_from} is:\n`{result} {currency_to}`")
+        await cconvert.edit(f"{amount} {currency_to} is:\n`{result} {currency_from}`")
 
 
 @register(outgoing=True, pattern="^.lastfm")
