@@ -26,3 +26,5 @@ spotify_token
 pymongo[srv]
 redis
 dnspython
+lxml
+humanize
