@@ -288,5 +288,5 @@ CMD_HELP.update({
               "Usage: Generate direct download link from supported URL(s)\n"
               "Supported websites:\n"
               "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - "
-              "ZippyShare - Mediafire - SourceFroge - OSDN - GitHub`"
+              "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
 })
