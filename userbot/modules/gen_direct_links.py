@@ -53,6 +53,8 @@ async def direct_link_generator(request):
                 reply += sourceforge(link)
             elif 'osdn.net' in link:
                 reply += osdn(link)
+            elif 'github.com' in link:
+                reply += github(link)
             else:
                 reply += re.findall(r"\bhttps?://(.*?[^/]+)", link)[0] + 'is not supported'
         await request.edit(reply)
@@ -262,10 +264,29 @@ def osdn(url: str) -> str:
     return reply
 
 
+def github(url: str) -> str:
+    """ GitHub direct links generator """
+    try:
+        link = re.findall(r'\bhttps?://.*github\.com.*releases\S+', url)[0]
+    except IndexError:
+        reply = "`No GitHub Releases links found`"
+        return reply
+    reply = ''
+    dl_url = ''
+    download = requests.get(url, stream=True, allow_redirects=False)
+    try:
+        dl_url = download.headers["location"]
+    except KeyError:
+        reply += "`Error: Can't extract the link\n`"
+    name = link.split('/')[-1]
+    reply += f'[{name}]({dl_url}) '
+    return reply
+
+
 CMD_HELP.update({
     "direct": ".direct <url> <url>\n"
               "Usage: Generate direct download link from supported URL(s)\n"
               "Supported websites:\n"
               "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - "
-              "ZippyShare - Mediafire - SourceFroge - OSDN`"
+              "ZippyShare - Mediafire - SourceFroge - OSDN - GitHub`"
 })
