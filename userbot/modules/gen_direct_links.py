@@ -59,9 +59,14 @@ async def gdrive(request):
             except KeyError:
                 # In case of download warning page
                 page = BeautifulSoup(download.content, 'html.parser')
-                export = DRIVE + page.find('a', {'id': 'uc-download-link'}).get('href')
+                export = DRIVE + page.find('a',
+                                           {'id': 'uc-download-link'}).get('href')
                 name = page.find('span', {'class': 'uc-name-size'}).text
-                response = requests.get(export, stream=True, allow_redirects=False, cookies=cookies)
+                response = requests.get(
+                    export,
+                    stream=True,
+                    allow_redirects=False,
+                    cookies=cookies)
                 dl_url = response.headers['location']
                 if 'accounts.google.com' in dl_url:
                     reply += 'Link is not public!'
@@ -99,10 +104,12 @@ async def zippy_share(request):
             scripts = page_soup.find_all("script", {"type": "text/javascript"})
             for script in scripts:
                 if "getElementById('dlbutton')" in script.text:
-                    url_raw = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
-                                        script.text).group('url')
-                    math = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
-                                     script.text).group('math')
+                    url_raw = re.search(
+                        r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
+                        script.text).group('url')
+                    math = re.search(
+                        r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
+                        script.text).group('math')
                     dl_url = url_raw.replace(math, '"' + str(eval(math)) + '"')
                     break
             dl_url = base_url + eval(dl_url)
@@ -147,7 +154,8 @@ async def yandex_disk(request):
 async def mega_dl(request):
     """ MEGA.nz direct links generator
     Using https://github.com/tonikelope/megadown"""
-    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@", "!"):
+    if not request.text[0].isalpha() and request.text[0] not in (
+            "/", "#", "@", "!"):
         textx = await request.get_reply_message()
         message = request.pattern_match.group(1)
         if message:
@@ -190,7 +198,8 @@ async def mega_dl(request):
 async def cm_ru(request):
     """ cloud.mail.ru direct links generator
     Using https://github.com/JrMasterModelBuilder/cmrudl.py"""
-    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@", "!"):
+    if not request.text[0].isalpha() and request.text[0] not in (
+            "/", "#", "@", "!"):
         textx = await request.get_reply_message()
         message = request.pattern_match.group(1)
         if message:
