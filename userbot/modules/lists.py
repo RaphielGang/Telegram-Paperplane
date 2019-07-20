@@ -13,6 +13,7 @@ from userbot.modules.dbhelper import (get_list, get_lists,
                                       set_list)
 from userbot.events import register
 
+
 @register(outgoing=True, pattern="^.lists$")
 async def lists_active(event):
     """ For .lists command, list all of the lists saved in a chat. """
@@ -35,6 +36,7 @@ async def lists_active(event):
 
         await event.edit(message)
 
+
 @register(outgoing=True, pattern=r"^.rmlist (\w*)")
 async def removelists(event):
     """ For .rmlist command, delete list with the given name."""
@@ -54,11 +56,13 @@ async def removelists(event):
                              .format(listname))
 
         if BOTLOG:
-            listat = "global storage" if _list['chat_id'] == 0 else str(event.chat_id)
+            listat = "global storage" if _list['chat_id'] == 0 else str(
+                event.chat_id)
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"Removed list {listname} from {listat}"
             )
+
 
 @register(outgoing=True, pattern=r"^.add(g)?list (\w*)")
 async def addlist(event):
@@ -90,6 +94,7 @@ async def addlist(event):
                 f"Added list {listname} to {listat}"
             )
 
+
 @register(outgoing=True, pattern=r"^.addlistitems (\w*)")
 async def add_list_items(event):
     """ For .addlistitems command, add item(s) to a list. """
@@ -114,11 +119,13 @@ Use` ${} `to get the list.`"
             await event.edit(f"List {listname} doesn't exist!")
 
         if BOTLOG:
-            listat = "global storage" if _list['chat_id'] else str(event.chat_id)
+            listat = "global storage" if _list['chat_id'] else str(
+                event.chat_id)
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"Added items {content} to {listname} in {listat}"
             )
+
 
 @register(outgoing=True, pattern=r"^.rmlistitem (\w*) ([0-9]+)")
 async def rmlistitems(event):
@@ -135,7 +142,7 @@ async def rmlistitems(event):
         _list = await get_list(event.chat_id, listname)
 
         content = _list['items']
-        del content[item_number-1]
+        del content[item_number - 1]
 
         msg = "`Item {} removed from the list successfully. \
 Use` ${} `to get the list.`"
@@ -146,11 +153,13 @@ Use` ${} `to get the list.`"
             await event.edit(f"List {listname} doesn't exist!")
 
         if BOTLOG:
-            listat = "global storage" if _list['chat_id'] else str(event.chat_id)
+            listat = "global storage" if _list['chat_id'] else str(
+                event.chat_id)
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"Removed item {str(item_number)} from {listname} in {listat}"
             )
+
 
 @register(outgoing=True, pattern=r"^.setlist (\w*) (\w*)")
 async def setliststate(event):
@@ -188,6 +197,7 @@ async def setliststate(event):
                 f"Changed state of list {listname} to {_futureState}"
             )
 
+
 @register(pattern=r"\$\w*", disable_edited=True)
 async def lists_logic(event):
     """ Lists logic. """
@@ -208,7 +218,7 @@ async def lists_logic(event):
                     return_str = "`This list is empty!`"
 
                 await event.reply(return_str)
-    except:
+    except BaseException:
         pass
 
 CMD_HELP.update({

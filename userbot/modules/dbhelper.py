@@ -202,6 +202,7 @@ async def get_lists(chatid):
         ]
     })
 
+
 async def get_list(chatid, name):
     return MONGO.lists.find_one({
         '$or': [
@@ -210,6 +211,7 @@ async def get_list(chatid, name):
         ],
         'name': name
     })
+
 
 async def add_list(chatid, name, items):
     to_check = await get_list(chatid, name)
@@ -246,6 +248,7 @@ async def delete_list(chatid, name):
             'name': to_check["name"],
             'items': to_check["items"],
         })
+
 
 async def set_list(oldchatid, name, newchatid):
     to_check = await get_list(oldchatid, name)
