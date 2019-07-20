@@ -55,6 +55,8 @@ async def direct_link_generator(request):
                 reply += osdn(link)
             elif 'github.com' in link:
                 reply += github(link)
+            elif 'androidfilehost.com' in link:
+                reply += androidfilehost(link)
             else:
                 reply += re.findall(r"\bhttps?://(.*?[^/]+)", link)[0] + 'is not supported'
         await request.edit(reply)
@@ -283,10 +285,50 @@ def github(url: str) -> str:
     return reply
 
 
+def androidfilehost(url: str) -> str:
+    """ AFH direct links generator """
+    try:
+        link = re.findall(r'\bhttps?://.*androidfilehost.*fid.*\S+', url)[0]
+    except IndexError:
+        reply = "`No AFH links found`"
+        return reply
+    fid = re.findall(r'\?fid=(.*)', link)[0]
+    download = requests.get(link, allow_redirects=True)
+    cookies = download.cookies
+    reply = ''
+    headers = {
+        'origin': 'https://androidfilehost.com',
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
+                      '(KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36 OPR/62.0.3331.66',
+        'x-mod-sbb-ctype': 'xhr',
+        'referer': f'https://androidfilehost.com/?fid={fid}',
+        'authority': 'androidfilehost.com',
+        'x-requested-with': 'XMLHttpRequest',
+    }
+    data = {
+        'submit': 'submit',
+        'action': 'getdownloadmirrors',
+        'fid': f'{fid}'
+    }
+    mirrors = ''
+    try:
+        req = requests.post('https://androidfilehost.com/libs/otf/mirrors.otf.php',
+                             headers=headers, data=data, cookies=cookies, allow_redirects=True)
+        info = req.json()
+        mirrors = info['MIRRORS']
+    except (json.decoder.JSONDecodeError, TypeError):
+        reply += "`Error: Can't find Mirrors for the link\n`"
+    for item in mirrors:
+        name = item['name']
+        dl_url = item['url']
+        reply += f'[{name}]({dl_url}) '
+    return reply
+
+
 CMD_HELP.update({
     "direct": ".direct <url> <url>\n"
               "Usage: Generate direct download link from supported URL(s)\n"
               "Supported websites:\n"
-              "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - "
+              "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - "
               "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
 })
