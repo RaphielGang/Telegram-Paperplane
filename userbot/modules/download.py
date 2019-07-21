@@ -14,11 +14,12 @@ import json
 import os
 import subprocess
 from datetime import datetime
-
+from time import sleep
 import requests
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
+from pyDownload import Downloader
 
 from userbot import LOGS, CMD_HELP
 from userbot.events import register
@@ -62,32 +63,15 @@ async def download(target_file):
             url, file_name = input_str.split("|")
             url = url.strip()
             # https://stackoverflow.com/a/761825/4723940
-            file_name = file_name.strip()
-            required_file_name = TEMP_DOWNLOAD_DIRECTORY + "" + file_name
             start = datetime.now()
-            resp = requests.get(url, stream=True)
-            with open(required_file_name, "wb") as file:
-                total_length = resp.headers.get("content-length")
-                # https://stackoverflow.com/a/15645088/4723940
-                if total_length is None:  # no content length header
-                    file.write(resp.content)
-                else:
-                    downloaded = 0
-                    total_length = int(total_length)
-                    for chunk in resp.iter_content(chunk_size=128):
-                        downloaded += len(chunk)
-                        file.write(chunk)
-                        done = int(100 * downloaded / total_length)
-                        download_progress_string = "Downloading ... [%s%s]" % (
-                            "=" * done,
-                            " " * (50 - done),
-                        )
-                        LOGS.info(download_progress_string)
+            downloader = Downloader(url=url)
+            if downloader.is_running:
+                sleep(1)
             end = datetime.now()
             duration = (end - start).seconds
             await target_file.edit(
-                "Downloaded to `{}` in {} seconds.".format(
-                    required_file_name, duration)
+                "Downloaded `{}` in {} seconds.".format(
+                    downloader.file_name, duration)
             )
         else:
             await target_file.edit("Reply to a message to download to my local server.")
