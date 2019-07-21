@@ -59,7 +59,8 @@ async def direct_link_generator(request):
             elif 'androidfilehost.com' in link:
                 reply += androidfilehost(link)
             else:
-                reply += re.findall(r"\bhttps?://(.*?[^/]+)", link)[0] + 'is not supported'
+                reply += re.findall(r"\bhttps?://(.*?[^/]+)",
+                                    link)[0] + 'is not supported'
         await request.edit(reply)
 
 
@@ -254,7 +255,11 @@ def osdn(url: str) -> str:
     except IndexError:
         reply = "`No OSDN links found`\n"
         return reply
-    page = BeautifulSoup(requests.get(link, allow_redirects=True).content, 'lxml')
+    page = BeautifulSoup(
+        requests.get(
+            link,
+            allow_redirects=True).content,
+        'lxml')
     info = page.find('a', {'class': 'mirror_link'})
     link = urllib.parse.unquote(osdn_link + info['href'])
     reply = f"Mirrors for __{link.split('/')[-1]}__\n"
@@ -319,8 +324,11 @@ def androidfilehost(url: str) -> str:
     reply = ''
     error = "`Error: Can't find Mirrors for the link`\n"
     try:
-        req = session.post('https://androidfilehost.com/libs/otf/mirrors.otf.php',
-                           headers=headers, data=data, cookies=res.cookies)
+        req = session.post(
+            'https://androidfilehost.com/libs/otf/mirrors.otf.php',
+            headers=headers,
+            data=data,
+            cookies=res.cookies)
         mirrors = req.json()['MIRRORS']
     except (json.decoder.JSONDecodeError, TypeError):
         reply += error
@@ -339,9 +347,13 @@ def useragent():
     useragent random setter
     """
     useragents = BeautifulSoup(
-        requests.get('https://developers.whatismybrowser.com/'
-                     'useragents/explore/operating_system_name/android/').content, 'lxml')\
-        .findAll('td', {'class': 'useragent'})
+        requests.get(
+            'https://developers.whatismybrowser.com/'
+            'useragents/explore/operating_system_name/android/').content,
+        'lxml') .findAll(
+            'td',
+            {
+                'class': 'useragent'})
     user_agent = choice(useragents)
     return user_agent.text
 
