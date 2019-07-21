@@ -38,7 +38,8 @@ async def magisk(request):
         except IndexError:
             releases += "`can't find latest zip`"
         try:
-            latest_uninstaller = re.findall(r'/.*Magisk-uninstaller-.*zip', links)[0]
+            latest_uninstaller = re.findall(
+                r'/.*Magisk-uninstaller-.*zip', links)[0]
             releases += f'[{latest_uninstaller.split("/")[-1]}]({GITHUB}/{latest_uninstaller})\n'
         except IndexError:
             releases += "`can't find latest uninstaller`"
@@ -92,8 +93,8 @@ async def codename_info(request):
         else:
             await request.edit("`Usage: .codename <brand> <device>`")
             return
-        found = [i for i in get(DEVICES_DATA).json()
-                 if i["brand"].lower() == brand and device in i["name"].lower()]
+        found = [i for i in get(DEVICES_DATA).json(
+        ) if i["brand"].lower() == brand and device in i["name"].lower()]
         if found:
             reply = ''
             for item in found:
@@ -126,19 +127,25 @@ async def devices_specifications(request):
             await request.edit("`Usage: .specs <brand> <device>`")
             return
         all_brands = BeautifulSoup(
-            get('https://www.devicespecifications.com/en/brand-more').content, 'lxml') \
-            .find('div', {'class': 'brand-listing-container-news'}).findAll('a')
+            get('https://www.devicespecifications.com/en/brand-more').content,
+            'lxml') .find(
+            'div',
+            {
+                'class': 'brand-listing-container-news'}).findAll('a')
         brand_page_url = None
         try:
-            brand_page_url = [i['href'] for i in all_brands if brand == i.text.strip().lower()][0]
+            brand_page_url = [i['href']
+                              for i in all_brands if brand == i.text.strip().lower()][0]
         except IndexError:
             await request.edit(f'`{brand} is unknown brand!`')
         devices = BeautifulSoup(get(brand_page_url).content, 'lxml') \
             .findAll('div', {'class': 'model-listing-container-80'})
         device_page_url = None
         try:
-            device_page_url = [i.a['href'] for i in BeautifulSoup(str(devices), 'lxml')
-                               .findAll('h3') if device in i.text.strip().lower()][0]
+            device_page_url = [
+                i.a['href'] for i in BeautifulSoup(
+                    str(devices),
+                    'lxml') .findAll('h3') if device in i.text.strip().lower()][0]
         except IndexError:
             await request.edit(f"`can't find {device}!`")
         reply = ''
