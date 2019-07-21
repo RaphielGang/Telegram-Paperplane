@@ -9,6 +9,7 @@ from os import popen
 import re
 import urllib.parse
 import json
+from random import choice
 import requests
 from bs4 import BeautifulSoup
 from humanize import naturalsize
@@ -293,14 +294,18 @@ def androidfilehost(url: str) -> str:
         reply = "`No AFH links found`"
         return reply
     fid = re.findall(r'\?fid=(.*)', link)[0]
-    download = requests.get(link, allow_redirects=True)
-    cookies = download.cookies
-    reply = ''
+    session = requests.Session()
+    user_agent = useragent()
+    headers = {'user-agent': user_agent}
+    res = session.get(link, headers=headers, allow_redirects=True)
     headers = {
         'origin': 'https://androidfilehost.com',
-        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
-                      '(KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36 OPR/62.0.3331.66',
+        'accept-encoding': 'gzip, deflate, br',
+        'accept-language': 'en-US,en;q=0.9',
+        'user-agent': user_agent,
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'x-mod-sbb-ctype': 'xhr',
+        'accept': '*/*',
         'referer': f'https://androidfilehost.com/?fid={fid}',
         'authority': 'androidfilehost.com',
         'x-requested-with': 'XMLHttpRequest',
@@ -310,19 +315,35 @@ def androidfilehost(url: str) -> str:
         'action': 'getdownloadmirrors',
         'fid': f'{fid}'
     }
-    mirrors = ''
+    mirrors = None
+    reply = ''
+    error = "`Error: Can't find Mirrors for the link`\n"
     try:
-        req = requests.post('https://androidfilehost.com/libs/otf/mirrors.otf.php',
-                             headers=headers, data=data, cookies=cookies, allow_redirects=True)
-        info = req.json()
-        mirrors = info['MIRRORS']
+        req = session.post('https://androidfilehost.com/libs/otf/mirrors.otf.php',
+                           headers=headers, data=data, cookies=res.cookies)
+        mirrors = req.json()['MIRRORS']
     except (json.decoder.JSONDecodeError, TypeError):
-        reply += "`Error: Can't find Mirrors for the link\n`"
+        reply += error
+    if not mirrors:
+        reply += error
+        return reply
     for item in mirrors:
         name = item['name']
         dl_url = item['url']
         reply += f'[{name}]({dl_url}) '
     return reply
+
+
+def useragent():
+    """
+    useragent random setter
+    """
+    useragents = BeautifulSoup(
+        requests.get('https://developers.whatismybrowser.com/'
+                     'useragents/explore/operating_system_name/android/').content, 'lxml')\
+        .findAll('td', {'class': 'useragent'})
+    user_agent = choice(useragents)
+    return user_agent.text
 
 
 CMD_HELP.update({
