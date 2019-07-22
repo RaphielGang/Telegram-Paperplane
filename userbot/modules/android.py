@@ -29,18 +29,18 @@ async def magisk(request):
         releases = ''
         try:
             latest_apk = re.findall(r'/.*MagiskManager-v.*apk', links)[0]
-            releases += f'[{latest_apk.split("/")[-1]}]({GITHUB}/{latest_apk})\n'
+            releases += f'[{latest_apk.split("/")[-1]}]({GITHUB}{latest_apk})\n'
         except IndexError:
             releases += "`can't find latest apk`"
         try:
             latest_zip = re.findall(r'/.*Magisk-v.*zip', links)[0]
-            releases += f'[{latest_zip.split("/")[-1]}]({GITHUB}/{latest_zip})\n'
+            releases += f'[{latest_zip.split("/")[-1]}]({GITHUB}{latest_zip})\n'
         except IndexError:
             releases += "`can't find latest zip`"
         try:
             latest_uninstaller = re.findall(
                 r'/.*Magisk-uninstaller-.*zip', links)[0]
-            releases += f'[{latest_uninstaller.split("/")[-1]}]({GITHUB}/{latest_uninstaller})\n'
+            releases += f'[{latest_uninstaller.split("/")[-1]}]({GITHUB}{latest_uninstaller})\n'
         except IndexError:
             releases += "`can't find latest uninstaller`"
         await request.edit(releases)
