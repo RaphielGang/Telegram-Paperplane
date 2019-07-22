@@ -86,6 +86,10 @@ SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
 SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
 
+GDRIVE_FOLDER = os.environ.get(
+    "GDRIVE_FOLDER", None
+)
+
 # pylint: disable=invalid-name
 bot = TelegramClient("userbot", API_KEY, API_HASH)
 

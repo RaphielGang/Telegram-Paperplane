@@ -12,16 +12,19 @@
 
 import json
 import os
+import logging
+import re
 import subprocess
 from datetime import datetime
 from time import sleep
-import requests
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeVideo
 from pyDownload import Downloader
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
 
-from userbot import LOGS, CMD_HELP
+from userbot import LOGS, CMD_HELP, GDRIVE_FOLDER
 from userbot.events import register
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
@@ -33,6 +36,111 @@ def progress(current, total):
         "Downloaded %s of %s\nCompleted %s",
         current, total, (current / total) * 100
     )
+
+
+def download_from_url(url: str, file_name: str) -> str:
+    """
+    Download files from URL
+    """
+    start = datetime.now()
+    downloader = Downloader(url=url)
+    if downloader.is_running:
+        sleep(1)
+    end = datetime.now()
+    duration = (end - start).seconds
+    os.rename(downloader.file_name, file_name)
+    status = f"Downloaded `{file_name}` in {duration} seconds."
+    return status
+
+
+async def download_from_tg(target_file) -> str:
+    """
+    Download files from Telegram
+    """
+    start = datetime.now()
+    downloaded_file_name = await target_file.client.download_media(
+        await target_file.get_reply_message(),
+        TEMP_DOWNLOAD_DIRECTORY,
+        progress_callback=progress,
+    )
+    end = datetime.now()
+    duration = (end - start).seconds
+    await target_file.edit(
+        "Downloaded to `{}` in {} seconds.".format(
+            downloaded_file_name, duration)
+    )
+    return downloaded_file_name.split('/')[1]
+
+
+def gdrive_upload(filename: str) -> str:
+    """
+    Upload files to Google Drive
+    """
+    # a workaround for disabling cache errors
+    # https://github.com/googleapis/google-api-python-client/issues/299
+    logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.CRITICAL)
+
+    def authenticate():
+        """
+        Authenticate Google Drive automatically
+        https://stackoverflow.com/a/24542604
+        """
+        gauth = GoogleAuth()
+        # Try to load saved client credentials
+        gauth.LoadCredentialsFile("secret.json")
+        if gauth.credentials is None:
+            # Authenticate if they're not there
+            gauth.LocalWebserverAuth()
+        elif gauth.access_token_expired:
+            # Refresh them if expired
+            gauth.Refresh()
+        else:
+            # Initialize the saved credentials
+            gauth.Authorize()
+        # Save the current credentials to a file
+        gauth.SaveCredentialsFile("secret.json")
+        g_drive = GoogleDrive(gauth)
+        return g_drive
+
+    drive = authenticate()
+    file = drive.CreateFile({'title': filename,
+                             "parents": [{"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]})
+    file.SetContentFile(filename)
+    file.Upload()
+    # insert new permission
+    file.InsertPermission({
+        'type':  'anyone', 'value': 'anyone', 'role':  'reader'
+    })
+    reply = f"[{filename}]({file['alternateLink']})\n" \
+        f"__Direct link:__ [Here]({file['downloadUrl']})"
+    return reply
+
+
+@register(pattern=r".mirror(?: |$)([\s\S]*)", outgoing=True)
+async def gdrive(request):
+    """ Download a file and upload to Google Drive """
+    if not request.text[0].isalpha(
+    ) and request.text[0] not in ("/", "#", "@", "!"):
+        message = request.pattern_match.group(1)
+        if not request.reply_to_msg_id and not message:
+            await request.edit("`Usage: .mirror <url> <url>`")
+            return
+        reply = ''
+        links = re.findall(r'\bhttps?://.*\.\S+', message)
+        if not links and not request.reply_to_msg_id:
+            reply = "No links or telegram files found!\n"
+            await request.edit(reply)
+        if request.reply_to_msg_id:
+            file_name = await download_from_tg(request)
+            reply += gdrive_upload(file_name)
+        elif "|" in message:
+            url, file_name = message.split("|")
+            url = url.strip()
+            file_name = file_name.strip()
+            status = download_from_url(url, file_name)
+            await request.edit(status)
+            reply += gdrive_upload(file_name)
+        await request.edit(reply)
 
 
 @register(pattern=r".download(?: |$)(.*)", outgoing=True)
@@ -47,32 +155,13 @@ async def download(target_file):
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
         if target_file.reply_to_msg_id:
-            start = datetime.now()
-            downloaded_file_name = await target_file.client.download_media(
-                await target_file.get_reply_message(),
-                TEMP_DOWNLOAD_DIRECTORY,
-                progress_callback=progress,
-            )
-            end = datetime.now()
-            duration = (end - start).seconds
-            await target_file.edit(
-                "Downloaded to `{}` in {} seconds.".format(
-                    downloaded_file_name, duration)
-            )
+            await download_from_tg(target_file)
         elif "|" in input_str:
             url, file_name = input_str.split("|")
             url = url.strip()
-            # https://stackoverflow.com/a/761825/4723940
-            start = datetime.now()
-            downloader = Downloader(url=url)
-            if downloader.is_running:
-                sleep(1)
-            end = datetime.now()
-            duration = (end - start).seconds
-            await target_file.edit(
-                "Downloaded `{}` in {} seconds.".format(
-                    downloader.file_name, duration)
-            )
+            file_name = file_name.strip()
+            status = download_from_url(url, file_name)
+            await target_file.edit(status)
         else:
             await target_file.edit("Reply to a message to download to my local server.")
 
@@ -335,8 +424,15 @@ async def uploadas(uas_event):
 
 
 CMD_HELP.update({
-    "download": ".download <link>\nUsage: Downloads file from link to the server."
+    "download": ".download [in reply to TG file]\n"
+                "or .download <link> | <filename>\n"
+                "Usage: Downloads a file from telegram or link to the server."
 })
 CMD_HELP.update({
     "upload": ".upload <link>\nUsage: Uploads a locally stored file to telegram."
+})
+CMD_HELP.update({
+    "mirror": ".mirror [in reply to TG file]\n"
+              "or .mirror <link> | <filename>\n"
+              "Usage: Downloads a file from telegram or link to the server then uploads to your GDrive."
 })
