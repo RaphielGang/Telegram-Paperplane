@@ -57,6 +57,7 @@ I would like to thank people who assisted me throughout this project:
 * [@zakaryan2004](https://github.com/zakaryan2004)
 * [@kandnub](https://github.com/kandnub)
 * [@pqhaz](https://github.com/pqhaz)
+* [@yshalsager](https://github.com/yshalsager)
 
 and many more people who aren't mentioned here.
 
