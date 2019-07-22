@@ -78,7 +78,8 @@ def gdrive_upload(filename: str) -> str:
     """
     # a workaround for disabling cache errors
     # https://github.com/googleapis/google-api-python-client/issues/299
-    logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.CRITICAL)
+    logging.getLogger('googleapiclient.discovery_cache').setLevel(
+        logging.CRITICAL)
 
     def authenticate():
         """
@@ -103,13 +104,13 @@ def gdrive_upload(filename: str) -> str:
         return g_drive
 
     drive = authenticate()
-    file = drive.CreateFile({'title': filename,
-                             "parents": [{"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]})
+    file = drive.CreateFile({'title': filename, "parents": [
+                            {"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]})
     file.SetContentFile(filename)
     file.Upload()
     # insert new permission
     file.InsertPermission({
-        'type':  'anyone', 'value': 'anyone', 'role':  'reader'
+        'type': 'anyone', 'value': 'anyone', 'role': 'reader'
     })
     reply = f"[{filename}]({file['alternateLink']})\n" \
         f"__Direct link:__ [Here]({file['downloadUrl']})"
