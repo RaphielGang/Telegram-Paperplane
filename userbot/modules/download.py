@@ -13,9 +13,11 @@
 import json
 import os
 import logging
+import mimetypes
 import re
 import subprocess
 from datetime import datetime
+from io import BytesIO
 from time import sleep
 from telethon.tl.types import DocumentAttributeVideo
 from pyDownload import Downloader
@@ -53,26 +55,27 @@ def download_from_url(url: str, file_name: str) -> str:
     return status
 
 
-async def download_from_tg(target_file) -> str:
+async def download_from_tg(target_file) -> [str, BytesIO]:
     """
     Download files from Telegram
     """
     start = datetime.now()
-    downloaded_file_name = await target_file.client.download_media(
-        await target_file.get_reply_message(),
-        TEMP_DOWNLOAD_DIRECTORY,
+    buf = BytesIO()
+    reply_msg = await target_file.get_reply_message()
+    buf = await target_file.client.download_media(
+        reply_msg,
+        buf,
         progress_callback=progress,
     )
     end = datetime.now()
     duration = (end - start).seconds
     await target_file.edit(
-        "Downloaded to `{}` in {} seconds.".format(
-            downloaded_file_name, duration)
+        f"Downloaded {reply_msg.media.document.attributes[0].file_name} in {duration} seconds."
     )
-    return downloaded_file_name.split('/')[1]
+    return [reply_msg.media.document.attributes[0].file_name, buf]
 
 
-def gdrive_upload(filename: str) -> str:
+def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     """
     Upload files to Google Drive
     """
@@ -81,32 +84,38 @@ def gdrive_upload(filename: str) -> str:
     logging.getLogger('googleapiclient.discovery_cache').setLevel(
         logging.CRITICAL)
 
-    def authenticate():
-        """
-        Authenticate Google Drive automatically
-        https://stackoverflow.com/a/24542604
-        """
-        gauth = GoogleAuth()
-        # Try to load saved client credentials
-        gauth.LoadCredentialsFile("secret.json")
-        if gauth.credentials is None:
-            # Authenticate if they're not there
-            gauth.LocalWebserverAuth()
-        elif gauth.access_token_expired:
-            # Refresh them if expired
-            gauth.Refresh()
-        else:
-            # Initialize the saved credentials
-            gauth.Authorize()
-        # Save the current credentials to a file
-        gauth.SaveCredentialsFile("secret.json")
-        g_drive = GoogleDrive(gauth)
-        return g_drive
+    """
+    Authenticate Google Drive automatically
+    https://stackoverflow.com/a/24542604
+    """
+    gauth = GoogleAuth()
+    # Try to load saved client credentials
+    gauth.LoadCredentialsFile("secret.json")
+    if gauth.credentials is None:
+        return "nosecret"
+    elif gauth.access_token_expired:
+        gauth.Refresh()
+    else:
+        # Initialize the saved credentials
+        gauth.Authorize()
+    # Save the current credentials to a file
+    gauth.SaveCredentialsFile("secret.json")
+    drive = GoogleDrive(gauth)
 
-    drive = authenticate()
-    file = drive.CreateFile({'title': filename, "parents": [
-                            {"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]})
-    file.SetContentFile(filename)
+    filedata = {'title': filename, "parents": [
+                            {"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]}
+
+    if filebuf:
+        mime_type = mimetypes.guess_type(filename)
+        if mime_type[0] and mime_type[1]:
+            filedata['mimeType'] = f"{mime_type[0]}/{mime_type[1]}"
+        else:
+            filedata['mimeType'] = 'text/plain'
+        file = drive.CreateFile(filedata)
+        file.content = filebuf
+    else:
+        file = drive.CreateFile(filedata)
+        file.setContentFile(filename)
     file.Upload()
     # insert new permission
     file.InsertPermission({
@@ -127,13 +136,15 @@ async def gdrive(request):
             await request.edit("`Usage: .mirror <url> <url>`")
             return
         reply = ''
+        reply_msg = await request.get_reply_message()
         links = re.findall(r'\bhttps?://.*\.\S+', message)
-        if not links and not request.reply_to_msg_id:
+        if not (links or reply_msg or reply_msg.media or reply_msg.media.document):
             reply = "No links or telegram files found!\n"
             await request.edit(reply)
+            return
         if request.reply_to_msg_id:
-            file_name = await download_from_tg(request)
-            reply += gdrive_upload(file_name)
+            buf = await download_from_tg(request)
+            reply += gdrive_upload(buf[0], buf[1])
         elif "|" in message:
             url, file_name = message.split("|")
             url = url.strip()
@@ -141,6 +152,8 @@ async def gdrive(request):
             status = download_from_url(url, file_name)
             await request.edit(status)
             reply += gdrive_upload(file_name)
+        if "nosecret" in reply:
+            reply = "`Run the generate_drive_session.py file in your machine to authenticate on google drive!!`"
         await request.edit(reply)
 
 
@@ -156,7 +169,9 @@ async def download(target_file):
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
         if target_file.reply_to_msg_id:
-            await download_from_tg(target_file)
+            buf = await download_from_tg(target_file)
+            with open(buf[0], 'wb') as toSave:
+                toSave.write(buf[1].read())
         elif "|" in input_str:
             url, file_name = input_str.split("|")
             url = url.strip()
@@ -437,3 +452,4 @@ CMD_HELP.update({
               "or .mirror <link> | <filename>\n"
               "Usage: Downloads a file from telegram or link to the server then uploads to your GDrive."
 })
+
