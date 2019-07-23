@@ -63,7 +63,7 @@ RUN sudo pip3 install -r requirements.txt
 # If you want to use your local files, comment the git command and uncomment COPY
 #
 RUN mkdir /home/userbot/userbot
-RUN git clone -b master https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
+RUN git clone -b staging https://github.com/baalajimaestro/Telegram-UserBot /home/userbot/userbot
 #COPY . /home/userbot/userbot
 RUN mkdir /home/userbot/bin
 WORKDIR /home/userbot/userbot
