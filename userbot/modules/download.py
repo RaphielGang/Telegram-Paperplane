@@ -14,6 +14,7 @@ import json
 import os
 import logging
 import mimetypes
+import psutil
 import re
 import subprocess
 from datetime import datetime
@@ -62,17 +63,27 @@ async def download_from_tg(target_file) -> [str, BytesIO]:
     start = datetime.now()
     buf = BytesIO()
     reply_msg = await target_file.get_reply_message()
-    buf = await target_file.client.download_media(
-        reply_msg,
-        buf,
-        progress_callback=progress,
-    )
+    avail_mem = psutil.virtual_memory().available + psutil.swap_memory().free
+    if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
+        buf.name = "nomem"
+        filen = await target_file.client.download_media(
+            reply_msg,
+            GDRIVE_FOLDER,
+            progress_callback=progress,
+        )
+    else:
+        filen = buf.name = reply_msg.media.document.attributes[0].file_name
+        buf = await target_file.client.download_media(
+            reply_msg,
+            buf,
+            progress_callback=progress,
+        )
     end = datetime.now()
     duration = (end - start).seconds
     await target_file.edit(
         f"Downloaded {reply_msg.media.document.attributes[0].file_name} in {duration} seconds."
     )
-    return [reply_msg.media.document.attributes[0].file_name, buf]
+    return [filen, buf]
 
 
 def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
@@ -144,7 +155,7 @@ async def gdrive(request):
             return
         if request.reply_to_msg_id:
             buf = await download_from_tg(request)
-            reply += gdrive_upload(buf[0], buf[1])
+            reply += gdrive_upload(buf[0], buf[1]) if buf[1].name != "nomem" else gdrive_upload(buf[0])
         elif "|" in message:
             url, file_name = message.split("|")
             url = url.strip()
@@ -166,12 +177,14 @@ async def download(target_file):
             return
         await target_file.edit("Processing ...")
         input_str = target_file.pattern_match.group(1)
+        reply_msg = await target_file.get_reply_message()
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-        if target_file.reply_to_msg_id:
+        if reply_msg and reply_msg.media and reply_msg.media.document:
             buf = await download_from_tg(target_file)
-            with open(buf[0], 'wb') as toSave:
-                toSave.write(buf[1].read())
+            if buf[1].name != "nomem":
+                with open(buf[0], 'wb') as toSave:
+                    toSave.write(buf[1].read())
         elif "|" in input_str:
             url, file_name = input_str.split("|")
             url = url.strip()
