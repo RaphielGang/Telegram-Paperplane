@@ -128,6 +128,8 @@ def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
         file = drive.CreateFile(filedata)
         file.setContentFile(filename)
     file.Upload()
+    if not filebuf:
+        os.remove(filename)
     # insert new permission
     file.InsertPermission({
         'type': 'anyone', 'value': 'anyone', 'role': 'reader'
