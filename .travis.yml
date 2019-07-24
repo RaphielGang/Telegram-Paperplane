@@ -1,0 +1,13 @@
+language: bash
+
+dist: xenial
+
+python:
+  - "3.7.3"
+
+script:
+  - bash init/Merge.sh
+
+branches:
+  only:
+  - master
