@@ -59,8 +59,8 @@ async def direct_link_generator(request):
             elif 'androidfilehost.com' in link:
                 reply += androidfilehost(link)
             else:
-                reply += re.findall(r"\bhttps?://(.*?[^/]+)",
-                                    link)[0] + 'is not supported'
+                reply += '`' + re.findall(r"\bhttps?://(.*?[^/]+)",
+                                          link)[0] + 'is not supported`\n'
         await request.edit(reply)
 
 
@@ -103,7 +103,7 @@ def gdrive(url: str) -> str:
             cookies=cookies)
         dl_url = response.headers['location']
         if 'accounts.google.com' in dl_url:
-            reply += 'Link is not public!'
+            reply += '`Link is not public!`\n'
             return reply
     reply += f'[{name}]({dl_url})\n'
     return reply

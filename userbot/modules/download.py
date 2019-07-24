@@ -14,12 +14,12 @@ import json
 import os
 import logging
 import mimetypes
-import psutil
 import re
 import subprocess
 from datetime import datetime
 from io import BytesIO
 from time import sleep
+import psutil
 from telethon.tl.types import DocumentAttributeVideo
 from pyDownload import Downloader
 from pydrive.auth import GoogleAuth
@@ -41,7 +41,7 @@ def progress(current, total):
     )
 
 
-def download_from_url(url: str, file_name: str) -> str:
+async def download_from_url(url: str, file_name: str) -> str:
     """
     Download files from URL
     """
@@ -81,30 +81,28 @@ async def download_from_tg(target_file) -> [str, BytesIO]:
     end = datetime.now()
     duration = (end - start).seconds
     await target_file.edit(
-        f"Downloaded {reply_msg.media.document.attributes[0].file_name} in {duration} seconds."
+        f"`Downloaded {reply_msg.media.document.attributes[0].file_name} in {duration} seconds.`"
     )
     return [filen, buf]
 
 
-def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
+async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     """
-    Upload files to Google Drive
+    Upload files to Google Drive using PyDrive
     """
     # a workaround for disabling cache errors
     # https://github.com/googleapis/google-api-python-client/issues/299
     logging.getLogger('googleapiclient.discovery_cache').setLevel(
         logging.CRITICAL)
 
-    """
-    Authenticate Google Drive automatically
-    https://stackoverflow.com/a/24542604
-    """
+    # Authenticate Google Drive automatically
+    # https://stackoverflow.com/a/24542604
     gauth = GoogleAuth()
     # Try to load saved client credentials
     gauth.LoadCredentialsFile("secret.json")
     if gauth.credentials is None:
         return "nosecret"
-    elif gauth.access_token_expired:
+    if gauth.access_token_expired:
         gauth.Refresh()
     else:
         # Initialize the saved credentials
@@ -126,7 +124,8 @@ def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
         file.content = filebuf
     else:
         file = drive.CreateFile(filedata)
-        file.setContentFile(filename)
+        file.SetContentFile(filename)
+    name = filename.split('/')[-1]
     file.Upload()
     if not filebuf:
         os.remove(filename)
@@ -134,13 +133,13 @@ def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     file.InsertPermission({
         'type': 'anyone', 'value': 'anyone', 'role': 'reader'
     })
-    reply = f"[{filename}]({file['alternateLink']})\n" \
+    reply = f"[{name}]({file['alternateLink']})\n" \
         f"__Direct link:__ [Here]({file['downloadUrl']})"
     return reply
 
 
 @register(pattern=r".mirror(?: |$)([\s\S]*)", outgoing=True)
-async def gdrive(request):
+async def gdrive_mirror(request):
     """ Download a file and upload to Google Drive """
     if not request.text[0].isalpha(
     ) and request.text[0] not in ("/", "#", "@", "!"):
@@ -152,22 +151,45 @@ async def gdrive(request):
         reply_msg = await request.get_reply_message()
         links = re.findall(r'\bhttps?://.*\.\S+', message)
         if not (links or reply_msg or reply_msg.media or reply_msg.media.document):
-            reply = "No links or telegram files found!\n"
+            reply = "`No links or telegram files found!`\n"
             await request.edit(reply)
             return
         if request.reply_to_msg_id:
+            await request.edit('`Downloading from Telegram...`')
             buf = await download_from_tg(request)
-            reply += gdrive_upload(buf[0], buf[1]
-                                   ) if buf[1].name != "nomem" else gdrive_upload(buf[0])
+            await request.edit(f'`Uploading {buf[0]} to GDrive...`')
+            reply += await gdrive_upload(buf[0], buf[1]
+                                         ) if buf[1].name != "nomem" else await gdrive_upload(buf[0])
         elif "|" in message:
             url, file_name = message.split("|")
             url = url.strip()
             file_name = file_name.strip()
-            status = download_from_url(url, file_name)
+            await request.edit(f'`Downloading {file_name}`')
+            status = await download_from_url(url, file_name)
             await request.edit(status)
-            reply += gdrive_upload(file_name)
+            await request.edit(f'`Uploading {file_name} to GDrive...`')
+            reply += await gdrive_upload(file_name)
         if "nosecret" in reply:
-            reply = "`Run the generate_drive_session.py file in your machine to authenticate on google drive!!`"
+            reply = "`Run the generate_drive_session.py file " \
+                    "in your machine to authenticate on google drive!!`"
+        await request.edit(reply)
+
+
+@register(pattern=r".drive(?: |$)(\S*.?\/*.?\.?[A-Za-z0-9]*)", outgoing=True)
+async def gdrive(request):
+    """ Upload files from server to Google Drive """
+    if not request.text[0].isalpha(
+    ) and request.text[0] not in ("/", "#", "@", "!"):
+        path = request.pattern_match.group(1)
+        if not path:
+            await request.edit("`Usage: .drive <file>`")
+            return
+        if not os.path.isfile(path):
+            await request.edit("`No such file!`\n")
+            return
+        file_name = path.split('/')[-1]
+        await request.edit(f'`Uploading {file_name} to GDrive...`')
+        reply = await gdrive_upload(path)
         await request.edit(reply)
 
 
@@ -184,18 +206,20 @@ async def download(target_file):
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
         if reply_msg and reply_msg.media and reply_msg.media.document:
+            await target_file.edit('`Downloading file from Telegram....`')
             buf = await download_from_tg(target_file)
             if buf[1].name != "nomem":
-                with open(buf[0], 'wb') as toSave:
-                    toSave.write(buf[1].read())
+                with open(buf[0], 'wb') as to_save:
+                    to_save.write(buf[1].read())
         elif "|" in input_str:
             url, file_name = input_str.split("|")
             url = url.strip()
             file_name = file_name.strip()
-            status = download_from_url(url, file_name)
+            await target_file.edit(f'`Downloading {file_name}`')
+            status = await download_from_url(url, file_name)
             await target_file.edit(status)
         else:
-            await target_file.edit("Reply to a message to download to my local server.")
+            await target_file.edit("`Reply to a message to download to my local server.`\n")
 
 
 @register(pattern=r".uploadir (.*)", outgoing=True)
@@ -464,7 +488,11 @@ CMD_HELP.update({
     "upload": ".upload <link>\nUsage: Uploads a locally stored file to telegram."
 })
 CMD_HELP.update({
+    "drive": ".upload <file>\nUsage: Uploads a locally stored file to GDrive."
+})
+CMD_HELP.update({
     "mirror": ".mirror [in reply to TG file]\n"
               "or .mirror <link> | <filename>\n"
-              "Usage: Downloads a file from telegram or link to the server then uploads to your GDrive."
+              "Usage: Downloads a file from telegram "
+              "or link to the server then uploads to your GDrive."
 })
