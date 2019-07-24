@@ -114,7 +114,7 @@ def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     drive = GoogleDrive(gauth)
 
     filedata = {'title': filename, "parents": [
-                            {"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]}
+        {"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]}
 
     if filebuf:
         mime_type = mimetypes.guess_type(filename)
@@ -157,7 +157,8 @@ async def gdrive(request):
             return
         if request.reply_to_msg_id:
             buf = await download_from_tg(request)
-            reply += gdrive_upload(buf[0], buf[1]) if buf[1].name != "nomem" else gdrive_upload(buf[0])
+            reply += gdrive_upload(buf[0], buf[1]
+                                   ) if buf[1].name != "nomem" else gdrive_upload(buf[0])
         elif "|" in message:
             url, file_name = message.split("|")
             url = url.strip()
@@ -467,4 +468,3 @@ CMD_HELP.update({
               "or .mirror <link> | <filename>\n"
               "Usage: Downloads a file from telegram or link to the server then uploads to your GDrive."
 })
-
