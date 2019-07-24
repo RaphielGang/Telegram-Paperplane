@@ -22,5 +22,5 @@ git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/rap
 git fetch
 git checkout staging
 git pull origin staging
-git push --quiet origin staging:master
+git push --force origin staging:master
 tg_sendinfo "<code>I have merged all commits from staging into master</code>"
