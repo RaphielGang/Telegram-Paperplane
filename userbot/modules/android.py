@@ -26,7 +26,7 @@ async def magisk(request):
     ) and request.text[0] not in ("/", "#", "@", "!"):
         page = BeautifulSoup(get(MAGISK_REPO).content, 'lxml')
         links = '\n'.join([i['href'] for i in page.findAll('a')])
-        releases = ''
+        releases = 'Latest Magisk Releases:\n'
         try:
             latest_apk = re.findall(r'/.*MagiskManager-v.*apk', links)[0]
             releases += f'[{latest_apk.split("/")[-1]}]({GITHUB}{latest_apk})\n'
@@ -63,7 +63,7 @@ async def device_info(request):
         found = [i for i in get(DEVICES_DATA).json()
                  if i["device"] == device or i["model"] == device]
         if found:
-            reply = ''
+            reply = f'Search results for {device}:\n'
             for item in found:
                 brand = item['brand']
                 name = item['name']
@@ -95,8 +95,10 @@ async def codename_info(request):
             return
         found = [i for i in get(DEVICES_DATA).json(
         ) if i["brand"].lower() == brand and device in i["name"].lower()]
+        if len(found) > 8:
+            found = found[:8]
         if found:
-            reply = ''
+            reply = f'Search results for {brand.capitalize()} {device.capitalize()}:\n'
             for item in found:
                 brand = item['brand']
                 name = item['name']
@@ -128,10 +130,8 @@ async def devices_specifications(request):
             return
         all_brands = BeautifulSoup(
             get('https://www.devicespecifications.com/en/brand-more').content,
-            'lxml') .find(
-            'div',
-            {
-                'class': 'brand-listing-container-news'}).findAll('a')
+            'lxml').find('div',
+                         {'class': 'brand-listing-container-news'}).findAll('a')
         brand_page_url = None
         try:
             brand_page_url = [i['href']
@@ -145,18 +145,22 @@ async def devices_specifications(request):
             device_page_url = [
                 i.a['href'] for i in BeautifulSoup(
                     str(devices),
-                    'lxml') .findAll('h3') if device in i.text.strip().lower()][0]
+                    'lxml') .findAll('h3') if device in i.text.strip().lower()]
         except IndexError:
             await request.edit(f"`can't find {device}!`")
+        if len(device_page_url) > 2:
+            device_page_url = device_page_url[:2]
         reply = ''
-        info = BeautifulSoup(get(device_page_url).content, 'lxml') \
-            .find('div', {'id': 'model-brief-specifications'})
-        specifications = re.findall(r'<b>.*?<br/>', str(info))
-        for item in specifications:
-            title = re.findall(r'<b>(.*?)</b>', item)[0].strip()
-            data = re.findall(r'</b>: (.*?)<br/>', item)[0]\
-                .replace('<b>', '').replace('</b>', '').strip()
-            reply += f'**{title}**: {data}\n'
+        for url in device_page_url:
+            info = BeautifulSoup(get(url).content, 'lxml')
+            reply = '\n' + info.title.text.split('-')[0].strip() + '\n'
+            info = info.find('div', {'id': 'model-brief-specifications'})
+            specifications = re.findall(r'<b>.*?<br/>', str(info))
+            for item in specifications:
+                title = re.findall(r'<b>(.*?)</b>', item)[0].strip()
+                data = re.findall(r'</b>: (.*?)<br/>', item)[0]\
+                    .replace('<b>', '').replace('</b>', '').strip()
+                reply += f'**{title}**: {data}\n'
         await request.edit(reply)
 
 
