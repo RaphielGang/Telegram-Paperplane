@@ -155,8 +155,8 @@ async def type_afk_is_not_true(e):
 
 
 CMD_HELP.update({
-    "afk": ".afk <reason>(reason is optional)\
-\nUsage: Sets you as afk. Responds to anyone who tags/PM's \
-you telling that you are afk. Switches off AFK when you type back anything.\
+    "afk": ".afk <reason>(optional)\
+\nUsage: Sets your status as AFK. Responds to anyone who tags/PM's \
+you telling you are AFK. Switches off AFK when you type back anything.\
 "
 })

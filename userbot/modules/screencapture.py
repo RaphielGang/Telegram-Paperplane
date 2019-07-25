@@ -59,5 +59,5 @@ async def capture(url):
 
 CMD_HELP.update({
     "screencapture": ".screencapture <url>\
-    \nUsage: Takes a screenshot of a website and sends the screenshot."
+    \nUsage: Take a screenshot of a website and send the screenshot."
 })

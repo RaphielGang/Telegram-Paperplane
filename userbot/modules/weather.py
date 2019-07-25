@@ -17,8 +17,6 @@ from userbot.events import register
 
 # ===== CONSTANT =====
 DEFCITY = ''
-
-
 # ====================
 
 

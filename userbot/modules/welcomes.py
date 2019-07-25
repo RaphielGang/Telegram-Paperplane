@@ -23,6 +23,7 @@ async def welcome_mute(welcm):
         return
     if welcm.user_joined or welcm.user_added:
         adder = None
+        ignore = None
 
         if welcm.user_added:
             ignore = False
@@ -32,6 +33,7 @@ async def welcome_mute(welcm):
             if admin.id == adder:
                 ignore = True
                 break
+
         if ignore:
             return
         elif welcm.user_joined:
@@ -142,6 +144,6 @@ async def welcome_mute(welcm):
 
 CMD_HELP.update({
     'welcome_mute': "If enabled in config.env or env var, \
-        this module will ban(or inform admins) the group join \
-        spammers if they match the userbot's algorithm of banning"
+        this module will ban(or inform the admins about) the \
+        spammer(s) if they match the userbot's algorithm"
 })

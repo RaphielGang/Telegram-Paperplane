@@ -78,15 +78,15 @@ async def kickme(leave):
 
 
 CMD_HELP.update({
-    "chatid": "Fetches the current chat's ID"
+    "chatid": "Fetch the current chat's ID"
 })
 CMD_HELP.update({
-    "userid": "Fetches the ID of the user in reply, if its a \
-forwarded message, finds the ID for the source."
+    "userid": "Fetch the ID of the user in reply or the \
+original author of a forwarded message."
 })
 CMD_HELP.update({
-    "log": "Forwards the message you've replied to in your \
-bot logs group."
+    "log": "Forward the message you've replied to to your \
+botlog group."
 })
 CMD_HELP.update({
     "kickme": "Leave from a targeted group."
