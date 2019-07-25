@@ -482,17 +482,17 @@ async def uploadas(uas_event):
 CMD_HELP.update({
     "download": ".download [in reply to TG file]\n"
                 "or .download <link> | <filename>\n"
-                "Usage: Downloads a file from telegram or link to the server."
+                "Usage: Download a file from telegram or link to the server."
 })
 CMD_HELP.update({
-    "upload": ".upload <link>\nUsage: Uploads a locally stored file to telegram."
+    "upload": ".upload <link>\nUsage: Upload a locally stored file to Telegram."
 })
 CMD_HELP.update({
-    "drive": ".upload <file>\nUsage: Uploads a locally stored file to GDrive."
+    "drive": ".upload <file>\nUsage: Upload a locally stored file to GDrive."
 })
 CMD_HELP.update({
     "mirror": ".mirror [in reply to TG file]\n"
               "or .mirror <link> | <filename>\n"
-              "Usage: Downloads a file from telegram "
-              "or link to the server then uploads to your GDrive."
+              "Usage: Download a file from telegram "
+              "or link to the server then upload to your GDrive."
 })

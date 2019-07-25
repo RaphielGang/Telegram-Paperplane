@@ -142,10 +142,10 @@ async def kick_marie_notes(kick):
 CMD_HELP.update({
     "notes": "\
 #<notename>\
-\nUsage: Gets the note with name notename\
+\nUsage: Get the note with name notename\
 \n\n.save <notename> <notedata>\
-\nUsage: Saves notedata as a note with the name notename\
+\nUsage: Save notedata as a note with the name notename\
 \n\n.clear <notename>\
-\nUsage: Deletes the note with name notename.\
+\nUsage: Delete the note with name notename.\
 "
 })

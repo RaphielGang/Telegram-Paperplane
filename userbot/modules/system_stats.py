@@ -18,8 +18,6 @@ from userbot.events import register
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
-
-
 # ============================================
 
 
@@ -185,18 +183,19 @@ async def amireallyalivereset(ureset):
 
 CMD_HELP.update({
     "sysd": ".sysd\
-    \nUsage: Shows system information using neofetch."
+    \nUsage: Show system information using neofetch."
 })
 CMD_HELP.update({
     "botver": ".botver\
-    \nUsage: Shows the userbot version."
+    \nUsage: Show the userbot version."
 })
 CMD_HELP.update({
     "pip": ".pip <module(s)>\
-    \nUsage: Does a search of pip modules(s)."
+    \nUsage: Search module(s) in PyPi."
 })
 CMD_HELP.update({
     "alive": ".alive\
-    \nUsage: It's used to check if your bot is working or not. \
-Use .aliveu <new_user> to change user or .resetalive to reset .alive."
+    \nUsage: Check if your bot is working or not. \
+Use .aliveu <new_user> to change user name, or .resetalive \
+to reset it to default."
 })

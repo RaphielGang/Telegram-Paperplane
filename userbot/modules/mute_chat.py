@@ -64,10 +64,10 @@ async def keep_read(message):
 
 CMD_HELP.update({
     'unmutechat': '.unmutechat\
-\nUsage: Unmutes a muted chat.'
+\nUsage: Unmute a muted chat.'
 })
 
 CMD_HELP.update({
     'mutechat': '.mutechat\
-\nUsage: Allows you to mute any chat.'
+\nUsage: Mute any chat.'
 })

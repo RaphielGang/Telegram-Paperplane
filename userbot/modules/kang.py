@@ -190,5 +190,5 @@ CMD_HELP.update({
 \nUsage: Works just like .kang but uses the emoji('s) you picked.\
 \n\n.kang [number]\
 \nUsage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
-\n\n\nPlease kang this. Made by @rupansh."
+\n\n\nPlease kang this."
 })
