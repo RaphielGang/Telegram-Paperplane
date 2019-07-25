@@ -178,7 +178,7 @@ def mega_dl(url: str) -> str:
         reply += "`Error: Can't extract the link`\n"
         return reply
     dl_url = data['url']
-    name = data['name']
+    name = data['file_name']
     size = naturalsize(int(data['file_size']))
     reply += f'[{name} ({size})]({dl_url})\n'
     return reply
