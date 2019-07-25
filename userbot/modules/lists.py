@@ -126,6 +126,7 @@ Use` ${} `to get the list.`"
                 f"Added items {content} to {listname} in {listat}"
             )
 
+
 @register(outgoing=True, pattern=r"^.editlistitem (\w*) ([0-9]+)")
 async def edit_list_item(event):
     """ For .editlistitem command, edit an individual item on a list. """

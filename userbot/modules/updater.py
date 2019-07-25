@@ -15,12 +15,14 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from userbot import CMD_HELP
 from userbot.events import register
 
+
 async def gen_chlog(repo, diff):
     ch_log = ''
     d_form = "%d/%m/%y"
     for c in repo.iter_commits(diff):
         ch_log += f'•[{c.committed_datetime.strftime(d_form)}]: {c.summary} <{c.author}>\n'
     return ch_log
+
 
 async def is_off_br(br):
     off_br = ['master', 'staging', 'redis']
@@ -29,11 +31,12 @@ async def is_off_br(br):
             return 1
     return
 
+
 @register(outgoing=True, pattern="^.update(?: |$)(.*)")
 async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"
     if not ups.text[0].isalpha() and ups.text[0] not in (
-        "/", "#", "@", "!"):
+            "/", "#", "@", "!"):
         await ups.edit("`Checking for updates, please wait....`")
         conf = ups.pattern_match.group(1)
         off_repo = 'https://github.com/RaphielGang/Telegram-UserBot.git'
