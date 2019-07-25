@@ -95,7 +95,7 @@ async def addlist(event):
             )
 
 
-@register(outgoing=True, pattern=r"^.addlistitems (\w*)")
+@register(outgoing=True, pattern=r"^.addlistitem(s)? (\w*)")
 async def add_list_items(event):
     """ For .addlistitems command, add item(s) to a list. """
     cmd = event.text[0]
@@ -104,7 +104,7 @@ async def add_list_items(event):
             await event.edit("`Database connections failing!`")
             return
 
-        listname = event.pattern_match.group(1)
+        listname = event.pattern_match.group(2)
         _list = await get_list(event.chat_id, listname)
         content = _list['items']
 
@@ -124,6 +124,40 @@ Use` ${} `to get the list.`"
             await event.client.send_message(
                 BOTLOG_CHATID,
                 f"Added items {content} to {listname} in {listat}"
+            )
+
+@register(outgoing=True, pattern=r"^.editlistitem (\w*) ([0-9]+)")
+async def edit_list_item(event):
+    """ For .editlistitem command, edit an individual item on a list. """
+    cmd = event.text[0]
+    if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
+        if not is_mongo_alive() or not is_redis_alive():
+            await event.edit("`Database connections failing!`")
+            return
+
+        listname = event.pattern_match.group(1)
+        item_number = int(event.pattern_match.group(2))
+
+        _list = await get_list(event.chat_id, listname)
+        content = _list['items']
+        content[item_number - 1] = event.text.partition(
+            f"{listname} {item_number} "
+        )[2]
+
+        msg = f"`Item {item_number} edited successfully. \
+Use` ${listname} `to get the list.`"
+
+        if await add_list(event.chat_id, listname, content) is False:
+            await event.edit(msg)
+        else:
+            await event.edit(f"List {listname} doesn't exist!")
+
+        if BOTLOG:
+            listat = "global storage" if _list['chat_id'] else str(
+                event.chat_id)
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                f"Edited item {item_number} of {listname} in {listat} successfully."
             )
 
 
@@ -234,13 +268,16 @@ Separate items with a new line.\
 \nUsage: Saves items as a global list with the name listname. \
 Separate items with a new line. Accessible from every chat.\
 \n\n.rmlist <listname>\
-\nUsage: Deletes the list with name listname.\
-\n\n.addlistitems <listname> <items>\
+\nUsage: Delete the list with name listname.\
+\n\n.addlistitem(s) <listname> <items>\
 \nUsage: Add items to the list listname. \
 Separate items with a new line.\
 \n\n.rmlistitem <listname> <item_number>\
-\nUsage: Deletes the item with the number item_number in the \
+\nUsage: Delete the item with the number item_number in the \
 list with the name listname.\
+\n\n.editlistitem <listname> <item_number> <new_content>\
+\nUsage: Edit item item_number in listname, changing the \
+content to new_content\
 \n\n.setlist <listname> <local|global>\
 \nUsage: Change the status of a list to local \
 (accessible only from the current chat), or global \
