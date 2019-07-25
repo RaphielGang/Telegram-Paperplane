@@ -95,5 +95,5 @@ CMD_HELP.update({
 
 CMD_HELP.update({
     'repo': '.repo\
-\nUsage: If you are curious what makes the Userbot work, this is what you need.'
+\nUsage: If you are curious what makes Paperplane work, this is what you need.'
 })
