@@ -23,6 +23,7 @@ async def welcome_mute(welcm):
         return
     if welcm.user_joined or welcm.user_added:
         adder = None
+        ignore = None
 
         if welcm.user_added:
             ignore = False
@@ -32,6 +33,7 @@ async def welcome_mute(welcm):
             if admin.id == adder:
                 ignore = True
                 break
+
         if ignore:
             return
         elif welcm.user_joined:
