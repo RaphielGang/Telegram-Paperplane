@@ -142,13 +142,13 @@ async def set_time_country(loc):
 
 CMD_HELP.update({
     "time": ".time <country name/code>\
-    \nUsage: Gets the time of a country."
+    \nUsage: Get the time of a country."
 })
 CMD_HELP.update({
     "date": ".date <country name/code>\
-    \nUsage: Gets the date of a country."
+    \nUsage: Get the date of a country."
 })
 CMD_HELP.update({
     "ctime": ".ctime <country name/code>\
-    \nUsage: Sets a default country for your userbot so you can do .time/.date."
+    \nUsage: Set the default country for .time and .date command."
 })
