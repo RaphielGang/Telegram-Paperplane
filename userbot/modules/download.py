@@ -20,7 +20,7 @@ from datetime import datetime
 from io import BytesIO
 from time import sleep
 import psutil
-from telethon.tl.types import DocumentAttributeVideo
+from telethon.tl.types import DocumentAttributeVideo, MessageMediaPhoto
 from pyDownload import Downloader
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
@@ -56,34 +56,47 @@ async def download_from_url(url: str, file_name: str) -> str:
     return status
 
 
-async def download_from_tg(target_file) -> [str, BytesIO]:
+async def download_from_tg(target_file) -> (str, BytesIO):
     """
     Download files from Telegram
     """
+    async def dl_file(buffer: BytesIO) -> BytesIO:
+        buffer = await target_file.client.download_media(
+            reply_msg,
+            buffer,
+            progress_callback=progress,
+        )
+        return buffer
+
     start = datetime.now()
     buf = BytesIO()
     reply_msg = await target_file.get_reply_message()
     avail_mem = psutil.virtual_memory().available + psutil.swap_memory().free
-    if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
-        buf.name = "nomem"
-        filen = await target_file.client.download_media(
-            reply_msg,
-            GDRIVE_FOLDER,
-            progress_callback=progress,
-        )
-    else:
-        filen = buf.name = reply_msg.media.document.attributes[0].file_name
-        buf = await target_file.client.download_media(
-            reply_msg,
-            buf,
-            progress_callback=progress,
-        )
+    try:
+        if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
+            filen = await target_file.client.download_media(
+                reply_msg,
+                progress_callback=progress,
+            )
+        else:
+            buf = await dl_file(buf)
+            filen = reply_msg.media.document.attributes[0].file_name
+    except AttributeError:
+        buf = await dl_file(buf)
+        try:
+            filen = reply_msg.media.document.attributes[0].file_name
+        except AttributeError:
+            if isinstance(reply_msg.media, MessageMediaPhoto):
+                filen = 'photo-' + str(datetime.today()).split('.')[0].replace(' ', '-') + '.jpg'
+            else:
+                filen = reply_msg.media.document.mime_type\
+                    .replace('/', '-' + str(datetime.today()).split('.')[0].replace(' ', '-') + '.')
     end = datetime.now()
     duration = (end - start).seconds
     await target_file.edit(
-        f"`Downloaded {reply_msg.media.document.attributes[0].file_name} in {duration} seconds.`"
+        f"`Downloaded {filen} in {duration} seconds.`"
     )
-    return [filen, buf]
+    return filen, buf
 
 
 async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
@@ -156,10 +169,9 @@ async def gdrive_mirror(request):
             return
         if request.reply_to_msg_id:
             await request.edit('`Downloading from Telegram...`')
-            buf = await download_from_tg(request)
-            await request.edit(f'`Uploading {buf[0]} to GDrive...`')
-            reply += await gdrive_upload(buf[0], buf[1]
-                                         ) if buf[1].name != "nomem" else await gdrive_upload(buf[0])
+            filen, buf = await download_from_tg(request)
+            await request.edit(f'`Uploading {filen} to GDrive...`')
+            reply += await gdrive_upload(filen, buf) if buf else await gdrive_upload(filen)
         elif "|" in message:
             url, file_name = message.split("|")
             url = url.strip()
@@ -205,12 +217,12 @@ async def download(target_file):
         reply_msg = await target_file.get_reply_message()
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-        if reply_msg and reply_msg.media and reply_msg.media.document:
+        if reply_msg and reply_msg.media:
             await target_file.edit('`Downloading file from Telegram....`')
-            buf = await download_from_tg(target_file)
-            if buf[1].name != "nomem":
-                with open(buf[0], 'wb') as to_save:
-                    to_save.write(buf[1].read())
+            filen, buf = await download_from_tg(target_file)
+            if buf:
+                with open(filen, 'wb') as to_save:
+                    to_save.write(buf.read())
         elif "|" in input_str:
             url, file_name = input_str.split("|")
             url = url.strip()
