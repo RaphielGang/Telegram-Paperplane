@@ -102,6 +102,7 @@ lastfm = pylast.LastFMNetwork(
     api_secret=LASTFM_SECRET,
     username=LASTFM_USERNAME,
     password_hash=LASTFM_PASS
+)
 
 GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
 
