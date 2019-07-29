@@ -103,9 +103,7 @@ lastfm = pylast.LastFMNetwork(
     username=LASTFM_USERNAME,
     password_hash=LASTFM_PASS
 
-GDRIVE_FOLDER = os.environ.get(
-    "GDRIVE_FOLDER", None
-)
+GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
 
 # pylint: disable=invalid-name
 bot = TelegramClient("userbot", API_KEY, API_HASH)
