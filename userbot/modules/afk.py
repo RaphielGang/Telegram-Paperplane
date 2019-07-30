@@ -13,6 +13,8 @@ from userbot import (
     BOTLOG,
     BOTLOG_CHATID,
     CMD_HELP,
+    COUNT_MSG,
+    USERS,
     is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import is_afk, afk, afk_reason, no_afk
