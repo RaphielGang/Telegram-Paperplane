@@ -44,7 +44,7 @@ async def kang(args):
             elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs')
                   in message.media.document.attributes):
                 await bot.download_file(message.media.document, 'AnimatedSticker.tgs')
-                emoji = message.media.document.attributes[0].alt
+                emoji = message.media.document.attributes[1].alt
                 emojibypass = True
                 is_anim = True
                 photo = 1
