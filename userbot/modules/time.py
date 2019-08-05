@@ -13,7 +13,7 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 # ===== CONSTANT =====
 COUNTRY = ''
@@ -48,6 +48,7 @@ async def get_tz(con):
 
 
 @register(outgoing=True, pattern="^.time(?: |$)(.*)")
+@errors_handler
 async def time_func(tdata):
     """ For .time command, return the time of
         1. The country passed as an argument,
@@ -84,6 +85,7 @@ async def time_func(tdata):
 
 
 @register(outgoing=True, pattern="^.date(?: |$)(.*)")
+@errors_handler
 async def date_func(dat):
     """ For .date command, return the date of
         1. The country passed as an argument,
@@ -119,6 +121,7 @@ async def date_func(dat):
 
 
 @register(outgoing=True, pattern="^.ctime (.*)")
+@errors_handler
 async def set_time_country(loc):
     """ For .ctime command, change the default userbot country for date and time commands. """
     if not loc.text[0].isalpha() and loc.text[0] not in ("/", "#", "@", "!"):

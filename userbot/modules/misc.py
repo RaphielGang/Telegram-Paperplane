@@ -11,10 +11,11 @@ from random import randint
 from time import sleep
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 
 @register(outgoing=True, pattern="^.random")
+@errors_handler
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
     if not items.text[0].isalpha() and items.text[0] not in (
@@ -25,6 +26,7 @@ async def randomise(items):
 
 
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
+@errors_handler
 async def sleepybot(time):
     """ For .sleep command, let the userbot snooze for a few second. """
     message = time.text
@@ -44,6 +46,7 @@ async def sleepybot(time):
 
 
 @register(outgoing=True, pattern="^.shutdown$")
+@errors_handler
 async def killdabot(event):
     """ For .shutdown command, shut the bot down."""
     if not event.text[0].isalpha():
@@ -57,6 +60,7 @@ async def killdabot(event):
 
 
 @register(outgoing=True, pattern="^.support$")
+@errors_handler
 async def bot_support(wannahelp):
     """ For .support command, just returns the group link. """
     if not wannahelp.text[0].isalpha(
@@ -65,6 +69,7 @@ async def bot_support(wannahelp):
 
 
 @register(outgoing=True, pattern="^.repo$")
+@errors_handler
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
     if not wannasee.text[0].isalpha(

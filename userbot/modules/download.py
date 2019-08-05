@@ -28,7 +28,7 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
 from userbot import LOGS, CMD_HELP, GDRIVE_FOLDER
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
@@ -139,6 +139,7 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
 
 
 @register(pattern=r".mirror(?: |$)([\s\S]*)", outgoing=True)
+@errors_handler
 async def gdrive_mirror(request):
     """ Download a file and upload to Google Drive """
     if not request.text[0].isalpha(
@@ -176,6 +177,7 @@ async def gdrive_mirror(request):
 
 
 @register(pattern=r".drive(?: |$)(\S*.?\/*.?\.?[A-Za-z0-9]*)", outgoing=True)
+@errors_handler
 async def gdrive(request):
     """ Upload files from server to Google Drive """
     if not request.text[0].isalpha(
@@ -194,6 +196,7 @@ async def gdrive(request):
 
 
 @register(pattern=r".download(?: |$)(.*)", outgoing=True)
+@errors_handler
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
     if not target_file.text[0].isalpha(
@@ -223,6 +226,7 @@ async def download(target_file):
 
 
 @register(pattern=r".uploadir (.*)", outgoing=True)
+@errors_handler
 async def uploadir(udir_event):
     """ For .uploadir command, allows you to upload everything from a folder in the server"""
     if not udir_event.text[0].isalpha(
@@ -301,6 +305,7 @@ async def uploadir(udir_event):
 
 
 @register(pattern=r".upload (.*)", outgoing=True)
+@errors_handler
 async def upload(u_event):
     """ For .upload command, allows you to upload a file from the userbot's server """
     if not u_event.text[0].isalpha() and u_event.text[0] not in (
@@ -386,6 +391,7 @@ def extract_w_h(file):
 
 
 @register(pattern=r".uploadas(stream|vn|all) (.*)", outgoing=True)
+@errors_handler
 async def uploadas(uas_event):
     """ For .uploadas command, allows you to specify some arguments for upload. """
     if not uas_event.text[0].isalpha(
