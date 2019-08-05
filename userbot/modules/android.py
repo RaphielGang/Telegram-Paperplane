@@ -29,41 +29,41 @@ async def magisk(request):
         beta_releases = 'Latest Beta Magisk Release:\n'
         canary_releases = 'Latest Canary Magisk Release:\n'
         try:
-            stable_releases += f'[APK: {MAGISK_STABLE["app"]["version"]}]({MAGISK_STABLE["app"]["link"]})\n'
+            stable_releases += f'APK: [{MAGISK_STABLE["app"]["version"]}]({MAGISK_STABLE["app"]["link"]}) - '
         except NameError:
             stable_releases += f"`can't find latest stable apk`\n"
         try:
-            stable_releases += f'[ZIP: {MAGISK_STABLE["magisk"]["version"]}]({MAGISK_STABLE["magisk"]["link"]})\n'
+            stable_releases += f'ZIP: [{MAGISK_STABLE["magisk"]["version"]}]({MAGISK_STABLE["magisk"]["link"]}) - '
         except NameError:
             stable_releases += f"`can't find latest stable zip`\n"
         try:
-            stable_releases += f'[stable uninstaller]({MAGISK_STABLE["uninstaller"]["link"]})\n'
+            stable_releases += f'[Stable Uninstaller]({MAGISK_STABLE["uninstaller"]["link"]})\n'
         except NameError:
             stable_releases += f"`can't find latest stable uninstaller`\n"
         try:
-            beta_releases += f'[APK: {MAGISK_BETA["app"]["version"]}]({MAGISK_BETA["app"]["link"]})\n'
+            beta_releases += f'APK: [{MAGISK_BETA["app"]["version"]}]({MAGISK_BETA["app"]["link"]}) - '
         except NameError:
             beta_releases += f"`can't find latest beta apk`\n"
         try:
-            beta_releases += f'[ZIP: {MAGISK_BETA["magisk"]["version"]}]({MAGISK_BETA["magisk"]["link"]})\n'
+            beta_releases += f'ZIP: [{MAGISK_BETA["magisk"]["version"]}]({MAGISK_BETA["magisk"]["link"]}) - '
         except NameError:
             beta_releases += f"`can't find latest beta zip`\n"
         try:
-            beta_releases += f'[beta uninstaller]({MAGISK_BETA["uninstaller"]["link"]})\n'
+            beta_releases += f'[Beta Uninstaller]({MAGISK_BETA["uninstaller"]["link"]})\n'
         except NameError:
             beta_releases += f"`can't find latest beta uninstaller`\n"
         try:
-            canary_releases += f'[APK: {MAGISK_CANARY["app"]["version"]}]({MAGISK_CANARY["app"]["link"]})\n'
+            canary_releases += f'APK: [{MAGISK_CANARY["app"]["version"]}]({MAGISK_CANARY["app"]["link"]}) - '
         except NameError:
             canary_releases += f"`can't find latest canary apk`\n"
         try:
-            canary_releases += f'[ZIP: {MAGISK_CANARY["magisk"]["version"]}]({MAGISK_CANARY["magisk"]["link"]})\n'
+            canary_releases += f'ZIP: [{MAGISK_CANARY["magisk"]["version"]}]({MAGISK_CANARY["magisk"]["link"]}) - '
         except NameError:
             canary_releases += f"`can't find latest canary zip`\n"
         try:
-            canary_releases += f'[canary uninstaller]({MAGISK_CANARY["uninstaller"]["link"]})\n'
+            canary_releases += f'[Canary Uninstaller]({MAGISK_CANARY["uninstaller"]["link"]})'
         except NameError:
-            canary_releases += f"`can't find latest canary uninstaller`\n"
+            canary_releases += f"`can't find latest canary uninstaller`"
         await request.edit(f"{stable_releases}{beta_releases}{canary_releases}")
 
 
