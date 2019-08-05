@@ -13,8 +13,6 @@ from userbot import CMD_HELP
 from userbot.events import register
 
 
-GITHUB = 'https://github.com'
-MAGISK_REPO = f'{GITHUB}/topjohnwu/Magisk/releases'
 DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
                'certified-android-devices/master/devices.json'
 
@@ -24,26 +22,49 @@ async def magisk(request):
     """ magisk latest releases """
     if not request.text[0].isalpha(
     ) and request.text[0] not in ("/", "#", "@", "!"):
-        page = BeautifulSoup(get(MAGISK_REPO).content, 'lxml')
-        links = '\n'.join([i['href'] for i in page.findAll('a')])
-        releases = 'Latest Magisk Releases:\n'
+        MAGISK_STABLE = get("https://raw.githubusercontent.com/topjohnwu/magisk_files/master/stable.json").json()
+        MAGISK_BETA = get("https://raw.githubusercontent.com/topjohnwu/magisk_files/master/beta.json").json()
+        MAGISK_CANARY = get("https://raw.githubusercontent.com/topjohnwu/magisk_files/master/canary_builds/canary.json").json()
+        stable_releases = 'Latest Stable Magisk Release:\n'
+        beta_releases = 'Latest Beta Magisk Release:\n'
+        canary_releases = 'Latest Canary Magisk Release:\n'
         try:
-            latest_apk = re.findall(r'/.*MagiskManager-v.*apk', links)[0]
-            releases += f'[{latest_apk.split("/")[-1]}]({GITHUB}{latest_apk})\n'
-        except IndexError:
-            releases += "`can't find latest apk`"
+            stable_releases += f'[APK: {MAGISK_STABLE["app"]["version"]}]({MAGISK_STABLE["app"]["link"]})\n'
+        except NameError:
+            stable_releases += f"`can't find latest stable apk`\n"
         try:
-            latest_zip = re.findall(r'/.*Magisk-v.*zip', links)[0]
-            releases += f'[{latest_zip.split("/")[-1]}]({GITHUB}{latest_zip})\n'
-        except IndexError:
-            releases += "`can't find latest zip`"
+            stable_releases += f'[ZIP: {MAGISK_STABLE["magisk"]["version"]}]({MAGISK_STABLE["magisk"]["link"]})\n'
+        except NameError:
+            stable_releases += f"`can't find latest stable zip`\n"
         try:
-            latest_uninstaller = re.findall(
-                r'/.*Magisk-uninstaller-.*zip', links)[0]
-            releases += f'[{latest_uninstaller.split("/")[-1]}]({GITHUB}{latest_uninstaller})\n'
-        except IndexError:
-            releases += "`can't find latest uninstaller`"
-        await request.edit(releases)
+            stable_releases += f'[stable uninstaller]({MAGISK_STABLE["uninstaller"]["link"]})\n'
+        except NameError:
+            stable_releases += f"`can't find latest stable uninstaller`\n"
+        try:
+            beta_releases += f'[APK: {MAGISK_BETA["app"]["version"]}]({MAGISK_BETA["app"]["link"]})\n'
+        except NameError:
+            beta_releases += f"`can't find latest beta apk`\n"
+        try:
+            beta_releases += f'[ZIP: {MAGISK_BETA["magisk"]["version"]}]({MAGISK_BETA["magisk"]["link"]})\n'
+        except NameError:
+            beta_releases += f"`can't find latest beta zip`\n"
+        try:
+            beta_releases += f'[beta uninstaller]({MAGISK_BETA["uninstaller"]["link"]})\n'
+        except NameError:
+            beta_releases += f"`can't find latest beta uninstaller`\n"
+        try:
+            canary_releases += f'[APK: {MAGISK_CANARY["app"]["version"]}]({MAGISK_CANARY["app"]["link"]})\n'
+        except NameError:
+            canary_releases += f"`can't find latest canary apk`\n"
+        try:
+            canary_releases += f'[ZIP: {MAGISK_CANARY["magisk"]["version"]}]({MAGISK_CANARY["magisk"]["link"]})\n'
+        except NameError:
+            canary_releases += f"`can't find latest canary zip`\n"
+        try:
+            canary_releases += f'[canary uninstaller]({MAGISK_CANARY["uninstaller"]["link"]})\n'
+        except NameError:
+            canary_releases += f"`can't find latest canary uninstaller`\n"
+        await request.edit(f"{stable_releases}{beta_releases}{canary_releases}")
 
 
 @register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
