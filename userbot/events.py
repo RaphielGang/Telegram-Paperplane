@@ -16,6 +16,7 @@ import sys
 import traceback
 import datetime
 
+
 def register(**args):
     """ Register a new event. """
     pattern = args.get('pattern', None)
@@ -37,24 +38,22 @@ def register(**args):
     return decorator
 
 
-
 def errors_handler(func):
     async def wrapper(errors):
         try:
             await func(errors)
-        except:
+        except BaseException:
 
             date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
             new = {
                 'error': str(sys.exc_info()[1]),
                 'date': datetime.datetime.now()
-                }
+            }
 
             text = "**Sorry, I encountered a error!**\n"
             link = "[https://t.me/userbot_support](Userbot Support Chat)"
             text += f"If you wanna you can report it - just forward this message to {link}.\n"
             text += "I won't log anything except the fact of error and date\n"
-
 
             ftext = "\nDisclaimer:\nThis file uploaded ONLY here, we logged only fact of error and date, "
             ftext += "we respect your privacy, you may not report this error if you've "
@@ -71,7 +70,6 @@ def errors_handler(func):
             ftext += str(sys.exc_info()[1])
             ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
 
-
             command = "git log --pretty=format:\"%an: %s\" -5"
 
             ftext += "\n\n\nLast 5 commits:\n"
@@ -80,10 +78,10 @@ def errors_handler(func):
                 command,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
-                )
+            )
             stdout, stderr = await process.communicate()
             result = str(stdout.decode().strip()) \
-                    + str(stderr.decode().strip())
+                + str(stderr.decode().strip())
 
             ftext += result
 
@@ -92,10 +90,10 @@ def errors_handler(func):
             file.close()
 
             await errors.client.send_file(
-                  errors.chat_id,
-                  "error.log",
-                  caption=text,
-                  )
+                errors.chat_id,
+                "error.log",
+                caption=text,
+            )
             return
 
     return wrapper

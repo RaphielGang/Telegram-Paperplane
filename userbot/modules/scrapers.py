@@ -28,7 +28,7 @@ from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
-from userbot.events import register,errors_handler
+from userbot.events import register, errors_handler
 
 LANG = "en"
 
@@ -188,6 +188,7 @@ async def urban_dict(ud_e):
                 )
         else:
             await ud_e.edit("No result found for **" + query + "**")
+
 
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
 @errors_handler
