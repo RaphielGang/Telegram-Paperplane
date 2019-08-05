@@ -6,7 +6,7 @@ from requests import post, get
 from re import sub
 from time import time
 
-from userbot import COINBASE_KEY, COINBASE_SECRET, bot
+from userbot import CMD_HELP, COINBASE_KEY, COINBASE_SECRET, bot
 from userbot.events import register
 
 @register(outgoing=True, pattern=r"^.coin (\S*) ?(\S*) ?(\S*)")
@@ -65,3 +65,10 @@ async def coin(cspot):
     else:
         response = post(f'https://www.coinspot.com.au/{API}', headers=headers, data=postdata).json()
     await cspot.edit(f"{response}")
+
+CMD_HELP.update({
+    'crypto': ".coin <bal/price <token>/send <address>>\
+    \nUsage: .coin bal\
+    \nUsage: .coin price ETH\
+    \nUsage: .coin send ETH <ETH address> <amount>"
+})
