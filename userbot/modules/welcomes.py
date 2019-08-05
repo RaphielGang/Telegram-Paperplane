@@ -14,10 +14,12 @@ from telethon.tl.types import ChannelParticipantsAdmins, Message
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
 from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
-
+from userbot.events import errors_handler
 
 @bot.on(ChatAction)
+@errors_handler
 async def welcome_mute(welcm):
+  try:
     ''' Ban a recently joined user if it matches the spammer checking algorithm. '''
     if not WELCOME_MUTE:
         return
@@ -140,7 +142,8 @@ async def welcome_mute(welcm):
                     f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                     f"CHAT: {welcm.chat.title}(`{welcm.chat_id}`)"
                 )
-
+  except ValueError:
+      pass
 
 CMD_HELP.update({
     'welcome_mute': "If enabled in config.env or env var, \
