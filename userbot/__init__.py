@@ -84,7 +84,7 @@ YOUTUBE_API_KEY = os.environ.get(
 
 SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
 SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
-SPOTIFY_BIO_PREFIX = os.environ.get("SPOTIFY_BIO_PREFIX", None)
+BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
 
 COINBASE_KEY = os.environ.get("COINBASE_KEY", None)

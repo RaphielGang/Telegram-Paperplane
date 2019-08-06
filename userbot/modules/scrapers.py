@@ -20,7 +20,6 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS
-from pylast import User
 from pytube import YouTube
 from pytube.helpers import safe_filename
 from requests import get
@@ -29,7 +28,7 @@ from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, lastfm, LASTFM_USERNAME, CURRENCY_API, bot
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CURRENCY_API, bot
 from userbot.events import register
 
 LANG = "en"
@@ -443,68 +442,6 @@ async def currency(cconvert):
         await cconvert.edit(f"{amount} {currency_to} is:\n`{result} {currency_from}`")
 
 
-@register(outgoing=True, pattern="^.lastfm")
-async def last_fm(lastFM):
-    """ For .lastfm command, fetch scrobble data from last.fm. """
-    if not lastFM.text[0].isalpha() and lastFM.text[0] not in ("/", "#", "@", "!"):
-        await lastFM.edit("Processing...")
-        preview = None
-        playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
-        username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
-        if playing is not None:
-            try:
-                image = User(LASTFM_USERNAME, lastfm).get_now_playing().get_cover_image()
-            except IndexError:
-                image = None
-                pass
-            tags = gettags(isNowPlaying=True, playing=playing)
-            rectrack = parse.quote_plus(f"{playing}")
-            rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
-            if image:
-                output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
-                preview = True
-            else:
-                output = f"[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
-        else:
-            recent = User(LASTFM_USERNAME, lastfm).get_recent_tracks(limit=3)
-            playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
-            output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
-            for i, track in enumerate(recent):
-                printable = artist_and_song(track)
-                tags = gettags(track)
-                rectrack = parse.quote_plus(str(printable))
-                rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
-                output += f"• [{printable}]({rectrack})\n"
-                if tags:
-                    output += f"`{tags}`\n\n"
-        if preview is not None:
-            await lastFM.edit(f"{output}", parse_mode='md', link_preview=True)
-        else:
-            await lastFM.edit(f"{output}", parse_mode='md')
-        
-
-
-def gettags(track=None, isNowPlaying=None, playing=None):
-    if isNowPlaying:
-        tags = playing.get_top_tags()
-        arg = playing
-        if not tags:
-            tags = playing.artist.get_top_tags()
-    else:
-        tags = track.track.get_top_tags()
-        arg = track.track
-    if not tags:
-        tags = arg.artist.get_top_tags()
-    tags = "".join([" #" + t.item.__str__() for t in tags[:5]])
-    tags = sub("^ ", "", tags)
-    tags = sub(" ", "_", tags)
-    tags = sub("_#", " #", tags)
-    return tags
-
-def artist_and_song(track):
-    return f"{track.track}"
-
-
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return get_emoji_regexp().sub(u'', inputString)
@@ -548,4 +485,8 @@ CMD_HELP.update({
     \nUsage: Download videos from YouTube. \
 If no quality is specified, the highest downloadable quality is downloaded. \
 Will send the link if the video is larger than 50 MB."
+})
+CMD_HELP.update({
+    'cr': ".cr <from> <to>\
+    \nUsage: Currency converter, converts <from> to <to>."
 })

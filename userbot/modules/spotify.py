@@ -10,7 +10,7 @@ from telethon.errors import AboutTooLongError
 from telethon.tl.functions.account import UpdateProfileRequest
 
 from userbot import (DEFAULT_BIO, CMD_HELP, BOTLOG, BOTLOG_CHATID,
-                     SPOTIFY_BIO_PREFIX, SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
+                     BIO_PREFIX, SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
 from userbot.events import register
 
 # =================== CONSTANT ===================
@@ -25,7 +25,7 @@ PASSWORD = SPOTIFY_PASS
 ARTIST = 0
 SONG = 0
 
-BIOPREFIX = SPOTIFY_BIO_PREFIX
+BIOPREFIX = BIO_PREFIX
 
 SPOTIFYCHECK = False
 RUNNING = False
