@@ -201,8 +201,7 @@ async def blockpm(block):
         if await block_pm(block.chat_id) is False:
             return await block.edit("`First approve, before blocc'ing`")
         else:
-            return await block.edit("`Blocked.`")
-
+            await block.edit("`Blocked.`")
             if block.reply_to_msg_id:
                 reply = await block.get_reply_message()
                 replied_user = await block.client(GetFullUserRequest(reply.from_id))
