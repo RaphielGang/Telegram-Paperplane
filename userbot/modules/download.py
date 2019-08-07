@@ -7,7 +7,7 @@
 # 'download, uploadir, uploadas, upload' which is MPL
 # License: MPL and OSSRPL
 
-""" Userbot module which contains everything related to \
+""" Userbot module which contains everything related to
     downloading/uploading from/to the server. """
 
 import json
@@ -64,7 +64,8 @@ async def download_from_tg(target_file) -> [str, BytesIO]:
     buf = BytesIO()
     reply_msg = await target_file.get_reply_message()
     avail_mem = psutil.virtual_memory().available + psutil.swap_memory().free
-    if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
+    if reply_msg.media.document.size >= avail_mem:
+        # unlikely to happen but baalaji crai
         buf.name = "nomem"
         filen = await target_file.client.download_media(
             reply_msg,
@@ -222,13 +223,15 @@ async def download(target_file):
             status = await download_from_url(url, file_name)
             await target_file.edit(status)
         else:
-            await target_file.edit("`Reply to a message to download to my local server.`\n")
+            await target_file.edit("`Reply to a message to \
+             download to my local server.`\n")
 
 
 @register(pattern=r".uploadir (.*)", outgoing=True)
 @errors_handler
 async def uploadir(udir_event):
-    """ For .uploadir command, allows you to upload everything from a folder in the server"""
+    """ For .uploadir command, allows you to upload
+     everything from a folder in the server"""
     if not udir_event.text[0].isalpha(
     ) and udir_event.text[0] not in ("/", "#", "@", "!"):
         if udir_event.fwd_from:
@@ -246,7 +249,8 @@ async def uploadir(udir_event):
             LOGS.info(lst_of_files)
             uploaded = 0
             await udir_event.edit(
-                "Found {} files. Uploading will start soon. Please wait!".format(
+                "Found {} files. Uploading will \
+                 start soon. Please wait!".format(
                     len(lst_of_files)
                 )
             )
@@ -299,7 +303,9 @@ async def uploadir(udir_event):
                     uploaded = uploaded + 1
             end = datetime.now()
             duration = (end - start).seconds
-            await udir_event.edit("Uploaded {} files in {} seconds.".format(uploaded, duration))
+            await udir_event.edit(
+            "Uploaded {} files in {} seconds.".format(uploaded, duration)
+            )
         else:
             await udir_event.edit("404: Directory Not Found")
 
@@ -307,7 +313,8 @@ async def uploadir(udir_event):
 @register(pattern=r".upload (.*)", outgoing=True)
 @errors_handler
 async def upload(u_event):
-    """ For .upload command, allows you to upload a file from the userbot's server """
+    """ For .upload command, allows you to \
+    upload a file from the userbot's server """
     if not u_event.text[0].isalpha() and u_event.text[0] not in (
             "/", "#", "@", "!"):
         if u_event.fwd_from:
@@ -393,7 +400,8 @@ def extract_w_h(file):
 @register(pattern=r".uploadas(stream|vn|all) (.*)", outgoing=True)
 @errors_handler
 async def uploadas(uas_event):
-    """ For .uploadas command, allows you to specify some arguments for upload. """
+    """ For .uploadas command, allows you \
+    to specify some arguments for upload. """
     if not uas_event.text[0].isalpha(
     ) and uas_event.text[0] not in ("/", "#", "@", "!"):
         if uas_event.fwd_from:
@@ -491,7 +499,8 @@ CMD_HELP.update({
                 "Usage: Download a file from telegram or link to the server."
 })
 CMD_HELP.update({
-    "upload": ".upload <link>\nUsage: Upload a locally stored file to Telegram."
+    "upload": ".upload <link>\nUsage: Upload a "
+              "locally stored file to Telegram."
 })
 CMD_HELP.update({
     "drive": ".upload <file>\nUsage: Upload a locally stored file to GDrive."

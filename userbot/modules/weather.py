@@ -41,7 +41,8 @@ async def get_weather(weather):
         return
 
     if len(OWM_API) < 1:
-        await weather.edit("Get an API key from https://openweathermap.org/ first.")
+        await weather.edit("Get an API key from "
+                           "https://openweathermap.org/ first.")
         return
 
     APPID = OWM_API
@@ -132,7 +133,8 @@ async def get_weather(weather):
 @register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
 @errors_handler
 async def set_default_city(city):
-    """ For .ctime command, change the default userbot country for date and time commands. """
+    """ For .ctime command, change the default
+        userbot country for date and time commands. """
     if not city.text.startswith("."):
         return
 

@@ -4,7 +4,8 @@
 # you may not use this file except in compliance with the License.
 #
 
-""" Userbot module for getting the date and time of any country or the userbot server.  """
+""" Userbot module for getting the date
+    and time of any country or the userbot server.  """
 
 from datetime import datetime as dt
 
@@ -73,7 +74,7 @@ async def time_func(tdata):
 
         time_zone = await get_tz(con)
         if not time_zone:
-            await tdata.edit("``` Wrong country given! Try again! ```")
+            await tdata.edit("` Wrong country given! Try again! `")
             return
 
         try:
@@ -109,7 +110,7 @@ async def date_func(dat):
 
         time_zone = await get_tz(con)
         if not time_zone:
-            await dat.edit("``` Wrong country given! Try again! ```")
+            await dat.edit("` Wrong country given! Try again! `")
             return
 
         try:
@@ -123,14 +124,15 @@ async def date_func(dat):
 @register(outgoing=True, pattern="^.ctime (.*)")
 @errors_handler
 async def set_time_country(loc):
-    """ For .ctime command, change the default userbot country for date and time commands. """
+    """ For .ctime command, change the default userbot
+        country for date and time commands. """
     if not loc.text[0].isalpha() and loc.text[0] not in ("/", "#", "@", "!"):
         global COUNTRY
         temp_country = loc.pattern_match.group(1).title()
 
         time_zone = await get_tz(temp_country)
         if not time_zone:
-            await loc.edit("``` Wrong country given! Try again! ```")
+            await loc.edit("` Wrong country given! Try again! `")
             return
 
         try:
@@ -140,7 +142,8 @@ async def set_time_country(loc):
 
         COUNTRY = c_name
 
-        await loc.edit(f"``` Default country for date and time set to {COUNTRY} successfully! ```")
+        await loc.edit(f"` Default country for date "
+                            "and time set to {COUNTRY} successfully! `")
 
 
 CMD_HELP.update({

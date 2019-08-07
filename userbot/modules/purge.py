@@ -23,7 +23,8 @@ async def fastpurger(purg):
         msgs = []
         count = 0
 
-        async for msg in purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id):
+        async for msg in purg.client.iter_messages(chat,
+                                                  min_id=purg.reply_to_msg_id):
             msgs.append(msg)
             count = count + 1
             msgs.append(purg.reply_to_msg_id)
@@ -37,7 +38,8 @@ async def fastpurger(purg):
             purg.chat_id,
             "`Fast purge complete!\n`Purged "
             + str(count)
-            + " messages. **This auto-generated message shall be self destructed in 2 seconds.**",
+            + " messages. **This auto-generated message "
+            + "  shall be self destructed in 2 seconds.**",
         )
 
         if BOTLOG:
@@ -59,7 +61,8 @@ async def purgeme(delme):
         count = int(message[9:])
         i = 1
 
-        async for message in delme.client.iter_messages(delme.chat_id, from_user='me'):
+        async for message in delme.client.iter_messages(delme.chat_id,
+                                                        from_user='me'):
             if i > count + 1:
                 break
             i = i + 1
@@ -69,7 +72,8 @@ async def purgeme(delme):
             delme.chat_id,
             "`Purge complete!` Purged "
             + str(count)
-            + " messages. **This auto-generated message shall be self destructed in 2 seconds.**",
+            + " messages. **This auto-generated message "
+            + " shall be self destructed in 2 seconds.**",
         )
         if BOTLOG:
             await delme.client.send_message(
@@ -122,7 +126,8 @@ async def editer(edit):
                 break
             i = i + 1
         if BOTLOG:
-            await edit.send_message(BOTLOG_CHATID, "Edit query was executed successfully")
+            await edit.send_message(BOTLOG_CHATID,
+                  "Edit query was executed successfully")
 
 
 @register(outgoing=True, pattern="^.sd")
@@ -139,7 +144,8 @@ async def selfdestruct(destroy):
         await sleep(counter)
         await smsg.delete()
         if BOTLOG:
-            await destroy.client.send_message(BOTLOG_CHATID, "sd query done successfully")
+            await destroy.client.send_message(BOTLOG_CHATID,
+                                  "sd query done successfully")
 
 
 CMD_HELP.update({

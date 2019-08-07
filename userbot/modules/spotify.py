@@ -14,10 +14,11 @@ from userbot import (DEFAULT_BIO, CMD_HELP, BOTLOG, BOTLOG_CHATID,
 from userbot.events import register, errors_handler
 
 # =================== CONSTANT ===================
-SPO_BIO_ENABLED = "```Spotify current music to bio is now enabled.```"
-SPO_BIO_DISABLED = "```Spotify current music to bio is now disabled. Bio reverted to default.```"
-SPO_BIO_RUNNING = "```Spotify current music to bio is already running.```"
-ERROR_MSG = "```Spotify module halted, got an unexpected error.```"
+SPO_BIO_ENABLED = "`Spotify current music to bio is now enabled.`"
+SPO_BIO_DISABLED = "`Spotify current music to bio is now disabled. "
+SPO_BIO_DISABLED += "Bio reverted to default.`"
+SPO_BIO_RUNNING = "`Spotify current music to bio is already running.`"
+ERROR_MSG = "`Spotify module halted, got an unexpected error.`"
 
 USERNAME = SPOTIFY_USERNAME
 PASSWORD = SPOTIFY_PASS
