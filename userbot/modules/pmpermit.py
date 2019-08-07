@@ -131,7 +131,7 @@ async def auto_accept(event):
             if await approval(event.chat_id) or chat.bot:
                 return
             async for message in event.client.iter_messages(chat.id,
-                                                    reverse=True, limit=1):
+                                                            reverse=True, limit=1):
                 if message.from_id == (await event.client.get_me()).id:
                     await approve(chat.id)
                     if BOTLOG:
@@ -139,7 +139,7 @@ async def auto_accept(event):
                             BOTLOG_CHATID,
                             "#AUTO-APPROVED\n"
                             + "User: "
-                            +  f"[{chat.first_name}](tg://user?id={chat.id})",
+                            + f"[{chat.first_name}](tg://user?id={chat.id})",
                         )
 
 
@@ -253,16 +253,16 @@ async def unblockpm(unblock):
         if unblock.reply_to_msg_id:
             reply = await unblock.get_reply_message()
             replied_user = await unblock.client(GetFullUserRequest
-                                               (reply.from_id))
+                                                (reply.from_id))
             name0 = str(replied_user.user.first_name)
             if await approve(reply.from_id) is False:
                 return await unblock.edit(
-                                     "`You haven't blocked this user yet!`"
-                                         )
+                    "`You haven't blocked this user yet!`"
+                )
             else:
                 return await unblock.edit(
-                                     "`My Master has forgiven you to PM now`"
-                                         )
+                    "`My Master has forgiven you to PM now`"
+                )
 
             await unblock.client(UnblockRequest(replied_user.user.id))
 

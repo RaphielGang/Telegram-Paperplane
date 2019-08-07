@@ -918,18 +918,18 @@ CMD_HELP.update({
 })
 CMD_HELP.update({
     "gmute": "Usage: Reply to message with .gmute to mute them in all "
-                     "groups you have in common with them."
+    "groups you have in common with them."
 })
 CMD_HELP.update({
     "ungmute": "Usage: Reply message with .ungmute "
-                      "to remove them from the gmuted list."
+    "to remove them from the gmuted list."
 })
 CMD_HELP.update({
     "delusers": "Usage: Searches for deleted accounts in a group."
 })
 CMD_HELP.update({
     "delusers clean": "Usage: Searches and removes "
-                              "deleted accounts from the group"
+    "deleted accounts from the group"
 })
 CMD_HELP.update({
     "adminlist": "Usage: Retrieves all admins in the chat."

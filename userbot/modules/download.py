@@ -89,11 +89,11 @@ async def download_from_tg(target_file) -> (str, BytesIO):
         except AttributeError:
             if isinstance(reply_msg.media, MessageMediaPhoto):
                 filen = 'photo-' + str(datetime.today())\
-                .split('.')[0].replace(' ', '-') + '.jpg'
+                    .split('.')[0].replace(' ', '-') + '.jpg'
             else:
                 filen = reply_msg.media.document.mime_type\
-                    .replace('/', '-' + str(datetime.today())\
-                    .split('.')[0].replace(' ', '-') + '.')
+                    .replace('/', '-' + str(datetime.today())
+                             .split('.')[0].replace(' ', '-') + '.')
     end = datetime.now()
     duration = (end - start).seconds
     await target_file.edit(
@@ -318,7 +318,7 @@ async def uploadir(udir_event):
             end = datetime.now()
             duration = (end - start).seconds
             await udir_event.edit(
-            "Uploaded {} files in {} seconds.".format(uploaded, duration)
+                "Uploaded {} files in {} seconds.".format(uploaded, duration)
             )
         else:
             await udir_event.edit("404: Directory Not Found")

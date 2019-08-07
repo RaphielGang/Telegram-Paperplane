@@ -62,7 +62,7 @@ async def img_sampler(event):
         paths = response.download(arguments)
         lst = paths[0][query]
         await event.client.send_file(await event.client.get_input_entity(
-                                                           event.chat_id), lst)
+            event.chat_id), lst)
         os.remove(lst[0])
         os.remove(lst[1])
         os.rmdir(os.path.dirname(os.path.abspath(lst[0])))
@@ -205,7 +205,7 @@ async def text_to_speech(query):
             message = textx.text
         else:
             await query.edit("`Give a text or reply to a "
-                              "message for Text-to-Speech!`")
+                             "message for Text-to-Speech!`")
             return
 
         try:
@@ -233,7 +233,7 @@ async def text_to_speech(query):
             tts.save("k.mp3")
         with open("k.mp3", "r"):
             await query.client.send_file(query.chat_id,
-                                        "k.mp3", voice_note=True)
+                                         "k.mp3", voice_note=True)
             os.remove("k.mp3")
             if BOTLOG:
                 await query.client.send_message(
@@ -418,7 +418,7 @@ async def download_video(v_url):
                  "**If the video plays instead of downloading, "
                  "right click(or long press on touchscreen) and "
                  "press 'Save Video As...'(may depend on the browser) "
-                  "to download the video.**")
+                 "to download the video.**")
             )
             return
 
