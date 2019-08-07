@@ -427,6 +427,10 @@ async def spider(spdr):
             except UserIdInvalidError:
                 return await spdr.edit("`Uh oh my unmute logic broke!`")
 
+            # These indicate we couldn't hit him an API mute, possibly an admin?
+
+            except (UserAdminInvalidError,ChatAdminRequiredError,BadRequestError):
+                return await spdr.edit("`I couldn't mute on the API, could be an admin possibly? Anyways muted on the userbot. I'll automatically delete messages in this chat from this person`")
 
 @register(outgoing=True, pattern="^.unmute(?: |$)(.*)")
 @errors_handler
@@ -505,11 +509,17 @@ async def muter(moot):
         for i in muted:
             if i == moot.sender_id:
                 await moot.delete()
-                await moot.client(EditBannedRequest(
-                    moot.chat_id,
-                    moot.sender_id,
-                    rights
-                ))
+                try:
+                    await moot.client(EditBannedRequest(
+                        moot.chat_id,
+                        moot.sender_id,
+                        rights
+                        ))
+
+                # We couldn't hit him an API mute, probably an admin?
+                # Telethon sometimes fails to grab user details properly gaurd it also
+                except (UserAdminInvalidError,ChatAdminRequiredError,BadRequestError, UserIdInvalidError):
+                    pass
     for i in gmuted:
         if i == moot.sender_id:
             await moot.delete()
