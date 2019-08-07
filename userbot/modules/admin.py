@@ -430,8 +430,13 @@ async def spider(spdr):
             # These indicate we couldn't hit him an API mute, possibly an
             # admin?
 
-            except (UserAdminInvalidError, ChatAdminRequiredError, BadRequestError):
-                return await spdr.edit("`I couldn't mute on the API, could be an admin possibly? Anyways muted on the userbot. I'll automatically delete messages in this chat from this person`")
+            except (UserAdminInvalidError,
+                    ChatAdminRequiredError, BadRequestError):
+                return await spdr.edit("""`I couldn't mute on the API,
+                could be an admin possibly?
+                Anyways muted on the userbot.
+                I'll automatically delete messages
+                in this chat from this person`""")
 
 
 @register(outgoing=True, pattern="^.unmute(?: |$)(.*)")
@@ -521,7 +526,10 @@ async def muter(moot):
                 # We couldn't hit him an API mute, probably an admin?
                 # Telethon sometimes fails to grab user details properly gaurd
                 # it also
-                except (UserAdminInvalidError, ChatAdminRequiredError, BadRequestError, UserIdInvalidError):
+                except (UserAdminInvalidError,
+                        ChatAdminRequiredError,
+                        BadRequestError,
+                        UserIdInvalidError):
                     pass
     for i in gmuted:
         if i == moot.sender_id:
@@ -644,7 +652,8 @@ async def rm_deletedacc(show):
                     del_u += 1
 
             if del_u > 0:
-                del_status = f"found **{del_u}** deleted account(s) in this group \
+                del_status = f"found **{del_u}** \
+                 deleted account(s) in this group \
                 \nclean them by using .delusers clean"
             await show.edit(del_status)
             return
@@ -695,7 +704,7 @@ async def rm_deletedacc(show):
 
         if del_a > 0:
             del_status = f"cleaned **{del_u}** deleted account(s) \
-            \n**{del_a}** deleted admin accounts are not removed"
+\n**{del_a}** deleted admin accounts are not removed"
 
         await show.edit(del_status)
 
@@ -893,29 +902,34 @@ CMD_HELP.update({
     "ban": "Usage: Reply to message with .ban to ban them."
 })
 CMD_HELP.update({
-    "demote": "Usage: Reply to message with .demote to revoke their admin permissions."
+    "demote": "Usage: Reply to message with"
+              ".demote to revoke their admin permissions."
 })
 CMD_HELP.update({
     "unban": "Usage: Reply to message with .unban to unban them in this chat."
 })
 CMD_HELP.update({
-    "mute": "Usage: Reply tomessage with .mute to mute them, works on admins too"
+    "mute": "Usage: Reply tomessage with .mute "
+            "to mute them, works on admins too"
 })
 CMD_HELP.update({
-    "unmute": "Usage: Reply to message with .unmute to remove them from muted list."
+    "unmute": "Usage: Reply to message with .unmute "
+              "to remove them from muted list."
 })
 CMD_HELP.update({
-    "gmute": "Usage: Reply to message with .gmute to mute them in all \
-groups you have in common with them."
+    "gmute": "Usage: Reply to message with .gmute to mute them in all "
+                     "groups you have in common with them."
 })
 CMD_HELP.update({
-    "ungmute": "Usage: Reply message with .ungmute to remove them from the gmuted list."
+    "ungmute": "Usage: Reply message with .ungmute "
+                      "to remove them from the gmuted list."
 })
 CMD_HELP.update({
     "delusers": "Usage: Searches for deleted accounts in a group."
 })
 CMD_HELP.update({
-    "delusers clean": "Usage: Searches and removes deleted accounts from the group"
+    "delusers clean": "Usage: Searches and removes "
+                              "deleted accounts from the group"
 })
 CMD_HELP.update({
     "adminlist": "Usage: Retrieves all admins in the chat."

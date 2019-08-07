@@ -23,12 +23,13 @@ async def capture(url):
     if not url.text[0].isalpha() and url.text[0] not in ("/", "#", "@", "!"):
         if SCREENSHOT_LAYER_ACCESS_KEY is None:
             await url.edit(
-                "Need to get an API key from https://screenshotlayer.com/product \nModule stopping!"
+                "Need to get an API key from https://screenshotlayer.com\
+                /product \nModule stopping!"
             )
             return
         await url.edit("Processing ...")
-        sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&\
-            url={}&fullpage={}&format={}&viewport={}"
+        sample_url = "https://api.screenshotlayer.com/api/capture"
+        sample_url += "?access_key={}&url={}&fullpage={}&format={}&viewport={}"
         input_str = url.pattern_match.group(1)
         response_api = get(
             sample_url.format(

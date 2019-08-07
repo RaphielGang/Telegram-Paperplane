@@ -23,7 +23,12 @@ from userbot import (
     is_mongo_alive,
     is_redis_alive)
 from userbot.events import register, errors_handler
-from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, notif_off, notif_on
+from userbot.modules.dbhelper import (approval,
+                                      approve,
+                                      block_pm,
+                                      notif_state,
+                                      notif_off,
+                                      notif_on)
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
@@ -79,7 +84,8 @@ async def permitpm(event):
 
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
-                        "`You were spamming my master's PM, which I don't like.`"
+                        "`You were spamming my master's PM, "
+                        " which I don't like.`"
                         " `I'mma Report Spam.`"
                     )
 
@@ -90,7 +96,8 @@ async def permitpm(event):
                         if BOTLOG:
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "Count PM is seemingly going retard, plis restart bot!",
+                                "Count PM is seemingly going retard, "
+                                "plis restart bot!",
                             )
                         LOGS.info("CountPM wen't rarted boi")
                         return
@@ -123,21 +130,24 @@ async def auto_accept(event):
         if isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
                 return
-            async for message in event.client.iter_messages(chat.id, reverse=True, limit=1):
+            async for message in event.client.iter_messages(chat.id,
+                                                    reverse=True, limit=1):
                 if message.from_id == (await event.client.get_me()).id:
                     await approve(chat.id)
                     if BOTLOG:
                         await event.client.send_message(
                             BOTLOG_CHATID,
                             "#AUTO-APPROVED\n"
-                            + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
+                            + "User: "
+                            +  f"[{chat.first_name}](tg://user?id={chat.id})",
                         )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
 @errors_handler
 async def notifoff(noff_event):
-    """ For .notifoff command, stop getting notifications from unapproved PMs. """
+    """ For .notifoff command, stop getting
+        notifications from unapproved PMs. """
     if not noff_event.text[0].isalpha(
     ) and noff_event.text[0] not in ("/", "#", "@", "!"):
         if await notif_off() is False:
@@ -173,7 +183,8 @@ async def approvepm(apprvpm):
         else:
             if apprvpm.reply_to_msg_id:
                 reply = await apprvpm.get_reply_message()
-                replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+                replied_user = await apprvpm.client(GetFullUserRequest
+                                                    (reply.from_id))
                 aname = replied_user.user.id
                 name0 = str(replied_user.user.first_name)
                 uid = replied_user.user.id
@@ -210,7 +221,8 @@ async def blockpm(block):
 
             if block.reply_to_msg_id:
                 reply = await block.get_reply_message()
-                replied_user = await block.client(GetFullUserRequest(reply.from_id))
+                replied_user = await block.client(GetFullUserRequest
+                                                  (reply.from_id))
                 aname = replied_user.user.id
                 name0 = str(replied_user.user.first_name)
                 await block.client(BlockRequest(replied_user.user.id))
@@ -240,12 +252,17 @@ async def unblockpm(unblock):
             not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
         if unblock.reply_to_msg_id:
             reply = await unblock.get_reply_message()
-            replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
+            replied_user = await unblock.client(GetFullUserRequest
+                                               (reply.from_id))
             name0 = str(replied_user.user.first_name)
             if await approve(reply.from_id) is False:
-                return await unblock.edit("`You haven't blocked this user yet!`")
+                return await unblock.edit(
+                                     "`You haven't blocked this user yet!`"
+                                         )
             else:
-                return await unblock.edit("`My Master has forgiven you to PM now`")
+                return await unblock.edit(
+                                     "`My Master has forgiven you to PM now`"
+                                         )
 
             await unblock.client(UnblockRequest(replied_user.user.id))
 

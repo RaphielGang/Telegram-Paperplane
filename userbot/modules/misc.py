@@ -22,7 +22,8 @@ async def randomise(items):
             "/", "#", "@", "!"):
         itemo = (items.text[8:]).split()
         index = randint(1, len(itemo) - 1)
-        await items.edit("**Query: **\n`" + items.text[8:] + "`\n**Output: **\n`" + itemo[index] + "`")
+        await items.edit("**Query: **\n`" + items.text[8:] +
+                         "`\n**Output: **\n`" + itemo[index] + "`")
 
 
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
@@ -40,7 +41,8 @@ async def sleepybot(time):
             if BOTLOG:
                 await time.client.send_message(
                     BOTLOG_CHATID,
-                    "You put the bot to sleep for " + str(counter) + " seconds",
+                    "You put the bot to sleep for " + str(counter) +
+                    " seconds",
                 )
             sleep(counter)
 

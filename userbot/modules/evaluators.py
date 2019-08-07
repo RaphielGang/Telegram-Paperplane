@@ -74,7 +74,8 @@ async def evaluate(query):
 
         if BOTLOG:
             await query.client.send_message(
-                BOTLOG_CHATID, f"Eval query {expression} was executed successfully"
+                BOTLOG_CHATID,
+                f"Eval query {expression} was executed successfully"
             )
 
 

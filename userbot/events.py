@@ -3,7 +3,8 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
-""" Userbot module for managing events. One of the main components of the userbot. """
+""" Userbot module for managing events.
+ One of the main components of the userbot. """
 
 from telethon import events
 import asyncio
@@ -52,11 +53,14 @@ def errors_handler(func):
 
             text = "**Sorry, I encountered a error!**\n"
             link = "[https://t.me/userbot_support](Userbot Support Chat)"
-            text += f"If you wanna you can report it - just forward this message to {link}.\n"
+            text += "If you wanna you can report it"
+            text += f"- just forward this message to {link}.\n"
             text += "I won't log anything except the fact of error and date\n"
 
-            ftext = "\nDisclaimer:\nThis file uploaded ONLY here, we logged only fact of error and date, "
-            ftext += "we respect your privacy, you may not report this error if you've "
+            ftext = "\nDisclaimer:\nThis file uploaded ONLY here, "
+            ftext += "we logged only fact of error and date, "
+            ftext += "we respect your privacy, "
+            ftext +=  "you may not report this error if you've "
             ftext += "any confidential data here, noone will see your data\n\n"
             ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
             ftext += "\nDate: " + date

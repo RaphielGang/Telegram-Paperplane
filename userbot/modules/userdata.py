@@ -115,7 +115,8 @@ async def update_username(username):
 @register(outgoing=True, pattern=r"^.delpfp")
 @errors_handler
 async def remove_profilepic(delpfp):
-    """ For .delpfp command, delete your current profile picture in Telegram. """
+    """ For .delpfp command, delete your current
+        profile picture in Telegram. """
     if not delpfp.text[0].isalpha() and delpfp.text[0] not in (
             "/", "#", "@", "!"):
         group = delpfp.text[8:]

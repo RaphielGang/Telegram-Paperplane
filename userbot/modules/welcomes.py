@@ -21,7 +21,8 @@ from userbot.events import errors_handler
 @errors_handler
 async def welcome_mute(welcm):
     try:
-        ''' Ban a recently joined user if it matches the spammer checking algorithm. '''
+        ''' Ban a recently joined user if it
+           matches the spammer checking algorithm. '''
         if not WELCOME_MUTE:
             return
         if welcm.user_joined or welcm.user_added:

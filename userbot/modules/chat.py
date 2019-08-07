@@ -50,7 +50,8 @@ async def chatidgetter(chat):
 @register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
 @errors_handler
 async def log(log_text):
-    """ For .log command, forwards a message or the command argument to the bot logs group """
+    """ For .log command, forwards a message
+     or the command argument to the bot logs group """
     if not log_text.text[0].isalpha(
     ) and log_text.text[0] not in ("/", "#", "@", "!"):
         if BOTLOG:
