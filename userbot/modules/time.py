@@ -143,7 +143,7 @@ async def set_time_country(loc):
         COUNTRY = c_name
 
         await loc.edit(f"` Default country for date "
-                            "and time set to {COUNTRY} successfully! `")
+                       "and time set to {COUNTRY} successfully! `")
 
 
 CMD_HELP.update({

@@ -98,7 +98,7 @@ async def get_dogbin_content(dog_url):
             resp.raise_for_status()
         except exceptions.HTTPError as HTTPErr:
             await dog_url.edit("Request returned an unsuccessful status code.\n\n"
-                              + str(HTTPErr))
+                               + str(HTTPErr))
             return
         except exceptions.Timeout as TimeoutErr:
             await dog_url.edit("Request timed out." + str(TimeoutErr))
@@ -126,9 +126,9 @@ CMD_HELP.update({
 })
 CMD_HELP.update({
     "get_dogbin_content": "Get the content of a paste or "
-                           "shortened url from dogbin (https://del.dog/)"
+    "shortened url from dogbin (https://del.dog/)"
 })
 CMD_HELP.update({
     "pastestats": "Get stats of a paste or shortened "
-                   "url from dogbin (https://del.dog/)"
+    "url from dogbin (https://del.dog/)"
 })

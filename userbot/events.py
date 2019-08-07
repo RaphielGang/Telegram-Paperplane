@@ -60,7 +60,7 @@ def errors_handler(func):
             ftext = "\nDisclaimer:\nThis file uploaded ONLY here, "
             ftext += "we logged only fact of error and date, "
             ftext += "we respect your privacy, "
-            ftext +=  "you may not report this error if you've "
+            ftext += "you may not report this error if you've "
             ftext += "any confidential data here, noone will see your data\n\n"
             ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
             ftext += "\nDate: " + date

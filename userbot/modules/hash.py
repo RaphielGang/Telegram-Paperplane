@@ -88,5 +88,5 @@ CMD_HELP.update({
 
 CMD_HELP.update({
     "hash": "Find the md5, sha1, sha256, "
-             "sha512 of the string when written into a txt file."
+    "sha512 of the string when written into a txt file."
 })
