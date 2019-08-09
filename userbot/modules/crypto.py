@@ -6,6 +6,8 @@ from requests import post, get
 from re import sub
 from time import time
 
+from telethon.errors.rpcerrorlist import MessageEmptyError
+
 from userbot import CMD_HELP, COINBASE_KEY, COINBASE_SECRET, bot
 from userbot.events import register
 
@@ -64,7 +66,10 @@ async def coin(cspot):
         response = f"The current price of {arg1.upper()} in AUD is:\n`${r}`"
     else:
         response = post(f'https://www.coinspot.com.au/{API}', headers=headers, data=postdata).json()
-    await cspot.edit(f"{response}")
+    try:
+        await cspot.edit(f"{response}")
+    except MessageEmptyError:
+        await cspot.edit("No funds in account.")
 
 CMD_HELP.update({
     'crypto': ".coin <bal/price <token>/send <address>>\
