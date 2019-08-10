@@ -31,3 +31,4 @@ humanize
 pyDownload
 PyDrive
 psutil
+pylast
