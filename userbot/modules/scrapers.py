@@ -27,7 +27,7 @@ from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CURRENCY_API, bot
 from userbot.events import register, errors_handler
 
 LANG = "en"
