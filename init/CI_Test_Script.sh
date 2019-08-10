@@ -75,8 +75,9 @@ tg_sendinfo "<code>$num_errors_after code problems detected, but couldn't be aut
 }
 tg_yay() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
-      tg_sendinfo "<code>Compilation Success! This PR will be merged if there aren't any lint issues!"
+      tg_sendinfo "<code>Compilation Success! This PR will be merged if there aren't any lint issues! Check Stickler's Build Status for more!"
       exit 0
+   fi
     tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
     lint
 }
