@@ -15,10 +15,11 @@ from bs4 import BeautifulSoup
 from humanize import naturalsize
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 
 @register(outgoing=True, pattern=r"^.direct(?: |$)([\s\S]*)")
+@errors_handler
 async def direct_link_generator(request):
     """ direct links generator """
     if not request.text[0].isalpha(
@@ -149,7 +150,8 @@ def yandex_disk(url: str) -> str:
     except IndexError:
         reply = "`No Yandex.Disk links found`\n"
         return reply
-    api = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key={}'
+    api = 'https://cloud-api.yandex.net/v1/disk/'
+    api += 'public/resources/download?public_key={}'
     try:
         dl_url = requests.get(api.format(link)).json()['href']
         name = dl_url.split('filename=')[1].split('&disposition')[0]
@@ -178,7 +180,7 @@ def mega_dl(url: str) -> str:
         reply += "`Error: Can't extract the link`\n"
         return reply
     dl_url = data['url']
-    name = data['name']
+    name = data['file_name']
     size = naturalsize(int(data['file_size']))
     reply += f'[{name} ({size})]({dl_url})\n'
     return reply

@@ -14,10 +14,11 @@ from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import bot, CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 
 @register(outgoing=True, pattern="^.kang")
+@errors_handler
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
     if not args.text[0].isalpha() and args.text[0] not in ("/", "#", "@", "!"):
@@ -100,7 +101,8 @@ async def kang(args):
                     await conv.send_message(packname)
                     await conv.get_response()
                     if is_anim:
-                        await bot.forward_messages('Stickers', [message.id], args.chat_id)
+                        await bot.forward_messages('Stickers',
+                                                   [message.id], args.chat_id)
                     else:
                         file.seek(0)
                         await conv.send_file(file, force_document=True)
@@ -114,7 +116,8 @@ async def kang(args):
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
             else:
-                await args.edit("Userbot sticker pack doesn't exist! Making a new one!")
+                await args.edit("Userbot sticker pack \
+                                 doesn't exist! Making a new one!")
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message(cmd)
                     await conv.get_response()
@@ -125,7 +128,8 @@ async def kang(args):
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     if is_anim:
-                        await bot.forward_messages('Stickers', [message.id], args.chat_id)
+                        await bot.forward_messages('Stickers',
+                                                   [message.id], args.chat_id)
                     else:
                         file.seek(0)
                         await conv.send_file(file, force_document=True)

@@ -15,7 +15,7 @@ import time
 from cowpy import cow
 
 from userbot import CMD_HELP, ZALG_LIST
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 # ================= CONSTANT =================
 METOOSTR = [
@@ -196,6 +196,7 @@ DISABLE_RUN = False
 
 
 @register(outgoing=True, pattern=r"^.(\w+)say (.*)")
+@errors_handler
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
     if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in (
@@ -214,6 +215,7 @@ async def univsaye(cowmsg):
 
 
 @register(outgoing=True, pattern="^:/$")
+@errors_handler
 async def kek(keks):
     """ Check yourself ;)"""
     uio = ["/", "\\"]
@@ -223,6 +225,7 @@ async def kek(keks):
 
 
 @register(outgoing=True, pattern="^-_-$")
+@errors_handler
 async def lol(lel):
     """ Ok... """
     okay = "-_-"
@@ -232,6 +235,7 @@ async def lol(lel):
 
 
 @register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+@errors_handler
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     if not cp_e.text[0].isalpha() and cp_e.text[0] not in ("/", "#", "@", "!"):
@@ -243,7 +247,9 @@ async def copypasta(cp_e):
         elif textx:
             message = textx.text
         else:
-            await cp_e.edit("`😂🅱️IvE👐sOME👅text👅for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
+            await cp_e.edit(
+                "`😂🅱️IvE👐sOME👅text👅 for✌️Me👌tO👐MAkE👀iT💞funNy!💦`"
+            )
             return
 
         reply_text = random.choice(EMOJIS)
@@ -267,6 +273,7 @@ async def copypasta(cp_e):
 
 
 @register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
+@errors_handler
 async def vapor(vpr):
     """ Vaporize everything! """
     if not vpr.text[0].isalpha() and vpr.text[0] not in ("/", "#", "@", "!"):
@@ -293,6 +300,7 @@ async def vapor(vpr):
 
 
 @register(outgoing=True, pattern="^.str(?: |$)(.*)")
+@errors_handler
 async def stretch(stret):
     """ Stretch it."""
     if not stret.text[0].isalpha() and stret.text[0] not in (
@@ -318,6 +326,7 @@ async def stretch(stret):
 
 
 @register(outgoing=True, pattern="^.zal(?: |$)(.*)")
+@errors_handler
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     if not zgfy.text[0].isalpha() and zgfy.text[0] not in ("/", "#", "@", "!"):
@@ -357,8 +366,8 @@ async def zal(zgfy):
         await zgfy.edit("".join(reply_text))
 
 
-
 @register(outgoing=True, pattern="^.owo(?: |$)(.*)")
+@errors_handler
 async def faces(owo):
     """ UwU """
     if not owo.text[0].isalpha() and owo.text[0] not in ("/", "#", "@", "!"):
@@ -383,6 +392,7 @@ async def faces(owo):
 
 
 @register(outgoing=True, pattern="^.react$")
+@errors_handler
 async def react_meme(react):
     """ Make your userbot react to everything. """
     if not react.text[0].isalpha() and react.text[0] not in (
@@ -393,6 +403,7 @@ async def react_meme(react):
 
 
 @register(outgoing=True, pattern="^.shg$")
+@errors_handler
 async def shrugger(shg):
     r""" ¯\_(ツ)_/¯ """
     if not shg.text[0].isalpha() and shg.text[0] not in ("/", "#", "@", "!"):
@@ -400,6 +411,7 @@ async def shrugger(shg):
 
 
 @register(outgoing=True, pattern="^.runs$")
+@errors_handler
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     if not DISABLE_RUN:
@@ -411,6 +423,7 @@ async def runner_lol(run):
 
 
 @register(outgoing=True, pattern="^.disable runs$")
+@errors_handler
 async def disable_runs(norun):
     """ Some people don't like running... """
     if not norun.text[0].isalpha() and norun.text[0] not in (
@@ -421,6 +434,7 @@ async def disable_runs(norun):
 
 
 @register(outgoing=True, pattern="^.enable runs$")
+@errors_handler
 async def enable_runs(run):
     """ But some do! """
     if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@", "!"):
@@ -430,6 +444,7 @@ async def enable_runs(run):
 
 
 @register(outgoing=True, pattern="^.metoo$")
+@errors_handler
 async def metoo(hahayes):
     """ Haha yes """
     if not hahayes.text[0].isalpha() and hahayes.text[0] not in (
@@ -439,6 +454,7 @@ async def metoo(hahayes):
 
 
 @register(outgoing=True, pattern="^.mock(?: |$)(.*)")
+@errors_handler
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
     if not mock.text[0].isalpha() and mock.text[0] not in ("/", "#", "@", "!"):
@@ -464,6 +480,7 @@ async def spongemocktext(mock):
 
 
 @register(outgoing=True, pattern="^.clap(?: |$)(.*)")
+@errors_handler
 async def claptext(memereview):
     """ Praise people! """
     if not memereview.text[0].isalpha(
@@ -484,6 +501,7 @@ async def claptext(memereview):
 
 
 @register(outgoing=True, pattern="^.bt$")
+@errors_handler
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
     if not bt_e.text[0].isalpha() and bt_e.text[0] not in ("/", "#", "@", "!"):
@@ -495,6 +513,7 @@ async def bluetext(bt_e):
 
 
 @register(pattern='.type(?: |$)(.*)')
+@errors_handler
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
     if not typew.text[0].isalpha() and typew.text[0] not in (

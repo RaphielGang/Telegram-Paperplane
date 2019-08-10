@@ -13,21 +13,23 @@ import os
 from requests import get
 
 from userbot import SCREENSHOT_LAYER_ACCESS_KEY, CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 
 @register(pattern=r".screencapture (.*)", outgoing=True)
+@errors_handler
 async def capture(url):
     """ For .screencapture command, capture a website and send the photo. """
     if not url.text[0].isalpha() and url.text[0] not in ("/", "#", "@", "!"):
         if SCREENSHOT_LAYER_ACCESS_KEY is None:
             await url.edit(
-                "Need to get an API key from https://screenshotlayer.com/product \nModule stopping!"
+                "Need to get an API key from https://screenshotlayer.com\
+                /product \nModule stopping!"
             )
             return
         await url.edit("Processing ...")
-        sample_url = "https://api.screenshotlayer.com/api/capture?access_key={}&\
-            url={}&fullpage={}&format={}&viewport={}"
+        sample_url = "https://api.screenshotlayer.com/api/capture"
+        sample_url += "?access_key={}&url={}&fullpage={}&format={}&viewport={}"
         input_str = url.pattern_match.group(1)
         response_api = get(
             sample_url.format(

@@ -16,13 +16,16 @@ from userbot import (
     COUNT_MSG,
     USERS,
     is_redis_alive)
-from userbot.events import register
+from userbot.events import register, errors_handler
 from userbot.modules.dbhelper import is_afk, afk, afk_reason, no_afk
 
 
 @register(incoming=True, disable_edited=True)
+@errors_handler
 async def mention_afk(mention):
-    """ This function takes care of notifying the people who mention you that you are AFK."""
+    """ This function takes care of notifying the
+     people who mention you that you are AFK."""
+
     global COUNT_MSG
     global USERS
     if not is_redis_alive():
@@ -55,6 +58,7 @@ async def mention_afk(mention):
 
 
 @register(incoming=True)
+@errors_handler
 async def afk_on_pm(e):
     global USERS
     global COUNT_MSG
@@ -88,6 +92,7 @@ async def afk_on_pm(e):
 
 
 @register(outgoing=True, pattern="^.afk")
+@errors_handler
 async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if not is_redis_alive():
@@ -108,6 +113,7 @@ async def set_afk(e):
 
 
 @register(outgoing=True)
+@errors_handler
 async def type_afk_is_not_true(e):
     global COUNT_MSG
     global USERS
@@ -122,7 +128,8 @@ async def type_afk_is_not_true(e):
             "`You recieved "
             + str(COUNT_MSG)
             + " messages while you were away. Check log for more details.`"
-            + " `This auto-generated message shall be self destructed in 2 seconds.`"
+            + " `This auto-generated message "
+            + "shall be self destructed in 2 seconds.`"
         )
         time.sleep(2)
         await x.delete()

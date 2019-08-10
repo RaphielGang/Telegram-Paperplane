@@ -47,7 +47,8 @@ CONFIG_CHECK = os.environ.get(
 
 if CONFIG_CHECK:
     LOGS.error(
-        "Please remove the line mentioned in the first hashtag from the config.env file")
+        "Please remove the line mentioned in the first \
+         hashtag from the config.env file")
     quit(1)
 
 API_KEY = os.environ.get("API_KEY", None)
@@ -114,7 +115,8 @@ if os.path.exists("learning-data-root.check"):
 else:
     LOGS.info("Braincheck file does not exist, fetching...")
 
-URL = 'https://raw.githubusercontent.com/RaphielGang/databasescape/master/learning-data-root.check'
+URL = 'https://raw.githubusercontent.com/RaphielGang/'
+URL += 'databasescape/master/learning-data-root.check'
 
 with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)

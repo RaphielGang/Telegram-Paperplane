@@ -22,8 +22,13 @@ from userbot import (
     LOGS,
     is_mongo_alive,
     is_redis_alive)
-from userbot.events import register
-from userbot.modules.dbhelper import approval, approve, block_pm, notif_state, notif_off, notif_on
+from userbot.events import register, errors_handler
+from userbot.modules.dbhelper import (approval,
+                                      approve,
+                                      block_pm,
+                                      notif_state,
+                                      notif_off,
+                                      notif_on)
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
@@ -37,6 +42,7 @@ If you\'d like to be approved please be **descriptive** in what you need!"""
 
 
 @register(incoming=True, disable_edited=True)
+@errors_handler
 async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
@@ -90,7 +96,8 @@ async def permitpm(event):
                         if BOTLOG:
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "Count PM is seemingly going retard, plis restart bot!",
+                                "Count PM is seemingly going retard, "
+                                "plis restart bot!",
                             )
                         LOGS.info("CountPM wen't rarted boi")
                         return
@@ -113,6 +120,7 @@ async def permitpm(event):
 
 
 @register(disable_edited=True, outgoing=True)
+@errors_handler
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if event.is_private:
@@ -122,20 +130,24 @@ async def auto_accept(event):
         if isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
                 return
-            async for message in event.client.iter_messages(chat.id, reverse=True, limit=1):
+            async for message in event.client.iter_messages(chat.id,
+                                                            reverse=True, limit=1):
                 if message.from_id == (await event.client.get_me()).id:
                     await approve(chat.id)
                     if BOTLOG:
                         await event.client.send_message(
                             BOTLOG_CHATID,
                             "#AUTO-APPROVED\n"
-                            + "User: " + f"[{chat.first_name}](tg://user?id={chat.id})",
+                            + "User: "
+                            + f"[{chat.first_name}](tg://user?id={chat.id})",
                         )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
+@errors_handler
 async def notifoff(noff_event):
-    """ For .notifoff command, stop getting notifications from unapproved PMs. """
+    """ For .notifoff command, stop getting
+        notifications from unapproved PMs. """
     if not noff_event.text[0].isalpha(
     ) and noff_event.text[0] not in ("/", "#", "@", "!"):
         if await notif_off() is False:
@@ -145,6 +157,7 @@ async def notifoff(noff_event):
 
 
 @register(outgoing=True, pattern="^.notifon$")
+@errors_handler
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if not non_event.text[0].isalpha(
@@ -156,6 +169,7 @@ async def notifon(non_event):
 
 
 @register(outgoing=True, pattern="^.approve$")
+@errors_handler
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     if not apprvpm.text[0].isalpha() and apprvpm.text[0] not in (
@@ -169,7 +183,8 @@ async def approvepm(apprvpm):
         else:
             if apprvpm.reply_to_msg_id:
                 reply = await apprvpm.get_reply_message()
-                replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+                replied_user = await apprvpm.client(GetFullUserRequest
+                                                    (reply.from_id))
                 aname = replied_user.user.id
                 name0 = str(replied_user.user.first_name)
                 uid = replied_user.user.id
@@ -192,6 +207,7 @@ async def approvepm(apprvpm):
 
 
 @register(outgoing=True, pattern="^.block$")
+@errors_handler
 async def blockpm(block):
     """ For .block command, block people from PMing you! """
     if not block.text[0].isalpha() and block.text[0] not in (
@@ -204,7 +220,8 @@ async def blockpm(block):
             await block.edit("`Blocked.`")
             if block.reply_to_msg_id:
                 reply = await block.get_reply_message()
-                replied_user = await block.client(GetFullUserRequest(reply.from_id))
+                replied_user = await block.client(GetFullUserRequest
+                                                  (reply.from_id))
                 aname = replied_user.user.id
                 name0 = str(replied_user.user.first_name)
                 await block.client(BlockRequest(replied_user.user.id))
@@ -227,18 +244,22 @@ async def blockpm(block):
 
 
 @register(outgoing=True, pattern="^.unblock$")
+@errors_handler
 async def unblockpm(unblock):
     """ For .unblock command, let people PMing you again! """
     if not unblock.text[0].isalpha() and unblock.text[0] \
             not in ("/", "#", "@", "!") and unblock.reply_to_msg_id:
         if unblock.reply_to_msg_id:
             reply = await unblock.get_reply_message()
-            replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
+            replied_user = await unblock.client(GetFullUserRequest
+                                                (reply.from_id))
             name0 = str(replied_user.user.first_name)
             if await approve(reply.from_id) is False:
-                return await unblock.edit("`You haven't blocked this user yet!`")
+                return await unblock.edit(
+                    "`You haven't blocked this user yet!`"
+                )
             else:
-                return await unblock.edit("`Skittles has forgiven you to PM now`")
+                return await unblock.edit("`Skittles has allowed you to PM now`")
 
             await unblock.client(UnblockRequest(replied_user.user.id))
 

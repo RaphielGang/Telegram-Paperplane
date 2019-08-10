@@ -10,12 +10,13 @@ from asyncio import sleep
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
                      is_mongo_alive, is_redis_alive)
-from userbot.events import register
+from userbot.events import register, errors_handler
 from userbot.modules.dbhelper import (get_note, get_notes,
                                       add_note, delete_note)
 
 
 @register(outgoing=True, pattern="^.saved$")
+@errors_handler
 async def notes_active(event):
     """ For .saved command, list all of the notes saved in a chat. """
     cmd = event.text[0]
@@ -37,6 +38,7 @@ async def notes_active(event):
 
 
 @register(outgoing=True, pattern=r"^.clear (\w*)")
+@errors_handler
 async def remove_notes(event):
     """ For .clear command, clear note with the given name."""
     cmd = event.text[0]
@@ -54,6 +56,7 @@ async def remove_notes(event):
 
 
 @register(outgoing=True, pattern=r"^.save (\w*)")
+@errors_handler
 async def add_filter(event):
     """ For .save command, saves notes in a chat. """
     cmd = event.text[0]
@@ -76,6 +79,7 @@ async def add_filter(event):
 
 
 @register(outgoing=True, pattern=r"^.note (\w*)")
+@errors_handler
 async def save_note(event):
     """ For .save command, saves notes in a chat. """
     cmd = event.text[0]
@@ -94,6 +98,7 @@ async def save_note(event):
 
 
 @register(pattern=r"#\w*", disable_edited=True)
+@errors_handler
 async def note(event):
     """ Notes logic. """
     try:
@@ -110,6 +115,7 @@ async def note(event):
 
 
 @register(outgoing=True, pattern="^.rmnotes (.*)")
+@errors_handler
 async def kick_marie_notes(kick):
     """ For .rmfilters command, allows you to kick all \
         Marie(or her clones) filters from a chat. """

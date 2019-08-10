@@ -15,7 +15,7 @@ from datetime import datetime
 from requests import post, get
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 
 def progress(current, total):
@@ -28,6 +28,7 @@ def progress(current, total):
 
 
 @register(pattern=r"^.getqr$", outgoing=True)
+@errors_handler
 async def parseqr(qr_e):
     """ For .getqr command, get QR Code content from the replied photo. """
     if not qr_e.text[0].isalpha() and qr_e.text[0] not in ("/", "#", "@", "!"):
@@ -52,6 +53,7 @@ async def parseqr(qr_e):
 
 
 @register(pattern=r".makeqr(?: |$)([\s\S]*)", outgoing=True)
+@errors_handler
 async def make_qr(qrcode):
     """ For .makeqr command, make a QR Code containing the given content. """
     if not qrcode.text[0].isalpha() and qrcode.text[0] not in (
@@ -81,9 +83,10 @@ async def make_qr(qrcode):
             else:
                 message = previous_message.message
 
-        url = "https://api.qrserver.com/v1/create-qr-code/?data={}&size=200x200&\
-                charset-source=UTF-8&charset-target=UTF-8&ecc=L&color=0-0-0\
-                &bgcolor=255-255-255&margin=1&qzone=0&format=jpg"
+        url = "https://api.qrserver.com/v1/create-qr-code/?data={}&\
+size=200x200&charset-source=UTF-8&charset-target=UTF-8\
+&ecc=L&color=0-0-0&bgcolor=255-255-255\
+&margin=1&qzone=0&format=jpg"
         resp = get(url.format(message), stream=True)
         required_file_name = "temp_qr.webp"
         with open(required_file_name, "w+b") as file:

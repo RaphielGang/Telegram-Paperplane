@@ -5,7 +5,8 @@
 #
 # The entire source code is OSSRPL except 'whois' which is MPL
 # License: MPL and OSSRPL
-""" Userbot module for getiing info about any user on Telegram(including you!). """
+""" Userbot module for getiing info
+    about any user on Telegram(including you!). """
 
 import os
 
@@ -13,12 +14,13 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 
 
 @register(pattern=".whois(?: |$)(.*)", outgoing=True)
+@errors_handler
 async def who(event):
     """ For .whois command, get info about a user. """
     if event.fwd_from:
@@ -59,7 +61,8 @@ async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(GetFullUserRequest(
+                                          previous_message.from_id))
     else:
         user = event.pattern_match.group(1)
 
@@ -81,7 +84,8 @@ async def get_user(event):
                 return replied_user
         try:
             user_object = await event.client.get_entity(user)
-            replied_user = await event.client(GetFullUserRequest(user_object.id))
+            replied_user = await event.client(GetFullUserRequest(
+                user_object.id))
         except (TypeError, ValueError) as err:
             await event.edit(str(err))
             return None

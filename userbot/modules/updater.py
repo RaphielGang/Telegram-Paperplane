@@ -13,7 +13,7 @@ from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 
 async def gen_chlog(repo, diff):
@@ -33,6 +33,7 @@ async def is_off_br(br):
 
 
 @register(outgoing=True, pattern="^.update(?: |$)(.*)")
+@errors_handler
 async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"
     if not ups.text[0].isalpha() and ups.text[0] not in (
@@ -42,13 +43,15 @@ async def upstream(ups):
         off_repo = 'https://github.com/RaphielGang/Telegram-UserBot.git'
 
         try:
-            txt = "`Oops.. Updater cannot continue due to some problems occured`\n\n**LOGTRACE:**\n"
+            txt = "`Oops.. Updater cannot continue due to "
+            txt += "some problems`\n\n**LOGTRACE:**\n"
             repo = Repo()
         except NoSuchPathError as error:
             await ups.edit(f'{txt}\n`directory {error} is not found`')
             return
         except InvalidGitRepositoryError as error:
-            await ups.edit(f'{txt}\n`directory {error} does not seems to be a git repository`')
+            await ups.edit(f'{txt}\n`directory {error} does \
+                           not seems to be a git repository`')
             return
         except GitCommandError as error:
             await ups.edit(f'{txt}\n`Early failure! {error}`')
@@ -57,9 +60,10 @@ async def upstream(ups):
         ac_br = repo.active_branch.name
         if not await is_off_br(ac_br):
             await ups.edit(
-                f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). \
-                in that case, Updater is unable to identify which branch is to be merged. \
-                please checkout to any official branch`'
+                f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). '
+                'in that case, Updater is unable to identify '
+                'which branch is to be merged. '
+                'please checkout to any official branch`'
             )
             return
 
@@ -99,20 +103,24 @@ async def upstream(ups):
         try:
             ups_rem.pull(ac_br)
             await ups.edit(
-                '`Successfully Updated without casualties\nBot is switching off now.. restart kthx`'
+                '`Successfully Updated without casualties\n'
+                'Bot is switching off now.. restart kthx`'
             )
             await ups.client.disconnect()
         except GitCommandError:
             ups_rem.git.reset('--hard')
             await ups.edit(
-                '`Successfully Updated with casualties\nBot is switching off now.. restart kthx`'
+                '`Successfully Updated with casualties\n'
+                'Bot is switching off now.. restart kthx`'
             )
             await ups.client.disconnect()
 
 
 CMD_HELP.update({
     'update': '.update\
-\nUsage: Check if the main userbot repository has any updates and show changelog if so.\
+\nUsage: Check if the main userbot repository has any\
+updates and show changelog if so.\
 \n\n.update now\
-\nUsage: Update your userbot, if there are any updates in the main userbot repository.'
+\nUsage: Update your userbot, if there are any\
+updates in the main userbot repository.'
 })

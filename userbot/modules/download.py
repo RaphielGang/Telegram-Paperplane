@@ -7,7 +7,7 @@
 # 'download, uploadir, uploadas, upload' which is MPL
 # License: MPL and OSSRPL
 
-""" Userbot module which contains everything related to \
+""" Userbot module which contains everything related to
     downloading/uploading from/to the server. """
 
 import json
@@ -20,7 +20,7 @@ from datetime import datetime
 from io import BytesIO
 from time import sleep
 import psutil
-from telethon.tl.types import DocumentAttributeVideo
+from telethon.tl.types import DocumentAttributeVideo, MessageMediaPhoto
 from pyDownload import Downloader
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
@@ -28,7 +28,7 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
 from userbot import LOGS, CMD_HELP, GDRIVE_FOLDER
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
@@ -56,34 +56,50 @@ async def download_from_url(url: str, file_name: str) -> str:
     return status
 
 
-async def download_from_tg(target_file) -> [str, BytesIO]:
+async def download_from_tg(target_file) -> (str, BytesIO):
     """
     Download files from Telegram
     """
+    async def dl_file(buffer: BytesIO) -> BytesIO:
+        buffer = await target_file.client.download_media(
+            reply_msg,
+            buffer,
+            progress_callback=progress,
+        )
+        return buffer
+
     start = datetime.now()
     buf = BytesIO()
     reply_msg = await target_file.get_reply_message()
     avail_mem = psutil.virtual_memory().available + psutil.swap_memory().free
-    if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
-        buf.name = "nomem"
-        filen = await target_file.client.download_media(
-            reply_msg,
-            GDRIVE_FOLDER,
-            progress_callback=progress,
-        )
-    else:
-        filen = buf.name = reply_msg.media.document.attributes[0].file_name
-        buf = await target_file.client.download_media(
-            reply_msg,
-            buf,
-            progress_callback=progress,
-        )
+    try:
+        if reply_msg.media.document.size >= avail_mem:
+            # unlikely to happen but baalaji crai
+            filen = await target_file.client.download_media(
+                reply_msg,
+                progress_callback=progress,
+            )
+        else:
+            buf = await dl_file(buf)
+            filen = reply_msg.media.document.attributes[0].file_name
+    except AttributeError:
+        buf = await dl_file(buf)
+        try:
+            filen = reply_msg.media.document.attributes[0].file_name
+        except AttributeError:
+            if isinstance(reply_msg.media, MessageMediaPhoto):
+                filen = 'photo-' + str(datetime.today())\
+                    .split('.')[0].replace(' ', '-') + '.jpg'
+            else:
+                filen = reply_msg.media.document.mime_type\
+                    .replace('/', '-' + str(datetime.today())
+                             .split('.')[0].replace(' ', '-') + '.')
     end = datetime.now()
     duration = (end - start).seconds
     await target_file.edit(
-        f"`Downloaded {reply_msg.media.document.attributes[0].file_name} in {duration} seconds.`"
+        f"`Downloaded {filen} in {duration} seconds.`"
     )
-    return [filen, buf]
+    return filen, buf
 
 
 async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
@@ -139,6 +155,7 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
 
 
 @register(pattern=r".mirror(?: |$)([\s\S]*)", outgoing=True)
+@errors_handler
 async def gdrive_mirror(request):
     """ Download a file and upload to Google Drive """
     if not request.text[0].isalpha(
@@ -156,10 +173,9 @@ async def gdrive_mirror(request):
             return
         if request.reply_to_msg_id:
             await request.edit('`Downloading from Telegram...`')
-            buf = await download_from_tg(request)
-            await request.edit(f'`Uploading {buf[0]} to GDrive...`')
-            reply += await gdrive_upload(buf[0], buf[1]
-                                         ) if buf[1].name != "nomem" else await gdrive_upload(buf[0])
+            filen, buf = await download_from_tg(request)
+            await request.edit(f'`Uploading {filen} to GDrive...`')
+            reply += await gdrive_upload(filen, buf) if buf else await gdrive_upload(filen)
         elif "|" in message:
             url, file_name = message.split("|")
             url = url.strip()
@@ -176,6 +192,7 @@ async def gdrive_mirror(request):
 
 
 @register(pattern=r".drive(?: |$)(\S*.?\/*.?\.?[A-Za-z0-9]*)", outgoing=True)
+@errors_handler
 async def gdrive(request):
     """ Upload files from server to Google Drive """
     if not request.text[0].isalpha(
@@ -194,6 +211,7 @@ async def gdrive(request):
 
 
 @register(pattern=r".download(?: |$)(.*)", outgoing=True)
+@errors_handler
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
     if not target_file.text[0].isalpha(
@@ -205,12 +223,12 @@ async def download(target_file):
         reply_msg = await target_file.get_reply_message()
         if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
             os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-        if reply_msg and reply_msg.media and reply_msg.media.document:
+        if reply_msg and reply_msg.media:
             await target_file.edit('`Downloading file from Telegram....`')
-            buf = await download_from_tg(target_file)
-            if buf[1].name != "nomem":
-                with open(buf[0], 'wb') as to_save:
-                    to_save.write(buf[1].read())
+            filen, buf = await download_from_tg(target_file)
+            if buf:
+                with open(filen, 'wb') as to_save:
+                    to_save.write(buf.read())
         elif "|" in input_str:
             url, file_name = input_str.split("|")
             url = url.strip()
@@ -219,12 +237,15 @@ async def download(target_file):
             status = await download_from_url(url, file_name)
             await target_file.edit(status)
         else:
-            await target_file.edit("`Reply to a message to download to my local server.`\n")
+            await target_file.edit("`Reply to a message to \
+             download to my local server.`\n")
 
 
 @register(pattern=r".uploadir (.*)", outgoing=True)
+@errors_handler
 async def uploadir(udir_event):
-    """ For .uploadir command, allows you to upload everything from a folder in the server"""
+    """ For .uploadir command, allows you to upload
+     everything from a folder in the server"""
     if not udir_event.text[0].isalpha(
     ) and udir_event.text[0] not in ("/", "#", "@", "!"):
         if udir_event.fwd_from:
@@ -242,7 +263,8 @@ async def uploadir(udir_event):
             LOGS.info(lst_of_files)
             uploaded = 0
             await udir_event.edit(
-                "Found {} files. Uploading will start soon. Please wait!".format(
+                "Found {} files. Uploading will \
+                 start soon. Please wait!".format(
                     len(lst_of_files)
                 )
             )
@@ -295,14 +317,18 @@ async def uploadir(udir_event):
                     uploaded = uploaded + 1
             end = datetime.now()
             duration = (end - start).seconds
-            await udir_event.edit("Uploaded {} files in {} seconds.".format(uploaded, duration))
+            await udir_event.edit(
+                "Uploaded {} files in {} seconds.".format(uploaded, duration)
+            )
         else:
             await udir_event.edit("404: Directory Not Found")
 
 
 @register(pattern=r".upload (.*)", outgoing=True)
+@errors_handler
 async def upload(u_event):
-    """ For .upload command, allows you to upload a file from the userbot's server """
+    """ For .upload command, allows you to \
+    upload a file from the userbot's server """
     if not u_event.text[0].isalpha() and u_event.text[0] not in (
             "/", "#", "@", "!"):
         if u_event.fwd_from:
@@ -386,8 +412,10 @@ def extract_w_h(file):
 
 
 @register(pattern=r".uploadas(stream|vn|all) (.*)", outgoing=True)
+@errors_handler
 async def uploadas(uas_event):
-    """ For .uploadas command, allows you to specify some arguments for upload. """
+    """ For .uploadas command, allows you \
+    to specify some arguments for upload. """
     if not uas_event.text[0].isalpha(
     ) and uas_event.text[0] not in ("/", "#", "@", "!"):
         if uas_event.fwd_from:
@@ -485,7 +513,8 @@ CMD_HELP.update({
                 "Usage: Download a file from telegram or link to the server."
 })
 CMD_HELP.update({
-    "upload": ".upload <link>\nUsage: Upload a locally stored file to Telegram."
+    "upload": ".upload <link>\nUsage: Upload a "
+              "locally stored file to Telegram."
 })
 CMD_HELP.update({
     "drive": ".upload <file>\nUsage: Upload a locally stored file to GDrive."

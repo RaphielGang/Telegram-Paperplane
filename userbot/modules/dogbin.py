@@ -3,19 +3,22 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
-""" Userbot module containing commands for interacting with dogbin(https://del.dog)"""
+""" Userbot module containing commands
+    for interacting with dogbin(https://del.dog)"""
 
 from requests import get, post, exceptions
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 DOGBIN_URL = "https://del.dog/"
 
 
 @register(outgoing=True, pattern=r"^.paste(?: |$)([\s\S]*)")
+@errors_handler
 async def paste(pstl):
-    """ For .paste command, allows using dogbin functionality with the command. """
+    """ For .paste command, allows using
+        dogbin functionality with the command. """
     if not pstl.text[0].isalpha() and pstl.text[0] not in ("/", "#", "@", "!"):
         dogbin_final_url = ""
 
@@ -62,8 +65,10 @@ async def paste(pstl):
 
 
 @register(outgoing=True, pattern="^.get_dogbin_content(?: |$)(.*)")
+@errors_handler
 async def get_dogbin_content(dog_url):
-    """ For .get_dogbin_content command, fetches the content of a dogbin URL. """
+    """ For .get_dogbin_content command,
+        fetches the content of a dogbin URL. """
     if not dog_url.text[0].isalpha() and dog_url.text[0] not in (
             "/", "#", "@", "!"):
         textx = await dog_url.get_reply_message()
@@ -83,7 +88,8 @@ async def get_dogbin_content(dog_url):
         elif message.startswith("del.dog/"):
             message = message[len("del.dog/"):]
         else:
-            await dog_url.edit("`Are you sure you're using a valid dogbin URL?`")
+            await dog_url.edit("`Are you sure you're \
+                                using a valid dogbin URL?`")
             return
 
         resp = get(f'{DOGBIN_URL}raw/{message}')
@@ -91,31 +97,38 @@ async def get_dogbin_content(dog_url):
         try:
             resp.raise_for_status()
         except exceptions.HTTPError as HTTPErr:
-            await dog_url.edit("Request returned an unsuccessful status code.\n\n" + str(HTTPErr))
+            await dog_url.edit("Request returned an unsuccessful status code.\n\n"
+                               + str(HTTPErr))
             return
         except exceptions.Timeout as TimeoutErr:
             await dog_url.edit("Request timed out." + str(TimeoutErr))
             return
         except exceptions.TooManyRedirects as RedirectsErr:
-            await dog_url.edit("Request exceeded the configured number of maximum redirections." + str(RedirectsErr))
+            await dog_url.edit("Request exceeded the configured \
+                          number of maximum redirections." + str(RedirectsErr))
             return
 
-        reply_text = "`Fetched dogbin URL content successfully!`\n\n`Content:` " + resp.text
+        reply_text = "`Fetched dogbin URL content "
+        reply_text += "successfully!`\n\n`Content:` " + resp.text
 
         await dog_url.edit(reply_text)
         if BOTLOG:
             await dog_url.client.send_message(
                 BOTLOG_CHATID,
-                "Get dogbin content query for `" + message + "` was executed successfully",
+                "Get dogbin content query for `" + message + "` was \
+executed successfully",
             )
 
 
 CMD_HELP.update({
-    "paste": "Create a paste or a shortened url using dogbin (https://del.dog/)"
+    "paste": "Create a paste or a shortened url using "
+             "dogbin (https://del.dog/)"
 })
 CMD_HELP.update({
-    "get_dogbin_content": "Get the content of a paste or shortened url from dogbin (https://del.dog/)"
+    "get_dogbin_content": "Get the content of a paste or "
+    "shortened url from dogbin (https://del.dog/)"
 })
 CMD_HELP.update({
-    "pastestats": "Get stats of a paste or shortened url from dogbin (https://del.dog/)"
+    "pastestats": "Get stats of a paste or shortened "
+    "url from dogbin (https://del.dog/)"
 })

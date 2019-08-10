@@ -11,13 +11,14 @@ from telethon.tl.functions.account import UpdateProfileRequest
 
 from userbot import (DEFAULT_BIO, CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      BIO_PREFIX, SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
-from userbot.events import register
+from userbot.events import register, errors_handler
 
 # =================== CONSTANT ===================
-SPO_BIO_ENABLED = "```Spotify current music to bio is now enabled.```"
-SPO_BIO_DISABLED = "```Spotify current music to bio is now disabled. Bio reverted to default.```"
-SPO_BIO_RUNNING = "```Spotify current music to bio is already running.```"
-ERROR_MSG = "```Spotify module halted, got an unexpected error.```"
+SPO_BIO_ENABLED = "`Spotify current music to bio is now enabled.`"
+SPO_BIO_DISABLED = "`Spotify current music to bio is now disabled. "
+SPO_BIO_DISABLED += "Bio reverted to default.`"
+SPO_BIO_RUNNING = "`Spotify current music to bio is already running.`"
+ERROR_MSG = "`Spotify module halted, got an unexpected error.`"
 
 USERNAME = SPOTIFY_USERNAME
 PASSWORD = SPOTIFY_PASS
@@ -113,6 +114,7 @@ async def dirtyfix():
 
 
 @register(outgoing=True, pattern="^.enablespotify$")
+@errors_handler
 async def set_biostgraph(setstbio):
     setrecursionlimit(700000)
     if not SPOTIFYCHECK:
@@ -125,6 +127,7 @@ async def set_biostgraph(setstbio):
 
 
 @register(outgoing=True, pattern="^.disablespotify$")
+@errors_handler
 async def set_biodgraph(setdbio):
     global SPOTIFYCHECK
     global RUNNING

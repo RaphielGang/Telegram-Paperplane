@@ -22,7 +22,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 
 from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
                      is_mongo_alive, is_redis_alive)
-from userbot.events import register
+from userbot.events import register, errors_handler
 from userbot.modules.dbhelper import (mute, unmute, get_muted,
                                       gmute, ungmute, get_gmuted)
 
@@ -82,6 +82,7 @@ UNMUTE_RIGHTS = ChatBannedRights(
 
 
 @register(outgoing=True, pattern="^.setgrouppic$")
+@errors_handler
 async def set_group_photo(gpic):
     """ For .setgrouppic command, changes the picture of a group """
     if not gpic.text[0].isalpha() and gpic.text[0] not in ("/", "#", "@", "!"):
@@ -116,6 +117,7 @@ async def set_group_photo(gpic):
 
 
 @register(outgoing=True, pattern="^.promote(?: |$)(.*)")
+@errors_handler
 async def promote(promt):
     """ For .promote command, do promote targeted person """
     if not promt.text[0].isalpha() \
@@ -176,6 +178,7 @@ async def promote(promt):
 
 
 @register(outgoing=True, pattern="^.demote(?: |$)(.*)")
+@errors_handler
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     if not dmod.text[0].isalpha() and dmod.text[0] not in ("/", "#", "@", "!"):
@@ -234,6 +237,7 @@ async def demote(dmod):
 
 
 @register(outgoing=True, pattern="^.ban(?: |$)(.*)")
+@errors_handler
 async def ban(bon):
     """ For .ban command, do "thanos" at targeted person """
     if not bon.text[0].isalpha() and bon.text[0] not in ("/", "#", "@", "!"):
@@ -293,6 +297,7 @@ async def ban(bon):
 
 
 @register(outgoing=True, pattern="^.unban(?: |$)(.*)")
+@errors_handler
 async def nothanos(unbon):
     """ For .unban command, undo "thanos" on target """
     if not unbon.text[0].isalpha() and unbon.text[0] \
@@ -337,6 +342,7 @@ async def nothanos(unbon):
 
 
 @register(outgoing=True, pattern="^.mute(?: |$)(.*)")
+@errors_handler
 async def spider(spdr):
     """
     This function is basically muting peeps
@@ -398,8 +404,20 @@ async def spider(spdr):
             except UserIdInvalidError:
                 return await spdr.edit("`Uh oh my unmute logic broke!`")
 
+            # These indicate we couldn't hit him an API mute, possibly an
+            # admin?
+
+            except (UserAdminInvalidError,
+                    ChatAdminRequiredError, BadRequestError):
+                return await spdr.edit("""`I couldn't mute on the API,
+                could be an admin possibly?
+                Anyways muted on the userbot.
+                I'll automatically delete messages
+                in this chat from this person`""")
+
 
 @register(outgoing=True, pattern="^.unmute(?: |$)(.*)")
+@errors_handler
 async def unmoot(unmot):
     """ For .unmute command, unmute the target """
     if not unmot.text[0].isalpha() and unmot.text[0] \
@@ -454,8 +472,11 @@ async def unmoot(unmot):
 
 
 @register(incoming=True)
+@errors_handler
 async def muter(moot):
     """ Used for deleting the messages of muted people """
+    if not is_mongo_alive() or not is_redis_alive():
+        return
     muted = await get_muted(moot.chat_id)
     gmuted = await get_gmuted()
     rights = ChatBannedRights(
@@ -472,17 +493,28 @@ async def muter(moot):
         for i in muted:
             if i == moot.sender_id:
                 await moot.delete()
-                await moot.client(EditBannedRequest(
-                    moot.chat_id,
-                    moot.sender_id,
-                    rights
-                ))
+                try:
+                    await moot.client(EditBannedRequest(
+                        moot.chat_id,
+                        moot.sender_id,
+                        rights
+                    ))
+
+                # We couldn't hit him an API mute, probably an admin?
+                # Telethon sometimes fails to grab user details properly gaurd
+                # it also
+                except (UserAdminInvalidError,
+                        ChatAdminRequiredError,
+                        BadRequestError,
+                        UserIdInvalidError):
+                    pass
     for i in gmuted:
         if i == moot.sender_id:
             await moot.delete()
 
 
 @register(outgoing=True, pattern="^.ungmute(?: |$)(.*)")
+@errors_handler
 async def ungmoot(un_gmute):
     """ For .ungmute command, ungmutes the target in the userbot """
     if not un_gmute.text[0].isalpha() and un_gmute.text[0] \
@@ -528,6 +560,7 @@ async def ungmoot(un_gmute):
 
 
 @register(outgoing=True, pattern="^.gmute(?: |$)(.*)")
+@errors_handler
 async def gspider(gspdr):
     """ For .gmute command, gmutes the target in the userbot """
     cmd = gspdr.text[0]
@@ -570,6 +603,7 @@ async def gspider(gspdr):
 
 
 @register(outgoing=True, pattern="^.delusers(?: |$)(.*)")
+@errors_handler
 async def rm_deletedacc(show):
     """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
@@ -590,7 +624,8 @@ async def rm_deletedacc(show):
                     del_u += 1
 
             if del_u > 0:
-                del_status = f"found **{del_u}** deleted account(s) in this group \
+                del_status = f"found **{del_u}** \
+                 deleted account(s) in this group \
                 \nclean them by using .delusers clean"
             await show.edit(del_status)
             return
@@ -641,12 +676,13 @@ async def rm_deletedacc(show):
 
         if del_a > 0:
             del_status = f"cleaned **{del_u}** deleted account(s) \
-            \n**{del_a}** deleted admin accounts are not removed"
+\n**{del_a}** deleted admin accounts are not removed"
 
         await show.edit(del_status)
 
 
 @register(outgoing=True, pattern="^.adminlist$")
+@errors_handler
 async def get_admin(show):
     """ For .adminlist command, list all of the admins of the chat. """
     if not show.text[0].isalpha() and show.text[0] not in ("/", "#", "@", "!"):
@@ -673,6 +709,7 @@ async def get_admin(show):
 
 
 @register(outgoing=True, pattern="^.pin(?: |$)(.*)")
+@errors_handler
 async def pin(msg):
     if not msg.text[0].isalpha() and msg.text[0] not in ("/", "#", "@", "!"):
         # Admin or creator check
@@ -721,6 +758,7 @@ async def pin(msg):
 
 
 @register(outgoing=True, pattern="^.kick(?: |$)(.*)")
+@errors_handler
 async def kick(usr):
     """ For .kick command, kick someone from the group using the userbot. """
     if not usr.text[0].isalpha() and usr.text[0] not in ("/", "#", "@", "!"):
@@ -825,23 +863,37 @@ CMD_HELP.update({
     "ban": "Usage: Reply to message with .ban to ban them."
 })
 CMD_HELP.update({
-    "demote": "Usage: Reply to message with .demote to revoke their admin permissions."
+    "demote": "Usage: Reply to message with"
+              ".demote to revoke their admin permissions."
 })
 CMD_HELP.update({
     "unban": "Usage: Reply to message with .unban to unban them in this chat."
 })
 CMD_HELP.update({
-    "mute": "Usage: Reply tomessage with .mute to mute them, works on admins too"
+    "mute": "Usage: Reply tomessage with .mute "
+            "to mute them, works on admins too"
 })
 CMD_HELP.update({
-    "unmute": "Usage: Reply to message with .unmute to remove them from muted list."
+    "unmute": "Usage: Reply to message with .unmute "
+              "to remove them from muted list."
 })
 CMD_HELP.update({
-    "gmute": "Usage: Reply to message with .gmute to mute them in all \
-groups you have in common with them."
+    "gmute": "Usage: Reply to message with .gmute to mute them in all "
+    "groups you have in common with them."
 })
 CMD_HELP.update({
-    "ungmute": "Usage: Reply message with .ungmute to remove them from the gmuted list."
+    "ungmute": "Usage: Reply message with .ungmute "
+    "to remove them from the gmuted list."
+})
+CMD_HELP.update({
+    "delusers": "Usage: Searches for deleted accounts in a group."
+})
+CMD_HELP.update({
+    "delusers clean": "Usage: Searches and removes "
+    "deleted accounts from the group"
+})
+CMD_HELP.update({
+    "adminlist": "Usage: Retrieves all admins in the chat."
 })
 CMD_HELP.update({
     "delusers": "Usage: Searches for deleted accounts in a group."
