@@ -37,6 +37,10 @@ test_run() {
 # Nuke Trap, coz it not working
 
 tg_senderror() {
+    if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
+        tg_sendinfo "<code>This PR is having build issues and won't be merged until its fixed<code>"
+        exit 1
+    fi
     tg_sendinfo "<code>Build Throwing Error(s)</code>" \
         "@baalajimaestro @raphielscape @MrYacha please look in!" \
         "Logs: https://semaphoreci.com/baalajimaestro/telegram-userbot"
@@ -70,6 +74,9 @@ lint() {
 tg_sendinfo "<code>$num_errors_after code problems detected, but couldn't be auto-linted</code>"
 }
 tg_yay() {
+  if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
+      tg_sendinfo "<code>Compilation Success! This PR will be merged if there aren't any lint issues!"
+      exit 0
     tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
     lint
 }
