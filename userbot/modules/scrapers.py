@@ -27,7 +27,7 @@ from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, bot
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CURRENCY_API, bot
 from userbot.events import register, errors_handler
 
 LANG = "en"
@@ -444,6 +444,21 @@ async def download_video(v_url):
         await v_url.delete()
 
 
+@register(outgoing=True, pattern=r".cr (\S*) ?(\S*) ?(\S*)")
+async def currency(cconvert):
+    """ For .cr command, convert amount, from, to. """
+    if not cconvert.text[0].isalpha() and cconvert.text[0] not in (
+            "/", "#", "@", "!"):
+        amount = cconvert.pattern_match.group(1)
+        currency_from = cconvert.pattern_match.group(3).upper()
+        currency_to = cconvert.pattern_match.group(2).upper()
+        data = get(f"https://free.currconv.com/api/v7/convert?apiKey={CURRENCY_API}&q={currency_from}_{currency_to}&compact=ultra").json()
+        result = data[f'{currency_from}_{currency_to}']
+        result = float(amount) / float(result)
+        result = round(result, 5)
+        await cconvert.edit(f"{amount} {currency_to} is:\n`{result} {currency_from}`")
+
+
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return get_emoji_regexp().sub(u'', inputString)
@@ -488,4 +503,8 @@ CMD_HELP.update({
     \nUsage: Download videos from YouTube. \
 If no quality is specified, the highest downloadable quality is downloaded. \
 Will send the link if the video is larger than 50 MB."
+})
+CMD_HELP.update({
+    'cr': ".cr <from> <to>\
+    \nUsage: Currency converter, converts <from> to <to>."
 })

@@ -103,6 +103,8 @@ if not LASTFM_USERNAME == "None":
 else:
     lastfm = None
 
+CURRENCY_API = os.environ.get("CURRENCY_API", None)
+
 GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
 
 # pylint: disable=invalid-name
