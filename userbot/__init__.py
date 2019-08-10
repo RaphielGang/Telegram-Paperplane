@@ -100,6 +100,8 @@ lastfm = pylast.LastFMNetwork(
     password_hash=LASTFM_PASS
 )
 
+CURRENCY_API = os.environ.get("CURRENCY_API", None)
+
 GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
 
 # pylint: disable=invalid-name
