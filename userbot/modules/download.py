@@ -73,8 +73,7 @@ async def download_from_tg(target_file) -> (str, BytesIO):
     reply_msg = await target_file.get_reply_message()
     avail_mem = psutil.virtual_memory().available + psutil.swap_memory().free
     try:
-        if reply_msg.media.document.size >= avail_mem:
-            # unlikely to happen but baalaji crai
+        if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
             filen = await target_file.client.download_media(
                 reply_msg,
                 progress_callback=progress,

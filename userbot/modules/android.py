@@ -67,7 +67,6 @@ async def magisk(request):
             canary_releases += f"`can't find latest canary uninstaller`"
         await request.edit(f"{stable_releases}{beta_releases}{canary_releases}")
 
-
 @register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
 @errors_handler
 async def device_info(request):

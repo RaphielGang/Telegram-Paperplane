@@ -39,20 +39,25 @@ LastLog = False
 @register(outgoing=True, pattern="^.lastfm$")
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
-    if not lastFM.text[0].isalpha() and lastFM.text[0] not in ("/", "#", "@", "!"):
+    if not lastFM.text[0].isalpha() and lastFM.text[0] not in (
+            "/", "#", "@", "!"):
         await lastFM.edit("Processing...")
         preview = None
         playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
         username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
         if playing is not None:
             try:
-                image = User(LASTFM_USERNAME, lastfm).get_now_playing().get_cover_image()
+                image = User(LASTFM_USERNAME,
+                             lastfm).get_now_playing().get_cover_image()
             except IndexError:
                 image = None
                 pass
             tags = gettags(isNowPlaying=True, playing=playing)
             rectrack = parse.quote_plus(f"{playing}")
-            rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
+            rectrack = sub(
+                "^",
+                "https://www.youtube.com/results?search_query=",
+                rectrack)
             if image:
                 output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
                 preview = True
@@ -63,11 +68,14 @@ async def last_fm(lastFM):
             playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
             output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
             for i, track in enumerate(recent):
-                print(i) # vscode hates the i being there so lets make it chill
+                print(i)  # vscode hates the i being there so lets make it chill
                 printable = artist_and_song(track)
                 tags = gettags(track)
                 rectrack = parse.quote_plus(str(printable))
-                rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
+                rectrack = sub(
+                    "^",
+                    "https://www.youtube.com/results?search_query=",
+                    rectrack)
                 output += f"• [{printable}]({rectrack})\n"
                 if tags:
                     output += f"`{tags}`\n\n"
@@ -109,7 +117,7 @@ async def get_curr_track(lfmbio):
     oldsong = ""
     while LASTFMCHECK:
         try:
-            if USER_ID == 0:  
+            if USER_ID == 0:
                 USER_ID = (await lfmbio.client.get_me()).id
             user_info = await bot(GetFullUserRequest(USER_ID))
             RUNNING = True
@@ -155,16 +163,10 @@ async def get_curr_track(lfmbio):
     RUNNING = False
 
 
-"""async def dirtyfix(lfmbio):
-    global LASTFMCHECK
-    LASTFMCHECK = True
-    await sleep(4)
-    await get_curr_track(lfmbio)
-"""
-
 @register(outgoing=True, pattern=r"^.lastbio (\S*)")
 async def lastbio(lfmbio):
-    if not lfmbio.text[0].isalpha() and lfmbio.text[0] not in ("/", "#", "@", "!"):
+    if not lfmbio.text[0].isalpha() and lfmbio.text[0] not in (
+            "/", "#", "@", "!"):
         arg = lfmbio.pattern_match.group(1)
         global LASTFMCHECK
         global RUNNING
@@ -189,7 +191,8 @@ async def lastbio(lfmbio):
 
 @register(outgoing=True, pattern=r"^.lastlog (\S*)")
 async def lastlog(lstlog):
-    if not lstlog.text[0].isalpha() and lstlog.text[0] not in ("/", "#", "@", "!"):
+    if not lstlog.text[0].isalpha() and lstlog.text[0] not in (
+            "/", "#", "@", "!"):
         arg = lstlog.pattern_match.group(1)
         global LastLog
         LastLog = False

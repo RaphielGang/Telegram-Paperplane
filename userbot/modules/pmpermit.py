@@ -37,7 +37,6 @@ Skittles hasn't approved you to PM. \n\n\
 Please wait for him to look in. **If he doesn\'t know you, he likely won\'t approve PMs.**\n\n\
 If you\'d like to be approved please be **descriptive** in what you need!"""
 )
-
 # =================================================================
 
 
@@ -259,7 +258,9 @@ async def unblockpm(unblock):
                     "`You haven't blocked this user yet!`"
                 )
             else:
-                return await unblock.edit("`Skittles has allowed you to PM now`")
+                return await unblock.edit(
+                    "`Skittles has allowed you to PM now`"
+                )
 
             await unblock.client(UnblockRequest(replied_user.user.id))
 

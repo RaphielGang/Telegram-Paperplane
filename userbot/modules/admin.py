@@ -178,7 +178,6 @@ async def promote(promt):
 
 
 @register(outgoing=True, pattern="^.demote(?: |$)(.*)")
-@errors_handler
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     if not dmod.text[0].isalpha() and dmod.text[0] not in ("/", "#", "@", "!"):
@@ -884,16 +883,6 @@ CMD_HELP.update({
 CMD_HELP.update({
     "ungmute": "Usage: Reply message with .ungmute "
     "to remove them from the gmuted list."
-})
-CMD_HELP.update({
-    "delusers": "Usage: Searches for deleted accounts in a group."
-})
-CMD_HELP.update({
-    "delusers clean": "Usage: Searches and removes "
-    "deleted accounts from the group"
-})
-CMD_HELP.update({
-    "adminlist": "Usage: Retrieves all admins in the chat."
 })
 CMD_HELP.update({
     "delusers": "Usage: Searches for deleted accounts in a group."
