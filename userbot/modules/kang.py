@@ -3,24 +3,20 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 #
-
+ 
 """ Userbot module for kanging stickers or making new ones. """
-
+ 
 import io
 import urllib.request
-
+ 
 import math
 from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
-
+ 
 from userbot import bot, CMD_HELP
 from userbot.events import register, errors_handler
-
-
 PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
 A pack can't have more than 120 stickers at the moment."
-
-
 @register(outgoing=True, pattern="^.kang")
 @errors_handler
 async def kang(args):
@@ -34,7 +30,6 @@ async def kang(args):
         emojibypass = False
         is_anim = False
         emoji = ""
-
         await args.edit("`Kanging..........`")
         if message and message.media:
             if isinstance(message.media, MessageMediaPhoto):
@@ -59,7 +54,7 @@ async def kang(args):
         else:
             await args.edit("`Reply to photo to kang it bruh`")
             return
-
+ 
         if photo:
             splat = args.text.split()
             if not emojibypass:
@@ -77,12 +72,12 @@ async def kang(args):
                     # User sent just custom emote, wants to push to default
                     # pack
                     emoji = splat[1]
-
+ 
             packname = f"a{user.id}_by_{user.username}_{pack}"
             packnick = f"@{user.username}'s userbot pack {pack}"
             cmd = '/newpack'
             file = io.BytesIO()
-
+ 
             if not is_anim:
                 image = await resize_photo(photo)
                 file.name = "sticker.png"
@@ -91,20 +86,19 @@ async def kang(args):
                 packname += "_anim"
                 packnick += " animated"
                 cmd = '/newanimated'
-
+ 
             response = urllib.request.urlopen(
                 urllib.request.Request(f'http://t.me/addstickers/{packname}')
             )
             htmlstr = response.read().decode("utf8").split('\n')
-
-            if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
+ 
+            if "  A <strong>Telegram</strong> user has created the <strong>Sticker Set</strong>." not in htmlstr:
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message('/addsticker')
                     await conv.get_response()
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     await conv.send_message(packname)
-
                     x = await conv.get_response()
                     while x.text == PACK_FULL:
                         pack += 1
@@ -172,6 +166,7 @@ async def kang(args):
                     await bot.send_read_acknowledge(conv.chat_id)
             else:
                 await args.edit("Userbot sticker pack \
+doesn't exist! Making a new one!")
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message(cmd)
                     await conv.get_response()
@@ -209,13 +204,13 @@ async def kang(args):
                     await conv.get_response()
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
-
+ 
             await args.edit(
                 f"Sticker added! Your pack can be found [here](t.me/addstickers/{packname})",
                 parse_mode='md'
             )
-
-
+ 
+ 
 async def resize_photo(photo):
     """ Resize the given photo to 512x512 """
     image = Image.open(photo)
@@ -237,10 +232,10 @@ async def resize_photo(photo):
         image = image.resize(sizenew)
     else:
         image.thumbnail(maxsize)
-
+ 
     return image
-
-
+ 
+ 
 CMD_HELP.update({
     "kang": ".kang\
 \nUsage: Reply .kang to a sticker or an image to kang it to your userbot pack.\
@@ -250,3 +245,4 @@ CMD_HELP.update({
 \nUsage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\
 \n\n\nPlease kang this."
 })
+ 
