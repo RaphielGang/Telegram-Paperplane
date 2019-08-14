@@ -92,7 +92,6 @@ async def afk_on_pm(e):
 
 
 @register(outgoing=True, pattern="^.afk")
-@errors_handler
 async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if not is_redis_alive():
