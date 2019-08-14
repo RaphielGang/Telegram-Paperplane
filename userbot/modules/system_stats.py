@@ -137,8 +137,12 @@ async def pipcheck(pip):
 @errors_handler
 async def amireallyalive(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if not is_mongo_alive() or not is_redis_alive():
-            db = "Either Mongo or Redis Database seems to be failing!"
+        if not is_mongo_alive() and not is_redis_alive():
+            db = "Both Mongo and Redis Database seems to be failing!"
+        elif not is_mongo_alive():
+            db = "Mongo DB seems to be failing!"
+        elif not is_redis_alive():
+            db = "Redis Cache seems to be failing!"
         else:
             db = "Databases functioning normally!"
         await e.edit(
