@@ -13,7 +13,7 @@ from html import unescape
 from re import findall
 from urllib import parse
 from urllib.error import HTTPError
-
+from googlesearch import search
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googleapiclient.discovery import build
@@ -77,14 +77,10 @@ async def gsearch(q_event):
             "/", "#", "@", "!"):
         match_ = q_event.pattern_match.group(1)
         match = parse.quote_plus(match_)
-        result_ = await asyncsh(
-            f"gsearch {match}",
-            stdout=asyncsh_PIPE,
-            stderr=asyncsh_PIPE
-        )
-        stdout, stderr = await result_.communicate()
-        result = str(stdout.decode().strip()) \
-            + str(stderr.decode().strip())
+        result = ""
+        for i in search(match, stop=8):
+            result += i
+            result += "\n"
         await q_event.edit(
             "**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" + result
         )
@@ -452,7 +448,8 @@ async def currency(cconvert):
         amount = cconvert.pattern_match.group(1)
         currency_from = cconvert.pattern_match.group(3).upper()
         currency_to = cconvert.pattern_match.group(2).upper()
-        data = get(f"https://free.currconv.com/api/v7/convert?apiKey={CURRENCY_API}&q={currency_from}_{currency_to}&compact=ultra").json()
+        data = get(
+            f"https://free.currconv.com/api/v7/convert?apiKey={CURRENCY_API}&q={currency_from}_{currency_to}&compact=ultra").json()
         result = data[f'{currency_from}_{currency_to}']
         result = float(amount) / float(result)
         result = round(result, 5)
