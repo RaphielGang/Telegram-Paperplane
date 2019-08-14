@@ -15,8 +15,8 @@ from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import bot, CMD_HELP
 from userbot.events import register, errors_handler
-
-
+PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
+A pack can't have more than 120 stickers at the moment."
 @register(outgoing=True, pattern="^.kang")
 @errors_handler
 async def kang(args):
@@ -30,7 +30,7 @@ async def kang(args):
         emojibypass = False
         is_anim = False
         emoji = ""
-
+        await args.edit("`Kanging..........`")
         if message and message.media:
             if isinstance(message.media, MessageMediaPhoto):
                 photo = io.BytesIO()
@@ -59,7 +59,7 @@ async def kang(args):
             splat = args.text.split()
             if not emojibypass:
                 emoji = "🤔"
-            pack = "1"
+            pack = 1
             if len(splat) == 3:
                 pack = splat[2]  # User sent both
                 emoji = splat[1]
@@ -99,7 +99,56 @@ async def kang(args):
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     await conv.send_message(packname)
-                    await conv.get_response()
+                    x = await conv.get_response()
+                    while x.text == PACK_FULL:
+                        pack += 1
+                        packname = f"a{user.id}_by_{user.username}_{pack}"
+                        packnick = f"@{user.username}'s userbot pack {pack}"
+                        await args.edit("`Switching to Pack " + str(pack) + " due to insufficient space`")
+                        await conv.send_message(packname)
+                        x = await conv.get_response()
+                        if x.text == "Invalid pack selected.":
+                            await conv.send_message(cmd)
+                            await conv.get_response()
+                            # Ensure user doesn't get spamming notifications
+                            await bot.send_read_acknowledge(conv.chat_id)
+                            await conv.send_message(packnick)
+                            await conv.get_response()
+                            # Ensure user doesn't get spamming notifications
+                            await bot.send_read_acknowledge(conv.chat_id)
+                            if is_anim:
+                                await bot.forward_messages('Stickers',
+                                                           [message.id], args.chat_id)
+                            else:
+                                file.seek(0)
+                                await conv.send_file(file, force_document=True)
+                            await conv.get_response()
+                            await conv.send_message(emoji)
+                            # Ensure user doesn't get spamming notifications
+                            await bot.send_read_acknowledge(conv.chat_id)
+                            await conv.get_response()
+                            await conv.send_message("/publish")
+                            if is_anim:
+                                await conv.get_response()
+                                await conv.send_message(f"<{packnick}>")
+                            # Ensure user doesn't get spamming notifications
+                            await conv.get_response()
+                            await bot.send_read_acknowledge(conv.chat_id)
+                            await conv.send_message("/skip")
+                            # Ensure user doesn't get spamming notifications
+                            await bot.send_read_acknowledge(conv.chat_id)
+                            await conv.get_response()
+                            await conv.send_message(packname)
+                            # Ensure user doesn't get spamming notifications
+                            await bot.send_read_acknowledge(conv.chat_id)
+                            await conv.get_response()
+                            # Ensure user doesn't get spamming notifications
+                            await bot.send_read_acknowledge(conv.chat_id)
+                            await args.edit(
+                                f"Sticker added in a Different Pack! This Pack is Newly created! Your pack can be found [here](t.me/addstickers/{packname})",
+                                parse_mode='md'
+                            )
+                            return
                     if is_anim:
                         await bot.forward_messages('Stickers',
                                                    [message.id], args.chat_id)
@@ -117,7 +166,7 @@ async def kang(args):
                     await bot.send_read_acknowledge(conv.chat_id)
             else:
                 await args.edit("Userbot sticker pack \
-                                 doesn't exist! Making a new one!")
+doesn't exist! Making a new one!")
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message(cmd)
                     await conv.get_response()
