@@ -97,13 +97,13 @@ async def delete_it(delme):
                 await msg_src.delete()
                 await delme.delete()
                 if BOTLOG:
-                    await delme.send_message(
+                    await delme.client.send_message(
                         BOTLOG_CHATID,
                         "Deletion of message was successful"
                     )
             except rpcbaseerrors.BadRequestError:
                 if BOTLOG:
-                    await delme.send_message(
+                    await delme.client.send_message(
                         BOTLOG_CHATID,
                         "Well, I can't delete a message"
                     )
@@ -126,7 +126,7 @@ async def editer(edit):
                 break
             i = i + 1
         if BOTLOG:
-            await edit.send_message(BOTLOG_CHATID,
+            await edit.client.send_message(BOTLOG_CHATID,
                                     "Edit query was executed successfully")
 
 
