@@ -126,6 +126,8 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     gauth.SaveCredentialsFile("secret.json")
     drive = GoogleDrive(gauth)
 
+    if filename.count('/') > 1:
+        filename = filename.split('/')[-1]
     filedata = {'title': filename, "parents": [
         {"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]}
 
