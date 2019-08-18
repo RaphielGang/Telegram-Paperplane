@@ -30,6 +30,8 @@ from wikipedia.exceptions import DisambiguationError, PageError
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CURRENCY_API, bot
 from userbot.events import register, errors_handler
 
+from bs4 import BeautifulSoup
+
 LANG = "en"
 
 
@@ -69,25 +71,29 @@ async def img_sampler(event):
         await event.delete()
 
 
-@register(outgoing=True, pattern=r"^.google (.*)")
+@register(outgoing=True, pattern=r"^.search (.*)")
 @errors_handler
-async def gsearch(q_event):
-    """ For .google command, do a Google search. """
+async def search(q_event):
+    """ For .search command, do a StartPage search. """
     if not q_event.text[0].isalpha() and q_event.text[0] not in (
             "/", "#", "@", "!"):
         match_ = q_event.pattern_match.group(1)
-        match = parse.quote_plus(match_)
-        result = ""
-        for i in search(match, stop=8):
-            result += i
-            result += "\n"
+        match = quote_plus(match_)
+        plain_txt = get(f"https://www.startpage.com/do/search?cmd=process_search&query={match}", 'html').text
+        soup = BeautifulSoup(plain_txt, "lxml")
+        msg = ""
+        for result in soup.find_all('a', {'class': 'w-gl__result-title'}):
+            title = result.text
+            link = result.get('href')
+            msg += f"**{title}**{link}"
         await q_event.edit(
-            "**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" + result
+            "**Search Query:**\n`" + match_ + "`\n\n**Results:**\n" + msg,
+            link_preview = False
         )
         if BOTLOG:
             await q_event.client.send_message(
                 BOTLOG_CHATID,
-                "Google Search query " + match_ + " was executed successfully",
+                "Search query `" + match_ + "` was executed successfully",
             )
 
 
