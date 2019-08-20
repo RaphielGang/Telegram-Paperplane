@@ -127,7 +127,7 @@ async def editer(edit):
             i = i + 1
         if BOTLOG:
             await edit.client.send_message(BOTLOG_CHATID,
-                                    "Edit query was executed successfully")
+                                           "Edit query was executed successfully")
 
 
 @register(outgoing=True, pattern="^.sd")

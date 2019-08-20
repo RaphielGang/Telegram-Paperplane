@@ -396,8 +396,11 @@ async def no_afk():
     REDIS.delete('is_afk')
 
 # Fbans
+
+
 async def get_fban():
     return MONGO.fban.find()
+
 
 async def add_chat_fban(chatid):
     if await is_fban(chatid) is True:
@@ -417,8 +420,9 @@ async def remove_chat_fban(chatid):
         })
         return True
 
+
 async def is_fban(chatid):
-    if not MONGO.fban.find_one({"chatid":chatid}):
+    if not MONGO.fban.find_one({"chatid": chatid}):
         print("FAILED on fed")
         return False
     else:
@@ -426,8 +430,10 @@ async def is_fban(chatid):
 
 # Gbans
 
+
 async def get_gban():
     return MONGO.gban.find()
+
 
 async def add_chat_gban(chatid):
     if await is_gban(chatid) is True:
@@ -448,8 +454,9 @@ async def remove_chat_gban(chatid):
         })
         return True
 
+
 async def is_gban(chatid):
-    if not MONGO.gban.find_one({"chatid":chatid}):
+    if not MONGO.gban.find_one({"chatid": chatid}):
         return False
     else:
         return True
