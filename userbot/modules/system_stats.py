@@ -77,10 +77,11 @@ async def bot_ver(event):
                 "`Revision: "
                 f"{revout}"
                 "`"
+                "`Tagged Version: r4.0`"
             )
         else:
             await event.edit(
-                "Shame that you don't have git, You're running r3.1 anyway"
+                "Shame that you don't have git, You're running r4.0 anyway"
             )
 
 
