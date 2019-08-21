@@ -9,7 +9,8 @@
 
 from random import randint
 from time import sleep
-
+from os import execl
+import sys
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register, errors_handler
 
@@ -59,6 +60,23 @@ async def killdabot(event):
                 "#SHUTDOWN \n"
                 "Bot shut down")
         await event.client.disconnect()
+
+@register(outgoing=True, pattern="^.restart$")
+@errors_handler
+async def killdabot(event):
+
+    if not event.text[0].isalpha():
+        await event.edit("`Hold tight! I just need a second to be back up....`")
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID,
+                "#RESTART \n"
+                "Bot Restarted")
+        await event.client.disconnect()
+        # Spin a new instance of bot
+        execl(sys.executable, sys.executable, *sys.argv)
+        # Shut the existing one down
+        exit()
 
 
 @register(outgoing=True, pattern="^.support$")
