@@ -61,6 +61,7 @@ async def killdabot(event):
                 "Bot shut down")
         await event.client.disconnect()
 
+
 @register(outgoing=True, pattern="^.restart$")
 @errors_handler
 async def killdabot(event):
