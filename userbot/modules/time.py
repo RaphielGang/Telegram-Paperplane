@@ -53,7 +53,7 @@ async def get_tz(con):
 async def time_func(tdata):
     """ For .time command, return the time of
         1. The country passed as an argument,
-        2. The default userbot country(set it by using .ctime),
+        2. The default userbot country(set it by using .settime),
         3. The server where the userbot runs.
     """
     if not tdata.text[0].isalpha() and tdata.text[0] not in (
@@ -74,7 +74,7 @@ async def time_func(tdata):
 
         time_zone = await get_tz(con)
         if not time_zone:
-            await tdata.edit("` Wrong country given! Try again! `")
+            await tdata.edit("`Invaild country.`")
             return
 
         try:
@@ -90,7 +90,7 @@ async def time_func(tdata):
 async def date_func(dat):
     """ For .date command, return the date of
         1. The country passed as an argument,
-        2. The default userbot country(set it by using .ctime),
+        2. The default userbot country(set it by using .settime),
         3. The server where the userbot runs.
     """
     if not dat.text[0].isalpha() and dat.text[0] not in ("/", "#", "@", "!"):
@@ -110,7 +110,7 @@ async def date_func(dat):
 
         time_zone = await get_tz(con)
         if not time_zone:
-            await dat.edit("` Wrong country given! Try again! `")
+            await dat.edit("`Invaild country.`")
             return
 
         try:
@@ -121,10 +121,10 @@ async def date_func(dat):
         await dat.edit(f"`It's`  **{dt.now().strftime(d_form)}**  `in {c_name}`")
 
 
-@register(outgoing=True, pattern="^.ctime (.*)")
+@register(outgoing=True, pattern="^.settime (.*)")
 @errors_handler
 async def set_time_country(loc):
-    """ For .ctime command, change the default userbot
+    """ For .settime command, change the default userbot
         country for date and time commands. """
     if not loc.text[0].isalpha() and loc.text[0] not in ("/", "#", "@", "!"):
         global COUNTRY
@@ -132,7 +132,7 @@ async def set_time_country(loc):
 
         time_zone = await get_tz(temp_country)
         if not time_zone:
-            await loc.edit("` Wrong country given! Try again! `")
+            await loc.edit("`Invaild country.`")
             return
 
         try:
@@ -142,8 +142,7 @@ async def set_time_country(loc):
 
         COUNTRY = c_name
 
-        await loc.edit(f"` Default country for date "
-                       "and time set to {COUNTRY} successfully! `")
+        await loc.edit(f"`Set default country as {COUNTRY}. `")
 
 
 CMD_HELP.update({
@@ -155,6 +154,6 @@ CMD_HELP.update({
     \nUsage: Get the date of a country."
 })
 CMD_HELP.update({
-    "ctime": ".ctime <country name/code>\
+    "settime": ".settime <country name/code>\
     \nUsage: Set the default country for .time and .date command."
 })
