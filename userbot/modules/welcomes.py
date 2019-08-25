@@ -28,6 +28,8 @@ async def welcome_mute(welcm):
         if welcm.user_joined or welcm.user_added:
             adder = None
             ignore = None
+            spambot = False
+            users = None
 
             if welcm.user_added:
                 ignore = False
@@ -47,14 +49,12 @@ async def welcome_mute(welcm):
                 else:
                     users = [welcm.action_message.from_id]
             await sleep(5)
-            spambot = False
 
             for user_id in users:
                 async for message in bot.iter_messages(
                         welcm.chat_id,
                         from_user=user_id
                 ):
-
                     correct_type = isinstance(message, Message)
                     if not message or not correct_type:
                         break

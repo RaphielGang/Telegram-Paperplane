@@ -76,7 +76,7 @@ async def bot_ver(event):
                 "` \n"
                 "`Revision: "
                 f"{revout}"
-                "`"
+                "` \n"
                 "`Tagged Version: r4.0`"
             )
         else:
