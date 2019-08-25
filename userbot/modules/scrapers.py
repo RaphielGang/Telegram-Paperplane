@@ -75,6 +75,7 @@ async def gsearch(q_event):
     """ For .google command, do a Google search. """
     if not q_event.text[0].isalpha() and q_event.text[0] not in (
             "/", "#", "@", "!"):
+        await q_event.edit("`Searching...`")
         match_ = q_event.pattern_match.group(1)
         match = parse.quote_plus(match_)
         result = ""
