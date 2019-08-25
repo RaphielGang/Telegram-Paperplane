@@ -6,12 +6,23 @@
 
 """ Userbot module containing commands for keeping lists. """
 
+import re
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
                      is_mongo_alive, is_redis_alive)
 from userbot.modules.dbhelper import (get_list, get_lists,
                                       add_list, delete_list,
                                       set_list)
 from userbot.events import register, errors_handler
+
+# =================== CONSTANTS ===================
+
+DB_FAILED = "`Database connections failed!`"
+NO_LISTS = "`There are no saved lists in this chat or globally.`"
+CHK_HELP = "`Check `**.help lists**` for more info about Lists.`"
+LIST_NOT_FOUND = "`List {} not found!`"
+LIST_HEADER = "[Paperplane-List] List **{}({})**\n\n"
+
+# =================================================
 
 
 @register(outgoing=True, pattern="^.lists$")
@@ -21,10 +32,10 @@ async def lists_active(event):
     cmd = event.text[0]
     if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await event.edit("`Database connections failing!`")
+            await event.edit(DB_FAILED)
             return
 
-        message = "`There are no saved lists in this chat`"
+        message = NO_LISTS
         lists = await get_lists(event.chat_id)
         if lists.count() != 0:
             message = "Lists saved in this chat:\n"
@@ -38,21 +49,34 @@ async def lists_active(event):
         await event.edit(message)
 
 
-@register(outgoing=True, pattern=r"^.rmlist (\w*)")
+@register(outgoing=True, pattern=r"^.dellist ?(\w*)")
 @errors_handler
 async def removelists(event):
-    """ For .rmlist command, delete list with the given name."""
+    """ For .dellist command, delete list with the given name."""
     cmd = event.text[0]
     if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await event.edit("`Database connections failing!`")
+            await event.edit(DB_FAILED)
             return
-        listname = event.pattern_match.group(1)
+
+        textx = await event.get_reply_message()
+        listname = None
+
+        if textx:
+            x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
+            listname = x.group(1)
+        elif event.pattern_match.group(1):
+            listname = event.pattern_match.group(1)
+        else:
+            await x.edit(f"`Pass a list to delete!` {CHK_HELP}")
+            return
+
         _list = await get_list(event.chat_id, listname)
 
         if await delete_list(event.chat_id, listname) is False:
             await event.edit("`Couldn't find list:` **{}**"
                              .format(listname))
+            return
         else:
             await event.edit("`Successfully deleted list:` **{}**"
                              .format(listname))
@@ -73,7 +97,7 @@ async def addlist(event):
     cmd = event.text[0]
     if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await event.edit("`Database connections failing!`")
+            await event.edit(DB_FAILED)
             return
 
         is_global = event.pattern_match.group(1) == "g"
@@ -81,109 +105,166 @@ async def addlist(event):
         listname = event.pattern_match.group(2)
         content = event.text.partition(f"{listname} ")[2].splitlines()
 
-        msg = "`List {} successfully. Use` ${} `to get it`"
+        msg = "`List {} successfully. Use` ${} `to get it.`"
 
         chatid = 0 if is_global else event.chat_id
 
         if await add_list(chatid, listname, content) is False:
             await event.edit(msg.format('updated', listname))
         else:
-            await event.edit(msg.format('added', listname))
+            await event.edit(msg.format('created', listname))
 
         if BOTLOG:
             listat = "global storage" if is_global else str(event.chat_id)
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"Added list {listname} to {listat}"
+                f"Created list {listname} in {listat}"
             )
 
 
-@register(outgoing=True, pattern=r"^.addlistitem(s)? (\w*)")
+@register(outgoing=True, pattern=r"^.addlistitem(s)? ?(\w*)\n((.|\n*)*)")
 @errors_handler
 async def add_list_items(event):
     """ For .addlistitems command, add item(s) to a list. """
     cmd = event.text[0]
     if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await event.edit("`Database connections failing!`")
+            await event.edit(DB_FAILED)
             return
 
-        listname = event.pattern_match.group(2)
+        textx = await event.get_reply_message()
+        listname = None
+
+        if textx:
+            x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
+            listname = x.group(1)
+        elif event.pattern_match.group(2):
+            listname = event.pattern_match.group(2)
+
+        if not listname:
+            return_msg = f"`Pass a list to add items into!` {CHK_HELP}"
+            await x.edit(return_msg)
+            return
+
         _list = await get_list(event.chat_id, listname)
+
+        if not _list:
+            await x.edit(LIST_NOT_FOUND.format(listname))
+
         content = _list['items']
+        newitems = event.pattern_match.group(3)
+        content.extend(newitems.splitlines())
 
-        content.extend(event.text.partition(f"{listname} ")[2].splitlines())
-
-        msg = "`Items added successfully to the list. \
-Use` ${} `to get the list.`"
+        msg = "`Item(s) added successfully to the list.\n\n"
+        msg += "New item(s):\n"
+        msg += f"{newitems}\n\n"
+        msg += f"Use` ${listname} `to get the list.`"
 
         if await add_list(event.chat_id, listname, content) is False:
-            await event.edit(msg.format(listname))
+            await event.edit(msg)
         else:
-            await event.edit(f"List {listname} doesn't exist!")
+            await event.edit(LIST_NOT_FOUND.format(listname))
+            return
 
         if BOTLOG:
             listat = "global storage" if _list['chat_id'] else str(
                 event.chat_id)
+
+            log = "Added item(s) {newitems.splitlines()} "
+            log += f"to {listname} in {listat}."
+
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"Added items {content} to {listname} in {listat}"
+                log
             )
 
 
-@register(outgoing=True, pattern=r"^.editlistitem (\w*) ([0-9]+)")
+@register(outgoing=True, pattern=r"^.editlistitem ?(\w*)? ([0-9]+) (.*)")
 @errors_handler
 async def edit_list_item(event):
     """ For .editlistitem command, edit an individual item on a list. """
     cmd = event.text[0]
     if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await event.edit("`Database connections failing!`")
+            await event.edit(DB_FAILED)
             return
 
-        listname = event.pattern_match.group(1)
+        textx = await event.get_reply_message()
+        listname = None
+
+        if textx:
+            x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
+            listname = x.group(1)
+        elif event.pattern_match.group(1):
+            listname = event.pattern_match.group(1)
+        else:
+            await x.edit(f"`Pass a list!` {CHK_HELP}")
+            return
+
         item_number = int(event.pattern_match.group(2))
 
         _list = await get_list(event.chat_id, listname)
         content = _list['items']
-        content[item_number - 1] = event.text.partition(
-            f"{listname} {item_number} "
-        )[2]
+        content[item_number - 1] = event.pattern_match.group(3)
 
-        msg = f"`Item {item_number} edited successfully. \
-Use` ${listname} `to get the list.`"
+        msg = f"`Item {item_number} edited successfully.\n"
+        msg += f"Use` ${listname} `to get the list.`"
 
         if await add_list(event.chat_id, listname, content) is False:
             await event.edit(msg)
         else:
-            await event.edit(f"List {listname} doesn't exist!")
+            await event.edit(LIST_NOT_FOUND.format(listname))
 
         if BOTLOG:
             listat = "global storage" if _list['chat_id'] else str(
                 event.chat_id)
+
+            log = "Edited item {item_number} of "
+            log += f"{listname} in {listat} successfully."
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"Edited item {item_number} of {listname} in {listat} successfully."
+                log
             )
 
 
-@register(outgoing=True, pattern=r"^.rmlistitem (\w*) ([0-9]+)")
+@register(outgoing=True, pattern=r"^.rmlistitem ?(\w*)? ([0-9]+)")
 @errors_handler
 async def rmlistitems(event):
     """ For .rmlistitem command, remove an item from the list. """
     cmd = event.text[0]
     if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await event.edit("`Database connections failing!`")
+            await event.edit(DB_FAILED)
             return
 
-        listname = event.pattern_match.group(1)
+        await event.edit("`Removing...`")
+
+        textx = await event.get_reply_message()
+        listname = None
+
+        if textx:
+            x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
+            listname = x.group(1)
+        elif event.pattern_match.group(1):
+            listname = event.pattern_match.group(1)
+        else:
+            await x.edit(f"`Pass a list to remove items from!` {CHK_HELP}")
+            return
+
         item_number = int(event.pattern_match.group(2))
 
         _list = await get_list(event.chat_id, listname)
 
-        content = _list['items']
-        del content[item_number - 1]
+        try:
+            content = _list['items']
+            del content[item_number - 1]
+        except TypeError:
+            await event.edit(LIST_NOT_FOUND.format('listname'))
+            return
+        except IndexError:
+            await event.edit(f"`Item `**{item_number}**\
+` in list `**{listname}**` not found!`")
+            return
 
         msg = "`Item {} removed from the list successfully. \
 Use` ${} `to get the list.`"
@@ -202,14 +283,14 @@ Use` ${} `to get the list.`"
             )
 
 
-@register(outgoing=True, pattern=r"^.setlist (\w*) (\w*)")
+@register(outgoing=True, pattern=r"^.setlist ?(\w*)? (global|local)")
 @errors_handler
 async def setliststate(event):
     """ For .setlist command, changes the state of a list. """
     cmd = event.text[0]
     if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
         if not is_mongo_alive() or not is_redis_alive():
-            await event.edit("`Database connections failing!`")
+            await event.edit(DB_FAILED)
             return
 
         _futureState = event.pattern_match.group(2)
@@ -220,7 +301,18 @@ async def setliststate(event):
         elif _futureState == "local":
             changeToGlobal = False
 
-        listname = event.pattern_match.group(1)
+        textx = await event.get_reply_message()
+        listname = None
+
+        if textx:
+            x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
+            listname = x.group(1)
+        elif event.pattern_match.group(1):
+            listname = event.pattern_match.group(1)
+        else:
+            await x.edit(f"`Pass a list to remove!` {CHK_HELP}")
+            return
+
         _list = await get_list(event.chat_id, listname)
 
         chatid = 0 if changeToGlobal else event.chat_id
@@ -252,7 +344,58 @@ async def lists_logic(event):
             listname = event.text[1:]
             _list = await get_list(event.chat_id, listname)
             if _list:
-                return_str = ""
+                storage = "None"
+                if _list['chat_id'] == 0:
+                    storage = "global"
+                else:
+                    storage = str(_list['chat_id'])
+
+                return_str = LIST_HEADER.format(listname, storage)
+
+                if _list['items']:
+                    for i, item in enumerate(_list['items']):
+                        return_str += f"{i+1}. {item}\n"
+
+                    return_str += f"\n{CHK_HELP}"
+                else:
+                    return_str = f"`This list is empty!` {CHK_HELP}"
+
+                await event.reply(return_str)
+    except BaseException:
+        pass
+
+
+@register(pattern=r".getlist ?(\w*)?")
+@errors_handler
+async def getlist_logic(event):
+    """ For .getlist, get the list by the name. """
+    cmd = event.text[0]
+    if not cmd.isalpha() and cmd not in ("/", "#", "@", "!"):
+        if not (await event.get_sender()).bot:
+            if not is_mongo_alive() or not is_redis_alive():
+                return
+
+            textx = await event.get_reply_message()
+            listname = None
+
+            if textx:
+                x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
+                listname = x.group(1)
+            elif event.pattern_match.group(1):
+                listname = event.pattern_match.group(1)
+            else:
+                await x.edit(f"`Pass a list to get!` {CHK_HELP}")
+                return
+
+            _list = await get_list(event.chat_id, listname)
+            if _list:
+                storage = "None"
+                if _list['chat_id'] == 0:
+                    storage = "global"
+                else:
+                    storage = str(_list['chat_id'])
+
+                return_str = LIST_HEADER.format(listname, storage)
 
                 if _list['items']:
                     for i, item in enumerate(_list['items']):
@@ -260,9 +403,10 @@ async def lists_logic(event):
                 else:
                     return_str = "`This list is empty!`"
 
-                await event.reply(return_str)
-    except BaseException:
-        pass
+                await event.edit(return_str)
+            else:
+                await event.edit(f"`List {listname} not found!`")
+
 
 CMD_HELP.update({
     "lists": "\
@@ -276,11 +420,13 @@ Separate items with a new line.\
 \n\n.addglist <listname> <items>\
 \nUsage: Saves items as a global list with the name listname. \
 Separate items with a new line. Accessible from every chat.\
-\n\n.rmlist <listname>\
+\n\n.dellist <listname>\
 \nUsage: Delete the list with name listname.\
-\n\n.addlistitem(s) <listname> <items>\
+\n\n.addlistitem(s) <listname> \n\
+<items>\
 \nUsage: Add items to the list listname. \
 Separate items with a new line.\
+The first items must start from a new line.\
 \n\n.rmlistitem <listname> <item_number>\
 \nUsage: Delete the item with the number item_number in the \
 list with the name listname.\
@@ -291,5 +437,11 @@ content to new_content\
 \nUsage: Change the status of a list to local \
 (accessible only from the current chat), or global \
 (accessible from every chat).\
-"
+\n\n.getlist <listname>\
+\nUsage: Search for and get the list with name listname. \
+\n\n\
+By replying to a Paperplane List message(identified by \
+\n'[Paperplane-List]' in the beginning of a userbot message), \
+\nyou can omit <listname> from all commands (except $<listname>). \
+\nPaperplane will recognize the list from the replied message."
 })
