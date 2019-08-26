@@ -14,7 +14,6 @@ from userbot.events import register, errors_handler
 
 
 GITHUB = 'https://github.com'
-MAGISK_REPO = f'{GITHUB}/topjohnwu/Magisk/releases'
 DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
                'certified-android-devices/master/devices.json'
 
@@ -25,25 +24,14 @@ async def magisk(request):
     """ magisk latest releases """
     if not request.text[0].isalpha(
     ) and request.text[0] not in ("/", "#", "@", "!"):
-        page = BeautifulSoup(get(MAGISK_REPO).content, 'lxml')
-        links = '\n'.join([i['href'] for i in page.findAll('a')])
+        url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/master/'
         releases = 'Latest Magisk Releases:\n'
-        try:
-            latest_apk = re.findall(r'/.*MagiskManager-v.*apk', links)[0]
-            releases += f'[{latest_apk.split("/")[-1]}]({GITHUB}{latest_apk})\n'
-        except IndexError:
-            releases += "`can't find latest apk`"
-        try:
-            latest_zip = re.findall(r'/.*Magisk-v.*zip', links)[0]
-            releases += f'[{latest_zip.split("/")[-1]}]({GITHUB}{latest_zip})\n'
-        except IndexError:
-            releases += "`can't find latest zip`"
-        try:
-            latest_uninstaller = re.findall(
-                r'/.*Magisk-uninstaller-.*zip', links)[0]
-            releases += f'[{latest_uninstaller.split("/")[-1]}]({GITHUB}{latest_uninstaller})\n'
-        except IndexError:
-            releases += "`can't find latest uninstaller`"
+        for variant in ['stable', 'beta', 'canary_builds/canary']:
+            data = get(url + variant + '.json').json()
+            name = variant.split('_')[0].capitalize()
+            releases += f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | ' \
+                        f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | ' \
+                        f'[Uninstaller]({data["uninstaller"]["link"]})\n'
         await request.edit(releases)
 
 
