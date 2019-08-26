@@ -90,7 +90,7 @@ async def time_func(tdata):
         elif len(timezones) > 1:
             if tz_num:
                 tz_num = int(tz_num)
-                time_zone = timezones[tz_num-1]
+                time_zone = timezones[tz_num - 1]
             else:
                 return_str = f"{c_name} has multiple timezones:\n"
 
@@ -158,7 +158,7 @@ async def date_func(dat):
         elif len(timezones) > 1:
             if tz_num:
                 tz_num = int(tz_num)
-                time_zone = timezones[tz_num-1]
+                time_zone = timezones[tz_num - 1]
             else:
                 return_str = f"{c_name} has multiple timezones:\n"
 
@@ -227,7 +227,7 @@ async def set_time_country(loc):
                 return
 
         COUNTRY = c_name
-        tz_name = timezones[TZ_NUMBER-1]
+        tz_name = timezones[TZ_NUMBER - 1]
 
         await loc.edit("`Default country for date and time set to "
                        f"{COUNTRY}({tz_name} timezone).`")
