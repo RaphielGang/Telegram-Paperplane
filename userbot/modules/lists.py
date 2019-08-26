@@ -68,7 +68,7 @@ async def removelists(event):
         elif event.pattern_match.group(1):
             listname = event.pattern_match.group(1)
         else:
-            await x.edit(f"`Pass a list to delete!` {CHK_HELP}")
+            await event.edit(f"`Pass a list to delete!` {CHK_HELP}")
             return
 
         _list = await get_list(event.chat_id, listname)
@@ -143,7 +143,7 @@ async def add_list_items(event):
 
         if not listname:
             return_msg = f"`Pass a list to add items into!` {CHK_HELP}"
-            await x.edit(return_msg)
+            await event.edit(return_msg)
             return
 
         _list = await get_list(event.chat_id, listname)
@@ -198,7 +198,7 @@ async def edit_list_item(event):
         elif event.pattern_match.group(1):
             listname = event.pattern_match.group(1)
         else:
-            await x.edit(f"`Pass a list!` {CHK_HELP}")
+            await event.edit(f"`Pass a list!` {CHK_HELP}")
             return
 
         item_number = int(event.pattern_match.group(2))
@@ -248,7 +248,7 @@ async def rmlistitems(event):
         elif event.pattern_match.group(1):
             listname = event.pattern_match.group(1)
         else:
-            await x.edit(f"`Pass a list to remove items from!` {CHK_HELP}")
+            await event.edit(f"`Pass a list to remove items from!` {CHK_HELP}")
             return
 
         item_number = int(event.pattern_match.group(2))
@@ -310,7 +310,7 @@ async def setliststate(event):
         elif event.pattern_match.group(1):
             listname = event.pattern_match.group(1)
         else:
-            await x.edit(f"`Pass a list to remove!` {CHK_HELP}")
+            await event.edit(f"`Pass a list to remove!` {CHK_HELP}")
             return
 
         _list = await get_list(event.chat_id, listname)
@@ -384,7 +384,7 @@ async def getlist_logic(event):
             elif event.pattern_match.group(1):
                 listname = event.pattern_match.group(1)
             else:
-                await x.edit(f"`Pass a list to get!` {CHK_HELP}")
+                await event.edit(f"`Pass a list to get!` {CHK_HELP}")
                 return
 
             _list = await get_list(event.chat_id, listname)
