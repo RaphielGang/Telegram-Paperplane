@@ -34,24 +34,27 @@ async def magisk(request):
         await request.edit(releases)
 
 
-@register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^.device(?: |)(.*)")
 @errors_handler
 async def device_info(request):
     """ get android device basic info from its codename """
     if not request.text[0].isalpha()\
             and request.text[0] not in ("/", "#", "@", "!"):
         textx = await request.get_reply_message()
-        device = request.pattern_match.group(1)
+        device = "".join(request.pattern_match.groups())
         if device:
             pass
         elif textx:
             device = textx.text
         else:
-            await request.edit("`Usage: .device <codename> / <model>`")
+            await request.edit("`Usage: .device <codename> / <model> / <name>`")
             return
         found = [
             i for i in get(DEVICES_DATA).json()
-            if i["device"] == device or i["model"] == device
+            if i["device"].lower() == device.lower() or
+                i["model"].lower() == device.lower() or
+                i["name"].lower() == device.lower() or
+                f'{i["brand"]} {i["name"]}'.lower() == device.lower()
         ]
         if found:
             reply = f'Search results for {device}:\n'
@@ -65,44 +68,6 @@ async def device_info(request):
                     f'**Model**: {model}\n\n'
         else:
             reply = f"`Couldn't find info about {device}!`\n"
-        await request.edit(reply)
-
-
-@register(outgoing=True, pattern=r"^.codename(?: |)([\S]*)(?: |)([\s\S]*)")
-@errors_handler
-async def codename_info(request):
-    """ search for android codename """
-    if not request.text[0].isalpha()\
-            and request.text[0] not in ("/", "#", "@", "!"):
-        textx = await request.get_reply_message()
-        brand = request.pattern_match.group(1).lower()
-        device = request.pattern_match.group(2).lower()
-        if brand and device:
-            pass
-        elif textx:
-            brand = textx.text.split(' ')[0]
-            device = ' '.join(textx.text.split(' ')[1:])
-        else:
-            await request.edit("`Usage: .codename <brand> <device>`")
-            return
-        found = [
-            i for i in get(DEVICES_DATA).json()
-            if i["brand"].lower() == brand and device in i["name"].lower()
-        ]
-        if len(found) > 8:
-            found = found[:8]
-        if found:
-            reply = f'Search results for {brand.capitalize()} {device.capitalize()}:\n'
-            for item in found:
-                brand = item['brand']
-                name = item['name']
-                codename = item['device']
-                model = item['model']
-                reply += f'{brand} {name}\n' \
-                    f'**Codename**: `{codename}`\n' \
-                    f'**Model**: {model}\n\n'
-        else:
-            reply = f"`Couldn't find {device} codename!`\n"
         await request.edit(reply)
 
 
@@ -199,10 +164,6 @@ CMD_HELP.update({"magisk": "Get latest Magisk releases"})
 CMD_HELP.update({
     "device":
     ".device <codename>\nUsage: Get info about android device codename or model."
-})
-CMD_HELP.update({
-    "codename":
-    ".codename <brand> <device>\nUsage: Search for android device codename."
 })
 CMD_HELP.update({
     "specs":
