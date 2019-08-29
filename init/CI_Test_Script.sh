@@ -76,10 +76,10 @@ tg_yay() {
 
       tg_sendinfo "<code>Compilation Success! Checking for Lint Issues before it can be merged!</code>"
       if ! yapf -d -r -p userbot; then
-        tg_sendinfo "<code>PR has Lint Problems, ${REVIEWERS} review it before merging</code>"
+        tg_sendinfo "<code>PR has Lint Problems, </code>${REVIEWERS}<code> review it before merging</code>"
         exit 1
       else
-        tg_sendinfo "<code>PR didn't have any Lint Problems, merge it happily! ${REVIEWERS}</code>"
+        tg_sendinfo "<code>PR didn't have any Lint Problems, merge it happily! </code>${REVIEWERS}"
         exit 0
       fi
    fi
