@@ -7,12 +7,10 @@
 import re
 from asyncio import sleep
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
-                     is_mongo_alive, is_redis_alive)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
+                     is_redis_alive)
 from userbot.events import register, errors_handler
-from userbot.modules.dbhelper import (get_filters,
-                                      add_filter,
-                                      delete_filter)
+from userbot.modules.dbhelper import (get_filters, add_filter, delete_filter)
 
 
 @register(incoming=True, disable_edited=True)
@@ -31,7 +29,8 @@ async def filter_incoming_handler(handler):
             for trigger in filters:
                 for item in listes:
                     pro = re.fullmatch(trigger["keyword"],
-                                       item, flags=re.IGNORECASE)
+                                       item,
+                                       flags=re.IGNORECASE)
                     if pro:
                         await handler.reply(trigger["msg"])
                         return
@@ -77,11 +76,10 @@ async def remove_filter(event):
         filt = event.text[6:]
 
         if not await delete_filter(event.chat_id, filt):
-            await event.edit("`Filter` **{}** `doesn't exist.`"
-                             .format(filt))
+            await event.edit("`Filter` **{}** `doesn't exist.`".format(filt))
         else:
-            await event.edit("`Filter` **{}** `was deleted successfully`"
-                             .format(filt))
+            await event.edit(
+                "`Filter` **{}** `was deleted successfully`".format(filt))
 
 
 @register(outgoing=True, pattern="^.rmfilters (.*)")
@@ -107,13 +105,11 @@ async def kick_marie_filter(event):
                 await event.reply("/stop %s" % (i.strip()))
             await sleep(0.3)
         await event.respond(
-            "```Successfully purged bots filters yaay!```\n Gimme cookies!"
-        )
+            "```Successfully purged bots filters yaay!```\n Gimme cookies!")
         if BOTLOG:
             await event.client.send_message(
-                BOTLOG_CHATID, "I cleaned all filters at " +
-                               str(event.chat_id)
-            )
+                BOTLOG_CHATID,
+                "I cleaned all filters at " + str(event.chat_id))
 
 
 @register(outgoing=True, pattern="^.filters$")
@@ -140,7 +136,8 @@ async def filters_active(event):
 
 
 CMD_HELP.update({
-    "filters": "\
+    "filters":
+    "\
 .filters\
 \nUsage: List all active filters in this chat.\
 \n\n.filter <keyword> <reply message>\

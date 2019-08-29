@@ -37,9 +37,8 @@ async def gban_all(msg):
                 if msg.message.entities is not None:
                     probable_user_mention_entity = msg.message.entities[0]
 
-                if isinstance(
-                        probable_user_mention_entity,
-                        MessageEntityMentionName):
+                if isinstance(probable_user_mention_entity,
+                              MessageEntityMentionName):
                     ban_id = probable_user_mention_entity.user_id
             try:
                 banreason = "[userbot] "
@@ -49,7 +48,9 @@ async def gban_all(msg):
             except TypeError:
                 banreason = "[userbot] fban"
         if not textx:
-            await msg.edit("Reply Message missing! Might fail on many bots! Still attempting Gban!")
+            await msg.edit(
+                "Reply Message missing! Might fail on many bots! Still attempting Gban!"
+            )
             # Ensure User Read the warning
             await asyncio.sleep(1)
         x = (await get_gban())
@@ -97,9 +98,8 @@ async def fedban_all(msg):
                 if msg.message.entities is not None:
                     probable_user_mention_entity = msg.message.entities[0]
 
-                if isinstance(
-                        probable_user_mention_entity,
-                        MessageEntityMentionName):
+                if isinstance(probable_user_mention_entity,
+                              MessageEntityMentionName):
                     ban_id = probable_user_mention_entity.user_id
             try:
                 banreason = "[userbot] "
@@ -130,7 +130,9 @@ async def fedban_all(msg):
                         # Tag him, coz we can't fban xd
                         await bot.send_message(-1001312712379, "@SitiSchu")
                     else:
-                        await msg.reply("`Spam message detected. But no reply message, can't forward to spamwatch`")
+                        await msg.reply(
+                            "`Spam message detected. But no reply message, can't forward to spamwatch`"
+                        )
                 continue
             async with bot.conversation(bangroup) as conv:
                 await conv.send_message(f"!fban {banid} {banreason}")
@@ -195,7 +197,11 @@ async def remove_from_gban(chat):
     await chat.edit("`Removed this bot from the Gbanlist!`")
 
 
-CMD_HELP.update({"gbanall": """.gban\n
+CMD_HELP.update({
+    "gbanall":
+    """.gban\n
 Usage: Reply to a user to ban them in all the bots provided by you!""",
-                 "fbanall": """.fban\n
-Usage: Reply to a user to fban them in all the groups provided by you!"""})
+    "fbanall":
+    """.fban\n
+Usage: Reply to a user to fban them in all the groups provided by you!"""
+})

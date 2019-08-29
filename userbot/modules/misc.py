@@ -4,7 +4,6 @@
 # you may not use this file except in compliance with the License.
 #
 # You can find misc modules, which dont fit in anything xD
-
 """ Userbot module for other small commands. """
 
 from random import randint
@@ -19,8 +18,8 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
-    if not items.text[0].isalpha() and items.text[0] not in (
-            "/", "#", "@", "!"):
+    if not items.text[0].isalpha() and items.text[0] not in ("/", "#", "@",
+                                                             "!"):
         itemo = (items.text[8:]).split()
         index = randint(1, len(itemo) - 1)
         await items.edit("**Query: **\n`" + items.text[8:] +
@@ -55,10 +54,8 @@ async def killdabot(event):
     if not event.text[0].isalpha():
         await event.edit("`Goodbye *Windows XP shutdown sound*....`")
         if BOTLOG:
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                "#SHUTDOWN \n"
-                "Bot shut down")
+            await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n"
+                                            "Bot shut down")
         await event.client.disconnect()
 
 
@@ -67,12 +64,11 @@ async def killdabot(event):
 async def killdabot(event):
 
     if not event.text[0].isalpha():
-        await event.edit("`Hold tight! I just need a second to be back up....`")
+        await event.edit("`Hold tight! I just need a second to be back up....`"
+                         )
         if BOTLOG:
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                "#RESTART \n"
-                "Bot Restarted")
+            await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
+                                            "Bot Restarted")
         await event.client.disconnect()
         # Spin a new instance of bot
         execl(sys.executable, sys.executable, *sys.argv)
@@ -84,8 +80,8 @@ async def killdabot(event):
 @errors_handler
 async def bot_support(wannahelp):
     """ For .support command, just returns the group link. """
-    if not wannahelp.text[0].isalpha(
-    ) and wannahelp.text[0] not in ("/", "#", "@", "!"):
+    if not wannahelp.text[0].isalpha() and wannahelp.text[0] not in ("/", "#",
+                                                                     "@", "!"):
         await wannahelp.edit("Link Portal: @userbot_support")
 
 
@@ -93,33 +89,36 @@ async def bot_support(wannahelp):
 @errors_handler
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
-    if not wannasee.text[0].isalpha(
-    ) and wannasee.text[0] not in ("/", "#", "@", "!"):
+    if not wannasee.text[0].isalpha() and wannasee.text[0] not in ("/", "#",
+                                                                   "@", "!"):
         await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
 
 
 CMD_HELP.update({
-    'random': '.random <item1> <item2> ... <itemN>\
+    'random':
+    '.random <item1> <item2> ... <itemN>\
 \nUsage: Get a random item from the list of items.'
 })
 
 CMD_HELP.update({
-    'sleep': '.sleep 10\
+    'sleep':
+    '.sleep 10\
 \nUsage: Userbots get tired too. Let yours snooze for a few seconds.'
 })
 
 CMD_HELP.update({
-    "shutdown": ".shutdown\
+    "shutdown":
+    ".shutdown\
 \nUsage: Sometimes you need to restart your bot. Sometimes you just hope to\
 hear Windows XP shutdown sound... but you don't."
 })
 
-CMD_HELP.update({
-    'support': ".support\
-\nUsage: If you need help, use this command."
-})
+CMD_HELP.update(
+    {'support': ".support\
+\nUsage: If you need help, use this command."})
 
 CMD_HELP.update({
-    'repo': '.repo\
+    'repo':
+    '.repo\
 \nUsage: If you are curious what makes Paperplane work, this is what you need.'
 })

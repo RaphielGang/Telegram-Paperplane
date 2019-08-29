@@ -3,16 +3,15 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-
 """ Userbot module containing commands for keeping notes. """
 
 from asyncio import sleep
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
-                     is_mongo_alive, is_redis_alive)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
+                     is_redis_alive)
 from userbot.events import register, errors_handler
-from userbot.modules.dbhelper import (get_note, get_notes,
-                                      add_note, delete_note)
+from userbot.modules.dbhelper import (get_note, get_notes, add_note,
+                                      delete_note)
 
 
 @register(outgoing=True, pattern="^.saved$")
@@ -48,11 +47,11 @@ async def remove_notes(event):
             return
         notename = event.pattern_match.group(1)
         if await delete_note(event.chat_id, notename) is False:
-            return await event.edit("`Couldn't find note:` **{}**"
-                                    .format(notename))
+            return await event.edit(
+                "`Couldn't find note:` **{}**".format(notename))
         else:
-            return await event.edit("`Successfully deleted note:` **{}**"
-                                    .format(notename))
+            return await event.edit(
+                "`Successfully deleted note:` **{}**".format(notename))
 
 
 @register(outgoing=True, pattern=r"^.save (\w*)")
@@ -90,11 +89,11 @@ async def save_note(event):
         note = event.text[6:]
         note_db = await get_note(event.chat_id, note)
         if not await get_note(event.chat_id, note):
-            return await event.edit("`Note` **{}** `doesn't exist!`"
-                                    .format(note))
+            return await event.edit(
+                "`Note` **{}** `doesn't exist!`".format(note))
         else:
-            return await event.edit(" 🔹 **{}** - `{}`"
-                                    .format(note, note_db["text"]))
+            return await event.edit(" 🔹 **{}** - `{}`".format(
+                note, note_db["text"]))
 
 
 @register(pattern=r"#\w*", disable_edited=True)
@@ -136,17 +135,15 @@ async def kick_marie_notes(kick):
                 await kick.reply("/clear %s" % (i.strip()))
             await sleep(0.3)
         await kick.respond(
-            "```Successfully purged bots notes yaay!```\n Gimme cookies!"
-        )
+            "```Successfully purged bots notes yaay!```\n Gimme cookies!")
         if BOTLOG:
             await kick.client.send_message(
-                BOTLOG_CHATID, "I cleaned all Notes at " +
-                               str(kick.chat_id)
-            )
+                BOTLOG_CHATID, "I cleaned all Notes at " + str(kick.chat_id))
 
 
 CMD_HELP.update({
-    "notes": "\
+    "notes":
+    "\
 #<notename>\
 \nUsage: Get the note with name notename\
 \n\n.save <notename> <notedata>\

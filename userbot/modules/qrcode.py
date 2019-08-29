@@ -5,7 +5,6 @@
 #
 # The entire source code is OSSRPL except 'makeqr and getqr' which is MPL
 # License: MPL and OSSRPL
-
 """ Userbot module containing commands related to QR Codes. """
 
 import os
@@ -20,11 +19,8 @@ from userbot.events import register, errors_handler
 
 def progress(current, total):
     """ Calculate and return the download progress with given arguments. """
-    print(
-        "Downloaded {} of {}\nCompleted {}".format(
-            current, total, (current / total) * 100
-        )
-    )
+    print("Downloaded {} of {}\nCompleted {}".format(current, total,
+                                                     (current / total) * 100))
 
 
 @register(pattern=r"^.getqr$", outgoing=True)
@@ -36,8 +32,7 @@ async def parseqr(qr_e):
             return
         start = datetime.now()
         downloaded_file_name = await qr_e.client.download_media(
-            await qr_e.get_reply_message(), progress_callback=progress
-        )
+            await qr_e.get_reply_message(), progress_callback=progress)
         url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
         file = open(downloaded_file_name, "rb")
         files = {"file": file}
@@ -47,17 +42,16 @@ async def parseqr(qr_e):
         os.remove(downloaded_file_name)
         end = datetime.now()
         duration = (end - start).seconds
-        await qr_e.edit(
-            "Obtained QRCode contents in {} seconds.\n{}".format(duration, qr_contents)
-        )
+        await qr_e.edit("Obtained QRCode contents in {} seconds.\n{}".format(
+            duration, qr_contents))
 
 
 @register(pattern=r".makeqr(?: |$)([\s\S]*)", outgoing=True)
 @errors_handler
 async def make_qr(qrcode):
     """ For .makeqr command, make a QR Code containing the given content. """
-    if not qrcode.text[0].isalpha() and qrcode.text[0] not in (
-            "/", "#", "@", "!"):
+    if not qrcode.text[0].isalpha() and qrcode.text[0] not in ("/", "#", "@",
+                                                               "!"):
         if qrcode.fwd_from:
             return
         start = datetime.now()
@@ -71,8 +65,7 @@ async def make_qr(qrcode):
             reply_msg_id = previous_message.id
             if previous_message.media:
                 downloaded_file_name = await qrcode.client.download_media(
-                    previous_message, progress_callback=progress
-                )
+                    previous_message, progress_callback=progress)
                 m_list = None
                 with open(downloaded_file_name, "rb") as file:
                     m_list = file.readlines()
@@ -87,6 +80,7 @@ async def make_qr(qrcode):
 size=200x200&charset-source=UTF-8&charset-target=UTF-8\
 &ecc=L&color=0-0-0&bgcolor=255-255-255\
 &margin=1&qzone=0&format=jpg"
+
         resp = get(url.format(message), stream=True)
         required_file_name = "temp_qr.webp"
         with open(required_file_name, "w+b") as file:
@@ -106,12 +100,14 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
 
 
 CMD_HELP.update({
-    'getqr': ".getqr\
+    'getqr':
+    ".getqr\
 \nUsage: Get the QR Code content from the replied QR Code."
 })
 
 CMD_HELP.update({
-    'makeqr': ".makeqr <content>)\
+    'makeqr':
+    ".makeqr <content>)\
 \nUsage: Make a QR Code from the given content.\
 \nExample: .makeqr www.google.com"
 })

@@ -3,7 +3,6 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-
 """ Userbot module for getting the date
     and time of any country or the userbot server.  """
 
@@ -20,9 +19,8 @@ from userbot.events import register, errors_handler
 COUNTRY = ''
 TZ_NUMBER = 1
 
+
 # ===== CONSTANT =====
-
-
 async def get_tz(con):
     """ Get time zone of the given country. """
     if "(Uk)" in con:
@@ -56,8 +54,8 @@ async def time_func(tdata):
         2. The default userbot country(set it by using .settime),
         3. The server where the userbot runs.
     """
-    if not tdata.text[0].isalpha() and tdata.text[0] not in (
-            "/", "#", "@", "!"):
+    if not tdata.text[0].isalpha() and tdata.text[0] not in ("/", "#", "@",
+                                                             "!"):
         con = tdata.pattern_match.group(1).title()
         tz_num = tdata.pattern_match.group(2)
 
@@ -77,8 +75,7 @@ async def time_func(tdata):
             timezones = await get_tz(COUNTRY)
         else:
             await tdata.edit(
-                f"`It's`  **{dt.now().strftime(t_form)}**  `here.`"
-            )
+                f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
             return
 
         if not timezones:
@@ -107,15 +104,12 @@ async def time_func(tdata):
         dtnow = dt.now(tz(time_zone)).strftime(t_form)
 
         if COUNTRY:
-            await tdata.edit(
-                f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
-                f"({time_zone} timezone).`"
-            )
+            await tdata.edit(f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
+                             f"({time_zone} timezone).`")
             return
 
         await tdata.edit(
-            f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
-        )
+            f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
 @register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
@@ -126,8 +120,7 @@ async def date_func(dat):
         2. The default userbot country(set it by using .settime),
         3. The server where the userbot runs.
     """
-    if not dat.text[0].isalpha() and dat.text[0] not in (
-            "/", "#", "@", "!"):
+    if not dat.text[0].isalpha() and dat.text[0] not in ("/", "#", "@", "!"):
         con = dat.pattern_match.group(1).title()
         tz_num = dat.pattern_match.group(2)
 
@@ -175,15 +168,12 @@ async def date_func(dat):
         dtnow = dt.now(tz(time_zone)).strftime(d_form)
 
         if COUNTRY:
-            await dat.edit(
-                f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
-                f"({time_zone} timezone).`"
-            )
+            await dat.edit(f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
+                           f"({time_zone} timezone).`")
             return
 
         await dat.edit(
-            f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
-        )
+            f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
 @register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
@@ -234,19 +224,22 @@ async def set_time_country(loc):
 
 
 CMD_HELP.update({
-    "time": ".time <country name/code> <timezone number>"
+    "time":
+    ".time <country name/code> <timezone number>"
     "\nUsage: Get the time of a country. If a country has "
     "multiple timezones, Paperplane will list all of them "
     "and let you select one."
 })
 CMD_HELP.update({
-    "date": ".date <country name/code> <timezone number>"
+    "date":
+    ".date <country name/code> <timezone number>"
     "\nUsage: Get the date of a country. If a country has "
     "multiple timezones, Paperplane will list all of them "
     "and let you select one."
 })
 CMD_HELP.update({
-    "settime": ".settime <country name/code> <timezone number>"
+    "settime":
+    ".settime <country name/code> <timezone number>"
     "\nUsage: Set the default country for .time and .date "
     "command. If a country has multiple timezones, Paperpl"
     "ane will list all of them and let you select one."

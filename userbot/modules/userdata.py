@@ -32,7 +32,6 @@ NAME_OK = "```Your name was successfully changed.```"
 USERNAME_SUCCESS = "```Your username was successfully changed.```"
 USERNAME_TAKEN = "```This username is already taken.```"
 
-
 # ===============================================================
 
 
@@ -50,9 +49,8 @@ async def update_name(name):
             firstname = namesplit[0]
             lastname = namesplit[1]
 
-        await bot(UpdateProfileRequest(
-            first_name=firstname,
-            last_name=lastname))
+        await bot(
+            UpdateProfileRequest(first_name=firstname, last_name=lastname))
         await name.edit(NAME_OK)
 
 
@@ -60,8 +58,8 @@ async def update_name(name):
 @errors_handler
 async def set_profilepic(propic):
     """ For .profilepic command, change your profile picture in Telegram. """
-    if not propic.text[0].isalpha() and propic.text[0] not in (
-            "/", "#", "@", "!"):
+    if not propic.text[0].isalpha() and propic.text[0] not in ("/", "#", "@",
+                                                               "!"):
         replymsg = await propic.get_reply_message()
         photo = None
         if replymsg.media:
@@ -74,9 +72,8 @@ async def set_profilepic(propic):
 
         if photo:
             try:
-                await bot(UploadProfilePhotoRequest(
-                    await bot.upload_file(photo)
-                ))
+                await bot(
+                    UploadProfilePhotoRequest(await bot.upload_file(photo)))
                 os.remove(photo)
                 await propic.edit(PP_CHANGED)
             except PhotoCropSizeSmallError:
@@ -91,8 +88,8 @@ async def set_profilepic(propic):
 @errors_handler
 async def set_biograph(setbio):
     """ For .setbio command, set a new bio for your profile in Telegram. """
-    if not setbio.text[0].isalpha() and setbio.text[0] not in (
-            "/", "#", "@", "!"):
+    if not setbio.text[0].isalpha() and setbio.text[0] not in ("/", "#", "@",
+                                                               "!"):
         newbio = setbio.pattern_match.group(1)
         await bot(UpdateProfileRequest(about=newbio))
         await setbio.edit(BIO_SUCCESS)
@@ -102,8 +99,8 @@ async def set_biograph(setbio):
 @errors_handler
 async def update_username(username):
     """ For .username command, set a new username in Telegram. """
-    if not username.text[0].isalpha(
-    ) and username.text[0] not in ("/", "#", "@", "!"):
+    if not username.text[0].isalpha() and username.text[0] not in ("/", "#",
+                                                                   "@", "!"):
         newusername = username.pattern_match.group(1)
         try:
             await bot(UpdateUsernameRequest(newusername))
@@ -117,8 +114,8 @@ async def update_username(username):
 async def remove_profilepic(delpfp):
     """ For .delpfp command, delete your current
         profile picture in Telegram. """
-    if not delpfp.text[0].isalpha() and delpfp.text[0] not in (
-            "/", "#", "@", "!"):
+    if not delpfp.text[0].isalpha() and delpfp.text[0] not in ("/", "#", "@",
+                                                               "!"):
         group = delpfp.text[8:]
         if group == 'all':
             lim = 0
@@ -127,42 +124,43 @@ async def remove_profilepic(delpfp):
         else:
             lim = 1
 
-        pfplist = await bot(GetUserPhotosRequest(
-            user_id=delpfp.from_id,
-            offset=0,
-            max_id=0,
-            limit=lim))
+        pfplist = await bot(
+            GetUserPhotosRequest(user_id=delpfp.from_id,
+                                 offset=0,
+                                 max_id=0,
+                                 limit=lim))
         input_photos = []
         for sep in pfplist.photos:
             input_photos.append(
-                InputPhoto(
-                    id=sep.id,
-                    access_hash=sep.access_hash,
-                    file_reference=sep.file_reference
-                )
-            )
+                InputPhoto(id=sep.id,
+                           access_hash=sep.access_hash,
+                           file_reference=sep.file_reference))
         await bot(DeletePhotosRequest(id=input_photos))
-        await delpfp.edit(f"`Successfully deleted {len(input_photos)} profile picture(s).`")
+        await delpfp.edit(
+            f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
 
 CMD_HELP.update({
-    "username": ".username <new_username>\
+    "username":
+    ".username <new_username>\
     \nUsage: Change your Telegram username."
 })
 CMD_HELP.update({
-    "name": ".name <firstname> or .name <firstname> <lastname>\
+    "name":
+    ".name <firstname> or .name <firstname> <lastname>\
     \nUsage: Chane your Telegram name.\
     \n(First and last name will get split by the first space)"
 })
 CMD_HELP.update({
-    "profilepic": ".profilepic\
+    "profilepic":
+    ".profilepic\
     \nUsage: Change your Telegram avatar with the replied photo."
 })
+CMD_HELP.update(
+    {"setbio": ".setbio <new_bio>\
+    \nUsage: Change your Telegram bio."})
 CMD_HELP.update({
-    "setbio": ".setbio <new_bio>\
-    \nUsage: Change your Telegram bio."
-})
-CMD_HELP.update({
-    "delpfp": ".delpfp or .delpfp <number>/<all>\
+    "delpfp":
+    ".delpfp or .delpfp <number>/<all>\
     \nUsage: Delete your Telegram profile avatar(s)."
 })

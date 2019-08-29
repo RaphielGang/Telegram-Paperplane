@@ -6,7 +6,6 @@
 # The entire source code is OSSRPL except
 # 'download, uploadir, uploadas, upload' which is MPL
 # License: MPL and OSSRPL
-
 """ Userbot module which contains everything related to
     downloading/uploading from/to the server. """
 
@@ -35,10 +34,8 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
 def progress(current, total):
     """ Logs the download progress """
-    LOGS.info(
-        "Downloaded %s of %s\nCompleted %s",
-        current, total, (current / total) * 100
-    )
+    LOGS.info("Downloaded %s of %s\nCompleted %s", current, total,
+              (current / total) * 100)
 
 
 async def download_from_url(url: str, file_name: str) -> str:
@@ -95,9 +92,7 @@ async def download_from_tg(target_file) -> (str, BytesIO):
                              .split('.')[0].replace(' ', '-') + '.')
     end = datetime.now()
     duration = (end - start).seconds
-    await target_file.edit(
-        f"`Downloaded {filen} in {duration} seconds.`"
-    )
+    await target_file.edit(f"`Downloaded {filen} in {duration} seconds.`")
     return filen, buf
 
 
@@ -128,8 +123,13 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
 
     if filename.count('/') > 1:
         filename = filename.split('/')[-1]
-    filedata = {'title': filename, "parents": [
-        {"kind": "drive#fileLink", "id": GDRIVE_FOLDER}]}
+    filedata = {
+        'title': filename,
+        "parents": [{
+            "kind": "drive#fileLink",
+            "id": GDRIVE_FOLDER
+        }]
+    }
 
     if filebuf:
         mime_type = mimetypes.guess_type(filename)
@@ -148,7 +148,9 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
         os.remove(filename)
     # insert new permission
     file.InsertPermission({
-        'type': 'anyone', 'value': 'anyone', 'role': 'reader'
+        'type': 'anyone',
+        'value': 'anyone',
+        'role': 'reader'
     })
     reply = f"[{name}]({file['alternateLink']})\n" \
         f"__Direct link:__ [Here]({file['downloadUrl']})"
@@ -159,8 +161,8 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
 @errors_handler
 async def gdrive_mirror(request):
     """ Download a file and upload to Google Drive """
-    if not request.text[0].isalpha(
-    ) and request.text[0] not in ("/", "#", "@", "!"):
+    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         message = request.pattern_match.group(1)
         if not request.reply_to_msg_id and not message:
             await request.edit("`Usage: .mirror <url> <url>`")
@@ -168,7 +170,8 @@ async def gdrive_mirror(request):
         reply = ''
         reply_msg = await request.get_reply_message()
         links = re.findall(r'\bhttps?://.*\.\S+', message)
-        if not (links or reply_msg or reply_msg.media or reply_msg.media.document):
+        if not (links or reply_msg or reply_msg.media
+                or reply_msg.media.document):
             reply = "`No links or telegram files found!`\n"
             await request.edit(reply)
             return
@@ -176,7 +179,8 @@ async def gdrive_mirror(request):
             await request.edit('`Downloading from Telegram...`')
             filen, buf = await download_from_tg(request)
             await request.edit(f'`Uploading {filen} to GDrive...`')
-            reply += await gdrive_upload(filen, buf) if buf else await gdrive_upload(filen)
+            reply += await gdrive_upload(
+                filen, buf) if buf else await gdrive_upload(filen)
         elif "|" in message:
             url, file_name = message.split("|")
             url = url.strip()
@@ -196,8 +200,8 @@ async def gdrive_mirror(request):
 @errors_handler
 async def gdrive(request):
     """ Upload files from server to Google Drive """
-    if not request.text[0].isalpha(
-    ) and request.text[0] not in ("/", "#", "@", "!"):
+    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         path = request.pattern_match.group(1)
         if not path:
             await request.edit("`Usage: .drive <file>`")
@@ -215,8 +219,8 @@ async def gdrive(request):
 @errors_handler
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
-    if not target_file.text[0].isalpha(
-    ) and target_file.text[0] not in ("/", "#", "@", "!"):
+    if not target_file.text[0].isalpha() and target_file.text[0] not in (
+            "/", "#", "@", "!"):
         if target_file.fwd_from:
             return
         await target_file.edit("Processing ...")
@@ -247,8 +251,8 @@ async def download(target_file):
 async def uploadir(udir_event):
     """ For .uploadir command, allows you to upload
      everything from a folder in the server"""
-    if not udir_event.text[0].isalpha(
-    ) and udir_event.text[0] not in ("/", "#", "@", "!"):
+    if not udir_event.text[0].isalpha() and udir_event.text[0] not in (
+            "/", "#", "@", "!"):
         if udir_event.fwd_from:
             return
         input_str = udir_event.pattern_match.group(1)
@@ -263,12 +267,8 @@ async def uploadir(udir_event):
                     lst_of_files.append(os.path.join(r, file))
             LOGS.info(lst_of_files)
             uploaded = 0
-            await udir_event.edit(
-                "Found {} files. Uploading will \
-                 start soon. Please wait!".format(
-                    len(lst_of_files)
-                )
-            )
+            await udir_event.edit("Found {} files. Uploading will \
+                 start soon. Please wait!".format(len(lst_of_files)))
             for single_file in lst_of_files:
                 if os.path.exists(single_file):
                     # https://stackoverflow.com/a/678242/4723940
@@ -318,9 +318,8 @@ async def uploadir(udir_event):
                     uploaded = uploaded + 1
             end = datetime.now()
             duration = (end - start).seconds
-            await udir_event.edit(
-                "Uploaded {} files in {} seconds.".format(uploaded, duration)
-            )
+            await udir_event.edit("Uploaded {} files in {} seconds.".format(
+                uploaded, duration))
         else:
             await udir_event.edit("404: Directory Not Found")
 
@@ -330,8 +329,8 @@ async def uploadir(udir_event):
 async def upload(u_event):
     """ For .upload command, allows you to \
     upload a file from the userbot's server """
-    if not u_event.text[0].isalpha() and u_event.text[0] not in (
-            "/", "#", "@", "!"):
+    if not u_event.text[0].isalpha() and u_event.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         if u_event.fwd_from:
             return
         if u_event.is_channel and not u_event.is_group:
@@ -340,7 +339,8 @@ async def upload(u_event):
         await u_event.edit("Processing ...")
         input_str = u_event.pattern_match.group(1)
         if input_str in ("userbot.session", "config.env"):
-            await u_event.edit("`That's a dangerous operation! Not Permitted!`")
+            await u_event.edit("`That's a dangerous operation! Not Permitted!`"
+                               )
             return
         if os.path.exists(input_str):
             start = datetime.now()
@@ -369,9 +369,8 @@ def get_video_thumb(file, output=None, width=90):
             file,
             "-ss",
             str(
-                int((0, metadata.get("duration").seconds)
-                    [metadata.has("duration")] / 2)
-            ),
+                int((0, metadata.get("duration").seconds
+                     )[metadata.has("duration")] / 2)),
             "-filter:v",
             "scale={}:-1".format(width),
             "-vframes",
@@ -400,8 +399,8 @@ def extract_w_h(file):
     ]
     # https://stackoverflow.com/a/11236144/4723940
     try:
-        t_response = subprocess.check_output(
-            command_to_run, stderr=subprocess.STDOUT)
+        t_response = subprocess.check_output(command_to_run,
+                                             stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
         LOGS.warning(exc)
     else:
@@ -417,8 +416,8 @@ def extract_w_h(file):
 async def uploadas(uas_event):
     """ For .uploadas command, allows you \
     to specify some arguments for upload. """
-    if not uas_event.text[0].isalpha(
-    ) and uas_event.text[0] not in ("/", "#", "@", "!"):
+    if not uas_event.text[0].isalpha() and uas_event.text[0] not in ("/", "#",
+                                                                     "@", "!"):
         if uas_event.fwd_from:
             return
         await uas_event.edit("Processing ...")
@@ -501,7 +500,8 @@ async def uploadas(uas_event):
                 end = datetime.now()
                 duration = (end - start).seconds
                 os.remove(thumb)
-                await uas_event.edit("Uploaded in {} seconds.".format(duration))
+                await uas_event.edit("Uploaded in {} seconds.".format(duration)
+                                     )
             except FileNotFoundError as err:
                 await uas_event.edit(str(err))
         else:
@@ -509,20 +509,24 @@ async def uploadas(uas_event):
 
 
 CMD_HELP.update({
-    "download": ".download [in reply to TG file]\n"
-                "or .download <link> | <filename>\n"
-                "Usage: Download a file from telegram or link to the server."
+    "download":
+    ".download [in reply to TG file]\n"
+    "or .download <link> | <filename>\n"
+    "Usage: Download a file from telegram or link to the server."
 })
 CMD_HELP.update({
-    "upload": ".upload <link>\nUsage: Upload a "
-              "locally stored file to Telegram."
+    "upload":
+    ".upload <link>\nUsage: Upload a "
+    "locally stored file to Telegram."
 })
 CMD_HELP.update({
-    "drive": ".upload <file>\nUsage: Upload a locally stored file to GDrive."
+    "drive":
+    ".upload <file>\nUsage: Upload a locally stored file to GDrive."
 })
 CMD_HELP.update({
-    "mirror": ".mirror [in reply to TG file]\n"
-              "or .mirror <link> | <filename>\n"
-              "Usage: Download a file from telegram "
-              "or link to the server then upload to your GDrive."
+    "mirror":
+    ".mirror [in reply to TG file]\n"
+    "or .mirror <link> | <filename>\n"
+    "Usage: Download a file from telegram "
+    "or link to the server then upload to your GDrive."
 })

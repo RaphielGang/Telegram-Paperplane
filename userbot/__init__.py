@@ -28,17 +28,13 @@ if CONSOLE_LOGGER_VERBOSE:
         level=DEBUG,
     )
 else:
-    basicConfig(
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=INFO
-    )
+    basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                level=INFO)
 LOGS = getLogger(__name__)
 
 if version_info[0] < 3 or version_info[1] < 6:
-    LOGS.error(
-        "You MUST have a python version of at least 3.6."
-        " Multiple features depend on this. Bot quitting."
-    )
+    LOGS.error("You MUST have a python version of at least 3.6."
+               " Multiple features depend on this. Bot quitting.")
     quit(1)
 
 # Check if the config was edited by using the already used variable
@@ -46,8 +42,7 @@ CONFIG_CHECK = os.environ.get(
     "___________PLOX_______REMOVE_____THIS_____LINE__________", None)
 
 if CONFIG_CHECK:
-    LOGS.error(
-        "Please remove the line mentioned in the first \
+    LOGS.error("Please remove the line mentioned in the first \
          hashtag from the config.env file")
     quit(1)
 
@@ -57,31 +52,22 @@ API_HASH = os.environ.get("API_HASH", None)
 
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID", "0"))
 
-BOTLOG = sb(os.environ.get(
-    "BOTLOG", "False"
-))
+BOTLOG = sb(os.environ.get("BOTLOG", "False"))
 
 PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
-CONSOLE_LOGGER_VERBOSE = sb(
-    os.environ.get("CONSOLE_LOGGER_VERBOSE", "False")
-)
+CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
 MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
 
-SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get(
-    "SCREENSHOT_LAYER_ACCESS_KEY", None
-)
+SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
+                                             None)
 
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 
-WELCOME_MUTE = sb(os.environ.get(
-    "WELCOME_MUTE", "False"
-))
+WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
 
-YOUTUBE_API_KEY = os.environ.get(
-    "YOUTUBE_API_KEY", None
-)
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
 
 SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
 SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
@@ -94,12 +80,10 @@ LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
 LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
 LASTFM_PASS = pylast.md5(LASTFM_PASSWORD_PLAIN)
 if not LASTFM_USERNAME == "None":
-    lastfm = pylast.LastFMNetwork(
-        api_key=LASTFM_API,
-        api_secret=LASTFM_SECRET,
-        username=LASTFM_USERNAME,
-        password_hash=LASTFM_PASS
-    )
+    lastfm = pylast.LastFMNetwork(api_key=LASTFM_API,
+                                  api_secret=LASTFM_SECRET,
+                                  username=LASTFM_USERNAME,
+                                  password_hash=LASTFM_PASS)
 else:
     lastfm = None
 
@@ -157,113 +141,116 @@ LASTMSG = {}
 ENABLE_KILLME = True
 CMD_HELP = {}
 AFKREASON = "no reason"
-ZALG_LIST = [["̖",
-              " ̗",
-              " ̘",
-              " ̙",
-              " ̜",
-              " ̝",
-              " ̞",
-              " ̟",
-              " ̠",
-              " ̤",
-              " ̥",
-              " ̦",
-              " ̩",
-              " ̪",
-              " ̫",
-              " ̬",
-              " ̭",
-              " ̮",
-              " ̯",
-              " ̰",
-              " ̱",
-              " ̲",
-              " ̳",
-              " ̹",
-              " ̺",
-              " ̻",
-              " ̼",
-              " ͅ",
-              " ͇",
-              " ͈",
-              " ͉",
-              " ͍",
-              " ͎",
-              " ͓",
-              " ͔",
-              " ͕",
-              " ͖",
-              " ͙",
-              " ͚",
-              " ",
-              ],
-             [" ̍",
-              " ̎",
-              " ̄",
-              " ̅",
-              " ̿",
-              " ̑",
-              " ̆",
-              " ̐",
-              " ͒",
-              " ͗",
-              " ͑",
-              " ̇",
-              " ̈",
-              " ̊",
-              " ͂",
-              " ̓",
-              " ̈́",
-              " ͊",
-              " ͋",
-              " ͌",
-              " ̃",
-              " ̂",
-              " ̌",
-              " ͐",
-              " ́",
-              " ̋",
-              " ̏",
-              " ̽",
-              " ̉",
-              " ͣ",
-              " ͤ",
-              " ͥ",
-              " ͦ",
-              " ͧ",
-              " ͨ",
-              " ͩ",
-              " ͪ",
-              " ͫ",
-              " ͬ",
-              " ͭ",
-              " ͮ",
-              " ͯ",
-              " ̾",
-              " ͛",
-              " ͆",
-              " ̚",
-              ],
-             [" ̕",
-              " ̛",
-              " ̀",
-              " ́",
-              " ͘",
-              " ̡",
-              " ̢",
-              " ̧",
-              " ̨",
-              " ̴",
-              " ̵",
-              " ̶",
-              " ͜",
-              " ͝",
-              " ͞",
-              " ͟",
-              " ͠",
-              " ͢",
-              " ̸",
-              " ̷",
-              " ͡",
-              ]]
+ZALG_LIST = [[
+    "̖",
+    " ̗",
+    " ̘",
+    " ̙",
+    " ̜",
+    " ̝",
+    " ̞",
+    " ̟",
+    " ̠",
+    " ̤",
+    " ̥",
+    " ̦",
+    " ̩",
+    " ̪",
+    " ̫",
+    " ̬",
+    " ̭",
+    " ̮",
+    " ̯",
+    " ̰",
+    " ̱",
+    " ̲",
+    " ̳",
+    " ̹",
+    " ̺",
+    " ̻",
+    " ̼",
+    " ͅ",
+    " ͇",
+    " ͈",
+    " ͉",
+    " ͍",
+    " ͎",
+    " ͓",
+    " ͔",
+    " ͕",
+    " ͖",
+    " ͙",
+    " ͚",
+    " ",
+],
+             [
+                 " ̍",
+                 " ̎",
+                 " ̄",
+                 " ̅",
+                 " ̿",
+                 " ̑",
+                 " ̆",
+                 " ̐",
+                 " ͒",
+                 " ͗",
+                 " ͑",
+                 " ̇",
+                 " ̈",
+                 " ̊",
+                 " ͂",
+                 " ̓",
+                 " ̈́",
+                 " ͊",
+                 " ͋",
+                 " ͌",
+                 " ̃",
+                 " ̂",
+                 " ̌",
+                 " ͐",
+                 " ́",
+                 " ̋",
+                 " ̏",
+                 " ̽",
+                 " ̉",
+                 " ͣ",
+                 " ͤ",
+                 " ͥ",
+                 " ͦ",
+                 " ͧ",
+                 " ͨ",
+                 " ͩ",
+                 " ͪ",
+                 " ͫ",
+                 " ͬ",
+                 " ͭ",
+                 " ͮ",
+                 " ͯ",
+                 " ̾",
+                 " ͛",
+                 " ͆",
+                 " ̚",
+             ],
+             [
+                 " ̕",
+                 " ̛",
+                 " ̀",
+                 " ́",
+                 " ͘",
+                 " ̡",
+                 " ̢",
+                 " ̧",
+                 " ̨",
+                 " ̴",
+                 " ̵",
+                 " ̶",
+                 " ͜",
+                 " ͝",
+                 " ͞",
+                 " ͟",
+                 " ͠",
+                 " ͢",
+                 " ̸",
+                 " ̷",
+                 " ͡",
+             ]]

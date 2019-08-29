@@ -13,8 +13,8 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def help(event):
     """ For .help command,"""
-    if not event.text[0].isalpha() and event.text[0] not in (
-            "/", "#", "@", "!"):
+    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
+                                                             "!"):
         args = event.pattern_match.group(1)
         if args:
             if args in CMD_HELP:
@@ -23,8 +23,7 @@ async def help(event):
                 await event.edit("Please specify a valid module name.")
         else:
             await event.edit(
-                "Please specify which module do you want help for!"
-            )
+                "Please specify which module do you want help for!")
             string = ""
             for i in CMD_HELP:
                 string += "`" + str(i)

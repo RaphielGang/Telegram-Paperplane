@@ -4,7 +4,6 @@
 # you may not use this file except in compliance with the License.
 #
 #
-
 """ Userbot module for having some fun. """
 
 import asyncio
@@ -191,7 +190,6 @@ RUNSREACTS = [
 ]
 DISABLE_RUN = False
 
-
 # ===========================================
 
 
@@ -199,8 +197,8 @@ DISABLE_RUN = False
 @errors_handler
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
-    if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in (
-            "/", "#", "@", "!"):
+    if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("/", "#", "@",
+                                                               "!"):
         arg = cowmsg.pattern_match.group(1).lower()
         text = cowmsg.pattern_match.group(2)
 
@@ -247,9 +245,7 @@ async def copypasta(cp_e):
         elif textx:
             message = textx.text
         else:
-            await cp_e.edit(
-                "`😂🅱️IvE👐sOME👅text👅 for✌️Me👌tO👐MAkE👀iT💞funNy!💦`"
-            )
+            await cp_e.edit("`😂🅱️IvE👐sOME👅text👅 for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
             return
 
         reply_text = random.choice(EMOJIS)
@@ -303,8 +299,8 @@ async def vapor(vpr):
 @errors_handler
 async def stretch(stret):
     """ Stretch it."""
-    if not stret.text[0].isalpha() and stret.text[0] not in (
-            "/", "#", "@", "!"):
+    if not stret.text[0].isalpha() and stret.text[0] not in ("/", "#", "@",
+                                                             "!"):
         textx = await stret.get_reply_message()
         message = stret.text
         message = stret.pattern_match.group(1)
@@ -317,11 +313,8 @@ async def stretch(stret):
             return
 
         count = random.randint(3, 10)
-        reply_text = re.sub(
-            r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])",
-            (r"\1" * count),
-            message
-        )
+        reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])",
+                            (r"\1" * count), message)
         await stret.edit(reply_text)
 
 
@@ -403,8 +396,8 @@ async def faces(owo):
 @errors_handler
 async def react_meme(react):
     """ Make your userbot react to everything. """
-    if not react.text[0].isalpha() and react.text[0] not in (
-            "/", "#", "@", "!"):
+    if not react.text[0].isalpha() and react.text[0] not in ("/", "#", "@",
+                                                             "!"):
         index = random.randint(0, len(FACEREACTS))
         reply_text = FACEREACTS[index]
         await react.edit(reply_text)
@@ -423,8 +416,8 @@ async def shrugger(shg):
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     if not DISABLE_RUN:
-        if not run.text[0].isalpha() and run.text[0] not in (
-                "/", "#", "@", "!"):
+        if not run.text[0].isalpha() and run.text[0] not in ("/", "#", "@",
+                                                             "!"):
             index = random.randint(0, len(RUNSREACTS) - 1)
             reply_text = RUNSREACTS[index]
             await run.edit(reply_text)
@@ -434,8 +427,8 @@ async def runner_lol(run):
 @errors_handler
 async def disable_runs(norun):
     """ Some people don't like running... """
-    if not norun.text[0].isalpha() and norun.text[0] not in (
-            "/", "#", "@", "!"):
+    if not norun.text[0].isalpha() and norun.text[0] not in ("/", "#", "@",
+                                                             "!"):
         global DISABLE_RUN
         DISABLE_RUN = True
         await norun.edit("```Done!```")
@@ -455,8 +448,8 @@ async def enable_runs(run):
 @errors_handler
 async def metoo(hahayes):
     """ Haha yes """
-    if not hahayes.text[0].isalpha() and hahayes.text[0] not in (
-            "/", "#", "@", "!"):
+    if not hahayes.text[0].isalpha() and hahayes.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         reply_text = random.choice(METOOSTR)
         await hahayes.edit(reply_text)
 
@@ -491,8 +484,8 @@ async def spongemocktext(mock):
 @errors_handler
 async def claptext(memereview):
     """ Praise people! """
-    if not memereview.text[0].isalpha(
-    ) and memereview.text[0] not in ("/", "#", "@", "!"):
+    if not memereview.text[0].isalpha() and memereview.text[0] not in (
+            "/", "#", "@", "!"):
         textx = await memereview.get_reply_message()
         message = memereview.pattern_match.group(1)
         if message:
@@ -516,16 +509,15 @@ async def bluetext(bt_e):
         if await bt_e.get_reply_message():
             await bt_e.edit(
                 "`BLUETEXT MUST CLICK.`\n"
-                "`Are you a stupid animal which is attracted to colours?`"
-            )
+                "`Are you a stupid animal which is attracted to colours?`")
 
 
 @register(pattern='.type(?: |$)(.*)')
 @errors_handler
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
-    if not typew.text[0].isalpha() and typew.text[0] not in (
-            "/", "#", "@", "!"):
+    if not typew.text[0].isalpha() and typew.text[0] not in ("/", "#", "@",
+                                                             "!"):
         textx = await typew.get_reply_message()
         message = typew.pattern_match.group(1)
         if message:
@@ -549,6 +541,4 @@ async def typewriter(typew):
             await asyncio.sleep(sleep_time)
 
 
-CMD_HELP.update({
-    "memes": "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."
-})
+CMD_HELP.update({"memes": "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."})

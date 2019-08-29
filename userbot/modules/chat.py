@@ -16,8 +16,8 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def useridgetter(target):
     """ For .userid command, returns the ID of the target user. """
-    if not target.text[0].isalpha() and target.text[0] not in (
-            "/", "#", "@", "!"):
+    if not target.text[0].isalpha() and target.text[0] not in ("/", "#", "@",
+                                                               "!"):
         message = await target.get_reply_message()
         if message:
             if not message.forward:
@@ -33,10 +33,8 @@ async def useridgetter(target):
                     name = "@" + message.forward.sender.username
                 else:
                     name = "*" + message.forward.sender.first_name + "*"
-            await target.edit(
-                "**Name:** {} \n**User ID:** `{}`"
-                .format(name, user_id)
-            )
+            await target.edit("**Name:** {} \n**User ID:** `{}`".format(
+                name, user_id))
 
 
 @register(outgoing=True, pattern="^.chatid$")
@@ -52,8 +50,8 @@ async def chatidgetter(chat):
 async def log(log_text):
     """ For .log command, forwards a message
      or the command argument to the bot logs group """
-    if not log_text.text[0].isalpha(
-    ) and log_text.text[0] not in ("/", "#", "@", "!"):
+    if not log_text.text[0].isalpha() and log_text.text[0] not in ("/", "#",
+                                                                   "@", "!"):
         if BOTLOG:
             if log_text.reply_to_msg_id:
                 reply_msg = await log_text.get_reply_message()
@@ -67,7 +65,8 @@ async def log(log_text):
                 return
             await log_text.edit("`Logged Successfully`")
         else:
-            await log_text.edit("`This feature requires Logging to be enabled!`")
+            await log_text.edit(
+                "`This feature requires Logging to be enabled!`")
         sleep(2)
         await log_text.delete()
 
@@ -76,23 +75,19 @@ async def log(log_text):
 @errors_handler
 async def kickme(leave):
     """ Basically it's .kickme command """
-    if not leave.text[0].isalpha() and leave.text[0] not in (
-            "/", "#", "@", "!"):
+    if not leave.text[0].isalpha() and leave.text[0] not in ("/", "#", "@",
+                                                             "!"):
         await leave.edit("`Nope, no, no, I go away`")
         await bot(LeaveChannelRequest(leave.chat_id))
 
 
+CMD_HELP.update({"chatid": "Fetch the current chat's ID"})
 CMD_HELP.update({
-    "chatid": "Fetch the current chat's ID"
-})
-CMD_HELP.update({
-    "userid": "Fetch the ID of the user in reply or the \
+    "userid":
+    "Fetch the ID of the user in reply or the \
 original author of a forwarded message."
 })
-CMD_HELP.update({
-    "log": "Forward the message you've replied to to your \
-botlog group."
-})
-CMD_HELP.update({
-    "kickme": "Leave from a targeted group."
-})
+CMD_HELP.update(
+    {"log": "Forward the message you've replied to to your \
+botlog group."})
+CMD_HELP.update({"kickme": "Leave from a targeted group."})

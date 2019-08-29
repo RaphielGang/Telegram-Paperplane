@@ -3,7 +3,6 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-
 """ Userbot module for kanging stickers or making new ones. """
 
 import io
@@ -17,6 +16,8 @@ from userbot import bot, CMD_HELP
 from userbot.events import register, errors_handler
 PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
 A pack can't have more than 120 stickers at the moment."
+
+
 @register(outgoing=True, pattern="^.kang")
 @errors_handler
 async def kang(args):
@@ -38,12 +39,12 @@ async def kang(args):
             elif "image" in message.media.document.mime_type.split('/'):
                 photo = io.BytesIO()
                 await bot.download_file(message.media.document, photo)
-                if (DocumentAttributeFilename(file_name='sticker.webp')
-                        in message.media.document.attributes):
+                if (DocumentAttributeFilename(file_name='sticker.webp') in
+                        message.media.document.attributes):
                     emoji = message.media.document.attributes[1].alt
                     emojibypass = True
-            elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs')
-                  in message.media.document.attributes):
+            elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
+                  message.media.document.attributes):
                 emoji = message.media.document.attributes[0].alt
                 emojibypass = True
                 is_anim = True
@@ -88,8 +89,7 @@ async def kang(args):
                 cmd = '/newanimated'
 
             response = urllib.request.urlopen(
-                urllib.request.Request(f'http://t.me/addstickers/{packname}')
-            )
+                urllib.request.Request(f'http://t.me/addstickers/{packname}'))
             htmlstr = response.read().decode("utf8").split('\n')
 
             if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
@@ -104,7 +104,8 @@ async def kang(args):
                         pack += 1
                         packname = f"a{user.id}_by_{user.username}_{pack}"
                         packnick = f"@{user.username}'s userbot pack {pack}"
-                        await args.edit("`Switching to Pack " + str(pack) + " due to insufficient space`")
+                        await args.edit("`Switching to Pack " + str(pack) +
+                                        " due to insufficient space`")
                         await conv.send_message(packname)
                         x = await conv.get_response()
                         if x.text == "Invalid pack selected.":
@@ -117,8 +118,8 @@ async def kang(args):
                             # Ensure user doesn't get spamming notifications
                             await bot.send_read_acknowledge(conv.chat_id)
                             if is_anim:
-                                await bot.forward_messages('Stickers',
-                                                           [message.id], args.chat_id)
+                                await bot.forward_messages(
+                                    'Stickers', [message.id], args.chat_id)
                             else:
                                 file.seek(0)
                                 await conv.send_file(file, force_document=True)
@@ -146,12 +147,11 @@ async def kang(args):
                             await bot.send_read_acknowledge(conv.chat_id)
                             await args.edit(
                                 f"Sticker added in a Different Pack! This Pack is Newly created! Your pack can be found [here](t.me/addstickers/{packname})",
-                                parse_mode='md'
-                            )
+                                parse_mode='md')
                             return
                     if is_anim:
-                        await bot.forward_messages('Stickers',
-                                                   [message.id], args.chat_id)
+                        await bot.forward_messages('Stickers', [message.id],
+                                                   args.chat_id)
                     else:
                         file.seek(0)
                         await conv.send_file(file, force_document=True)
@@ -177,8 +177,8 @@ doesn't exist! Making a new one!")
                     # Ensure user doesn't get spamming notifications
                     await bot.send_read_acknowledge(conv.chat_id)
                     if is_anim:
-                        await bot.forward_messages('Stickers',
-                                                   [message.id], args.chat_id)
+                        await bot.forward_messages('Stickers', [message.id],
+                                                   args.chat_id)
                     else:
                         file.seek(0)
                         await conv.send_file(file, force_document=True)
@@ -207,8 +207,7 @@ doesn't exist! Making a new one!")
 
             await args.edit(
                 f"Sticker added! Your pack can be found [here](t.me/addstickers/{packname})",
-                parse_mode='md'
-            )
+                parse_mode='md')
 
 
 async def resize_photo(photo):
@@ -237,7 +236,8 @@ async def resize_photo(photo):
 
 
 CMD_HELP.update({
-    "kang": ".kang\
+    "kang":
+    ".kang\
 \nUsage: Reply .kang to a sticker or an image to kang it to your userbot pack.\
 \n\n.kang [emoji('s)]\
 \nUsage: Works just like .kang but uses the emoji('s) you picked.\

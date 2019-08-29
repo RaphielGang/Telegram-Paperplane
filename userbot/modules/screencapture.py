@@ -5,7 +5,6 @@
 #
 # The entire source code is OSSRPL except 'screencapture' which is MPL
 # License: MPL and OSSRPL
-
 """ Userbot module for ScreenshotLayer API """
 
 import os
@@ -24,17 +23,15 @@ async def capture(url):
         if SCREENSHOT_LAYER_ACCESS_KEY is None:
             await url.edit(
                 "Need to get an API key from https://screenshotlayer.com\
-                /product \nModule stopping!"
-            )
+                /product \nModule stopping!")
             return
         await url.edit("Processing ...")
         sample_url = "https://api.screenshotlayer.com/api/capture"
         sample_url += "?access_key={}&url={}&fullpage={}&format={}&viewport={}"
         input_str = url.pattern_match.group(1)
         response_api = get(
-            sample_url.format(
-                SCREENSHOT_LAYER_ACCESS_KEY, input_str, "1", "PNG", "2560x1440"
-            ),
+            sample_url.format(SCREENSHOT_LAYER_ACCESS_KEY, input_str, "1",
+                              "PNG", "2560x1440"),
             stream=True,
         )
         content_type = response_api.headers["content-type"]
@@ -60,6 +57,7 @@ async def capture(url):
 
 
 CMD_HELP.update({
-    "screencapture": ".screencapture <url>\
+    "screencapture":
+    ".screencapture <url>\
     \nUsage: Take a screenshot of a website and send the screenshot."
 })

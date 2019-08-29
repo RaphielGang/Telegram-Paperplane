@@ -3,15 +3,13 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-
 """ Userbot module containing commands for keeping lists. """
 
 import re
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
-                     is_mongo_alive, is_redis_alive)
-from userbot.modules.dbhelper import (get_list, get_lists,
-                                      add_list, delete_list,
-                                      set_list)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
+                     is_redis_alive)
+from userbot.modules.dbhelper import (get_list, get_lists, add_list,
+                                      delete_list, set_list)
 from userbot.events import register, errors_handler
 
 # =================== CONSTANTS ===================
@@ -42,9 +40,8 @@ async def lists_active(event):
 
             for _list in lists:
                 message += "🔹 **{} ({})**\n".format(
-                    _list["name"],
-                    "Local" if (_list["chat_id"] != 0) else "Global"
-                )
+                    _list["name"], "Local" if
+                    (_list["chat_id"] != 0) else "Global")
 
         await event.edit(message)
 
@@ -74,20 +71,17 @@ async def removelists(event):
         _list = await get_list(event.chat_id, listname)
 
         if await delete_list(event.chat_id, listname) is False:
-            await event.edit("`Couldn't find list:` **{}**"
-                             .format(listname))
+            await event.edit("`Couldn't find list:` **{}**".format(listname))
             return
         else:
-            await event.edit("`Successfully deleted list:` **{}**"
-                             .format(listname))
+            await event.edit(
+                "`Successfully deleted list:` **{}**".format(listname))
 
         if BOTLOG:
             listat = "global storage" if _list['chat_id'] == 0 else str(
                 event.chat_id)
             await event.client.send_message(
-                BOTLOG_CHATID,
-                f"Removed list {listname} from {listat}"
-            )
+                BOTLOG_CHATID, f"Removed list {listname} from {listat}")
 
 
 @register(outgoing=True, pattern=r"^.add(g)?list (\w*)")
@@ -117,9 +111,7 @@ async def addlist(event):
         if BOTLOG:
             listat = "global storage" if is_global else str(event.chat_id)
             await event.client.send_message(
-                BOTLOG_CHATID,
-                f"Created list {listname} in {listat}"
-            )
+                BOTLOG_CHATID, f"Created list {listname} in {listat}")
 
 
 @register(outgoing=True, pattern=r"^.addlistitem(s)? ?(\w*)\n((.|\n*)*)")
@@ -173,10 +165,7 @@ async def add_list_items(event):
             log = "Added item(s) {newitems.splitlines()} "
             log += f"to {listname} in {listat}."
 
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                log
-            )
+            await event.client.send_message(BOTLOG_CHATID, log)
 
 
 @register(outgoing=True, pattern=r"^.editlistitem ?(\w*)? ([0-9]+) (.*)")
@@ -221,10 +210,7 @@ async def edit_list_item(event):
 
             log = "Edited item {item_number} of "
             log += f"{listname} in {listat} successfully."
-            await event.client.send_message(
-                BOTLOG_CHATID,
-                log
-            )
+            await event.client.send_message(BOTLOG_CHATID, log)
 
 
 @register(outgoing=True, pattern=r"^.rmlistitem ?(\w*)? ([0-9]+)")
@@ -279,8 +265,7 @@ Use` ${} `to get the list.`"
                 event.chat_id)
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"Removed item {str(item_number)} from {listname} in {listat}"
-            )
+                f"Removed item {str(item_number)} from {listname} in {listat}")
 
 
 @register(outgoing=True, pattern=r"^.setlist ?(\w*)? (global|local)")
@@ -328,8 +313,7 @@ async def setliststate(event):
         if BOTLOG:
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"Changed state of list {listname} to {_futureState}"
-            )
+                f"Changed state of list {listname} to {_futureState}")
 
 
 @register(pattern=r"\$\w*", disable_edited=True)
@@ -409,7 +393,8 @@ async def getlist_logic(event):
 
 
 CMD_HELP.update({
-    "lists": "\
+    "lists":
+    "\
 .lists\
 \nUsage: Get all of the lists (both local and global)\
 \n\n$<listname>\

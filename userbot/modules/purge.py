@@ -3,7 +3,6 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-
 """ Userbot module for purging unneeded messages(usually spam or ot). """
 
 from asyncio import sleep
@@ -23,8 +22,8 @@ async def fastpurger(purg):
         msgs = []
         count = 0
 
-        async for msg in purg.client.iter_messages(chat,
-                                                   min_id=purg.reply_to_msg_id):
+        async for msg in purg.client.iter_messages(
+                chat, min_id=purg.reply_to_msg_id):
             msgs.append(msg)
             count = count + 1
             msgs.append(purg.reply_to_msg_id)
@@ -36,17 +35,15 @@ async def fastpurger(purg):
             await purg.client.delete_messages(chat, msgs)
         done = await purg.client.send_message(
             purg.chat_id,
-            "`Fast purge complete!\n`Purged "
-            + str(count)
-            + " messages. **This auto-generated message "
-            + "  shall be self destructed in 2 seconds.**",
+            "`Fast purge complete!\n`Purged " + str(count) +
+            " messages. **This auto-generated message " +
+            "  shall be self destructed in 2 seconds.**",
         )
 
         if BOTLOG:
             await purg.client.send_message(
-                BOTLOG_CHATID, "Purge of " +
-                               str(count) + " messages done successfully."
-            )
+                BOTLOG_CHATID,
+                "Purge of " + str(count) + " messages done successfully.")
         await sleep(2)
         await done.delete()
 
@@ -55,8 +52,8 @@ async def fastpurger(purg):
 @errors_handler
 async def purgeme(delme):
     """ For .purgeme, delete x count of your latest message."""
-    if not delme.text[0].isalpha() and delme.text[0] not in (
-            "/", "#", "@", "!"):
+    if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@",
+                                                             "!"):
         message = delme.text
         count = int(message[9:])
         i = 1
@@ -70,16 +67,14 @@ async def purgeme(delme):
 
         smsg = await delme.client.send_message(
             delme.chat_id,
-            "`Purge complete!` Purged "
-            + str(count)
-            + " messages. **This auto-generated message "
-            + " shall be self destructed in 2 seconds.**",
+            "`Purge complete!` Purged " + str(count) +
+            " messages. **This auto-generated message " +
+            " shall be self destructed in 2 seconds.**",
         )
         if BOTLOG:
             await delme.client.send_message(
-                BOTLOG_CHATID, "Purge of " +
-                               str(count) + " messages done successfully."
-            )
+                BOTLOG_CHATID,
+                "Purge of " + str(count) + " messages done successfully.")
         await sleep(2)
         i = 1
         await smsg.delete()
@@ -89,8 +84,8 @@ async def purgeme(delme):
 @errors_handler
 async def delete_it(delme):
     """ For .del command, delete the replied message. """
-    if not delme.text[0].isalpha() and delme.text[0] not in (
-            "/", "#", "@", "!"):
+    if not delme.text[0].isalpha() and delme.text[0] not in ("/", "#", "@",
+                                                             "!"):
         msg_src = await delme.get_reply_message()
         if delme.reply_to_msg_id:
             try:
@@ -98,15 +93,11 @@ async def delete_it(delme):
                 await delme.delete()
                 if BOTLOG:
                     await delme.client.send_message(
-                        BOTLOG_CHATID,
-                        "Deletion of message was successful"
-                    )
+                        BOTLOG_CHATID, "Deletion of message was successful")
             except rpcbaseerrors.BadRequestError:
                 if BOTLOG:
                     await delme.client.send_message(
-                        BOTLOG_CHATID,
-                        "Well, I can't delete a message"
-                    )
+                        BOTLOG_CHATID, "Well, I can't delete a message")
 
 
 @register(outgoing=True, pattern="^.editme")
@@ -126,16 +117,16 @@ async def editer(edit):
                 break
             i = i + 1
         if BOTLOG:
-            await edit.client.send_message(BOTLOG_CHATID,
-                                           "Edit query was executed successfully")
+            await edit.client.send_message(
+                BOTLOG_CHATID, "Edit query was executed successfully")
 
 
 @register(outgoing=True, pattern="^.sd")
 @errors_handler
 async def selfdestruct(destroy):
     """ For .sd command, make seflf-destructable messages. """
-    if not destroy.text[0].isalpha() and destroy.text[0] not in (
-            "/", "#", "@", "!"):
+    if not destroy.text[0].isalpha() and destroy.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         message = destroy.text
         counter = int(message[4:6])
         text = str(destroy.text[6:])
@@ -149,27 +140,29 @@ async def selfdestruct(destroy):
 
 
 CMD_HELP.update({
-    'purge': '.purge\
+    'purge':
+    '.purge\
         \nUsage: Purge all messages starting from the reply.'
 })
 
 CMD_HELP.update({
-    'purgeme': '.purgeme <x>\
+    'purgeme':
+    '.purgeme <x>\
         \nUsage: Delete x amount of your latest messages.'
 })
 
-CMD_HELP.update({
-    "del": ".del\
-\nUsage: Delete the message you replied to."
-})
+CMD_HELP.update({"del": ".del\
+\nUsage: Delete the message you replied to."})
 
 CMD_HELP.update({
-    'editme': ".editme <newmessage>\
+    'editme':
+    ".editme <newmessage>\
 \nUsage: Edit the text you replied to with newtext."
 })
 
 CMD_HELP.update({
-    'sd': '.sd <x> <message>\
+    'sd':
+    '.sd <x> <message>\
 \nUsage: Create a message that self-destructs in x seconds.\
 \nKeep the seconds under 100 since it puts your bot to sleep.'
 })

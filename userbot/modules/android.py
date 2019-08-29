@@ -12,7 +12,6 @@ from bs4 import BeautifulSoup
 from userbot import CMD_HELP
 from userbot.events import register, errors_handler
 
-
 GITHUB = 'https://github.com'
 DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
                'certified-android-devices/master/devices.json'
@@ -22,8 +21,8 @@ DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
 @errors_handler
 async def magisk(request):
     """ magisk latest releases """
-    if not request.text[0].isalpha(
-    ) and request.text[0] not in ("/", "#", "@", "!"):
+    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/master/'
         releases = 'Latest Magisk Releases:\n'
         for variant in ['stable', 'beta', 'canary_builds/canary']:
@@ -50,8 +49,10 @@ async def device_info(request):
         else:
             await request.edit("`Usage: .device <codename> / <model>`")
             return
-        found = [i for i in get(DEVICES_DATA).json()
-                 if i["device"] == device or i["model"] == device]
+        found = [
+            i for i in get(DEVICES_DATA).json()
+            if i["device"] == device or i["model"] == device
+        ]
         if found:
             reply = f'Search results for {device}:\n'
             for item in found:
@@ -84,8 +85,10 @@ async def codename_info(request):
         else:
             await request.edit("`Usage: .codename <brand> <device>`")
             return
-        found = [i for i in get(DEVICES_DATA).json(
-        ) if i["brand"].lower() == brand and device in i["name"].lower()]
+        found = [
+            i for i in get(DEVICES_DATA).json()
+            if i["brand"].lower() == brand and device in i["name"].lower()
+        ]
         if len(found) > 8:
             found = found[:8]
         if found:
@@ -107,8 +110,8 @@ async def codename_info(request):
 @errors_handler
 async def devices_specifications(request):
     """ Mobile devices specifications """
-    if not request.text[0].isalpha(
-    ) and request.text[0] not in ("/", "#", "@", "!"):
+    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         textx = await request.get_reply_message()
         brand = request.pattern_match.group(1).lower()
         device = request.pattern_match.group(2).lower()
@@ -122,12 +125,15 @@ async def devices_specifications(request):
             return
         all_brands = BeautifulSoup(
             get('https://www.devicespecifications.com/en/brand-more').content,
-            'lxml').find('div',
-                         {'class': 'brand-listing-container-news'}).findAll('a')
+            'lxml').find('div', {
+                'class': 'brand-listing-container-news'
+            }).findAll('a')
         brand_page_url = None
         try:
-            brand_page_url = [i['href']
-                              for i in all_brands if brand == i.text.strip().lower()][0]
+            brand_page_url = [
+                i['href'] for i in all_brands
+                if brand == i.text.strip().lower()
+            ][0]
         except IndexError:
             await request.edit(f'`{brand} is unknown brand!`')
         devices = BeautifulSoup(get(brand_page_url).content, 'lxml') \
@@ -135,9 +141,10 @@ async def devices_specifications(request):
         device_page_url = None
         try:
             device_page_url = [
-                i.a['href'] for i in BeautifulSoup(
-                    str(devices),
-                    'lxml') .findAll('h3') if device in i.text.strip().lower()]
+                i.a['href']
+                for i in BeautifulSoup(str(devices), 'lxml').findAll('h3')
+                if device in i.text.strip().lower()
+            ]
         except IndexError:
             await request.edit(f"`can't find {device}!`")
         if len(device_page_url) > 2:
@@ -187,18 +194,21 @@ async def twrp(request):
             f'**Updated:** __{date}__\n'
         await request.edit(reply)
 
+
+CMD_HELP.update({"magisk": "Get latest Magisk releases"})
 CMD_HELP.update({
-    "magisk": "Get latest Magisk releases"
+    "device":
+    ".device <codename>\nUsage: Get info about android device codename or model."
 })
 CMD_HELP.update({
-    "device": ".device <codename>\nUsage: Get info about android device codename or model."
+    "codename":
+    ".codename <brand> <device>\nUsage: Search for android device codename."
 })
 CMD_HELP.update({
-    "codename": ".codename <brand> <device>\nUsage: Search for android device codename."
+    "specs":
+    ".specs <brand> <device>\nUsage: Get device specifications info."
 })
 CMD_HELP.update({
-    "specs": ".specs <brand> <device>\nUsage: Get device specifications info."
-})
-CMD_HELP.update({
-    "twrp": ".twrp <codename>\nUsage: Get latest twrp download for android device."
+    "twrp":
+    ".twrp <codename>\nUsage: Get latest twrp download for android device."
 })

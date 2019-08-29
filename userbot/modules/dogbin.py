@@ -43,18 +43,15 @@ async def paste(pstl):
             dogbin_final_url = DOGBIN_URL + key
 
             if response['isUrl']:
-                reply_text = (
-                    "`Pasted successfully!`\n\n"
-                    f"`Shortened URL:` {dogbin_final_url}\n\n"
-                    "Original(non-shortened) URLs`\n"
-                    f"`Dogbin URL`: {DOGBIN_URL}v/{key}\n")
+                reply_text = ("`Pasted successfully!`\n\n"
+                              f"`Shortened URL:` {dogbin_final_url}\n\n"
+                              "Original(non-shortened) URLs`\n"
+                              f"`Dogbin URL`: {DOGBIN_URL}v/{key}\n")
             else:
-                reply_text = (
-                    "`Pasted successfully!`\n\n"
-                    f"`Dogbin URL`: {dogbin_final_url}")
+                reply_text = ("`Pasted successfully!`\n\n"
+                              f"`Dogbin URL`: {dogbin_final_url}")
         else:
-            reply_text = (
-                "`Failed to reach Dogbin`")
+            reply_text = ("`Failed to reach Dogbin`")
 
         await pstl.edit(reply_text)
         if BOTLOG:
@@ -69,8 +66,8 @@ async def paste(pstl):
 async def get_dogbin_content(dog_url):
     """ For .get_dogbin_content command,
         fetches the content of a dogbin URL. """
-    if not dog_url.text[0].isalpha() and dog_url.text[0] not in (
-            "/", "#", "@", "!"):
+    if not dog_url.text[0].isalpha() and dog_url.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         textx = await dog_url.get_reply_message()
         message = dog_url.pattern_match.group(1)
         await dog_url.edit("`Getting dogbin content . . .`")
@@ -97,8 +94,9 @@ async def get_dogbin_content(dog_url):
         try:
             resp.raise_for_status()
         except exceptions.HTTPError as HTTPErr:
-            await dog_url.edit("Request returned an unsuccessful status code.\n\n"
-                               + str(HTTPErr))
+            await dog_url.edit(
+                "Request returned an unsuccessful status code.\n\n" +
+                str(HTTPErr))
             return
         except exceptions.Timeout as TimeoutErr:
             await dog_url.edit("Request timed out." + str(TimeoutErr))
@@ -121,14 +119,17 @@ executed successfully",
 
 
 CMD_HELP.update({
-    "paste": "Create a paste or a shortened url using "
-             "dogbin (https://del.dog/)"
+    "paste":
+    "Create a paste or a shortened url using "
+    "dogbin (https://del.dog/)"
 })
 CMD_HELP.update({
-    "get_dogbin_content": "Get the content of a paste or "
+    "get_dogbin_content":
+    "Get the content of a paste or "
     "shortened url from dogbin (https://del.dog/)"
 })
 CMD_HELP.update({
-    "pastestats": "Get stats of a paste or shortened "
+    "pastestats":
+    "Get stats of a paste or shortened "
     "url from dogbin (https://del.dog/)"
 })

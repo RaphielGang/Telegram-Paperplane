@@ -22,8 +22,8 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def direct_link_generator(request):
     """ direct links generator """
-    if not request.text[0].isalpha(
-    ) and request.text[0] not in ("/", "#", "@", "!"):
+    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@",
+                                                                 "!"):
         textx = await request.get_reply_message()
         message = request.pattern_match.group(1)
         if message:
@@ -94,14 +94,12 @@ def gdrive(url: str) -> str:
     except KeyError:
         # In case of download warning page
         page = BeautifulSoup(download.content, 'lxml')
-        export = drive + page.find('a',
-                                   {'id': 'uc-download-link'}).get('href')
+        export = drive + page.find('a', {'id': 'uc-download-link'}).get('href')
         name = page.find('span', {'class': 'uc-name-size'}).text
-        response = requests.get(
-            export,
-            stream=True,
-            allow_redirects=False,
-            cookies=cookies)
+        response = requests.get(export,
+                                stream=True,
+                                allow_redirects=False,
+                                cookies=cookies)
         dl_url = response.headers['location']
         if 'accounts.google.com' in dl_url:
             reply += '`Link is not public!`\n'
@@ -127,12 +125,10 @@ def zippy_share(url: str) -> str:
     scripts = page_soup.find_all("script", {"type": "text/javascript"})
     for script in scripts:
         if "getElementById('dlbutton')" in script.text:
-            url_raw = re.search(
-                r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
-                script.text).group('url')
-            math = re.search(
-                r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
-                script.text).group('math')
+            url_raw = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
+                                script.text).group('url')
+            math = re.search(r'= (?P<url>\".+\" \+ (?P<math>\(.+\)) .+);',
+                             script.text).group('math')
             dl_url = url_raw.replace(math, '"' + str(eval(math)) + '"')
             break
     dl_url = base_url + eval(dl_url)
@@ -219,8 +215,7 @@ def mediafire(url: str) -> str:
         return reply
     reply = ''
     page = BeautifulSoup(requests.get(link).content, 'lxml')
-    info = page.find('a',
-                     {'aria-label': 'Download file'})
+    info = page.find('a', {'aria-label': 'Download file'})
     dl_url = info.get('href')
     size = re.findall(r'\(.*\)', info.text)[0]
     name = page.find('div', {'class': 'filename'}).text
@@ -258,10 +253,7 @@ def osdn(url: str) -> str:
         reply = "`No OSDN links found`\n"
         return reply
     page = BeautifulSoup(
-        requests.get(
-            link,
-            allow_redirects=True).content,
-        'lxml')
+        requests.get(link, allow_redirects=True).content, 'lxml')
     info = page.find('a', {'class': 'mirror_link'})
     link = urllib.parse.unquote(osdn_link + info['href'])
     reply = f"Mirrors for __{link.split('/')[-1]}__\n"
@@ -352,18 +344,16 @@ def useragent():
         requests.get(
             'https://developers.whatismybrowser.com/'
             'useragents/explore/operating_system_name/android/').content,
-        'lxml') .findAll(
-            'td',
-            {
-                'class': 'useragent'})
+        'lxml').findAll('td', {'class': 'useragent'})
     user_agent = choice(useragents)
     return user_agent.text
 
 
 CMD_HELP.update({
-    "direct": ".direct <url> <url>\n"
-              "Usage: Generate direct download link from supported URL(s)\n"
-              "Supported websites:\n"
-              "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - "
-              "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
+    "direct":
+    ".direct <url> <url>\n"
+    "Usage: Generate direct download link from supported URL(s)\n"
+    "Supported websites:\n"
+    "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - "
+    "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
 })
