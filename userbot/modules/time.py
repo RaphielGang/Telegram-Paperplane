@@ -12,12 +12,14 @@ from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
-from userbot import CMD_HELP
+from userbot import (CMD_HELP, is_mongo_alive, is_redis_alive)
 from userbot.events import register, errors_handler
+from userbot.modules.dbhelper import (get_time, set_time)
 
 # ===== CONSTANT =====
-COUNTRY = ''
-TZ_NUMBER = 1
+INV_CON = "`Invalid country.`"
+TZ_NOT_FOUND = "`The selected timezone is not found! Try again!`"
+DB_FAILED = "`Database connections failed!`"
 
 
 # ===== CONSTANT =====
@@ -60,7 +62,10 @@ async def time_func(tdata):
         tz_num = tdata.pattern_match.group(2)
 
         t_form = "%H:%M"
-        c_name = ''
+
+        saved_props = await get_time() if is_mongo_alive() else None
+        saved_country = saved_props['timec'] if saved_props else None
+        saved_tz_num = saved_props['timezone'] if saved_props else None
 
         if con:
             try:
@@ -69,17 +74,17 @@ async def time_func(tdata):
                 c_name = con
 
             timezones = await get_tz(con)
-        elif COUNTRY:
-            c_name = COUNTRY
-            tz_num = TZ_NUMBER
-            timezones = await get_tz(COUNTRY)
+        elif saved_country:
+            c_name = saved_country
+            tz_num = saved_tz_num
+            timezones = await get_tz(saved_country)
         else:
             await tdata.edit(
                 f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
             return
 
         if not timezones:
-            await tdata.edit("`Invaild country.`")
+            await tdata.edit(INV_CON)
             return
 
         if len(timezones) == 1:
@@ -87,7 +92,11 @@ async def time_func(tdata):
         elif len(timezones) > 1:
             if tz_num:
                 tz_num = int(tz_num)
-                time_zone = timezones[tz_num - 1]
+                if len(timezones) >= tz_num:
+                    time_zone = timezones[tz_num - 1]
+                else:
+                    await tdata.edit(TZ_NOT_FOUND)
+                    return
             else:
                 return_str = f"{c_name} has multiple timezones:\n"
 
@@ -103,8 +112,8 @@ async def time_func(tdata):
 
         dtnow = dt.now(tz(time_zone)).strftime(t_form)
 
-        if COUNTRY:
-            await tdata.edit(f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
+        if not con and saved_country:
+            await tdata.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
                              f"({time_zone} timezone).`")
             return
 
@@ -125,7 +134,10 @@ async def date_func(dat):
         tz_num = dat.pattern_match.group(2)
 
         d_form = "%d/%m/%y - %A"
-        c_name = ''
+
+        saved_props = await get_time() if is_mongo_alive() else None
+        saved_country = saved_props['timec'] if saved_props else None
+        saved_tz_num = saved_props['timezone'] if saved_props else None
 
         if con:
             try:
@@ -134,16 +146,16 @@ async def date_func(dat):
                 c_name = con
 
             timezones = await get_tz(con)
-        elif COUNTRY:
-            c_name = COUNTRY
-            tz_num = TZ_NUMBER
-            timezones = await get_tz(COUNTRY)
+        elif saved_country:
+            c_name = saved_country
+            tz_num = saved_tz_num
+            timezones = await get_tz(saved_country)
         else:
             await dat.edit(f"`It's`  **{dt.now().strftime(d_form)}**  `here.`")
             return
 
         if not timezones:
-            await dat.edit("`Invaild country.`")
+            await dat.edit(INV_CON)
             return
 
         if len(timezones) == 1:
@@ -151,7 +163,11 @@ async def date_func(dat):
         elif len(timezones) > 1:
             if tz_num:
                 tz_num = int(tz_num)
-                time_zone = timezones[tz_num - 1]
+                if len(timezones) >= tz_num:
+                    time_zone = timezones[tz_num - 1]
+                else:
+                    await dat.edit(TZ_NOT_FOUND)
+                    return
             else:
                 return_str = f"{c_name} has multiple timezones:\n"
 
@@ -167,8 +183,8 @@ async def date_func(dat):
 
         dtnow = dt.now(tz(time_zone)).strftime(d_form)
 
-        if COUNTRY:
-            await dat.edit(f"`It's`  **{dtnow}**  `here, in {COUNTRY}"
+        if not con and saved_country:
+            await dat.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
                            f"({time_zone} timezone).`")
             return
 
@@ -182,10 +198,15 @@ async def set_time_country(loc):
     """ For .settime command, change the default userbot
         country for date and time commands. """
     if not loc.text[0].isalpha() and loc.text[0] not in ("/", "#", "@", "!"):
-        global COUNTRY
-        global TZ_NUMBER
+        if not is_mongo_alive() or not is_redis_alive():
+            await loc.edit(DB_FAILED)
+            return
+
         temp_country = loc.pattern_match.group(1).title()
         temp_tz_num = loc.pattern_match.group(2)
+
+        c_name = None
+        tz_num = None
 
         try:
             c_name = c_n[temp_country]
@@ -195,14 +216,14 @@ async def set_time_country(loc):
         timezones = await get_tz(temp_country)
 
         if not timezones:
-            await loc.edit("`Invaild country.`")
+            await loc.edit(INV_CON)
             return
 
         if len(timezones) == 1:
-            TZ_NUMBER = 1
+            tz_num = 1
         elif len(timezones) > 1:
             if temp_tz_num:
-                TZ_NUMBER = int(temp_tz_num)
+                tz_num = int(temp_tz_num)
             else:
                 return_str = f"{c_name} has multiple timezones:\n"
 
@@ -216,11 +237,16 @@ async def set_time_country(loc):
                 await loc.edit(return_str)
                 return
 
-        COUNTRY = c_name
-        tz_name = timezones[TZ_NUMBER - 1]
+        if len(timezones) >= tz_num:
+            tz_name = timezones[tz_num - 1]
+        else:
+            await loc.edit(TZ_NOT_FOUND)
+            return
+
+        await set_time(c_name, tz_num)
 
         await loc.edit("`Default country for date and time set to "
-                       f"{COUNTRY}({tz_name} timezone).`")
+                       f"{c_name}({tz_name} timezone).`")
 
 
 CMD_HELP.update({

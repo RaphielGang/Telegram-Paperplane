@@ -405,3 +405,25 @@ async def is_gban(chatid):
         return False
     else:
         return True
+
+
+# Time
+async def get_time():
+    return MONGO.misc.find_one({}, {'timec': 1, 'timezone': 1})
+
+
+async def set_time(country, timezone=1):
+    to_check = await get_time()
+
+    if to_check:
+        MONGO.misc.update_one(
+            {
+                '_id': to_check['_id'],
+                'timec': to_check['timec'],
+                'timezone': to_check['timezone']
+            }, {"$set": {
+                'timec': country,
+                'timezone': timezone
+            }})
+    else:
+        MONGO.misc.insert_one({'timec': country, 'timezone': timezone})
