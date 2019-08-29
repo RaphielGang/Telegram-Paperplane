@@ -20,8 +20,9 @@ export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
 kickstart_pub
 
 req_install() {
+    pip3 install --upgrade setuptools pip
     pip3 install -r requirements.txt
-    pip3 install pep8 autopep8
+    pip3 install yapf
 }
 
 get_session() {
@@ -54,16 +55,13 @@ lint() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
     exit 0
   fi
-  num_errors_before=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
-  echo $num_errors_before
-  git config --global user.email "baalajimaestro@computer4u.com"
+  git config --global user.email "baalajimaestro@raphielgang.org"
   git config --global user.name "baalajimaestro"
-  find . -name \*.py -exec autopep8 --recursive --aggressive --aggressive --in-place {} +
-  num_errors_after=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
-  echo $num_errors_after
-  if [ "$num_errors_after" -lt "$num_errors_before" ]; then
+
+  if ! yapf -d -r -p userbot; then
+            yapf -i -r -p userbot
             git add .
-            git commit -m "[MaestroCI]: Lint"
+            git commit -m "[MaestroCI]: Lint" --signoff
             git remote rm origin
             git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
             git push --quiet origin $PARSE_BRANCH
@@ -71,12 +69,15 @@ lint() {
   else
     tg_sendinfo "<code>Auto-Linter didn't lint anything</code>"
   fi
-tg_sendinfo "<code>$num_errors_after code problems detected, but couldn't be auto-linted</code>"
 }
 tg_yay() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
-      tg_sendinfo "<code>Compilation Success! This PR will be merged if there aren't any lint issues! Check Stickler's Build Status for more!"
-      exit 0
+
+      tg_sendinfo "<code>Compilation Success! Checking for Lint Issues before it can be merged!</code>"
+      if ! yapf -d -r -p userbot; then
+        tg_sendinfo "<code>PR has Lint Problems, @baalajimaestro @raphielscape @MrYacha review it before merging</code>"
+        exit 1
+      fi
    fi
     tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
     lint
