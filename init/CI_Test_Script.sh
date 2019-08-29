@@ -77,6 +77,9 @@ tg_yay() {
       if ! yapf -d -r -p userbot; then
         tg_sendinfo "<code>PR has Lint Problems, @baalajimaestro @raphielscape @MrYacha review it before merging</code>"
         exit 1
+      else
+        tg_sendinfo "<code>PR didn't have any Lint Problems, merge it happily! @baalajimaestro @raphielscape @MrYacha </code>"
+        exit 0
       fi
    fi
     tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
