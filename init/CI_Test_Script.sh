@@ -15,6 +15,7 @@ PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 COMMIT_HASH="$(git rev-parse --verify HEAD)"
+REVIEWERS="@baalajimaestro @raphielscape @MrYacha @RealAkito"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
 kickstart_pub
@@ -43,7 +44,7 @@ tg_senderror() {
         exit 1
     fi
     tg_sendinfo "<code>Build Throwing Error(s)</code>" \
-        "@baalajimaestro @raphielscape @MrYacha please look in!" \
+        "${REVIEWERS} please look in!" \
         "Logs: https://semaphoreci.com/baalajimaestro/telegram-userbot"
 
     [ -n "${STATUS}" ] &&
@@ -75,10 +76,10 @@ tg_yay() {
 
       tg_sendinfo "<code>Compilation Success! Checking for Lint Issues before it can be merged!</code>"
       if ! yapf -d -r -p userbot; then
-        tg_sendinfo "<code>PR has Lint Problems, @baalajimaestro @raphielscape @MrYacha review it before merging</code>"
+        tg_sendinfo "<code>PR has Lint Problems, ${REVIEWERS} review it before merging</code>"
         exit 1
       else
-        tg_sendinfo "<code>PR didn't have any Lint Problems, merge it happily! @baalajimaestro @raphielscape @MrYacha </code>"
+        tg_sendinfo "<code>PR didn't have any Lint Problems, merge it happily! ${REVIEWERS}</code>"
         exit 0
       fi
    fi
