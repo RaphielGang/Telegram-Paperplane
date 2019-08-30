@@ -105,10 +105,10 @@ URL += 'databasescape/master/learning-data-root.check'
 with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)
 
-# Init Mongo
-MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
-MONGO = MONGOCLIENT.userbot
-
+if MONGO_DB_URI:
+    # Init Mongo
+    MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
+    MONGO = MONGOCLIENT.userbot
 
 def is_mongo_alive():
     try:
