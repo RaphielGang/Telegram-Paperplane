@@ -17,18 +17,16 @@ def __list_all_modules():
         basename(f)[:-3] for f in mod_paths
         if isfile(f) and f.endswith(".py") and not f.endswith("__init__.py")
     ]
-    return all_modules
+
+    if MONGO_DB_URI:
+        return all_modules
+    else:
+        for i in REQUIRE_DB: all_modules.remove(i)
+        LOGS.warn("No MongoDB URI set, excluding modules that depend on it.")
+        return all_modules
 
 
 ALL_MODULES = sorted(__list_all_modules())
-
-if not MONGO_DB_URI:
-    LOGS.info("No MongoDB URI set, disabling modules that depend on it.")
-    for i in REQUIRE_DB:
-        try:
-            ALL_MODULES.remove(i)
-        except:
-            pass
 
 LOGS.info("Modules to load: %s", str(ALL_MODULES))
 __all__ = ALL_MODULES + ["ALL_MODULES"]

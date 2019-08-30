@@ -13,7 +13,6 @@ from sys import version_info
 import pylast
 import redis
 from dotenv import load_dotenv
-from pymongo import MongoClient
 from requests import get
 from telethon import TelegramClient
 
@@ -59,6 +58,12 @@ PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
 MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+
+try:
+    from pymongo import MongoClient
+except ModuleNotFoundError:
+    LOGS.warn("PyMongo not installed, yeeting the URI if there ever was one.")
+    MONGO_DB_URI = None
 
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
                                              None)
