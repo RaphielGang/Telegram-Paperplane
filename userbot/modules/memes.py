@@ -17,15 +17,13 @@ from userbot import CMD_HELP, ZALG_LIST
 from userbot.events import register, errors_handler
 
 # ================= CONSTANT =================
-METOOSTR = [
-    "Me too thanks",
-    "Haha yes, me too",
-    "Same lol",
-    "Me irl",
-    "Same here",
-    "Haha yes",
-    "Me rn",
-]
+METOOSTR = ["Me too thanks", "Haha yes, me too", "Same lol", "Me irl", "Haha same",
+            "Same here", "Haha yes", "Yeah, same bro", "Indeed my good chum",
+            "Same, haha", "I, too, exhibit this", "Me rn", "I share this experience",
+            "The condition you're exclaiming is one that I, too, experience as a human.",
+            "Dude, like, same", "Me three", "Same", "I feel ya", "O\nM\nG\n\nSame",
+            """What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You're fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that's just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little "clever" comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, you didn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You're fucking dead, kiddo.\n\n I mean.. uh.. me too."""]
+
 EMOJIS = [
     "😂",
     "😂",
@@ -56,24 +54,12 @@ EMOJIS = [
     "😩",
     "🚰",
 ]
-UWUS = [
-    "(・`ω´・)",
-    ";;w;;",
-    "owo",
-    "UwU",
-    ">w<",
-    "^w^",
-    r"\(^o\) (/o^)/",
-    "( ^ _ ^)∠☆",
-    "(ô_ô)",
-    "~:o",
-    ";-;",
-    "(*^*)",
-    "(>_",
-    "(♥_♥)",
-    "*(^O^)*",
-    "((+_+))",
-]
+
+UWUS = ['(・`ω´・)',';;w;;','owo','UwU','>w<','^w^','\(^o\) (/o^)/','( ^ _ ^)∠☆','(ô_ô)','~:o',
+        ';____;','(*^*)','(>_','(♥_♥)','*(^O^)*','((+_+))','(づ｡◕‿‿◕｡)づ','(◕‿◕✿)',
+        '(｡◕‿‿◕｡)','(｡◕‿◕｡)','(─‿‿─)','(´• ω •`)','(^◕ᴥ◕^)','(^◔ᴥ◔^)','(^˵◕ω◕˵^)',
+        '( =ω=)..nyaa','( ; ω ; )']
+
 FACEREACTS = [
     "ʘ‿ʘ",
     "ヾ(-_- )ゞ",
@@ -398,9 +384,7 @@ async def react_meme(react):
     """ Make your userbot react to everything. """
     if not react.text[0].isalpha() and react.text[0] not in ("/", "#", "@",
                                                              "!"):
-        index = random.randint(0, len(FACEREACTS))
-        reply_text = FACEREACTS[index]
-        await react.edit(reply_text)
+        await react.edit(random.choice(FACEREACTS))
 
 
 @register(outgoing=True, pattern="^.shg$")
