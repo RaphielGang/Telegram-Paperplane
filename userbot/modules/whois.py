@@ -19,7 +19,7 @@ from userbot.events import register, errors_handler
 TMP_DOWNLOAD_DIRECTORY = "./"
 
 
-@register(pattern=".whois(?: |$)(.*)", outgoing=True)
+@register(pattern="^.whois(?: |$)(.*)", outgoing=True)
 @errors_handler
 async def who(event):
     """ For .whois command, get info about a user. """
@@ -131,6 +131,6 @@ async def fetch_info(replied_user, event):
 
 CMD_HELP.update({
     "whois":
-    ".whois <username>(or reply to the target person's message)\
-    \nUsage: Get info about a user."
+    ".whois <username>(or reply to the target person's message)"
+    "\nUsage: Get info about a user."
 })

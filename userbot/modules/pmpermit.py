@@ -237,16 +237,14 @@ async def unblockpm(unblock):
 
 CMD_HELP.update({
     "pmpermit":
-    "\
-.approve\
-\nUsage: Approve the mentioned/replied person to PM.\
-\n\n.block\
-\nUsage: Block the person from PMing you.\
-\n\n.unblock\
-\nUsage: Unblock the person so they can PM you.\
-\n\n.notifoff\
-\nUsage: Clear any notifications of unapproved PMs.\
-\n\n.notifon\
-\nUsage: Allow notifications for unapproved PMs.\
-"
+    ".approve"
+    "\nUsage: Approve the mentioned/replied person to PM."
+    "\n\n.block"
+    "\nUsage: Block the person from PMing you."
+    "\n\n.unblock"
+    "\nUsage: Unblock the person so they can PM you."
+    "\n\n.notifoff"
+    "\nUsage: Clear any notifications of unapproved PMs."
+    "\n\n.notifon"
+    "\nUsage: Allow notifications for unapproved PMs."
 })
