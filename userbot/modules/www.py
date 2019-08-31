@@ -19,15 +19,14 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def speedtst(spd):
     """ For .speed command, use SpeedTest to check server speeds. """
-    if not spd.text[0].isalpha() and spd.text[0] not in ("/", "#", "@", "!"):
-        await spd.edit("`Running speed test . . .`")
-        test = speedtest.Speedtest()
+    await spd.edit("`Running speed test . . .`")
+    test = speedtest.Speedtest()
 
-        test.get_best_server()
-        test.download()
-        test.upload()
-        test.results.share()
-        result = test.results.dict()
+    test.get_best_server()
+    test.download()
+    test.upload()
+    test.results.share()
+    result = test.results.dict()
 
     await spd.edit("`"
                    "Started at "
@@ -70,12 +69,11 @@ async def neardc(event):
 @errors_handler
 async def pingme(pong):
     """ FOr .pingme command, ping the userbot from any chat.  """
-    if not pong.text[0].isalpha() and pong.text[0] not in ("/", "#", "@", "!"):
-        start = datetime.now()
-        await pong.edit("`Pong!`")
-        end = datetime.now()
-        duration = (end - start).microseconds / 1000
-        await pong.edit("`Pong!\n%sms`" % (duration))
+    start = datetime.now()
+    await pong.edit("`Pong!`")
+    end = datetime.now()
+    duration = (end - start).microseconds / 1000
+    await pong.edit("`Pong!\n%sms`" % (duration))
 
 
 CMD_HELP.update({
