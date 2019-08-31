@@ -409,7 +409,12 @@ async def is_gban(chatid):
 
 # Time
 async def get_time():
-    return MONGO.misc.find_one({}, {'timec': 1, 'timezone': 1})
+    return MONGO.misc.find_one({'timec': {
+        '$exists': True
+    }}, {
+        'timec': 1,
+        'timezone': 1
+    })
 
 
 async def set_time(country, timezone=1):
@@ -427,3 +432,25 @@ async def set_time(country, timezone=1):
             }})
     else:
         MONGO.misc.insert_one({'timec': country, 'timezone': timezone})
+
+
+# Weather
+async def get_weather():
+    return MONGO.misc.find_one({'weather_city': {
+        '$exists': True
+    }}, {'weather_city': 1})
+
+
+async def set_weather(city):
+    to_check = await get_weather()
+
+    if to_check:
+        MONGO.misc.update_one(
+            {
+                '_id': to_check['_id'],
+                'weather_city': to_check['weather_city']
+            }, {"$set": {
+                'weather_city': city
+            }})
+    else:
+        MONGO.misc.insert_one({'weather_city': city})
