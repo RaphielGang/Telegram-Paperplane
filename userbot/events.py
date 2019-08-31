@@ -22,12 +22,21 @@ def register(**args):
     """ Register a new event. """
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
+    ignore_unsafe = args.get('ignore_unsafe', False)
+    unsafe_pattern = '^[^/!#@\$A-Za-z]'
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
 
     if "disable_edited" in args:
         del args['disable_edited']
+
+    if "ignore_unsafe" in args:
+        del args['ignore_unsafe']
+    
+    if pattern:
+        if not ignore_unsafe:
+            args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
 
     def decorator(func):
         if not disable_edited:

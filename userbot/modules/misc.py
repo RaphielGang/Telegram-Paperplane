@@ -18,80 +18,69 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
-    if not items.text[0].isalpha() and items.text[0] not in ("/", "#", "@",
-                                                             "!"):
-        itemo = (items.text[8:]).split()
-        index = randint(1, len(itemo) - 1)
-        await items.edit("**Query: **\n`" + items.text[8:] +
-                         "`\n**Output: **\n`" + itemo[index] + "`")
+    itemo = (items.text[8:]).split()
+    index = randint(1, len(itemo) - 1)
+    await items.edit("**Query: **\n`" + items.text[8:] +
+                        "`\n**Output: **\n`" + itemo[index] + "`")
 
 
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
 @errors_handler
 async def sleepybot(time):
     """ For .sleep command, let the userbot snooze for a few second. """
-    message = time.text
-    if not message[0].isalpha() and message[0] not in ("/", "#", "@", "!"):
-        if " " not in time.pattern_match.group(1):
-            await time.reply("Syntax: `.sleep [seconds]`")
-        else:
-            counter = int(time.pattern_match.group(1))
-            await time.edit("`I am sulking and snoozing....`")
-            sleep(2)
-            if BOTLOG:
-                await time.client.send_message(
-                    BOTLOG_CHATID,
-                    "You put the bot to sleep for " + str(counter) +
-                    " seconds",
-                )
-            sleep(counter)
+    if " " not in time.pattern_match.group(1):
+        await time.reply("Syntax: `.sleep [seconds]`")
+    else:
+        counter = int(time.pattern_match.group(1))
+        await time.edit("`I am sulking and snoozing....`")
+        sleep(2)
+        if BOTLOG:
+            await time.client.send_message(
+                BOTLOG_CHATID,
+                "You put the bot to sleep for " + str(counter) +
+                " seconds",
+            )
+        sleep(counter)
 
 
 @register(outgoing=True, pattern="^.shutdown$")
 @errors_handler
 async def killdabot(event):
     """ For .shutdown command, shut the bot down."""
-    if not event.text[0].isalpha():
-        await event.edit("`Goodbye *Windows XP shutdown sound*....`")
-        if BOTLOG:
-            await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n"
-                                            "Bot shut down")
-        await event.client.disconnect()
+    await event.edit("`Goodbye *Windows XP shutdown sound*....`")
+    if BOTLOG:
+        await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n"
+                                        "Bot shut down")
+    await event.client.disconnect()
 
 
 @register(outgoing=True, pattern="^.restart$")
 @errors_handler
 async def knocksomesense(event):
-
-    if not event.text[0].isalpha():
-        await event.edit("`Hold tight! I just need a second to be back up....`"
-                         )
-        if BOTLOG:
-            await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
-                                            "Bot Restarted")
-        await event.client.disconnect()
-        # Spin a new instance of bot
-        execl(sys.executable, sys.executable, *sys.argv)
-        # Shut the existing one down
-        exit()
+    await event.edit("`Hold tight! I just need a second to be back up....`"
+                        )
+    if BOTLOG:
+        await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
+                                        "Bot Restarted")
+    await event.client.disconnect()
+    # Spin a new instance of bot
+    execl(sys.executable, sys.executable, *sys.argv)
+    # Shut the existing one down
+    exit()
 
 
 @register(outgoing=True, pattern="^.support$")
 @errors_handler
 async def bot_support(wannahelp):
     """ For .support command, just returns the group link. """
-    if not wannahelp.text[0].isalpha() and wannahelp.text[0] not in ("/", "#",
-                                                                     "@", "!"):
-        await wannahelp.edit("Link Portal: @userbot_support")
+    await wannahelp.edit("Link Portal: @userbot_support")
 
 
 @register(outgoing=True, pattern="^.repo$")
 @errors_handler
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
-    if not wannasee.text[0].isalpha() and wannasee.text[0] not in ("/", "#",
-                                                                   "@", "!"):
-        await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
+    await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
 
 
 CMD_HELP.update({

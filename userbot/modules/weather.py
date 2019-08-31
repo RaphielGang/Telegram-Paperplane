@@ -40,9 +40,6 @@ async def get_tz(con):
 @errors_handler
 async def fetch_weather(weather):
     """ For .weather command, gets the current weather of a city. """
-    if weather.text[0].isalpha() or weather.text[0] in ("/", "#", "@", "!"):
-        return
-
     if len(OWM_API) < 1:
         await weather.edit(NO_API_KEY)
         return
@@ -142,9 +139,6 @@ async def fetch_weather(weather):
 async def set_default_city(city):
     """ For .setcity command, change the default
         city for weather command. """
-    if city.text[0].isalpha() or city.text[0] in ("/", "#", "@", "!"):
-        return
-
     if not is_mongo_alive() or not is_redis_alive():
         await city.edit(DB_FAILED)
         return

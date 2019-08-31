@@ -22,47 +22,45 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def direct_link_generator(request):
     """ direct links generator """
-    if not request.text[0].isalpha() and request.text[0] not in ("/", "#", "@",
-                                                                 "!"):
-        textx = await request.get_reply_message()
-        message = request.pattern_match.group(1)
-        if message:
-            pass
-        elif textx:
-            message = textx.text
-        else:
-            await request.edit("`Usage: .direct <url> <url>`")
-            return
-        reply = ''
-        links = re.findall(r'\bhttps?://.*\.\S+', message)
-        if not links:
-            reply = "No links found!"
-            await request.edit(reply)
-        for link in links:
-            if 'drive.google.com' in link:
-                reply += gdrive(link)
-            elif 'zippyshare.com' in link:
-                reply += zippy_share(link)
-            elif 'mega.' in link:
-                reply += mega_dl(link)
-            elif 'yadi.sk' in link:
-                reply += yandex_disk(link)
-            elif 'cloud.mail.ru' in link:
-                reply += cm_ru(link)
-            elif 'mediafire.com' in link:
-                reply += mediafire(link)
-            elif 'sourceforge.net' in link:
-                reply += sourceforge(link)
-            elif 'osdn.net' in link:
-                reply += osdn(link)
-            elif 'github.com' in link:
-                reply += github(link)
-            elif 'androidfilehost.com' in link:
-                reply += androidfilehost(link)
-            else:
-                reply += '`' + re.findall(r"\bhttps?://(.*?[^/]+)",
-                                          link)[0] + 'is not supported`\n'
+    textx = await request.get_reply_message()
+    message = request.pattern_match.group(1)
+    if message:
+        pass
+    elif textx:
+        message = textx.text
+    else:
+        await request.edit("`Usage: .direct <url> <url>`")
+        return
+    reply = ''
+    links = re.findall(r'\bhttps?://.*\.\S+', message)
+    if not links:
+        reply = "No links found!"
         await request.edit(reply)
+    for link in links:
+        if 'drive.google.com' in link:
+            reply += gdrive(link)
+        elif 'zippyshare.com' in link:
+            reply += zippy_share(link)
+        elif 'mega.' in link:
+            reply += mega_dl(link)
+        elif 'yadi.sk' in link:
+            reply += yandex_disk(link)
+        elif 'cloud.mail.ru' in link:
+            reply += cm_ru(link)
+        elif 'mediafire.com' in link:
+            reply += mediafire(link)
+        elif 'sourceforge.net' in link:
+            reply += sourceforge(link)
+        elif 'osdn.net' in link:
+            reply += osdn(link)
+        elif 'github.com' in link:
+            reply += github(link)
+        elif 'androidfilehost.com' in link:
+            reply += androidfilehost(link)
+        else:
+            reply += '`' + re.findall(r"\bhttps?://(.*?[^/]+)",
+                                        link)[0] + 'is not supported`\n'
+    await request.edit(reply)
 
 
 def gdrive(url: str) -> str:

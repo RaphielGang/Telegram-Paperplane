@@ -79,22 +79,21 @@ async def afk_on_pm(e):
 @register(outgoing=True, pattern="^.afk")
 @errors_handler
 async def set_afk(e):
-    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
-        if not is_redis_alive():
-            await e.edit("`Database connections failing!`")
-            return
-        message = e.text
-        try:
-            AFKREASON = str(message[5:])
-        except BaseException:
-            AFKREASON = ''
-        if not AFKREASON:
-            AFKREASON = 'No reason'
-        await e.edit("AFK AF!")
-        if BOTLOG:
-            await e.client.send_message(BOTLOG_CHATID, "You went AFK!")
-        await afk(AFKREASON)
-        raise StopPropagation
+    if not is_redis_alive():
+        await e.edit("`Database connections failing!`")
+        return
+    message = e.text
+    try:
+        AFKREASON = str(message[5:])
+    except BaseException:
+        AFKREASON = ''
+    if not AFKREASON:
+        AFKREASON = 'No reason'
+    await e.edit("AFK AF!")
+    if BOTLOG:
+        await e.client.send_message(BOTLOG_CHATID, "You went AFK!")
+    await afk(AFKREASON)
+    raise StopPropagation
 
 
 @register(outgoing=True)
