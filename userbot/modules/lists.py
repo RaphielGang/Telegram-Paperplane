@@ -317,7 +317,6 @@ async def setliststate(event):
 
 
 @register(pattern=r"\$\w*", disable_edited=True)
-@errors_handler
 async def lists_logic(event):
     """ Lists logic. """
     try:

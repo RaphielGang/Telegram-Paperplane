@@ -512,7 +512,7 @@ async def bluetext(bt_e):
                 "`Are you a stupid animal which is attracted to colours?`")
 
 
-@register(pattern='.type(?: |$)(.*)')
+@register(outgoing=True, pattern='^.type(?: |$)(.*)')
 @errors_handler
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """

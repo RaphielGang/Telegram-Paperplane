@@ -16,7 +16,6 @@ from userbot.modules.dbhelper import is_afk, afk, afk_reason, no_afk
 
 
 @register(incoming=True, disable_edited=True)
-@errors_handler
 async def mention_afk(mention):
     """ This function takes care of notifying the
      people who mention you that you are AFK."""
@@ -49,7 +48,6 @@ async def mention_afk(mention):
 
 
 @register(incoming=True)
-@errors_handler
 async def afk_on_pm(e):
     global USERS
     global COUNT_MSG
@@ -79,6 +77,7 @@ async def afk_on_pm(e):
 
 
 @register(outgoing=True, pattern="^.afk")
+@errors_handler
 async def set_afk(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         if not is_redis_alive():

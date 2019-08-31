@@ -97,7 +97,6 @@ async def save_note(event):
 
 
 @register(pattern=r"#\w*", disable_edited=True)
-@errors_handler
 async def note(event):
     """ Notes logic. """
     try:

@@ -42,7 +42,6 @@ async def mute_chat(mute_e):
 
 
 @register(incoming=True)
-@errors_handler
 async def keep_read(message):
     """ The mute logic. """
     if not is_mongo_alive() or not is_redis_alive():

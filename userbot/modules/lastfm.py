@@ -12,7 +12,7 @@ from telethon.tl.types import User as Userbot
 from telethon.errors.rpcerrorlist import FloodWaitError
 
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO, BIO_PREFIX, lastfm, LASTFM_USERNAME, bot
-from userbot.events import register
+from userbot.events import (register, errors_handler)
 
 # =================== CONSTANT ===================
 LFM_BIO_ENABLED = "```last.fm current music to bio is now enabled.```"
@@ -37,6 +37,7 @@ LastLog = False
 
 
 @register(outgoing=True, pattern="^.lastfm$")
+@errors_handler
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
     if not lastFM.text[0].isalpha() and lastFM.text[0] not in ("/", "#", "@",
@@ -170,6 +171,7 @@ async def get_curr_track(lfmbio):
 
 
 @register(outgoing=True, pattern=r"^.lastbio (\S*)")
+@errors_handler
 async def lastbio(lfmbio):
     if not lfmbio.text[0].isalpha() and lfmbio.text[0] not in ("/", "#", "@",
                                                                "!"):
@@ -196,6 +198,7 @@ async def lastbio(lfmbio):
 
 
 @register(outgoing=True, pattern=r"^.lastlog (\S*)")
+@errors_handler
 async def lastlog(lstlog):
     if not lstlog.text[0].isalpha() and lstlog.text[0] not in ("/", "#", "@",
                                                                "!"):

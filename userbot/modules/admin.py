@@ -436,7 +436,6 @@ async def unmoot(unmot):
 
 
 @register(incoming=True)
-@errors_handler
 async def muter(moot):
     """ Used for deleting the messages of muted people """
     if not is_mongo_alive() or not is_redis_alive():

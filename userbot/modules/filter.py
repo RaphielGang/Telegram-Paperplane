@@ -14,7 +14,6 @@ from userbot.modules.dbhelper import (get_filters, add_filter, delete_filter)
 
 
 @register(incoming=True, disable_edited=True)
-@errors_handler
 async def filter_incoming_handler(handler):
     """ Checks if the incoming message contains handler of a filter """
     try:

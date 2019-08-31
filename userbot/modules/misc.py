@@ -61,7 +61,7 @@ async def killdabot(event):
 
 @register(outgoing=True, pattern="^.restart$")
 @errors_handler
-async def killdabot(event):
+async def knocksomesense(event):
 
     if not event.text[0].isalpha():
         await event.edit("`Hold tight! I just need a second to be back up....`"

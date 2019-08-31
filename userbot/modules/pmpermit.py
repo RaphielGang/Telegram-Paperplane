@@ -27,7 +27,6 @@ UNAPPROVED_MSG = (
 
 
 @register(incoming=True, disable_edited=True)
-@errors_handler
 async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
@@ -101,7 +100,6 @@ async def permitpm(event):
 
 
 @register(disable_edited=True, outgoing=True)
-@errors_handler
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if event.is_private:

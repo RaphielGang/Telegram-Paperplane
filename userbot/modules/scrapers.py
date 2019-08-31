@@ -407,6 +407,7 @@ async def download_video(v_url):
 
 
 @register(outgoing=True, pattern=r".cr (\S*) ?(\S*) ?(\S*)")
+@errors_handler
 async def currency(cconvert):
     """ For .cr command, convert amount, from, to. """
     if not cconvert.text[0].isalpha() and cconvert.text[0] not in ("/", "#",
