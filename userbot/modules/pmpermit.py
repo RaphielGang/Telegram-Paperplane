@@ -182,12 +182,14 @@ async def approvepm(apprvpm):
 @errors_handler
 async def blockpm(block):
     """ For .block command, block people from PMing you! """
-    await block.edit("`You are gonna be blocked from PM-ing my Master!`")
+    if not is_mongo_alive() or not is_redis_alive():
+        await block.edit("`Database connections failing!`")
+        return
 
     if await block_pm(block.chat_id) is False:
         return await block.edit("`First approve, before blocc'ing`")
     else:
-        return await block.edit("`Blocked.`")
+        await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
         if block.reply_to_msg_id:
             reply = await block.get_reply_message()
@@ -203,9 +205,8 @@ async def blockpm(block):
             name0 = str(aname.first_name)
             uid = block.chat_id
 
-        if not is_mongo_alive() or not is_redis_alive():
-            await block.edit("`Database connections failing!`")
-            return
+        await block.edit("`Blocked.`")
+
         if BOTLOG:
             await block.client.send_message(
                 BOTLOG_CHATID,
