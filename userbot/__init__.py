@@ -68,6 +68,11 @@ WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
 
 YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
 
+REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
+
+TEMP_DOWNLOAD_DIRECTORY = os.environ.get(
+    "TMP_DOWNLOAD_DIRECTORY", "./downloads")
+
 SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
 SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
 BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
