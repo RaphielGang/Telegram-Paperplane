@@ -43,12 +43,12 @@ async def paste(pstl):
 
         if response['isUrl']:
             reply_text = ("`Pasted successfully!`\n\n"
-                            f"`Shortened URL:` {dogbin_final_url}\n\n"
-                            "Original(non-shortened) URLs`\n"
-                            f"`Dogbin URL`: {DOGBIN_URL}v/{key}\n")
+                          f"`Shortened URL:` {dogbin_final_url}\n\n"
+                          "Original(non-shortened) URLs`\n"
+                          f"`Dogbin URL`: {DOGBIN_URL}v/{key}\n")
         else:
             reply_text = ("`Pasted successfully!`\n\n"
-                            f"`Dogbin URL`: {dogbin_final_url}")
+                          f"`Dogbin URL`: {dogbin_final_url}")
     else:
         reply_text = ("`Failed to reach Dogbin`")
 
@@ -92,8 +92,7 @@ async def get_dogbin_content(dog_url):
         resp.raise_for_status()
     except exceptions.HTTPError as HTTPErr:
         await dog_url.edit(
-            "Request returned an unsuccessful status code.\n\n" +
-            str(HTTPErr))
+            "Request returned an unsuccessful status code.\n\n" + str(HTTPErr))
         return
     except exceptions.Timeout as TimeoutErr:
         await dog_url.edit("Request timed out." + str(TimeoutErr))

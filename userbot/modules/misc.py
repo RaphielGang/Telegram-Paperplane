@@ -20,8 +20,8 @@ async def randomise(items):
     """ For .random command, get a random item from the list of items. """
     itemo = (items.text[8:]).split()
     index = randint(1, len(itemo) - 1)
-    await items.edit("**Query: **\n`" + items.text[8:] +
-                        "`\n**Output: **\n`" + itemo[index] + "`")
+    await items.edit("**Query: **\n`" + items.text[8:] + "`\n**Output: **\n`" +
+                     itemo[index] + "`")
 
 
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
@@ -37,8 +37,7 @@ async def sleepybot(time):
         if BOTLOG:
             await time.client.send_message(
                 BOTLOG_CHATID,
-                "You put the bot to sleep for " + str(counter) +
-                " seconds",
+                "You put the bot to sleep for " + str(counter) + " seconds",
             )
         sleep(counter)
 
@@ -57,8 +56,7 @@ async def killdabot(event):
 @register(outgoing=True, pattern="^.restart$")
 @errors_handler
 async def knocksomesense(event):
-    await event.edit("`Hold tight! I just need a second to be back up....`"
-                        )
+    await event.edit("`Hold tight! I just need a second to be back up....`")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
                                         "Bot Restarted")

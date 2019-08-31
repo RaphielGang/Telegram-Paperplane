@@ -48,8 +48,7 @@ async def update_name(name):
         firstname = namesplit[0]
         lastname = namesplit[1]
 
-    await bot(
-        UpdateProfileRequest(first_name=firstname, last_name=lastname))
+    await bot(UpdateProfileRequest(first_name=firstname, last_name=lastname))
     await name.edit(NAME_OK)
 
 
@@ -69,8 +68,7 @@ async def set_profilepic(propic):
 
     if photo:
         try:
-            await bot(
-                UploadProfilePhotoRequest(await bot.upload_file(photo)))
+            await bot(UploadProfilePhotoRequest(await bot.upload_file(photo)))
             os.remove(photo)
             await propic.edit(PP_CHANGED)
         except PhotoCropSizeSmallError:
@@ -117,15 +115,15 @@ async def remove_profilepic(delpfp):
 
     pfplist = await bot(
         GetUserPhotosRequest(user_id=delpfp.from_id,
-                                offset=0,
-                                max_id=0,
-                                limit=lim))
+                             offset=0,
+                             max_id=0,
+                             limit=lim))
     input_photos = []
     for sep in pfplist.photos:
         input_photos.append(
             InputPhoto(id=sep.id,
-                        access_hash=sep.access_hash,
-                        file_reference=sep.file_reference))
+                       access_hash=sep.access_hash,
+                       file_reference=sep.file_reference))
     await bot(DeletePhotosRequest(id=input_photos))
     await delpfp.edit(
         f"`Successfully deleted {len(input_photos)} profile picture(s).`")

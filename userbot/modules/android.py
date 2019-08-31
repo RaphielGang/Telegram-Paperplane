@@ -123,8 +123,7 @@ async def devices_specifications(request):
     brand_page_url = None
     try:
         brand_page_url = [
-            i['href'] for i in all_brands
-            if brand == i.text.strip().lower()
+            i['href'] for i in all_brands if brand == i.text.strip().lower()
         ][0]
     except IndexError:
         await request.edit(f'`{brand} is unknown brand!`')

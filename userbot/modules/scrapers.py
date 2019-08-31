@@ -77,8 +77,8 @@ async def gsearch(q_event):
     for i in search(match, stop=8):
         result += i
         result += "\n"
-    await q_event.edit("**Search Query:**\n`" + match_ +
-                        "`\n\n**Result:**\n" + result)
+    await q_event.edit("**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" +
+                       result)
     if BOTLOG:
         await q_event.client.send_message(
             BOTLOG_CHATID,
@@ -113,8 +113,7 @@ async def wiki(wiki_q):
         if os.path.exists("output.txt"):
             os.remove("output.txt")
         return
-    await wiki_q.edit("**Search:**\n`" + match + "`\n\n**Result:**\n" +
-                        result)
+    await wiki_q.edit("**Search:**\n`" + match + "`\n\n**Result:**\n" + result)
     if BOTLOG:
         await wiki_q.client.send_message(
             BOTLOG_CHATID, f"Wiki query {match} was executed successfully")
@@ -139,9 +138,8 @@ async def urban_dict(ud_e):
         if int(meanlen) >= 4096:
             await ud_e.edit("`Output too large, sending as file.`")
             file = open("output.txt", "w+")
-            file.write("Text: " + query + "\n\nMeaning: " +
-                        mean[0]["def"] + "\n\n" + "Example: \n" +
-                        mean[0]["example"])
+            file.write("Text: " + query + "\n\nMeaning: " + mean[0]["def"] +
+                       "\n\n" + "Example: \n" + mean[0]["example"])
             file.close()
             await ud_e.client.send_file(
                 ud_e.chat_id,
@@ -156,8 +154,7 @@ async def urban_dict(ud_e):
                         mean[0]["example"] + "__")
         if BOTLOG:
             await ud_e.client.send_message(
-                BOTLOG_CHATID,
-                "ud query " + query + " executed successfully.")
+                BOTLOG_CHATID, "ud query " + query + " executed successfully.")
     else:
         await ud_e.edit("No result found for **" + query + "**")
 
@@ -174,15 +171,15 @@ async def text_to_speech(query):
         message = textx.text
     else:
         await query.edit("`Give a text or reply to a "
-                            "message for Text-to-Speech!`")
+                         "message for Text-to-Speech!`")
         return
 
     try:
         gTTS(message, LANG)
     except AssertionError:
         await query.edit('The text is empty.\n'
-                            'Nothing left to speak after pre-precessing, '
-                            'tokenizing and cleaning.')
+                         'Nothing left to speak after pre-precessing, '
+                         'tokenizing and cleaning.')
         return
     except ValueError:
         await query.edit('Language is not supported.')
@@ -199,14 +196,11 @@ async def text_to_speech(query):
         tts = gTTS(message, LANG)
         tts.save("k.mp3")
     with open("k.mp3", "r"):
-        await query.client.send_file(query.chat_id,
-                                        "k.mp3",
-                                        voice_note=True)
+        await query.client.send_file(query.chat_id, "k.mp3", voice_note=True)
         os.remove("k.mp3")
         if BOTLOG:
             await query.client.send_message(
-                BOTLOG_CHATID,
-                "tts of " + message + " executed successfully!")
+                BOTLOG_CHATID, "tts of " + message + " executed successfully!")
         await query.delete()
 
 
@@ -223,7 +217,7 @@ async def translateme(trans):
         message = textx.text
     else:
         await trans.edit("`Give a text or reply "
-                            "to a message to translate!`")
+                         "to a message to translate!`")
         return
 
     try:
@@ -344,7 +338,7 @@ async def download_video(v_url):
 
     if video_stream is None:
         all_streams = video.streams.filter(progressive=True,
-                                            subtype="mp4").all()
+                                           subtype="mp4").all()
         available_qualities = ""
 
         for item in all_streams[:-1]:
@@ -352,9 +346,9 @@ async def download_video(v_url):
         available_qualities += all_streams[-1].resolution
 
         await v_url.edit("**A stream matching your query wasn't found. "
-                            "Try again with different options.\n**"
-                            "**Available Qualities:**\n"
-                            f"{available_qualities}")
+                         "Try again with different options.\n**"
+                         "**Available Qualities:**\n"
+                         f"{available_qualities}")
         return
 
     video_size = video_stream.filesize / 1000000
@@ -362,11 +356,11 @@ async def download_video(v_url):
     if video_size >= 50:
         await v_url.edit(
             ("**File larger than 50MB. Sending the link instead.\n**"
-                f"Get the video [here]({video_stream.url})\n\n"
-                "**If the video plays instead of downloading, "
-                "right click(or long press on touchscreen) and "
-                "press 'Save Video As...'(may depend on the browser) "
-                "to download the video.**"))
+             f"Get the video [here]({video_stream.url})\n\n"
+             "**If the video plays instead of downloading, "
+             "right click(or long press on touchscreen) and "
+             "press 'Save Video As...'(may depend on the browser) "
+             "to download the video.**"))
         return
 
     await v_url.edit("**Downloading...**")

@@ -47,15 +47,14 @@ async def last_fm(lastFM):
     if playing is not None:
         try:
             image = User(LASTFM_USERNAME,
-                            lastfm).get_now_playing().get_cover_image()
+                         lastfm).get_now_playing().get_cover_image()
         except IndexError:
             image = None
             pass
         tags = gettags(isNowPlaying=True, playing=playing)
         rectrack = parse.quote_plus(f"{playing}")
-        rectrack = sub("^",
-                        "https://www.youtube.com/results?search_query=",
-                        rectrack)
+        rectrack = sub("^", "https://www.youtube.com/results?search_query=",
+                       rectrack)
         if image:
             output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
             preview = True
@@ -66,14 +65,13 @@ async def last_fm(lastFM):
         playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
         output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
         for i, track in enumerate(recent):
-            print(
-                i)  # vscode hates the i being there so lets make it chill
+            print(i)  # vscode hates the i being there so lets make it chill
             printable = artist_and_song(track)
             tags = gettags(track)
             rectrack = parse.quote_plus(str(printable))
-            rectrack = sub(
-                "^", "https://www.youtube.com/results?search_query=",
-                rectrack)
+            rectrack = sub("^",
+                           "https://www.youtube.com/results?search_query=",
+                           rectrack)
             output += f"• [{printable}]({rectrack})\n"
             if tags:
                 output += f"`{tags}`\n\n"

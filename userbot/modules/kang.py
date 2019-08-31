@@ -43,7 +43,7 @@ async def kang(args):
                 emoji = message.media.document.attributes[1].alt
                 emojibypass = True
         elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
-                message.media.document.attributes):
+              message.media.document.attributes):
             emoji = message.media.document.attributes[0].alt
             emojibypass = True
             is_anim = True
@@ -117,8 +117,9 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            await bot.forward_messages(
-                                'Stickers', [message.id], args.chat_id)
+                            await bot.forward_messages('Stickers',
+                                                       [message.id],
+                                                       args.chat_id)
                         else:
                             file.seek(0)
                             await conv.send_file(file, force_document=True)
@@ -150,7 +151,7 @@ async def kang(args):
                         return
                 if is_anim:
                     await bot.forward_messages('Stickers', [message.id],
-                                                args.chat_id)
+                                               args.chat_id)
                 else:
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
@@ -177,7 +178,7 @@ doesn't exist! Making a new one!")
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
                     await bot.forward_messages('Stickers', [message.id],
-                                                args.chat_id)
+                                               args.chat_id)
                 else:
                     file.seek(0)
                     await conv.send_file(file, force_document=True)

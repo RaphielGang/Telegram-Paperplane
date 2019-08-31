@@ -60,8 +60,7 @@ async def log(log_text):
             return
         await log_text.edit("`Logged Successfully`")
     else:
-        await log_text.edit(
-            "`This feature requires Logging to be enabled!`")
+        await log_text.edit("`This feature requires Logging to be enabled!`")
     sleep(2)
     await log_text.delete()
 

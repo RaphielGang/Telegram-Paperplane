@@ -168,8 +168,7 @@ async def gdrive_mirror(request):
     reply = ''
     reply_msg = await request.get_reply_message()
     links = re.findall(r'\bhttps?://.*\.\S+', message)
-    if not (links or reply_msg or reply_msg.media
-            or reply_msg.media.document):
+    if not (links or reply_msg or reply_msg.media or reply_msg.media.document):
         reply = "`No links or telegram files found!`\n"
         await request.edit(reply)
         return
@@ -329,8 +328,7 @@ async def upload(u_event):
     await u_event.edit("Processing ...")
     input_str = u_event.pattern_match.group(1)
     if input_str in ("userbot.session", "config.env"):
-        await u_event.edit("`That's a dangerous operation! Not Permitted!`"
-                            )
+        await u_event.edit("`That's a dangerous operation! Not Permitted!`")
         return
     if os.path.exists(input_str):
         start = datetime.now()
@@ -488,8 +486,7 @@ async def uploadas(uas_event):
             end = datetime.now()
             duration = (end - start).seconds
             os.remove(thumb)
-            await uas_event.edit("Uploaded in {} seconds.".format(duration)
-                                    )
+            await uas_event.edit("Uploaded in {} seconds.".format(duration))
         except FileNotFoundError as err:
             await uas_event.edit(str(err))
     else:

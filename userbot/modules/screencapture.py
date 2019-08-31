@@ -29,8 +29,8 @@ async def capture(url):
     sample_url += "?access_key={}&url={}&fullpage={}&format={}&viewport={}"
     input_str = url.pattern_match.group(1)
     response_api = get(
-        sample_url.format(SCREENSHOT_LAYER_ACCESS_KEY, input_str, "1",
-                            "PNG", "2560x1440"),
+        sample_url.format(SCREENSHOT_LAYER_ACCESS_KEY, input_str, "1", "PNG",
+                          "2560x1440"),
         stream=True,
     )
     content_type = response_api.headers["content-type"]

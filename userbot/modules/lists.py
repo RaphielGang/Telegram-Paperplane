@@ -70,8 +70,8 @@ async def removelists(event):
         await event.edit("`Couldn't find list:` **{}**".format(listname))
         return
     else:
-        await event.edit(
-            "`Successfully deleted list:` **{}**".format(listname))
+        await event.edit("`Successfully deleted list:` **{}**".format(listname)
+                         )
 
     if BOTLOG:
         listat = "global storage" if _list['chat_id'] == 0 else str(
@@ -151,8 +151,7 @@ async def add_list_items(event):
         return
 
     if BOTLOG:
-        listat = "global storage" if _list['chat_id'] else str(
-            event.chat_id)
+        listat = "global storage" if _list['chat_id'] else str(event.chat_id)
 
         log = "Added item(s) {newitems.splitlines()} "
         log += f"to {listname} in {listat}."
@@ -195,8 +194,7 @@ async def edit_list_item(event):
         await event.edit(LIST_NOT_FOUND.format(listname))
 
     if BOTLOG:
-        listat = "global storage" if _list['chat_id'] else str(
-            event.chat_id)
+        listat = "global storage" if _list['chat_id'] else str(event.chat_id)
 
         log = "Edited item {item_number} of "
         log += f"{listname} in {listat} successfully."
@@ -249,8 +247,7 @@ Use` ${} `to get the list.`"
         await event.edit(f"List {listname} doesn't exist!")
 
     if BOTLOG:
-        listat = "global storage" if _list['chat_id'] else str(
-            event.chat_id)
+        listat = "global storage" if _list['chat_id'] else str(event.chat_id)
         await event.client.send_message(
             BOTLOG_CHATID,
             f"Removed item {str(item_number)} from {listname} in {listat}")

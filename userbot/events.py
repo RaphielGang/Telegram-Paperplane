@@ -33,7 +33,7 @@ def register(**args):
 
     if "ignore_unsafe" in args:
         del args['ignore_unsafe']
-    
+
     if pattern:
         if not ignore_unsafe:
             args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)

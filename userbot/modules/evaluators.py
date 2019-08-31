@@ -49,19 +49,19 @@ async def evaluate(query):
                     remove("output.txt")
                     return
                 await query.edit("**Query: **\n`"
-                                    f"{expression}"
-                                    "`\n**Result: **\n`"
-                                    f"{evaluation}"
-                                    "`")
+                                 f"{expression}"
+                                 "`\n**Result: **\n`"
+                                 f"{evaluation}"
+                                 "`")
         else:
             await query.edit("**Query: **\n`"
-                                f"{expression}"
-                                "`\n**Result: **\n`No Result Returned/False`")
+                             f"{expression}"
+                             "`\n**Result: **\n`No Result Returned/False`")
     except Exception as err:
         await query.edit("**Query: **\n`"
-                            f"{expression}"
-                            "`\n**Exception: **\n"
-                            f"`{err}`")
+                         f"{expression}"
+                         "`\n**Exception: **\n"
+                         f"`{err}`")
 
     if BOTLOG:
         await query.client.send_message(
@@ -120,14 +120,14 @@ execute. Use .help exec for an example.```")
             remove("output.txt")
             return
         await run_q.edit("**Query: **\n`"
-                            f"{codepre}"
-                            "`\n**Result: **\n`"
-                            f"{result}"
-                            "`")
+                         f"{codepre}"
+                         "`\n**Result: **\n`"
+                         f"{result}"
+                         "`")
     else:
         await run_q.edit("**Query: **\n`"
-                            f"{codepre}"
-                            "`\n**Result: **\n`No Result Returned/False`")
+                         f"{codepre}"
+                         "`\n**Result: **\n`No Result Returned/False`")
 
     if BOTLOG:
         await run_q.client.send_message(

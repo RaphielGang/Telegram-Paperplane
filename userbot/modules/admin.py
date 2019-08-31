@@ -93,8 +93,7 @@ async def set_group_photo(gpic):
 
     if photo:
         try:
-            await EditPhotoRequest(gpic.chat_id, await
-                                    bot.upload_file(photo))
+            await EditPhotoRequest(gpic.chat_id, await bot.upload_file(photo))
             await gpic.edit(CHAT_PP_CHANGED)
 
         except PhotoCropSizeSmallError:
@@ -122,11 +121,11 @@ async def promote(promt):
         return
 
     new_rights = ChatAdminRights(add_admins=True,
-                                    invite_users=True,
-                                    change_info=True,
-                                    ban_users=True,
-                                    delete_messages=True,
-                                    pin_messages=True)
+                                 invite_users=True,
+                                 change_info=True,
+                                 ban_users=True,
+                                 delete_messages=True,
+                                 pin_messages=True)
 
     await promt.edit("`Promoting...`")
 
@@ -138,8 +137,8 @@ async def promote(promt):
 
     # Try to promote if current user is admin or creator
     try:
-        await promt.client(
-            EditAdminRequest(promt.chat_id, user.id, new_rights))
+        await promt.client(EditAdminRequest(promt.chat_id, user.id,
+                                            new_rights))
         await promt.edit("`Promoted Successfully!`")
 
     # If Telethon spit BadRequestError, assume
@@ -190,8 +189,7 @@ async def demote(dmod):
                                 pin_messages=None)
     # Edit Admin Permission
     try:
-        await dmod.client(
-            EditAdminRequest(dmod.chat_id, user.id, newrights))
+        await dmod.client(EditAdminRequest(dmod.chat_id, user.id, newrights))
 
     # If we catch BadRequestError from Telethon
     # Assume we don't have permission to demote
@@ -238,8 +236,8 @@ async def ban(bon):
     await bon.edit("`Whacking the pest!`")
 
     try:
-        await bon.client(
-            EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
+        await bon.client(EditBannedRequest(bon.chat_id, user.id,
+                                           BANNED_RIGHTS))
     except BadRequestError:
         await bon.edit(NO_PERM)
         return
@@ -336,14 +334,12 @@ async def spider(spdr):
     self_user = await spdr.client.get_me()
 
     if user.id == self_user.id:
-        await spdr.edit(
-            "`Mute Error! You are not supposed to mute yourself!`")
+        await spdr.edit("`Mute Error! You are not supposed to mute yourself!`")
         return
 
     # If the targeted user is a Sudo
     if user.id in BRAIN_CHECKER:
-        await spdr.edit("`Mute Error! I am not supposed to mute this user`"
-                        )
+        await spdr.edit("`Mute Error! I am not supposed to mute this user`")
         return
 
     # If everything goes well, do announcing and mute
@@ -590,8 +586,7 @@ async def rm_deletedacc(show):
         if user.deleted:
             try:
                 await show.client(
-                    EditBannedRequest(show.chat_id, user.id,
-                                        BANNED_RIGHTS))
+                    EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
             except ChatAdminRequiredError:
                 await show.edit("`You don't have enough rights.`")
                 return
@@ -711,15 +706,14 @@ async def kick(usr):
     await usr.edit("`Kicking...`")
 
     try:
-        await usr.client(
-            EditBannedRequest(usr.chat_id, user.id, KICK_RIGHTS))
+        await usr.client(EditBannedRequest(usr.chat_id, user.id, KICK_RIGHTS))
         await sleep(.5)
     except BadRequestError:
         await usr.edit(NO_PERM)
         return
     await usr.client(
         EditBannedRequest(usr.chat_id, user.id,
-                            ChatBannedRights(until_date=None)))
+                          ChatBannedRights(until_date=None)))
 
     kmsg = "`Kicked` [{}](tg://user?id={})`!`"
     await usr.edit(kmsg.format(user.first_name, user.id))

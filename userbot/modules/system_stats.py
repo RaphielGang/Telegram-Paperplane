@@ -139,12 +139,12 @@ async def amireallyalive(e):
     else:
         db = "Databases functioning normally!"
     await e.edit("`"
-                    "Your bot is running \n\n"
-                    f"Telethon version: {version.__version__} \n"
-                    f"Python: {python_version()} \n"
-                    f"User: {DEFAULTUSER} \n"
-                    f"Database Status: {db}"
-                    "`")
+                 "Your bot is running \n\n"
+                 f"Telethon version: {version.__version__} \n"
+                 f"Python: {python_version()} \n"
+                 f"User: {DEFAULTUSER} \n"
+                 f"Database Status: {db}"
+                 "`")
 
 
 @register(outgoing=True, pattern="^.aliveu")

@@ -33,7 +33,7 @@ async def gethash(hash_q):
     runapp(["rm", "hashdis.txt"], stdout=PIPE)
     sha512 = sha512.stdout.decode()
     ans = ("Text: `" + hashtxt_ + "`\nMD5: `" + md5 + "`SHA1: `" + sha1 +
-            "`SHA256: `" + sha256 + "`SHA512: `" + sha512[:-1] + "`")
+           "`SHA256: `" + sha256 + "`SHA512: `" + sha512[:-1] + "`")
     if len(ans) > 4096:
         hashfile = open("hashes.txt", "w+")
         hashfile.write(ans)
@@ -55,13 +55,12 @@ async def endecrypt(query):
     if query.pattern_match.group(1) == "en":
         lething = str(
             pybase64.b64encode(bytes(query.pattern_match.group(2),
-                                        "utf-8")))[2:]
+                                     "utf-8")))[2:]
         await query.reply("Encoded: `" + lething[:-1] + "`")
     else:
         lething = str(
-            pybase64.b64decode(bytes(query.pattern_match.group(2),
-                                        "utf-8"),
-                                validate=True))[2:]
+            pybase64.b64decode(bytes(query.pattern_match.group(2), "utf-8"),
+                               validate=True))[2:]
         await query.reply("Decoded: `" + lething[:-1] + "`")
 
 

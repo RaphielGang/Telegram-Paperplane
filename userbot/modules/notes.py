@@ -43,8 +43,8 @@ async def remove_notes(event):
         return
     notename = event.pattern_match.group(1)
     if await delete_note(event.chat_id, notename) is False:
-        return await event.edit(
-            "`Couldn't find note:` **{}**".format(notename))
+        return await event.edit("`Couldn't find note:` **{}**".format(notename)
+                                )
     else:
         return await event.edit(
             "`Successfully deleted note:` **{}**".format(notename))
@@ -81,8 +81,7 @@ async def save_note(event):
     note = event.text[6:]
     note_db = await get_note(event.chat_id, note)
     if not await get_note(event.chat_id, note):
-        return await event.edit(
-            "`Note` **{}** `doesn't exist!`".format(note))
+        return await event.edit("`Note` **{}** `doesn't exist!`".format(note))
     else:
         return await event.edit(" 🔹 **{}** - `{}`".format(
             note, note_db["text"]))

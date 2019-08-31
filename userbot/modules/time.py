@@ -77,8 +77,7 @@ async def time_func(tdata):
         tz_num = saved_tz_num
         timezones = await get_tz(saved_country)
     else:
-        await tdata.edit(
-            f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
+        await tdata.edit(f"`It's`  **{dt.now().strftime(t_form)}**  `here.`")
         return
 
     if not timezones:
@@ -112,7 +111,7 @@ async def time_func(tdata):
 
     if not con and saved_country:
         await tdata.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
-                            f"({time_zone} timezone).`")
+                         f"({time_zone} timezone).`")
         return
 
     await tdata.edit(
@@ -182,11 +181,11 @@ async def date_func(dat):
 
     if not con and saved_country:
         await dat.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
-                        f"({time_zone} timezone).`")
+                       f"({time_zone} timezone).`")
         return
 
-    await dat.edit(
-        f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
+    await dat.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
+                   )
 
 
 @register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
@@ -242,7 +241,7 @@ async def set_time_country(loc):
     await set_time(c_name, tz_num)
 
     await loc.edit("`Default country for date and time set to "
-                    f"{c_name}({tz_name} timezone).`")
+                   f"{c_name}({tz_name} timezone).`")
 
 
 CMD_HELP.update({

@@ -21,8 +21,8 @@ async def fastpurger(purg):
     msgs = []
     count = 0
 
-    async for msg in purg.client.iter_messages(
-            chat, min_id=purg.reply_to_msg_id):
+    async for msg in purg.client.iter_messages(chat,
+                                               min_id=purg.reply_to_msg_id):
         msgs.append(msg)
         count = count + 1
         msgs.append(purg.reply_to_msg_id)
@@ -111,8 +111,8 @@ async def editer(edit):
             break
         i = i + 1
     if BOTLOG:
-        await edit.client.send_message(
-            BOTLOG_CHATID, "Edit query was executed successfully")
+        await edit.client.send_message(BOTLOG_CHATID,
+                                       "Edit query was executed successfully")
 
 
 @register(outgoing=True, pattern="^.sd")
@@ -128,7 +128,7 @@ async def selfdestruct(destroy):
     await smsg.delete()
     if BOTLOG:
         await destroy.client.send_message(BOTLOG_CHATID,
-                                            "sd query done successfully")
+                                          "sd query done successfully")
 
 
 CMD_HELP.update({

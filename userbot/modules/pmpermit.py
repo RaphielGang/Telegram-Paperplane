@@ -167,14 +167,12 @@ async def approvepm(apprvpm):
             name0 = str(aname.first_name)
             uid = apprvpm.chat_id
 
-        await apprvpm.edit(
-            f"[{name0}](tg://user?id={uid}) `approved to PM!`")
+        await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
 
         if BOTLOG:
             await apprvpm.client.send_message(
                 BOTLOG_CHATID,
-                "#APPROVED\n" + "User: " +
-                f"[{name0}](tg://user?id={uid})",
+                "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
             )
 
 
@@ -193,8 +191,8 @@ async def blockpm(block):
 
         if block.reply_to_msg_id:
             reply = await block.get_reply_message()
-            replied_user = await block.client(
-                GetFullUserRequest(reply.from_id))
+            replied_user = await block.client(GetFullUserRequest(reply.from_id)
+                                              )
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             await block.client(BlockRequest(replied_user.user.id))
@@ -220,15 +218,12 @@ async def unblockpm(unblock):
     """ For .unblock command, let people PMing you again! """
     if unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
-        replied_user = await unblock.client(
-            GetFullUserRequest(reply.from_id))
+        replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         if await approve(reply.from_id) is False:
-            return await unblock.edit(
-                "`You haven't blocked this user yet!`")
+            return await unblock.edit("`You haven't blocked this user yet!`")
         else:
-            return await unblock.edit(
-                "`My Master has forgiven you to PM now`")
+            return await unblock.edit("`My Master has forgiven you to PM now`")
 
         await unblock.client(UnblockRequest(replied_user.user.id))
 

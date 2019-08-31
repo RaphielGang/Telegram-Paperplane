@@ -101,8 +101,7 @@ async def kick_marie_filter(event):
         "```Successfully purged bots filters yaay!```\n Gimme cookies!")
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID,
-            "I cleaned all filters at " + str(event.chat_id))
+            BOTLOG_CHATID, "I cleaned all filters at " + str(event.chat_id))
 
 
 @register(outgoing=True, pattern="^.filters$")
@@ -118,10 +117,10 @@ async def filters_active(event):
         if transact == "`There are no filters in this chat.`":
             transact = "Active filters in this chat:\n"
             transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
-                                                    filt["msg"])
+                                                   filt["msg"])
         else:
             transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
-                                                    filt["msg"])
+                                                   filt["msg"])
 
     await event.edit(transact)
 
