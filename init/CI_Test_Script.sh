@@ -61,12 +61,13 @@ lint() {
 
   if ! yapf -d -r -p userbot; then
             yapf -i -r -p userbot
-            git add .
-            git commit -m "[MaestroCI]: Lint" --signoff
+            message=$(git log -1 --pretty=%B)
+            git reset HEAD~1
+            git commit -m "[AUTO-LINT]: ${message}" --signoff
             git remote rm origin
             git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
-            git push --quiet origin $PARSE_BRANCH
-            tg_sendinfo "<code>Code has been linted and Committed</code>"
+            git push -f origin $PARSE_BRANCH
+            tg_sendinfo "<code>Code has been Linted and Force Pushed!</code>"
   else
     tg_sendinfo "<code>Auto-Linter didn't lint anything</code>"
   fi
