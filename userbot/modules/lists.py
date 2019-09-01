@@ -374,39 +374,38 @@ async def getlist_logic(event):
 
 CMD_HELP.update({
     "lists":
-    "\
-.lists\
-\nUsage: Get all of the lists (both local and global)\
-\n\n$<listname>\
-\nUsage: Gets the list with name listname\
-\n\n.addlist <listname> <items>\
-\nUsage: Saves items as a list with the name listname. \
-Separate items with a new line.\
-\n\n.addglist <listname> <items>\
-\nUsage: Saves items as a global list with the name listname. \
-Separate items with a new line. Accessible from every chat.\
-\n\n.dellist <listname>\
-\nUsage: Delete the list with name listname.\
-\n\n.addlistitem(s) <listname> \n\
-<items>\
-\nUsage: Add items to the list listname. \
-Separate items with a new line.\
-The first items must start from a new line.\
-\n\n.rmlistitem <listname> <item_number>\
-\nUsage: Delete the item with the number item_number in the \
-list with the name listname.\
-\n\n.editlistitem <listname> <item_number> <new_content>\
-\nUsage: Edit item item_number in listname, changing the \
-content to new_content\
-\n\n.setlist <listname> <local|global>\
-\nUsage: Change the status of a list to local \
-(accessible only from the current chat), or global \
-(accessible from every chat).\
-\n\n.getlist <listname>\
-\nUsage: Search for and get the list with name listname. \
-\n\n\
-By replying to a Paperplane List message(identified by \
-\n'[Paperplane-List]' in the beginning of a userbot message), \
-\nyou can omit <listname> from all commands (except $<listname>). \
-\nPaperplane will recognize the list from the replied message."
+    ".lists"
+    "\nUsage: Get all of the lists (both local and global)"
+    "\n\n$<listname>"
+    "\nUsage: Gets the list with name listname"
+    "\n\n.addlist <listname> <items>"
+    "\nUsage: Saves items as a list with the name listname. "
+    "Separate items with a new line."
+    "\n\n.addglist <listname> <items>"
+    "\nUsage: Saves items as a global list with the name listname. "
+    "Separate items with a new line. Accessible from every chat."
+    "\n\n.dellist <listname>"
+    "\nUsage: Delete the list with name listname."
+    "\n\n.addlistitem(s) <listname> \n"
+    "<items>"
+    "\nUsage: Add items to the list listname. "
+    "Separate items with a new line. "
+    "The first items must start from a new line."
+    "\n\n.rmlistitem <listname> <item_number>"
+    "\nUsage: Delete the item with the number item_number in the "
+    "list with the name listname."
+    "\n\n.editlistitem <listname> <item_number> <new_content>"
+    "\nUsage: Edit item item_number in listname, changing the "
+    "content to new_content"
+    "\n\n.setlist <listname> <local|global>"
+    "\nUsage: Change the status of a list to local "
+    "(accessible only from the current chat), or global "
+    "(accessible from every chat)."
+    "\n\n.getlist <listname>"
+    "\nUsage: Search for and get the list with name listname. "
+    "\n\n"
+    "By replying to a Paperplane List message(identified by "
+    "\n'[Paperplane-List]' in the beginning of a userbot message), "
+    "\nyou can omit <listname> from all commands (except $<listname>). "
+    "\nPaperplane will recognize the list from the replied message."
 })

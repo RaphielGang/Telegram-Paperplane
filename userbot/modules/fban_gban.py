@@ -197,9 +197,9 @@ async def remove_from_gban(chat):
 
 CMD_HELP.update({
     "gbanall":
-    """.gban\n
-Usage: Reply to a user to ban them in all the bots provided by you!""",
+    ".gban\n"
+    "Usage: Reply to a user to ban them in all the bots provided by you!",
     "fbanall":
-    """.fban\n
-Usage: Reply to a user to fban them in all the groups provided by you!"""
+    ".fban\n"
+    "Usage: Reply to a user to fban them in all the groups provided by you!"
 })
