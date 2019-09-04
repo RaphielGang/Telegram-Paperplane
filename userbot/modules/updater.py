@@ -97,7 +97,7 @@ async def upstream(ups):
 
     await ups.edit('`New update found, updating...`')
     ups_rem.fetch(ac_br)
-    ups_rem.git.reset('--hard', 'FETCH_HEAD')
+    repo.git.reset('--hard', 'FETCH_HEAD')
     await ups.edit('`Successfully Updated!\n'
                    'Bot is restarting... Wait for a second!`')
     await ups.client.disconnect()
