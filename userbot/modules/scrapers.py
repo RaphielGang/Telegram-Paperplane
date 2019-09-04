@@ -12,7 +12,7 @@ from html import unescape
 from re import findall
 from urllib import parse
 from urllib.error import HTTPError
-from googlesearch import search
+from search_engine_parser import GoogleSearch
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googleapiclient.discovery import build
@@ -70,21 +70,35 @@ async def img_sampler(event):
 @errors_handler
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
-    await q_event.edit("`Searching...`")
-    match_ = q_event.pattern_match.group(1)
-    match = parse.quote_plus(match_)
-    result = ""
-    for i in search(match, stop=8):
-        result += i
-        result += "\n"
-    await q_event.edit("**Search Query:**\n`" + match_ + "`\n\n**Result:**\n" +
-                       result)
+    match = q_event.pattern_match.group(1)
+    page = findall(r"page=\d+", match)
+    try:
+        page = page[0]
+        page = page.replace("page=", "")
+        match = match.replace("page=" + page[0], "")
+    except IndexError:
+        page = 1
+    search_args = (str(match), int(page))
+    gsearch = GoogleSearch()
+    gresults = gsearch.search(*search_args)
+    msg = ""
+    for i in range(10):
+        try:
+            title = gresults["titles"][i]
+            link = gresults["links"][i]
+            desc = gresults["descriptions"][i]
+            msg += f"{i}. [{title}]({link})\n`{desc}`\n\n"
+        except IndexError:
+            break
+    await q_event.edit("**Search Query:**\n`" + match +
+                       "`\n\n**Results:**\n" + msg,
+                       link_preview=False)
     if BOTLOG:
         await q_event.client.send_message(
             BOTLOG_CHATID,
-            "Google Search query " + match_ + " was executed successfully",
+            "Google Search query `" + match +
+            "` was executed successfully",
         )
-
 
 @register(outgoing=True, pattern=r"^.wiki (.*)")
 @errors_handler
