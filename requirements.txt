@@ -9,7 +9,6 @@ google-api-python-client
 oauth2client
 google_images_download>=2.7.1
 googletrans>=2.4.0
-git+https://github.com/MarioVilas/googlesearch.git/
 gtts>=2.0.1
 hachoir
 pybase64>=0.4.0
@@ -22,6 +21,7 @@ telegraph
 telethon>=1.9
 urbandict>=0.5
 wikipedia>=1.4.0
+search-engine-parser
 spotify_token
 pymongo[srv]
 redis
