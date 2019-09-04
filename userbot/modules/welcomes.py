@@ -12,7 +12,7 @@ from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChannelParticipantsAdmins, Message
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
-from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
+from userbot.modules.admin import KICK_RIGHTS
 from userbot.events import errors_handler
 
 
@@ -91,11 +91,7 @@ async def welcome_mute(welcm):
                     continue  # Check the next messsage
 
             if spambot:
-                await welcm.reply(
-                    "`Potential Spambot Detected! Kicking away! "
-                    "Will log the ID for further purposes!\n"
-                    f"USER:` [{user.first_name}](tg://user?id={user.id})")
-
+                
                 chat = await welcm.get_chat()
                 admin = chat.admin_rights
                 creator = chat.creator
@@ -106,14 +102,16 @@ async def welcome_mute(welcm):
                         "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
                 else:
                     try:
+                        await welcm.reply(
+                            "`Potential Spambot Detected! Kicking away! "
+                            "Will log the ID for further purposes!\n"
+                            f"USER:` [{user.first_name}](tg://user?id={user.id})")
+                        
                         await welcm.client(
                             EditBannedRequest(welcm.chat_id, user.id,
-                                              BANNED_RIGHTS))
+                                              KICK_RIGHTS))
 
                         await sleep(1)
-                        await welcm.client(
-                            EditBannedRequest(welcm.chat_id, user.id,
-                                              UNBAN_RIGHTS))
 
                     except BaseException:
                         await welcm.reply(
