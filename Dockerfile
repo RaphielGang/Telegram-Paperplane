@@ -11,18 +11,20 @@ RUN apk add --no-cache --update \
     git \
     bash \
     python3 \
-    redis \   
-    py-pillow \
-    py-requests \
+    redis \ 
+    py3-pillow \
+    py3-requests \
     libpq \
     curl \
     sudo \
     neofetch \
     musl \
-    py-tz \
+    py3-tz \
     py3-aiohttp \
-    py-six \
-    py-click
+    py3-six \
+    py3-click \
+    py3-psutil \
+    py3-lxml
 
 RUN python3 -m ensurepip \
     && pip3 install --upgrade pip setuptools \
@@ -39,7 +41,7 @@ RUN git clone -b master https://github.com/RaphielGang/Telegram-UserBot.git /roo
 # !!! NOT FOR PRODUCTION !!!
 # Copy Userbot components from Local
 #
-# COPY . /home/userbot/userbot
+# COPY . /root/userbot
 
 #
 # Make binary folder and include in PATH
