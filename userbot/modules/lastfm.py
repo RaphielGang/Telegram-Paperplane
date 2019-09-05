@@ -28,7 +28,11 @@ ARTIST = 0
 SONG = 0
 USER_ID = 0
 
-BIOPREFIX = BIO_PREFIX
+
+if BIO_PREFIX:
+    BIOPREFIX = BIO_PREFIX
+else:
+    BIOPREFIX = None
 
 LASTFMCHECK = False
 RUNNING = False
@@ -125,7 +129,10 @@ async def get_curr_track(lfmbio):
             if playing is not None and SONG != oldsong and ARTIST != oldartist:
                 environ["oldsong"] = str(SONG)
                 environ["oldartist"] = str(ARTIST)
-                lfmbio = f"{BIOPREFIX} 🎧: {ARTIST} - {SONG}"
+                if BIOPREFIX:
+                    lfmbio = f"{BIOPREFIX} 🎧: {ARTIST} - {SONG}"
+                else:
+                    lfmbio = f"🎧: {ARTIST} - {SONG}"
                 try:
                     if BOTLOG and LastLog:
                         await bot.send_message(
