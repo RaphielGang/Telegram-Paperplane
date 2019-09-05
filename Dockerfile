@@ -51,7 +51,7 @@ WORKDIR /root/userbot/
 #
 # Copies session and config(if it exists)
 #
-COPY ./userbot.session ./config.env* ./client_secrets.json* ./secret.json* /root/userbot/
+COPY ./sample_config.env ./userbot.session* ./config.env* ./client_secrets.json* ./secret.json* /root/userbot/
 
 #
 # Install dependencies
