@@ -65,7 +65,7 @@ lint() {
             message=$(git log -1 --pretty=%B)
             git reset HEAD~1
             git add .
-            git commit -m "[AUTO-LINT]: ${message}" --author ${COMMIT_AUTHOR} --signoff
+            git commit -m "[AUTO-LINT]: ${message}" --author="${COMMIT_AUTHOR}" --signoff
             git remote rm origin
             git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
             git push -f origin $PARSE_BRANCH

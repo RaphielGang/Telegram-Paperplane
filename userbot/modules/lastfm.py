@@ -28,7 +28,6 @@ ARTIST = 0
 SONG = 0
 USER_ID = 0
 
-
 if BIO_PREFIX:
     BIOPREFIX = BIO_PREFIX
 else:

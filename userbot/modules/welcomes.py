@@ -91,7 +91,7 @@ async def welcome_mute(welcm):
                     continue  # Check the next messsage
 
             if spambot:
-                
+
                 chat = await welcm.get_chat()
                 admin = chat.admin_rights
                 creator = chat.creator
@@ -105,8 +105,9 @@ async def welcome_mute(welcm):
                         await welcm.reply(
                             "`Potential Spambot Detected! Kicking away! "
                             "Will log the ID for further purposes!\n"
-                            f"USER:` [{user.first_name}](tg://user?id={user.id})")
-                        
+                            f"USER:` [{user.first_name}](tg://user?id={user.id})"
+                        )
+
                         await welcm.client(
                             EditBannedRequest(welcm.chat_id, user.id,
                                               KICK_RIGHTS))
