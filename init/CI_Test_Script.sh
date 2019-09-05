@@ -15,6 +15,7 @@ PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 COMMIT_HASH="$(git rev-parse --verify HEAD)"
+COMMIT_AUTHOR="$(git log -1 --format='%an <%ae>')"
 REVIEWERS="@baalajimaestro @raphielscape @MrYacha @RealAkito"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
@@ -63,7 +64,8 @@ lint() {
             yapf -i -r -p userbot
             message=$(git log -1 --pretty=%B)
             git reset HEAD~1
-            git commit -m "[AUTO-LINT]: ${message}" --signoff
+            git add .
+            git commit -m "[AUTO-LINT]: ${message}" --author ${COMMIT_AUTHOR} --signoff
             git remote rm origin
             git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
             git push -f origin $PARSE_BRANCH
