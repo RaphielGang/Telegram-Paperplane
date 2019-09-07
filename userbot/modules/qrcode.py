@@ -45,7 +45,7 @@ async def parseqr(qr_e):
         duration, qr_contents))
 
 
-@register(pattern=r".makeqr(?: |$)([\s\S]*)", outgoing=True)
+@register(pattern=r"^.makeqr(?: |$)([\s\S]*)", outgoing=True)
 @errors_handler
 async def make_qr(qrcode):
     """ For .makeqr command, make a QR Code containing the given content. """

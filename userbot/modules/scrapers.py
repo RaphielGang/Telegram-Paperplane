@@ -254,7 +254,7 @@ async def translateme(trans):
         )
 
 
-@register(pattern=".lang (.*)", outgoing=True)
+@register(pattern="^.lang (.*)", outgoing=True)
 @errors_handler
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
@@ -331,7 +331,7 @@ def youtube_search(query,
         return (nexttok, videos)
 
 
-@register(outgoing=True, pattern=r".yt_dl (\S*) ?(\S*)")
+@register(outgoing=True, pattern=r"^.yt_dl (\S*) ?(\S*)")
 @errors_handler
 async def download_video(v_url):
     """ For .yt_dl command, download videos from YouTube. """
@@ -397,7 +397,7 @@ async def download_video(v_url):
     await v_url.delete()
 
 
-@register(outgoing=True, pattern=r".cr (\S*) ?(\S*) ?(\S*)")
+@register(outgoing=True, pattern=r"^.cr (\S*) ?(\S*) ?(\S*)")
 @errors_handler
 async def currency(cconvert):
     """ For .cr command, convert amount, from, to. """

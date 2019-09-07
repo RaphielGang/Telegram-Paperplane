@@ -331,7 +331,7 @@ async def lists_logic(event):
         pass
 
 
-@register(pattern=r".getlist ?(\w*)?")
+@register(pattern=r"^.getlist ?(\w*)?")
 @errors_handler
 async def getlist_logic(event):
     """ For .getlist, get the list by the name. """
