@@ -22,6 +22,7 @@ from userbot.events import register, errors_handler
 @errors_handler
 async def direct_link_generator(request):
     """ direct links generator """
+    await request.edit("`Processing...`")
     textx = await request.get_reply_message()
     message = request.pattern_match.group(1)
     if message:
@@ -29,12 +30,12 @@ async def direct_link_generator(request):
     elif textx:
         message = textx.text
     else:
-        await request.edit("`Usage: .direct <url> <url>`")
+        await request.edit("`Usage: .direct <url>`")
         return
     reply = ''
     links = re.findall(r'\bhttps?://.*\.\S+', message)
     if not links:
-        reply = "No links found!"
+        reply = "`No links found!`"
         await request.edit(reply)
     for link in links:
         if 'drive.google.com' in link:
@@ -165,11 +166,10 @@ def mega_dl(url: str) -> str:
     except IndexError:
         reply = "`No MEGA.nz links found`\n"
         return reply
-    command = f'megadown -q -m {link}'
+    command = f'bin/megadown -q -m {link}'
     result = popen(command).read()
     try:
         data = json.loads(result)
-        print(data)
     except json.JSONDecodeError:
         reply += "`Error: Can't extract the link`\n"
         return reply
@@ -189,7 +189,7 @@ def cm_ru(url: str) -> str:
     except IndexError:
         reply = "`No cloud.mail.ru links found`\n"
         return reply
-    command = f'cmrudl -s {link}'
+    command = f'bin/cmrudl -s {link}'
     result = popen(command).read()
     result = result.splitlines()[-1]
     try:

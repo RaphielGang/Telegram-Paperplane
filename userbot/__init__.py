@@ -10,6 +10,7 @@ from distutils.util import strtobool as sb
 from logging import basicConfig, getLogger, INFO, DEBUG
 from sys import version_info
 
+from pyDownload import Downloader
 import pylast
 import redis
 from dotenv import load_dotenv
@@ -131,6 +132,19 @@ def is_redis_alive():
     except BaseException:
         return False
 
+
+# Download binaries for gen_direct_links module, give correct perms
+if not os.path.exists('bin'):
+    os.mkdir('bin')
+
+url1 = 'https://raw.githubusercontent.com/yshalsager/megadown/master/megadown'
+url2 = 'https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py'
+
+dl1 = Downloader(url=url1, filename="bin/megadown")
+dl1 = Downloader(url=url1, filename="bin/cmrudl")
+
+os.chmod('bin/megadown', 0o755)
+os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
 COUNT_MSG = 0

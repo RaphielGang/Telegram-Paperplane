@@ -13,3 +13,4 @@ userbot/modules/sql_helper/__pycache__/*
 .idea/*
 *secret*
 error.log
+bin/*
