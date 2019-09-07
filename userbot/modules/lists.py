@@ -153,8 +153,9 @@ async def add_list_items(event):
     if BOTLOG:
         listat = "global storage" if _list['chat_id'] else str(event.chat_id)
 
-        log = "Added item(s) {newitems.splitlines()} "
-        log += f"to {listname} in {listat}."
+        log = f"Added item(s) to {listname} in {listat}.\n"
+        log += "New items:\n"
+        log += f"{newitems}"
 
         await event.client.send_message(BOTLOG_CHATID, log)
 
@@ -196,7 +197,7 @@ async def edit_list_item(event):
     if BOTLOG:
         listat = "global storage" if _list['chat_id'] else str(event.chat_id)
 
-        log = "Edited item {item_number} of "
+        log = f"Edited item {item_number} of "
         log += f"{listname} in {listat} successfully."
         await event.client.send_message(BOTLOG_CHATID, log)
 
