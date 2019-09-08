@@ -181,7 +181,7 @@ async def terminal_runner(term):
         remove("output.txt")
         return
 
-    if uid is 0:
+    if uid == 0:
         await term.edit("`" f"{curruser}:~# {command}" f"\n{result}" "`")
     else:
         await term.edit("`" f"{curruser}:~$ {command}" f"\n{result}" "`")
