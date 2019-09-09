@@ -25,7 +25,7 @@ def register(**args):
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
     ignore_unsafe = args.get('ignore_unsafe', False)
-    unsafe_pattern = '^[^/!#@\$A-Za-z]'
+    unsafe_pattern = r'^[^/!#@\$A-Za-z]'
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
