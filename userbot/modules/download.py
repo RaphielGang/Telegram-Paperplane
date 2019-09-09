@@ -10,24 +10,25 @@
     downloading/uploading from/to the server. """
 
 import json
-import os
 import logging
 import mimetypes
+import os
 import re
 import subprocess
 from datetime import datetime
 from io import BytesIO
 from time import sleep
+
 import psutil
-from telethon.tl.types import DocumentAttributeVideo, MessageMediaPhoto
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
 from pyDownload import Downloader
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
+from telethon.tl.types import DocumentAttributeVideo, MessageMediaPhoto
 
-from userbot import LOGS, CMD_HELP, GDRIVE_FOLDER
-from userbot.events import register, errors_handler
+from userbot import CMD_HELP, GDRIVE_FOLDER, LOGS
+from userbot.events import errors_handler, register
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
@@ -144,14 +145,14 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
         file.SetContentFile(filename)
     name = filename.split('/')[-1]
     file.Upload()
-    if not filebuf:
-        os.remove(filename)
     # insert new permission
     file.InsertPermission({
         'type': 'anyone',
         'value': 'anyone',
         'role': 'reader'
     })
+    if not filebuf:
+        os.remove(filename)
     reply = f"[{name}]({file['alternateLink']})\n" \
         f"__Direct link:__ [Here]({file['downloadUrl']})"
     return reply

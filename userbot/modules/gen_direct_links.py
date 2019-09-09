@@ -5,17 +5,18 @@
 #
 """ Userbot module containing various sites direct links generators"""
 
-from os import popen
+import json
 import re
 import urllib.parse
-import json
+from os import popen
 from random import choice
+
 import requests
 from bs4 import BeautifulSoup
 from humanize import naturalsize
 
 from userbot import CMD_HELP
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 
 @register(outgoing=True, pattern=r"^.direct(?: |$)([\s\S]*)")

@@ -14,7 +14,7 @@ from shutil import which
 from telethon import version
 
 from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node

@@ -6,12 +6,13 @@
 # You can find misc modules, which dont fit in anything xD
 """ Userbot module for other small commands. """
 
+import sys
+from os import execl
 from random import randint
 from time import sleep
-from os import execl
-import sys
+
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 
 @register(outgoing=True, pattern="^.random")

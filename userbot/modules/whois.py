@@ -14,7 +14,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from userbot import CMD_HELP
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 

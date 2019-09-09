@@ -11,10 +11,10 @@ import os
 from asyncio import sleep
 from datetime import datetime
 
-from requests import post, get
+from requests import get, post
 
 from userbot import CMD_HELP
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 
 def progress(current, total):

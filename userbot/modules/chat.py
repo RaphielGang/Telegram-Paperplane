@@ -8,8 +8,8 @@ from time import sleep
 
 from telethon.tl.functions.channels import LeaveChannelRequest
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
-from userbot.events import register, errors_handler
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
+from userbot.events import errors_handler, register
 
 
 @register(outgoing=True, pattern="^.userid$")

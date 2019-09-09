@@ -10,8 +10,8 @@ from getpass import getuser
 from os import remove
 from sys import executable
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID
-from userbot.events import register, errors_handler
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from userbot.events import errors_handler, register
 
 
 @register(outgoing=True, pattern="^.eval(?: |$)(.*)")

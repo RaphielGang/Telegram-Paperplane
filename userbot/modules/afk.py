@@ -11,8 +11,8 @@ from telethon.events import StopPropagation
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_MSG, USERS,
                      is_redis_alive)
-from userbot.events import register, errors_handler
-from userbot.modules.dbhelper import is_afk, afk, afk_reason, no_afk
+from userbot.events import errors_handler, register
+from userbot.modules.dbhelper import afk, afk_reason, is_afk, no_afk
 
 
 @register(incoming=True, disable_edited=True)

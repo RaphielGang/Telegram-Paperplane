@@ -14,7 +14,7 @@ import time
 from cowpy import cow
 
 from userbot import CMD_HELP, ZALG_LIST
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 # ================= CONSTANT =================
 METOOSTR = [

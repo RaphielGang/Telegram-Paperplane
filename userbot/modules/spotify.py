@@ -9,9 +9,9 @@ from requests import get
 from telethon.errors import AboutTooLongError
 from telethon.tl.functions.account import UpdateProfileRequest
 
-from userbot import (DEFAULT_BIO, CMD_HELP, BOTLOG, BOTLOG_CHATID, BIO_PREFIX,
+from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
                      SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 # =================== CONSTANT ===================
 SPO_BIO_ENABLED = "`Spotify current music to bio is now enabled.`"

@@ -6,10 +6,10 @@
 """ Userbot module containing commands
     for interacting with dogbin(https://del.dog)"""
 
-from requests import get, post, exceptions
+from requests import exceptions, get, post
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 DOGBIN_URL = "https://del.dog/"
 

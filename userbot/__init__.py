@@ -7,13 +7,13 @@
 
 import os
 from distutils.util import strtobool as sb
-from logging import basicConfig, getLogger, INFO, DEBUG
+from logging import DEBUG, INFO, basicConfig, getLogger
 from sys import version_info
 
-from pyDownload import Downloader
 import pylast
 import redis
 from dotenv import load_dotenv
+from pyDownload import Downloader
 from pymongo import MongoClient
 from requests import get
 from telethon import TelegramClient

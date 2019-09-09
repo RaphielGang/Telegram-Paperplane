@@ -11,8 +11,8 @@ import os
 
 from requests import get
 
-from userbot import SCREENSHOT_LAYER_ACCESS_KEY, CMD_HELP
-from userbot.events import register, errors_handler
+from userbot import CMD_HELP, SCREENSHOT_LAYER_ACCESS_KEY
+from userbot.events import errors_handler, register
 
 
 @register(pattern=r"^.screencapture (.*)", outgoing=True)

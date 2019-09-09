@@ -7,13 +7,14 @@
 This module updates the userbot based on Upstream revision
 """
 
-from os import remove, execl
 import sys
+from os import execl, remove
+
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from userbot import CMD_HELP
-from userbot.events import register, errors_handler
+from userbot.events import errors_handler, register
 
 
 async def gen_chlog(repo, diff):
