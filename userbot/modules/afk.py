@@ -102,7 +102,6 @@ async def set_afk(e):
 async def type_afk_is_not_true(e):
     global COUNT_MSG
     global USERS
-    global AFKREASON
     if not is_redis_alive():
         return
     ISAFK = await is_afk()
