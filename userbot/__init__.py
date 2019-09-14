@@ -51,13 +51,11 @@ API_KEY = os.environ.get("API_KEY", None)
 
 API_HASH = os.environ.get("API_HASH", None)
 
-BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID", "0"))
-
 BOTLOG = sb(os.environ.get("BOTLOG", "False"))
 
-PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
+BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID")) if BOTLOG else 0
 
-CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
+PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
 MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
 
@@ -94,6 +92,27 @@ GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
 
 # pylint: disable=invalid-name
 bot = TelegramClient("userbot", API_KEY, API_HASH)
+
+
+async def check_botlog_chatid():
+    if not BOTLOG:
+        return
+
+    entity = await bot.get_entity(BOTLOG_CHATID)
+    if entity.default_banned_rights.send_messages:
+        LOGS.error(
+            "Your account doesn't have rights to send messages to BOTLOG_CHATID "
+            "group. Check if you typed the Chat ID correctly.")
+        quit(1)
+
+
+with bot:
+    try:
+        bot.loop.run_until_complete(check_botlog_chatid())
+    except:
+        LOGS.error("BOTLOG_CHATID environment variable isn't a "
+                   "valid entity. Check your config.env file.")
+        quit(1)
 
 if os.path.exists("learning-data-root.check"):
     os.remove("learning-data-root.check")
