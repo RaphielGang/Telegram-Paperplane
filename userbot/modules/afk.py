@@ -11,12 +11,11 @@ from telethon.events import StopPropagation
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_MSG, USERS,
                      is_redis_alive)
-from userbot.events import errors_handler, register
+from userbot.events import register
 from userbot.modules.dbhelper import afk, afk_reason, is_afk, no_afk
 
 
 @register(incoming=True, disable_edited=True)
-@errors_handler
 async def mention_afk(mention):
     """ This function takes care of notifying the
      people who mention you that you are AFK."""
@@ -48,8 +47,7 @@ async def mention_afk(mention):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@register(incoming=True)
-@errors_handler
+@register(incoming=True, disable_errors=True)
 async def afk_on_pm(e):
     global USERS
     global COUNT_MSG
@@ -78,7 +76,7 @@ async def afk_on_pm(e):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@register(outgoing=True, pattern="^.afk")
+@register(outgoing=True, disable_errors=True, pattern="^.afk")
 async def set_afk(e):
     if not is_redis_alive():
         await e.edit("`Database connections failing!`")
@@ -98,7 +96,6 @@ async def set_afk(e):
 
 
 @register(outgoing=True)
-@errors_handler
 async def type_afk_is_not_true(e):
     global COUNT_MSG
     global USERS

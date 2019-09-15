@@ -22,7 +22,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 
 from userbot import (BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP, bot,
                      is_mongo_alive, is_redis_alive)
-from userbot.events import errors_handler, register
+from userbot.events import register
 from userbot.modules.dbhelper import (get_gmuted, get_muted, gmute, mute,
                                       ungmute, unmute)
 
@@ -71,8 +71,7 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 # ================================================
 
 
-@register(outgoing=True, pattern="^.setgrouppic$")
-@errors_handler
+@register(outgoing=True, group_only=True, pattern="^.setgrouppic$")
 async def set_group_photo(gpic):
     """ For .setgrouppic command, changes the picture of a group """
     replymsg = await gpic.get_reply_message()
@@ -102,11 +101,7 @@ async def set_group_photo(gpic):
             await gpic.edit(PP_ERROR)
 
 
-@register(outgoing=True, pattern="^.promote(?: |$)(.*)")
-@register(incoming=True,
-          from_users=BRAIN_CHECKER,
-          pattern="^.promote(?: |$)(.*)")
-@errors_handler
+@register(permit_sudo=True, group_only=True, pattern="^.promote(?: |$)(.*)")
 async def promote(promt):
     """ For .promote command, do promote targeted person """
     # Get targeted chat
@@ -137,8 +132,8 @@ async def promote(promt):
 
     # Try to promote if current user is admin or creator
     try:
-        await promt.client(EditAdminRequest(promt.chat_id, user.id,
-                                            new_rights))
+        await promt.client(
+            EditAdminRequest(promt.chat_id, user.id, new_rights, "Admin"))
         await promt.edit("`Promoted Successfully!`")
 
     # If Telethon spit BadRequestError, assume
@@ -155,11 +150,7 @@ async def promote(promt):
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
 
-@register(outgoing=True, pattern="^.demote(?: |$)(.*)")
-@register(incoming=True,
-          from_users=BRAIN_CHECKER,
-          pattern="^.demote(?: |$)(.*)")
-@errors_handler
+@register(permit_sudo=True, group_only=True, pattern="^.demote(?: |$)(.*)")
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     # Admin right check
@@ -189,7 +180,8 @@ async def demote(dmod):
                                 pin_messages=None)
     # Edit Admin Permission
     try:
-        await dmod.client(EditAdminRequest(dmod.chat_id, user.id, newrights))
+        await dmod.client(
+            EditAdminRequest(dmod.chat_id, user.id, newrights, "Admin"))
 
     # If we catch BadRequestError from Telethon
     # Assume we don't have permission to demote
@@ -206,11 +198,9 @@ async def demote(dmod):
             f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
 
 
-@register(outgoing=True, pattern="^.ban(?: |$)(.*)")
-@register(incoming=True, from_users=BRAIN_CHECKER, pattern="^.ban(?: |$)(.*)")
-@errors_handler
+@register(permit_sudo=True, group_only=True, pattern="^.ban(?: |$)(.*)")
 async def ban(bon):
-    """ For .ban command, do "thanos" at targeted person """
+    """ For .ban command, do a ban at targeted person """
     # Here laying the sanity check
     chat = await bon.get_chat()
     admin = chat.admin_rights
@@ -264,13 +254,9 @@ async def ban(bon):
             f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
 
-@register(outgoing=True, pattern="^.unban(?: |$)(.*)")
-@register(incoming=True,
-          from_users=BRAIN_CHECKER,
-          pattern="^.unban(?: |$)(.*)")
-@errors_handler
+@register(permit_sudo=True, group_only=True, pattern="^.unban(?: |$)(.*)")
 async def nothanos(unbon):
-    """ For .unban command, undo "thanos" on target """
+    """ For .unban command, unban the target """
     # Here laying the sanity check
     chat = await unbon.get_chat()
     admin = chat.admin_rights
@@ -304,8 +290,7 @@ async def nothanos(unbon):
         await unbon.edit("`Uh oh my unban logic broke!`")
 
 
-@register(outgoing=True, pattern="^.mute(?: |$)(.*)")
-@errors_handler
+@register(outgoing=True, group_only=True, pattern="^.mute(?: |$)(.*)")
 async def spider(spdr):
     """
     This function is basically muting peeps
@@ -374,8 +359,7 @@ async def spider(spdr):
             in this chat from this person`""")
 
 
-@register(outgoing=True, pattern="^.unmute(?: |$)(.*)")
-@errors_handler
+@register(outgoing=True, group_only=True, pattern="^.unmute(?: |$)(.*)")
 async def unmoot(unmot):
     """ For .unmute command, unmute the target """
     # Admin or creator check
@@ -419,7 +403,7 @@ async def unmoot(unmot):
                 f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
 
 
-@register(incoming=True)
+@register(incoming=True, disable_errors=True)
 async def muter(moot):
     """ Used for deleting the messages of muted people """
     if not is_mongo_alive() or not is_redis_alive():
@@ -456,19 +440,13 @@ async def muter(moot):
             await moot.delete()
 
 
-@register(outgoing=True, pattern="^.ungmute(?: |$)(.*)")
-@errors_handler
+@register(outgoing=True, group_only=True, pattern="^.ungmute(?: |$)(.*)")
 async def ungmoot(un_gmute):
     """ For .ungmute command, ungmutes the target in the userbot """
     # Admin or creator check
     chat = await un_gmute.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
-
-    # If not admin and not creator, return
-    if not admin and not creator:
-        await un_gmute.edit(NO_ADMIN)
-        return
 
     # Check if the function running under SQL mode
     if not is_mongo_alive() or not is_redis_alive():
@@ -498,19 +476,13 @@ async def ungmoot(un_gmute):
                 f"CHAT: {un_gmute.chat.title}(`{un_gmute.chat_id}`)")
 
 
-@register(outgoing=True, pattern="^.gmute(?: |$)(.*)")
-@errors_handler
+@register(outgoing=True, group_only=True, pattern="^.gmute(?: |$)(.*)")
 async def gspider(gspdr):
     """ For .gmute command, gmutes the target in the userbot """
     # Admin or creator check
     chat = await gspdr.get_chat()
     admin = chat.admin_rights
     creator = chat.creator
-
-    # If not admin and not creator, return
-    if not admin and not creator:
-        await gspdr.edit(NO_ADMIN)
-        return
 
     # Check if the function running under SQL mode
     if not is_mongo_alive() or not is_redis_alive():
@@ -542,8 +514,7 @@ async def gspider(gspdr):
                 f"CHAT: {gspdr.chat.title}(`{gspdr.chat_id}`)")
 
 
-@register(outgoing=True, pattern="^.delusers(?: |$)(.*)")
-@errors_handler
+@register(outgoing=True, group_only=True, pattern="^.delusers(?: |$)(.*)")
 async def rm_deletedacc(show):
     """ For .delusers command, clean deleted accounts. """
     con = show.pattern_match.group(1)
@@ -607,13 +578,9 @@ async def rm_deletedacc(show):
     await show.edit(del_status)
 
 
-@register(outgoing=True, pattern="^.adminlist$")
-@errors_handler
+@register(outgoing=True, group_only=True, pattern="^.adminlist$")
 async def get_admin(show):
     """ For .adminlist command, list all of the admins of the chat. """
-    if not show.is_group:
-        await show.edit("Are you sure this is a group?")
-        return
     info = await show.client.get_entity(show.chat_id)
     title = info.title if info.title else "this chat"
     mentions = f'<b>Admins in {title}:</b> \n'
@@ -632,9 +599,7 @@ async def get_admin(show):
     await show.edit(mentions, parse_mode="html")
 
 
-@register(outgoing=True, pattern="^.pin(?: |$)(.*)")
-@register(incoming=True, from_users=BRAIN_CHECKER, pattern="^.pin(?: |$)(.*)")
-@errors_handler
+@register(permit_sudo=True, group_only=True, pattern="^.pin(?: |$)(.*)")
 async def pin(msg):
     # Admin or creator check
     chat = await msg.get_chat()
@@ -678,9 +643,7 @@ async def pin(msg):
             f"LOUD: {not is_silent}")
 
 
-@register(outgoing=True, pattern="^.kick(?: |$)(.*)")
-@register(incoming=True, from_users=BRAIN_CHECKER, pattern="^.kick(?: |$)(.*)")
-@errors_handler
+@register(permit_sudo=True, group_only=True, pattern="^.kick(?: |$)(.*)")
 async def kick(usr):
     """ For .kick command, kick someone from the group using the userbot. """
     # Admin or creator check

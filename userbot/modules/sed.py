@@ -11,7 +11,7 @@ import re
 from sre_constants import error as sre_err
 
 from userbot import CMD_HELP
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 DELIMITERS = ("/", ":", "|", "_")
 
@@ -59,7 +59,6 @@ def separate_sed(sed_string):
 
 
 @register(outgoing=True, pattern="^sed", ignore_unsafe=True)
-@errors_handler
 async def sed(command):
     """ For sed command, use sed on Telegram. """
     sed_result = separate_sed(command.text)

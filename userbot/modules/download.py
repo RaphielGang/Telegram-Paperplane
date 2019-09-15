@@ -28,7 +28,7 @@ from pydrive.drive import GoogleDrive
 from telethon.tl.types import DocumentAttributeVideo, MessageMediaPhoto
 
 from userbot import CMD_HELP, GDRIVE_FOLDER, LOGS
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
@@ -159,7 +159,6 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
 
 
 @register(pattern=r"^.mirror(?: |$)([\s\S]*)", outgoing=True)
-@errors_handler
 async def gdrive_mirror(request):
     """ Download a file and upload to Google Drive """
     message = request.pattern_match.group(1)
@@ -195,7 +194,6 @@ async def gdrive_mirror(request):
 
 
 @register(pattern=r"^.drive(?: |$)(\S*.?\/*.?\.?[A-Za-z0-9]*)", outgoing=True)
-@errors_handler
 async def gdrive(request):
     """ Upload files from server to Google Drive """
     path = request.pattern_match.group(1)
@@ -212,7 +210,6 @@ async def gdrive(request):
 
 
 @register(pattern=r"^.download(?: |$)(.*)", outgoing=True)
-@errors_handler
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
     if target_file.fwd_from:
@@ -241,7 +238,6 @@ async def download(target_file):
 
 
 @register(pattern=r"^.uploadir (.*)", outgoing=True)
-@errors_handler
 async def uploadir(udir_event):
     """ For .uploadir command, allows you to upload
      everything from a folder in the server"""
@@ -317,7 +313,6 @@ async def uploadir(udir_event):
 
 
 @register(pattern=r"^.upload (.*)", outgoing=True)
-@errors_handler
 async def upload(u_event):
     """ For .upload command, allows you to \
     upload a file from the userbot's server """
@@ -401,7 +396,6 @@ def extract_w_h(file):
 
 
 @register(pattern=r"^.uploadas(stream|vn|all) (.*)", outgoing=True)
-@errors_handler
 async def uploadas(uas_event):
     """ For .uploadas command, allows you \
     to specify some arguments for upload. """

@@ -7,11 +7,10 @@
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, is_mongo_alive,
                      is_redis_alive)
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 
 @register(outgoing=True, pattern="^.unmutechat$")
-@errors_handler
 async def unmute_chat(unm_e):
     """ For .unmutechat command, unmute a muted chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -22,7 +21,6 @@ async def unmute_chat(unm_e):
 
 
 @register(outgoing=True, pattern="^.mutechat$")
-@errors_handler
 async def mute_chat(mute_e):
     """ For .mutechat command, mute any chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -37,7 +35,7 @@ async def mute_chat(mute_e):
             str(mute_e.chat_id) + " was silenced.")
 
 
-@register(incoming=True)
+@register(incoming=True, disable_errors=True)
 async def keep_read(message):
     """ The mute logic. """
     if not is_mongo_alive() or not is_redis_alive():

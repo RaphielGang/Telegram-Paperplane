@@ -12,11 +12,10 @@ from random import randint
 from time import sleep
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 
 @register(outgoing=True, pattern="^.random")
-@errors_handler
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
     itemo = (items.text[8:]).split()
@@ -32,7 +31,6 @@ async def randomise(items):
 
 
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
-@errors_handler
 async def sleepybot(time):
     """ For .sleep command, let the userbot snooze for a few second. """
     if " " not in time.pattern_match.group(1):
@@ -50,7 +48,6 @@ async def sleepybot(time):
 
 
 @register(outgoing=True, pattern="^.shutdown$")
-@errors_handler
 async def killdabot(event):
     """ For .shutdown command, shut the bot down."""
     await event.edit("`Goodbye *Windows XP shutdown sound*....`")
@@ -61,7 +58,6 @@ async def killdabot(event):
 
 
 @register(outgoing=True, pattern="^.restart$")
-@errors_handler
 async def knocksomesense(event):
     await event.edit("`Hold tight! I just need a second to be back up....`")
     if BOTLOG:
@@ -75,14 +71,12 @@ async def knocksomesense(event):
 
 
 @register(outgoing=True, pattern="^.support$")
-@errors_handler
 async def bot_support(wannahelp):
     """ For .support command, just returns the group link. """
     await wannahelp.edit("Link Portal: @userbot_support")
 
 
 @register(outgoing=True, pattern="^.repo$")
-@errors_handler
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
     await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")

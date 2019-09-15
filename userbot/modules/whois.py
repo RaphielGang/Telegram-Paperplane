@@ -14,13 +14,12 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from userbot import CMD_HELP
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 
 
 @register(pattern="^.whois(?: |$)(.*)", outgoing=True)
-@errors_handler
 async def who(event):
     """ For .whois command, get info about a user. """
     if event.fwd_from:

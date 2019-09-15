@@ -9,12 +9,11 @@ from asyncio import sleep
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
                      is_redis_alive)
-from userbot.events import errors_handler, register
+from userbot.events import register
 from userbot.modules.dbhelper import add_note, delete_note, get_note, get_notes
 
 
 @register(outgoing=True, pattern="^.saved$")
-@errors_handler
 async def notes_active(event):
     """ For .saved command, list all of the notes saved in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -34,7 +33,6 @@ async def notes_active(event):
 
 
 @register(outgoing=True, pattern=r"^.clear (\w*)")
-@errors_handler
 async def remove_notes(event):
     """ For .clear command, clear note with the given name."""
     if not is_mongo_alive() or not is_redis_alive():
@@ -50,7 +48,6 @@ async def remove_notes(event):
 
 
 @register(outgoing=True, pattern=r"^.save (\w*)")
-@errors_handler
 async def add_filter(event):
     """ For .save command, saves notes in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -71,7 +68,6 @@ async def add_filter(event):
 
 
 @register(outgoing=True, pattern=r"^.note (\w*)")
-@errors_handler
 async def save_note(event):
     """ For .save command, saves notes in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -86,7 +82,10 @@ async def save_note(event):
             note, note_db["text"]))
 
 
-@register(pattern=r"#\w*", disable_edited=True, ignore_unsafe=True)
+@register(pattern=r"#\w*",
+          disable_edited=True,
+          ignore_unsafe=True,
+          disable_errors=True)
 async def note(event):
     """ Notes logic. """
     try:
@@ -103,7 +102,6 @@ async def note(event):
 
 
 @register(outgoing=True, pattern="^.rmnotes (.*)")
-@errors_handler
 async def kick_marie_notes(kick):
     """ For .rmfilters command, allows you to kick all \
         Marie(or her clones) filters from a chat. """

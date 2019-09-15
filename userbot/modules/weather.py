@@ -16,7 +16,7 @@ from pytz import timezone as tz
 from userbot import CMD_HELP
 from userbot import OPEN_WEATHER_MAP_APPID as OWM_API
 from userbot import is_mongo_alive, is_redis_alive
-from userbot.events import errors_handler, register
+from userbot.events import register
 from userbot.modules.dbhelper import get_weather, set_weather
 
 # ===== CONSTANT =====
@@ -40,7 +40,6 @@ async def get_tz(con):
 
 
 @register(outgoing=True, pattern="^.weather(?: |$)(.*)")
-@errors_handler
 async def fetch_weather(weather):
     """ For .weather command, gets the current weather of a city. """
     if len(OWM_API) < 1:
@@ -138,7 +137,6 @@ async def fetch_weather(weather):
 
 
 @register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
-@errors_handler
 async def set_default_city(city):
     """ For .setcity command, change the default
         city for weather command. """

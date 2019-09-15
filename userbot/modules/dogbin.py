@@ -9,13 +9,12 @@
 from requests import exceptions, get, post
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 DOGBIN_URL = "https://del.dog/"
 
 
 @register(outgoing=True, pattern=r"^.paste(?: |$)([\s\S]*)")
-@errors_handler
 async def paste(pstl):
     """ For .paste command, allows using
         dogbin functionality with the command. """
@@ -61,7 +60,6 @@ async def paste(pstl):
 
 
 @register(outgoing=True, pattern="^.get_dogbin_content(?: |$)(.*)")
-@errors_handler
 async def get_dogbin_content(dog_url):
     """ For .get_dogbin_content command,
         fetches the content of a dogbin URL. """

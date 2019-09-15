@@ -29,13 +29,12 @@ from wikipedia.exceptions import DisambiguationError, PageError
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, CURRENCY_API,
                      YOUTUBE_API_KEY, bot)
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 LANG = "en"
 
 
 @register(outgoing=True, pattern="^.img (.*)")
-@errors_handler
 async def img_sampler(event):
     """ For .img command, search and return images matching the query. """
     await event.edit("Processing...")
@@ -69,7 +68,6 @@ async def img_sampler(event):
 
 
 @register(outgoing=True, pattern=r"^.google (.*)")
-@errors_handler
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     match = q_event.pattern_match.group(1)
@@ -103,7 +101,6 @@ async def gsearch(q_event):
 
 
 @register(outgoing=True, pattern=r"^.wiki (.*)")
-@errors_handler
 async def wiki(wiki_q):
     """ For .google command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
@@ -136,7 +133,6 @@ async def wiki(wiki_q):
 
 
 @register(outgoing=True, pattern="^.ud (.*)")
-@errors_handler
 async def urban_dict(ud_e):
     """ For .ud command, fetch content from Urban Dictionary. """
     await ud_e.edit("Processing...")
@@ -176,7 +172,6 @@ async def urban_dict(ud_e):
 
 
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
-@errors_handler
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
     textx = await query.get_reply_message()
@@ -221,7 +216,6 @@ async def text_to_speech(query):
 
 
 @register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)")
-@errors_handler
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     translator = Translator()
@@ -257,7 +251,6 @@ async def translateme(trans):
 
 
 @register(pattern="^.lang (.*)", outgoing=True)
-@errors_handler
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
     global LANG
@@ -269,7 +262,6 @@ async def lang(value):
 
 
 @register(outgoing=True, pattern="^.yt (.*)")
-@errors_handler
 async def yt_search(video_q):
     """ For .yt command, do a YouTube search from Telegram. """
     query = video_q.pattern_match.group(1)
@@ -334,7 +326,6 @@ def youtube_search(query,
 
 
 @register(outgoing=True, pattern=r"^.yt_dl (\S*) ?(\S*)")
-@errors_handler
 async def download_video(v_url):
     """ For .yt_dl command, download videos from YouTube. """
     url = v_url.pattern_match.group(1)
@@ -400,7 +391,6 @@ async def download_video(v_url):
 
 
 @register(outgoing=True, pattern=r"^.cr (\S*) ?(\S*) ?(\S*)")
-@errors_handler
 async def currency(cconvert):
     """ For .cr command, convert amount, from, to. """
     amount = cconvert.pattern_match.group(1)
