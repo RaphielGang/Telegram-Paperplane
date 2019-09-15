@@ -521,13 +521,10 @@ async def rm_deletedacc(show):
     del_u = 0
     del_status = "`No deleted accounts found, Group is cleaned as Hell`"
 
-    if not show.is_group:
-        await show.edit("`This command is only for groups!`")
-        return
-
     if con != "clean":
         await show.edit("`Searching for zombie accounts...`")
-        async for user in show.client.iter_participants(show.chat_id):
+        async for user in show.client.iter_participants(show.chat_id,
+                                                        aggressive=True):
             if user.deleted:
                 del_u += 1
 
@@ -567,7 +564,7 @@ async def rm_deletedacc(show):
             await show.client(
                 EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
             del_u += 1
-
+            await sleep(1)
     if del_u > 0:
         del_status = f"cleaned **{del_u}** deleted account(s)"
 
