@@ -68,9 +68,11 @@ def register(**args):
                         check.chat_id, filter=ChannelParticipantsAdmins):
                     if user.id in BRAIN_CHECKER:
                         return
-
-                # Announce that you are handling the request
-
+            # Avoid non-sudos from triggering the command
+            elif not check.out and check.sender_id not in BRAIN_CHECKER:
+                return
+            # Announce that you are handling the request
+            elif not check.out and check.sender_id in BRAIN_CHECKER and permit_sudo:
                 await check.respond("`Processing Sudo Request!`")
             try:
                 await func(check)
