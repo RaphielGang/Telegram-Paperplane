@@ -18,16 +18,22 @@ async def fastpurger(purg):
     """ For .purge command, purge all messages starting from the reply. """
     chat = await purg.get_input_chat()
     msgs = []
+    itermsg = purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
     count = 0
 
-    async for msg in purg.client.iter_messages(chat,
-                                               min_id=purg.reply_to_msg_id):
-        msgs.append(msg)
-        count = count + 1
-        msgs.append(purg.reply_to_msg_id)
-        if len(msgs) == 100:
-            await purg.client.delete_messages(chat, msgs)
-            msgs = []
+    if purg.reply_to_msg_id is not None:
+        async for msg in itermsg:
+            msgs.append(msg)
+            count = count + 1
+            msgs.append(purg.reply_to_msg_id)
+            if len(msgs) == 100:
+                await purg.client.delete_messages(chat, msgs)
+                msgs = []
+    else:
+        await purg.edit(
+            "`No message specified.`",
+        )
+        return
 
     if msgs:
         await purg.client.delete_messages(chat, msgs)
@@ -128,25 +134,21 @@ async def selfdestruct(destroy):
 
 CMD_HELP.update(
     {'purge': '.purge'
-     '\nUsage: Purge all messages starting from the reply.'})
+              '\nUsage: Purge all messages starting from the reply.'})
 
-CMD_HELP.update({
-    'purgeme':
-    '.purgeme <x>'
-    '\nUsage: Delete x amount of your latest messages.'
-})
+CMD_HELP.update(
+    {'purgeme': '.purgeme <x>'
+                '\nUsage: Delete x amount of your latest messages.'})
 
-CMD_HELP.update({"del": ".del" "\nUsage: Delete the message you replied to."})
+CMD_HELP.update(
+    {'del': '.del'
+            '\nUsage: Delete the message you replied to.'})
 
-CMD_HELP.update({
-    'editme':
-    ".editme <newmessage>"
-    "\nUsage: Edit the text you replied to with newtext."
-})
+CMD_HELP.update(
+    {'editme': '.editme <newmessage>'
+               '\nUsage: Edit the text you replied to with newtext.'})
 
-CMD_HELP.update({
-    'sd':
-    '.sd <x> <message>'
-    "\nUsage: Create a message that self-destructs in x seconds."
-    '\nKeep the seconds under 100 since it puts your bot to sleep.'
-})
+CMD_HELP.update(
+    {'sd': '.sd <x> <message>'
+           "\nUsage: Create a message that self-destructs in x seconds."
+           '\nKeep the seconds under 100 since it puts your bot to sleep.'})
