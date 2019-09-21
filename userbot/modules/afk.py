@@ -24,9 +24,9 @@ async def mention_afk(mention):
     global USERS
     if not is_redis_alive():
         return
-    AFK = await is_afk()
+    IsAway = await is_afk()
     if mention.message.mentioned and not (await mention.get_sender()).bot:
-        if AFK is True:
+        if IsAway is True:
             if mention.sender_id not in USERS:
                 await mention.reply(
                     "Sorry! My boss is AFK due to " + await afk_reason() +
@@ -48,81 +48,81 @@ async def mention_afk(mention):
 
 
 @register(incoming=True, disable_errors=True)
-async def afk_on_pm(e):
+async def afk_on_pm(afk_pm):
     global USERS
     global COUNT_MSG
     if not is_redis_alive():
         return
-    AFK = await is_afk()
-    if e.is_private and not (await e.get_sender()).bot:
-        if AFK is True:
-            if e.sender_id not in USERS:
-                await e.reply(
+    IsAway = await is_afk()
+    if afk_pm.is_private and not (await afk_pm.get_sender()).bot:
+        if IsAway is True:
+            if afk_pm.sender_id not in USERS:
+                await afk_pm.reply(
                     "Sorry! My boss is AFK due to ```" + await afk_reason() +
                     "``` I'll ping him to look into the message soon😉")
-                USERS.update({e.sender_id: 1})
+                USERS.update({afk_pm.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
-            elif e.sender_id in USERS:
-                if USERS[e.sender_id] % 5 == 0:
-                    await e.reply(
+            elif afk_pm.sender_id in USERS:
+                if USERS[afk_pm.sender_id] % 5 == 0:
+                    await afk_pm.reply(
                         "Sorry! But my boss is still not here. "
                         "Try to ping him a little later. I am sorry😖."
                         "He told me he was busy with ```" +
                         await afk_reason() + "```")
-                    USERS[e.sender_id] = USERS[e.sender_id] + 1
+                    USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
-                    USERS[e.sender_id] = USERS[e.sender_id] + 1
+                    USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
 
 
 @register(outgoing=True, disable_errors=True, pattern="^.afk")
-async def set_afk(e):
+async def set_afk(setafk):
     if not is_redis_alive():
-        await e.edit("`Database connections failing!`")
+        await setafk.edit("`Database connections failing!`")
         return
-    message = e.text
+    message = setafk.text
     try:
         AFKREASON = str(message[5:])
     except BaseException:
         AFKREASON = ''
     if not AFKREASON:
         AFKREASON = 'No reason'
-    await e.edit("AFK AF!")
+    await setafk.edit("AFK AF!")
     if BOTLOG:
-        await e.client.send_message(BOTLOG_CHATID, "You went AFK!")
+        await setafk.client.send_message(BOTLOG_CHATID, "You went AFK!")
     await afk(AFKREASON)
     raise StopPropagation
 
 
 @register(outgoing=True)
-async def type_afk_is_not_true(e):
+async def type_afk_is_not_true(notafk):
     global COUNT_MSG
     global USERS
     if not is_redis_alive():
         return
-    ISAFK = await is_afk()
-    if ISAFK is True:
-        await no_afk()
-        x = await e.respond("I'm no longer AFK.")
-        y = await e.respond(
+    IsAway = await is_afk()
+    if IsAway is True:
+        x = await notafk.respond("I'm no longer AFK.")
+        y = await notafk.respond(
             "`You recieved " + str(COUNT_MSG) +
             " messages while you were away. Check log for more details.`" +
             " `This auto-generated message " +
             "shall be self destructed in 2 seconds.`")
+        await no_afk()
         time.sleep(2)
         await x.delete()
         await y.delete()
         if BOTLOG:
-            await e.client.send_message(
+            await notafk.client.send_message(
                 BOTLOG_CHATID,
                 "You've recieved " + str(COUNT_MSG) + " messages from " +
                 str(len(USERS)) + " chats while you were away",
             )
             for i in USERS:
-                name = await e.client.get_entity(i)
+                name = await notafk.client.get_entity(i)
                 name0 = str(name.first_name)
-                await e.client.send_message(
+                await notafk.client.send_message(
                     BOTLOG_CHATID,
                     "[" + name0 + "](tg://user?id=" + str(i) + ")" +
                     " sent you " + "`" + str(USERS[i]) + " messages`",
