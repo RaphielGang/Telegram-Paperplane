@@ -369,23 +369,22 @@ async def getlist_logic(event):
             await event.edit(f"`List {listname} not found!`")
 
 
+# TODO : CLEAN THIS
 CMD_HELP.update({
-    "lists":
-    ".lists"
-    "\nUsage: Get all of the lists (both local and global)"
-    "\n\n$<listname>"
-    "\nUsage: Gets the list with name listname"
-    "\n\n.addlist <listname> <items>"
-    "\nUsage: Saves items as a list with the name listname. "
-    "Separate items with a new line."
-    "\n\n.addglist <listname> <items>"
-    "\nUsage: Saves items as a global list with the name listname. "
-    "Separate items with a new line. Accessible from every chat."
-    "\n\n.dellist <listname>"
-    "\nUsage: Delete the list with name listname."
-    "\n\n.addlistitem(s) <listname> \n"
-    "<items>"
-    "\nUsage: Add items to the list listname. "
+    "lists": ".lists\n"
+             "Usage: Get all of the lists (both local and global)\n\n"
+    "$<listname>"
+    "Usage: Gets the list with name listname\n\n"
+    ".addlist <listname> <items>\n"
+    "Usage: Saves items as a list with the name listname. "
+    "Separate items with a new line.\n\n"
+    ".addglist <listname> <items>\n"
+    "Usage: Saves items as a global list with the name listname. "
+    "Separate items with a new line. Accessible from every chat.\n\n"
+    ".dellist <listname>\n"
+    "Usage: Delete the list with name listname.\n\n"
+    ".addlistitem(s) <listname> <items> \n\n"
+    "Usage: Add items to the list listname. "
     "Separate items with a new line. "
     "The first items must start from a new line."
     "\n\n.rmlistitem <listname> <item_number>"

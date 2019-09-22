@@ -125,7 +125,7 @@ async def pipcheck(pip):
 
 
 @register(outgoing=True, pattern="^.alive$")
-async def amireallyalive(e):
+async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
         db = "Both Mongo and Redis Database seems to be failing!"
     elif not is_mongo_alive():
@@ -134,13 +134,13 @@ async def amireallyalive(e):
         db = "Redis Cache seems to be failing!"
     else:
         db = "Databases functioning normally!"
-    await e.edit("`"
-                 "Your bot is running \n\n"
-                 f"Telethon version: {version.__version__} \n"
-                 f"Python: {python_version()} \n"
-                 f"User: {DEFAULTUSER} \n"
-                 f"Database Status: {db}"
-                 "`")
+    await alive.edit("`"
+                     "Your bot is running \n\n"
+                     f"Telethon version: {version.__version__} \n"
+                     f"Python: {python_version()} \n"
+                     f"User: {DEFAULTUSER} \n"
+                     f"Database Status: {db}"
+                     "`")
 
 
 @register(outgoing=True, pattern="^.aliveu")
@@ -168,17 +168,18 @@ async def amireallyalivereset(ureset):
         await ureset.edit("`" "Successfully reset user for alive!" "`")
 
 
-CMD_HELP.update(
-    {"sysd": ".sysd"
-     "\nUsage: Show system information using neofetch."})
-CMD_HELP.update({"botver": ".botver" "\nUsage: Show the userbot version."})
-CMD_HELP.update(
-    {"pip": ".pip <module(s)>"
-     "\nUsage: Search module(s) in PyPi."})
 CMD_HELP.update({
-    "alive":
-    ".alive"
-    "\nUsage: Check if your bot is working or not. "
-    "Use .aliveu <new_user> to change user name, or .resetalive "
-    "to reset it to default."
+    "sysd": ".sysd\n"
+            "Usage: Show system information using neofetch."})
+CMD_HELP.update({
+    "botver": ".botver\n"
+              "Usage: Show the userbot version."})
+CMD_HELP.update({
+    "pip": ".pip <module(s)>\n"
+           "Usage: Search module(s) in PyPi."})
+CMD_HELP.update({
+    "alive": ".alive\n"
+             "Usage: Check if your bot is working or not. "
+             "Use .aliveu <new_user> to change user name, or .resetalive "
+             "to reset it to default."
 })
