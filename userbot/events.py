@@ -75,8 +75,16 @@ def register(**args):
                 await check.respond("`Processing Sudo Request!`")
             try:
                 await func(check)
+            #
+            # HACK HACK HACK
+            # Raise StopPropagation to Raise StopPropagation
+            # This needed for AFK to working properly
+            # TODO
+            # Rewrite events to not passing all exceptions
+            #
+            except events.StopPropagation:
+                raise events.StopPropagation
             # This is a gay exception and must be passed out. So that it doesnt spam chats
-
             except KeyboardInterrupt:
                 pass
             except BaseException:
