@@ -83,30 +83,27 @@ async def repo_is_here(wannasee):
 
 
 CMD_HELP.update({
-    'random':
-    ".random <item1> <item2> ... <itemN>"
-    "\nUsage: Get a random item from the list of items."
+    'random': ".random <item1> <item2> ... <itemN>\n"
+              "Usage: Get a random item from the list of items."
 })
 
 CMD_HELP.update({
-    'sleep':
-    '.sleep 10'
-    '\nUsage: Userbots get tired too. Let yours snooze for a few seconds.'
+    'sleep': '.sleep 10\n'
+             'Usage: Userbots get tired too. Let yours snooze for a few seconds.'
 })
 
 CMD_HELP.update({
-    "shutdown":
-    ".shutdown"
-    '\nUsage: Sometimes you need to restart your bot. Sometimes you just hope to'
-    "hear Windows XP shutdown sound... but you don't."
+    "shutdown": ".shutdown\n"
+                'Usage: Sometimes you need to restart your bot. Sometimes you just hope to'
+                "hear Windows XP shutdown sound... but you don't."
 })
 
-CMD_HELP.update(
-    {'support': ".support"
-     "\nUsage: If you need help, use this command."})
+CMD_HELP.update({
+    'support': ".support\n"
+               "Usage: If you need help, use this command."
+})
 
 CMD_HELP.update({
-    'repo':
-    '.repo'
-    '\nUsage: If you are curious what makes Paperplane work, this is what you need.'
+    'repo': '.repo\n'
+            'Usage: If you are curious what makes Paperplane work, this is what you need.'
 })

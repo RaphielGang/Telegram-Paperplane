@@ -17,9 +17,8 @@ from userbot.modules.admin import KICK_RIGHTS
 
 @bot.on(ChatAction)
 async def welcome_mute(welcm):
+    ''' Ban a recently joined user if it matches the spammer checking algorithm.'''
     try:
-        ''' Ban a recently joined user if it
-           matches the spammer checking algorithm. '''
         if not WELCOME_MUTE:
             return
         if welcm.user_joined or welcm.user_added:
@@ -128,9 +127,7 @@ async def welcome_mute(welcm):
         pass
 
 
-CMD_HELP.update({
-    'welcome_mute':
-    "If enabled in config.env or env var, "
-    "this module will ban(or inform the admins about) the "
-    "spammer(s) if they match the userbot's algorithm"
-})
+CMD_HELP.update(
+    {'welcome_mute': "If enabled in config.env or env var, "
+                     "this module will ban(or inform the admins about) the "
+                     "spammer(s) if they match the userbot's algorithm"})

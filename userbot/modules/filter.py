@@ -121,6 +121,7 @@ async def filters_active(event):
     await event.edit(transact)
 
 
+# TODO : Clean this
 CMD_HELP.update({
     "filters":
     ".filters"

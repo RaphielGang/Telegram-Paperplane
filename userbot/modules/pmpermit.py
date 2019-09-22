@@ -10,7 +10,7 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
-from userbot import (BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP, COUNT_PM,
+from userbot import (BOTLOG, BOTLOG_CHATID, LogicWorker, CMD_HELP, COUNT_PM,
                      LASTMSG, LOGS, PM_AUTO_BAN, is_mongo_alive,
                      is_redis_alive)
 from userbot.events import register
@@ -31,7 +31,7 @@ async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
     if PM_AUTO_BAN:
-        if event.sender_id in BRAIN_CHECKER:
+        if event.sender_id in LogicWorker:
             return
         if event.is_private and not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
@@ -231,15 +231,26 @@ async def unblockpm(unblock):
 
 
 CMD_HELP.update({
-    "pmpermit":
-    ".approve"
-    "\nUsage: Approve the mentioned/replied person to PM."
-    "\n\n.block"
-    "\nUsage: Block the person from PMing you."
-    "\n\n.unblock"
-    "\nUsage: Unblock the person so they can PM you."
-    "\n\n.notifoff"
-    "\nUsage: Clear any notifications of unapproved PMs."
-    "\n\n.notifon"
-    "\nUsage: Allow notifications for unapproved PMs."
+    "pmpermit": ".approve\n"
+                "Usage: Approve the mentioned/replied person to PM."
+})
+
+CMD_HELP.update({
+    "block": ".block\n"
+             "Usage: Block the person from PMing you."
+})
+
+CMD_HELP.update({
+    "unblock": ".unblock\n"
+               "Usage: Unblock the person so they can PM you."
+})
+
+CMD_HELP.update({
+    "notifoff": ".notifoff\n"
+                "Usage: Clear any notifications of unapproved PMs."
+})
+
+CMD_HELP.update({
+    "notifon": ".notifon\n"
+               "Usage: Allow notifications for unnaproved PMs."
 })

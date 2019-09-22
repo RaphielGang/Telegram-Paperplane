@@ -20,7 +20,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
-from userbot import (BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP, bot,
+from userbot import (BOTLOG, BOTLOG_CHATID, LogicWorker, CMD_HELP, bot,
                      is_mongo_alive, is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import (get_gmuted, get_muted, gmute, mute,
@@ -218,7 +218,7 @@ async def ban(bon):
         return
 
     # If the user is a sudo
-    if user.id in BRAIN_CHECKER:
+    if user.id in LogicWorker:
         await bon.edit("`Ban Error! I am not supposed to ban this user`")
         return
 
@@ -323,7 +323,7 @@ async def spider(spdr):
         return
 
     # If the targeted user is a Sudo
-    if user.id in BRAIN_CHECKER:
+    if user.id in LogicWorker:
         await spdr.edit("`Mute Error! I am not supposed to mute this user`")
         return
 
@@ -443,10 +443,6 @@ async def muter(moot):
 @register(outgoing=True, group_only=True, pattern="^.ungmute(?: |$)(.*)")
 async def ungmoot(un_gmute):
     """ For .ungmute command, ungmutes the target in the userbot """
-    # Admin or creator check
-    chat = await un_gmute.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
 
     # Check if the function running under SQL mode
     if not is_mongo_alive() or not is_redis_alive():
@@ -479,10 +475,6 @@ async def ungmoot(un_gmute):
 @register(outgoing=True, group_only=True, pattern="^.gmute(?: |$)(.*)")
 async def gspider(gspdr):
     """ For .gmute command, gmutes the target in the userbot """
-    # Admin or creator check
-    chat = await gspdr.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
 
     # Check if the function running under SQL mode
     if not is_mongo_alive() or not is_redis_alive():
@@ -495,7 +487,7 @@ async def gspider(gspdr):
         return
 
     # If the targeted user is a SUDO
-    if user.id in BRAIN_CHECKER:
+    if user.id in LogicWorker:
         await gspdr.edit("`Gmute Error! Couldn't gmute this user`")
         return
 
@@ -659,7 +651,7 @@ async def kick(usr):
         return
 
     # If the targeted user is a Sudo
-    if user.id in BRAIN_CHECKER:
+    if user.id in LogicWorker:
         await usr.edit("`Kick Error! I am not supposed to kick this user`")
         return
 
@@ -729,7 +721,7 @@ async def get_user_from_id(user, event):
 
     return user_obj
 
-
+# TODO : Clean this
 CMD_HELP.update(
     {"promote": "Usage: Reply to message with .promote to promote them."})
 CMD_HELP.update({"ban": "Usage: Reply to message with .ban to ban them."})

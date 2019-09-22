@@ -16,7 +16,7 @@ from traceback import format_exc
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
-from userbot import BRAIN_CHECKER, bot
+from userbot import LogicWorker, bot
 
 
 def register(**args):
@@ -62,16 +62,16 @@ def register(**args):
             # Check if the sudo is an admin already, if yes, we can avoid acting to his command.
             #If his admin was limited, its his problem.
 
-            if not check.out and check.sender_id in BRAIN_CHECKER and permit_sudo:
+            if not check.out and check.sender_id in LogicWorker and permit_sudo:
                 async for user in check.client.iter_participants(
                         check.chat_id, filter=ChannelParticipantsAdmins):
-                    if user.id in BRAIN_CHECKER:
+                    if user.id in LogicWorker:
                         return
             # Avoid non-sudos from triggering the command
-            elif not check.out and check.sender_id not in BRAIN_CHECKER:
+            elif not check.out and check.sender_id not in LogicWorker:
                 return
             # Announce that you are handling the request
-            elif not check.out and check.sender_id in BRAIN_CHECKER and permit_sudo:
+            elif not check.out and check.sender_id in LogicWorker and permit_sudo:
                 await check.respond("`Processing Sudo Request!`")
             try:
                 await func(check)
