@@ -23,6 +23,8 @@ from userbot.modules.dbhelper import get_weather, set_weather
 INV_PARAM = "`Invalid parameters. Try again!`"
 NO_API_KEY = "`Get an API key from` https://openweathermap.org/ `first.`"
 DB_FAILED = "`Database connections failed!`"
+
+
 # ====================
 async def get_tz(con):
     """
@@ -120,7 +122,8 @@ async def fetch_weather(weather):
         return temp[0]
 
     def sun(unix):
-        suntime = datetime.fromtimestamp(unix, tz=ctimezone).strftime("%I:%M %p")
+        suntime = datetime.fromtimestamp(unix,
+                                         tz=ctimezone).strftime("%I:%M %p")
         return suntime
 
     await weather.edit(
@@ -192,11 +195,13 @@ async def set_default_city(city):
 
 
 CMD_HELP.update({
-    "weather": ".weather <city> or .weather <city>, <country name/code>\n"
-               "Usage: Gets the weather of a city."
+    "weather":
+    ".weather <city> or .weather <city>, <country name/code>\n"
+    "Usage: Gets the weather of a city."
 })
 
 CMD_HELP.update({
-    "weather": ".setcity <city> or .setcity <city>, <country name/code>\n"
-               "Usage: Sets your default city so you can just use .weather."
+    "weather":
+    ".setcity <city> or .setcity <city>, <country name/code>\n"
+    "Usage: Sets your default city so you can just use .weather."
 })

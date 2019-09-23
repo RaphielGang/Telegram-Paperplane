@@ -371,8 +371,9 @@ async def getlist_logic(event):
 
 # TODO : CLEAN THIS
 CMD_HELP.update({
-    "lists": ".lists\n"
-             "Usage: Get all of the lists (both local and global)\n\n"
+    "lists":
+    ".lists\n"
+    "Usage: Get all of the lists (both local and global)\n\n"
     "$<listname>"
     "Usage: Gets the list with name listname\n\n"
     ".addlist <listname> <items>\n"

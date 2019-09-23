@@ -721,6 +721,7 @@ async def get_user_from_id(user, event):
 
     return user_obj
 
+
 # TODO : Clean this
 CMD_HELP.update(
     {"promote": "Usage: Reply to message with .promote to promote them."})

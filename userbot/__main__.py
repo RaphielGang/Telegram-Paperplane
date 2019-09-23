@@ -38,8 +38,8 @@ LOGS.info("Your Bot is alive! Test it by typing .alive on any chat."
           " Should you need assistance, head to https://t.me/userbot_support")
 LOGS.info("Your Bot Version is 4.0")
 
-SEM_TEST=os.environ.get("SEMAPHORE",None)
-if not SEM_TEST:
+SEM_TEST = os.environ.get("SEMAPHORE", None)
+if SEM_TEST:
     bot.disconnect()
 else:
     bot.run_until_disconnected()

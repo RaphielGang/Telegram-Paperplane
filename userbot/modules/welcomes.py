@@ -127,7 +127,9 @@ async def welcome_mute(welcm):
         pass
 
 
-CMD_HELP.update(
-    {'welcome_mute': "If enabled in config.env or env var, "
-                     "this module will ban(or inform the admins about) the "
-                     "spammer(s) if they match the userbot's algorithm"})
+CMD_HELP.update({
+    'welcome_mute':
+    "If enabled in config.env or env var, "
+    "this module will ban(or inform the admins about) the "
+    "spammer(s) if they match the userbot's algorithm"
+})
