@@ -32,7 +32,7 @@ get_session() {
 }
 
 test_run() {
-    python3 -m userbot test
+    python3 -m userbot
     STATUS=${?}
     export STATUS
 }
@@ -58,9 +58,9 @@ lint() {
   git config --global user.email "baalajimaestro@raphielgang.org"
   git config --global user.name "baalajimaestro"
 
-RESULT = yapf -d -r -p userbot
+RESULT=`yapf -d -r -p userbot`
 
-  if ! $RESULT; then
+  if [ ! -z "$RESULT" ]; then
             yapf -i -r -p userbot
             message=$(git log -1 --pretty=%B)
             git reset HEAD~1

@@ -408,51 +408,57 @@ def deEmojify(inputString):
 
 
 CMD_HELP.update({
-    'img': ".img <search_query>\n"
-           "Usage: Does an image search on Google and shows two images."
+    'img':
+    ".img <search_query>\n"
+    "Usage: Does an image search on Google and shows two images."
 })
 
-CMD_HELP.update({
-    'google': ".google <search_query>\n"
-              "Usage: Does a search on Google."})
+CMD_HELP.update(
+    {'google': ".google <search_query>\n"
+     "Usage: Does a search on Google."})
+
+CMD_HELP.update(
+    {'wiki': ".wiki <search_query>\n"
+     "Usage: Does a Wikipedia search."})
+
+CMD_HELP.update(
+    {'ud': ".ud <search_query>\n"
+     "Usage: Does a search on Urban Dictionary."})
 
 CMD_HELP.update({
-    'wiki': ".wiki <search_query>\n"
-    "Usage: Does a Wikipedia search."})
-
-CMD_HELP.update({
-    'ud': ".ud <search_query>\n"
-    "Usage: Does a search on Urban Dictionary."})
-
-CMD_HELP.update({
-    'tts': ".tts <text> or reply to someones text with .trt\n"
+    'tts':
+    ".tts <text> or reply to someones text with .trt\n"
     "Usage: Translates text to speech for the default language which is set."
 })
 
 CMD_HELP.update({
-    'trt': ".trt <text> or reply to someones text with .trt\n"
-           "Usage: Translates text to the default language which is set."
+    'trt':
+    ".trt <text> or reply to someones text with .trt\n"
+    "Usage: Translates text to the default language which is set."
 })
 
 CMD_HELP.update({
-    'lang': ".lang <lang>\n"
-            "Usage: Changes the default language of"
-            "userbot scrapers used for Google TRT, "
-            "TTS may not work."
+    'lang':
+    ".lang <lang>\n"
+    "Usage: Changes the default language of"
+    "userbot scrapers used for Google TRT, "
+    "TTS may not work."
+})
+
+CMD_HELP.update(
+    {'yt': ".yt <search_query>\n"
+     "Usage: Does a YouTube search. "})
+
+CMD_HELP.update({
+    'yt_dl':
+    ".yt_dl <url> <quality>(optional)\n"
+    "Usage: Download videos from YouTube. "
+    "If no quality is specified, the highest downloadable quality is "
+    "downloaded. Will send the link if the video is larger than 50 MB."
 })
 
 CMD_HELP.update({
-    'yt': ".yt <search_query>\n"
-          "Usage: Does a YouTube search. "})
-
-CMD_HELP.update({
-    'yt_dl': ".yt_dl <url> <quality>(optional)\n"
-             "Usage: Download videos from YouTube. "
-             "If no quality is specified, the highest downloadable quality is "
-             "downloaded. Will send the link if the video is larger than 50 MB."
-})
-
-CMD_HELP.update({
-    'cr': ".cr <from> <to>\n"
-          "Usage: Currency converter, converts <from> to <to>."
+    'cr':
+    ".cr <from> <to>\n"
+    "Usage: Currency converter, converts <from> to <to>."
 })

@@ -190,15 +190,12 @@ async def terminal_runner(term):
         )
 
 
+CMD_HELP.update({"eval": ".eval 2 + 3\n" "Usage: Evalute mini-expressions."})
+CMD_HELP.update(
+    {"exec": ".exec print('hello')\n"
+     "Usage: Execute small Python scripts."})
 CMD_HELP.update({
-    "eval": ".eval 2 + 3\n"
-            "Usage: Evalute mini-expressions."
-})
-CMD_HELP.update({
-    "exec": ".exec print('hello')\n"
-            "Usage: Execute small Python scripts."
-})
-CMD_HELP.update({
-    "term": ".term <command>\n"
+    "term":
+    ".term <command>\n"
     "Usage: Run bash commands and scripts on your server."
 })

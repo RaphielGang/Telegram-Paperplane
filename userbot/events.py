@@ -65,7 +65,7 @@ def register(**args):
             if permit_sudo and not check.out:
                 if check.sender_id in LogicWorker:
                     async for user in check.client.iter_participants(
-                        check.chat_id, filter=ChannelParticipantsAdmins):
+                            check.chat_id, filter=ChannelParticipantsAdmins):
                         if user.id in LogicWorker:
                             return
                 else:
@@ -124,10 +124,9 @@ def register(**args):
 
                     ftext += "\n\n\nLast 5 commits:\n"
 
-                    process = await asyncsubshell(
-                        command,
-                        stdout=asyncsub.PIPE,
-                        stderr=asyncsub.PIPE)
+                    process = await asyncsubshell(command,
+                                                  stdout=asyncsub.PIPE,
+                                                  stderr=asyncsub.PIPE)
                     stdout, stderr = await process.communicate()
                     result = str(stdout.decode().strip()) \
                         + str(stderr.decode().strip())
