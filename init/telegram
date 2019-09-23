@@ -14,6 +14,8 @@ export TELEGRAM
 MAINGROUP_ID="-1001372533112"
 BUILDSCAPERER_ID="-1001192834712"
 DEBUG_ID="-1001200493978"
+COMMIT_HASH="$(git rev-parse --verify HEAD)"
+COMMIT_AUTHOR="$(git log -1 --format='%an <%ae>')"
 
 # Graphics Interchange Format Assets
 Start_Asset="CAADBAADHwEAArznMw8iLJLuDeQskAI"
@@ -74,17 +76,6 @@ tg_channelcast() {
     -t $BOT_API_KEY
 }
 
-# Debugcasting
-tg_debugcast() {
-    "${TELEGRAM}" -c ${DEBUG_ID} -H \
-    "$(
-		for POST in "${@}"; do
-			echo "${POST}"
-		done
-    )" \
-    -t $BOT_API_KEY
-}
-
 kickstart_pub() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
      tg_sendinfo "I am starting build" \
@@ -103,18 +94,4 @@ kickstart_pub() {
     " " \
     "<b>CI Link: </b> https://semaphoreci.com/baalajimaestro/telegram-userbot"
 fi
-}
-
-kickstart_priv() {
-    tg_buildmain_sendgif
-
-    tg_debugcast "Compiler <code>${COMPILER_USED}</code>" \
-    "Device <b>${DEVICE}</b>" \
-    "Branch <code>${PARSE_BRANCH}</code>" \
-    "Commit Point <code>${COMMIT_POINT}</code>" \
-    "Under <code>$(hostname)</code>" \
-    "Started on <code>$(whoami)</code>"
-
-    tg_debugcast "This ${COMPILER_USED} build will not producing any binaries" \
-                "This is internal build"
 }
