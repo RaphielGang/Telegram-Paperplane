@@ -70,9 +70,8 @@ comment()
 
 tg_yay() {
   if [ -n "$PULL_REQUEST_NUMBER" ]; then
-
-      tg_sendinfo "<code>Compilation Success! Checking for Lint Issues before it can be merged!</code>"
-      RESULT=$(yapf -d -r -p userbot)
+    tg_sendinfo "<code>Compilation Success! Checking for Lint Issues before it can be merged!</code>"
+    RESULT=$(yapf -d -r -p userbot)
       if ! $RESULT; then
         tg_sendinfo "<code>PR has Lint Problems, </code>${REVIEWERS}<code> review it before merging</code>"
         comment "$PULL_REQUEST_NUMBER" "This is MaestroCI Automation Service! Your PR has lint issues, you could wait for our reviewers to manally review and merge it or apply the below said fixes for an auto-merge
@@ -85,9 +84,8 @@ tg_yay() {
         tg_sendinfo "<code>PR $PULL_REQUEST_NUMBER has been merged!"
         exit 0
       fi
-   fi
-    tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
-    lint
+    fi
+    tg_sendinfo "<code>Compilation Success!</code>"
 }
 
 # Fin Prober
