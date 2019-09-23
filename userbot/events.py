@@ -62,14 +62,15 @@ def register(**args):
             # Check if the sudo is an admin already, if yes, we can avoid acting to his command.
             #If his admin was limited, its his problem.
 
-            if not check.out and check.sender_id in LogicWorker and permit_sudo:
-                async for user in check.client.iter_participants(
+            if permit_sudo and not check.out:
+                if check.sender_id in LogicWorker:
+                    async for user in check.client.iter_participants(
                         check.chat_id, filter=ChannelParticipantsAdmins):
-                    if user.id in LogicWorker:
-                        return
-            # Avoid non-sudos from triggering the command
-            elif not check.out and check.sender_id not in LogicWorker:
-                return
+                        if user.id in LogicWorker:
+                            return
+                else:
+                    print("BOYEEEEE")
+                    return
             # Announce that you are handling the request
             elif not check.out and check.sender_id in LogicWorker and permit_sudo:
                 await check.respond("`Processing Sudo Request!`")
