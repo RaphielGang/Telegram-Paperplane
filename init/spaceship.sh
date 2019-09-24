@@ -14,14 +14,12 @@
 PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
-REVIEWERS="@baalajimaestro @raphielscape @MrYacha @RealAkito"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
 kickstart_pub
 
 req_install() {
     pip3 install --upgrade setuptools pip
-    pip3 install -r requirements.txt
     pip3 install yapf
 }
 
@@ -40,32 +38,11 @@ tg_senderror() {
         tg_sendinfo "<code>This PR is having build issues and won't be merged until its fixed<code>"
         exit 1
     fi
-    tg_sendinfo "<code>Build Throwing Error(s)</code>" \
-        "${REVIEWERS} please look in!" \
-        "Logs: https://semaphoreci.com/baalajimaestro/telegram-userbot"
+    tg_sendinfo "<code>Build Throwing Error(s)</code>"
 
     [ -n "${STATUS}" ] &&
     exit "${STATUS}" ||
     exit 1
-}
-
-merge()
-{
-    curl \
-        -X PUT \
-        -H "Authorization: token $GH_PERSONAL_TOKEN" \
-        -d '{"merge_method":"squash"}' \
-        "https://api.github.com/repos/RaphielGang/Telegram-UserBot/pulls/$1/merge"
-}
-
-comment()
-{
-  curl \
-  -s \
-  -H "Authorization: token ${GH_PERSONAL_TOKEN}" \
-  -X POST \
-  -d "{ body: $2 }" \
-  "https://api.github.com/repos/RaphielGang/Telegram-UserBot/issues/$1/comments"
 }
 
 tg_yay() {
@@ -73,15 +50,10 @@ tg_yay() {
     tg_sendinfo "<code>Compilation Success! Checking for Lint Issues before it can be merged!</code>"
     RESULT=$(yapf -d -r -p userbot)
       if ! $RESULT; then
-        tg_sendinfo "<code>PR has Lint Problems, </code>${REVIEWERS}<code> review it before merging</code>"
-        comment "$PULL_REQUEST_NUMBER" "This is MaestroCI Automation Service! Your PR has lint issues, you could wait for our reviewers to manally review and merge it or apply the below said fixes for an auto-merge
-        $RESULT"
+        tg_sendinfo "<code>PR has Lint Problems, review it before merging</code>"
         exit 1
       else
-        tg_sendinfo "<code>PR didn't have any Lint Problems, auto-merging!</code>"
-        comment "$PULL_REQUEST_NUMBER" "This is MaestroCI, this PR seems to have no lint issues, or any other problems, thank you for your contribution!"
-        merge "$PULL_REQUEST_NUMBER"
-        tg_sendinfo "<code>PR $PULL_REQUEST_NUMBER has been merged!"
+        tg_sendinfo "<code>PR didn't have any Lint Problems</code>"
         exit 0
       fi
     fi

@@ -1,0 +1,13 @@
+kind: pipeline
+name: Paperplane CI
+
+steps:
+- name : Commit Testings
+  image: baalajimaestro/userbot_python:latest
+  environment:
+    BOT_API_KEY:
+      from_secret: BOT_API_KEY
+    PULL_LINK:
+      from_secret: YEET
+  commands:
+    - ./init/spaceship.sh
