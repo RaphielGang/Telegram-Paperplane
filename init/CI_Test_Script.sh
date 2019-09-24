@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.b (the "License");
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
 # CI Runner Script for baalajimaestro's userbot
@@ -15,13 +15,16 @@ PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 COMMIT_HASH="$(git rev-parse --verify HEAD)"
+COMMIT_AUTHOR="$(git log -1 --format='%an <%ae>')"
+REVIEWERS="@baalajimaestro @raphielscape @MrYacha @RealAkito"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
 kickstart_pub
 
 req_install() {
+    pip3 install --upgrade setuptools pip
     pip3 install -r requirements.txt
-    pip3 install pep8 autopep8
+    pip3 install yapf
 }
 
 get_session() {
@@ -29,12 +32,10 @@ get_session() {
 }
 
 test_run() {
-    python3 -m userbot test
+    python3 -m userbot
     STATUS=${?}
     export STATUS
 }
-
-# Nuke Trap, coz it not working
 
 tg_senderror() {
     if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
@@ -42,7 +43,7 @@ tg_senderror() {
         exit 1
     fi
     tg_sendinfo "<code>Build Throwing Error(s)</code>" \
-        "@baalajimaestro @raphielscape @MrYacha please look in!" \
+        "${REVIEWERS} please look in!" \
         "Logs: https://semaphoreci.com/baalajimaestro/telegram-userbot"
 
     [ -n "${STATUS}" ] &&
@@ -54,29 +55,62 @@ lint() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
     exit 0
   fi
-  num_errors_before=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
-  echo $num_errors_before
-  git config --global user.email "baalajimaestro@computer4u.com"
+  git config --global user.email "baalajimaestro@raphielgang.org"
   git config --global user.name "baalajimaestro"
-  find . -name \*.py -exec autopep8 --recursive --aggressive --aggressive --in-place {} +
-  num_errors_after=`find . -name \*.py -exec pycodestyle --ignore=E402 {} + | wc -l`
-  echo $num_errors_after
-  if [ "$num_errors_after" -lt "$num_errors_before" ]; then
+
+RESULT=`yapf -d -r -p userbot`
+
+  if [ ! -z "$RESULT" ]; then
+            yapf -i -r -p userbot
+            message=$(git log -1 --pretty=%B)
+            git reset HEAD~1
             git add .
-            git commit -m "[MaestroCI]: Lint"
+            git commit -m "[AUTO-LINT]: ${message}" --author="${COMMIT_AUTHOR}" --signoff
             git remote rm origin
             git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
-            git push --quiet origin $PARSE_BRANCH
-            tg_sendinfo "<code>Code has been linted and Committed</code>"
+            git push -f origin $PARSE_BRANCH
+            tg_sendinfo "<code>Code has been Linted and Force Pushed!</code>"
   else
     tg_sendinfo "<code>Auto-Linter didn't lint anything</code>"
   fi
-tg_sendinfo "<code>$num_errors_after code problems detected, but couldn't be auto-linted</code>"
 }
+
+merge()
+{
+    curl \
+        -X PUT \
+        -H "Authorization: token $GH_PERSONAL_TOKEN" \
+        -d '{"merge_method":"squash"}' \
+        "https://api.github.com/repos/RaphielGang/Telegram-UserBot/pulls/$1/merge"
+}
+
+comment()
+{
+  curl \
+  -s \
+  -H "Authorization: token ${GH_PERSONAL_TOKEN}" \
+  -X POST \
+  -d "{"body": "$2"}" \
+  "https://api.github.com/repos/RaphielGang/Telegram-UserBot/issues/$1/comments"
+}
+
 tg_yay() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
-      tg_sendinfo "<code>Compilation Success! This PR will be merged if there aren't any lint issues! Check Stickler's Build Status for more!"
-      exit 0
+
+      tg_sendinfo "<code>Compilation Success! Checking for Lint Issues before it can be merged!</code>"
+      RESULT = yapf -d -r -p userbot
+      if ! $RESULT; then
+        tg_sendinfo "<code>PR has Lint Problems, </code>${REVIEWERS}<code> review it before merging</code>"
+        comment $PULL_REQUEST_NUMBER "This is MaestroCI Automation Service! Your PR has lint issues, you could wait for our reviewers to manally review and merge it or apply the below said fixes for an auto-merge
+        $RESULT"
+        exit 1
+      else
+        tg_sendinfo "<code>PR didn't have any Lint Problems, auto-merging!</code>"
+        comment $PULL_REQUEST_NUMBER  "This is MaestroCI, this PR seems to have no lint issues, or any other problems, thank you for your contribution!"
+        merge $PULL_REQUEST_NUMBER
+        tg_sendinfo "<code>PR $PULL_REQUEST_NUMBER has been merged!"
+        exit 0
+      fi
    fi
     tg_sendinfo "<code>Compilation Success! Auto-Linter Starting up!</code>"
     lint

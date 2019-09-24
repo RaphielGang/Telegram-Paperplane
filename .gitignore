@@ -12,3 +12,5 @@ userbot/modules/sql_helper/__pycache__/*
 .vscode/*
 .idea/*
 *secret*
+error.log
+bin/*

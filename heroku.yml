@@ -2,4 +2,4 @@ build:
   docker:
     worker: Dockerfile
 run:
-  worker: dash init/start.sh
+  worker: bash init/start.sh
