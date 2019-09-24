@@ -16,7 +16,7 @@ PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
 COMMIT_HASH="$(git rev-parse --verify HEAD)"
 COMMIT_AUTHOR="$(git log -1 --format='%an <%ae>')"
-REVIEWERS="@baalajimaestro @raphielscape @MrYacha @RealAkito"
+REVIEWERS="@RealAkito"
 LINT_ALLOWED_BRANCHES="staging dev/haruka"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
