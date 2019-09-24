@@ -74,10 +74,10 @@ async def bot_ver(event):
                              "`Revision: "
                              f"{revout}"
                              "` \n"
-                             "`Tagged Version: r4.0`")
+                             "`Tagged Version: r4.0-Haruka!`")
         else:
             await event.edit(
-                "Shame that you don't have git, You're running r4.0 anyway")
+                "Shame that you don't have git, You're running r4.0-Haruka! anyway")
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
@@ -135,7 +135,7 @@ async def amireallyalive(alive):
     else:
         db = "Databases functioning normally!"
     await alive.edit("`"
-                     "Your bot is running \n\n"
+                     "Haruka! Userbot is running \n\n"
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
