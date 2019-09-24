@@ -418,15 +418,15 @@ CMD_HELP.update({
 
 CMD_HELP.update({
     'wiki': ".wiki <search_query>\n"
-    "Usage: Does a Wikipedia search."})
+            "Usage: Does a Wikipedia search."})
 
 CMD_HELP.update({
     'ud': ".ud <search_query>\n"
-    "Usage: Does a search on Urban Dictionary."})
+          "Usage: Does a search on Urban Dictionary."})
 
 CMD_HELP.update({
     'tts': ".tts <text> or reply to someones text with .trt\n"
-    "Usage: Translates text to speech for the default language which is set."
+           "Usage: Translates text to speech for the default language which is set."
 })
 
 CMD_HELP.update({

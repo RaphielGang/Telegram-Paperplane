@@ -61,13 +61,13 @@ def register(**args):
             if permit_sudo and not check.out:
                 if check.sender_id in LogicWorker:
                     async for user in check.client.iter_participants(
-                        check.chat_id, filter=ChannelParticipantsAdmins):
+                            check.chat_id, filter=ChannelParticipantsAdmins):
                         if user.id in LogicWorker:
                             return
                     # Announce that you are handling the request
                     await check.respond("`Processing Sudo Request!`")
                 else:
-                    return                
+                    return
 
             try:
                 await func(check)
