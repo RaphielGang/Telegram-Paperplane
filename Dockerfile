@@ -3,7 +3,7 @@ FROM baalajimaestro/userbot_python:latest
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
 
-RUN git clone https://github.com/MyPaperPlane/Telegram-UserBot.git -b dev/haruka/ /app
+RUN git clone https://github.com/MyPaperPlane/Telegram-UserBot.git -b dev/haruka /app
 
 #
 # Copies session and config(if it exists)
