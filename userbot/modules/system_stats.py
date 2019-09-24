@@ -77,7 +77,8 @@ async def bot_ver(event):
                              "`Tagged Version: r4.0-Haruka!`")
         else:
             await event.edit(
-                "Shame that you don't have git, You're running r4.0-Haruka! anyway")
+                "Shame that you don't have git, You're running r4.0-Haruka! anyway"
+            )
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")

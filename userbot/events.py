@@ -67,7 +67,7 @@ def register(**args):
                     # Announce that you are handling the request
                     await check.respond("`Processing Sudo Request!`")
                 else:
-                    return                
+                    return
 
             try:
                 await func(check)
