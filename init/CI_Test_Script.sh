@@ -55,7 +55,7 @@ merge()
         -X PUT \
         -H "Authorization: token $GH_PERSONAL_TOKEN" \
         -d '{"merge_method":"squash"}' \
-        "https://api.github.com/repos/RaphielGang/Telegram-UserBot/pulls/$1/merge"
+        "https://api.github.com/repos/MyPaperPlane/Telegram-UserBot/pulls/$1/merge"
 }
 
 comment()
@@ -65,7 +65,7 @@ comment()
   -H "Authorization: token ${GH_PERSONAL_TOKEN}" \
   -X POST \
   -d "{ body: $2 }" \
-  "https://api.github.com/repos/RaphielGang/Telegram-UserBot/issues/$1/comments"
+  "https://api.github.com/repos/MyPaperPlane/Telegram-UserBot/issues/$1/comments"
 }
 
 tg_yay() {
