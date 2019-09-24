@@ -119,8 +119,8 @@ if os.path.exists("learning-data-root.check"):
 else:
     LOGS.info("Braincheck file does not exist, fetching...")
 
-URL = 'https://raw.githubusercontent.com/RaphielGang/'
-URL += 'databasescape/master/learning-data-root.check'
+URL = 'https://raw.githubusercontent.com/MyPaperplane/'
+URL += 'binaries-download/master/learning-data-root.check'
 
 with open('learning-data-root.check', 'wb') as load:
     load.write(get(URL).content)
