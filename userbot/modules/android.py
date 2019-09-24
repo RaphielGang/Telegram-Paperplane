@@ -13,10 +13,7 @@ from requests import get
 from userbot import CMD_HELP
 from userbot.events import register
 
-<<<<<<< HEAD
-=======
 GITHUB = 'https://github.com'
->>>>>>> 4a2b038ce01d24620793fbff8f4b1989cbc736a4
 DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
                'certified-android-devices/master/devices.json'
 
