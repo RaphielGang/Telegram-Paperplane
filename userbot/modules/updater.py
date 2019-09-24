@@ -26,7 +26,7 @@ async def gen_chlog(repo, diff):
 
 
 async def is_off_br(br):
-    off_br = ['haruka']
+    off_br = ['dev/haruka']
     if br in off_br:
         return 1
     return
