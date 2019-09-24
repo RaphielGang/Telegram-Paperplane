@@ -8,7 +8,7 @@
 #
 # Telegram command container
 
-TELEGRAM=$SEMAPHORE_PROJECT_DIR/init/telegramapi
+TELEGRAM=/drone/src/init/telegramapi
 export TELEGRAM
 
 # Caster configurations
