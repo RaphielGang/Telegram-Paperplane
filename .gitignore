@@ -14,3 +14,4 @@ userbot/modules/sql_helper/__pycache__/*
 *secret*
 error.log
 bin/*
+userbot/modules/haruka_secret.py

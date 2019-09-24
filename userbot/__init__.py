@@ -70,6 +70,8 @@ YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", None)
 
 REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
 
+PM_LOG_ALLOW = os.environ.get("PM_LOG_ALLOW", None)
+
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
 
