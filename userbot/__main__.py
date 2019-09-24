@@ -6,12 +6,12 @@
 """ Userbot start point """
 
 from importlib import import_module
+from os import environ
 from sqlite3 import connect
-from sys import argv
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
-from userbot import LogicWorker, LOGS, bot
+from userbot import LOGS, LogicWorker, bot
 from userbot.modules import ALL_MODULES
 
 DB = connect("learning-data-root.check")
@@ -38,7 +38,8 @@ LOGS.info("Your Bot is alive! Test it by typing .alive on any chat."
           " Should you need assistance, head to https://t.me/userbot_support")
 LOGS.info("Your Bot Version is 4.0")
 
-if len(argv) not in (1, 3, 4):
+CI_TEST = environ.get("CI", None)
+if CI_TEST:
     bot.disconnect()
 else:
     bot.run_until_disconnected()

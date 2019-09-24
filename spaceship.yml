@@ -11,5 +11,6 @@ steps:
       from_secret: YEET
     API_KEY: 17349
     API_HASH: 344583e45741c457fe1862106095a5eb
+    CI: True
   commands:
     - ./init/spaceship.sh
