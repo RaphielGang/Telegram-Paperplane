@@ -364,6 +364,77 @@ async def afk_reason():
 async def no_afk():
     REDIS.delete('is_afk')
 
+# Spotify
+async def sfsetartist(artist):
+    REDIS.set('sfartist', artist)
+
+async def sfsetsong(song):
+    REDIS.set('sfsong', song)
+
+async def spotifycheck(spotifychck):
+    REDIS.set('spotifycheck', spotifychck)
+
+async def exceptionexist(olexception):
+    REDIS.set('exceptionexist', olexception)
+
+async def sfgetsong():
+    return strb(REDIS.get('sfsong'))
+
+async def sfgetartist():
+    return strb(REDIS.get('sfartist'))
+
+async def getexception():
+    exceptcheck = REDIS.get('exceptionexist')
+    if exceptcheck is True:
+        return True
+
+    return False
+
+async def getspotifycheck():
+    spotifychk = REDIS.get('spotifycheck')
+    if spotifychk is True:
+        return True
+
+    return False
+
+# LastFM
+async def lfsetartist(artist):
+    REDIS.set('lfartist', artist)
+
+async def lfsetsong(song):
+    REDIS.set('lfsong', song)
+
+async def setlastfmcheck(lastfmcheck):
+    REDIS.set('lastfmcheck', lastfmcheck)
+
+async def setuserID(userid):
+    REDIS.set('userid', userid)
+
+async def lfsetLogging(log):
+    REDIS.set('lflog', log)
+
+async def lfgetartist():
+    return strb(REDIS.get('lfartist'))
+
+async def lfgetsong():
+    return strb(REDIS.get('lfsong'))
+
+async def getlastfmcheck():
+    lastcheck = REDIS.get('lastfmcheck')
+    if lastcheck is True:
+        return True
+
+    return False
+
+async def getuserID():
+    return REDIS.get('userid')
+
+async def lfgetLogging():
+    loggingup = REDIS.get('lflog')
+    if loggingup is True:
+        return True
+
+    return False
 
 # Fbans
 

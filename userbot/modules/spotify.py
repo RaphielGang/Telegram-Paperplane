@@ -10,8 +10,11 @@ from telethon.errors import AboutTooLongError
 from telethon.tl.functions.account import UpdateProfileRequest
 
 from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
-                     SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
+                     SPOTIFY_PASS, SPOTIFY_USERNAME, bot, is_redis_alive)
 from userbot.events import register
+from userbot.modules.dbhelper import (exceptionexist, getspotifycheck,
+                                      sfgetartist, sfgetsong, sfsetartist,
+                                      sfsetsong, spotifycheck)
 
 # =================== CONSTANT ===================
 SPO_BIO_ENABLED = "`Spotify current music to bio is now enabled.`"
@@ -27,13 +30,6 @@ ARTIST = 0
 SONG = 0
 
 BIOPREFIX = BIO_PREFIX
-
-SPOTIFYCHECK = False
-RUNNING = False
-OLDEXCEPT = False
-PARSE = False
-
-
 # ================================================
 async def get_spotify_token():
     sptoken = st.start_session(USERNAME, PASSWORD)
@@ -42,34 +38,29 @@ async def get_spotify_token():
 
 
 async def update_spotify_info():
-    global ARTIST
-    global SONG
-    global PARSE
-    global SPOTIFYCHECK
-    global RUNNING
-    global OLDEXCEPT
     oldartist = ""
     oldsong = ""
-    while SPOTIFYCHECK:
+    while await getspotifycheck():
         try:
-            RUNNING = True
             spftoken = environ.get("spftoken", None)
             hed = {'Authorization': 'Bearer ' + spftoken}
             url = 'https://api.spotify.com/v1/me/player/currently-playing'
             response = get(url, headers=hed)
             data = loads(response.content)
             artist = data['item']['album']['artists'][0]['name']
+            await sfsetartist(artist)
             song = data['item']['name']
-            OLDEXCEPT = False
+            await sfsetsong(song)
+            await exceptionexist(False)
             oldsong = environ.get("oldsong", None)
             if song != oldsong and artist != oldartist:
                 oldartist = artist
-                environ["oldsong"] = song
-                spobio = BIOPREFIX + " 🎧: " + artist + " - " + song
+                environ["oldsong"] = await sfgetsong()
+                spobio = f"{BIOPREFIX} 🎧: {await sfgetartist()} - {await sfgetsong()}"
                 try:
                     await bot(UpdateProfileRequest(about=spobio))
                 except AboutTooLongError:
-                    short_bio = "🎧: " + song
+                    short_bio = f"🎧: {await sfgetsong()}"
                     await bot(UpdateProfileRequest(about=short_bio))
                 environ["errorcheck"] = "0"
         except KeyError:
@@ -77,21 +68,20 @@ async def update_spotify_info():
             if errorcheck == 0:
                 await update_token()
             elif errorcheck == 1:
-                SPOTIFYCHECK = False
+                await spotifycheck(False)
                 await bot(UpdateProfileRequest(about=DEFAULT_BIO))
                 print(ERROR_MSG)
                 if BOTLOG:
                     await bot.send_message(BOTLOG_CHATID, ERROR_MSG)
         except JSONDecodeError:
-            OLDEXCEPT = True
+            await exceptionexist(True)
             await sleep(6)
             await bot(UpdateProfileRequest(about=DEFAULT_BIO))
         except TypeError:
             await dirtyfix()
-        SPOTIFYCHECK = False
+        await spotifycheck(False)
         await sleep(2)
         await dirtyfix()
-    RUNNING = False
 
 
 async def update_token():
@@ -103,16 +93,18 @@ async def update_token():
 
 
 async def dirtyfix():
-    global SPOTIFYCHECK
-    SPOTIFYCHECK = True
+    await spotifycheck(True)
     await sleep(4)
     await update_spotify_info()
 
 
 @register(outgoing=True, pattern="^.enablespotify$")
 async def set_biostgraph(setstbio):
+    if not is_redis_alive():
+        setstbio.edit("Who forgot their Redis?")
+        return
     setrecursionlimit(700000)
-    if not SPOTIFYCHECK:
+    if await getspotifycheck() is False:
         environ["errorcheck"] = "0"
         await setstbio.edit(SPO_BIO_ENABLED)
         await get_spotify_token()
@@ -123,10 +115,10 @@ async def set_biostgraph(setstbio):
 
 @register(outgoing=True, pattern="^.disablespotify$")
 async def set_biodgraph(setdbio):
-    global SPOTIFYCHECK
-    global RUNNING
-    SPOTIFYCHECK = False
-    RUNNING = False
+    if not is_redis_alive():
+        setdbio.edit("Who forgot their Redis?")
+        return
+    await spotifycheck(False)
     await bot(UpdateProfileRequest(about=DEFAULT_BIO))
     await setdbio.edit(SPO_BIO_DISABLED)
 
