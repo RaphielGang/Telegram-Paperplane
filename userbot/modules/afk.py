@@ -28,18 +28,23 @@ async def mention_afk(mention):
     if mention.message.mentioned and not (await mention.get_sender()).bot:
         if IsAway is True:
             if mention.sender_id not in USERS:
+                if await afk_reason() == 'No reason':
+                    reason = '\n'
+                    busy_with = ''
+                else:
+                    reason = f"due to {await afk_reason()}"
+                    busy_with = f"busy with {await afk_reason()}"
                 await mention.reply(
-                    "Sorry! My boss is AFK due to " + await afk_reason() +
-                    ". Would ping him to look into the message soon😉")
+                    f"Sorry! My boss is AFK {reason}"
+                    "I'll ping to look into the message soon😉")
                 USERS.update({mention.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif mention.sender_id in USERS:
                 if USERS[mention.sender_id] % 5 == 0:
                     await mention.reply(
                         "Sorry! But my boss is still not here. "
-                        "Try to ping him a little later. I am sorry😖."
-                        "He told me he was busy with ```" +
-                        await afk_reason() + "```")
+                        "Try to ping a little later. I am sorry😖."
+                        f"He told me he was {busy_with}")
                     USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
@@ -57,18 +62,23 @@ async def afk_on_pm(afk_pm):
     if afk_pm.is_private and not (await afk_pm.get_sender()).bot:
         if IsAway is True:
             if afk_pm.sender_id not in USERS:
+                if await afk_reason() == 'No reason':
+                    reason = '\n'
+                    busy_with = ''
+                else:
+                    reason = f"due to {await afk_reason()}"
+                    busy_with = f"busy with {await afk_reason()}"
                 await afk_pm.reply(
-                    "Sorry! My boss is AFK due to ```" + await afk_reason() +
-                    "``` I'll ping him to look into the message soon😉")
+                    f"Sorry! My boss is AFK {reason}"
+                    "I'll ping to look into the message soon😉")
                 USERS.update({afk_pm.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif afk_pm.sender_id in USERS:
                 if USERS[afk_pm.sender_id] % 5 == 0:
                     await afk_pm.reply(
                         "Sorry! But my boss is still not here. "
-                        "Try to ping him a little later. I am sorry😖."
-                        "He told me he was busy with ```" +
-                        await afk_reason() + "```")
+                        "Try to ping a little later. I am sorry😖."
+                        f"He told me he was {busy_with}")
                     USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
