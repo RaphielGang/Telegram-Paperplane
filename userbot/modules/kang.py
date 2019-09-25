@@ -33,16 +33,19 @@ async def kang(args):
     emoji = ""
     await args.edit("`Kanging...`")
     if message and message.media:
+        # For kanging regular images
         if isinstance(message.media, MessageMediaPhoto):
             photo = io.BytesIO()
             photo = await bot.download_media(message.photo, photo)
         elif "image" in message.media.document.mime_type.split('/'):
             photo = io.BytesIO()
             await bot.download_file(message.media.document, photo)
+            # For kanging other sticker
             if (DocumentAttributeFilename(file_name='sticker.webp') in
                     message.media.document.attributes):
                 emoji = message.media.document.attributes[1].alt
                 emojibypass = True
+        # For kanging Animated Stickers
         elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
               message.media.document.attributes):
             await bot.download_file(message.media.document, 'AnimatedSticker.tgs')
