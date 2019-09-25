@@ -13,7 +13,7 @@ from shutil import which
 
 from telethon import version
 
-from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot import CMD_HELP, is_mongo_alive, is_redis_alive, runningInDocker
 from userbot.events import register
 
 # ================= CONSTANT =================
@@ -122,16 +122,6 @@ async def pipcheck(pip):
                                "`\n**Result: **\n`No Result Returned/False`")
         else:
             await pip.edit("`Use .help pip to see an example`")
-
-
-def runningInDocker():
-    with open('/proc/self/cgroup', 'r') as procfile:
-        for line in procfile:
-            stripsplit = line.strip().split('/')
-            if 'docker' in stripsplit:
-                return True
-
-    return False
 
 
 @register(outgoing=True, pattern="^.alive$")

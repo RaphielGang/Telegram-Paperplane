@@ -11,7 +11,7 @@ from os import execl
 from random import randint
 from time import sleep
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, runningInDocker
 from userbot.events import register
 
 
@@ -59,6 +59,10 @@ async def killdabot(event):
 
 @register(outgoing=True, pattern="^.restart$")
 async def knocksomesense(event):
+    """ Restart the bot, this doesn't working on Docker """
+    if runningInDocker() is True:
+        event.edit("`You can't restart on Docker! Manually restart the bot from your host`")
+        return
     await event.edit("`Hold tight! I just need a second to be back up....`")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
