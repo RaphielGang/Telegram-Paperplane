@@ -159,6 +159,16 @@ def is_redis_alive():
         return False
 
 
+def runningInDocker():
+    with open('/proc/self/cgroup', 'r') as procfile:
+        for line in procfile:
+            stripsplit = line.strip().split('/')
+            if 'docker' in stripsplit:
+                return True
+
+    return False
+
+
 # Download binaries for gen_direct_links module, give correct perms
 if not os.path.exists('bin'):
     os.mkdir('bin')
