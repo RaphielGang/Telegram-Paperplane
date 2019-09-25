@@ -5,13 +5,13 @@
 #
 """ Userbot module for getting the weather of a city. """
 
-import json
 from datetime import datetime
+from json import loads
 
-import requests
-from pytz import country_names as c_n
-from pytz import country_timezones as c_tz
+from pytz import country_names as countryname
+from pytz import country_timezones as countrytz
 from pytz import timezone as tz
+from requests import get
 
 from userbot import CMD_HELP
 from userbot import OPEN_WEATHER_MAP_APPID as OWM_API
@@ -24,17 +24,19 @@ INV_PARAM = "`Invalid parameters. Try again!`"
 NO_API_KEY = "`Get an API key from` https://openweathermap.org/ `first.`"
 DB_FAILED = "`Database connections failed!`"
 # ====================
+
+
 async def get_tz(con):
     """
     Get time zone of the given country.
     Credits: @aragon12 and @zakaryan2004.
     """
-    for c_code in c_n:
-        if con == c_n[c_code]:
-            return tz(c_tz[c_code][0])
+    for c_code in countryname:
+        if con == countryname[c_code]:
+            return tz(countrytz[c_code][0])
     try:
-        if c_n[con]:
-            return tz(c_tz[con][0])
+        if countryname[con]:
+            return tz(countrytz[con][0])
     except KeyError:
         return
 
@@ -46,22 +48,24 @@ async def fetch_weather(weather):
         await weather.edit(NO_API_KEY)
         return
 
-    OpenWeatherAPI = OWM_API
-    saved_props = await get_weather() if is_mongo_alive() else None
+    saved_props = await get_weather() \
+        if is_mongo_alive() \
+        else None
 
     if not weather.pattern_match.group(1):
         if 'weather_city' in saved_props:
             city = saved_props['weather_city']
         else:
-            await weather.edit("`Please specify a city or set one as default.`"
-                               )
+            await weather.edit(
+                "`Please specify a city or set one as default.`")
             return
     else:
         city = weather.pattern_match.group(1)
 
     timezone_countries = {
         timezone: country
-        for country, timezones in c_tz.items() for timezone in timezones
+        for country, timezones in countrytz.items()
+        for timezone in timezones
     }
 
     if "," in city:
@@ -77,9 +81,9 @@ async def fetch_weather(weather):
                 return
             city = newcity[0].strip() + "," + countrycode.strip()
 
-    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OpenWeatherAPI}'
-    request = requests.get(url)
-    result = json.loads(request.text)
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OWM_API}'
+    request = get(url)
+    result = loads(request.text)
 
     if request.status_code != 200:
         await weather.edit(INV_PARAM)
@@ -98,9 +102,9 @@ async def fetch_weather(weather):
     wind = result['wind']['speed']
     winddir = result['wind']['deg']
 
-    ctimezone = tz(c_tz[country][0])
+    ctimezone = tz(countrytz[country][0])
     time = datetime.now(ctimezone).strftime("%A, %I:%M %p")
-    fullc_n = c_n[f"{country}"]
+    fullc_n = countryname[f"{country}"]
     # dirs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
     #        "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
     dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
@@ -120,7 +124,8 @@ async def fetch_weather(weather):
         return temp[0]
 
     def sun(unix):
-        suntime = datetime.fromtimestamp(unix, tz=ctimezone).strftime("%I:%M %p")
+        suntime = datetime.fromtimestamp(
+            unix, tz=ctimezone).strftime("%I:%M %p")
         return suntime
 
     await weather.edit(
@@ -137,28 +142,25 @@ async def fetch_weather(weather):
 
 
 @register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
-async def set_default_city(city):
+async def set_default_city(defcity):
     """ For .setcity command, change the default
         city for weather command. """
     if not is_mongo_alive() or not is_redis_alive():
-        await city.edit(DB_FAILED)
+        await defcity.edit(DB_FAILED)
         return
 
     if OWM_API is None:
-        await city.edit(NO_API_KEY)
+        await defcity.edit(NO_API_KEY)
         return
 
-    OpenWeatherAPI = OWM_API
-
-    if not city.pattern_match.group(1):
-        await city.edit("`Please specify a city to set one as default.`")
-        return
+    if not defcity.pattern_match.group(1):
+        await defcity.edit("`Please specify a city to set one as default.`")
     else:
-        city = city.pattern_match.group(1)
+        city = defcity.pattern_match.group(1)
 
     timezone_countries = {
         timezone: country
-        for country, timezones in c_tz.items() for timezone in timezones
+        for country, timezones in countrytz.items() for timezone in timezones
     }
 
     if "," in city:
@@ -173,22 +175,20 @@ async def set_default_city(city):
                 await city.edit(INV_PARAM)
                 return
             city = newcity[0].strip() + "," + countrycode.strip()
-
-    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OpenWeatherAPI}'
-    request = requests.get(url)
-    result = json.loads(request.text)
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OWM_API}'
+    request = get(url)
+    result = loads(request.text)
 
     if request.status_code != 200:
-        await city.edit(INV_PARAM)
+        await defcity.edit(INV_PARAM)
         return
 
     await set_weather(city)
     cityname = result['name']
     country = result['sys']['country']
+    fullcountryname = countryname[f"{country}"]
 
-    fullc_n = c_n[f"{country}"]
-
-    await city.edit(f"`Set default city as {cityname}, {fullc_n}.`")
+    await defcity.edit(f"`Set default city as {cityname}, {fullcountryname}.`")
 
 
 CMD_HELP.update({
