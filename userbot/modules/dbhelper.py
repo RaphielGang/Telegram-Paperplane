@@ -98,9 +98,10 @@ async def add_filter(chatid, keyword, msg):
                 '_id': to_check["_id"],
                 'chat_id': to_check["chat_id"],
                 'keyword': to_check["keyword"],
-            }, {"$set": {
-                'msg': msg
-            }})
+            },
+            {
+                "$set": {'msg': msg}
+            })
 
         return False
 
@@ -143,9 +144,10 @@ async def add_note(chatid, name, text):
                 '_id': to_check["_id"],
                 'chat_id': to_check["chat_id"],
                 'name': to_check["name"],
-            }, {"$set": {
-                'text': text
-            }})
+            },
+            {
+                "$set": {'text': text}
+            })
 
         return False
 
@@ -256,10 +258,14 @@ async def approve(userid):
     if await approval(userid) is True:
         return False
     else:
-        MONGO.pmpermit.update_one({'user_id': userid},
-                                  {"$set": {
-                                      'approval': True
-                                  }})
+        MONGO.pmpermit.update_one(
+            {
+                'user_id': userid
+            },
+            {
+                "$set": {'approval': True}
+            }
+            )
         return True
 
 
@@ -267,10 +273,14 @@ async def block_pm(userid):
     if await approval(userid) is False:
         return False
     else:
-        MONGO.pmpermit.update_one({'user_id': userid},
-                                  {"$set": {
-                                      'approval': False
-                                  }})
+        MONGO.pmpermit.update_one(
+            {
+                'user_id': userid
+            },
+            {
+                "$set": {'approval': False}
+            }
+            )
 
         return True
 
@@ -305,10 +315,14 @@ async def notif_on():
     if await notif_state() is True:
         return False
     else:
-        MONGO.notif.update({'_id': await __notif_id()},
-                           {"$set": {
-                               'state': True
-                           }})
+        MONGO.notif.update(
+            {
+                '_id': await __notif_id()
+            },
+            {
+                "$set": {'state': True}
+            }
+            )
         return True
 
 
@@ -316,10 +330,14 @@ async def notif_off():
     if await notif_state() is False:
         return False
     else:
-        MONGO.notif.update({'_id': await __notif_id()},
-                           {"$set": {
-                               'state': False
-                           }})
+        MONGO.notif.update(
+            {
+                '_id': await __notif_id()
+            },
+            {
+                "$set": {'state': False}
+            }
+            )
         return True
 
 
@@ -426,19 +444,27 @@ async def set_time(country, timezone=1):
                 '_id': to_check['_id'],
                 'timec': to_check['timec'],
                 'timezone': to_check['timezone']
-            }, {"$set": {
-                'timec': country,
-                'timezone': timezone
-            }})
+            },
+            {
+                "$set": {'timec': country,
+                         'timezone': timezone
+                        }
+            }
+            )
     else:
         MONGO.misc.insert_one({'timec': country, 'timezone': timezone})
 
 
 # Weather
 async def get_weather():
-    return MONGO.misc.find_one({'weather_city': {
-        '$exists': True
-    }}, {'weather_city': 1})
+    return MONGO.misc.find_one(
+        {
+            'weather_city': {'$exists': True}
+        },
+        {
+            'weather_city': 1
+        }
+        )
 
 
 async def set_weather(city):
@@ -449,8 +475,10 @@ async def set_weather(city):
             {
                 '_id': to_check['_id'],
                 'weather_city': to_check['weather_city']
-            }, {"$set": {
-                'weather_city': city
-            }})
+            },
+            {
+                "$set": {'weather_city': city}
+            }
+            )
     else:
         MONGO.misc.insert_one({'weather_city': city})
