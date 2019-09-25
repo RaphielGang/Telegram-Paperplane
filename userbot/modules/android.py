@@ -21,9 +21,9 @@ DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
 @register(outgoing=True, pattern="^.magisk$")
 async def magisk(request):
     """ magisk latest releases """
-    url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/master/'
+    url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
     releases = 'Latest Magisk Releases:\n'
-    for variant in ['stable', 'beta', 'canary_builds/canary']:
+    for variant in ['master/stable', 'master/beta', 'canary/release']:
         data = get(url + variant + '.json').json()
         name = variant.split('_')[0].capitalize()
         releases += f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | ' \
