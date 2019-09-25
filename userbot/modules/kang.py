@@ -119,8 +119,7 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
-                            await conv.send_file(upload, force_document=True)
+                            await conv.send_file('AnimatedSticker.tgs', force_document=True)
                             DelFile('AnimatedSticker.tgs')
                         else:
                             file.seek(0)
@@ -152,8 +151,7 @@ async def kang(args):
                             parse_mode='md')
                         return
                 if is_anim:
-                    upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
-                    await conv.send_file(upload, force_document=True)
+                    await conv.send_file('AnimatedSticker.tgs', force_document=True)
                     DelFile('AnimatedSticker.tgs')
                 else:
                     file.seek(0)
@@ -180,8 +178,7 @@ doesn't exist! Making a new one!")
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
-                    upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
-                    await conv.send_file(upload, force_document=True)
+                    await conv.send_file('AnimatedSticker.tgs', force_document=True)
                     DelFile('AnimatedSticker.tgs')
                 else:
                     file.seek(0)
