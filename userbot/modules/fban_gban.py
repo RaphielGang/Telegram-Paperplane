@@ -66,7 +66,7 @@ async def gban_all(msg):
                 c = await msg.forward_to(banbot)
                 await c.reply("/id")
             await conv.send_message(f"/gban {banid} {banreason}")
-            resp = await conv.get_response()
+            await conv.get_response()
             await bot.send_read_acknowledge(conv.chat_id)
             count += 1
             # We cant see if he actually Gbanned. Let this stay for now
