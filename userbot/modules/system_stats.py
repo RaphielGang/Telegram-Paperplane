@@ -125,6 +125,16 @@ async def pipcheck(pip):
             await pip.edit("`Use .help pip to see an example`")
 
 
+def runningInDocker():
+    with open('/proc/self/cgroup', 'r') as procfile:
+        for line in procfile:
+            stripsplit = line.strip().split('/')
+            if 'docker' in stripsplit:
+                return True
+
+    return False
+
+
 @register(outgoing=True, pattern="^.alive$")
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
@@ -140,7 +150,8 @@ async def amireallyalive(alive):
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
-                     f"Database Status: {db}"
+                     f"Database Status: {db} \n"
+                     f"Running on Docker: {runningInDocker()}"
                      "`")
 
 
