@@ -77,6 +77,7 @@ async def kang(args):
         packnick = f"@{user.username}'s userbot pack {pack}"
         cmd = '/newpack'
         file = io.BytesIO()
+        file.seek(0)
 
         if not is_anim:
             image = await resize_photo(photo)
@@ -117,11 +118,10 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            await bot.forward_messages('Stickers',
-                                                       [message.id],
-                                                       args.chat_id)
+                            upload = await args.client.upload_file(
+                                file, file_name="AnimatedSticker.tgs")
+                            await conv.send_file(upload, force_document=True)
                         else:
-                            file.seek(0)
                             await conv.send_file(file, force_document=True)
                         await conv.get_response()
                         await conv.send_message(emoji)
@@ -150,10 +150,10 @@ async def kang(args):
                             parse_mode='md')
                         return
                 if is_anim:
-                    await bot.forward_messages('Stickers', [message.id],
-                                               args.chat_id)
+                    upload = await args.client.upload_file(
+                        file, file_name="AnimatedSticker.tgs")
+                    await conv.send_file(upload, force_document=True)
                 else:
-                    file.seek(0)
                     await conv.send_file(file, force_document=True)
                 await conv.get_response()
                 await conv.send_message(emoji)
@@ -177,10 +177,10 @@ doesn't exist! Making a new one!")
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
-                    await bot.forward_messages('Stickers', [message.id],
-                                               args.chat_id)
+                    upload = await args.client.upload_file(
+                        file, file_name="AnimatedSticker.tgs")
+                    await conv.send_file(upload, force_document=True)
                 else:
-                    file.seek(0)
                     await conv.send_file(file, force_document=True)
                 await conv.get_response()
                 await conv.send_message(emoji)
