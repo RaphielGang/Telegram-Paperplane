@@ -41,7 +41,7 @@ async def gban_all(msg):
 
             if isinstance(probable_user_mention_entity,
                           MessageEntityMentionName):
-                ban_id = probable_user_mention_entity.user_id
+                banid = probable_user_mention_entity.user_id
         try:
             banreason = "[userbot] "
             banreason += banreason.join(msg.text.split(" ")[2:])
@@ -100,7 +100,7 @@ async def fedban_all(msg):
 
             if isinstance(probable_user_mention_entity,
                           MessageEntityMentionName):
-                ban_id = probable_user_mention_entity.user_id
+                banid = probable_user_mention_entity.user_id
         try:
             banreason = "[userbot] "
             banreason += banreason.join(msg.text.split(" ")[2:])
