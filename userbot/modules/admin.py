@@ -124,7 +124,10 @@ async def promote(promt):
 
     await promt.edit("`Promoting...`")
 
-    user = await get_user_from_event(promt)
+    user, rank = await get_user_from_event(promt)
+    if not rank:
+        # In case custom rank is not given.
+        rank = "Admin"
     if user:
         pass
     else:
@@ -133,7 +136,7 @@ async def promote(promt):
     # Try to promote if current user is admin or creator
     try:
         await promt.client(
-            EditAdminRequest(promt.chat_id, user.id, new_rights, "Admin"))
+            EditAdminRequest(promt.chat_id, user.id, new_rights, rank))
         await promt.edit("`Promoted Successfully!`")
 
     # If Telethon spit BadRequestError, assume
@@ -164,8 +167,8 @@ async def demote(dmod):
 
     # If passing, declare that we're going to demote
     await dmod.edit("`Demoting...`")
-
     user = await get_user_from_event(dmod)
+    user = user[0] # We don't need the 'rank' here.
     if user:
         pass
     else:
@@ -211,7 +214,7 @@ async def ban(bon):
         await bon.edit(NO_ADMIN)
         return
 
-    user = await get_user_from_event(bon)
+    user, reason = await get_user_from_event(bon)
     if user:
         pass
     else:
@@ -237,14 +240,21 @@ async def ban(bon):
         if reply:
             await reply.delete()
     except BadRequestError:
-        bmsg = "`I dont have enough rights! But still he was banned!`"
+        if reason:
+            bmsg = f"`I dont have enough rights! But still he was banned!`\
+            \n`Reason: {reason}`"
+        else:
+            bmsg = "`I dont have enough rights! But still he was banned!`"
         await bon.edit(bmsg)
         return
     # Delete message and then tell that the command
     # is done gracefully
     # Shout out the ID, so that fedadmins can fban later
 
-    await bon.edit("`{}` was banned!".format(str(user.id)))
+    if reason:
+        await bon.edit(f"`{str(user.id)}` was banned !!\nReason: {reason}")
+    else:
+        await bon.edit(f"`{str(user.id)}` was banned !!")
 
     # Announce to the logging group if we have demoted successfully
     if BOTLOG:
@@ -271,6 +281,8 @@ async def nothanos(unbon):
     await unbon.edit("`Unbanning...`")
 
     user = await get_user_from_event(unbon)
+    # Do we need a reason for unban ?
+    user = user[0]
     if user:
         pass
     else:
@@ -310,7 +322,7 @@ async def spider(spdr):
         await spdr.edit(NO_ADMIN)
         return
 
-    user = await get_user_from_event(spdr)
+    user, reason = await get_user_from_event(spdr)
     if user:
         pass
     else:
@@ -336,8 +348,10 @@ async def spider(spdr):
             await spdr.client(
                 EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
             # Announce that the function is done
-            await spdr.edit("`Safely taped!`")
-
+            if reason:
+                await spdr.edit(f"`Safely taped !!`\nReason: {reason}")
+            else:
+                await spdr.edit("`Safely taped !!`")
             # Announce to logging group
             if BOTLOG:
                 await spdr.client.send_message(
@@ -379,6 +393,8 @@ async def unmoot(unmot):
     # If admin or creator, inform the user and start unmuting
     await unmot.edit('```Unmuting...```')
     user = await get_user_from_event(unmot)
+    # Do we need a reason to unmute ?
+    user = user[0]
     if user:
         pass
     else:
@@ -480,7 +496,7 @@ async def gspider(gspdr):
     if not is_mongo_alive() or not is_redis_alive():
         await gspdr.edit(NO_SQL)
         return
-    user = await get_user_from_event(gspdr)
+    user, reason = await get_user_from_event(gspdr)
     if user:
         pass
     else:
@@ -497,7 +513,11 @@ async def gspider(gspdr):
     if await gmute(user.id) is False:
         await gspdr.edit('`Error! User probably already gmuted.`')
     else:
-        await gspdr.edit("`Globally taped!`")
+        if reason:
+            await gspdr.edit(f"`Globally taped!`\
+            \nReason: {reason}")
+        else:
+            await gspdr.edit("`Globally taped!`")
 
         if BOTLOG:
             await gspdr.client.send_message(
@@ -645,7 +665,7 @@ async def kick(usr):
         await usr.edit(NO_ADMIN)
         return
 
-    user = await get_user_from_event(usr)
+    user, reason = await get_user_from_event(usr)
     if not user:
         await usr.edit("`Couldn't fetch user.`")
         return
@@ -667,8 +687,13 @@ async def kick(usr):
         EditBannedRequest(usr.chat_id, user.id,
                           ChatBannedRights(until_date=None)))
 
-    kmsg = "`Kicked` [{}](tg://user?id={})`!`"
-    await usr.edit(kmsg.format(user.first_name, user.id))
+    if reason:
+        kmsg = f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!` \n\
+        Reason: {reason}"
+    else:
+        kmsg = f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`"
+
+    await usr.edit(kmsg)
 
     if BOTLOG:
         await usr.client.send_message(
@@ -679,11 +704,15 @@ async def kick(usr):
 
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
-    if event.reply_to_msg_id:
+    args = event.pattern_match.group(1).split(' ', 1)
+    extra = None
+    if event.reply_to_msg_id and not len(args) == 2:
         previous_message = await event.get_reply_message()
         user_obj = await event.client.get_entity(previous_message.from_id)
-    else:
-        user = event.pattern_match.group(1)
+    elif args:
+        user = args[0]
+        if len(args) == 2:
+            extra = args[1]
 
         if user.isnumeric():
             user = int(user)
@@ -706,7 +735,7 @@ async def get_user_from_event(event):
             await event.edit(str(err))
             return None
 
-    return user_obj
+    return user_obj, extra
 
 
 async def get_user_from_id(user, event):
