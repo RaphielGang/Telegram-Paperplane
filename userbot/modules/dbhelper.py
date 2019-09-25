@@ -374,6 +374,44 @@ async def afk_reason():
 async def no_afk():
     REDIS.delete('is_afk')
 
+# LastFM
+async def setartist(artist):
+    REDIS.set('artist', artist)
+
+async def setsong(song):
+    REDIS.set('song', song)
+
+async def setlastfmcheck(lastfmcheck):
+    REDIS.set('lastfmcheck', lastfmcheck)
+
+async def setuserID(userid):
+    REDIS.set('userid', userid)
+
+async def setLogging(log):
+    REDIS.set('log', log)
+
+async def getartist():
+    return strb(REDIS.get('artist'))
+
+async def getsong():
+    return strb(REDIS.get('song'))
+
+async def getlastfmcheck():
+    lastcheck = REDIS.get('lastfmcheck')
+    if lastcheck is True:
+        return True
+
+    return False
+
+async def getuserID():
+    return REDIS.get('userid')
+
+async def getLogging():
+    loggingup = REDIS.get('log')
+    if loggingup is True:
+        return True
+
+    return False
 
 # Fbans
 
