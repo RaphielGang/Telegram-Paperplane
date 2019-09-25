@@ -23,7 +23,7 @@ async def magisk(request):
     """ magisk latest releases """
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
     releases = 'Latest Magisk Releases:\n'
-    for variant in ['master/stable', 'master/beta', 'canary/release']:
+    for variant in ['master/stable', 'master/beta', 'canary/debug']:
         data = get(url + variant + '.json').json()
         name = variant.split('_')[0].capitalize()
         releases += f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | ' \
