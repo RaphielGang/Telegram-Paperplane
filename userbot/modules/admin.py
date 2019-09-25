@@ -691,7 +691,7 @@ async def kick(usr):
       kmsg = f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`\
       \nReason: {reason}"
     else:
-      kmsg = f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`")
+      kmsg = f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!`"
     await usr.edit(kmsg)
 
     if BOTLOG:
