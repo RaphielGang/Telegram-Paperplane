@@ -17,8 +17,12 @@ async def monito_p_m_s(event):
     sender = await event.get_sender()
     if event.is_private and not (await event.get_sender()).bot:
         chat = await event.get_chat()
-        if chat.id == int(777000):
+        self_user = await event.client.get_me()
+        DEF_NO_LOG = [777000]
+        DEF_NO_LOG.append(int(self_user.id))
+        if chat.id in DEF_NO_LOG:
             return
+
         if chat.id not in NO_PM_LOG_USERS and chat.id:
             if not BOTLOG_CHATID:
                 LOG.warn("No log chat specfied. Returning")
