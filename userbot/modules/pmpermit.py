@@ -127,18 +127,18 @@ async def notifoff(noff_event):
     """ For .notifoff command, stop getting
         notifications from unapproved PMs. """
     if await notif_off() is False:
-        return await noff_event.edit('`Notifications already silenced!`')
+        await noff_event.edit('`Notifications already silenced!`')
     else:
-        return await noff_event.edit("`Notifications silenced!`")
+        await noff_event.edit("`Notifications silenced!`")
 
 
 @register(outgoing=True, pattern="^.notifon$")
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
-        return await non_event.edit("`Notifications ain't muted!")
+        await non_event.edit("`Notifications ain't muted!")
     else:
-        return await non_event.edit("`Notifications unmuted!`")
+        await non_event.edit("`Notifications unmuted!`")
 
 
 @register(outgoing=True, pattern="^.approve$")
@@ -147,9 +147,8 @@ async def approvepm(apprvpm):
     if not is_mongo_alive() or not is_redis_alive():
         await apprvpm.edit("`Database connections failing!`")
         return
-
     if await approve(apprvpm.chat_id) is False:
-        return await apprvpm.edit("`User was already approved!`")
+        await apprvpm.edit("`User was already approved!`")
     else:
         if apprvpm.reply_to_msg_id:
             reply = await apprvpm.get_reply_message()
@@ -179,33 +178,32 @@ async def blockpm(block):
     if not is_mongo_alive() or not is_redis_alive():
         await block.edit("`Database connections failing!`")
         return
-
     if await block_pm(block.chat_id) is False:
-        return await block.edit("`First approve, before blocc'ing`")
+        await block.edit("`First approve, before blocc'ing`")
     else:
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
-        if block.reply_to_msg_id:
-            reply = await block.get_reply_message()
-            replied_user = await block.client(GetFullUserRequest(reply.from_id)
-                                              )
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            await block.client(BlockRequest(replied_user.user.id))
-            uid = replied_user.user.id
-        else:
-            await block.client(BlockRequest(block.chat_id))
-            aname = await block.client.get_entity(block.chat_id)
-            name0 = str(aname.first_name)
-            uid = block.chat_id
+    if block.reply_to_msg_id:
+        reply = await block.get_reply_message()
+        replied_user = await block.client(
+            GetFullUserRequest(reply.from_id))
+        aname = replied_user.user.id
+        name0 = str(replied_user.user.first_name)
+        await block.client(BlockRequest(replied_user.user.id))
+        uid = replied_user.user.id
+    else:
+        await block.client(BlockRequest(block.chat_id))
+        aname = await block.client.get_entity(block.chat_id)
+        name0 = str(aname.first_name)
+        uid = block.chat_id
 
-        await block.edit("`Blocked.`")
+    await block.edit("`Blocked.`")
 
-        if BOTLOG:
-            await block.client.send_message(
-                BOTLOG_CHATID,
-                "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
-            )
+    if BOTLOG:
+        await block.client.send_message(
+            BOTLOG_CHATID,
+            "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+        )
 
 
 @register(outgoing=True, pattern="^.unblock$")
@@ -216,9 +214,9 @@ async def unblockpm(unblock):
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         if await approve(reply.from_id) is False:
-            return await unblock.edit("`You haven't blocked this user yet!`")
+            await unblock.edit("`You haven't blocked this user yet!`")
         else:
-            return await unblock.edit("`My Master has forgiven you to PM now`")
+            await unblock.edit("`My Master has forgiven you to PM now`")
 
         await unblock.client(UnblockRequest(replied_user.user.id))
 
