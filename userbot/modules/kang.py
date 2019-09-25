@@ -8,6 +8,7 @@
 import io
 import math
 import urllib.request
+from os import remove as DelFile
 
 from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
@@ -38,12 +39,13 @@ async def kang(args):
         elif "image" in message.media.document.mime_type.split('/'):
             photo = io.BytesIO()
             await bot.download_file(message.media.document, photo)
-        if (DocumentAttributeFilename(file_name='sticker.webp') in
-                message.media.document.attributes):
-            emoji = message.media.document.attributes[1].alt
-            emojibypass = True
+            if (DocumentAttributeFilename(file_name='sticker.webp') in
+                    message.media.document.attributes):
+                emoji = message.media.document.attributes[1].alt
+                emojibypass = True
         elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
               message.media.document.attributes):
+            await bot.download_file(message.media.document, 'AnimatedSticker.tgs')
             emoji = message.media.document.attributes[0].alt
             emojibypass = True
             is_anim = True
@@ -98,16 +100,16 @@ async def kang(args):
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 await conv.send_message(packname)
-                x = await conv.get_response()
-                while x.text == PACK_FULL:
+                resp = await conv.get_response()
+                while resp.text == PACK_FULL:
                     pack += 1
                     packname = f"a{user.id}_by_{user.username}_{pack}"
                     packnick = f"@{user.username}'s userbot pack {pack}"
                     await args.edit("`Switching to Pack " + str(pack) +
                                     " due to insufficient space`")
                     await conv.send_message(packname)
-                    x = await conv.get_response()
-                    if x.text == "Invalid pack selected.":
+                    resp = await conv.get_response()
+                    if resp.text == "Invalid pack selected.":
                         await conv.send_message(cmd)
                         await conv.get_response()
                         # Ensure user doesn't get spamming notifications
@@ -117,9 +119,9 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            file.seek(0)
                             upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
                             await conv.send_file(upload, force_document=True)
+                            DelFile('AnimatedSticker.tgs')
                         else:
                             file.seek(0)
                             await conv.send_file(file, force_document=True)
@@ -150,9 +152,9 @@ async def kang(args):
                             parse_mode='md')
                         return
                 if is_anim:
-                    file.seek(0)
                     upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
                     await conv.send_file(upload, force_document=True)
+                    DelFile('AnimatedSticker.tgs')
                 else:
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
@@ -178,9 +180,9 @@ doesn't exist! Making a new one!")
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
-                    file.seek(0)
                     upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
                     await conv.send_file(upload, force_document=True)
+                    DelFile('AnimatedSticker.tgs')
                 else:
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
