@@ -18,7 +18,7 @@ COMMIT_HASH="$(git rev-parse --verify HEAD)"
 COMMIT_AUTHOR="$(git log -1 --format='%an <%ae>')"
 REVIEWERS="@RealAkito"
 LINT_ALLOWED_BRANCHES="staging dev/haruka"
-TELEGRAM_TOKEN=${BOT_API_KEY}
+TELEGRAM_TOKEN=${AKITO_BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
 kickstart_pub
 
@@ -60,8 +60,8 @@ lint() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
     exit 0
   fi
-  git config --global user.email "baalajimaestro@raphielgang.org"
-  git config --global user.name "baalajimaestro"
+  git config --global user.email "peak@echln.net"
+  git config --global user.name "Akito Mizukito"
 
 RESULT=`yapf -d -r -p userbot`
 
@@ -75,7 +75,7 @@ RESULT=`yapf -d -r -p userbot`
             git add .
             git commit -m "[AUTO-LINT]: ${message}" --author="${COMMIT_AUTHOR}" --signoff
             git remote rm origin
-            git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
+            git remote add origin https://RealAkito:${AKITO_GH_PERSONAL_TOKEN}@github.com/MyPaperPlane/telegram-userbot.git
             git push -f origin $PARSE_BRANCH
             tg_sendinfo "<code>Code has been Linted and Force Pushed!</code>"
       else
