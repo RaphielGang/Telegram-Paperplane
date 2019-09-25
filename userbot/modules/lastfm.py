@@ -174,8 +174,9 @@ async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1)
     if arg == "on":
         setrecursionlimit(700000)
-        if await getlastfmcheck() is False:
-            await setlastfmcheck(True)
+        lastfmchknottrue = await getlastfmcheck() == "False"
+        if lastfmchknottrue:
+            await setlastfmcheck("True")
             environ["errorcheck"] = "0"
             await lfmbio.edit(LFM_BIO_ENABLED)
             await sleep(4)
@@ -183,7 +184,7 @@ async def lastbio(lfmbio):
         else:
             await lfmbio.edit(LFM_BIO_RUNNING)
     elif arg == "off":
-        await setlastfmcheck(False)
+        await setlastfmcheck("False")
         await bot(UpdateProfileRequest(about=DEFAULT_BIO))
         await lfmbio.edit(LFM_BIO_DISABLED)
     else:
@@ -195,12 +196,12 @@ async def lastlog(lstlog):
     if not is_redis_alive():
         return
     arg = lstlog.pattern_match.group(1)
-    await lfsetLogging(False)
+    await lfsetLogging("False")
     if arg == "on":
-        await lfsetLogging(True)
+        await lfsetLogging("True")
         await lstlog.edit(LFM_LOG_ENABLED)
     elif arg == "off":
-        await lfsetLogging(False)
+        await lfsetLogging("False")
         await lstlog.edit(LFM_LOG_DISABLED)
     else:
         await lstlog.edit(LFM_LOG_ERR)

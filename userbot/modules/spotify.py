@@ -51,7 +51,7 @@ async def update_spotify_info():
             await sfsetartist(artist)
             song = data['item']['name']
             await sfsetsong(song)
-            await exceptionexist(False)
+            await exceptionexist("False")
             oldsong = environ.get("oldsong", None)
             if song != oldsong and artist != oldartist:
                 oldartist = artist
@@ -68,7 +68,7 @@ async def update_spotify_info():
             if errorcheck == 0:
                 await update_token()
             elif errorcheck == 1:
-                await spotifycheck(False)
+                await spotifycheck("False")
                 await bot(UpdateProfileRequest(about=DEFAULT_BIO))
                 print(ERROR_MSG)
                 if BOTLOG:
@@ -79,7 +79,7 @@ async def update_spotify_info():
             await bot(UpdateProfileRequest(about=DEFAULT_BIO))
         except TypeError:
             await dirtyfix()
-        await spotifycheck(False)
+        await spotifycheck("False")
         await sleep(2)
         await dirtyfix()
 
@@ -93,7 +93,7 @@ async def update_token():
 
 
 async def dirtyfix():
-    await spotifycheck(True)
+    await spotifycheck("True")
     await sleep(4)
     await update_spotify_info()
 
@@ -104,7 +104,7 @@ async def set_biostgraph(setstbio):
         setstbio.edit("Who forgot their Redis?")
         return
     setrecursionlimit(700000)
-    if await getspotifycheck() is False:
+    if await getspotifycheck() == "True":
         environ["errorcheck"] = "0"
         await setstbio.edit(SPO_BIO_ENABLED)
         await get_spotify_token()
@@ -118,7 +118,7 @@ async def set_biodgraph(setdbio):
     if not is_redis_alive():
         setdbio.edit("Who forgot their Redis?")
         return
-    await spotifycheck(False)
+    await spotifycheck("False")
     await bot(UpdateProfileRequest(about=DEFAULT_BIO))
     await setdbio.edit(SPO_BIO_DISABLED)
 
