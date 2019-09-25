@@ -8,6 +8,7 @@
 import io
 import math
 import urllib.request
+from os import remove as DelFile
 
 from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
@@ -18,6 +19,8 @@ from userbot.events import register
 PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
 A pack can't have more than 120 stickers at the moment."
 
+CREATE_RESP = "  A <strong>Telegram</strong> user has created the \
+<strong>Sticker&nbsp;Set</strong>."
 
 @register(outgoing=True, pattern="^.kang")
 async def kang(args):
@@ -30,21 +33,34 @@ async def kang(args):
     emojibypass = False
     is_anim = False
     emoji = ""
-    await args.edit("`Kanging..........`")
+    await args.edit("`Kanging...`")
     if message and message.media:
+        # For kanging regular images
         if isinstance(message.media, MessageMediaPhoto):
             photo = io.BytesIO()
             photo = await bot.download_media(message.photo, photo)
         elif "image" in message.media.document.mime_type.split('/'):
             photo = io.BytesIO()
             await bot.download_file(message.media.document, photo)
-            if (DocumentAttributeFilename(file_name='sticker.webp') in
-                    message.media.document.attributes):
-                emoji = message.media.document.attributes[1].alt
-                emojibypass = True
+
+        # For kanging other sticker
+        if (DocumentAttributeFilename(file_name='sticker.webp') in
+                message.media.document.attributes):
+            emoji = message.media.document.attributes[1].alt
+            emojibypass = True
+        # For kanging Animated Stickers
         elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
               message.media.document.attributes):
-            emoji = message.media.document.attributes[0].alt
+            await bot.download_file(message.media.document, 'AnimatedSticker.tgs')
+            #
+            # !!! HACK HACK HACK HACK !!!
+            # We have to check both as Telegram constantly moving
+            # the attributes between 0 and 1
+            #
+            try:
+                emoji = message.media.document.attributes[0].alt
+            except AttributeError:
+                emoji = message.media.document.attributes[1].alt
             emojibypass = True
             is_anim = True
             photo = 1
@@ -77,7 +93,6 @@ async def kang(args):
         packnick = f"@{user.username}'s userbot pack {pack}"
         cmd = '/newpack'
         file = io.BytesIO()
-        file.seek(0)
 
         if not is_anim:
             image = await resize_photo(photo)
@@ -92,23 +107,23 @@ async def kang(args):
             urllib.request.Request(f'http://t.me/addstickers/{packname}'))
         htmlstr = response.read().decode("utf8").split('\n')
 
-        if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
+        if CREATE_RESP not in htmlstr:
             async with bot.conversation('Stickers') as conv:
                 await conv.send_message('/addsticker')
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 await conv.send_message(packname)
-                x = await conv.get_response()
-                while x.text == PACK_FULL:
+                resp = await conv.get_response()
+                while resp.text == PACK_FULL:
                     pack += 1
                     packname = f"a{user.id}_by_{user.username}_{pack}"
                     packnick = f"@{user.username}'s userbot pack {pack}"
                     await args.edit("`Switching to Pack " + str(pack) +
                                     " due to insufficient space`")
                     await conv.send_message(packname)
-                    x = await conv.get_response()
-                    if x.text == "Invalid pack selected.":
+                    resp = await conv.get_response()
+                    if resp.text == "Invalid pack selected.":
                         await conv.send_message(cmd)
                         await conv.get_response()
                         # Ensure user doesn't get spamming notifications
@@ -118,10 +133,10 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            upload = await args.client.upload_file(
-                                file, file_name="AnimatedSticker.tgs")
-                            await conv.send_file(upload, force_document=True)
+                            await conv.send_file('AnimatedSticker.tgs', force_document=True)
+                            DelFile('AnimatedSticker.tgs')
                         else:
+                            file.seek(0)
                             await conv.send_file(file, force_document=True)
                         await conv.get_response()
                         await conv.send_message(emoji)
@@ -146,14 +161,15 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         await args.edit(
-                            f"Sticker added in a Different Pack! This Pack is Newly created! Your pack can be found [here](t.me/addstickers/{packname})",
+                            f"Sticker added in a Different Pack! This Pack is Newly created! \
+                            Your pack can be found [here](t.me/addstickers/{packname})",
                             parse_mode='md')
                         return
                 if is_anim:
-                    upload = await args.client.upload_file(
-                        file, file_name="AnimatedSticker.tgs")
-                    await conv.send_file(upload, force_document=True)
+                    await conv.send_file('AnimatedSticker.tgs', force_document=True)
+                    DelFile('AnimatedSticker.tgs')
                 else:
+                    file.seek(0)
                     await conv.send_file(file, force_document=True)
                 await conv.get_response()
                 await conv.send_message(emoji)
@@ -177,10 +193,10 @@ doesn't exist! Making a new one!")
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
-                    upload = await args.client.upload_file(
-                        file, file_name="AnimatedSticker.tgs")
-                    await conv.send_file(upload, force_document=True)
+                    await conv.send_file('AnimatedSticker.tgs', force_document=True)
+                    DelFile('AnimatedSticker.tgs')
                 else:
+                    file.seek(0)
                     await conv.send_file(file, force_document=True)
                 await conv.get_response()
                 await conv.send_message(emoji)
@@ -236,19 +252,16 @@ async def resize_photo(photo):
 
 
 CMD_HELP.update({
-    "kang":
-    ".kang\n"
-    "Usage: Reply .kang to a sticker or an image to kang it to your userbot pack."
+    "kang": ".kang\n"
+            "Usage: Reply .kang to a sticker or an image to kang it to your userbot pack."
 })
 
 CMD_HELP.update({
-    "kang":
-    ".kang [emoji('s)]\n"
-    "Usage: Works just like .kang but uses the emoji('s) you picked."
+    "kang": ".kang [emoji('s)]\n"
+            "Usage: Works just like .kang but uses the emoji('s) you picked."
 })
 
 CMD_HELP.update({
-    "kang":
-    ".kang [number]\n"
-    "Usage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji."
+    "kang": ".kang [number]\n"
+            "Usage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji."
 })
