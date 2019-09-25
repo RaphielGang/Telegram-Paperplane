@@ -1,5 +1,6 @@
 from userbot import MONGO, REDIS
 
+
 async def get_alive():
     return MONGO.alives.find_one({})
 
@@ -8,12 +9,10 @@ async def alivedb(data):
     to_check = await get_alive()
 
     if await alive_exist() is True:
-        MONGO.alives.update_one(
-            {
-                '_id': to_check["_id"]
-            }, {"$set": {
-                'alivemsg': data
-            }})
+        MONGO.alives.update_one({'_id': to_check["_id"]},
+                                {"$set": {
+                                    'alivemsg': data
+                                }})
     else:
         MONGO.alives.insert_one({'alivemsg': 'Userbot User'})
         return True

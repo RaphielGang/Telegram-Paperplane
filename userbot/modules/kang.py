@@ -45,7 +45,8 @@ async def kang(args):
                 emojibypass = True
         elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
               message.media.document.attributes):
-            await bot.download_file(message.media.document, 'AnimatedSticker.tgs')
+            await bot.download_file(message.media.document,
+                                    'AnimatedSticker.tgs')
             emoji = message.media.document.attributes[0].alt
             emojibypass = True
             is_anim = True
@@ -120,7 +121,8 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
+                            upload = await args.client.upload_file(
+                                file, file_name="AnimatedSticker.tgs")
                             await conv.send_file(upload, force_document=True)
                             DelFile('AnimatedSticker.tgs')
                         else:
@@ -152,7 +154,8 @@ async def kang(args):
                             parse_mode='md')
                         return
                 if is_anim:
-                    upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
+                    upload = await args.client.upload_file(
+                        file, file_name="AnimatedSticker.tgs")
                     await conv.send_file(upload, force_document=True)
                     DelFile('AnimatedSticker.tgs')
                 else:
@@ -179,7 +182,8 @@ doesn't exist! Making a new one!")
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
-                    upload = await args.client.upload_file(file, file_name="AnimatedSticker.tgs")
+                    upload = await args.client.upload_file(
+                        file, file_name="AnimatedSticker.tgs")
                     await conv.send_file(upload, force_document=True)
                     DelFile('AnimatedSticker.tgs')
                 else:
