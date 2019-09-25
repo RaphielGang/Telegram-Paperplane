@@ -116,13 +116,8 @@ async def kang(args):
                         await conv.get_response()
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
-                        if is_anim:
-                            await bot.forward_messages('Stickers',
-                                                       [message.id],
-                                                       args.chat_id)
-                        else:
-                            file.seek(0)
-                            await conv.send_file(file, force_document=True)
+                        file.seek(0)
+                        await conv.send_file(file, force_document=True)
                         await conv.get_response()
                         await conv.send_message(emoji)
                         # Ensure user doesn't get spamming notifications
@@ -149,12 +144,8 @@ async def kang(args):
                             f"Sticker added in a Different Pack! This Pack is Newly created! Your pack can be found [here](t.me/addstickers/{packname})",
                             parse_mode='md')
                         return
-                if is_anim:
-                    await bot.forward_messages('Stickers', [message.id],
-                                               args.chat_id)
-                else:
-                    file.seek(0)
-                    await conv.send_file(file, force_document=True)
+                file.seek(0)
+                await conv.send_file(file, force_document=True)
                 await conv.get_response()
                 await conv.send_message(emoji)
                 # Ensure user doesn't get spamming notifications
@@ -176,12 +167,8 @@ doesn't exist! Making a new one!")
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
-                if is_anim:
-                    await bot.forward_messages('Stickers', [message.id],
-                                               args.chat_id)
-                else:
-                    file.seek(0)
-                    await conv.send_file(file, force_document=True)
+                file.seek(0)
+                await conv.send_file(file, force_document=True)
                 await conv.get_response()
                 await conv.send_message(emoji)
                 # Ensure user doesn't get spamming notifications
