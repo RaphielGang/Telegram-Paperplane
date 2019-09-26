@@ -170,7 +170,6 @@ os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
 COUNT_MSG = 0
-LogicWorker = []
 USERS = {}
 COUNT_PM = {}
 LASTMSG = {}

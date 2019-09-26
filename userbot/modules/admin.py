@@ -20,7 +20,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
-from userbot import (BOTLOG, BOTLOG_CHATID, LogicWorker, CMD_HELP, bot,
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, bot,
                      is_mongo_alive, is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import (get_gmuted, get_muted, gmute, mute,
@@ -475,11 +475,6 @@ async def gspider(gspdr):
     if user:
         pass
     else:
-        return
-
-    # If the targeted user is a SUDO
-    if user.id in LogicWorker:
-        await gspdr.edit("`Gmute Error! Couldn't gmute this user`")
         return
 
     # If pass, inform and start gmuting
