@@ -11,7 +11,7 @@ import os
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
-from userbot import, LOGS, bot
+from userbot import LOGS, bot
 from userbot.modules import ALL_MODULES
 
 INVALID_PH = '\nERROR: The Phone No. entered is INVALID' \
