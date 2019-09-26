@@ -132,12 +132,13 @@ def register(**args):
                     file.write(ftext)
                     file.close()
 
-                    await check.client.send_file(
-                        check.chat_id,
-                        "error.log",
-                        caption=text,
-                    )
-                    remove("error.log")
+                    if bot.is_connected():
+                        await check.client.send_file(
+                            check.chat_id,
+                            "error.log",
+                            caption=text,
+                        )
+                        remove("error.log")
             else:
                 pass
 

@@ -8,7 +8,8 @@
 import os
 from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
-from sys import version_info
+from packaging.version import parse
+from sys import platform, version_info
 
 from dotenv import load_dotenv
 from pyDownload import Downloader
@@ -33,7 +34,8 @@ else:
                 level=INFO)
 LOGS = getLogger(__name__)
 
-if version_info[0] < 3 or version_info[1] < 6:
+pyversion = ".".join(str(num) for num in version_info if isinstance(num, int))
+if parse(pyversion) < parse('3.6'):
     LOGS.error("You MUST have a python version of at least 3.6."
                " Multiple features depend on this. Bot quitting.")
     quit(1)
@@ -78,6 +80,11 @@ LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
 LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
 LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
 LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
+
+CURRENCY_API = os.environ.get("CURRENCY_API", None)
+
+GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
+
 if not LASTFM_USERNAME == "None":
     lastfm = LastFMNetwork(api_key=LASTFM_API,
                            api_secret=LASTFM_SECRET,
@@ -86,12 +93,14 @@ if not LASTFM_USERNAME == "None":
 else:
     lastfm = None
 
-CURRENCY_API = os.environ.get("CURRENCY_API", None)
-
-GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
+if platform.startswith('win'):
+    from asyncio import ProactorEventLoop
+    loop = ProactorEventLoop()
+else:
+    loop = None
 
 # pylint: disable=invalid-name
-bot = TelegramClient("userbot", API_KEY, API_HASH)
+bot = TelegramClient("userbot", API_KEY, API_HASH, loop=loop)
 
 
 async def check_botlog_chatid():
@@ -114,16 +123,6 @@ with bot:
                    "valid entity. Check your config.env file.")
         quit(1)
 
-if os.path.exists("learning-data-root.check"):
-    os.remove("learning-data-root.check")
-else:
-    LOGS.info("Braincheck file does not exist, fetching...")
-
-URL = 'https://raw.githubusercontent.com/RaphielGang/'
-URL += 'databasescape/master/learning-data-root.check'
-
-with open('learning-data-root.check', 'wb') as load:
-    load.write(get(URL).content)
 
 # Init Mongo
 MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
@@ -174,116 +173,118 @@ LASTMSG = {}
 ENABLE_KILLME = True
 CMD_HELP = {}
 AFKREASON = "no reason"
-ZALG_LIST = [[
-    "̖",
-    " ̗",
-    " ̘",
-    " ̙",
-    " ̜",
-    " ̝",
-    " ̞",
-    " ̟",
-    " ̠",
-    " ̤",
-    " ̥",
-    " ̦",
-    " ̩",
-    " ̪",
-    " ̫",
-    " ̬",
-    " ̭",
-    " ̮",
-    " ̯",
-    " ̰",
-    " ̱",
-    " ̲",
-    " ̳",
-    " ̹",
-    " ̺",
-    " ̻",
-    " ̼",
-    " ͅ",
-    " ͇",
-    " ͈",
-    " ͉",
-    " ͍",
-    " ͎",
-    " ͓",
-    " ͔",
-    " ͕",
-    " ͖",
-    " ͙",
-    " ͚",
-    " ",
-],
-             [
-                 " ̍",
-                 " ̎",
-                 " ̄",
-                 " ̅",
-                 " ̿",
-                 " ̑",
-                 " ̆",
-                 " ̐",
-                 " ͒",
-                 " ͗",
-                 " ͑",
-                 " ̇",
-                 " ̈",
-                 " ̊",
-                 " ͂",
-                 " ̓",
-                 " ̈́",
-                 " ͊",
-                 " ͋",
-                 " ͌",
-                 " ̃",
-                 " ̂",
-                 " ̌",
-                 " ͐",
-                 " ́",
-                 " ̋",
-                 " ̏",
-                 " ̽",
-                 " ̉",
-                 " ͣ",
-                 " ͤ",
-                 " ͥ",
-                 " ͦ",
-                 " ͧ",
-                 " ͨ",
-                 " ͩ",
-                 " ͪ",
-                 " ͫ",
-                 " ͬ",
-                 " ͭ",
-                 " ͮ",
-                 " ͯ",
-                 " ̾",
-                 " ͛",
-                 " ͆",
-                 " ̚",
-             ],
-             [
-                 " ̕",
-                 " ̛",
-                 " ̀",
-                 " ́",
-                 " ͘",
-                 " ̡",
-                 " ̢",
-                 " ̧",
-                 " ̨",
-                 " ̴",
-                 " ̵",
-                 " ̶",
-                 " ͜",
-                 " ͝",
-                 " ͞",
-                 " ͟",
-                 " ͠",
-                 " ͢",
-                 " ̸",
-                 " ̷",
-                 " ͡",
-             ]]
+ZALG_LIST = [
+    [
+        "̖",
+        " ̗",
+        " ̘",
+        " ̙",
+        " ̜",
+        " ̝",
+        " ̞",
+        " ̟",
+        " ̠",
+        " ̤",
+        " ̥",
+        " ̦",
+        " ̩",
+        " ̪",
+        " ̫",
+        " ̬",
+        " ̭",
+        " ̮",
+        " ̯",
+        " ̰",
+        " ̱",
+        " ̲",
+        " ̳",
+        " ̹",
+        " ̺",
+        " ̻",
+        " ̼",
+        " ͅ",
+        " ͇",
+        " ͈",
+        " ͉",
+        " ͍",
+        " ͎",
+        " ͓",
+        " ͔",
+        " ͕",
+        " ͖",
+        " ͙",
+        " ͚",
+        " ",
+    ],
+    [
+        " ̍",
+        " ̎",
+        " ̄",
+        " ̅",
+        " ̿",
+        " ̑",
+        " ̆",
+        " ̐",
+        " ͒",
+        " ͗",
+        " ͑",
+        " ̇",
+        " ̈",
+        " ̊",
+        " ͂",
+        " ̓",
+        " ̈́",
+        " ͊",
+        " ͋",
+        " ͌",
+        " ̃",
+        " ̂",
+        " ̌",
+        " ͐",
+        " ́",
+        " ̋",
+        " ̏",
+        " ̽",
+        " ̉",
+        " ͣ",
+        " ͤ",
+        " ͥ",
+        " ͦ",
+        " ͧ",
+        " ͨ",
+        " ͩ",
+        " ͪ",
+        " ͫ",
+        " ͬ",
+        " ͭ",
+        " ͮ",
+        " ͯ",
+        " ̾",
+        " ͛",
+        " ͆",
+        " ̚",
+    ],
+    [
+        " ̕",
+        " ̛",
+        " ̀",
+        " ́",
+        " ͘",
+        " ̡",
+        " ̢",
+        " ̧",
+        " ̨",
+        " ̴",
+        " ̵",
+        " ̶",
+        " ͜",
+        " ͝",
+        " ͞",
+        " ͟",
+        " ͠",
+        " ͢",
+        " ̸",
+        " ̷",
+        " ͡",
+    ]
+]

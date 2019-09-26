@@ -15,6 +15,9 @@ from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
 
 
+regexNinja = False
+
+
 @register(outgoing=True, pattern="^.random")
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
@@ -79,7 +82,24 @@ async def bot_support(wannahelp):
 @register(outgoing=True, pattern="^.repo$")
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
-    await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
+    await wannasee.edit("https://github.com/MyPaperPlane/Telegram-UserBot/tree/nub")
+
+
+@register(outgoing=True, pattern="^s/")
+async def sedNinja(event):
+    if regexNinja:
+        await event.delete()
+
+
+@register(outgoing=True, pattern="^.(enable|disable) regexninja$")
+async def sedNinjaToggle(event):
+    global regexNinja
+    if event.pattern_match.group(1) == "enable":
+        regexNinja = True
+        await event.edit("`Successfully enabled ninja mode for Regexbot.`")
+    else:
+        regexNinja = False
+        await event.edit("`Successfully disabled ninja mode for Regexbot.`")
 
 
 CMD_HELP.update({
