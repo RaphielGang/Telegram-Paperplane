@@ -22,6 +22,7 @@ A pack can't have more than 120 stickers at the moment."
 CREATE_RESP = "  A <strong>Telegram</strong> user has created the \
 <strong>Sticker&nbsp;Set</strong>."
 
+
 @register(outgoing=True, pattern="^.kang")
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
@@ -51,7 +52,8 @@ async def kang(args):
         # For kanging Animated Stickers
         elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
               message.media.document.attributes):
-            await bot.download_file(message.media.document, 'AnimatedSticker.tgs')
+            await bot.download_file(message.media.document,
+                                    'AnimatedSticker.tgs')
             #
             # !!! HACK HACK HACK HACK !!!
             # We have to check both as Telegram constantly moving
@@ -133,7 +135,8 @@ async def kang(args):
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
                         if is_anim:
-                            await conv.send_file('AnimatedSticker.tgs', force_document=True)
+                            await conv.send_file('AnimatedSticker.tgs',
+                                                 force_document=True)
                             DelFile('AnimatedSticker.tgs')
                         else:
                             file.seek(0)
@@ -166,7 +169,8 @@ async def kang(args):
                             parse_mode='md')
                         return
                 if is_anim:
-                    await conv.send_file('AnimatedSticker.tgs', force_document=True)
+                    await conv.send_file('AnimatedSticker.tgs',
+                                         force_document=True)
                     DelFile('AnimatedSticker.tgs')
                 else:
                     file.seek(0)
@@ -193,7 +197,8 @@ doesn't exist! Making a new one!")
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
                 if is_anim:
-                    await conv.send_file('AnimatedSticker.tgs', force_document=True)
+                    await conv.send_file('AnimatedSticker.tgs',
+                                         force_document=True)
                     DelFile('AnimatedSticker.tgs')
                 else:
                     file.seek(0)
@@ -252,16 +257,19 @@ async def resize_photo(photo):
 
 
 CMD_HELP.update({
-    "kang": ".kang\n"
-            "Usage: Reply .kang to a sticker or an image to kang it to your userbot pack."
+    "kang":
+    ".kang\n"
+    "Usage: Reply .kang to a sticker or an image to kang it to your userbot pack."
 })
 
 CMD_HELP.update({
-    "kang": ".kang [emoji('s)]\n"
-            "Usage: Works just like .kang but uses the emoji('s) you picked."
+    "kang":
+    ".kang [emoji('s)]\n"
+    "Usage: Works just like .kang but uses the emoji('s) you picked."
 })
 
 CMD_HELP.update({
-    "kang": ".kang [number]\n"
-            "Usage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji."
+    "kang":
+    ".kang [number]\n"
+    "Usage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji."
 })
