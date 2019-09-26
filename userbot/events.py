@@ -27,7 +27,6 @@ def register(**args):
     unsafe_pattern = r'^[^/!#@\$A-Za-z]'
     group_only = args.get('group_only', False)
     disable_errors = args.get('disable_errors', False)
-    incoming_func = args.get('incoming', True)
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
 
@@ -54,9 +53,6 @@ def register(**args):
         async def wrapper(check):
             if group_only and not check.is_group:
                 await check.respond("`Are you sure this is a group?`")
-                return
-            if incoming_func and not check.out:
-                await func(check)
                 return
 
             try:

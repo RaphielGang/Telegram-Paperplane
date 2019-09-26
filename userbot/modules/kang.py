@@ -249,6 +249,18 @@ CMD_HELP.update({
 
 CMD_HELP.update({
     "kang":
+    ".kang\n"
+    "Usage: Reply .kang to a sticker or an image to kang it to your userbot pack."
+})
+
+CMD_HELP.update({
+    "kang":
+    ".kang [emoji('s)]\n"
+    "Usage: Works just like .kang but uses the emoji('s) you picked."
+})
+
+CMD_HELP.update({
+    "kang":
     ".kang [number]\n"
     "Usage: Kang's the sticker/image to the specified pack but uses 🤔 as emoji."
 })

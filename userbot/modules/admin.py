@@ -636,7 +636,6 @@ async def kick(usr):
         await usr.edit("`Couldn't fetch user.`")
         return
 
-
     await usr.edit("`Kicking...`")
 
     try:
