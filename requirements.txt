@@ -23,6 +23,7 @@ urbandict>=0.5
 wikipedia>=1.4.0
 search-engine-parser
 spotify_token
+packaging
 pymongo[srv]
 redis
 dnspython
