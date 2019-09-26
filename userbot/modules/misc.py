@@ -82,7 +82,7 @@ async def bot_support(wannahelp):
 @register(outgoing=True, pattern="^.repo$")
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
-    await wannasee.edit("https://github.com/MyPaperPlane/Telegram-UserBot/tree/nub")
+    await wannasee.edit("https://github.com/MyPaperPlane/Telegram-UserBot/tree/dev/nub")
 
 
 @register(outgoing=True, pattern="^s/")
