@@ -51,7 +51,15 @@ async def kang(args):
         elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
               message.media.document.attributes):
             await bot.download_file(message.media.document, 'AnimatedSticker.tgs')
-            emoji = message.media.document.attributes[0].alt
+            #
+            # !!! HACK HACK HACK HACK !!!
+            # We have to check both as Telegram constantly moving
+            # the attributes between 0 and 1
+            #
+            try:
+                emoji = message.media.document.attributes[0].alt
+            except AttributeError:
+                emoji = message.media.document.attributes[1].alt
             emojibypass = True
             is_anim = True
             photo = 1
