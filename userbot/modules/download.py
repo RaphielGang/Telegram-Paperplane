@@ -233,8 +233,8 @@ async def download(target_file):
         status = await download_from_url(url, file_name)
         await target_file.edit(status)
     else:
-        await target_file.edit("`Reply to a message to \
-            download to my local server.`\n")
+        await target_file.edit(
+            "`Reply to a message to download to my local server.`")
 
 
 @register(pattern=r"^.uploadir (.*)", outgoing=True)
