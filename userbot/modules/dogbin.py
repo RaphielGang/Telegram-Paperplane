@@ -59,7 +59,7 @@ async def paste(pstl):
         )
 
 
-@register(outgoing=True, pattern="^.get_dogbin_content(?: |$)(.*)")
+@register(outgoing=True, pattern="^.getpaste(?: |$)(.*)")
 async def get_dogbin_content(dog_url):
     """ For .get_dogbin_content command,
         fetches the content of a dogbin URL. """
@@ -118,7 +118,7 @@ CMD_HELP.update({
     "dogbin (https://del.dog/)"
 })
 CMD_HELP.update({
-    "get_dogbin_content":
+    "getpaste":
     "Get the content of a paste or "
     "shortened url from dogbin (https://del.dog/)"
 })
