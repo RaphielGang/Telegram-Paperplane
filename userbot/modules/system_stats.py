@@ -74,10 +74,10 @@ async def bot_ver(event):
                              "`Revision: "
                              f"{revout}"
                              "` \n"
-                             "`Tagged Version: r4.0`")
+                             "`Tagged Version: r4.2`")
         else:
             await event.edit(
-                "Shame that you don't have git, You're running r4.0 anyway")
+                "Shame that you don't have git, You're running r4.2 anyway")
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
