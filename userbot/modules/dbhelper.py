@@ -341,10 +341,6 @@ async def notif_off():
         return True
 
 
-def strb(redis_string):
-    return str(redis_string)[2:-1]
-
-
 async def is_afk():
     to_check = REDIS.get('is_afk')
     if to_check:
@@ -358,7 +354,7 @@ async def afk(reason):
 
 
 async def afk_reason():
-    return strb(REDIS.get('is_afk'))
+    return REDIS.get('is_afk').decode("UTF-8")
 
 
 async def no_afk():
@@ -378,10 +374,10 @@ async def exceptionexist(olexception):
     REDIS.set('exceptionexist', olexception)
 
 async def sfgetsong():
-    return strb(REDIS.get('sfsong'))
+    return REDIS.get('sfsong').decode("UTF-8")
 
 async def sfgetartist():
-    return strb(REDIS.get('sfartist'))
+    return REDIS.get('sfartist').decode("UTF-8")
 
 async def getexception():
     exceptcheck = REDIS.get('exceptionexist')
@@ -414,10 +410,10 @@ async def lfsetLogging(log):
     REDIS.set('lflog', log)
 
 async def lfgetartist():
-    return strb(REDIS.get('lfartist'))
+    return REDIS.get('lfartist').decode("UTF-8")
 
 async def lfgetsong():
-    return strb(REDIS.get('lfsong'))
+    return REDIS.get('lfsong').decode("UTF-8")
 
 async def getlastfmcheck():
     lastcheck = REDIS.get('lastfmcheck')
