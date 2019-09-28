@@ -7,9 +7,9 @@
 """ Userbot module for other small commands. """
 
 import sys
+from asyncio import sleep
 from os import execl
 from random import randint
-from time import sleep
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, runningInDocker
 from userbot.events import register
@@ -38,7 +38,7 @@ async def sleepybot(time):
     else:
         counter = int(time.pattern_match.group(1))
         await time.edit("`I am sulking and snoozing....`")
-        sleep(2)
+        await sleep(2)
         if BOTLOG:
             await time.client.send_message(
                 BOTLOG_CHATID,

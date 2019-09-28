@@ -6,10 +6,9 @@
 #
 """ Userbot module for having some fun. """
 
-import asyncio
-import random
-import re
-import time
+from asyncio import sleep
+from random import choice, getrandbits, randint
+from re import sub
 
 from cowpy import cow
 
@@ -214,7 +213,7 @@ async def kek(keks):
     """ Check yourself ;)"""
     uio = ["/", "\\"]
     for i in range(1, 15):
-        time.sleep(0.3)
+        await sleep(0.3)
         await keks.edit(":" + uio[i % 2])
 
 
@@ -241,23 +240,23 @@ async def copypasta(cp_e):
         await cp_e.edit("`😂🅱️IvE👐sOME👅text👅 for✌️Me👌tO👐MAkE👀iT💞funNy!💦`")
         return
 
-    reply_text = random.choice(EMOJIS)
+    reply_text = choice(EMOJIS)
     # choose a random character in the message to be substituted with 🅱️
-    b_char = random.choice(message).lower()
+    b_char = choice(message).lower()
     for owo in message:
         if owo == " ":
-            reply_text += random.choice(EMOJIS)
+            reply_text += choice(EMOJIS)
         elif owo in EMOJIS:
             reply_text += owo
-            reply_text += random.choice(EMOJIS)
+            reply_text += choice(EMOJIS)
         elif owo.lower() == b_char:
             reply_text += "🅱️"
         else:
-            if bool(random.getrandbits(1)):
+            if bool(getrandbits(1)):
                 reply_text += owo.upper()
             else:
                 reply_text += owo.lower()
-    reply_text += random.choice(EMOJIS)
+    reply_text += choice(EMOJIS)
     await cp_e.edit(reply_text)
 
 
@@ -300,8 +299,8 @@ async def stretch(stret):
         await stret.edit("`GiiiiiiiB sooooooomeeeeeee teeeeeeext!`")
         return
 
-    count = random.randint(3, 10)
-    reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count),
+    count = randint(3, 10)
+    reply_text = sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count),
                         message)
     await stret.edit(reply_text)
 
@@ -328,17 +327,17 @@ async def zal(zgfy):
             continue
 
         for _ in range(0, 3):
-            randint = random.randint(0, 2)
+            randint = randint(0, 2)
 
             if randint == 0:
                 charac = charac.strip() + \
-                    random.choice(ZALG_LIST[0]).strip()
+                    choice(ZALG_LIST[0]).strip()
             elif randint == 1:
                 charac = charac.strip() + \
-                    random.choice(ZALG_LIST[1]).strip()
+                    choice(ZALG_LIST[1]).strip()
             else:
                 charac = charac.strip() + \
-                    random.choice(ZALG_LIST[2]).strip()
+                    choice(ZALG_LIST[2]).strip()
 
         reply_text.append(charac)
 
@@ -365,20 +364,20 @@ async def faces(owo):
         await owo.edit("` UwU no text given! `")
         return
 
-    reply_text = re.sub(r"(r|l)", "w", message)
-    reply_text = re.sub(r"(R|L)", "W", reply_text)
-    reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
-    reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-    reply_text = re.sub(r"\!+", " " + random.choice(UWUS), reply_text)
+    reply_text = sub(r"(r|l)", "w", message)
+    reply_text = sub(r"(R|L)", "W", reply_text)
+    reply_text = sub(r"n([aeiou])", r"ny\1", reply_text)
+    reply_text = sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
+    reply_text = sub(r"\!+", " " + choice(UWUS), reply_text)
     reply_text = reply_text.replace("ove", "uv")
-    reply_text += " " + random.choice(UWUS)
+    reply_text += " " + choice(UWUS)
     await owo.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.react$")
 async def react_meme(react):
     """ Make your userbot react to everything. """
-    index = random.randint(0, len(FACEREACTS))
+    index = randint(0, len(FACEREACTS))
     reply_text = FACEREACTS[index]
     await react.edit(reply_text)
 
@@ -393,7 +392,7 @@ async def shrugger(shg):
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     if not DISABLE_RUN:
-        index = random.randint(0, len(RUNSREACTS) - 1)
+        index = randint(0, len(RUNSREACTS) - 1)
         reply_text = RUNSREACTS[index]
         await run.edit(reply_text)
 
@@ -417,7 +416,7 @@ async def enable_runs(run):
 @register(outgoing=True, pattern="^.metoo$")
 async def metoo(hahayes):
     """ Haha yes """
-    reply_text = random.choice(METOOSTR)
+    reply_text = choice(METOOSTR)
     await hahayes.edit(reply_text)
 
 
@@ -436,7 +435,7 @@ async def spongemocktext(mock):
         return
 
     for charac in message:
-        if charac.isalpha() and random.randint(0, 1):
+        if charac.isalpha() and randint(0, 1):
             to_app = charac.upper() if charac.islower() else charac.lower()
             reply_text.append(to_app)
         else:
@@ -488,14 +487,14 @@ async def typewriter(typew):
     typing_symbol = "|"
     old_text = ''
     await typew.edit(typing_symbol)
-    await asyncio.sleep(sleep_time)
+    await sleep(sleep_time)
     for character in message:
         old_text = old_text + "" + character
         typing_text = old_text + "" + typing_symbol
         await typew.edit(typing_text)
-        await asyncio.sleep(sleep_time)
+        await sleep(sleep_time)
         await typew.edit(old_text)
-        await asyncio.sleep(sleep_time)
+        await sleep(sleep_time)
 
 
 CMD_HELP.update({"memes": "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."})

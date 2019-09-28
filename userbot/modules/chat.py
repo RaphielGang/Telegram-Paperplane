@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 """ Userbot module containing userid, chatid and log commands"""
 
-from time import sleep
+from asyncio import sleep
 
 from telethon.tl.functions.channels import LeaveChannelRequest
 
@@ -58,7 +58,7 @@ async def log(log_text):
         await log_text.edit("`Logged Successfully`")
     else:
         await log_text.edit("`This feature requires Logging to be enabled!`")
-    sleep(2)
+    await sleep(2)
     await log_text.delete()
 
 

@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 #
 
-import asyncio
+from asyncio import sleep
 
 from telethon.tl.types import MessageEntityMentionName
 
@@ -54,7 +54,7 @@ async def gban_all(msg):
             "Reply Message missing! Might fail on many bots! Still attempting Gban!"
         )
         # Ensure User Read the warning
-        await asyncio.sleep(1)
+        await sleep(1)
     x = (await get_gban())
     count = 0
     banlist = []
@@ -71,7 +71,7 @@ async def gban_all(msg):
             count += 1
             # We cant see if he actually Gbanned. Let this stay for now
             await msg.edit("`Gbanned on " + str(count) + " bots!`")
-            await asyncio.sleep(0.2)
+            await sleep(0.2)
 
 
 @register(outgoing=True, pattern="^.fban")
@@ -145,7 +145,7 @@ async def fedban_all(msg):
                 await msg.edit("`Fbanned on " + str(count) + " feds!`")
             # Sleep to avoid a floodwait.
             # Prevents floodwait if user is a fedadmin on too many feds
-            await asyncio.sleep(0.2)
+            await sleep(0.2)
     if failed:
         failedstr = ""
         for i in failed.keys():

@@ -5,7 +5,7 @@
 #
 """ Userbot module which contains afk-related commands """
 
-import time
+from asyncio import sleep
 
 from telethon.events import StopPropagation
 
@@ -120,7 +120,7 @@ async def type_afk_is_not_true(notafk):
             " `This auto-generated message " +
             "shall be self destructed in 2 seconds.`")
         await no_afk()
-        time.sleep(2)
+        await sleep(2)
         await x.delete()
         await y.delete()
         if BOTLOG:
