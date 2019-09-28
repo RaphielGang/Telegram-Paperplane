@@ -98,26 +98,26 @@ def register(**args):
 
                     link = "[https://t.me/userbot_support](Userbot Support Chat)"
 
-                    text = f"**Sorry, I encountered a error!**\n \
-                            If you want, you can report this to {link}.\n \
-                            I won't log anything except for the exception and date. \n\n \
-                            Disclaimer:\n \
-                            This file uploaded ONLY here, we logged only fact of error \
-                            and date, we respect your privacy. You may not report this \
-                            if this containing any non-disclosure data, no one will \
-                            see your data. \n\n"
+                    text = "**Sorry, I encountered a error!**\n" \
+                            f"If you want, you can report this to {link}.\n" \
+                            "I won't log anything except for the exception and date. \n\n" \
+                            "Disclaimer:\n" \
+                            "This file uploaded ONLY here, we logged only fact of error" \
+                            "and date, we respect your privacy. You may not report this " \
+                            "if this containing any non-disclosure data, no one will " \
+                            "see your data. \n\n"
 
-                    traceback = f"--------BEGIN USERBOT TRACEBACK LOG--------\n \
-                                Date: {strftime('%Y-%m-%d %H:%M:%S', gmtime())} \n \
-                                Group ID: {str(check.chat_id)} \n \
-                                Sender ID: {str(check.sender_id)} \n \
-                                Event Trigger: \n{str(check.text)} \
-                                Traceback Info: \n {str(format_exc())} \
-                                Error Text: \n {str(sys.exc_info()[1])} \n\n \
-                                -------- END USERBOT TRACEBACK LOG-------- \n\n \
-                                Last 5 commits: \n \
-                                {str(stdout.decode().strip())} \
-                                {str(stderr.decode().strip())}"
+                    traceback = "--------BEGIN USERBOT TRACEBACK LOG--------\n" \
+                                f"Date: {strftime('%Y-%m-%d %H:%M:%S', gmtime())} \n" \
+                                f"Group ID: {str(check.chat_id)} \n" \
+                                f"Sender ID: {str(check.sender_id)} \n" \
+                                f"Event Trigger: \n{str(check.text)} \n\n" \
+                                f"Traceback Info: \n {str(format_exc())} \n\n" \
+                                f"Error Text: {str(sys.exc_info()[1])} \n\n" \
+                                "-------- END USERBOT TRACEBACK LOG-------- \n\n" \
+                                "Last 5 commits: \n" \
+                                f"{str(stdout.decode().strip())}" \
+                                f"{str(stderr.decode().strip())}"
 
                     file = open("error.log", "w+")
                     file.write(traceback)
