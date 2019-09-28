@@ -7,7 +7,6 @@
 
 from importlib import import_module
 from os import environ
-from sqlite3 import connect
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 

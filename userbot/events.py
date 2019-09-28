@@ -14,7 +14,6 @@ from time import gmtime, strftime
 from traceback import format_exc
 
 from telethon import events
-from telethon.tl.types import ChannelParticipantsAdmins
 
 from userbot import bot
 
