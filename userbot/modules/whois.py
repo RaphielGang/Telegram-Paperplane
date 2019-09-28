@@ -30,7 +30,11 @@ async def who(event):
 
     replied_user = await get_user(event)
 
-    caption = await fetch_info(replied_user, event)
+    try:
+        caption = await fetch_info(replied_user, event)
+    except AttributeError:
+        event.edit("Something went wrong, user doesn't exists?")
+        return
 
     message_id_to_reply = event.message.reply_to_msg_id
 
