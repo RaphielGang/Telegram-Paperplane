@@ -20,8 +20,8 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
 
-from userbot import (BOTLOG, BOTLOG_CHATID, LogicWorker, CMD_HELP, bot,
-                     is_mongo_alive, is_redis_alive)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, bot, is_mongo_alive,
+                     is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import (get_gmuted, get_muted, gmute, mute,
                                       ungmute, unmute)
@@ -101,7 +101,7 @@ async def set_group_photo(gpic):
             await gpic.edit(PP_ERROR)
 
 
-@register(permit_sudo=True, group_only=True, pattern="^.promote(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^.promote(?: |$)(.*)")
 async def promote(promt):
     """ For .promote command, do promote targeted person """
     # Get targeted chat
@@ -153,7 +153,7 @@ async def promote(promt):
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
 
-@register(permit_sudo=True, group_only=True, pattern="^.demote(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^.demote(?: |$)(.*)")
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     # Admin right check
@@ -201,7 +201,7 @@ async def demote(dmod):
             f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
 
 
-@register(permit_sudo=True, group_only=True, pattern="^.ban(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^.ban(?: |$)(.*)")
 async def ban(bon):
     """ For .ban command, do a ban at targeted person """
     # Here laying the sanity check
@@ -218,11 +218,6 @@ async def ban(bon):
     if user:
         pass
     else:
-        return
-
-    # If the user is a sudo
-    if user.id in LogicWorker:
-        await bon.edit("`Ban Error! I am not supposed to ban this user`")
         return
 
     # Announce that we're going to whack the pest
@@ -264,7 +259,7 @@ async def ban(bon):
             f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
 
-@register(permit_sudo=True, group_only=True, pattern="^.unban(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^.unban(?: |$)(.*)")
 async def nothanos(unbon):
     """ For .unban command, unban the target """
     # Here laying the sanity check
@@ -332,11 +327,6 @@ async def spider(spdr):
 
     if user.id == self_user.id:
         await spdr.edit("`Mute Error! You are not supposed to mute yourself!`")
-        return
-
-    # If the targeted user is a Sudo
-    if user.id in LogicWorker:
-        await spdr.edit("`Mute Error! I am not supposed to mute this user`")
         return
 
     # If everything goes well, do announcing and mute
@@ -502,11 +492,6 @@ async def gspider(gspdr):
     else:
         return
 
-    # If the targeted user is a SUDO
-    if user.id in LogicWorker:
-        await gspdr.edit("`Gmute Error! Couldn't gmute this user`")
-        return
-
     # If pass, inform and start gmuting
     await gspdr.edit("`Grabs a huge, sticky duct tape!`")
 
@@ -608,7 +593,7 @@ async def get_admin(show):
     await show.edit(mentions, parse_mode="html")
 
 
-@register(permit_sudo=True, group_only=True, pattern="^.pin(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^.pin(?: |$)(.*)")
 async def pin(msg):
     # Admin or creator check
     chat = await msg.get_chat()
@@ -652,7 +637,7 @@ async def pin(msg):
             f"LOUD: {not is_silent}")
 
 
-@register(permit_sudo=True, group_only=True, pattern="^.kick(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^.kick(?: |$)(.*)")
 async def kick(usr):
     """ For .kick command, kick someone from the group using the userbot. """
     # Admin or creator check
@@ -668,11 +653,6 @@ async def kick(usr):
     user, reason = await get_user_from_event(usr)
     if not user:
         await usr.edit("`Couldn't fetch user.`")
-        return
-
-    # If the targeted user is a Sudo
-    if user.id in LogicWorker:
-        await usr.edit("`Kick Error! I am not supposed to kick this user`")
         return
 
     await usr.edit("`Kicking...`")
