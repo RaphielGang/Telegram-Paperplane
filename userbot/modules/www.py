@@ -8,7 +8,7 @@
 
 from datetime import datetime
 
-import speedtest
+from speedtest import Speedtest
 from telethon import functions
 
 from userbot import CMD_HELP
@@ -19,7 +19,7 @@ from userbot.events import register
 async def speedtst(spd):
     """ For .speed command, use SpeedTest to check server speeds. """
     await spd.edit("`Running speed test . . .`")
-    test = speedtest.Speedtest()
+    test = Speedtest()
 
     test.get_best_server()
     test.download()
