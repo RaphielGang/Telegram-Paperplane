@@ -62,8 +62,6 @@ UNBAN_RIGHTS = ChatBannedRights(
     embed_links=None,
 )
 
-KICK_RIGHTS = ChatBannedRights(until_date=None, view_messages=True)
-
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
@@ -658,14 +656,10 @@ async def kick(usr):
     await usr.edit("`Kicking...`")
 
     try:
-        await usr.client(EditBannedRequest(usr.chat_id, user.id, KICK_RIGHTS))
-        await sleep(.5)
+        await usr.client.kick_participant(usr.chat_id, user.id)
     except BadRequestError:
         await usr.edit(NO_PERM)
         return
-    await usr.client(
-        EditBannedRequest(usr.chat_id, user.id,
-                          ChatBannedRights(until_date=None)))
 
     if reason:
         kmsg = f"`Kicked` [{user.first_name}](tg://user?id={user.id})`!` \n\

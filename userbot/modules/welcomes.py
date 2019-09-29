@@ -8,11 +8,9 @@
 from asyncio import sleep
 
 from telethon.events import ChatAction
-from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChannelParticipantsAdmins, Message
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
-from userbot.modules.admin import KICK_RIGHTS
 
 
 @bot.on(ChatAction)
@@ -106,9 +104,7 @@ async def welcome_mute(welcm):
                             f"USER:` [{user.first_name}](tg://user?id={user.id})"
                         )
 
-                        await welcm.client(
-                            EditBannedRequest(welcm.chat_id, user.id,
-                                              KICK_RIGHTS))
+                        await welcm.client.kick_participant(welcm.chat_id, user.id)
 
                         await sleep(1)
 
