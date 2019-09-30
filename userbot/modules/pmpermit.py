@@ -10,9 +10,8 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
-from userbot import (BOTLOG, BOTLOG_CHATID, LogicWorker, CMD_HELP, COUNT_PM,
-                     LASTMSG, LOGS, PM_AUTO_BAN, is_mongo_alive,
-                     is_redis_alive)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_PM, LASTMSG, LOGS,
+                     PM_AUTO_BAN, is_mongo_alive, is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import (approval, approve, block_pm, notif_off,
                                       notif_on, notif_state)
@@ -31,8 +30,6 @@ async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
     if PM_AUTO_BAN:
-        if event.sender_id in LogicWorker:
-            return
         if event.is_private and not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
                 return

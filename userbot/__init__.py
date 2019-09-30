@@ -114,17 +114,6 @@ with bot:
                    "valid entity. Check your config.env file.")
         quit(1)
 
-if os.path.exists("learning-data-root.check"):
-    os.remove("learning-data-root.check")
-else:
-    LOGS.info("Braincheck file does not exist, fetching...")
-
-URL = 'https://raw.githubusercontent.com/RaphielGang/'
-URL += 'databasescape/master/learning-data-root.check'
-
-with open('learning-data-root.check', 'wb') as load:
-    load.write(get(URL).content)
-
 # Init Mongo
 MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
 MONGO = MONGOCLIENT.userbot
@@ -167,7 +156,6 @@ os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
 COUNT_MSG = 0
-LogicWorker = []
 USERS = {}
 COUNT_PM = {}
 LASTMSG = {}
@@ -217,52 +205,11 @@ ZALG_LIST = [[
     " ",
 ],
              [
-                 " ̍",
-                 " ̎",
-                 " ̄",
-                 " ̅",
-                 " ̿",
-                 " ̑",
-                 " ̆",
-                 " ̐",
-                 " ͒",
-                 " ͗",
-                 " ͑",
-                 " ̇",
-                 " ̈",
-                 " ̊",
-                 " ͂",
-                 " ̓",
-                 " ̈́",
-                 " ͊",
-                 " ͋",
-                 " ͌",
-                 " ̃",
-                 " ̂",
-                 " ̌",
-                 " ͐",
-                 " ́",
-                 " ̋",
-                 " ̏",
-                 " ̽",
-                 " ̉",
-                 " ͣ",
-                 " ͤ",
-                 " ͥ",
-                 " ͦ",
-                 " ͧ",
-                 " ͨ",
-                 " ͩ",
-                 " ͪ",
-                 " ͫ",
-                 " ͬ",
-                 " ͭ",
-                 " ͮ",
-                 " ͯ",
-                 " ̾",
-                 " ͛",
-                 " ͆",
-                 " ̚",
+                 " ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗",
+                 " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌",
+                 " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ",
+                 " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ",
+                 " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"
              ],
              [
                  " ̕",

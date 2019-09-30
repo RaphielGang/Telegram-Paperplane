@@ -16,7 +16,7 @@ from traceback import format_exc
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
-from userbot import LogicWorker, bot
+from userbot import bot
 
 
 def register(**args):
@@ -27,7 +27,6 @@ def register(**args):
     unsafe_pattern = r'^[^/!#@\$A-Za-z]'
     group_only = args.get('group_only', False)
     disable_errors = args.get('disable_errors', False)
-    permit_sudo = args.get('permit_sudo', False)
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
 
@@ -43,9 +42,6 @@ def register(**args):
     if "disable_errors" in args:
         del args['disable_errors']
 
-    if "permit_sudo" in args:
-        del args['permit_sudo']
-
     if pattern:
         if not ignore_unsafe:
             args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
@@ -55,19 +51,6 @@ def register(**args):
             if group_only and not check.is_group:
                 await check.respond("`Are you sure this is a group?`")
                 return
-
-            # Check if the sudo is an admin already, if yes, we can avoid acting to his command.
-            #If his admin was limited, its his problem.
-            if permit_sudo and not check.out:
-                if check.sender_id in LogicWorker:
-                    async for user in check.client.iter_participants(
-                            check.chat_id, filter=ChannelParticipantsAdmins):
-                        if user.id in LogicWorker:
-                            return
-                    # Announce that you are handling the request
-                    await check.respond("`Processing Sudo Request!`")
-                else:
-                    return
 
             try:
                 await func(check)
