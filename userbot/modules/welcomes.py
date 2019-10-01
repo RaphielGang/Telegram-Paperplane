@@ -10,7 +10,8 @@ from asyncio import sleep
 from telethon.events import ChatAction
 from telethon.tl.types import ChannelParticipantsAdmins, Message
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, CONSOLE_LOGGER_VERBOSE,
+                     WELCOME_MUTE, bot)
 
 
 @bot.on(ChatAction)
@@ -37,7 +38,8 @@ async def welcome_mute(welcm):
 
             if ignore:
                 return
-            elif welcm.user_joined:
+
+            if welcm.user_joined:
                 users_list = hasattr(welcm.action_message.action, "users")
                 if users_list:
                     users = welcm.action_message.action.users
@@ -58,10 +60,9 @@ async def welcome_mute(welcm):
                     if message_date < join_time:
                         continue  # The message was sent before the user joined, thus ignore it
 
-                    # DEBUGGING. LEAVING IT HERE FOR SOME TIME ###
-                    print(f"User Joined: {join_time}")
-                    print(f"Message Sent: {message_date}")
-                    #
+                    if CONSOLE_LOGGER_VERBOSE:
+                        print(f"User Joined: {join_time}")
+                        print(f"Message Sent: {message_date}")
 
                     user = await welcm.client.get_entity(user_id)
                     if "http://" in message.text:
@@ -87,32 +88,19 @@ async def welcome_mute(welcm):
                     continue  # Check the next messsage
 
             if spambot:
-
                 chat = await welcm.get_chat()
                 admin = chat.admin_rights
                 creator = chat.creator
                 if not admin and not creator:
-                    await welcm.reply(
-                        "@admins\n"
-                        "`ANTI SPAMBOT DETECTOR!\n"
-                        "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
-                else:
-                    try:
-                        await welcm.reply(
-                            "`Potential Spambot Detected! Kicking away! "
-                            "Will log the ID for further purposes!\n"
-                            f"USER:` [{user.first_name}](tg://user?id={user.id})"
-                        )
+                    return
 
-                        await welcm.client.kick_participant(welcm.chat_id, user.id)
+                await welcm.reply(
+                    "`Potential Spambot Detected! Kicking away! "
+                    "Will log the ID for further purposes!\n"
+                    f"USER:` [{user.first_name}](tg://user?id={user.id})"
+                )
 
-                        await sleep(1)
-
-                    except BaseException:
-                        await welcm.reply(
-                            "@admins\n"
-                            "`ANTI SPAMBOT DETECTOR!\n"
-                            "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
+                await welcm.client.kick_participant(welcm.chat_id, user.id)
 
                 if BOTLOG:
                     await welcm.client.send_message(
