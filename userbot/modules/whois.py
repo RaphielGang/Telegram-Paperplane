@@ -3,11 +3,8 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-# The entire source code is OSSRPL
-""" Userbot module for getiing info
+""" Userbot module for getting info
     about any user on Telegram(including you!). """
-
-import os
 
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
@@ -15,16 +12,11 @@ from telethon.tl.types import MessageEntityMentionName
 from userbot import CMD_HELP
 from userbot.events import register
 
-TMP_DOWNLOAD_DIRECTORY = "./"
 
-
-@register(pattern="^.whois(?: |$)(.*)", outgoing=True)
-async def who(usr):
+@register(pattern="^.info(?: |$)(.*)", outgoing=True)
+async def info(usr):
     """ For .whois command, get info about a user. """
     if not usr.fwd_from:
-
-        if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
-            os.makedirs(TMP_DOWNLOAD_DIRECTORY)
 
         tofind = await get_user(usr)
 
@@ -90,28 +82,27 @@ async def fetch_info(replied_user, event):
         "This User has no Username")
     user_bio = "This User has no About" if not user_bio else user_bio
 
-    if user_id != (await event.client.get_me()).id:
-        common_chat = replied_user.common_chats_count
-    else:
+    if user_id == (await event.client.get_me()).id:
         common_chat = "I've seen them in... Wow. Are they stalking me? "
         common_chat += "They're in all the same places I am... oh. It's me."
+    else:
+        common_chat = replied_user.common_chats_count
 
-    caption = "<b>USER INFO:</b> \n"
-    caption += f"First Name: {first_name} \n"
-    caption += f"Last Name: {last_name} \n"
-    caption += f"Username: {username} \n"
-    caption += f"Is Bot: {is_bot} \n"
-    caption += f"Is Restricted: {restricted} \n"
-    caption += f"Is Verified by Telegram: {verified} \n"
-    caption += f"ID: <code>{user_id}</code> \n \n"
-    caption += f"Bio: \n<code>{user_bio}</code> \n \n"
-    caption += f"Common Chats with this user: {common_chat} \n"
-    caption += f"Permanent Link To Profile: "
-    caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
-
+    caption = "</b>User Info:</b>\n" \
+              f"First Name: {first_name} \n" \
+              f"Last Name: {last_name} \n" \
+              f"Username: {username} \n" \
+              f"Is Bot: {is_bot} \n" \
+              f"Is Restricted: {restricted} \n" \
+              f"Is Verified by Telegram: {verified} \n" \
+              f"ID: <code>{user_id}</code> \n \n" \
+              f"Bio: \n<code>{user_bio}</code> \n \n" \
+              f"Common Chats with this user: {common_chat} \n" \
+              f"Permanent Link To Profile: " \
+              f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
     return caption
 
 
-CMD_HELP.update(
-    {"whois": ".whois <username>(or reply to the target person's message)"
-              "\nUsage: Get info about a user."})
+CMD_HELP.update({
+    "info": ".info <username>(or reply to the target person's message)\n"
+            "Usage: Get info about a user."})
