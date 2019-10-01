@@ -3,8 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-# The entire source code is OSSRPL except 'whois' which is MPL
-# License: MPL and OSSRPL
+# The entire source code is OSSRPL
 """ Userbot module for getiing info
     about any user on Telegram(including you!). """
 
@@ -20,28 +19,22 @@ TMP_DOWNLOAD_DIRECTORY = "./"
 
 
 @register(pattern="^.whois(?: |$)(.*)", outgoing=True)
-async def who(event):
+async def who(usr):
     """ For .whois command, get info about a user. """
-    if event.fwd_from:
-        return
+    if not usr.fwd_from:
 
-    if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TMP_DOWNLOAD_DIRECTORY)
+        if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
+            os.makedirs(TMP_DOWNLOAD_DIRECTORY)
 
-    replied_user = await get_user(event)
+        tofind = await get_user(usr)
 
-    try:
-        caption = await fetch_info(replied_user, event)
-    except AttributeError:
-        event.edit("Something went wrong, user doesn't exists?")
-        return
+        try:
+            caption = await fetch_info(tofind, usr)
+        except AttributeError:
+            usr.edit("User Doesn't Exist!")
+            return
 
-    message_id_to_reply = event.message.reply_to_msg_id
-
-    if not message_id_to_reply:
-        message_id_to_reply = None
-
-    await event.edit(caption, parse_mode="html")
+        await usr.edit(caption, parse_mode="html")
 
 
 async def get_user(event):
