@@ -5,26 +5,25 @@ from userbot import MONGO, REDIS
 async def mute(chatid, userid):
     if await is_muted(chatid, userid) is True:
         return False
-    else:
-        MONGO.mutes.insert_one({'chat_id': chatid, 'user_id': userid})
-        return True
+
+    MONGO.mutes.insert_one({'chat_id': chatid, 'user_id': userid})
+    return True
 
 
 async def is_muted(chatid, userid):
-    is_muted = MONGO.mutes.find_one({'chat_id': chatid, 'user_id': userid})
-
-    if not is_muted:
+    muted = MONGO.mutes.find_one({'chat_id': chatid, 'user_id': userid})
+    if not muted:
         return False
-    else:
-        return True
+
+    return True
 
 
 async def unmute(chatid, userid):
     if await is_muted(chatid, userid) is False:
         return False
-    else:
-        MONGO.mutes.delete_one({'chat_id': chatid, 'user_id': userid})
-        return True
+
+    MONGO.mutes.delete_one({'chat_id': chatid, 'user_id': userid})
+    return True
 
 
 async def get_muted(chatid):
@@ -41,26 +40,25 @@ async def get_muted(chatid):
 async def gmute(userid):
     if await is_gmuted(userid) is True:
         return False
-    else:
-        MONGO.gmutes.insert_one({'user_id': userid})
-        return True
+
+    MONGO.gmutes.insert_one({'user_id': userid})
+    return True
 
 
 async def is_gmuted(userid):
-    is_gmuted = MONGO.gmutes.find_one({'user_id': userid})
-
-    if not is_gmuted:
+    gmuted = MONGO.gmutes.find_one({'user_id': userid})
+    if not gmuted:
         return False
-    else:
-        return True
+
+    return True
 
 
 async def ungmute(userid):
     if await is_gmuted(userid) is False:
         return False
-    else:
-        MONGO.gmutes.delete_one({'user_id': userid})
-        return True
+
+    MONGO.gmutes.delete_one({'user_id': userid})
+    return True
 
 
 async def get_gmuted():
@@ -257,32 +255,25 @@ async def approval(userid):
 async def approve(userid):
     if await approval(userid) is True:
         return False
-    else:
-        MONGO.pmpermit.update_one(
-            {
+
+    MONGO.pmpermit.update_one({
                 'user_id': userid
-            },
-            {
-                "$set": {'approval': True}
-            }
-            )
-        return True
+                }, {
+                    "$set": {'approval': True}
+                })
+    return True
 
 
 async def block_pm(userid):
     if await approval(userid) is False:
         return False
-    else:
-        MONGO.pmpermit.update_one(
-            {
-                'user_id': userid
-            },
-            {
-                "$set": {'approval': False}
-            }
-            )
 
-        return True
+    MONGO.pmpermit.update_one({
+                'user_id': userid
+                }, {
+                    "$set": {'approval': False}
+                })
+    return True
 
 
 async def notif_state():
@@ -345,8 +336,8 @@ async def is_afk():
     to_check = REDIS.get('is_afk')
     if to_check:
         return True
-    else:
-        return False
+
+    return False
 
 
 async def afk(reason):
@@ -432,9 +423,8 @@ async def lfgetLogging():
 
     return False
 
+
 # Fbans
-
-
 async def get_fban():
     return MONGO.fban.find()
 
@@ -463,8 +453,6 @@ async def is_fban(chatid):
 
 
 # Gbans
-
-
 async def get_gban():
     return MONGO.gban.find()
 
