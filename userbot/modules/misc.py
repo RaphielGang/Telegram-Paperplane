@@ -50,6 +50,9 @@ async def sleepybot(time):
 @register(outgoing=True, pattern="^.shutdown$")
 async def killdabot(event):
     """ For .shutdown command, shut the bot down."""
+    if runningInDocker() is True:
+        event.edit("`You can't use this command on Docker!`")
+        return
     await event.edit("`Goodbye *Windows XP shutdown sound*....`")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n"
@@ -61,7 +64,7 @@ async def killdabot(event):
 async def knocksomesense(event):
     """ Restart the bot, this doesn't working on Docker """
     if runningInDocker() is True:
-        event.edit("`You can't restart on Docker! Manually restart the bot from your host`")
+        event.edit("`You can't use this command on Docker!`")
         return
     await event.edit("`Hold tight! I just need a second to be back up....`")
     if BOTLOG:
