@@ -42,9 +42,6 @@ def register(**args):
     if "disable_errors" in args:
         del args['disable_errors']
 
-    if "permit_sudo" in args:
-        del args['permit_sudo']
-
     if pattern:
         if not ignore_unsafe:
             args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
