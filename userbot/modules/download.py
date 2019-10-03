@@ -9,19 +9,18 @@
 
 import json
 import logging
-import mimetypes
 import os
-import re
 import subprocess
 from datetime import datetime
 from io import BytesIO
-from asyncio import sleep
+from mimetypes import guess_type
+from random import randint
+from re import findall
+from shutil import make_archive
 
-import psutil
-import random
-import shutil
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from psutil import swap_memory, virtual_memory
 from pyDownload import Downloader
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
@@ -45,8 +44,6 @@ async def download_from_url(url: str, file_name: str) -> str:
     """
     start = datetime.now()
     downloader = Downloader(url=url)
-    if downloader.is_running:
-        await sleep(1)
     end = datetime.now()
     duration = (end - start).seconds
     os.rename(downloader.file_name, file_name)
@@ -69,7 +66,7 @@ async def download_from_tg(target_file) -> (str, BytesIO):
     start = datetime.now()
     buf = BytesIO()
     reply_msg = await target_file.get_reply_message()
-    avail_mem = psutil.virtual_memory().available + psutil.swap_memory().free
+    avail_mem = virtual_memory().available + swap_memory().free
     try:
         if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
             filen = await target_file.client.download_media(
@@ -133,7 +130,7 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     }
 
     if filebuf:
-        mime_type = mimetypes.guess_type(filename)
+        mime_type = guess_type(filename)
         if mime_type[0] and mime_type[1]:
             filedata['mimeType'] = f"{mime_type[0]}/{mime_type[1]}"
         else:
@@ -167,7 +164,7 @@ async def gdrive_mirror(request):
         return
     reply = ''
     reply_msg = await request.get_reply_message()
-    links = re.findall(r'\bhttps?://.*\.\S+', message)
+    links = findall(r'\bhttps?://.*\.\S+', message)
     if not (links or reply_msg or reply_msg.media or reply_msg.media.document):
         reply = "`No links or telegram files found!`\n"
         await request.edit(reply)
@@ -257,7 +254,7 @@ async def uploadir(dirmsg):
         return
     file_n = dirmsg.pattern_match.group(1)
     if os.path.exists(file_n):
-        shutil.make_archive(file_n+".zip", 'zip', file_n)
+        make_archive(file_n+".zip", 'zip', file_n)
         dur = upload_f(dirmsg, file_n)
         await dirmsg.edit(f"`Uploaded {file_n}, {dur} seconds`")
     else:
@@ -346,7 +343,7 @@ async def uploadas(umsg):
         file_name, thumb = map(lambda x: x.strip(), umsg.split("|"))
     else:
         file_name = file_n
-        thumb_path = random.randint(1, 100) + ".jpg"
+        thumb_path = randint(1, 100) + ".jpg"
         thumb = get_video_thumb(file_name, output=thumb_path)
     if os.path.exists(file_name):
         start = datetime.now()
