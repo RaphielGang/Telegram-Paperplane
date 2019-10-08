@@ -42,6 +42,13 @@ from userbot.events import errors_handler, register
 @register(outgoing=True, pattern="deepfry")
 @errors_handler
 async def deepfryer(event):
+    try:
+        frycount = int(event.pattern_match.group(1))
+        if frycount < 1:
+            raise ValueError
+    except ValueError:
+        frycount = 1
+
     if event.is_reply:
         reply_message = await event.get_reply_message()
         if reply_message and reply_message.media:
@@ -65,10 +72,12 @@ async def deepfryer(event):
     image = Image.open(image)
 
     # fry the image
-    fried_image = await deepfry(image)
+    for _ in range(frycount):
+        image = await deepfry(image)
+
     fried_io = io.BytesIO()
     fried_io.name = "image.jpeg"
-    fried_image.save(fried_io, "JPEG")
+    image.save(fried_io, "JPEG")
     fried_io.seek(0)
 
     await event.reply(file=fried_io)
@@ -107,6 +116,6 @@ async def deepfry(img: Image) -> Image:
 
 CMD_HELP.update({
     'deepfry':
-    ".deepfry"
-    "\nDeepfries an image or sticker."
+    ".deepfry <number>"
+    "\nDeepfries an image or sticker, optional fry pass count."
 })
