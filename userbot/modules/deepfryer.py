@@ -33,6 +33,7 @@ import io
 from random import randint, uniform
 
 from PIL import Image, ImageEnhance, ImageOps
+from telethon.tl.types import DocumentAttributeFilename
 
 from userbot import CMD_HELP, bot
 from userbot.events import errors_handler, register
@@ -43,8 +44,12 @@ from userbot.events import errors_handler, register
 async def deepfryer(event):
     if event.is_reply:
         reply_message = await event.get_reply_message()
-        data = reply_message.photo
-        data2 = reply_message.sticker
+        if DocumentAttributeFilename(file_name='AnimatedSticker.tgs') not in reply_message.media.document.attributes:
+            data = reply_message.photo
+            data2 = reply_message.sticker
+        else:
+            await event.edit("`I can't deep fry animated stickers!`")
+            return
     else:
         data = None
         data2 = None
