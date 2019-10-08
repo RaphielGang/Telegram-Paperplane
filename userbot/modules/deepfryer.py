@@ -33,7 +33,7 @@ import io
 from random import randint, uniform
 
 from PIL import Image, ImageEnhance, ImageOps
-from telethon.tl.types import DocumentAttributeFilename
+from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import CMD_HELP, bot
 from userbot.events import errors_handler, register
@@ -44,30 +44,25 @@ from userbot.events import errors_handler, register
 async def deepfryer(event):
     if event.is_reply:
         reply_message = await event.get_reply_message()
-        if DocumentAttributeFilename(file_name='AnimatedSticker.tgs') not in reply_message.media.document.attributes:
-            data = reply_message.photo
-            data2 = reply_message.sticker
+        if reply_message and reply_message.media:
+            if isinstance(reply_message.media, MessageMediaPhoto):
+                data = reply_message.photo
+            elif "image" in reply_message.media.document.mime_type.split('/'):
+                data = reply_message.media.document
+            elif DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in reply_message.media.document.attributes:
+                await event.edit("`I can't deep fry animated stickers!`")
+                return
         else:
-            await event.edit("`I can't deep fry animated stickers!`")
+            await event.edit("`I can't deep fry that!`")
             return
     else:
-        data = None
-        data2 = None
-
-    # check if message does contain media and cancel when not
-    if not data and not data2:
-        await event.edit("`I need an image or sticker to deep fry!`")
+        await event.edit("`Reply to an image or sticker to deep fry it!`")
         return
 
     # download last photo (highres) as byte array
-    if data:
-        image = io.BytesIO()
-        image = await bot.download_media(data, image)
-        image = Image.open(image)
-    elif data2:
-        image = io.BytesIO()
-        image = await bot.download_media(data2, image)
-        image = Image.open(image)
+    image = io.BytesIO()
+    image = await bot.download_media(data, image)
+    image = Image.open(image)
 
     # fry the image
     fried_image = await deepfry(image)
