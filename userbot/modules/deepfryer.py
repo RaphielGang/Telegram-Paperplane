@@ -30,6 +30,7 @@
 """ Userbot module for frying stuff. """
 
 import io
+from random import randint, uniform
 
 from PIL import Image, ImageEnhance, ImageOps
 
@@ -74,28 +75,32 @@ async def deepfryer(event):
 
 
 async def deepfry(img: Image) -> Image:
-    colours = ((50, 30, 40), (255, 240, 245))
+    colours = (
+        (randint(50, 200), randint(40, 170), randint(40, 190)),
+        (randint(190, 255), randint(170, 240), randint(180, 250))
+    )
+
     img = img.copy().convert("RGB")
 
     # Crush image to hell and back
     img = img.convert("RGB")
     width, height = img.width, img.height
-    img = img.resize((int(width ** .85), int(height ** .85)), resample=Image.LANCZOS)
-    img = img.resize((int(width ** .92), int(height ** .92)), resample=Image.BILINEAR)
-    img = img.resize((int(width ** .97), int(height ** .97)), resample=Image.BICUBIC)
+    img = img.resize((int(width ** uniform(0.8, 0.9)), int(height ** uniform(0.8, 0.9))), resample=Image.LANCZOS)
+    img = img.resize((int(width ** uniform(0.85, 0.95)), int(height ** uniform(0.85, 0.95))), resample=Image.BILINEAR)
+    img = img.resize((int(width ** uniform(0.89, 0.98)), int(height ** uniform(0.89, 0.98))), resample=Image.BICUBIC)
     img = img.resize((width, height), resample=Image.BICUBIC)
-    img = ImageOps.posterize(img, 7)
+    img = ImageOps.posterize(img, randint(3, 7))
 
     # Generate colour overlay
     overlay = img.split()[0]
-    overlay = ImageEnhance.Contrast(overlay).enhance(1.2)
-    overlay = ImageEnhance.Brightness(overlay).enhance(1.0)
+    overlay = ImageEnhance.Contrast(overlay).enhance(uniform(1.0, 2.0))
+    overlay = ImageEnhance.Brightness(overlay).enhance(uniform(1.0, 2.0))
 
     overlay = ImageOps.colorize(overlay, colours[0], colours[1])
 
     # Overlay red and yellow onto main image and sharpen the hell out of it
-    img = Image.blend(img, overlay, 0.15)
-    img = ImageEnhance.Sharpness(img).enhance(300)
+    img = Image.blend(img, overlay, uniform(0.1, 0.4))
+    img = ImageEnhance.Sharpness(img).enhance(randint(5, 300))
 
     return img
 
