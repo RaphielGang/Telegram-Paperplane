@@ -1,8 +1,16 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# you may not use this file except in compliance with the License.
+#
+""" Module that holding database components """
+
 from userbot import MONGO, REDIS
 
 
 # Mutes
 async def mute(chatid, userid):
+    """ Add muted person ID to database """
     if await is_muted(chatid, userid) is True:
         return False
 
@@ -11,6 +19,7 @@ async def mute(chatid, userid):
 
 
 async def is_muted(chatid, userid):
+    """ Return if the current ID is muted """
     muted = MONGO.mutes.find_one({'chat_id': chatid, 'user_id': userid})
     if not muted:
         return False
@@ -19,6 +28,7 @@ async def is_muted(chatid, userid):
 
 
 async def unmute(chatid, userid):
+    """ Remove a ID for unmute event"""
     if await is_muted(chatid, userid) is False:
         return False
 
@@ -27,6 +37,7 @@ async def unmute(chatid, userid):
 
 
 async def get_muted(chatid):
+    """ Grab if the current userID is muted """
     muted_db = MONGO.mutes.find({'chat_id': int(chatid)})
 
     muted = []
@@ -38,6 +49,7 @@ async def get_muted(chatid):
 
 # GMutes
 async def gmute(userid):
+    """ Add a globally muted person ID into database """
     if await is_gmuted(userid) is True:
         return False
 
@@ -46,6 +58,7 @@ async def gmute(userid):
 
 
 async def is_gmuted(userid):
+    """ Return if the current ID is globally muted """
     gmuted = MONGO.gmutes.find_one({'user_id': userid})
     if not gmuted:
         return False
@@ -54,6 +67,7 @@ async def is_gmuted(userid):
 
 
 async def ungmute(userid):
+    """ Remove a ID for ungmute event """
     if await is_gmuted(userid) is False:
         return False
 
@@ -62,6 +76,7 @@ async def ungmute(userid):
 
 
 async def get_gmuted():
+    """ Grab if the current ID is globally muted """
     gmuted_db = MONGO.gmutes.find()
     gmuted = []
 
@@ -73,14 +88,17 @@ async def get_gmuted():
 
 # Filters
 async def get_filters(chatid):
+    """ Find filters for specified ChatID """
     return MONGO.filters.find({'chat_id': chatid})
 
 
 async def get_filter(chatid, keyword):
+    """ Get filter content for the specified keyword """
     return MONGO.filters.find_one({'chat_id': chatid, 'keyword': keyword})
 
 
 async def add_filter(chatid, keyword, msg):
+    """ Add a filter into Database """
     to_check = await get_filter(chatid, keyword)
 
     if not to_check:
@@ -105,6 +123,7 @@ async def add_filter(chatid, keyword, msg):
 
 
 async def delete_filter(chatid, keyword):
+    """ Delete a filter from Database """
     to_check = await get_filter(chatid, keyword)
 
     if not to_check:
@@ -122,14 +141,17 @@ async def delete_filter(chatid, keyword):
 
 # Notes
 async def get_notes(chatid):
+    """ Find notes from specific ChatID """
     return MONGO.notes.find({'chat_id': chatid})
 
 
 async def get_note(chatid, name):
+    """ Get notes from specific ChatID """
     return MONGO.notes.find_one({'chat_id': chatid, 'name': name})
 
 
 async def add_note(chatid, name, text):
+    """ Add a note into the Database """
     to_check = await get_note(chatid, name)
 
     if not to_check:
@@ -151,6 +173,7 @@ async def add_note(chatid, name, text):
 
 
 async def delete_note(chatid, name):
+    """ Delete a note from Database """
     to_check = await get_note(chatid, name)
 
     if not to_check:
@@ -166,10 +189,12 @@ async def delete_note(chatid, name):
 
 # Lists
 async def get_lists(chatid):
+    """ Find list for specified ChatID """
     return MONGO.lists.find({'$or': [{'chat_id': chatid}, {'chat_id': 0}]})
 
 
 async def get_list(chatid, name):
+    """ Get list for specified ChatID """
     return MONGO.lists.find_one({
         '$or': [{
             'chat_id': chatid
@@ -181,6 +206,7 @@ async def get_list(chatid, name):
 
 
 async def add_list(chatid, name, items):
+    """ Add a list into the Database """
     to_check = await get_list(chatid, name)
 
     if not to_check:
@@ -205,6 +231,7 @@ async def add_list(chatid, name, items):
 
 
 async def delete_list(chatid, name):
+    """ Delete a list from the Database """
     to_check = await get_list(chatid, name)
 
     if not to_check:
@@ -219,6 +246,7 @@ async def delete_list(chatid, name):
 
 
 async def set_list(oldchatid, name, newchatid):
+    """ Set a list """
     to_check = await get_list(oldchatid, name)
 
     if not to_check:
@@ -240,6 +268,7 @@ async def set_list(oldchatid, name, newchatid):
 
 
 async def approval(userid):
+    """ Add approved ID into Database """
     to_check = MONGO.pmpermit.find_one({'user_id': userid})
 
     if to_check is None:
@@ -253,30 +282,33 @@ async def approval(userid):
 
 
 async def approve(userid):
+    """ Find if a ID is approved """
     if await approval(userid) is True:
         return False
 
     MONGO.pmpermit.update_one({
-                'user_id': userid
-                }, {
-                    "$set": {'approval': True}
-                })
+        'user_id': userid
+    }, {
+        "$set": {'approval': True}
+    })
     return True
 
 
 async def block_pm(userid):
+    """ Add a blocked person ID into database """
     if await approval(userid) is False:
         return False
 
     MONGO.pmpermit.update_one({
-                'user_id': userid
-                }, {
-                    "$set": {'approval': False}
-                })
+        'user_id': userid
+    }, {
+        "$set": {'approval': False}
+    })
     return True
 
 
 async def notif_state():
+    """ Get notification setting """
     state = dict()
     state_db = MONGO.notif.find()
 
@@ -293,6 +325,7 @@ async def notif_state():
 
 
 async def __notif_id():
+    """ Get notification ID from Database """
     id_real = dict()
     id_db = MONGO.notif.find()
 
@@ -303,36 +336,39 @@ async def __notif_id():
 
 
 async def notif_on():
+    """ Return if notification is enabled """
     if await notif_state() is True:
         return False
-    else:
-        MONGO.notif.update(
-            {
-                '_id': await __notif_id()
-            },
-            {
-                "$set": {'state': True}
-            }
-            )
-        return True
+
+    MONGO.notif.update(
+        {
+            '_id': await __notif_id()
+        },
+        {
+            "$set": {'state': True}
+        }
+    )
+    return True
 
 
 async def notif_off():
+    """ Return if notification is disabled """
     if await notif_state() is False:
         return False
-    else:
-        MONGO.notif.update(
-            {
-                '_id': await __notif_id()
-            },
-            {
-                "$set": {'state': False}
-            }
-            )
-        return True
+
+    MONGO.notif.update(
+        {
+            '_id': await __notif_id()
+        },
+        {
+            "$set": {'state': False}
+        }
+    )
+    return True
 
 
 async def is_afk():
+    """ Return if the user is AFK """
     to_check = REDIS.get('is_afk')
     if to_check:
         return True
@@ -341,43 +377,63 @@ async def is_afk():
 
 
 async def afk(reason):
+    """ Set AFK Reason """
     REDIS.set('is_afk', reason)
 
 
 async def afk_reason():
+    """ Get AFK Reason """
     return REDIS.get('is_afk').decode("UTF-8")
 
 
 async def no_afk():
+    """ Remove AFK Reason and state """
     REDIS.delete('is_afk')
 
 # Spotify
+
+
 async def sfsetartist(artist):
+    """ Set Spotify Artist """
     REDIS.set('sfartist', artist)
 
+
 async def sfsetsong(song):
+    """ Set Spotify Song """
     REDIS.set('sfsong', song)
 
+
 async def spotifycheck(spotifychck):
+    """ Set Spotify Check (Status) """
     REDIS.set('spotifycheck', spotifychck)
 
+
 async def exceptionexist(olexception):
+    """ Set if Spotify had exception before """
     REDIS.set('exceptionexist', olexception)
 
+
 async def sfgetsong():
+    """ Get Spotify Song """
     return REDIS.get('sfsong').decode("UTF-8")
 
+
 async def sfgetartist():
+    """ Get Spotify Artist """
     return REDIS.get('sfartist').decode("UTF-8")
 
+
 async def getexception():
+    """ Get if Spotify had exception before """
     exceptcheck = REDIS.get('exceptionexist')
     if exceptcheck is True:
         return True
 
     return False
 
+
 async def getspotifycheck():
+    """ Get Spotify Check (Status) """
     spotifychk = REDIS.get('spotifycheck')
     if spotifychk is True:
         return True
@@ -385,38 +441,59 @@ async def getspotifycheck():
     return False
 
 # LastFM
+
+
 async def lfsetartist(artist):
+    """ Set LastFM Artist """
     REDIS.set('lfartist', artist)
 
+
 async def lfsetsong(song):
+    """ Set LastFM Song """
     REDIS.set('lfsong', song)
 
+
 async def setlastfmcheck(lastfmcheck):
+    """ Set LastFM Check (Status) """
     REDIS.set('lastfmcheck', lastfmcheck)
 
+
 async def setuserID(userid):
+    """ Set UserID for LastFM """
     REDIS.set('userid', userid)
 
+
 async def lfsetLogging(log):
+    """ Set Logging for LastFM """
     REDIS.set('lflog', log)
 
+
 async def lfgetartist():
+    """ Get LastFM Artist """
     return REDIS.get('lfartist').decode("UTF-8")
 
+
 async def lfgetsong():
+    """ Get LastFM Song """
     return REDIS.get('lfsong').decode("UTF-8")
 
+
 async def getlastfmcheck():
+    """ Get LastFM Check (Status) """
     lastcheck = REDIS.get('lastfmcheck')
     if lastcheck is True:
         return True
 
     return False
 
+
 async def getuserID():
+    """ Get UserID for LastFM """
     return REDIS.get('userid')
 
+
 async def lfgetLogging():
+    """ Get Logging for LastFM """
     loggingup = REDIS.get('lflog')
     if loggingup is True:
         return True
@@ -426,10 +503,12 @@ async def lfgetLogging():
 
 # Fbans
 async def get_fban():
+    """ Find if a ID is fedbanned """
     return MONGO.fban.find()
 
 
 async def add_chat_fban(chatid):
+    """ Add a chat to execute fban into database """
     if await is_fban(chatid) is True:
         return False
 
@@ -437,6 +516,7 @@ async def add_chat_fban(chatid):
 
 
 async def remove_chat_fban(chatid):
+    """ Remove chat that used for executing fban from database """
     if await is_fban(chatid) is False:
         return False
 
@@ -445,6 +525,7 @@ async def remove_chat_fban(chatid):
 
 
 async def is_fban(chatid):
+    """ Check if the current chat is on database """
     if not MONGO.fban.find_one({"chatid": chatid}):
         return False
 
@@ -453,10 +534,12 @@ async def is_fban(chatid):
 
 # Gbans
 async def get_gban():
+    """ Find if a ID is gbanned """
     return MONGO.gban.find()
 
 
 async def add_chat_gban(chatid):
+    """ Add a chat to execute gban into database """
     if await is_gban(chatid) is True:
         return False
 
@@ -464,6 +547,7 @@ async def add_chat_gban(chatid):
 
 
 async def remove_chat_gban(chatid):
+    """ Remove chat that used for executing gban from database """
     if await is_gban(chatid) is False:
         return False
 
@@ -472,6 +556,7 @@ async def remove_chat_gban(chatid):
 
 
 async def is_gban(chatid):
+    """ Check if the current chat is on database """
     if not MONGO.gban.find_one({"chatid": chatid}):
         return False
 
@@ -480,6 +565,7 @@ async def is_gban(chatid):
 
 # Time
 async def get_time():
+    """ Get time variables from database """
     return MONGO.misc.find_one({'timec': {
         '$exists': True
     }}, {
@@ -489,6 +575,7 @@ async def get_time():
 
 
 async def set_time(country, timezone=1):
+    """ Set Time into database """
     to_check = await get_time()
 
     if to_check:
@@ -501,15 +588,16 @@ async def set_time(country, timezone=1):
             {
                 "$set": {'timec': country,
                          'timezone': timezone
-                        }
+                         }
             }
-            )
+        )
     else:
         MONGO.misc.insert_one({'timec': country, 'timezone': timezone})
 
 
 # Weather
 async def get_weather():
+    """ Get weather variables from database """
     return MONGO.misc.find_one(
         {
             'weather_city': {'$exists': True}
@@ -517,10 +605,11 @@ async def get_weather():
         {
             'weather_city': 1
         }
-        )
+    )
 
 
 async def set_weather(city):
+    """ Set weather variables from database """
     to_check = await get_weather()
 
     if to_check:
@@ -532,6 +621,6 @@ async def set_weather(city):
             {
                 "$set": {'weather_city': city}
             }
-            )
+        )
     else:
         MONGO.misc.insert_one({'weather_city': city})
