@@ -593,6 +593,7 @@ async def get_admin(show):
 
 @register(outgoing=True, group_only=True, pattern="^.pin(?: |$)(.*)")
 async def pin(msg):
+    """For .pin command, pin a replied message"""
     # Admin or creator check
     chat = await msg.get_chat()
     admin = chat.admin_rights
@@ -713,6 +714,7 @@ async def get_user_from_event(event):
 
 
 async def get_user_from_id(user, event):
+    """Getting userdata from ID"""
     if isinstance(user, str):
         user = int(user)
 
