@@ -3,7 +3,7 @@ name: Paperplane CI
 
 steps:
 - name : Commit Testings
-  image: baalajimaestro/userbot_python:latest
+  image: raphielscape/paperplanebase:latest
   environment:
     BOT_API_KEY:
       from_secret: BOT_API_KEY
