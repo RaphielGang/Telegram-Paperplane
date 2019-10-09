@@ -10,7 +10,7 @@ from os import environ
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
-from userbot import LOGS, bot
+from userbot import LOGS, bot, PAPERPLANE_VERSION
 from userbot.modules import ALL_MODULES
 
 INVALID_PH = '\nERROR: The Phone No. entered is INVALID' \
@@ -28,7 +28,7 @@ for module_name in ALL_MODULES:
 
 LOGS.info("Your Bot is alive! Test it by typing .alive on any chat."
           " Should you need assistance, head to https://t.me/userbot_support")
-LOGS.info("Your Bot Version is 4.2")
+LOGS.info("Your Bot Version is %s", PAPERPLANE_VERSION)
 
 CI_TEST = environ.get("CI", None)
 if CI_TEST:

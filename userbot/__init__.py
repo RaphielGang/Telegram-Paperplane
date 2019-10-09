@@ -38,6 +38,9 @@ if version_info < (3, 6, 0):
                " Multiple features depend on this. Bot quitting.")
     quit(1)
 
+# Global declaration for bot version
+PAPERPLANE_VERSION = "4.3"
+
 # Check if the config was edited by using the already used variable
 CONFIG_CHECK = os.environ.get(
     "___________PLOX_______REMOVE_____THIS_____LINE__________", None)

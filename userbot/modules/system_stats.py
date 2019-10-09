@@ -9,11 +9,12 @@ from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 from os import remove
 from platform import python_version, uname
-from shutil import which
 
+from git import Repo
 from telethon import version
 
-from userbot import CMD_HELP, is_mongo_alive, is_redis_alive, runningInDocker
+from userbot import (CMD_HELP, PAPERPLANE_VERSION, is_mongo_alive,
+                     is_redis_alive, runningInDocker)
 from userbot.events import register
 
 # ================= CONSTANT =================
@@ -43,41 +44,15 @@ async def sysdetails(sysd):
 
 
 @register(outgoing=True, pattern="^.botver$")
-async def bot_ver(event):
+async def bot_ver(ver):
     """ For .botver command, get the bot version. """
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
-                                                             "!"):
-        if which("git") is not None:
-            invokever = "git describe --all --long"
-            ver = await asyncrunapp(
-                invokever,
-                stdout=asyncPIPE,
-                stderr=asyncPIPE,
-            )
-            stdout, stderr = await ver.communicate()
-            verout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+    if not ver.text[0].isalpha() and ver.text[0] not in ("/", "#", "@", "!"):
 
-            invokerev = "git rev-list --all --count"
-            rev = await asyncrunapp(
-                invokerev,
-                stdout=asyncPIPE,
-                stderr=asyncPIPE,
-            )
-            stdout, stderr = await rev.communicate()
-            revout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+        repo = Repo(search_parent_directories=True)
+        revout = repo.head.object.hexsha
 
-            await event.edit("`Userbot Version: "
-                             f"{verout}"
-                             "` \n"
-                             "`Revision: "
-                             f"{revout}"
-                             "` \n"
-                             "`Tagged Version: r4.2`")
-        else:
-            await event.edit(
-                "Shame that you don't have git, You're running r4.2 anyway")
+        await ver.edit(f"`Version: {PAPERPLANE_VERSION}\n"
+                       f"Revision: {revout}`")
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
@@ -127,19 +102,19 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern="^.alive$")
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
-        db = "Both Mongo and Redis Database seems to be failing!"
+        dbstate = "Both Mongo and Redis Database seems to be failing!"
     elif not is_mongo_alive():
-        db = "Mongo DB seems to be failing!"
+        dbstate = "Mongo DB seems to be failing!"
     elif not is_redis_alive():
-        db = "Redis Cache seems to be failing!"
+        dbstate = "Redis Cache seems to be failing!"
     else:
-        db = "Databases functioning normally!"
+        dbstate = "Databases functioning normally!"
     await alive.edit("`"
                      "Your bot is running \n\n"
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
-                     f"Database Status: {db} \n"
+                     f"Database Status: {dbstate} \n"
                      f"Running on Docker: {runningInDocker()}"
                      "`")
 
