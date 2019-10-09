@@ -64,7 +64,7 @@ def register(**args):
             #
             except events.StopPropagation:
                 raise events.StopPropagation
-            # This is a gay exception and must be passed out. So that it doesnt spam chats
+            # This exception has to be passed
             except KeyboardInterrupt:
                 pass
             except BaseException:
@@ -84,7 +84,7 @@ def register(**args):
                             f"If you want, you can report this to {link}.\n" \
                             "I won't log anything except for the exception and date. \n\n" \
                             "Disclaimer:\n" \
-                            "This file uploaded ONLY here, we logged only fact of error" \
+                            "This file uploaded ONLY here, we logged only fact of error " \
                             "and date, we respect your privacy. You may not report this " \
                             "if this containing any non-disclosure data, no one will " \
                             "see your data. \n\n"
@@ -116,6 +116,7 @@ def register(**args):
 
         if not disable_edited:
             bot.add_event_handler(wrapper, events.MessageEdited(**args))
+
         bot.add_event_handler(wrapper, events.NewMessage(**args))
         return wrapper
 
