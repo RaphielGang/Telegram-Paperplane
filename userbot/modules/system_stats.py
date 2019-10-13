@@ -49,10 +49,11 @@ async def bot_ver(ver):
     if not ver.text[0].isalpha() and ver.text[0] not in ("/", "#", "@", "!"):
 
         repo = Repo(search_parent_directories=True)
-        revout = repo.head.object.hexsha
+        headhex = repo.head.object.hexsha
+        revision = repo.git.rev_parse(headhex, short=1)
 
         await ver.edit(f"`Version: {PAPERPLANE_VERSION}\n"
-                       f"Revision: {revout}`")
+                       f"Revision: {revision}`")
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
