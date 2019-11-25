@@ -148,11 +148,11 @@ if not os.path.exists('bin'):
 url1 = 'https://raw.githubusercontent.com/yshalsager/megadown/master/megadown'
 url2 = 'https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py'
 
-dl1 = Downloader(url=url1, filename="bin/megadown")
-dl1 = Downloader(url=url1, filename="bin/cmrudl")
+dl1 = Downloader(url=url1, filename="./bin/megadown.sh")
+dl1 = Downloader(url=url1, filename="./bin/cmrudl.py")
 
-os.chmod('bin/megadown', 0o755)
-os.chmod('bin/cmrudl', 0o755)
+os.chmod('/bin/megadown.sh', 0o755)
+os.chmod('./bin/cmrudl.py', 0o755)
 
 # Global Variables
 COUNT_MSG = 0
