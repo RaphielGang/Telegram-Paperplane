@@ -189,7 +189,7 @@ def cm_ru(url: str) -> str:
     except IndexError:
         reply = "`No cloud.mail.ru links found`\n"
         return reply
-    command = f'bin/cmrudl -s {link}'
+    command = f'./bin/cmrudl.py -s {link}'
     result = popen(command).read()
     result = result.splitlines()[-1]
     try:
