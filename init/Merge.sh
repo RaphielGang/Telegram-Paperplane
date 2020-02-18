@@ -18,7 +18,7 @@ cd
 git clone https://github.com/RaphielGang/Telegram-UserBot.git
 cd Telegram-UserBot
 git remote rm origin
-git remote add origin https://baalajimaestro:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
+git remote add origin https://nysascape:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
 git fetch
 git checkout staging
 git pull origin staging
