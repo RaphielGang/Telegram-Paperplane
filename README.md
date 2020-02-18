@@ -22,7 +22,7 @@
 
 Paperplane is a modular, Telegram userbot running on Python3, which can be coupled up with Mongo DB, and a Redis backend.
 
-Originally fowunded by baalajimaestro, it is now maintained by nysascape and RealAkito. It was started as a simple bot,
+Originally founded by baalajimaestro, it is now maintained by nysascape and RealAkito. It was started as a simple bot,
 which helped with deleting messages and other group related things, with a ton of features from [SkittBot](https://github.com/skittles9823/SkittBot).
 It has since evolved, becoming extremely modular and simple to use.
 
