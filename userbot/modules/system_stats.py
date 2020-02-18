@@ -74,10 +74,10 @@ async def bot_ver(event):
                              "`Revision: "
                              f"{revout}"
                              "` \n"
-                             "`Tagged Version: r4.0`")
+                             "`Tagged version: v1.0`")
         else:
             await event.edit(
-                "Shame that you don't have Git, you're running r4.0 anyway!")
+                "Shame that you don't have Git, you're running v1.0 anyway!")
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
@@ -140,7 +140,7 @@ async def amireallyalive(alive):
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
                      f"Database status: {db}"
-                     f"Tagged bot version: r4.0"
+                     f"Tagged bot version: v1.0"
                      "`")
 
 

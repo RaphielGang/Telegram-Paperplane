@@ -13,9 +13,9 @@ from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 from userbot import LOGS, bot
 from userbot.modules import ALL_MODULES
 
-INVALID_PH = '\nERROR: The phone no. entered is INVALID' \
-             '\n  Tip: Use country code (eg +44) along with No.' \
-             '\n       Recheck your Phone Number'
+INVALID_PH = '\nERROR: The phone no. entered is incorrect' \
+             '\n  Tip: Use country code (eg +44) along with num.' \
+             '\n       Recheck your phone number'
 
 try:
     bot.start()
@@ -28,7 +28,7 @@ for module_name in ALL_MODULES:
 
 LOGS.info("Paperplane is alive! Test it by typing .alive on any chat."
           " Should you need assistance, head to https://t.me/tgpaperplane")
-LOGS.info("Your bot version is 4.0")
+LOGS.info("Your bot version is v1.0.")
 
 SEM_TEST = os.environ.get("SEMAPHORE", None)
 if SEM_TEST:
