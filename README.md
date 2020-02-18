@@ -15,20 +15,19 @@
     Telegram Team deleted your account?
     And after that, then you pointed your fingers at us
     for getting your acoount deleted?
-    I will rolling on the floor laughing at you.
+    I will be rolling on the floor laughing at you.
 /**
 ```
-
-A modular telegram Python UserBot running on python3 with a mongoDB coupled with Redis backend.
+A modular Telegram userbot running on Python 3 with a mongoDB coupled with Redis backend.
 
 Started up as a simple bot, which helps with deleting messages and other stuffs when I didn't possess a smartphone(selecting each message indeed difficult) with a ton of meme features kanged from [SkittBot](https://github.com/skittles9823/SkittBot), it has evolved, becoming extremely modular and simple to use.
 
 For configuring this userbot, you can checkout the [Wiki](https://wiki.raphielgang.org)
 
 If you just want to stay in the loop about new features or
-announcements you can join the [news channel](https://t.me/maestro_userbot_channel).
+announcements you can join the [news channel](https://t.me/paperplanechannel).
 
-If you find any bugs or have any suggestions then don't hesitate to contact me in [my support group](https://t.me/userbot_support).
+If you find any bugs or have any suggestions then don't hesitate to contact me in [our support group](https://t.me/tgpaperplane).
 
 Please head to the wiki on instructions to setting it up!
 
@@ -61,4 +60,4 @@ I would like to thank people who assisted me throughout this project:
 
 and many more people who aren't mentioned here.
 
-Found Bugs? Create an issue on the issue tracker, or post it in the [support group](https://t.me/userbot_support).
+Found a bug? Create an issue on the issue tracker, or post it in the [support group](https://t.me/tgpaperplane).
