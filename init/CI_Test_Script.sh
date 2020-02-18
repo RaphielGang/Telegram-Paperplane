@@ -81,7 +81,6 @@ RESULT=`yapf -d -r -p userbot`
     tg_sendinfo "<code>Auto-Linter didn't lint anything</code>"
   fi
 }
-
 tg_yay() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
 
