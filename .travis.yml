@@ -1,9 +1,6 @@
-language: bash
+language: minimal
 
-dist: xenial
-
-python:
-  - "3.7.4"
+dist: bionic
 
 script:
   - bash init/Merge.sh
