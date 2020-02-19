@@ -8,21 +8,29 @@
 from userbot import CMD_HELP
 from userbot.events import register
 
-
 @register(outgoing=True, pattern="^.help(?: |$)(.*)")
 async def help(event):
     """ For .help command,"""
     args = event.pattern_match.group(1)
     if args:
         if args in CMD_HELP:
-            await event.edit(str(CMD_HELP[args]))
+            try:
+                await event.edit(str(CMD_HELP[args]))
+            except:
+                pass
         else:
-            await event.edit("Please specify a valid module name.")
+            try:
+                await event.edit("Please specify a valid module name.")
+            except:
+                pass
     else:
-        await event.edit("Please specify which module do you want help for!")
-        string = ""
-        for i in CMD_HELP:
-            string += "`" + str(i)
-            string += "`, "
-        string = string[:-2]
-        await event.reply(string)
+        try:
+            await event.edit("Please specify which module do you want help for!")
+            string = ""
+            for i in CMD_HELP:
+                string += "`" + str(i)
+                string += "`, "
+            string = string[:-2]
+            await event.reply(string)
+        except:
+            pass
