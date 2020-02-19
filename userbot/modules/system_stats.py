@@ -139,7 +139,7 @@ async def amireallyalive(alive):
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
-                     f"Database status: {db}"
+                     f"Database status: {db}\n"
                      f"Tagged bot version: v1.0"
                      "`")
 
