@@ -76,6 +76,5 @@ CMD_HELP.update({
     "original author of a forwarded message."
 })
 CMD_HELP.update(
-    {"log": "Forward the message you've replied to to your "
-     "botlog group."})
+    {"log": "Forward the message you've replied to to your botlog group."})
 CMD_HELP.update({"kickme": "Leave from a targeted group."})
