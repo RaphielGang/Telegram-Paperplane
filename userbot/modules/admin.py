@@ -321,32 +321,31 @@ async def spider(spdr):
     await spdr.edit("`Gets a tape!`")
     if await mute(spdr.chat_id, user.id) is False:
         return await spdr.edit('`Error! User probably already muted.`')
-    else:
-        try:
-            await spdr.client(
-                EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
-            # Announce that the function is done
-            await spdr.edit("`Safely taped!`")
+    try:
+        await spdr.client(
+            EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
+        # Announce that the function is done
+        await spdr.edit("`Safely taped!`")
 
-            # Announce to logging group
-            if BOTLOG:
-                await spdr.client.send_message(
-                    BOTLOG_CHATID, "#MUTE\n"
-                    f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                    f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
-        except UserIdInvalidError:
-            return await spdr.edit("`Uh oh my unmute logic broke!`")
+        # Announce to logging group
+        if BOTLOG:
+            await spdr.client.send_message(
+                BOTLOG_CHATID, "#MUTE\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
+    except UserIdInvalidError:
+        return await spdr.edit("`Uh oh my unmute logic broke!`")
 
-        # These indicate we couldn't hit him an API mute, possibly an
-        # admin?
+    # These indicate we couldn't hit him an API mute, possibly an
+    # admin?
 
-        except (UserAdminInvalidError, ChatAdminRequiredError,
-                BadRequestError):
-            return await spdr.edit("""`I couldn't mute on the API,
-            could be an admin possibly?
-            Anyways muted on the userbot.
-            I'll automatically delete messages
-            in this chat from this person`""")
+    except (UserAdminInvalidError, ChatAdminRequiredError,
+            BadRequestError):
+        return await spdr.edit("""`I couldn't mute on the API,
+        could be an admin possibly?
+        Anyways muted on the userbot.
+        I'll automatically delete messages
+        in this chat from this person`""")
 
 
 @register(outgoing=True, group_only=True, pattern="^.unmute(?: |$)(.*)")
@@ -376,21 +375,20 @@ async def unmoot(unmot):
 
     if await unmute(unmot.chat_id, user.id) is False:
         return await unmot.edit("`Error! User probably already unmuted.`")
-    else:
 
-        try:
-            await unmot.client(
-                EditBannedRequest(unmot.chat_id, user.id, UNMUTE_RIGHTS))
-            await unmot.edit("```Unmuted Successfully```")
-        except UserIdInvalidError:
-            await unmot.edit("`Uh oh my unmute logic broke!`")
-            return
+    try:
+        await unmot.client(
+            EditBannedRequest(unmot.chat_id, user.id, UNMUTE_RIGHTS))
+        await unmot.edit("```Unmuted Successfully```")
+    except UserIdInvalidError:
+        await unmot.edit("`Uh oh my unmute logic broke!`")
+        return
 
-        if BOTLOG:
-            await unmot.client.send_message(
-                BOTLOG_CHATID, "#UNMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
+    if BOTLOG:
+        await unmot.client.send_message(
+            BOTLOG_CHATID, "#UNMUTE\n"
+            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+            f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
 
 
 @register(incoming=True, disable_errors=True)
@@ -574,6 +572,7 @@ async def get_admin(show):
 
 @register(outgoing=True, group_only=True, pattern="^.pin(?: |$)(.*)")
 async def pin(msg):
+    """ .pin pins the replied to message at the top of the chat. """
     # Admin or creator check
     chat = await msg.get_chat()
     admin = chat.admin_rights
@@ -592,7 +591,7 @@ async def pin(msg):
 
     options = msg.pattern_match.group(1)
 
-    is_silent = True,
+    is_silent = True
     if options.lower() == "loud":
         is_silent = False
 
@@ -688,6 +687,7 @@ async def get_user_from_event(event):
 
 
 async def get_user_from_id(user, event):
+    """ Getting user from user ID """
     if isinstance(user, str):
         user = int(user)
 
@@ -700,14 +700,17 @@ async def get_user_from_id(user, event):
     return user_obj
 
 
-# TODO : Clean this
-CMD_HELP.update(
-    {"promote": "Usage: Reply to message with .promote to promote them."})
-CMD_HELP.update({"ban": "Usage: Reply to message with .ban to ban them."})
+CMD_HELP.update({
+    "promote": 
+    "Usage: Reply to message with .promote to promote them."
+})
+CMD_HELP.update({
+    "ban":
+    "Usage: Reply to message with .ban to ban them."
+})
 CMD_HELP.update({
     "demote":
-    "Usage: Reply to message with"
-    ".demote to revoke their admin permissions."
+    "Usage: Reply to message with .demote to revoke their admin permissions."
 })
 CMD_HELP.update({
     "unban":
@@ -715,29 +718,29 @@ CMD_HELP.update({
 })
 CMD_HELP.update({
     "mute":
-    "Usage: Reply tomessage with .mute "
-    "to mute them, works on admins too"
+    "Usage: Reply tomessage with .mute to mute them, works on admins too."
 })
 CMD_HELP.update({
     "unmute":
-    "Usage: Reply to message with .unmute "
-    "to remove them from muted list."
+    "Usage: Reply to message with .unmute to remove them from muted list."
 })
 CMD_HELP.update({
     "gmute":
-    "Usage: Reply to message with .gmute to mute them in all "
-    "groups you have in common with them."
+    "Usage: Reply to message with .gmute to mute them in all groups you have in common with them."
 })
 CMD_HELP.update({
     "ungmute":
-    "Usage: Reply message with .ungmute "
-    "to remove them from the gmuted list."
+    "Usage: Reply message with .ungmute to remove them from the gmuted list."
 })
-CMD_HELP.update(
-    {"delusers": "Usage: Searches for deleted accounts in a group."})
+CMD_HELP.update({
+    "delusers":
+    "Usage: Searches for deleted accounts in a group."
+})
 CMD_HELP.update({
     "delusers clean":
-    "Usage: Searches and removes "
-    "deleted accounts from the group"
+    "Usage: Searches and removes deleted accounts from the group"
 })
-CMD_HELP.update({"adminlist": "Usage: Retrieves all admins in the chat."})
+CMD_HELP.update({
+    "adminlist":
+    "Usage: Retrieves all admins in the chat."
+})
