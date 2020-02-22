@@ -73,7 +73,7 @@ async def knocksomesense(event):
 @register(outgoing=True, pattern="^.support$")
 async def bot_support(wannahelp):
     """ For .support command, just returns the group link. """
-    await wannahelp.edit("Link Portal: @userbot_support")
+    await wannahelp.edit("Group: @tgpaperplane")
 
 
 @register(outgoing=True, pattern="^.repo$")
