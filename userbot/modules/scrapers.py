@@ -57,22 +57,28 @@ async def img_sampler(event):
     await event.delete()
 
 
-@register(outgoing=True, pattern=r"^.google (.*)")
+@register(outgoing=True, pattern=r"^.google(?: |$)(.*)")
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
-    match = q_event.pattern_match.group(1)
-    page = findall(r"page=\d+", match)
-    try:
-        page = page[0]
-        page = page.replace("page=", "")
-        match = match.replace("page=" + page[0], "")
-    except IndexError:
-        page = 1
-    search_args = (str(match), int(page))
-    gsearch = GoogleSearch()
-    gresults = gsearch.search(*search_args)
+    textx = await q_event.get_reply_message()
+    query = q_event.pattern_match.group(1)
+
+    if query:
+        pass
+    elif textx:
+        query = textx.text
+    else:
+        await q_event.edit("`Pass a query as an argument or reply "
+                         "to a message for Google search!`")
+        return
+
+    q_event.edit("`Searching...`")
+
+    search_args = (str(query), 1)
+    googsearch = GoogleSearch()
+    gresults = await googsearch.async_search(*search_args)
     msg = ""
-    for i in range(10):
+    for i in range(1,6):
         try:
             title = gresults["titles"][i]
             link = gresults["links"][i]
@@ -80,13 +86,13 @@ async def gsearch(q_event):
             msg += f"{i}. [{title}]({link})\n`{desc}`\n\n"
         except IndexError:
             break
-    await q_event.edit("**Search Query:**\n`" + match + "`\n\n**Results:**\n" +
+    await q_event.edit("**Search Query:**\n`" + query + "`\n\n**Results:**\n" +
                        msg,
                        link_preview=False)
     if BOTLOG:
         await q_event.client.send_message(
             BOTLOG_CHATID,
-            "Google Search query `" + match + "` was executed successfully",
+            "Google Search query `" + query + "` was executed successfully",
         )
 
 
@@ -263,8 +269,8 @@ CMD_HELP.update({
 })
 
 CMD_HELP.update(
-    {'google': ".google <search_query>\n"
-     "Usage: Does a search on Google."})
+    {'google': ".google <search_query>(optional)\n"
+     "Usage: Does a search on Google. Query as argument and reply are supported."})
 
 CMD_HELP.update(
     {'wiki': ".wiki <search_query>\n"
