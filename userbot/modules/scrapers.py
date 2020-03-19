@@ -6,6 +6,7 @@
 """ Userbot module containing various scrapers. """
 
 import os
+import nest_asyncio
 from re import findall
 from shutil import rmtree
 from urllib.error import HTTPError
@@ -25,6 +26,9 @@ from userbot.events import register
 
 # Default language to EN
 LANG = "en"
+
+# Allow nested event loops
+nest_asyncio.apply()
 
 @register(outgoing=True, pattern="^.img (.*)")
 async def img_sampler(event):
