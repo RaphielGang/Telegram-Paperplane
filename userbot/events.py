@@ -27,6 +27,7 @@ def register(**args):
         unsafe_pattern = r'^[^/!#@\$A-Za-z]'
         group_only = args.get('group_only', False)
         disable_errors = args.get('disable_errors', False)
+        insecure = args.get('insecure', False)
 
         if pattern is not None and not pattern.startswith('(?i)'):
             args['pattern'] = '(?i)' + pattern
@@ -43,6 +44,9 @@ def register(**args):
         if "disable_errors" in args:
             del args['disable_errors']
 
+        if "insecure" in args:
+            del args['insecure']
+
         if pattern:
             if not ignore_unsafe:
                 args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
@@ -51,6 +55,9 @@ def register(**args):
         async def wrapper(check):
             if group_only and not check.is_group:
                 await check.respond("`Are you sure this is a group?`")
+                return
+            if check.via_bot_id and not insecure:
+                await check.respond("`Inline bots are disabled for security reasons`")
                 return
 
             try:
