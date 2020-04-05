@@ -16,7 +16,7 @@ from traceback import format_exc
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
-from userbot import bot
+from userbot import LOGS, bot
 
 
 def register(**args):
@@ -56,8 +56,9 @@ def register(**args):
                 await check.respond("`Are you sure this is a group?`")
                 return
             if check.via_bot_id and not insecure:
-                await check.respond("`Inline bots are disabled for security reasons`")
-                return
+                if event.out:
+                    LOGS.warn("WARNING: Potentially mallicious inline bot found! [Bot ID: {check.via_bot_id}]")
+                    return
 
             try:
                 await func(check)
