@@ -47,7 +47,7 @@ forks of Paperplane, we will only assist with issues affecting our central repos
 * [@TheDevXen](https://github.com/TheDevXen)
 * [@Skittles9823](https://github.com/Skittles9823)
 * [@deletescape](https://github.com/deletescape)
-* [@songotenks69](https://github.com/songotenks69)
+* [@gotenksIN](https://github.com/gotenksIN)
 * [@Ovenoboyo](https://github.com/Ovenoboyo)
 * [SphericalKat](https://github.com/ATechnoHazard)
 * [@rupansh](https://github.com/rupansh)
