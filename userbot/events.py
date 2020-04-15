@@ -55,8 +55,8 @@ def register(**args):
             if group_only and not check.is_group:
                 await check.respond("`Are you sure this is a group?`")
                 return
-            if check.via_bot_id and not insecure:
-                await check.respond("`Inline bots are disabled for security reasons`")
+            if check.via_bot_id and not insecure and check.out:
+                # Ignore outgoing messages via inline bots for security reasons
                 return
 
             try:
