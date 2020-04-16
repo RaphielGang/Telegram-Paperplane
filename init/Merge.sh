@@ -1,10 +1,10 @@
 #!/bin/bash
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2020 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
-# CI Runner Script for baalajimaestro's userbot
+# CI Runner Script for Paperplane CI
 
 # We need this directive
 # shellcheck disable=1090
@@ -15,10 +15,9 @@ TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY TELEGRAM_TOKEN
 tg_sendinfo "<code>I am gonna merge staging into master</code>"
 cd
-git clone https://github.com/RaphielGang/Telegram-UserBot.git
-cd Telegram-UserBot
-git remote rm origin
-git remote add origin https://nysascape:${GH_PERSONAL_TOKEN}@github.com/raphielgang/telegram-userbot.git
+git clone https://github.com/RaphielGang/Telegram-Paperplane.git
+cd Telegram-Paperplane
+git remote set-url origin https://${GH_USERNAME}:${GH_PERSONAL_TOKEN}@github.com/RaphielGang/Telegram-Paperplane.git
 git fetch
 git checkout staging
 git pull origin staging

@@ -26,6 +26,7 @@ from userbot.events import register
 # Default language to EN
 LANG = "en"
 
+
 @register(outgoing=True, pattern="^.img (.*)")
 async def img_sampler(event):
     """ For .img command, search and return images matching the query. """
@@ -69,7 +70,7 @@ async def gsearch(q_event):
         query = textx.text
     else:
         await q_event.edit("`Pass a query as an argument or reply "
-                         "to a message for Google search!`")
+                           "to a message for Google search!`")
         return
 
     q_event.edit("`Searching...`")
@@ -78,7 +79,7 @@ async def gsearch(q_event):
     googsearch = GoogleSearch()
     gresults = await googsearch.async_search(*search_args)
     msg = ""
-    for i in range(1,6):
+    for i in range(1, 6):
         try:
             title = gresults["titles"][i]
             link = gresults["links"][i]
@@ -268,9 +269,11 @@ CMD_HELP.update({
     "Usage: Does an image search on Google and shows two images."
 })
 
-CMD_HELP.update(
-    {'google': ".google <search_query>(optional)\n"
-     "Usage: Does a search on Google. Query as argument and reply are supported."})
+CMD_HELP.update({
+    'google':
+    ".google <search_query>(optional)\n"
+    "Usage: Does a search on Google. Query as argument and reply are supported."
+})
 
 CMD_HELP.update(
     {'wiki': ".wiki <search_query>\n"

@@ -8,6 +8,7 @@
 from userbot import CMD_HELP
 from userbot.events import register
 
+
 @register(outgoing=True, pattern="^.help(?: |$)(.*)")
 async def help(event):
     """ For .help command,"""
@@ -25,7 +26,8 @@ async def help(event):
                 pass
     else:
         try:
-            await event.edit("Please specify which module do you want help for!")
+            await event.edit(
+                "Please specify which module do you want help for!")
             string = ""
             for i in CMD_HELP:
                 string += "`" + str(i)

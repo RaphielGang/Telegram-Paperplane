@@ -322,8 +322,8 @@ async def spider(spdr):
     if await mute(spdr.chat_id, user.id) is False:
         return await spdr.edit('`Error! User probably already muted.`')
     try:
-        await spdr.client(
-            EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
+        await spdr.client(EditBannedRequest(spdr.chat_id, user.id,
+                                            MUTE_RIGHTS))
         # Announce that the function is done
         await spdr.edit("`Safely taped!`")
 
@@ -339,8 +339,7 @@ async def spider(spdr):
     # These indicate we couldn't hit him an API mute, possibly an
     # admin?
 
-    except (UserAdminInvalidError, ChatAdminRequiredError,
-            BadRequestError):
+    except (UserAdminInvalidError, ChatAdminRequiredError, BadRequestError):
         return await spdr.edit("""`I couldn't mute on the API,
         could be an admin possibly?
         Anyways muted on the userbot.
@@ -700,14 +699,9 @@ async def get_user_from_id(user, event):
     return user_obj
 
 
-CMD_HELP.update({
-    "promote": 
-    "Usage: Reply to message with .promote to promote them."
-})
-CMD_HELP.update({
-    "ban":
-    "Usage: Reply to message with .ban to ban them."
-})
+CMD_HELP.update(
+    {"promote": "Usage: Reply to message with .promote to promote them."})
+CMD_HELP.update({"ban": "Usage: Reply to message with .ban to ban them."})
 CMD_HELP.update({
     "demote":
     "Usage: Reply to message with .demote to revoke their admin permissions."
@@ -732,15 +726,10 @@ CMD_HELP.update({
     "ungmute":
     "Usage: Reply message with .ungmute to remove them from the gmuted list."
 })
-CMD_HELP.update({
-    "delusers":
-    "Usage: Searches for deleted accounts in a group."
-})
+CMD_HELP.update(
+    {"delusers": "Usage: Searches for deleted accounts in a group."})
 CMD_HELP.update({
     "delusers clean":
     "Usage: Searches and removes deleted accounts from the group"
 })
-CMD_HELP.update({
-    "adminlist":
-    "Usage: Retrieves all admins in the chat."
-})
+CMD_HELP.update({"adminlist": "Usage: Retrieves all admins in the chat."})

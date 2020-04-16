@@ -111,6 +111,7 @@ async def get_dogbin_content(dog_url):
 executed successfully",
         )
 
+
 CMD_HELP.update({
     ".paste":
     "Create a paste or a shortened url using "

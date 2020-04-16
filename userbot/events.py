@@ -42,7 +42,7 @@ def register(**args):
 
     if "disable_errors" in args:
         del args['disable_errors']
-    
+
     if "insecure" in args:
         del args['insecure']
 
