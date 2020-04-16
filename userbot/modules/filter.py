@@ -13,7 +13,7 @@ from userbot.events import register
 from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
 
 
-@register(incoming=True, disable_edited=True, disable_errors=True)
+@register(incoming=True, disable_errors=True)
 async def filter_incoming_handler(handler):
     """ Checks if the incoming message contains handler of a filter """
     try:
@@ -21,18 +21,16 @@ async def filter_incoming_handler(handler):
             if not is_mongo_alive() or not is_redis_alive():
                 await handler.edit("`Database connections failing!`")
                 return
-            listes = handler.text.split(" ")
+
             filters = await get_filters(handler.chat_id)
             if not filters:
                 return
             for trigger in filters:
-                for item in listes:
-                    pro = re.fullmatch(trigger["keyword"],
-                                       item,
-                                       flags=re.IGNORECASE)
-                    if pro:
-                        await handler.reply(trigger["msg"])
-                        return
+                pattern = r"( |^|[^\w])" + re.escape(
+                    trigger["keyword"]) + r"( |$|[^\w])"
+                if re.search(pattern, handler.text, flags=re.IGNORECASE):
+                    await handler.reply(trigger["msg"])
+                    return
     except AttributeError:
         pass
 
@@ -52,7 +50,7 @@ async def add_new_filter(event):
     if event.reply_to_msg_id:
         string = " " + (await event.get_reply_message()).text
 
-    msg = "`Filter` **{}** `{} successfully`"
+    msg = "`Filter `**{}**` {} successfully`"
 
     if await add_filter(event.chat_id, keyword[1], string[1:]) is True:
         await event.edit(msg.format(keyword[1], 'added'))
@@ -69,10 +67,10 @@ async def remove_filter(event):
     filt = event.text[6:]
 
     if not await delete_filter(event.chat_id, filt):
-        await event.edit("`Filter` **{}** `doesn't exist.`".format(filt))
+        await event.edit("`Filter `**{}**` doesn't exist.`".format(filt))
     else:
         await event.edit(
-            "`Filter` **{}** `was deleted successfully`".format(filt))
+            "`Filter `**{}**` was deleted successfully`".format(filt))
 
 
 @register(outgoing=True, pattern="^.rmfilters (.*)")
@@ -112,11 +110,11 @@ async def filters_active(event):
     for filt in filters:
         if transact == "`There are no filters in this chat.`":
             transact = "Active filters in this chat:\n"
-            transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
-                                                   filt["msg"])
+            transact += " • **{}** - `{}`\n".format(filt["keyword"],
+                                                    filt["msg"])
         else:
-            transact += "🔹 **{}** - `{}`\n".format(filt["keyword"],
-                                                   filt["msg"])
+            transact += " • **{}** - `{}`\n".format(filt["keyword"],
+                                                    filt["msg"])
 
     await event.edit(transact)
 
