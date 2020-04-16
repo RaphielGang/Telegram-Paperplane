@@ -223,7 +223,7 @@ async def lol(lel):
     okay = "-_-"
     for _ in range(10):
         okay = okay[:-1] + "_-"
-        await lel.edit(okay)
+        await lel.edit(okay, parse_mode='html')
 
 
 @register(outgoing=True, pattern="^.cp(?: |$)(.*)")
