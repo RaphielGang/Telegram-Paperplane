@@ -7,7 +7,7 @@ gTTS>=2.0.1
 gitpython
 google-api-python-client
 oauth2client
-google_images_download>=2.7.1
+git+https://github.com/voins/google-images-download.git@2cd68173c961324a2c41c61e8b6f40a49663ce60
 googletrans>=2.4.0
 gtts>=2.0.1
 hachoir
