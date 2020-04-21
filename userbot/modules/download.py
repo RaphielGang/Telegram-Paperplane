@@ -22,8 +22,8 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from psutil import swap_memory, virtual_memory
 from pyDownload import Downloader
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
+from pydrive2.auth import GoogleAuth
+from pydrive2.drive import GoogleDrive
 from telethon.tl.types import DocumentAttributeVideo, MessageMediaPhoto
 
 from userbot import CMD_HELP, GDRIVE_FOLDER, LOGS
@@ -96,7 +96,7 @@ async def download_from_tg(target_file) -> (str, BytesIO):
 
 async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     """
-    Upload files to Google Drive using PyDrive
+    Upload files to Google Drive using PyDrive2
     """
     # a workaround for disabling cache errors
     # https://github.com/googleapis/google-api-python-client/issues/299
