@@ -1,4 +1,4 @@
-from pydrive.auth import GoogleAuth
+from pydrive2.auth import GoogleAuth
 
 
 def main():

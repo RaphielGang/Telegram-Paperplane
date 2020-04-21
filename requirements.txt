@@ -29,6 +29,6 @@ dnspython
 lxml
 humanize
 pyDownload
-PyDrive
+PyDrive2
 psutil
 pylast
