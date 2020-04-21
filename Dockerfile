@@ -1,14 +1,9 @@
-FROM baalajimaestro/userbot_python:latest
+FROM zakaryan2004/userbot_docker:latest
 
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
 
 RUN git clone https://github.com/RaphielGang/Telegram-UserBot.git -b master /app
-
-#
-# Install requirements just in case the Docker Image isn't updated
-#
-RUN pip install --upgrade -r requirements.txt
 
 #
 # Copies session and config(if it exists)
