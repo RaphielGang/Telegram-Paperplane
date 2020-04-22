@@ -136,6 +136,19 @@ async def upstream(ups):
             return
         await ups.edit('`Successfully Updated!\n'
                        'Restarting, please wait...`')
+    else:
+        # Classic Updater, for using on PC
+        try:
+            ups_rem.pull(ac_br)
+        except GitCommandError:
+            repo.git.reset("--hard", "FETCH_HEAD")
+        reqs_upgrade = await update_requirements()
+        await ups.edit('`Successfully Updated!\n'
+                       'Bot is restarting... Wait for a second!`')
+        # Spin a new instance of bot
+        args = [sys.executable, "-m", "userbot"]
+        execle(sys.executable, *args, environ)
+        return
 
 
 CMD_HELP.update({
