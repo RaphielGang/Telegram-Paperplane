@@ -32,3 +32,4 @@ pyDownload
 PyDrive2
 psutil
 pylast
+heroku3
