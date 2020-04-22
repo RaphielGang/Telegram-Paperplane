@@ -118,7 +118,7 @@ async def upstream(ups):
         await ups.edit('`[HEROKU]\
                         \nUserbot dyno build in progress, please wait for it to complete.`'
                        )
-        os.popen(f'cd /app && git pull origin master)
+        os.popen(f'cd /app && git pull origin master')
         os.popen(f'git config --global user.email "example@example.com" && git config --global user.name "Example"')
         os.popen('cd /app && git add -f userbot.session config.env && git commit -m "Update userbot"')
         heroku_git_url = heroku_app.git_url.replace(
