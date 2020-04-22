@@ -13,9 +13,9 @@ from os import execl, remove
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import CMD_HELP
+from userbot import CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME
 from userbot.events import register
-
+import os
 
 async def gen_chlog(repo, diff):
     ch_log = ''
@@ -38,6 +38,7 @@ async def upstream(ups):
     await ups.edit("`Checking for updates, please wait....`")
     conf = ups.pattern_match.group(1)
     off_repo = 'https://github.com/RaphielGang/Telegram-UserBot.git'
+
 
     try:
         txt = "`Oops.. Updater cannot continue due to "
@@ -63,24 +64,22 @@ async def upstream(ups):
             'please checkout to any official branch`')
         return
 
-    try:
-        repo.create_remote('upstream', off_repo)
-    except BaseException:
-        pass
-
-    ups_rem = repo.remote('upstream')
-    ups_rem.fetch(ac_br)
-    changelog = await gen_chlog(repo, f'HEAD..upstream/{ac_br}')
-
-    if not changelog:
-        await ups.edit(
-            f'\n`Your BOT is`  **up-to-date**  `with`  **{ac_br}**\n')
-        return
-
     if conf != "now":
+        try:
+            repo.create_remote('upstream', off_repo)
+        except BaseException:
+            pass
+        ups_rem = repo.remote('upstream')
+        ups_rem.fetch(ac_br)
+        changelog = await gen_chlog(repo, f'HEAD..upstream/{ac_br}')
+
+        if not changelog:
+            await ups.edit(
+                f'\n`Your BOT is`  **up-to-date**  `with`  **{ac_br}**\n')
+            return
         changelog_str = f'**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`'
         if len(changelog_str) > 4096:
-            await ups.edit("`Changelog is too big, view the file to see it.`")
+            await ups.edit(  "`Changelog is too big, view the file to see it.`")
             file = open("output.txt", "w+")
             file.write(changelog_str)
             file.close()
@@ -95,16 +94,48 @@ async def upstream(ups):
         await ups.respond('`do \".update now\" to update`')
         return
 
-    await ups.edit('`New update found, updating...`')
-    ups_rem.fetch(ac_br)
-    repo.git.reset('--hard', 'FETCH_HEAD')
-    await ups.edit('`Successfully Updated!\n'
-                   'Bot is restarting... Wait for a second!`')
-    await ups.client.disconnect()
-    # Spin a new instance of bot
-    execl(sys.executable, sys.executable, *sys.argv)
-    # Shut the existing one down
-    exit()
+    if HEROKU_APIKEY is not None:
+        import heroku3
+        heroku = heroku3.from_key(HEROKU_APIKEY)
+        heroku_app = None
+        heroku_applications = heroku.apps()
+        if not HEROKU_APPNAME:
+            await ups.edit(
+                '`[HEROKU] Please set up the HEROKU_APPNAME variable to be able to update userbot.`'
+            )
+            repo.__del__()
+            return
+        for app in heroku_applications:
+            if app.name == HEROKU_APPNAME:
+                heroku_app = app
+                break
+        if heroku_app is None:
+            await ups.edit(
+                f'{txt}\n`Invalid Heroku credentials for updating userbot dyno.`'
+            )
+            repo.__del__()
+            return
+        await ups.edit('`[HEROKU]\
+                        \nUserbot dyno build in progress, please wait for it to complete.`'
+                       )
+        os.popen(f'cd /app && git pull origin master)
+        os.popen(f'git config --global user.email "example@example.com" && git config --global user.name "Example"')
+        os.popen('cd /app && git add -f userbot.session config.env && git commit -m "Update userbot"')
+        heroku_git_url = heroku_app.git_url.replace(
+            "https://", "https://api:" + HEROKU_APIKEY + "@")
+        if "heroku" in repo.remotes:
+            remote = repo.remote("heroku")
+            remote.set_url(heroku_git_url)
+        else:
+            remote = repo.create_remote("heroku", heroku_git_url)
+        try:
+            remote.push(refspec="HEAD:refs/heads/master", force=True)
+        except GitCommandError as error:
+            await ups.edit(f'{txt}\n`Here is the error log:\n{error}`')
+            repo.__del__()
+            return
+        await ups.edit('`Successfully Updated!\n'
+                       'Restarting, please wait...`')
 
 
 CMD_HELP.update({
