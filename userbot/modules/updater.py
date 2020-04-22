@@ -80,7 +80,7 @@ async def upstream(ups):
     if conf != "now":
         changelog_str = f'**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`'
         if len(changelog_str) > 4096:
-            await ups.edit(  "`Changelog is too big, view the file to see it.`")
+            await ups.edit("`Changelog is too big, view the file to see it.`")
             file = open("output.txt", "w+")
             file.write(changelog_str)
             file.close()
