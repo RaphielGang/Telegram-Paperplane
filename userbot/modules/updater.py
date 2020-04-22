@@ -39,7 +39,6 @@ async def upstream(ups):
     conf = ups.pattern_match.group(1)
     off_repo = 'https://github.com/RaphielGang/Telegram-UserBot.git'
 
-
     try:
         txt = "`Oops.. Updater cannot continue due to "
         txt += "some problems occured`\n\n**LOGTRACE:**\n"
