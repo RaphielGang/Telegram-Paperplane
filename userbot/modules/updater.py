@@ -16,6 +16,7 @@ from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from userbot import CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME
 from userbot.events import register
 import os
+import heroku3
 
 async def gen_chlog(repo, diff):
     ch_log = ''
