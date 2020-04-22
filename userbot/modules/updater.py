@@ -64,19 +64,21 @@ async def upstream(ups):
             'please checkout to any official branch`')
         return
 
-    if conf != "now":
-        try:
-            repo.create_remote('upstream', off_repo)
-        except BaseException:
-            pass
-        ups_rem = repo.remote('upstream')
-        ups_rem.fetch(ac_br)
-        changelog = await gen_chlog(repo, f'HEAD..upstream/{ac_br}')
+    try:
+        repo.create_remote('upstream', off_repo)
+    except BaseException:
+        pass
 
-        if not changelog:
-            await ups.edit(
-                f'\n`Your BOT is`  **up-to-date**  `with`  **{ac_br}**\n')
-            return
+    ups_rem = repo.remote('upstream')
+    ups_rem.fetch(ac_br)
+    changelog = await gen_chlog(repo, f'HEAD..upstream/{ac_br}')
+
+    if not changelog:
+        await ups.edit(
+            f'\n`Your BOT is`  **up-to-date**  `with`  **{ac_br}**\n')
+        return
+
+    if conf != "now":
         changelog_str = f'**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`'
         if len(changelog_str) > 4096:
             await ups.edit(  "`Changelog is too big, view the file to see it.`")
