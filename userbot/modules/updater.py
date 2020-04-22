@@ -97,7 +97,6 @@ async def upstream(ups):
         return
 
     if HEROKU_APIKEY is not None:
-        import heroku3
         heroku = heroku3.from_key(HEROKU_APIKEY)
         heroku_app = None
         heroku_applications = heroku.apps()
