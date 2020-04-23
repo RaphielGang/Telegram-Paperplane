@@ -27,7 +27,7 @@ async def gen_chlog(repo, diff):
 
 
 async def is_off_br(br):
-    off_br = ['master']
+    off_br = ['master', 'staging']
     if br in off_br:
         return 1
     return
@@ -42,7 +42,7 @@ async def upstream(ups):
 
     try:
         txt = "`Oops.. Updater cannot continue due to "
-        txt += "some problems occured`\n\n**LOGTRACE:**\n"
+        txt += "some problems.`\n\n**LOGTRACE:**\n"
         repo = Repo()
     except NoSuchPathError as error:
         await ups.edit(f'{txt}\n`directory {error} is not found`')
@@ -59,9 +59,8 @@ async def upstream(ups):
     if not await is_off_br(ac_br):
         await ups.edit(
             f'**[UPDATER]:**` Looks like you are using your own custom branch ({ac_br}). '
-            'in that case, Updater is unable to identify '
-            'which branch is to be merged. '
-            'please checkout to any official branch`')
+            'In that case, Updater is unable to perform a successful update. '
+            'Please checkout to any official branch.`')
         return
 
     try:
@@ -74,8 +73,7 @@ async def upstream(ups):
     changelog = await gen_chlog(repo, f'HEAD..upstream/{ac_br}')
 
     if not changelog:
-        await ups.edit(
-            f'\n`Your BOT is`  **up-to-date**  `with`  **{ac_br}**\n')
+        await ups.edit(f'\n`Your BOT is `**up-to-date**` with `**{ac_br}**\n')
         return
 
     if conf != "now":
@@ -93,7 +91,7 @@ async def upstream(ups):
             remove("output.txt")
         else:
             await ups.edit(changelog_str)
-        await ups.respond('`do \".update now\" to update`')
+        await ups.respond('`Use the \".update now\" command to update`')
         return
 
     await ups.edit('`New update found, updating...`')
@@ -108,20 +106,20 @@ async def upstream(ups):
             try:
                 heroku_app = heroku.apps()[HEROKU_APPNAME]
             except KeyError:
-                ups.edit(
+                await ups.edit(
                     "```Error: HEROKU_APPNAME config is invalid! Make sure an app with that "
                     "name exists and your HEROKU_APIKEY config is correct.```")
                 return
         else:
-            ups.edit(
+            await ups.edit(
                 "```Error: HEROKU_APPNAME config is not set! Make sure to set your "
                 "Heroku Application name in the config.```")
             return
 
         await ups.edit(
-            "`Heroku configuration found! Updater will try to update and restart "
-            "automatically if succeeded. Try checking if your bot is alive by typing"
-            ".alive after a few minutes.`")
+            "`Heroku configuration found! Updater will try to update and restart Paperplane"
+            "automatically if succeeded. Try checking if Paperplane is alive by using the"
+            "\".alive\" command after a few minutes.`")
 
         repo.git.add('userbot.session', force=True)
         if path.isfile('config.env'):
@@ -153,8 +151,10 @@ async def upstream(ups):
             return
     else:
         # Heroku configs not set, just restart the bot
-        await ups.edit('`Successfully Updated!\n'
-                       'Bot is restarting... Wait for a second!`')
+        await ups.edit(
+            '`Successfully Updated!\n'
+            'Paperplane is restarting... Wait for a few seconds, then '
+            'check if Paperplane is alive by using the ".alive" command.`')
 
         await ups.client.disconnect()
         # Spin a new instance of bot
