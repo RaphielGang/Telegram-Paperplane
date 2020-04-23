@@ -8,12 +8,13 @@ This module updates the userbot based on Upstream revision
 """
 
 import sys
-from os import execl, remove
+from os import execl, remove, path
+import heroku3
 
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import CMD_HELP
+from userbot import CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME
 from userbot.events import register
 
 
@@ -26,7 +27,7 @@ async def gen_chlog(repo, diff):
 
 
 async def is_off_br(br):
-    off_br = ['master', 'staging', 'redis']
+    off_br = ['master']
     if br in off_br:
         return 1
     return
@@ -37,7 +38,7 @@ async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"
     await ups.edit("`Checking for updates, please wait....`")
     conf = ups.pattern_match.group(1)
-    off_repo = 'https://github.com/RaphielGang/Telegram-UserBot.git'
+    off_repo = 'https://github.com/RaphielGang/Telegram-Paperplane.git'
 
     try:
         txt = "`Oops.. Updater cannot continue due to "
@@ -96,15 +97,70 @@ async def upstream(ups):
         return
 
     await ups.edit('`New update found, updating...`')
+
     ups_rem.fetch(ac_br)
     repo.git.reset('--hard', 'FETCH_HEAD')
-    await ups.edit('`Successfully Updated!\n'
-                   'Bot is restarting... Wait for a second!`')
-    await ups.client.disconnect()
-    # Spin a new instance of bot
-    execl(sys.executable, sys.executable, *sys.argv)
-    # Shut the existing one down
-    exit()
+
+    if HEROKU_APIKEY != None:
+        # Heroku configuration, which can rebuild the Docker image with newer changes
+        heroku = heroku3.from_key(HEROKU_APIKEY)
+        if HEROKU_APPNAME != None:
+            try:
+                heroku_app = heroku.apps()[HEROKU_APPNAME]
+            except KeyError:
+                ups.edit(
+                    "```Error: HEROKU_APPNAME config is invalid! Make sure an app with that "
+                    "name exists and your HEROKU_APIKEY config is correct.```")
+                return
+        else:
+            ups.edit(
+                "```Error: HEROKU_APPNAME config is not set! Make sure to set your "
+                "Heroku Application name in the config.```")
+            return
+
+        await ups.edit(
+            "`Heroku configuration found! Updater will try to update and restart "
+            "automatically if succeeded. Try checking if your bot is alive by typing"
+            ".alive after a few minutes.`")
+
+        repo.git.add('userbot.session', force=True)
+        if path.isfile('config.env'):
+            repo.git.add('config.env', force=True)
+
+        # Set git config for commiting session and config
+        repo.config_writer().set_value("user", "name",
+                                       "Paperplane Updater").release()
+        repo.config_writer().set_value("user", "email",
+                                       "<>").release()  # No Email
+
+        # Amend the session and config to the latest commit, this is only temporary to move them to the Docker image
+        repo.git.commit("-m 'Commit userbot.session and config.env'")
+
+        heroku_remote_url = heroku_app.git_url.replace(
+            "https://", f"https://api:{HEROKU_APIKEY}@")
+
+        remote = None
+        if 'heroku' in repo.remotes:
+            remote = repo.remote('heroku')
+            remote.set_url(heroku_remote_url)
+        else:
+            remote = repo.create_remote('heroku', heroku_remote_url)
+
+        try:
+            remote.push(refspec="HEAD:refs/heads/master", force=True)
+        except GitCommandError as e:
+            await ups.edit(f'{txt}\n`Early failure! {error}`')
+            return
+    else:
+        # Heroku configs not set, just restart the bot
+        await ups.edit('`Successfully Updated!\n'
+                       'Bot is restarting... Wait for a second!`')
+
+        await ups.client.disconnect()
+        # Spin a new instance of bot
+        execl(sys.executable, sys.executable, *sys.argv)
+        # Shut the existing one down
+        exit()
 
 
 CMD_HELP.update({

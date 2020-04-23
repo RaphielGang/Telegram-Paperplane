@@ -11,6 +11,7 @@ git+https://github.com/voins/google-images-download.git@2cd68173c961324a2c41c61e
 googletrans>=2.4.0
 gtts>=2.0.1
 hachoir
+heroku3
 pybase64>=0.4.0
 python-dotenv
 pytube>=9.5.1
