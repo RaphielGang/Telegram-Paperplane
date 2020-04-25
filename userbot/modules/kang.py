@@ -38,12 +38,12 @@ async def kang(args):
         elif "image" in message.media.document.mime_type.split('/'):
             photo = io.BytesIO()
             await bot.download_file(message.media.document, photo)
-            if (DocumentAttributeFilename(file_name='sticker.webp') in
-                    message.media.document.attributes):
+            if (DocumentAttributeFilename(file_name='sticker.webp')
+                    in message.media.document.attributes):
                 emoji = message.media.document.attributes[1].alt
                 emojibypass = True
-        elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
-              message.media.document.attributes):
+        elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs')
+              in message.media.document.attributes):
             emoji = message.media.document.attributes[0].alt
             emojibypass = True
             is_anim = True
