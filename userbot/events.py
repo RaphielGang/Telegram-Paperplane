@@ -15,7 +15,7 @@ from traceback import format_exc
 
 from telethon import events
 
-from userbot import bot
+from userbot import bot, BOTLOG, BOTLOG_CHATID
 
 
 def register(**args):
@@ -111,11 +111,19 @@ def register(**args):
                     file.write(traceback)
                     file.close()
 
-                    await check.client.send_file(
-                        check.chat_id,
-                        "error.log",
-                        caption=text,
-                    )
+                    if BOTLOG:
+                        await check.client.send_file(
+                            BOTLOG_CHATID,
+                            "error.log",
+                            caption=text,
+                        )
+                    else:
+                        await check.client.send_file(
+                            check.chat_id,
+                            "error.log",
+                            caption=text,
+                        )
+
                     remove("error.log")
             else:
                 pass
