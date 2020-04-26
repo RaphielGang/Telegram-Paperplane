@@ -17,6 +17,7 @@ from pymongo import MongoClient
 from redis import StrictRedis
 from requests import get
 from telethon import TelegramClient
+from telethon.sessions import StringSession
 
 load_dotenv("config.env")
 
@@ -50,6 +51,8 @@ if CONFIG_CHECK:
 API_KEY = os.environ.get("API_KEY", None)
 
 API_HASH = os.environ.get("API_HASH", None)
+
+STRING_SESSION = os.environ.get("STRING_SESSION", None)
 
 BOTLOG = sb(os.environ.get("BOTLOG", "False"))
 
@@ -90,7 +93,14 @@ HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY", None)
 HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME", None)
 
 # pylint: disable=invalid-name
-bot = TelegramClient("userbot", API_KEY, API_HASH)
+if STRING_SESSION:
+    bot = TelegramClient(StringSession(STRING_SESSION),
+                         API_KEY,
+                         API_HASH)
+else:
+    bot = TelegramClient("userbot",
+                         API_KEY,
+                         API_HASH)
 
 
 async def check_botlog_chatid():
