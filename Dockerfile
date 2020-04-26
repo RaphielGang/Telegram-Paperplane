@@ -8,7 +8,7 @@ RUN git clone https://github.com/RaphielGang/Telegram-UserBot.git -b master /app
 #
 # Copies session and config(if it exists)
 #
-COPY ./userbot.session* ./config.env* ./client_secrets.json* ./secret.json* /app/
+COPY ./sample_config.env ./userbot.session* ./config.env* ./client_secrets.json* ./secret.json* /app/
 
 #
 # Finalization
