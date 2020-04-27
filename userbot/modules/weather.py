@@ -157,17 +157,17 @@ async def set_default_city(city):
         await city.edit("`Please specify a city to set one as default.`")
         return
     else:
-        city = city.pattern_match.group(1)
+        city_name = city.pattern_match.group(1)
 
     timezone_countries = {
         timezone: country
         for country, timezones in c_tz.items() for timezone in timezones
     }
 
-    if "," in city:
-        newcity = city.split(",")
+    if "," in city_name:
+        newcity = city_name.split(",")
         if len(newcity[1]) == 2:
-            city = newcity[0].strip() + "," + newcity[1].strip()
+            city_name = newcity[0].strip() + "," + newcity[1].strip()
         else:
             country = await get_tz((newcity[1].strip()).title())
             try:
@@ -175,9 +175,9 @@ async def set_default_city(city):
             except KeyError:
                 await city.edit(INV_PARAM)
                 return
-            city = newcity[0].strip() + "," + countrycode.strip()
+            city_name = newcity[0].strip() + "," + countrycode.strip()
 
-    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OpenWeatherAPI}'
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={OpenWeatherAPI}'
     request = requests.get(url)
     result = json.loads(request.text)
 
@@ -185,7 +185,7 @@ async def set_default_city(city):
         await city.edit(INV_PARAM)
         return
 
-    await set_weather(city)
+    await set_weather(city_name)
     cityname = result['name']
     country = result['sys']['country']
 
