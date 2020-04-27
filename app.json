@@ -44,23 +44,27 @@
         },
         "OPEN_WEATHER_MAP_APPID": {
             "description": "OpenWeather Map API Key for .weather command. Get from https://openweathermap.org/.",
-            "required": true 
+            "required": false
         },
         "BOTLOG": {
             "description": "In case you want to turn on logging, set this True.",
             "value": "False"
+            "required": false 
         },
         "BOTLOG_CHATID": {
             "description": "Chat ID for Botlog. Get it from group management bots such as Marie or her forks.",
             "value": "0"
+            "required": false 
         },
         "CONSOLE_LOGGER_VERBOSE": {
             "description": "If you want verbosity on the Logging.",
             "value": "False"
+            "required": false 
         },
         "PM_AUTO_BAN": {
             "description": "PM Auto-Ban Feature Switch.",
             "value": "False"
+            "required": false  
         },
         "SPOTIFY_USERNAME": {
             "description": "Spotify Current Listening Music to Bio.",
