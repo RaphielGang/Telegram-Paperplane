@@ -38,6 +38,30 @@
             "description": "Your MongoDB Atlas URL.",
             "required": true 
         },
+        "SCREENSHOT_ACCESS_LAYER_KEY": {
+            "description": "Screenshot Layer API Key for .screenshot command. Get from https://screenshotlayer.com/. Please refer to README for getting the key.",
+            "required": false 
+        },
+        "OPEN_WEATHER_MAP_APPID": {
+            "description": "OpenWeather Map API Key for .weather command. Get from https://openweathermap.org/.",
+            "required": true 
+        },
+        "BOTLOG": {
+            "description": "In case you want to turn on logging, set this True.",
+            "value": "False"
+        },
+        "BOTLOG_CHATID": {
+            "description": "Chat ID for Botlog. Get it from group management bots such as Marie or her forks.",
+            "value": "0"
+        },
+        "CONSOLE_LOGGER_VERBOSE": {
+            "description": "If you want verbosity on the Logging.",
+            "value": "False"
+        },
+        "PM_AUTO_BAN": {
+            "description": "PM Auto-Ban Feature Switch.",
+            "value": "False"
+        },
         "SPOTIFY_USERNAME": {
             "description": "Spotify Current Listening Music to Bio.",
             "required": false
