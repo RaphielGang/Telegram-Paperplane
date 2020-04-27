@@ -1,7 +1,7 @@
 {
     "name": "Paperplane userbot project",
     "description": "A modular Telegram userbot running on Python3, which can be coupled up with Mongo DB and a Redis backend.",
-    "logo": "#TODO",
+    "logo": "https://camo.githubusercontent.com/c9497896ad221daba6cb84f897e7ec00ba46f430/68747470733a2f2f74656c656772612e70682f66696c652f3733636634633632623263363466393831393631652e706e67",
     "keywords": [
       "telegram",
       "userbot",
@@ -10,7 +10,7 @@
       "productivity"
     ],
     "repository": "https://github.com/RaphielGang/Telegram-Paperplane",
-    "website": "#TODO",
+    "website": "https://github.com/RaphielGang/Telegram-Paperplane",
     "success_url": "#TODO",
     "stack": "container",
     "env": {
