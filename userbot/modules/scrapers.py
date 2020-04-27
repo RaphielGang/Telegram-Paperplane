@@ -13,7 +13,7 @@ from urllib.error import HTTPError
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
-from gtts import gTTS
+from gtts import gTTS, gTTSError
 from requests import get
 from search_engine_parser import GoogleSearch
 from urbandict import define
@@ -183,7 +183,8 @@ async def text_to_speech(query):
         return
 
     try:
-        gTTS(message, LANG)
+        tts = gTTS(message, tld='com', lang=LANG)
+        tts.save("k.mp3")
     except AssertionError:
         await query.edit('The text is empty.\n'
                          'Nothing left to speak after pre-precessing, '
@@ -195,20 +196,17 @@ async def text_to_speech(query):
     except RuntimeError:
         await query.edit('Error loading the languages dictionary.')
         return
-    tts = gTTS(message, LANG)
-    tts.save("k.mp3")
-    with open("k.mp3", "rb") as audio:
-        linelist = list(audio)
-        linecount = len(linelist)
-    if linecount == 1:
-        tts = gTTS(message, LANG)
-        tts.save("k.mp3")
+    except gTTSError:
+        await query.edit('Error in Google Text-to-Speech API request! '
+                         'Check Paperplane logs for details.')
+        return
+
     with open("k.mp3", "r"):
         await query.client.send_file(query.chat_id, "k.mp3", voice_note=True)
         os.remove("k.mp3")
         if BOTLOG:
             await query.client.send_message(
-                BOTLOG_CHATID, "tts of " + message + " executed successfully!")
+                BOTLOG_CHATID, "TTS of " + message + " executed successfully!")
         await query.delete()
 
 
