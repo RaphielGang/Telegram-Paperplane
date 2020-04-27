@@ -31,7 +31,7 @@ It has since evolved, becoming extremely modular and simple to use.
 For configuring Paperplane, you can checkout our [Wiki](https://wiki.raphielgang.org). Please, before asking us in our groups,
 make sure you have followed the Wiki and all the steps required.
 
-The easiest way to deploy this usebot:
+Deploy Paperplane to Heroku:
 <p align="left"><a href="https://heroku.com/deploy"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" /></a></p>
 
 ## Groups and support
