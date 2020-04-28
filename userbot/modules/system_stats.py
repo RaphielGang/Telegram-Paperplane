@@ -5,7 +5,7 @@
 #
 """ Userbot module for getting information about the server. """
 
-from asyncio import create_subprocess_shell as asyncrunapp
+from asyncio import create_subprocess_exec as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 from os import remove
 from platform import python_version, uname
@@ -26,9 +26,9 @@ async def sysdetails(sysd):
     """ For .sysd command, get system info using neofetch. """
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
-            neo = "neofetch --stdout"
             fetch = await asyncrunapp(
-                neo,
+                "neofetch",
+                "--stdout",
                 stdout=asyncPIPE,
                 stderr=asyncPIPE,
             )
@@ -48,9 +48,11 @@ async def bot_ver(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
                                                              "!"):
         if which("git") is not None:
-            invokever = "git describe --all --long"
             ver = await asyncrunapp(
-                invokever,
+                "git",
+                "describe",
+                "--all",
+                "--long",
                 stdout=asyncPIPE,
                 stderr=asyncPIPE,
             )
@@ -58,9 +60,11 @@ async def bot_ver(event):
             verout = str(stdout.decode().strip()) \
                 + str(stderr.decode().strip())
 
-            invokerev = "git rev-list --all --count"
             rev = await asyncrunapp(
-                invokerev,
+                "git",
+                "rev-list",
+                "--all",
+                "--count",
                 stdout=asyncPIPE,
                 stderr=asyncPIPE,
             )
@@ -87,9 +91,10 @@ async def pipcheck(pip):
         pipmodule = pip.pattern_match.group(1)
         if pipmodule:
             await pip.edit("`Searching . . .`")
-            invokepip = f"pip3 search {pipmodule}"
             pipc = await asyncrunapp(
-                invokepip,
+                "pip3",
+                "search",
+                pipmodule,
                 stdout=asyncPIPE,
                 stderr=asyncPIPE,
             )
