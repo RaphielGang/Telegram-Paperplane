@@ -53,6 +53,10 @@ def register(**args):
 
 
         async def wrapper(check):
+            if check.edit_date and check.is_channel and not check.is_group:
+                # Messages sent in channels can be edited by other users.
+                # Ignore edits that take place in channels.
+                return
             if group_only and not check.is_group:
                 await check.respond("`Are you sure this is a group?`")
                 return
