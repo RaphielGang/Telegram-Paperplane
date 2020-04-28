@@ -1,0 +1,110 @@
+{
+    "name": "Paperplane userbot project",
+    "description": "A modular Telegram userbot running on Python3, which can be coupled up with Mongo DB and a Redis backend.",
+    "logo": "https://camo.githubusercontent.com/c9497896ad221daba6cb84f897e7ec00ba46f430/68747470733a2f2f74656c656772612e70682f66696c652f3733636634633632623263363466393831393631652e706e67",
+    "keywords": [
+      "telegram",
+      "userbot",
+      "plugin",
+      "modular",
+      "productivity"
+    ],
+    "repository": "https://github.com/RaphielGang/Telegram-Paperplane",
+    "website": "https://github.com/RaphielGang/Telegram-Paperplane",
+    "success_url": "#TODO",
+    "stack": "container",
+    "env": {
+        "API_KEY": {
+            "description": "Get from https://my.telegram.org/.",
+            "required": true
+        },
+        "API_HASH": {
+            "description": "Get from https://my.telegram.org/.",
+            "required": true
+        },
+        "STRING_SESSION": {
+            "description": "Generate using generate_string_session.py.",
+            "required": true
+        },
+        "HEROKU_APIKEY": {
+            "description": "Get from 'https://dashboard.heroku.com/account'. It's neede for userbot updates.",
+            "required": false
+        },
+        "HEROKU_APPNAME": {
+            "description": "Add the Heroku app name here. It's needed for userbot updates.",
+            "required": false
+        },
+        "MONGO_DB_URI": {
+            "description": "Your MongoDB Atlas URL.",
+            "required": true 
+        },
+        "SCREENSHOT_ACCESS_LAYER_KEY": {
+            "description": "Screenshot Layer API Key for .screenshot command. Get from https://screenshotlayer.com/. Please refer to README for getting the key.",
+            "required": false 
+        },
+        "OPEN_WEATHER_MAP_APPID": {
+            "description": "OpenWeather Map API Key for .weather command. Get from https://openweathermap.org/.",
+            "required": false
+        },
+        "BOTLOG": {
+            "description": "In case you want to turn on logging, set this True.",
+            "value": "False",
+            "required": false 
+        },
+        "BOTLOG_CHATID": {
+            "description": "Chat ID for Botlog. Get it from group management bots such as Marie or her forks.",
+            "value": "0",
+            "required": false 
+        },
+        "CONSOLE_LOGGER_VERBOSE": {
+            "description": "If you want verbosity on the Logging.",
+            "value": "False",
+            "required": false 
+        },
+        "PM_AUTO_BAN": {
+            "description": "PM Auto-Ban Feature Switch.",
+            "value": "False",
+            "required": false  
+        },
+        "SPOTIFY_USERNAME": {
+            "description": "Spotify Current Listening Music to Bio.",
+            "required": false
+        },
+        "SPOTIFY_PASS": {
+            "description": "Spotify Current Listening Music to Bio.",
+            "required": false
+        },
+        "LASTFM_API": {
+            "description": "API Key for Last.FM module. Get from https://www.last.fm/api/account/create.",
+            "required": false
+        },
+          "LASTFM_SECRET": {
+            "description": "SECRET Key for Last.FM module. Get from https://www.last.fm/api/account/create.",
+            "required": false
+        },
+          "LASTFM_USERNAME": {
+            "description": "Last.FM Username",
+            "required": false
+        },
+          "LASTFM_PASSWORD": {
+            "description": "Last.FM Password",
+            "required": false
+        },
+        "BIO_PREFIX": {
+            "description": "Bot will add before song name. For both last.fm and spotify bio modules.",
+            "required": false
+        },
+        "DEFAULT_BIO": {
+            "description": "Default bio message.",
+            "required": false
+        },
+        "WELCOME_MUTE": {
+            "description": "Detect and mute spambots which match the Paperplane algorithm after they join a group. Use at your own risk, the algorithm is in beta stage.",
+            "required": false
+        },
+        "GDRIVE_FOLDER": {
+            "description": "Google Drive upload folder.",
+            "required": false
+        }
+    }
+}

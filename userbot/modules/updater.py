@@ -14,7 +14,7 @@ import heroku3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME
+from userbot import CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME, STRING_SESSION
 from userbot.events import register
 
 
@@ -120,8 +120,8 @@ async def upstream(ups):
             "`Heroku configuration found! Updater will try to update and restart Paperplane"
             "automatically if succeeded. Try checking if Paperplane is alive by using the"
             "\".alive\" command after a few minutes.`")
-
-        repo.git.add('userbot.session', force=True)
+        if not STRING_SESSION:
+            repo.git.add('userbot.session', force=True)
         if path.isfile('config.env'):
             repo.git.add('config.env', force=True)
 
@@ -147,7 +147,7 @@ async def upstream(ups):
         try:
             remote.push(refspec="HEAD:refs/heads/master", force=True)
         except GitCommandError as e:
-            await ups.edit(f'{txt}\n`Early failure! {error}`')
+            await ups.edit(f'{txt}\n`Early failure! {e}`')
             return
     else:
         # Heroku configs not set, just restart the bot
