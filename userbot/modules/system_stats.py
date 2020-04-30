@@ -117,13 +117,13 @@ async def pipcheck(pip):
                     remove("output.txt")
                     return
                 await pip.edit("**Query: **\n`"
-                               f"{invokepip}"
+                               f"pip3 search {pipmodule}"
                                "`\n**Result: **\n`"
                                f"{pipout}"
                                "`")
             else:
                 await pip.edit("**Query: **\n`"
-                               f"{invokepip}"
+                               f"pip3 search {pipmodule}"
                                "`\n**Result: **\n`No Result Returned/False`")
         else:
             await pip.edit("`Use .help pip to see an example`")
