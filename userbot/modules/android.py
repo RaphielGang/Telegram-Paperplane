@@ -23,7 +23,7 @@ async def magisk(request):
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
     releases = 'Latest Magisk Releases:\n'
     for variant in [
-        'master/stable', 'master/beta', 'canary/release', 'canary/debug'
+            'master/stable', 'master/beta', 'canary/release', 'canary/debug'
     ]:
         data = get(url + variant + '.json').json()
         name = variant.split('_')[0].capitalize()
@@ -45,8 +45,9 @@ async def device_info(request):
     else:
         await request.edit("`Usage: .device <codename> / <model>`")
         return
-    data = json.loads(get("https://raw.githubusercontent.com/androidtrackers/"
-                          "certified-android-devices/master/by_device.json").text)
+    data = json.loads(
+        get("https://raw.githubusercontent.com/androidtrackers/"
+            "certified-android-devices/master/by_device.json").text)
     results = data.get(codename)
     if results:
         reply = f"**Search results for {codename}**:\n\n"
@@ -65,6 +66,7 @@ async def codename_info(request):
     textx = await request.get_reply_message()
     brand = request.pattern_match.group(1).lower()
     device = request.pattern_match.group(2).lower()
+
     if brand and device:
         pass
     elif textx:
@@ -73,10 +75,17 @@ async def codename_info(request):
     else:
         await request.edit("`Usage: .codename <brand> <device>`")
         return
-    data = json.loads(get("https://raw.githubusercontent.com/androidtrackers/"
-                          "certified-android-devices/master/by_brand.json").text)
-    devices = data.get(brand)
-    results = [i for i in devices if i["name"].lower() == device.lower() or i["model"] == device.lower()]
+
+    data = json.loads(
+        get("https://raw.githubusercontent.com/androidtrackers/"
+            "certified-android-devices/master/by_brand.json").text)
+    devices_lower = {k.lower(): v
+                     for k, v in data.items()}  # Lower brand names in JSON
+    devices = devices_lower.get(brand)
+    results = [
+        i for i in devices if i["name"].lower() == device.lower()
+        or i["model"].lower() == device.lower()
+    ]
     if results:
         reply = f"**Search results for {brand} {device}**:\n\n"
         if len(results) > 8:
@@ -107,8 +116,8 @@ async def devices_specifications(request):
     all_brands = BeautifulSoup(
         get('https://www.devicespecifications.com/en/brand-more').content,
         'lxml').find('div', {
-        'class': 'brand-listing-container-news'
-    }).findAll('a')
+            'class': 'brand-listing-container-news'
+        }).findAll('a')
     brand_page_url = None
     try:
         brand_page_url = [
@@ -175,17 +184,17 @@ async def twrp(request):
 CMD_HELP.update({"magisk": "Get latest Magisk releases"})
 CMD_HELP.update({
     "device":
-        ".device <codename>\nUsage: Get info about android device codename or model."
+    ".device <codename>\nUsage: Get info about android device codename or model."
 })
 CMD_HELP.update({
     "codename":
-        ".codename <brand> <device>\nUsage: Search for android device codename."
+    ".codename <brand> <device>\nUsage: Search for android device codename."
 })
 CMD_HELP.update({
     "specs":
-        ".specs <brand> <device>\nUsage: Get device specifications info."
+    ".specs <brand> <device>\nUsage: Get device specifications info."
 })
 CMD_HELP.update({
     "twrp":
-        ".twrp <codename>\nUsage: Get latest twrp download for android device."
+    ".twrp <codename>\nUsage: Get latest twrp download for android device."
 })
