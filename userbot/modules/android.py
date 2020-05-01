@@ -6,6 +6,7 @@
 """ Userbot module containing commands related to android"""
 
 import re
+import json
 
 from bs4 import BeautifulSoup
 from requests import get
@@ -14,8 +15,6 @@ from userbot import CMD_HELP
 from userbot.events import register
 
 GITHUB = 'https://github.com'
-DEVICES_DATA = 'https://raw.githubusercontent.com/androidtrackers/' \
-               'certified-android-devices/master/devices.json'
 
 
 @register(outgoing=True, pattern="^.magisk$")
@@ -24,7 +23,7 @@ async def magisk(request):
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
     releases = 'Latest Magisk Releases:\n'
     for variant in [
-            'master/stable', 'master/beta', 'canary/release', 'canary/debug'
+        'master/stable', 'master/beta', 'canary/release', 'canary/debug'
     ]:
         data = get(url + variant + '.json').json()
         name = variant.split('_')[0].capitalize()
@@ -38,30 +37,25 @@ async def magisk(request):
 async def device_info(request):
     """ get android device basic info from its codename """
     textx = await request.get_reply_message()
-    device = request.pattern_match.group(1)
-    if device:
+    codename = request.pattern_match.group(1)
+    if codename:
         pass
     elif textx:
-        device = textx.text
+        codename = textx.text
     else:
         await request.edit("`Usage: .device <codename> / <model>`")
         return
-    found = [
-        i for i in get(DEVICES_DATA).json()
-        if i["device"] == device or i["model"] == device
-    ]
-    if found:
-        reply = f'Search results for {device}:\n'
-        for item in found:
-            brand = item['brand']
-            name = item['name']
-            codename = item['device']
-            model = item['model']
-            reply += f'{brand} {name}\n' \
-                f'**Codename**: `{codename}`\n' \
-                f'**Model**: {model}\n\n'
+    data = json.loads(get("https://raw.githubusercontent.com/androidtrackers/"
+                          "certified-android-devices/master/by_device.json").text)
+    results = data.get(codename)
+    if results:
+        reply = f"**Search results for {codename}**:\n\n"
+        for item in results:
+            reply += f"**Brand**: {item['brand']}\n" \
+                     f"**Name**: {item['name']}\n" \
+                     f"**Model**: {item['model']}\n\n"
     else:
-        reply = f"`Couldn't find info about {device}!`\n"
+        reply = f"`Couldn't find info about {codename}!`\n"
     await request.edit(reply)
 
 
@@ -79,22 +73,18 @@ async def codename_info(request):
     else:
         await request.edit("`Usage: .codename <brand> <device>`")
         return
-    found = [
-        i for i in get(DEVICES_DATA).json()
-        if i["brand"].lower() == brand and device in i["name"].lower()
-    ]
-    if len(found) > 8:
-        found = found[:8]
-    if found:
-        reply = f'Search results for {brand.capitalize()} {device.capitalize()}:\n'
-        for item in found:
-            brand = item['brand']
-            name = item['name']
-            codename = item['device']
-            model = item['model']
-            reply += f'{brand} {name}\n' \
-                f'**Codename**: `{codename}`\n' \
-                f'**Model**: {model}\n\n'
+    data = json.loads(get("https://raw.githubusercontent.com/androidtrackers/"
+                          "certified-android-devices/master/by_brand.json").text)
+    devices = data.get(brand)
+    results = [i for i in devices if i["name"].lower() == device.lower() or i["model"] == device.lower()]
+    if results:
+        reply = f"**Search results for {brand} {device}**:\n\n"
+        if len(results) > 8:
+            results = results[:8]
+        for item in results:
+            reply += f"**Device**: {item['device']}\n" \
+                     f"**Name**: {item['name']}\n" \
+                     f"**Model**: {item['model']}\n\n"
     else:
         reply = f"`Couldn't find {device} codename!`\n"
     await request.edit(reply)
@@ -117,8 +107,8 @@ async def devices_specifications(request):
     all_brands = BeautifulSoup(
         get('https://www.devicespecifications.com/en/brand-more').content,
         'lxml').find('div', {
-            'class': 'brand-listing-container-news'
-        }).findAll('a')
+        'class': 'brand-listing-container-news'
+    }).findAll('a')
     brand_page_url = None
     try:
         brand_page_url = [
@@ -147,7 +137,7 @@ async def devices_specifications(request):
         specifications = re.findall(r'<b>.*?<br/>', str(info))
         for item in specifications:
             title = re.findall(r'<b>(.*?)</b>', item)[0].strip()
-            data = re.findall(r'</b>: (.*?)<br/>', item)[0]\
+            data = re.findall(r'</b>: (.*?)<br/>', item)[0] \
                 .replace('<b>', '').replace('</b>', '').strip()
             reply += f'**{title}**: {data}\n'
     await request.edit(reply)
@@ -177,25 +167,25 @@ async def twrp(request):
     size = page.find("span", {"class": "filesize"}).text
     date = page.find("em").text.strip()
     reply = f'**Latest TWRP for {device}:**\n' \
-        f'[{dl_file}]({dl_link}) - __{size}__\n' \
-        f'**Updated:** __{date}__\n'
+            f'[{dl_file}]({dl_link}) - __{size}__\n' \
+            f'**Updated:** __{date}__\n'
     await request.edit(reply)
 
 
 CMD_HELP.update({"magisk": "Get latest Magisk releases"})
 CMD_HELP.update({
     "device":
-    ".device <codename>\nUsage: Get info about android device codename or model."
+        ".device <codename>\nUsage: Get info about android device codename or model."
 })
 CMD_HELP.update({
     "codename":
-    ".codename <brand> <device>\nUsage: Search for android device codename."
+        ".codename <brand> <device>\nUsage: Search for android device codename."
 })
 CMD_HELP.update({
     "specs":
-    ".specs <brand> <device>\nUsage: Get device specifications info."
+        ".specs <brand> <device>\nUsage: Get device specifications info."
 })
 CMD_HELP.update({
     "twrp":
-    ".twrp <codename>\nUsage: Get latest twrp download for android device."
+        ".twrp <codename>\nUsage: Get latest twrp download for android device."
 })
