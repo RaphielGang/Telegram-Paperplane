@@ -65,6 +65,7 @@ async def codename_info(request):
     textx = await request.get_reply_message()
     brand = request.pattern_match.group(1).lower()
     device = request.pattern_match.group(2).lower()
+
     if brand and device:
         pass
     elif textx:
@@ -73,10 +74,12 @@ async def codename_info(request):
     else:
         await request.edit("`Usage: .codename <brand> <device>`")
         return
+
     data = json.loads(get("https://raw.githubusercontent.com/androidtrackers/"
                           "certified-android-devices/master/by_brand.json").text)
-    devices = data.get(brand)
-    results = [i for i in devices if i["name"].lower() == device.lower() or i["model"] == device.lower()]
+    devices_lower = {k.lower():v for k,v in data.items()} # Lower brand names in JSON
+    devices = devices_lower.get(brand)
+    results = [i for i in devices if i["name"].lower() == device.lower() or i["model"].lower() == device.lower()]
     if results:
         reply = f"**Search results for {brand} {device}**:\n\n"
         if len(results) > 8:
