@@ -190,7 +190,7 @@ async def gdrive_mirror(request):
     if "nosecret" in reply:
         reply = "`Run the generate_drive_session.py file " \
                 "in your machine to authenticate on google drive!!`"
-        await request.edit(reply)
+    await request.edit(reply)
 
 
 @register(pattern=r"^.drive(?: |$)(\S*.?\/*.?\.?[A-Za-z0-9]*)", outgoing=True)
