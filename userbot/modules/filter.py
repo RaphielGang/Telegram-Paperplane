@@ -119,20 +119,10 @@ async def filters_active(event):
     await event.edit(transact)
 
 
-CMD_HELP.update({
-    "filters": ".filters\n"
-               "Usage: List all active filters in this chat."
-})
-
-CMD_HELP.update({
-    "filter" : "filter <keyword> <reply message>"
-               "Usage: Add a filter to this chat"
-               "The bot will now reply that message whenever 'keyword' is mentioned."
-               "If you reply to sticker with keyword, bot will reply with that sticker."
-               "NOTE: all filter keywords are in lowercase."
-})
-
-CMD_HELP.update({
-    "stop" : ".stop <filter>"
-             "Usage: Stops that filter."
+CMD_HELP.update({"Filters":
+    " - `.filters`: List all active filters in this chat.\n"
+    " - `.filter <keyword> <reply message/media>`: Add a filter to this chat. " 
+    "Paperplane will reply with <reply message> or <media> whenever <keyword> is mentioned. "
+    "NOTE: filters are case insensitive.\n"
+    " - `.stop <filter>`: Removes the filter from this chat.\n"
 })

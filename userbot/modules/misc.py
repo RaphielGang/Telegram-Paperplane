@@ -89,28 +89,11 @@ async def repo_is_here(wannasee):
     await wannasee.edit("https://github.com/RaphielGang/Telegram-Paperplane")
 
 
-CMD_HELP.update({
-    'random': ".random <item1> <item2> ... <itemN>\n"
-              "Usage: Get a random item from the list of items."
-})
-
-CMD_HELP.update({
-    'sleep': '.sleep 10\n'
-             'Usage: Userbots get tired too. Let yours snooze for a few seconds.'
-})
-
-CMD_HELP.update({
-    "shutdown": ".shutdown\n"
-                'Usage: Sometimes you need to restart your bot. Sometimes you just hope to'
-                "hear Windows XP shutdown sound... but you don't."
-})
-
-CMD_HELP.update({
-    'support': ".support\n"
-               "Usage: If you need help, use this command."
-})
-
-CMD_HELP.update({
-    'repo': '.repo\n'
-            'Usage: If you are curious what makes Paperplane work, this is what you need.'
+CMD_HELP.update({"Misc":
+    " - `.random <item1> <item2> ... <itemN>`: Get a random item from the list of items.\n"
+    " - `.sleep <secs>`: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
+    " - `.shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
+    "hear Windows XP shutdown sound... but you don't.\n"
+    " - `.support`: If you need more help, use this command."
+    " - `.repo`: Get the link of the source code of Paperplane in GitHub."
 })

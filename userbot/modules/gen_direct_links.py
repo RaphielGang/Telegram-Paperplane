@@ -278,6 +278,7 @@ def github(url: str) -> str:
         dl_url = download.headers["location"]
     except KeyError:
         reply += "`Error: Can't extract the link`\n"
+        return
     name = link.split('/')[-1]
     reply += f'[{name}]({dl_url}) '
     return reply
@@ -347,10 +348,9 @@ def useragent():
     return user_agent.text
 
 
-CMD_HELP.update({
-    "direct": ".direct <url> <url>\n"
-              "Usage: Generate direct download link from supported URL(s)\n"
-              "Supported websites:\n"
-              "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - "
-              "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
+CMD_HELP.update({"Direct Links":
+    " - `.direct <url>`: Generate direct download link from supported URL(s)\n"
+    "Supported websites:\n"
+    "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - "
+    "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
 })

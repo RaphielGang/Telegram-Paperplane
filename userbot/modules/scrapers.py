@@ -254,36 +254,13 @@ def deEmojify(inputString):
     return get_emoji_regexp().sub(u'', inputString)
 
 
-CMD_HELP.update({
-    'img': ".img <search_query>\n"
-           "Usage: Does an image search on Google and shows two images."
+CMD_HELP.update({"Scrapers":
+    " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
+    " - `.google <query>`: Search Google for query (argument or reply).\n"
+    " - `.wiki <query>`: Search Wikipedia for query.\n"
+    " - `.ud <query>`: Search on Urban Dictionary for query.\n"
+    " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
+    " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
+    " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
 })
 
-CMD_HELP.update({
-    'google': ".google <search_query>\n"
-              "Usage: Does a search on Google."})
-
-CMD_HELP.update({
-    'wiki': ".wiki <search_query>\n"
-            "Usage: Does a Wikipedia search."})
-
-CMD_HELP.update({
-    'ud': ".ud <search_query>\n"
-          "Usage: Does a search on Urban Dictionary."})
-
-CMD_HELP.update({
-    'tts': ".tts <text> or reply to someones text with .trt\n"
-           "Usage: Translates text to speech for the default language which is set."
-})
-
-CMD_HELP.update({
-    'trt': ".trt <text> or reply to someones text with .trt\n"
-           "Usage: Translates text to the default language which is set."
-})
-
-CMD_HELP.update({
-    'lang': ".lang <lang>\n"
-            "Usage: Changes the default language of"
-            "userbot scrapers used for Google TRT, "
-            "TTS may not work."
-})

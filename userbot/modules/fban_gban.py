@@ -48,7 +48,7 @@ async def gban_all(msg):
             if banreason == "[userbot]":
                 raise TypeError
         except TypeError:
-            banreason = "[userbot] fban"
+            banreason = "[userbot] gban"
     if not textx:
         await msg.edit(
             "Reply Message missing! Might fail on many bots! Still attempting Gban!"
@@ -193,12 +193,11 @@ async def remove_from_gban(chat):
     await chat.edit("`Removed this bot from the Gbanlist!`")
 
 
-CMD_HELP.update({
-    "gbanall": ".gban\n"
-               "Usage: Reply to a user to ban them in all the bots provided by you!",
-})
-
-CMD_HELP.update({
-    "fbanall": ".fban\n"
-               "Usage: Reply to a user to fban them in all the groups provided by you!"
+CMD_HELP.update({"Fban/Gban":
+    " - `.gban`: Reply to a user to ban them in all the bots provided by you.\n"
+    " - `.fban`: Reply to a user to fban them in all the groups provided by you.\n"
+    " - `.addfban`: Add this group to the fbanlist.\n"
+    " - `.addgban`: Add this group to the gbanlist.\n"
+    " - `.removefban`: Remove this group from the fbanlist.\n"
+    " - `.removegban`: Remove this group from the gbanlist.\n"
 })

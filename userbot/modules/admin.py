@@ -726,45 +726,16 @@ async def get_user_from_id(user, event):
 
     return user_obj
 
-# TODO : Clean this
-CMD_HELP.update({
-    "promote": "Usage: Reply to message with .promote to promote them."})
-CMD_HELP.update({
-    "ban": "Usage: Reply to message with .ban to ban them."})
-CMD_HELP.update({
-    "demote":
-    "Usage: Reply to message with"
-    ".demote to revoke their admin permissions."
+CMD_HELP.update({"Admins":
+    " - `.promote`: Promotes a user. Reply to the user or use their username/ID.\n"
+    " - `.demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
+    " - `.ban`: Bans a user. Reply to the user or use their username/ID.\n"
+    " - `.unban`: Unbans a user. Reply to the user or use their username/ID.\n"
+    " - `.mute`: Mutes a user. Reply to the user or use their username/ID. Works on admins too.\n"
+    " - `.unmute`: Unmutes a user. Reply to the user or use their username/ID.\n"
+    " - `.gmute`: Mutes a user in all groups you have in common with them and have permissions. Reply to the user or use their username/ID.\n"
+    " - `.ungmute`: Ungmutes a user. Reply to the user or use their username/ID.\n"
+    " - `.delusers`: Searches for deleted accounts in a group/channel.\n"
+    " - `.delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
+    " - `.adminlist`: Retrieves all admins in the chat.\n"
 })
-CMD_HELP.update({
-    "unban":
-    "Usage: Reply to message with .unban to unban them in this chat."
-})
-CMD_HELP.update({
-    "mute":
-    "Usage: Reply tomessage with .mute "
-    "to mute them, works on admins too"
-})
-CMD_HELP.update({
-    "unmute":
-    "Usage: Reply to message with .unmute "
-    "to remove them from muted list."
-})
-CMD_HELP.update({
-    "gmute":
-    "Usage: Reply to message with .gmute to mute them in all "
-    "groups you have in common with them."
-})
-CMD_HELP.update({
-    "ungmute":
-    "Usage: Reply message with .ungmute "
-    "to remove them from the gmuted list."
-})
-CMD_HELP.update(
-    {"delusers": "Usage: Searches for deleted accounts in a group."})
-CMD_HELP.update({
-    "delusers clean":
-    "Usage: Searches and removes "
-    "deleted accounts from the group"
-})
-CMD_HELP.update({"adminlist": "Usage: Retrieves all admins in the chat."})

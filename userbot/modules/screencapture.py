@@ -48,7 +48,6 @@ async def capture(url):
         await url.edit(resp.text)
 
 
-CMD_HELP.update({
-    "screencapture": ".screencapture <url>\n"
-                     "Usage: Take a screenshot of a website and send the screenshot."
+CMD_HELP.update({"Screencapture":
+    " - `.screencapture <url>`: Take a screenshot of a website and send it.\n"
 })

@@ -68,20 +68,9 @@ async def kickme(leave):
     await leave.edit("`Nope, no, no, I go away`")
     await bot(LeaveChannelRequest(leave.chat_id))
 
-
-CMD_HELP.update({
-    "chatid": "Fetch the current chat's ID"
-})
-
-CMD_HELP.update({
-    "userid": "Fetch the ID of the user in reply or the "
-              "original author of a forwarded message."
-})
-
-CMD_HELP.update({
-    "log": "Forward the message you've replied to to your "
-           "botlog group."})
-
-CMD_HELP.update({
-    "kickme": "Leave from a targeted group."
+CMD_HELP.update({"Chat":
+    " - `.chatid`: Fetch the current chat's ID.\n"
+    " - `.userid`: Fetch the ID of the user in reply or the original author of a forwarded message.\n"
+    " - `.log`: Forward the message you've replied to to your botlog group.\n"
+    " - `.kickme`: Leave from a targeted group.\n"
 })

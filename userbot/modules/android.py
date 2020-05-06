@@ -181,20 +181,10 @@ async def twrp(request):
     await request.edit(reply)
 
 
-CMD_HELP.update({"magisk": "Get latest Magisk releases"})
-CMD_HELP.update({
-    "device":
-    ".device <codename>\nUsage: Get info about android device codename or model."
-})
-CMD_HELP.update({
-    "codename":
-    ".codename <brand> <device>\nUsage: Search for android device codename."
-})
-CMD_HELP.update({
-    "specs":
-    ".specs <brand> <device>\nUsage: Get device specifications info."
-})
-CMD_HELP.update({
-    "twrp":
-    ".twrp <codename>\nUsage: Get latest twrp download for android device."
+CMD_HELP.update({"Android":
+    " - `.magisk`: Get the latest Magisk releases.\n"
+    " - `.device <codename>`: Get info about an Android device.\n"
+    " - `.codename <brand> <device>`: Search for Android device codename.\n"
+    " - `.specs <brand> <device>`: Get device specifications info.\n"
+    " - `.twrp <codename>`: Get the latest TWRP download for an Android device.\n"
 })
