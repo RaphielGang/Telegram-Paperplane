@@ -127,12 +127,8 @@ async def kick_marie_notes(kick):
             BOTLOG_CHATID, "I cleaned all Notes at " + str(kick.chat_id))
 
 
-CMD_HELP.update({
-    "notes":
-    "#<notename>"
-    "\nUsage: Get the note with name notename"
-    "\n\n.save <notename> <notedata>"
-    "\nUsage: Save notedata as a note with the name notename"
-    "\n\n.clear <notename>"
-    "\nUsage: Delete the note with name notename."
+CMD_HELP.update({"Notes":
+    " - `#<notename>`: Get the note with name notename.\n"
+    " - `.save <notename> <content>`: Save content in a note with the name notename.\n"
+    " - `.clear <notename>`: Delete the note with name notename.\n"
 })

@@ -174,17 +174,12 @@ async def amireallyalivereset(ureset):
         await ureset.edit("`" "Successfully reset user for alive!" "`")
 
 
-CMD_HELP.update(
-    {"sysd": ".sysd\n"
-     "Usage: Show system information using neofetch."})
-CMD_HELP.update({"botver": ".botver\n" "Usage: Show the userbot version."})
-CMD_HELP.update(
-    {"pip": ".pip <module(s)>\n"
-     "Usage: Search module(s) in PyPi."})
-CMD_HELP.update({
-    "alive":
-    ".alive\n"
-    "Usage: Check if your bot is working or not. "
-    "Use .aliveu <new_user> to change user name, or .resetalive "
-    "to reset it to default."
+CMD_HELP.update({"System Stats":
+    " - `.sysd`: Show system information using neofetch.\n"
+    " - `.botver`: Show Paperplane version.\n"
+    " - `.pip <module(s)>`: Search module(s) in PyPI.\n"
+    " - `.alive`: Check if Paperplane is running. \n"
+    " - `.aliveu <new_user>`: Change the user name in .alive command (aesthetics change only)\n"
+    " - `.resetalive`: Reset the user name in the .alive command to default (aesthetics change only)\n"
 })
+

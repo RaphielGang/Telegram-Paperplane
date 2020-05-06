@@ -165,16 +165,7 @@ async def upstream(ups):
         exit()
 
 
-CMD_HELP.update({
-    'update':
-    '.update\n'
-    'Usage: Check if the main userbot repository has any'
-    'updates and show changelog if so.'
-})
-
-CMD_HELP.update({
-    'update':
-    '.update now\n'
-    'Usage: Update your userbot, if there are any'
-    'updates in the main userbot repository.'
+CMD_HELP.update({"Updater":
+    " - `.update`: Check if the main repository has any updates and show changelog if so."
+    " - `.update now`: Update Paperplane if there are any updates available."
 })

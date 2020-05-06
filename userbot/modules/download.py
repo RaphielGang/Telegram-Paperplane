@@ -487,26 +487,10 @@ async def uploadas(uas_event):
     else:
         await uas_event.edit("404: File Not Found")
 
-
-CMD_HELP.update({
-    "download":
-    ".download [in reply to TG file]\n"
-    "or .download <link> | <filename>\n"
-    "Usage: Download a file from telegram or link to the server."
-})
-CMD_HELP.update({
-    "upload":
-    ".upload <link>\nUsage: Upload a "
-    "locally stored file to Telegram."
-})
-CMD_HELP.update({
-    "drive":
-    ".upload <file>\nUsage: Upload a locally stored file to GDrive."
-})
-CMD_HELP.update({
-    "mirror":
-    ".mirror [in reply to TG file]\n"
-    "or .mirror <link> | <filename>\n"
-    "Usage: Download a file from telegram "
-    "or link to the server then upload to your GDrive."
+CMD_HELP.update({"Download":
+    " - `.download [in reply to TG file] or .download <link> | <filename>`: "
+    "Download a file from telegram or link to the server.\n"
+    " - `.upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n"
+    " - `.drive <filename>`: Upload a locally(where Paperplane runs) stored file to GDrive.\n"
+    " - `.mirror [in reply to TG file] or .mirror <link> | <filename>`: Mirror a file to Google Drive.\n"
 })

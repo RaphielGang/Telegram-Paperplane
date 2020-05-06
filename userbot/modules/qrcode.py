@@ -94,15 +94,7 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     await qrcode.delete()
 
 
-CMD_HELP.update({
-    'getqr':
-    ".getqr\n"
-    "Usage: Get the QR Code content from the replied QR Code."
-})
-
-CMD_HELP.update({
-    'makeqr':
-    ".makeqr <content>\n"
-    "Usage: Make a QR Code from the given content.\n"
-    "Example: .makeqr www.google.com"
+CMD_HELP.update({"QR Codes":
+    " - `.getqr`: Get the QR Code content from the replied QR Code.\n"
+    " - `.makeqr <content>`: Make a QR Code from the given message (text, link, etc...).\n"
 })
