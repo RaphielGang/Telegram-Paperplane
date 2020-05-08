@@ -66,6 +66,7 @@ SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
                                              None)
 
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
+print(OPEN_WEATHER_MAP_APPID)
 
 WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
 
@@ -127,7 +128,8 @@ MONGO = MONGOCLIENT.userbot
 def is_mongo_alive():
     try:
         MONGOCLIENT.server_info()
-    except BaseException:
+    except BaseException as e:
+        print(e)
         return False
     return True
 

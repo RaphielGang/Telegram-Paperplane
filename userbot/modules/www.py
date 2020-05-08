@@ -73,14 +73,8 @@ async def pingme(pong):
     await pong.edit("`Pong!\n%sms`" % (duration))
 
 
-CMD_HELP.update(
-    {"speed": ".speed"
-     "\nUsage: Conduct a speedtest and show the results."})
-CMD_HELP.update({
-    "nearestdc":
-    ".nearestdc"
-    "\nUsage: Find the nearest datacenter from your server."
+CMD_HELP.update({"WWW":
+    " - `.speed`: Conduct a SpeedTest.net and show the results.\n"
+    " - `.nearestdc`: Find the nearest datacenter from your server.\n"
+    " - `.pingme`: Show how long it takes to ping Paperplane.\n"
 })
-CMD_HELP.update(
-    {"pingme": ".pingme"
-     "\nUsage: Show how long it takes to ping your bot."})
