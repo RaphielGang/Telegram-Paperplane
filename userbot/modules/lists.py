@@ -79,9 +79,9 @@ async def removelists(event):
             BOTLOG_CHATID, f"Removed list {listname} from {listat}")
 
 
-@register(outgoing=True, pattern=r"^.add(g)?list (\w*)")
+@register(outgoing=True, pattern=r"^.new(g)?list (\w*)")
 async def addlist(event):
-    """ For .add(g)list command, saves lists in a chat. """
+    """ For .new(g)list command, saves lists in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit(DB_FAILED)
         return
@@ -106,7 +106,7 @@ async def addlist(event):
             BOTLOG_CHATID, f"Created list {listname} in {listat}")
 
 
-@register(outgoing=True, pattern=r"^.addlistitem(s)? ?(\w*)\n((.|\n*)*)")
+@register(outgoing=True, pattern=r"^.addlistitems? ?(\w*)\n((.|\n*)*)")
 async def add_list_items(event):
     """ For .addlistitems command, add item(s) to a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -119,8 +119,8 @@ async def add_list_items(event):
     if textx:
         x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
         listname = x.group(1)
-    elif event.pattern_match.group(2):
-        listname = event.pattern_match.group(2)
+    elif event.pattern_match.group(1):
+        listname = event.pattern_match.group(1)
 
     if not listname:
         return_msg = f"`Pass a list to add items into!` {CHK_HELP}"
@@ -133,7 +133,7 @@ async def add_list_items(event):
         await x.edit(LIST_NOT_FOUND.format(listname))
 
     content = _list['items']
-    newitems = event.pattern_match.group(3)
+    newitems = event.pattern_match.group(2)
     content.extend(newitems.splitlines())
 
     msg = "`Item(s) added successfully to the list.\n\n"
@@ -166,10 +166,12 @@ async def edit_list_item(event):
 
     textx = await event.get_reply_message()
     listname = None
+    arg_index = event.pattern_match.group(2)
 
     if textx:
         x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
         listname = x.group(1)
+        arg_index = event.pattern_match.group(1) + " " + arg_indexes
     elif event.pattern_match.group(1):
         listname = event.pattern_match.group(1)
     else:
@@ -198,7 +200,7 @@ async def edit_list_item(event):
         await event.client.send_message(BOTLOG_CHATID, log)
 
 
-@register(outgoing=True, pattern=r"^.rmlistitem ?(\w*)? ([0-9]+)")
+@register(outgoing=True, pattern=r"^.rmlistitems? ?(\w*)? ([0-9 ]+)")
 async def rmlistitems(event):
     """ For .rmlistitem command, remove an item from the list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -209,36 +211,43 @@ async def rmlistitems(event):
 
     textx = await event.get_reply_message()
     listname = None
+    arg_indexes = event.pattern_match.group(2)
 
     if textx:
         x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
         listname = x.group(1)
+        arg_indexes = event.pattern_match.group(1) + " " + arg_indexes
     elif event.pattern_match.group(1):
         listname = event.pattern_match.group(1)
     else:
         await event.edit(f"`Pass a list to remove items from!` {CHK_HELP}")
         return
 
-    item_number = int(event.pattern_match.group(2))
+    # Check if the argument contains only numbers and whitespaces
+    if re.match("^ *[0-9][0-9 ]*$", arg_indexes):
+        unwanted_indexes = list(map(int, arg_indexes.split()))
+    else:
+        await event.edit(f"`Error: Wrong arguments! {CHK_HELP}`")
+        return
 
     _list = await get_list(event.chat_id, listname)
 
     try:
-        content = _list['items']
-        del content[item_number - 1]
+        for elem in sorted(unwanted_indexes, reverse = True):
+            del _list['items'][elem - 1]
     except TypeError:
         await event.edit(LIST_NOT_FOUND.format('listname'))
         return
     except IndexError:
-        await event.edit(f"`Item `**{item_number}**\
+        await event.edit(f"`Item `**{unwanted_indexes}**\
 ` in list `**{listname}**` not found!`")
         return
 
-    msg = "`Item {} removed from the list successfully. \
+    msg = "`Item(s) {} removed from the list successfully. \
 Use` ${} `to get the list.`"
 
-    if await add_list(event.chat_id, listname, content) is False:
-        await event.edit(msg.format(item_number, listname))
+    if await add_list(event.chat_id, listname, _list['items']) is False:
+        await event.edit(msg.format(unwanted_indexes, listname))
     else:
         await event.edit(f"List {listname} doesn't exist!")
 
@@ -246,7 +255,7 @@ Use` ${} `to get the list.`"
         listat = "global storage" if _list['chat_id'] else str(event.chat_id)
         await event.client.send_message(
             BOTLOG_CHATID,
-            f"Removed item {str(item_number)} from {listname} in {listat}")
+            f"Removed item(s) {str(unwanted_indexes)} from {listname} in {listat}")
 
 
 @register(outgoing=True, pattern=r"^.setlist ?(\w*)? (global|local)")
