@@ -14,6 +14,7 @@
 PARSE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PARSE_ORIGIN="$(git config --get remote.origin.url)"
 COMMIT_POINT="$(git log --pretty=format:'%h : %s' -1)"
+COMMIT_HASH="$(git rev-parse --verify HEAD)"
 REVIEWERS="@zakaryan2004"
 TELEGRAM_TOKEN=${BOT_API_KEY}
 export BOT_API_KEY PARSE_BRANCH PARSE_ORIGIN COMMIT_POINT TELEGRAM_TOKEN
@@ -49,8 +50,6 @@ lint() {
   if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
     exit 0
   fi
-  git config --global user.email "zakaryan.2004@outlook.com"
-  git config --global user.name "Gegham Zakaryan"
 
   RESULT=`yapf -d -r -p userbot`
 
@@ -105,5 +104,4 @@ execute() {
     fi
 }
 
-get_session
 execute
