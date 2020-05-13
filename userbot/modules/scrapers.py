@@ -254,7 +254,7 @@ def deEmojify(inputString):
     return get_emoji_regexp().sub(u'', inputString)
 
 
-CMD_HELP.update({"Scrapers":
+CMD_HELP.update({"scrapers": ['Scrapers',
     " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
     " - `.google <query>`: Search Google for query (argument or reply).\n"
     " - `.wiki <query>`: Search Wikipedia for query.\n"
@@ -262,5 +262,6 @@ CMD_HELP.update({"Scrapers":
     " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
     " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
     " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
+    " - `.wolfram <query>: Get answers to questions using WolframAlpha Spoken Results API."]
 })
 

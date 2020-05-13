@@ -73,7 +73,7 @@ async def make_qr(qrstr):
     await qrstr.delete()
 
 
-CMD_HELP.update({"QR Codes":
+CMD_HELP.update({"qr codes": ['QR Codes',
     " - `.getqr`: Get the QR Code content from the replied QR Code.\n"
-    " - `.makeqr <content>`: Make a QR Code from the given message (text, link, etc...).\n"
+    " - `.makeqr <content>`: Make a QR Code from the given message (text, link, etc...).\n"]
 })

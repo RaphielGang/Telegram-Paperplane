@@ -497,4 +497,6 @@ async def typewriter(typew):
         await sleep(sleep_time)
 
 
-CMD_HELP.update({"Memes": "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."})
+CMD_HELP.update({"memes": ["Memes",
+    "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."]
+})
