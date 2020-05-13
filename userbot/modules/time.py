@@ -241,7 +241,7 @@ async def set_time_country(loc):
                    f"{c_name}({tz_name} timezone).`")
 
 
-CMD_HELP.update({"Date/Time":
+CMD_HELP.update({"date/time": ['Date/Time',
     " - `.time <country name/code> <timezone number>`: "
     "Get the time of a country. If a country has multiple timezones, "
     "Paperplane will list all of them and let you select one.\n"
@@ -250,6 +250,6 @@ CMD_HELP.update({"Date/Time":
     "Paperplane will list all of them and let you select one.\n"
     " - `.settime <country name/code> <timezone number>`: "
     "Set the default country for .time and .date command. If a country "
-    "has multiple timezones, Paperplane will list all of them and let you select one."
+    "has multiple timezones, Paperplane will list all of them and let you select one."]
 })
 

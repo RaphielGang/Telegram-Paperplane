@@ -119,10 +119,10 @@ async def filters_active(event):
     await event.edit(transact)
 
 
-CMD_HELP.update({"Filters":
+CMD_HELP.update({"filters": ['Filters',
     " - `.filters`: List all active filters in this chat.\n"
     " - `.filter <keyword> <reply message/media>`: Add a filter to this chat. " 
     "Paperplane will reply with <reply message> or <media> whenever <keyword> is mentioned. "
     "NOTE: filters are case insensitive.\n"
-    " - `.stop <filter>`: Removes the filter from this chat.\n"
+    " - `.stop <filter>`: Removes the filter from this chat.\n"]
 })

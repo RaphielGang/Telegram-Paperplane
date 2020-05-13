@@ -378,7 +378,7 @@ async def getlist_logic(event):
             await event.edit(f"`List {listname} not found!`")
 
 
-CMD_HELP.update({"Lists":
+CMD_HELP.update({"lists": ["Lists",
     " - `.lists`: Get all of the lists (both local and global).\n"
     " - `$listname`: Get the list called 'listname'.\n"
     " - `.getlist <listname>`: Same as $listname.\n"
@@ -398,5 +398,5 @@ CMD_HELP.update({"Lists":
     "By replying to a Paperplane List message(identified by "
     "\n'[Paperplane-List]' in the beginning of a userbot message), "
     "\nyou can omit <listname> from all commands (except $<listname>)."
-    "\nPaperplane will recognize the list from the replied message."
+    "\nPaperplane will recognize the list from the replied message."]
 })

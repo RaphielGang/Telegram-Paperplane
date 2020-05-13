@@ -100,8 +100,8 @@ async def sed(command):
             await command.edit("Did you mean? \n\n`" + text + "`")
 
 
-CMD_HELP.update({"Sed":
+CMD_HELP.update({"sed": ["Sed",
     " - `sed<delimiter><old word(s)><delimiter><new word(s)>`: "
     "Replaces a word or words using sed. You can find more online. "
-    "Delimiters: `/`, `:`, `|`, `_`\n"
+    "Delimiters: `/`, `:`, `|`, `_`\n"]
 })

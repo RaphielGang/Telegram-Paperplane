@@ -227,10 +227,10 @@ async def unblockpm(unblock):
         )
 
 
-CMD_HELP.update({"PMPermit":
+CMD_HELP.update({"pmpermit": ["PMPermit",
     " - `.approve`: Approve the mentioned/replied person to PM.\n"
     " - `.block`: Blocks the person from PMing you.\n"
     " - `.unblock`: Unblocks the person, so they can PM you again.\n"
     " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
-    " - `.notifon`: Allow notifications coming from unapproved PMs.\n"
+    " - `.notifon`: Allow notifications coming from unapproved PMs.\n"]
 })
