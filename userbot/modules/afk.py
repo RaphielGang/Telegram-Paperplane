@@ -9,8 +9,10 @@ import time
 
 from telethon.events import StopPropagation
 
+from telethon.tl.functions.account import UpdateProfileRequest
+
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_MSG, USERS,
-                     is_redis_alive)
+                     is_redis_alive, bot)
 from userbot.events import register
 from userbot.modules.dbhelper import afk, afk_reason, is_afk, no_afk
 
@@ -82,6 +84,7 @@ async def set_afk(setafk):
         await setafk.edit("`Database connections failing!`")
         return
     message = setafk.text
+    user = await bot.get_me()
     try:
         AFKREASON = str(message[5:])
     except BaseException:
@@ -89,6 +92,7 @@ async def set_afk(setafk):
     if not AFKREASON:
         AFKREASON = 'No reason'
     await setafk.edit("AFK AF!")
+    await bot(UpdateProfileRequest(first_name=user.first_name, last_name=user.last_name + " [ OFFLINE ]"))
     if BOTLOG:
         await setafk.client.send_message(BOTLOG_CHATID, "You went AFK!")
     await afk(AFKREASON)
@@ -102,8 +106,12 @@ async def type_afk_is_not_true(notafk):
     if not is_redis_alive():
         return
     IsAway = await is_afk()
+    user = await bot.get_me()
+    last = user.last_name
+    last1 = last[:-12]
     if IsAway is True:
         x = await notafk.respond("I'm no longer AFK.")
+        await bot(UpdateProfileRequest(first_name=user.first_name, last_name=last1))
         y = await notafk.respond(
             "`You recieved " + str(COUNT_MSG) +
             " messages while you were away. Check log for more details.`" +
