@@ -9,13 +9,14 @@ Userbot module to help you manage a group
 from asyncio import sleep
 
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
-                             UserAdminInvalidError)
+                             ChatNotModifiedError, ImageProcessFailedError,
+                             PhotoCropSizeSmallError, UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+from telethon.tl.functions.messages import (EditChatDefaultBannedRightsRequest,
+                                            UpdatePinnedMessageRequest)
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
@@ -65,6 +66,21 @@ UNBAN_RIGHTS = ChatBannedRights(
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
+
+CHATLOCK_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=None,
+    send_messages=True,
+    send_media=True,
+    send_stickers=True,
+    send_gifs=True,
+    send_games=True,
+    send_inline=True,
+    send_polls=True,
+    change_info=True,
+    invite_users=True,
+    pin_messages=True
+)
 
 # ================================================
 
@@ -166,7 +182,7 @@ async def demote(dmod):
     # If passing, declare that we're going to demote
     await dmod.edit("`Demoting...`")
     user = await get_user_from_event(dmod)
-    user = user[0] # We don't need the 'rank' here.
+    user = user[0]  # We don't need the 'rank' here.
     if user:
         pass
     else:
@@ -676,6 +692,36 @@ async def kick(usr):
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
+@register(outgoing=True, group_only=True, pattern="^.lock$")
+async def emergency_lock(lock):
+    """ For emergency-locking a chat """
+    # Admin or creator check
+    chat = await lock.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await lock.edit(NO_ADMIN)
+        return
+
+    await lock.edit("`Locking...`")
+
+    try:
+        await lock.client(
+            EditChatDefaultBannedRightsRequest(
+            lock.chat_id,
+            CHATLOCK_RIGHTS
+        ))
+        await lock.edit("`Locked!`")
+    except ChatNotModifiedError:
+        await lock.edit("`Chat already locked`")
+
+    if BOTLOG:
+        await lock.client.send_message(
+            BOTLOG_CHATID, "#LOCK\n"
+            f"CHAT: {lock.chat.title}(`{lock.chat_id}`)"
+        )
 
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
