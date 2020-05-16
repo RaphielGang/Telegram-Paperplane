@@ -77,8 +77,23 @@ CHATLOCK_RIGHTS = ChatBannedRights(
     send_games=True,
     send_inline=True,
     send_polls=True,
-    change_info=True,
     invite_users=True,
+    change_info=True,
+    pin_messages=True
+)
+
+CHATUNLOCK_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=None,
+    send_messages=None,
+    send_media=None,
+    send_stickers=None,
+    send_gifs=None,
+    send_games=None,
+    send_inline=None,
+    send_polls=None,
+    invite_users=None,
+    change_info=True,
     pin_messages=True
 )
 
@@ -722,6 +737,38 @@ async def emergency_lock(lock):
             BOTLOG_CHATID, "#LOCK\n"
             f"CHAT: {lock.chat.title}(`{lock.chat_id}`)"
         )
+
+@register(outgoing=True, group_only=True, pattern="^.unlock$")
+async def chat_unlock(unlock):
+    """ For unlocking a chat """
+    # Admin or creator check
+    chat = await unlock.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await unlock.edit(NO_ADMIN)
+        return
+
+    await unlock.edit("`Unlocking...`")
+
+    try:
+        await unlock.client(
+            EditChatDefaultBannedRightsRequest(
+            unlock.chat_id,
+            CHATUNLOCK_RIGHTS
+        ))
+        await unlock.edit("`Unlocked!`")
+    except ChatNotModifiedError:
+        await unlock.edit("`Chat already unlocked`")
+
+    if BOTLOG:
+        await unlock.client.send_message(
+            BOTLOG_CHATID, "#UNLOCK\n"
+            f"CHAT: {unlock.chat.title}(`{unlock.chat_id}`)"
+        )
+
 
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
