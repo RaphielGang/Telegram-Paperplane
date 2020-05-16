@@ -820,6 +820,8 @@ async def get_user_from_id(user, event):
     return user_obj
 
 CMD_HELP.update({"admins": ['Admins',
+    " - `.lock`: Lock current chat, allowing read only for non-admins.\n"
+    " - `.unlock`: Unlock current chat, allowing read/write for non-admins.\n"
     " - `.promote`: Promotes a user. Reply to the user or use their username/ID.\n"
     " - `.demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
     " - `.ban`: Bans a user. Reply to the user or use their username/ID.\n"
