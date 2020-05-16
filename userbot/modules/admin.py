@@ -9,13 +9,14 @@ Userbot module to help you manage a group
 from asyncio import sleep
 
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
-                             UserAdminInvalidError)
+                             ChatNotModifiedError, ImageProcessFailedError,
+                             PhotoCropSizeSmallError, UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+from telethon.tl.functions.messages import (EditChatDefaultBannedRightsRequest,
+                                            UpdatePinnedMessageRequest)
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
@@ -67,6 +68,36 @@ KICK_RIGHTS = ChatBannedRights(until_date=None, view_messages=True)
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
+
+CHATLOCK_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=None,
+    send_messages=True,
+    send_media=True,
+    send_stickers=True,
+    send_gifs=True,
+    send_games=True,
+    send_inline=True,
+    send_polls=True,
+    invite_users=True,
+    change_info=True,
+    pin_messages=True
+)
+
+CHATUNLOCK_RIGHTS = ChatBannedRights(
+    until_date=None,
+    view_messages=None,
+    send_messages=None,
+    send_media=None,
+    send_stickers=None,
+    send_gifs=None,
+    send_games=None,
+    send_inline=None,
+    send_polls=None,
+    invite_users=True,
+    change_info=True,
+    pin_messages=True
+)
 
 # ================================================
 
@@ -666,6 +697,68 @@ async def kick(usr):
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
+@register(outgoing=True, group_only=True, pattern="^.lock$")
+async def emergency_lock(lock):
+    """ For emergency-locking a chat """
+    # Admin or creator check
+    chat = await lock.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await lock.edit(NO_ADMIN)
+        return
+
+    await lock.edit("`Locking...`")
+
+    try:
+        await lock.client(
+            EditChatDefaultBannedRightsRequest(
+            lock.chat_id,
+            CHATLOCK_RIGHTS
+        ))
+        await lock.edit("`Locked!`")
+    except ChatNotModifiedError:
+        await lock.edit("`Chat has already been locked!`")
+
+    if BOTLOG:
+        await lock.client.send_message(
+            BOTLOG_CHATID, "#LOCK\n"
+            f"CHAT: {lock.chat.title}(`{lock.chat_id}`)"
+        )
+
+@register(outgoing=True, group_only=True, pattern="^.unlock$")
+async def chat_unlock(unlock):
+    """ For unlocking a chat """
+    # Admin or creator check
+    chat = await unlock.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await unlock.edit(NO_ADMIN)
+        return
+
+    await unlock.edit("`Unlocking...`")
+
+    try:
+        await unlock.client(
+            EditChatDefaultBannedRightsRequest(
+            unlock.chat_id,
+            CHATUNLOCK_RIGHTS
+        ))
+        await unlock.edit("`Unlocked!`")
+    except ChatNotModifiedError:
+        await unlock.edit("`Chat already unlocked`")
+
+    if BOTLOG:
+        await unlock.client.send_message(
+            BOTLOG_CHATID, "#UNLOCK\n"
+            f"CHAT: {unlock.chat.title}(`{unlock.chat_id}`)"
+        )
+
 
 async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
@@ -727,5 +820,7 @@ CMD_HELP.update({
         " - `.delusers`: Searches for deleted accounts in a group/channel.\n"
         " - `.delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
         " - `.adminlist`: Retrieves all admins in the chat.\n"
+        " - `.lock`: Lock current chat, allowing read only for non-admins.\n"
+        " - `.unlock`: Unlock current chat, allowing read/write for non-admins.\n"
     ]
 })
