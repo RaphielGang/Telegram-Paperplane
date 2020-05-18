@@ -7,6 +7,7 @@
 from asyncio import sleep
 
 from telethon.tl.functions.channels import LeaveChannelRequest
+from telethon.tl.types import TypeChannelParticipantsFilter
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import register
@@ -68,9 +69,26 @@ async def kickme(leave):
     await leave.edit("`Nope, no, no, I go away`")
     await bot(LeaveChannelRequest(leave.chat_id))
 
-CMD_HELP.update({"chat": ["Chat",
-    " - `.chatid`: Fetch the current chat's ID.\n"
-    " - `.userid`: Fetch the ID of the user in reply or the original author of a forwarded message.\n"
-    " - `.log`: Forward the message you've replied to to your botlog group.\n"
-    " - `.kickme`: Leave from a targeted group.\n"]
-})
+
+@register(outgoing=True, group_only=True, pattern="^@everyone$")
+async def everyone(evy):
+    """ Experimental implementation for @everyone"""
+    mention_text = "@everyone"
+    chat = await evy.get_chat()
+
+    async for user in evy.client.iter_participants(chat, filter=TypeChannelParticipantsFilter):
+        mention_text += f"[\u200b](tg://user?id={user.id})"
+
+        mention_slots -= 1
+        if mention_slots == 0:
+            break
+
+    await evy.respond(mention_text, mode="repost")
+
+CMD_HELP.update({"chat":
+                 ["Chat",
+                  " - `.chatid`: Fetch the current chat's ID.\n"
+                  " - `.userid`: Fetch the ID of the user in reply or the original author of a forwarded message.\n"
+                  " - `.log`: Forward the message you've replied to to your botlog group.\n"
+                  " - `.kickme`: Leave from a targeted group.\n"]
+                 })
