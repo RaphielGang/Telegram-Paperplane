@@ -47,7 +47,7 @@ async def keep_read(message):
                 await message.client.send_read_acknowledge(message.chat_id)
 
 
-CMD_HELP.update({"Muting":
-    " - `.unmutechat`: Unmute a muted chat."
-    " - `.mutechat`: Mute any chat."
+CMD_HELP.update({"muting": ['Muting',
+    " - `.unmutechat`: Unmute a muted chat.\n"
+    " - `.mutechat`: Mute any chat.\n"]
 })

@@ -16,7 +16,7 @@ from traceback import format_exc
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
-from userbot import bot, BOTLOG, BOTLOG_CHATID
+from userbot import bot, BOTLOG, BOTLOG_CHATID, LOGS
 
 
 def register(**args):
@@ -77,13 +77,12 @@ def register(**args):
             # This is a gay exception and must be passed out. So that it doesnt spam chats
             except KeyboardInterrupt:
                 pass
-            except BaseException:
+            except BaseException as e:
 
-                # Check if we have to disable it.
-                # If not silence the log spam on the console,
-                # with a dumb except.
-
+                # Check if we have to disable error logging.
                 if not disable_errors:
+                    LOGS.exception(e) # Log the error in console
+
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                     text = "**Sorry, I encountered a error!**\n"
@@ -96,7 +95,8 @@ def register(**args):
                     ftext += "we logged only fact of error and date, "
                     ftext += "we respect your privacy, "
                     ftext += "you may not report this error if you've "
-                    ftext += "any confidential data here, noone will see your data\n\n"
+                    ftext += "any confidential data here, no one will see your data "
+                    ftext += "if you choose not to do so.\n\n"
                     ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
                     ftext += "\nDate: " + date
                     ftext += "\nGroup ID: " + str(check.chat_id)

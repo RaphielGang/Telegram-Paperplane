@@ -698,7 +698,7 @@ async def get_user_from_id(user, event):
 
     return user_obj
 
-CMD_HELP.update({"Admins":
+CMD_HELP.update({"admins": ['Admins',
     " - `.promote`: Promotes a user. Reply to the user or use their username/ID.\n"
     " - `.demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
     " - `.ban`: Bans a user. Reply to the user or use their username/ID.\n"
@@ -709,5 +709,5 @@ CMD_HELP.update({"Admins":
     " - `.ungmute`: Ungmutes a user. Reply to the user or use their username/ID.\n"
     " - `.delusers`: Searches for deleted accounts in a group/channel.\n"
     " - `.delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
-    " - `.adminlist`: Retrieves all admins in the chat.\n"
+    " - `.adminlist`: Retrieves all admins in the chat.\n"]
 })

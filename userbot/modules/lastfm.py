@@ -211,8 +211,8 @@ async def lastlog(lstlog):
         await lstlog.edit(LFM_LOG_ERR)
 
 
-CMD_HELP.update({"LastFM":
+CMD_HELP.update({"lastfm": ["LastFM",
     " - `.lastfm`: Shows currently scrobbling track or most recent scrobbles if nothing is playing.\n"
     " - `.lastbio <on/off>`: Enable/Disable last.fm bio updating.\n"
-    " - `.lastlog <on/off>`: Enable/Disable last.fm bio logging.\n"  
+    " - `.lastlog <on/off>`: Enable/Disable last.fm bio logging.\n"]
 })
