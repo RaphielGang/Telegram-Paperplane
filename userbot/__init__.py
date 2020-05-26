@@ -151,17 +151,18 @@ def runningInDocker():
     return False
 
 # Download binaries for gen_direct_links module, give correct perms
-if not os.path.exists('bin'):
-    os.mkdir('bin')
 
-url1 = 'https://raw.githubusercontent.com/yshalsager/megadown/master/megadown'
-url2 = 'https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py'
+# if not os.path.exists('bin'):
+#     os.mkdir('bin')
 
-dl1 = Downloader(url=url1, filename="bin/megadown")
-dl1 = Downloader(url=url1, filename="bin/cmrudl")
+# url1 = 'https://raw.githubusercontent.com/yshalsager/megadown/master/megadown'
+# url2 = 'https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py'
 
-os.chmod('bin/megadown', 0o755)
-os.chmod('bin/cmrudl', 0o755)
+# dl1 = Downloader(url=url1, filename="bin/megadown")
+# dl1 = Downloader(url=url1, filename="bin/cmrudl")
+
+# os.chmod('bin/megadown', 0o755)
+# os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
 COUNT_MSG = 0
