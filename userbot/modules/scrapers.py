@@ -184,7 +184,7 @@ async def text_to_speech(query):
         return
 
     try:
-        tts = gTTS(message, tld='com', lang=LANG)
+        tts = gTTS(message, tld='com', lang=LANG, slow=True)
         tts.save("k.mp3")
     except AssertionError:
         await query.edit('The text is empty.\n'
