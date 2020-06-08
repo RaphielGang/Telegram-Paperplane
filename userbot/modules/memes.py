@@ -14,7 +14,7 @@ import time
 from cowpy import cow
 
 from userbot import CMD_HELP, ZALG_LIST
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
 METOOSTR = [
@@ -194,6 +194,7 @@ DISABLE_RUN = False
 
 
 @register(outgoing=True, pattern=r"^.(\w+)say (.*)")
+@grp_exclude()
 async def univsaye(cowmsg):
     """ For .cowsay module, userbot wrapper for cow which says things. """
     arg = cowmsg.pattern_match.group(1).lower()
@@ -210,6 +211,7 @@ async def univsaye(cowmsg):
 
 
 @register(outgoing=True, pattern="^:/$", ignore_unsafe=True)
+@grp_exclude()
 async def kek(keks):
     """ Check yourself ;)"""
     uio = ["/", "\\"]
@@ -219,6 +221,7 @@ async def kek(keks):
 
 
 @register(outgoing=True, pattern="^-_-$", ignore_unsafe=True)
+@grp_exclude()
 async def lol(lel):
     """ Ok... """
     okay = "-_-"
@@ -228,6 +231,7 @@ async def lol(lel):
 
 
 @register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+@grp_exclude()
 async def copypasta(cp_e):
     """ Copypasta the famous meme """
     textx = await cp_e.get_reply_message()
@@ -262,6 +266,7 @@ async def copypasta(cp_e):
 
 
 @register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
+@grp_exclude()
 async def vapor(vpr):
     """ Vaporize everything! """
     reply_text = list()
@@ -287,6 +292,7 @@ async def vapor(vpr):
 
 
 @register(outgoing=True, pattern="^.str(?: |$)(.*)")
+@grp_exclude()
 async def stretch(stret):
     """ Stretch it."""
     textx = await stret.get_reply_message()
@@ -307,6 +313,7 @@ async def stretch(stret):
 
 
 @register(outgoing=True, pattern="^.zal(?: |$)(.*)")
+@grp_exclude()
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
     reply_text = list()
@@ -346,6 +353,7 @@ async def zal(zgfy):
 
 
 @register(outgoing=True, pattern="^hi$", ignore_unsafe=True)
+@grp_exclude()
 async def hoi(hello):
     """ Greet everyone! """
     if False:
@@ -353,6 +361,7 @@ async def hoi(hello):
 
 
 @register(outgoing=True, pattern="^.owo(?: |$)(.*)")
+@grp_exclude()
 async def faces(owo):
     """ UwU """
     textx = await owo.get_reply_message()
@@ -376,6 +385,7 @@ async def faces(owo):
 
 
 @register(outgoing=True, pattern="^.react$")
+@grp_exclude()
 async def react_meme(react):
     """ Make your userbot react to everything. """
     index = random.randint(0, len(FACEREACTS))
@@ -384,12 +394,14 @@ async def react_meme(react):
 
 
 @register(outgoing=True, pattern="^.shg$")
+@grp_exclude()
 async def shrugger(shg):
     r""" ¯\_(ツ)_/¯ """
     await shg.edit(r"¯\_(ツ)_/¯")
 
 
 @register(outgoing=True, pattern="^.runs$")
+@grp_exclude()
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     if not DISABLE_RUN:
@@ -399,6 +411,7 @@ async def runner_lol(run):
 
 
 @register(outgoing=True, pattern="^.disable runs$")
+@grp_exclude()
 async def disable_runs(norun):
     """ Some people don't like running... """
     global DISABLE_RUN
@@ -407,6 +420,7 @@ async def disable_runs(norun):
 
 
 @register(outgoing=True, pattern="^.enable runs$")
+@grp_exclude()
 async def enable_runs(run):
     """ But some do! """
     global DISABLE_RUN
@@ -415,6 +429,7 @@ async def enable_runs(run):
 
 
 @register(outgoing=True, pattern="^.metoo$")
+@grp_exclude()
 async def metoo(hahayes):
     """ Haha yes """
     reply_text = random.choice(METOOSTR)
@@ -422,6 +437,7 @@ async def metoo(hahayes):
 
 
 @register(outgoing=True, pattern="^.mock(?: |$)(.*)")
+@grp_exclude()
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
     reply_text = list()
@@ -446,6 +462,7 @@ async def spongemocktext(mock):
 
 
 @register(outgoing=True, pattern="^.clap(?: |$)(.*)")
+@grp_exclude()
 async def claptext(memereview):
     """ Praise people! """
     textx = await memereview.get_reply_message()
@@ -464,6 +481,7 @@ async def claptext(memereview):
 
 
 @register(outgoing=True, pattern="^.bt$")
+@grp_exclude()
 async def bluetext(bt_e):
     """ Believe me, you will find this useful. """
     if await bt_e.get_reply_message():
@@ -473,6 +491,7 @@ async def bluetext(bt_e):
 
 
 @register(outgoing=True, pattern='^.type(?: |$)(.*)')
+@grp_exclude()
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
     textx = await typew.get_reply_message()

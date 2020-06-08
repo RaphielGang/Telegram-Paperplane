@@ -454,3 +454,44 @@ async def set_weather(city):
             }})
     else:
         MONGO.misc.insert_one({'weather_city': city})
+
+
+# Exclude Group
+async def get_excludes():
+    return MONGO.excludes.find()
+
+
+async def get_exclude(chatid):
+    return MONGO.excludes.find_one({'chatid': chatid})
+
+
+async def add_exclude_group(chatid, excl_type=0):
+    is_excl = await get_exclude(chatid)
+
+    if is_excl:
+        MONGO.excludes.update_one(
+            {
+                '_id': is_excl['_id'],
+                'chatid': is_excl['chatid'],
+                'excl_type': is_excl['excl_type']
+            }, {"$set": {
+                'chatid': chatid,
+                'excl_type': excl_type
+            }})
+    else:
+        MONGO.excludes.insert_one({'chatid': chatid, 'excl_type': excl_type})
+
+
+async def remove_exclude_group(chatid):
+    if await is_excluded(chatid) is False:
+        return False
+    else:
+        MONGO.excludes.delete_one({'chatid': chatid})
+        return True
+
+
+async def is_excluded(chatid):
+    if not MONGO.excludes.find_one({"chatid": chatid}):
+        return False
+    else:
+        return True

@@ -12,7 +12,7 @@ from telethon.tl.types import User
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_PM, LASTMSG, LOGS,
                      PM_AUTO_BAN, is_mongo_alive, is_redis_alive)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (approval, approve, block_pm, notif_off,
                                       notif_on, notif_state)
 
@@ -26,6 +26,7 @@ UNAPPROVED_MSG = (
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
+@grp_exclude()
 async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
@@ -97,6 +98,7 @@ async def permitpm(event):
 
 
 @register(disable_edited=True, outgoing=True, disable_errors=True)
+@grp_exclude()
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if event.is_private:
@@ -120,6 +122,7 @@ async def auto_accept(event):
 
 
 @register(outgoing=True, pattern="^.notifoff$")
+@grp_exclude()
 async def notifoff(noff_event):
     """ For .notifoff command, stop getting
         notifications from unapproved PMs. """
@@ -130,6 +133,7 @@ async def notifoff(noff_event):
 
 
 @register(outgoing=True, pattern="^.notifon$")
+@grp_exclude()
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
@@ -139,6 +143,7 @@ async def notifon(non_event):
 
 
 @register(outgoing=True, pattern="^.approve$")
+@grp_exclude()
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -171,6 +176,7 @@ async def approvepm(apprvpm):
 
 
 @register(outgoing=True, pattern="^.block$")
+@grp_exclude()
 async def blockpm(block):
     """ For .block command, block people from PMing you! """
     if not is_mongo_alive() or not is_redis_alive():
@@ -206,6 +212,7 @@ async def blockpm(block):
 
 
 @register(outgoing=True, pattern="^.unblock$")
+@grp_exclude()
 async def unblockpm(unblock):
     """ For .unblock command, let people PMing you again! """
     if unblock.reply_to_msg_id:

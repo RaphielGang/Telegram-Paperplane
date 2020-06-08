@@ -14,7 +14,7 @@ from shutil import which
 from telethon import version
 
 from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
@@ -22,6 +22,7 @@ DEFAULTUSER = uname().node
 
 
 @register(outgoing=True, pattern="^.sysd$")
+@grp_exclude()
 async def sysdetails(sysd):
     """ For .sysd command, get system info using neofetch. """
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
@@ -43,6 +44,7 @@ async def sysdetails(sysd):
 
 
 @register(outgoing=True, pattern="^.botver$")
+@grp_exclude()
 async def bot_ver(event):
     """ For .botver command, get the bot version. """
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
@@ -85,6 +87,7 @@ async def bot_ver(event):
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
+@grp_exclude()
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
@@ -130,6 +133,7 @@ async def pipcheck(pip):
 
 
 @register(outgoing=True, pattern="^.alive$")
+@grp_exclude()
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
         db = "Both Mongo and Redis Database seems to be failing!"
@@ -150,6 +154,7 @@ async def amireallyalive(alive):
 
 
 @register(outgoing=True, pattern="^.aliveu")
+@grp_exclude()
 async def amireallyaliveuser(username):
     """ For .aliveu command, change the username in the .alive command. """
     if not username.text[0].isalpha() and username.text[0] not in ("/", "#",
@@ -165,6 +170,7 @@ async def amireallyaliveuser(username):
 
 
 @register(outgoing=True, pattern="^.resetalive$")
+@grp_exclude()
 async def amireallyalivereset(ureset):
     """ For .resetalive command, reset the username in the .alive command. """
     if not ureset.text[0].isalpha() and ureset.text[0] not in ("/", "#", "@",

@@ -9,7 +9,7 @@ import re
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
                      is_redis_alive)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (add_list, delete_list, get_list,
                                       get_lists, set_list)
 
@@ -25,6 +25,7 @@ LIST_HEADER = "[Paperplane-List] List **{}({})**\n\n"
 
 
 @register(outgoing=True, pattern="^.lists$")
+@grp_exclude()
 async def lists_active(event):
     """ For .lists command, list all of the lists saved in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -45,6 +46,7 @@ async def lists_active(event):
 
 
 @register(outgoing=True, pattern=r"^.dellist ?(\w*)")
+@grp_exclude()
 async def removelists(event):
     """ For .dellist command, delete list with the given name."""
     if not is_mongo_alive() or not is_redis_alive():
@@ -80,6 +82,7 @@ async def removelists(event):
 
 
 @register(outgoing=True, pattern=r"^.new(g)?list (\w*)")
+@grp_exclude()
 async def addlist(event):
     """ For .new(g)list command, saves lists in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -107,6 +110,7 @@ async def addlist(event):
 
 
 @register(outgoing=True, pattern=r"^.addlistitems? ?(\w*)\n((.|\n*)*)")
+@grp_exclude()
 async def add_list_items(event):
     """ For .addlistitems command, add item(s) to a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -158,6 +162,7 @@ async def add_list_items(event):
 
 
 @register(outgoing=True, pattern=r"^.editlistitem ?(\w*)? ([0-9]+) (.*)")
+@grp_exclude()
 async def edit_list_item(event):
     """ For .editlistitem command, edit an individual item on a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -201,6 +206,7 @@ async def edit_list_item(event):
 
 
 @register(outgoing=True, pattern=r"^.rmlistitems? ?(\w*)? ([0-9 ]+)")
+@grp_exclude()
 async def rmlistitems(event):
     """ For .rmlistitem command, remove an item from the list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -259,6 +265,7 @@ Use` ${} `to get the list.`"
 
 
 @register(outgoing=True, pattern=r"^.setlist ?(\w*)? (global|local)")
+@grp_exclude()
 async def setliststate(event):
     """ For .setlist command, changes the state of a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -307,6 +314,7 @@ async def setliststate(event):
           disable_edited=True,
           ignore_unsafe=True,
           disable_errors=True)
+@grp_exclude()
 async def lists_logic(event):
     """ Lists logic. """
     try:
@@ -339,6 +347,7 @@ async def lists_logic(event):
 
 
 @register(pattern=r"^.getlist ?(\w*)?")
+@grp_exclude()
 async def getlist_logic(event):
     """ For .getlist, get the list by the name. """
     if not (await event.get_sender()).bot:

@@ -12,10 +12,11 @@ import os
 from requests import get
 
 from userbot import CMD_HELP, SCREENSHOT_LAYER_ACCESS_KEY
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(pattern=r"^.screencapture (.*)", outgoing=True)
+@grp_exclude()
 async def capture(url):
     """ For .screencapture command, capture a website and send the photo. """
     if SCREENSHOT_LAYER_ACCESS_KEY is None:

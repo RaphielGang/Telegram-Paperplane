@@ -13,13 +13,14 @@ from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import CMD_HELP, bot
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
 A pack can't have more than 120 stickers at the moment."
 
 
 @register(outgoing=True, pattern="^.kang")
+@grp_exclude()
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
     user = await bot.get_me()

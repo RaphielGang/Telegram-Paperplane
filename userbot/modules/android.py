@@ -12,12 +12,13 @@ from bs4 import BeautifulSoup
 from requests import get
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 GITHUB = 'https://github.com'
 
 
 @register(outgoing=True, pattern="^.magisk$")
+@grp_exclude()
 async def magisk(request):
     """ magisk latest releases """
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
@@ -34,6 +35,7 @@ async def magisk(request):
 
 
 @register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
+@grp_exclude()
 async def device_info(request):
     """ get android device basic info from its codename """
     textx = await request.get_reply_message()
@@ -61,6 +63,7 @@ async def device_info(request):
 
 
 @register(outgoing=True, pattern=r"^.codename(?: |)([\S]*)(?: |)([\s\S]*)")
+@grp_exclude()
 async def codename_info(request):
     """ search for android codename """
     textx = await request.get_reply_message()
@@ -100,6 +103,7 @@ async def codename_info(request):
 
 
 @register(outgoing=True, pattern=r"^.specs(?: |)([\S]*)(?: |)([\s\S]*)")
+@grp_exclude()
 async def devices_specifications(request):
     """ Mobile devices specifications """
     textx = await request.get_reply_message()
@@ -153,6 +157,7 @@ async def devices_specifications(request):
 
 
 @register(outgoing=True, pattern=r"^.twrp(?: |$)(\S*)")
+@grp_exclude()
 async def twrp(request):
     """ get android device twrp """
     textx = await request.get_reply_message()

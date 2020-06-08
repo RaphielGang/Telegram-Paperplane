@@ -11,10 +11,11 @@ from os import remove
 from sys import executable
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern="^.eval(?: |$)(.*)")
+@grp_exclude()
 async def evaluate(query):
     """ For .eval command, evaluates the given Python expression. """
     if query.is_channel and not query.is_group:
@@ -69,6 +70,7 @@ async def evaluate(query):
 
 
 @register(outgoing=True, pattern=r"^.exec(?: |$)([\s\S]*)")
+@grp_exclude()
 async def run(run_q):
     """ For .exec command, which executes the dynamically created program """
     code = run_q.pattern_match.group(1)
@@ -134,6 +136,7 @@ execute. Use .help exec for an example.```")
 
 
 @register(outgoing=True, pattern="^.term(?: |$)(.*)")
+@grp_exclude()
 async def terminal_runner(term):
     """ For .term command, runs bash commands and scripts on your server. """
     curruser = getuser()

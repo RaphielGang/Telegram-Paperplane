@@ -9,11 +9,12 @@ from asyncio import sleep
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
                      is_redis_alive)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
 
 
 @register(incoming=True, disable_errors=True)
+@grp_exclude()
 async def filter_incoming_handler(handler):
     """ Checks if the incoming message contains handler of a filter """
     try:
@@ -36,6 +37,7 @@ async def filter_incoming_handler(handler):
 
 
 @register(outgoing=True, pattern="^.filter\\s.*")
+@grp_exclude()
 async def add_new_filter(event):
     """ Command for adding a new filter """
     if not is_mongo_alive() or not is_redis_alive():
@@ -59,6 +61,7 @@ async def add_new_filter(event):
 
 
 @register(outgoing=True, pattern="^.stop\\s.*")
+@grp_exclude()
 async def remove_filter(event):
     """ Command for removing a filter """
     if not is_mongo_alive() or not is_redis_alive():
@@ -74,6 +77,7 @@ async def remove_filter(event):
 
 
 @register(outgoing=True, pattern="^.rmfilters (.*)")
+@grp_exclude()
 async def kick_marie_filter(event):
     """ For .rmfilters command, allows you to kick all \
         Marie(or her clones) filters from a chat. """
@@ -100,6 +104,7 @@ async def kick_marie_filter(event):
 
 
 @register(outgoing=True, pattern="^.filters$")
+@grp_exclude()
 async def filters_active(event):
     """ For .filters command, lists all of the active filters in a chat. """
     if not is_mongo_alive() or not is_redis_alive():

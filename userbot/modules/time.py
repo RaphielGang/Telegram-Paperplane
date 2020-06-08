@@ -13,7 +13,7 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
-from userbot.events import register
+from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import get_time, set_time
 
 # ===== CONSTANT =====
@@ -49,6 +49,7 @@ async def get_tz(con):
 
 
 @register(outgoing=True, pattern="^.time(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@grp_exclude()
 async def time_func(tdata):
     """ For .time command, return the time of
         1. The country passed as an argument,
@@ -118,6 +119,7 @@ async def time_func(tdata):
 
 
 @register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@grp_exclude()
 async def date_func(dat):
     """ For .date command, return the date of
         1. The country passed as an argument,
@@ -187,6 +189,7 @@ async def date_func(dat):
 
 
 @register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
+@grp_exclude()
 async def set_time_country(loc):
     """ For .settime command, change the default userbot
         country for date and time commands. """
