@@ -1,4 +1,4 @@
-# Paperplane userbot project
+# PaperplaneMinimal Project
 
 ![logo](https://telegra.ph/file/73cf4c62b2c64f981961e.png)
 
@@ -20,28 +20,19 @@
 
 ## What is it?
 
-Paperplane is a modular Telegram userbot running on Python3, which can be coupled up with Mongo DB and a Redis backend.
+PaperplaneMinimal is a minimalist fork of the Paperplane userbot, no database and only with modules that I (Hitalo) find useful and necessary for my use of Telegram.
 
-Originally created by baalajimaestro, Paperplane is currently maintained by zakaryan2004. It started as a simple bot,
-which helped with group management, with lots of features from [SkittBot](https://github.com/skittles9823/SkittBot).
-It has since evolved, becoming extremely modular and simple to use.
+## Install guide
 
-## How do I use it?
+Make sure you are running python3.6, I cannot guarantee everything will run fine. Also be sure you are using Telethon 1.10.
 
-For configuring Paperplane, you can checkout our [Wiki](https://wiki.raphielgang.org). Please, before asking us in our groups,
-make sure you have followed the Wiki and all the steps required.
+Start by installing the python dependencies. In the same directory as requirements.txt run
 
-Deploy Paperplane to Heroku:
-<p align="left"><a href="https://heroku.com/deploy"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" /></a></p>
+`python3 -m pip install -r requirements.txt`
 
-## Groups and support
-
-If you'd just like to know about new features, or announcements, you can join our [news channel](https://t.me/paperplanechannel).
-
-For discussion, bug reporting, and help, you can join [our discussion group](https://t.me/tgpaperplane).
-
-If you find a bug, don't be afraid to report it in our Telegram group or open an issue on this repository. As for unofficial
-forks of Paperplane, we will only assist with issues affecting our central repository, found on [this repo](https://github.com/RaphielGang/Telegram-Userbot).
+This will install all the required dependencies. After this, you need to copy and expand the sample configuration file. Create a new file named `config.py` and make sure in the header you have `from tg_userbot.sample_config import Config`. After that just copy the contents of the Config class in the `sample_config.py` file to your new file, fill in with your data and you should be done. You need your user API key and hash, you can get those in the [Telegram Core API](https://my.telegram.org/) website.
+ 
+With these done, you should be ready to run your bot, follow the instructions in Starting up section. Good luck.
 
 ## Credits
 
@@ -62,4 +53,4 @@ forks of Paperplane, we will only assist with issues affecting our central repos
 * [@Ovenoboyo](https://github.com/Ovenoboyo)
 * [SphericalKat](https://github.com/ATechnoHazard)
 
-and many more people who aren't mentioned here, but may be found in [Contributors](https://github.com/RaphielGang/Telegram-Paperplane/graphs/contributors) page.
+and many more people who aren't mentioned here, but may be found in [Contributors](https://github.com/HitaloSama/PaperplaneMinimal/graphs/contributors) page.

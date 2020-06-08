@@ -13,8 +13,9 @@ from shutil import which
 
 from telethon import version
 
-from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot import CMD_HELP, VERSION
 from userbot.events import register
+from userbot.modules import ALL_MODULES
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
@@ -78,7 +79,7 @@ async def bot_ver(event):
                              "`Revision: "
                              f"{revout}"
                              "` \n"
-                             "`Tagged version: v1.0`")
+                             "`Tagged version: {VERSION}`")
         else:
             await event.edit(
                 "Shame that you don't have Git, you're running v1.0 anyway!")
@@ -129,24 +130,18 @@ async def pipcheck(pip):
             await pip.edit("`Use .help pip to see an example`")
 
 
-@register(outgoing=True, pattern="^.alive$")
+@register(outgoing=True, pattern=r"^\.alive$")
 async def amireallyalive(alive):
-    if not is_mongo_alive() and not is_redis_alive():
-        db = "Both Mongo and Redis Database seems to be failing!"
-    elif not is_mongo_alive():
-        db = "Mongo DB seems to be failing!"
-    elif not is_redis_alive():
-        db = "Redis Cache seems to be failing!"
-    else:
-        db = "Databases functioning normally!"
-    await alive.edit("`"
-                     "Paperplane is alive! Your bot is running \n\n"
-                     f"Telethon version: {version.__version__} \n"
-                     f"Python: {python_version()} \n"
-                     f"User: {DEFAULTUSER} \n"
-                     f"Database status: {db}\n"
-                     f"Tagged bot version: v1.0"
-                     "`")
+    """ For .alive command, check if the bot is running.  """
+    await alive.edit(
+        "**PPM UserBot is alive!**\n\n"
+        f"**Telethon version:** `{version.__version__}` \n"
+        f"**Python version:** `{python_version()}` \n"
+        f"**Tagged version:** `{VERSION}` \n"
+        f"**Source:** [HERE](https://github.com/HitaloSama/PaperplaneMinimal) \n\n"
+        f"**Modules loaded:** `{len(ALL_MODULES)}` \n"
+        f"**User:** `{DEFAULTUSER}`"
+    )
 
 
 @register(outgoing=True, pattern="^.aliveu")

@@ -2,6 +2,7 @@ config.env
 __pycache__/*
 brains.check
 learning-data-root.check
+downloads/
 userbot.db
 userbot.session*
 userbot/__pycache__/*

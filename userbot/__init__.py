@@ -13,8 +13,6 @@ from sys import version_info
 from dotenv import load_dotenv
 from pyDownload import Downloader
 from pylast import LastFMNetwork, md5
-from pymongo import MongoClient
-from redis import StrictRedis
 from requests import get
 from telethon import TelegramClient
 from telethon.sessions import StringSession
@@ -54,24 +52,26 @@ API_HASH = os.environ.get("API_HASH", None)
 
 STRING_SESSION = os.environ.get("STRING_SESSION", None)
 
+OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
+OPEN_WEATHER_MAP_DEFCITY = os.environ.get("OPEN_WEATHER_MAP_DEFCITY", None)
+
 BOTLOG = sb(os.environ.get("BOTLOG", "False"))
 
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID")) if BOTLOG else 0
 
-PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
+UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL",
+                                   "https://github.com/HitaloSama/PaperplaneMinimal.git")  # Custom (forked) repo URL for updater.
 
-MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+Q_API_TOKEN = os.environ.get("Q_API_TOKEN", None)  # Quotly API key http://antiddos.systems
 
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
                                              None)
 
-OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
-print(OPEN_WEATHER_MAP_APPID)
-
 WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
 
-SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
-SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
+TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
+                                         "./downloads")
+
 BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
 
@@ -87,11 +87,6 @@ if not LASTFM_USERNAME == "None":
                            password_hash=LASTFM_PASS)
 else:
     lastfm = None
-
-GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
-
-HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY", None)
-HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME", None)
 
 WOLFRAM_ID = os.environ.get("WOLFRAM_ID", None)
 
@@ -122,33 +117,6 @@ with bot:
                    "valid entity. Check your config.env file.")
         quit(1)
 
-# Init Mongo
-MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
-MONGO = MONGOCLIENT.userbot
-
-
-def is_mongo_alive():
-    try:
-        MONGOCLIENT.server_info()
-    except BaseException as e:
-        print(e)
-        return False
-    return True
-
-
-# Init Redis
-# Redis will be hosted inside the docker container that hosts the bot
-# We need redis for just caching, so we just leave it to non-persistent
-REDIS = StrictRedis(host='localhost', port=6379, db=0)
-
-
-def is_redis_alive():
-    try:
-        REDIS.ping()
-        return True
-    except BaseException:
-        return False
-
 
 # Download binaries for gen_direct_links module, give correct perms
 if not os.path.exists('bin'):
@@ -164,6 +132,7 @@ os.chmod('bin/megadown', 0o755)
 os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
+VERSION = "1.0-PA"
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}

@@ -26,9 +26,7 @@ except PhoneNumberInvalidError:
 for module_name in ALL_MODULES:
     imported_module = import_module("userbot.modules." + module_name)
 
-LOGS.info("Paperplane is alive! Test it by typing .alive on any chat."
-          " Should you need assistance, head to https://t.me/tgpaperplane")
-LOGS.info("Your bot version is v1.0.")
+LOGS.info("Paperplane Minimal is alive! Test it by typing .alive on any chat.")
 
 SEM_TEST = os.environ.get("SEMAPHORE", None)
 if SEM_TEST:

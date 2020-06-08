@@ -86,9 +86,9 @@ def register(**args):
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                     text = "**Sorry, I encountered a error!**\n"
-                    link = "[https://t.me/tgpaperplane](Userbot Support Chat)"
+                    link = "https://github.com/HitaloSama/PaperplaneMinimal"
                     text += "If you wanna you can report it"
-                    text += f"- just forward this message to {link}.\n"
+                    text += f"- just open an issue on {link}.\n"
                     text += "I won't log anything except the fact of error and date\n"
 
                     ftext = "\nDisclaimer:\nThis file uploaded ONLY here, "
@@ -109,9 +109,9 @@ def register(**args):
                     ftext += str(sys.exc_info()[1])
                     ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
 
-                    command = "git log --pretty=format:\"%an: %s\" -5"
+                    command = "git log --pretty=format:\"%an: %s\" -10"
 
-                    ftext += "\n\n\nLast 5 commits:\n"
+                    ftext += "\n\n\nLast 10 commits:\n"
 
                     process = await asyncsubshell(command,
                                                   stdout=asyncsub.PIPE,
