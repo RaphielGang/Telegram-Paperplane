@@ -188,7 +188,6 @@ RUNSREACTS = [
     "I am just walking off, coz me is too fat.",
     "I Fugged off!",
 ]
-DISABLE_RUN = False
 
 # ===========================================
 
@@ -352,14 +351,6 @@ async def zal(zgfy):
     await zgfy.edit("".join(reply_text))
 
 
-@register(outgoing=True, pattern="^hi$", ignore_unsafe=True)
-@grp_exclude()
-async def hoi(hello):
-    """ Greet everyone! """
-    if False:
-        await hello.edit("Hoi!😄")
-
-
 @register(outgoing=True, pattern="^.owo(?: |$)(.*)")
 @grp_exclude()
 async def faces(owo):
@@ -404,28 +395,9 @@ async def shrugger(shg):
 @grp_exclude()
 async def runner_lol(run):
     """ Run, run, RUNNN! """
-    if not DISABLE_RUN:
-        index = random.randint(0, len(RUNSREACTS) - 1)
-        reply_text = RUNSREACTS[index]
-        await run.edit(reply_text)
-
-
-@register(outgoing=True, pattern="^.disable runs$")
-@grp_exclude()
-async def disable_runs(norun):
-    """ Some people don't like running... """
-    global DISABLE_RUN
-    DISABLE_RUN = True
-    await norun.edit("```Done!```")
-
-
-@register(outgoing=True, pattern="^.enable runs$")
-@grp_exclude()
-async def enable_runs(run):
-    """ But some do! """
-    global DISABLE_RUN
-    DISABLE_RUN = False
-    await run.edit("```Done!```")
+    index = random.randint(0, len(RUNSREACTS) - 1)
+    reply_text = RUNSREACTS[index]
+    await run.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.metoo$")

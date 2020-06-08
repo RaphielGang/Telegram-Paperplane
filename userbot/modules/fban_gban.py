@@ -129,11 +129,9 @@ async def fedban_all(msg):
             if spamwatch:
                 if textx:
                     await textx.forward_to(-1001312712379)
-                    # Tag him, coz we can't fban xd
-                    await bot.send_message(-1001312712379, "@SitiSchu")
                 else:
                     await msg.reply(
-                        "`Spam message detected. But no reply message, can't forward to spamwatch`"
+                        "`Spam message detected. But no reply message, can't forward to SpamWatch.`"
                     )
             continue
         async with bot.conversation(bangroup) as conv:

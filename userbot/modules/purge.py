@@ -99,30 +99,10 @@ async def delete_it(delme):
                     BOTLOG_CHATID, "Well, I can't delete a message")
 
 
-@register(outgoing=True, pattern="^.editme")
-@grp_exclude()
-async def editer(edit):
-    """ For .editme command, edit your last message. """
-    message = edit.text
-    chat = await edit.get_input_chat()
-    self_id = await edit.client.get_peer_id('me')
-    string = str(message[8:])
-    i = 1
-    async for message in edit.client.iter_messages(chat, self_id):
-        if i == 2:
-            await message.edit(string)
-            await edit.delete()
-            break
-        i = i + 1
-    if BOTLOG:
-        await edit.client.send_message(BOTLOG_CHATID,
-                                       "Edit query was executed successfully")
-
-
 @register(outgoing=True, pattern="^.sd")
 @grp_exclude()
 async def selfdestruct(destroy):
-    """ For .sd command, make seflf-destructable messages. """
+    """ For .sd command, make self-destructable messages. """
     message = destroy.text
     counter = int(message[4:6])
     text = str(destroy.text[6:])
@@ -140,7 +120,6 @@ CMD_HELP.update({
         "Purge", " - `.purge`: Purge all messages starting from the reply.\n"
         " - `.purgeme <x>`: Delete x amount of *your* latest messages.\n"
         " - `.del`: Delete the message you replied to.\n"
-        " - `.editme <newmsg>`: Edit your message you replied to, changing it to newmsg.\n"
         " - `.sd <x> <msg>`: Create a message that self-destructs in x seconds. "
         "Keep the seconds under 100 since it puts your bot to sleep."
     ]
