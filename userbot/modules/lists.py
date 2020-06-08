@@ -239,7 +239,7 @@ async def rmlistitems(event):
     _list = await get_list(event.chat_id, listname)
 
     try:
-        for elem in sorted(unwanted_indexes, reverse = True):
+        for elem in sorted(unwanted_indexes, reverse=True):
             del _list['items'][elem - 1]
     except TypeError:
         await event.edit(LIST_NOT_FOUND.format('listname'))
@@ -261,7 +261,8 @@ Use` ${} `to get the list.`"
         listat = "global storage" if _list['chat_id'] else str(event.chat_id)
         await event.client.send_message(
             BOTLOG_CHATID,
-            f"Removed item(s) {str(unwanted_indexes)} from {listname} in {listat}")
+            f"Removed item(s) {str(unwanted_indexes)} from {listname} in {listat}"
+        )
 
 
 @register(outgoing=True, pattern=r"^.setlist ?(\w*)? (global|local)")
@@ -387,25 +388,27 @@ async def getlist_logic(event):
             await event.edit(f"`List {listname} not found!`")
 
 
-CMD_HELP.update({"lists": ["Lists",
-    " - `.lists`: Get all of the lists (both local and global).\n"
-    " - `$listname`: Get the list called 'listname'.\n"
-    " - `.getlist <listname>`: Same as $listname.\n"
-    " - `.newlist <listname> <items>`: Creates a local list called 'listname' and adds items to it. "
-    "Separate items with a newline. Local lists are only accessible from a specific chat.\n"
-    " - `.newglist <listname> <items>`: Creates a global list called 'listname' and adds items to it. "
-    "Separate items with a newline. Global lists are accessible from every chat you are in.\n"
-    " - `.dellist <listname>`: Deletes the list called 'listname'.\n"
-    " - `.addlistitem(s) <listname> <items>`: Add new items to the list called 'listname'. "
-    "Separate items with a newline. The first items should start from a newline.\n"
-    " - `.rmlistitem(s) <listname> <indexes>`: Remove items accompanying the indexes from the list called 'listname'. "
-    "Indexes are the numbers which the item is on the list. You can remove multiple items at once from the list.\n"
-    " - `.editlistitem <listname> <item_number> <new_content>`: Edit item item_number in listname, changing the "
-    "content to new_content.\n"
-    " - `.setlist <listname> <local|global>`: Change the status of a list to local (accessible only from the current chat) "
-    "or global (accessible from every chat you are in.).\n\n"
-    "By replying to a Paperplane List message(identified by "
-    "\n'[Paperplane-List]' in the beginning of a userbot message), "
-    "\nyou can omit <listname> from all commands (except $<listname>)."
-    "\nPaperplane will recognize the list from the replied message."]
+CMD_HELP.update({
+    "lists": [
+        "Lists", " - `.lists`: Get all of the lists (both local and global).\n"
+        " - `$listname`: Get the list called 'listname'.\n"
+        " - `.getlist <listname>`: Same as $listname.\n"
+        " - `.newlist <listname> <items>`: Creates a local list called 'listname' and adds items to it. "
+        "Separate items with a newline. Local lists are only accessible from a specific chat.\n"
+        " - `.newglist <listname> <items>`: Creates a global list called 'listname' and adds items to it. "
+        "Separate items with a newline. Global lists are accessible from every chat you are in.\n"
+        " - `.dellist <listname>`: Deletes the list called 'listname'.\n"
+        " - `.addlistitem(s) <listname> <items>`: Add new items to the list called 'listname'. "
+        "Separate items with a newline. The first items should start from a newline.\n"
+        " - `.rmlistitem(s) <listname> <indexes>`: Remove items accompanying the indexes from the list called 'listname'. "
+        "Indexes are the numbers which the item is on the list. You can remove multiple items at once from the list.\n"
+        " - `.editlistitem <listname> <item_number> <new_content>`: Edit item item_number in listname, changing the "
+        "content to new_content.\n"
+        " - `.setlist <listname> <local|global>`: Change the status of a list to local (accessible only from the current chat) "
+        "or global (accessible from every chat you are in.).\n\n"
+        "By replying to a Paperplane List message(identified by "
+        "\n'[Paperplane-List]' in the beginning of a userbot message), "
+        "\nyou can omit <listname> from all commands (except $<listname>)."
+        "\nPaperplane will recognize the list from the replied message."
+    ]
 })

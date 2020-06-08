@@ -79,7 +79,7 @@ def register(**args):
             except KeyboardInterrupt:
                 pass
             except BaseException as e:
-                LOGS.exception(e) # Log the error in console
+                LOGS.exception(e)  # Log the error in console
                 # Check if we have to disable error logging message.
                 if not disable_errors:
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -160,16 +160,20 @@ def grp_exclude(force_exclude=False):
                     LOGS.info("EXCLUDED! force_exclude: True")
                     return
 
-                if exclude['excl_type'] == 1: # all
+                if exclude['excl_type'] == 1:  # all
                     LOGS.info("EXCLUDED! exclude['excl_type'] == 1")
                     return
 
-                if exclude['excl_type'] == 0 and check.out is False and func: # in
-                    LOGS.info("EXCLUDED! exclude['excl_type'] == 0 and check.out is False")
-                    return            
+                if exclude[
+                        'excl_type'] == 0 and check.out is False and func:  # in
+                    LOGS.info(
+                        "EXCLUDED! exclude['excl_type'] == 0 and check.out is False"
+                    )
+                    return
 
                 LOGS.info("NOT EXCLUDED!")
             await func(check)
 
         return wrapper
+
     return decorator

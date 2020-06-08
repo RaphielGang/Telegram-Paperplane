@@ -286,15 +286,20 @@ async def wolfram(wvent):
     res = get(server)
     await wvent.edit(f'**{i}**\n\n' + res.text, parse_mode='Markdown')
     if BOTLOG:
-        await wvent.client.send_message(BOTLOG_CHATID, f'.wolfram {i} was executed successfully')
+        await wvent.client.send_message(
+            BOTLOG_CHATID, f'.wolfram {i} was executed successfully')
 
-CMD_HELP.update({"scrapers": ['Scrapers',
-    " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
-    " - `.google <query>`: Search Google for query (argument or reply).\n"
-    " - `.wiki <query>`: Search Wikipedia for query.\n"
-    " - `.ud <query>`: Search on Urban Dictionary for query.\n"
-    " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
-    " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
-    " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
-    " - `.wolfram <query>: Get answers to questions using WolframAlpha Spoken Results API."]
+
+CMD_HELP.update({
+    "scrapers": [
+        'Scrapers',
+        " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
+        " - `.google <query>`: Search Google for query (argument or reply).\n"
+        " - `.wiki <query>`: Search Wikipedia for query.\n"
+        " - `.ud <query>`: Search on Urban Dictionary for query.\n"
+        " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
+        " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
+        " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
+        " - `.wolfram <query>: Get answers to questions using WolframAlpha Spoken Results API."
+    ]
 })

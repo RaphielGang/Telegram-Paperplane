@@ -196,9 +196,12 @@ async def set_default_city(city):
     await city.edit(f"`Set default city as {cityname}, {fullc_n}.`")
 
 
-CMD_HELP.update({"weather": ["Weather",
-    " - `.weather <city> or .weather <city>, <country name/code>`: "
-    "Gets the weather of a city.\n"
-    " - `.setcity <city> or .setcity <city>, <country name/code>`: "
-    "Set the default city for the .weather command.\n"]
+CMD_HELP.update({
+    "weather": [
+        "Weather",
+        " - `.weather <city> or .weather <city>, <country name/code>`: "
+        "Gets the weather of a city.\n"
+        " - `.setcity <city> or .setcity <city>, <country name/code>`: "
+        "Set the default city for the .weather command.\n"
+    ]
 })

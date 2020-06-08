@@ -135,7 +135,10 @@ async def type_afk_is_not_true(notafk):
         USERS = {}
 
 
-CMD_HELP.update({"afk": ['AFK',
-    " - `.afk <reason> (optional)`: Sets your status as AFK. Responds to anyone who tags/PM's "
-    "you telling you are AFK. Switches off AFK when you type back anything."]
+CMD_HELP.update({
+    "afk": [
+        'AFK',
+        " - `.afk <reason> (optional)`: Sets your status as AFK. Responds to anyone who tags/PM's "
+        "you telling you are AFK. Switches off AFK when you type back anything."
+    ]
 })

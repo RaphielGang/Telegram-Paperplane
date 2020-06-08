@@ -6,8 +6,9 @@
 """ Paperplane Exclude, a module for excluding a group from the Paperplane event handler. """
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive)
-from userbot.modules.dbhelper import (get_excludes, get_exclude, add_exclude_group,
-                                      remove_exclude_group, is_excluded)
+from userbot.modules.dbhelper import (get_excludes, get_exclude,
+                                      add_exclude_group, remove_exclude_group,
+                                      is_excluded)
 from userbot.events import register, grp_exclude
 
 
@@ -16,7 +17,7 @@ async def exclude_grp(excl):
     if not is_mongo_alive():
         await excl.edit("`Database connections failing!`")
         return
-    
+
     chat_id = excl.pattern_match.group(1)
     exclude_type = excl.pattern_match.group(2)
 
@@ -34,7 +35,9 @@ async def exclude_grp(excl):
 
     await add_exclude_group(chat_id, exclude_type_num)
 
-    await excl.edit(f"`This chat (ID: {chat_id}, Exclude type: {exclude_type}) has been added to Paperplane Exclude!`")
+    await excl.edit(
+        f"`This chat (ID: {chat_id}, Exclude type: {exclude_type}) has been added to Paperplane Exclude!`"
+    )
     return
 
 
@@ -51,7 +54,9 @@ async def unexclude_grp(excl):
 
     await remove_exclude_group(chat_id)
 
-    await excl.edit(f"`This chat (ID: {chat_id}) has been removed from Paperplane Exclude!`")
+    await excl.edit(
+        f"`This chat (ID: {chat_id}) has been removed from Paperplane Exclude!`"
+    )
     return
 
 
@@ -82,22 +87,25 @@ async def listexclude_grp(excl):
     return
 
 
-CMD_HELP.update({"paperplane exclude": ['Paperplane Exclude',
-    "PAPERPLANE EXCLUDE IS CURRENTLY BETA, and some features MAY NOT WORK PROPERLY. "
-    "We are not responsible for any bugs found in the module.\n"
-    " - `.exclude [chatid] (in|all)`: Exclude this (or the specified) group from the Paperplane event handler. "
-    "This means that Paperplane will behave restricted in that group, by not responding to incoming "
-    "triggers (such as AFK, filters, notes...) and/or your commands (such as .alive).\n"
-    " - `.unexclude [chatid]`: Unexclude this (or the specified) group from the Paperplane event handler. Paperplane "
-    "will behave like normally on that group after this.\n"
-    " - `.listexclude`: Lists every excluded chat, (Chat ID and exclude type). \n\n"
-    "Exclude types:\n"
-    " - `in`: This will exclude all incoming message, and will only allow outgoing messages. "
-    "It means that you will be able to execute commands yourself, but other people won't be "
-    "able to trigger Papepplane with notes, filters and mentioning while AFK. Also, AFK module "
-    "won't un-AFK you when you send a message.\n"
-    " - `all`: This will exclude *all* events, meaning that everything excluded by `in` plus "
-    "you won't be able to execute commands. Paperplane will pretend not to exist when this option "
-    "is set.\n"
-    "`P.S.: The .exclude and .unexclude commands will still work even if that chat is excluded.`"]
+CMD_HELP.update({
+    "paperplane exclude": [
+        'Paperplane Exclude',
+        "PAPERPLANE EXCLUDE IS CURRENTLY BETA, and some features MAY NOT WORK PROPERLY. "
+        "We are not responsible for any bugs found in the module.\n"
+        " - `.exclude [chatid] (in|all)`: Exclude this (or the specified) group from the Paperplane event handler. "
+        "This means that Paperplane will behave restricted in that group, by not responding to incoming "
+        "triggers (such as AFK, filters, notes...) and/or your commands (such as .alive).\n"
+        " - `.unexclude [chatid]`: Unexclude this (or the specified) group from the Paperplane event handler. Paperplane "
+        "will behave like normally on that group after this.\n"
+        " - `.listexclude`: Lists every excluded chat, (Chat ID and exclude type). \n\n"
+        "Exclude types:\n"
+        " - `in`: This will exclude all incoming message, and will only allow outgoing messages. "
+        "It means that you will be able to execute commands yourself, but other people won't be "
+        "able to trigger Papepplane with notes, filters and mentioning while AFK. Also, AFK module "
+        "won't un-AFK you when you send a message.\n"
+        " - `all`: This will exclude *all* events, meaning that everything excluded by `in` plus "
+        "you won't be able to execute commands. Paperplane will pretend not to exist when this option "
+        "is set.\n"
+        "`P.S.: The .exclude and .unexclude commands will still work even if that chat is excluded.`"
+    ]
 })

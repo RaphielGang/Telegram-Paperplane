@@ -712,16 +712,20 @@ async def get_user_from_id(user, event):
 
     return user_obj
 
-CMD_HELP.update({"admins": ['Admins',
-    " - `.promote`: Promotes a user. Reply to the user or use their username/ID.\n"
-    " - `.demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
-    " - `.ban`: Bans a user. Reply to the user or use their username/ID.\n"
-    " - `.unban`: Unbans a user. Reply to the user or use their username/ID.\n"
-    " - `.mute`: Mutes a user. Reply to the user or use their username/ID. Works on admins too.\n"
-    " - `.unmute`: Unmutes a user. Reply to the user or use their username/ID.\n"
-    " - `.gmute`: Mutes a user in all groups you have in common with them and have permissions. Reply to the user or use their username/ID.\n"
-    " - `.ungmute`: Ungmutes a user. Reply to the user or use their username/ID.\n"
-    " - `.delusers`: Searches for deleted accounts in a group/channel.\n"
-    " - `.delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
-    " - `.adminlist`: Retrieves all admins in the chat.\n"]
+
+CMD_HELP.update({
+    "admins": [
+        'Admins',
+        " - `.promote`: Promotes a user. Reply to the user or use their username/ID.\n"
+        " - `.demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
+        " - `.ban`: Bans a user. Reply to the user or use their username/ID.\n"
+        " - `.unban`: Unbans a user. Reply to the user or use their username/ID.\n"
+        " - `.mute`: Mutes a user. Reply to the user or use their username/ID. Works on admins too.\n"
+        " - `.unmute`: Unmutes a user. Reply to the user or use their username/ID.\n"
+        " - `.gmute`: Mutes a user in all groups you have in common with them and have permissions. Reply to the user or use their username/ID.\n"
+        " - `.ungmute`: Ungmutes a user. Reply to the user or use their username/ID.\n"
+        " - `.delusers`: Searches for deleted accounts in a group/channel.\n"
+        " - `.delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
+        " - `.adminlist`: Retrieves all admins in the chat.\n"
+    ]
 })
