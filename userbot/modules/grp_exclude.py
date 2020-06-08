@@ -11,7 +11,7 @@ from userbot.modules.dbhelper import (get_excludes, get_exclude, add_exclude_gro
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.exclude ?([0-9]+)? ?(in|all)?")
+@register(outgoing=True, pattern="^.exclude ?(-?[0-9]+)? ?(in|all)?")
 async def exclude_grp(excl):
     if not is_mongo_alive():
         await excl.edit("`Database connections failing!`")
@@ -26,18 +26,19 @@ async def exclude_grp(excl):
     ###### Exclude types:
     ### 0: Blocks incoming events only [default] (also force_exclude events)
     ### 1: Blocks every event (both incoming and outgoing)
-    if not exclude_type or exclude_type == 'in':
+    if not exclude_type or exclude_type.lower() == 'in':
         exclude_type_num = 0
+        exclude_type = 'in'
     if exclude_type == 'all':
         exclude_type_num = 1
-    
+
     await add_exclude_group(chat_id, exclude_type_num)
 
     await excl.edit(f"`This chat (ID: {chat_id}, Exclude type: {exclude_type}) has been added to Paperplane Exclude!`")
     return
 
 
-@register(outgoing=True, pattern="^.unexclude ?([0-9]+)?")
+@register(outgoing=True, pattern="^.unexclude ?(-?[0-9]+)?")
 async def unexclude_grp(excl):
     if not is_mongo_alive():
         await excl.edit("`Database connections failing!`")
