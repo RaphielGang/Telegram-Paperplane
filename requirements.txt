@@ -18,7 +18,8 @@ pytz
 requests>=2.18.4
 search-engine-parser
 speedtest-cli>=2.0.2
-telethon>=1.10.1
+telethon>=1.11.0
 urbandict>=0.5
 wikipedia>=1.4.0
-youtube-dl
+youtube-dl>=2020.6.6
+spamwatch>=0.2.2

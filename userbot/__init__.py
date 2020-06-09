@@ -11,8 +11,8 @@ from logging import DEBUG, INFO, basicConfig, getLogger
 from sys import version_info
 
 from dotenv import load_dotenv
-from pyDownload import Downloader
 from pylast import LastFMNetwork, md5
+from spamwatch import Client as SpamWatch
 from requests import get
 from telethon import TelegramClient
 from telethon.sessions import StringSession
@@ -68,6 +68,12 @@ SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
                                              None)
 
 WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
+
+SPAMWATCH_API_KEY = os.environ.get("SPAMWATCH_API_KEY", None)
+if SPAMWATCH_API_KEY:
+    spamwatch = SpamWatch(SPAMWATCH_API_KEY, host="https://staging.spamwat.ch")
+else:
+    spamwatch = None
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
