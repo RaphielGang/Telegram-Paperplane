@@ -70,16 +70,10 @@ async def knocksomesense(event):
     exit()
 
 
-@register(outgoing=True, pattern="^.support$")
-async def bot_support(wannahelp):
-    """ For .support command, just returns the group link. """
-    await wannahelp.edit("Group: @tgpaperplane")
-
-
 @register(outgoing=True, pattern="^.repo$")
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
-    await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
+    await wannasee.edit("https://github.com/HitaloSama/PaperplaneMinimal/")
 
 
 CMD_HELP.update({"misc": ["Misc",
@@ -87,6 +81,5 @@ CMD_HELP.update({"misc": ["Misc",
     " - `.sleep <secs>`: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
     " - `.shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
     "hear Windows XP shutdown sound... but you don't.\n"
-    " - `.support`: If you need more help, use this command.\n"
     " - `.repo`: Get the link of the source code of Paperplane in GitHub.\n"]
 })
