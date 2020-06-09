@@ -28,19 +28,6 @@ async def is_off_br(br):
     return
 
 
-async def update_requirements():
-    reqs = str(requirements_path)
-    try:
-        process = await asyncio.create_subprocess_shell(
-            ' '.join([sys.executable, "-m", "pip", "install", "-r", reqs]),
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE)
-        await process.communicate()
-        return process.returncode
-    except Exception as e:
-        return repr(e)
-
-
 @register(outgoing=True, pattern="^.update(?: |$)(.*)")
 async def upstream(ups):
     if not ups.text[0].isalpha() and ups.text[0] in ("."):
@@ -107,7 +94,6 @@ async def upstream(ups):
         await ups.edit('`New update found, updating...`')
         ups_rem.fetch(ac_br)
         repo.git.reset('--hard', 'FETCH_HEAD')
-        # reqs_upgrade = await update_requirements()
         await ups.edit('`Successfully Updated!\n'
                        'Bot is restarting... Wait for a second!`')
         # Spin a new instance of bot
