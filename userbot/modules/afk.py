@@ -114,15 +114,7 @@ async def afk_on_pm(sender):
     afk_str = "a while ago"
     if sender.is_private and sender.sender_id != 777000 and not (
             await sender.get_sender()).bot:
-        if PM_AUTO_BAN:
-            try:
-                from userbot.modules.sql_helper.pm_permit_sql import is_approved
-                apprv = is_approved(sender.sender_id)
-            except AttributeError:
-                apprv = True
-        else:
-            apprv = True
-        if apprv and ISAFK:
+        if ISAFK:
             now = datetime.now()
             afk_since = now - afk_time
             day = float(afk_since.seconds) // (24 * 3600)
@@ -158,7 +150,7 @@ async def afk_on_pm(sender):
                     await sender.reply(str(choice(AFKSTR)))
                 USERS.update({sender.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
-            elif apprv and sender.sender_id in USERS:
+            elif sender.sender_id in USERS:
                 if USERS[sender.sender_id] % randint(2, 4) == 0:
                     if AFKREASON:
                         await sender.reply("I'm still AFK."
