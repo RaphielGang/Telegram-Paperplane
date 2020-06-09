@@ -15,3 +15,6 @@ userbot/modules/sql_helper/__pycache__/*
 error.log
 bin/*
 dump.rdb
+*.mp4
+*.mp3
+*.jpg

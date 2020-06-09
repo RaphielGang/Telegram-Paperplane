@@ -6,10 +6,13 @@
 """ Userbot module containing various scrapers. """
 
 import os
+import time
+import asyncio
 from re import findall
 from shutil import rmtree
 from urllib.error import HTTPError
 
+from time import sleep
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
@@ -20,7 +23,14 @@ from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 from requests import get
+from youtube_dl import YoutubeDL
+from youtube_dl.utils import (DownloadError, ContentTooShortError,
+                              ExtractorError, GeoRestrictedError,
+                              MaxDownloadsReached, PostProcessingError,
+                              UnavailableVideoError, XAttrMetadataError)
+from telethon.tl.types import DocumentAttributeAudio
 
+from userbot.modules.upload_download import progress, humanbytes, time_formatter                            
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID, bot
 from userbot.events import register
 
@@ -281,6 +291,143 @@ async def wolfram(wvent):
         await wvent.client.send_message(BOTLOG_CHATID, f'.wolfram {i} was executed successfully')
 
 
+@register(outgoing=True, pattern=r"^\.rip(audio|video) (.*)")
+async def download_video(v_url):
+    """ For .rip command, download media from YouTube and many other sites. """
+    url = v_url.pattern_match.group(2)
+    type = v_url.pattern_match.group(1).lower()
+ 
+    await v_url.edit("`Preparing to download...`")
+ 
+    if type == "audio":
+        opts = {
+            'format':
+            'bestaudio',
+            'addmetadata':
+            True,
+            'key':
+            'FFmpegMetadata',
+            'writethumbnail':
+            True,
+            'prefer_ffmpeg':
+            True,
+            'geo_bypass':
+            True,
+            'nocheckcertificate':
+            True,
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '320',
+            }],
+            'outtmpl':
+            '%(id)s.mp3',
+            'quiet':
+            True,
+            'logtostderr':
+            False
+        }
+        video = False
+        song = True
+ 
+    elif type == "video":
+        opts = {
+            'format':
+            'best',
+            'addmetadata':
+            True,
+            'key':
+            'FFmpegMetadata',
+            'prefer_ffmpeg':
+            True,
+            'geo_bypass':
+            True,
+            'nocheckcertificate':
+            True,
+            'postprocessors': [{
+                'key': 'FFmpegVideoConvertor',
+                'preferedformat': 'mp4'
+            }],
+            'outtmpl':
+            '%(id)s.mp4',
+            'logtostderr':
+            False,
+            'quiet':
+            True
+        }
+        song = False
+        video = True
+ 
+    try:
+        await v_url.edit("`Fetching data, please wait..`")
+        with YoutubeDL(opts) as rip:
+            rip_data = rip.extract_info(url)
+    except DownloadError as DE:
+        await v_url.edit(f"`{str(DE)}`")
+        return
+    except ContentTooShortError:
+        await v_url.edit("`The download content was too short.`")
+        return
+    except GeoRestrictedError:
+        await v_url.edit(
+            "`Video is not available from your geographic location due to geographic restrictions imposed by a website.`"
+        )
+        return
+    except MaxDownloadsReached:
+        await v_url.edit("`Max-downloads limit has been reached.`")
+        return
+    except PostProcessingError:
+        await v_url.edit("`There was an error during post processing.`")
+        return
+    except UnavailableVideoError:
+        await v_url.edit("`Media is not available in the requested format.`")
+        return
+    except XAttrMetadataError as XAME:
+        await v_url.edit(f"`{XAME.code}: {XAME.msg}\n{XAME.reason}`")
+        return
+    except ExtractorError:
+        await v_url.edit("`There was an error during info extraction.`")
+        return
+    except Exception as e:
+        await v_url.edit(f"{str(type(e)): {str(e)}}")
+        return
+    c_time = time.time()
+    if song:
+        await v_url.edit(f"`Preparing to upload song:`\
+        \n**{rip_data['title']}**\
+        \nby __{rip_data['uploader']}__")
+        await v_url.client.send_file(
+            v_url.chat_id,
+            f"{rip_data['id']}.mp3",
+            supports_streaming=True,
+            attributes=[
+                DocumentAttributeAudio(duration=int(rip_data['duration']),
+                                       title=str(rip_data['title']),
+                                       performer=str(rip_data['uploader']))
+            ],
+            progress_callback=lambda d, t: asyncio.get_event_loop(
+            ).create_task(
+                progress(d, t, v_url, c_time, "Uploading..",
+                         f"{rip_data['title']}.mp3")))
+        os.remove(f"{rip_data['id']}.mp3")
+        await v_url.delete()
+    elif video:
+        await v_url.edit(f"`Preparing to upload video:`\
+        \n**{rip_data['title']}**\
+        \nby __{rip_data['uploader']}__")
+        await v_url.client.send_file(
+            v_url.chat_id,
+            f"{rip_data['id']}.mp4",
+            supports_streaming=True,
+            caption=rip_data['title'],
+            progress_callback=lambda d, t: asyncio.get_event_loop(
+            ).create_task(
+                progress(d, t, v_url, c_time, "Uploading..",
+                         f"{rip_data['title']}.mp4")))
+        os.remove(f"{rip_data['id']}.mp4")
+        await v_url.delete()
+
+
 CMD_HELP.update({"scrapers": ['Scrapers',
     " - `img` <query> lim=<n>: Do an Image Search on Google and send n results. Default is 2.\n"
     " - `google` <query>: Search Google for query (argument or reply).\n"
@@ -289,6 +436,7 @@ CMD_HELP.update({"scrapers": ['Scrapers',
     " - `tts` <query>: Text-to-Speech the query (argument or reply) to the saved language.\n"
     " - `trt` <query>: Translate the query (argument or reply) to the saved language.\n"
     " - `lang` <lang>: Changes the default language of trt and TTS modules.\n"
+    " - `ripaudio` <url> or `ripvideo` <url>: Download videos and songs from YouTube (and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).\n"
     " - `wolfram` <query>: Get answers to questions using WolframAlpha Spoken Results API.\n\n"
     "**All commands can be used with** `.`"]
 })
