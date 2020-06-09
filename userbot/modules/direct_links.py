@@ -5,15 +5,11 @@
 #
 """ Userbot module containing various sites direct links generators"""
 
-import json
 import re
-import urllib.parse
-from os import popen
 from random import choice
 
 import requests
 from bs4 import BeautifulSoup
-from humanize import naturalsize
 
 from userbot import CMD_HELP
 from userbot.events import register
@@ -121,7 +117,7 @@ def sourceforge(url: str) -> str:
     reply = f"Mirrors for __{file_path.split('/')[-1]}__\n"
     project = re.findall(r'projects?/(.*?)/files', link)[0]
     mirrors = f'https://sourceforge.net/settings/mirror_choices?' \
-        f'projectname={project}&filename={file_path}'
+              f'projectname={project}&filename={file_path}'
     page = BeautifulSoup(requests.get(mirrors).content, 'html.parser')
     info = page.find('ul', {'id': 'mirrorList'}).findAll('li')
     for mirror in info[1:]:
@@ -145,8 +141,8 @@ def useragent():
 
 
 CMD_HELP.update({"direct links": ['Direct Links',
-    " - `direct` <url>: Generate direct download link from supported URL(s)\n"
-    "Supported websites:\n"
-    "`Google Drive - MediaFire - SourceForge`"
-    "**All commands can be used with** `.`"]
-})
+                                  " - `direct` <url>: Generate direct download link from supported URL(s)\n"
+                                  "Supported websites:\n"
+                                  "`Google Drive - MediaFire - SourceForge`"
+                                  "**All commands can be used with** `.`"]
+                 })

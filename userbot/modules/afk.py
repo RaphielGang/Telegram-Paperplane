@@ -1,11 +1,11 @@
-from random import choice, randint
 from asyncio import sleep
 from datetime import datetime
+from random import choice, randint
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG,
-                     BOTLOG_CHATID, USERS)
+from userbot import (CMD_HELP, BOTLOG,
+                     BOTLOG_CHATID)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================
@@ -64,8 +64,8 @@ async def mention_afk(mention):
             elif day > 1:
                 if day > 6:
                     date = now + \
-                        datetime.timedelta(
-                            days=-day, hours=-hours, minutes=-minutes)
+                           datetime.timedelta(
+                               days=-day, hours=-hours, minutes=-minutes)
                     afk_str = date.strftime("%A, %Y %B %m, %H:%I")
                 else:
                     wday = now + datetime.timedelta(days=-day)
@@ -137,8 +137,8 @@ async def afk_on_pm(sender):
             elif day > 1:
                 if day > 6:
                     date = now + \
-                        datetime.timedelta(
-                            days=-day, hours=-hours, minutes=-minutes)
+                           datetime.timedelta(
+                               days=-day, hours=-hours, minutes=-minutes)
                     afk_since = date.strftime("%A, %Y %B %m, %H:%I")
                 else:
                     wday = now + datetime.timedelta(days=-day)
@@ -237,7 +237,7 @@ async def type_afk_is_not_true(notafk):
 
 
 CMD_HELP.update({"afk": ['AFK',
-    " - `afk <reason>`: Sets your status as AFK. Responds to anyone who tags/PM's "
-    "you telling you are AFK. Switches off AFK when you type back anything.\n\n"
-    "**All commands can be used with** `.`"]
-})
+                         " - `afk <reason>`: Sets your status as AFK. Responds to anyone who tags/PM's "
+                         "you telling you are AFK. Switches off AFK when you type back anything.\n\n"
+                         "**All commands can be used with** `.`"]
+                 })

@@ -22,7 +22,7 @@ async def gen_chlog(repo, diff):
 
 
 async def is_off_br(br):
-    off_br = ['master', 'staging', 'redis']
+    off_br = ['master']
     if br in off_br:
         return 1
     return
@@ -117,7 +117,7 @@ async def upstream(ups):
 
 
 CMD_HELP.update({"updater": ['Updater',
-    " - `update`: Check if the main repository has any updates and show changelog if so.\n"
-    " - `update now`: Update Paperplane if there are any updates available."
-    "**All commands can be used with** `.`"]
-})
+                             " - `update`: Check if the main repository has any updates and show changelog if so.\n"
+                             " - `update now`: Update Paperplane if there are any updates available."
+                             "**All commands can be used with** `.`"]
+                 })

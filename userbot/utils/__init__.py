@@ -8,7 +8,7 @@ from telethon.tl.functions.messages import GetFullChatRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import (MessageEntityMentionName,
                                ChannelParticipantsAdmins,
-                               ChannelParticipantsBots, MessageEntityMention, InputPeerChannel, InputPeerChat)
+                               ChannelParticipantsBots, InputPeerChannel, InputPeerChat)
 
 
 def parse_arguments(message: str, valid: List[str]) -> (dict, str):

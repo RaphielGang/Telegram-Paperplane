@@ -9,7 +9,6 @@ from telethon.errors import AboutTooLongError
 from telethon.errors.rpcerrorlist import FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import User as Userbot
 
 from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
                      LASTFM_USERNAME, bot, lastfm)
@@ -212,8 +211,8 @@ async def lastlog(lstlog):
 
 
 CMD_HELP.update({"lastfm": ["LastFM",
-    " - `lastfm`: Shows currently scrobbling track or most recent scrobbles if nothing is playing.\n"
-    " - `lastbio` <on/off>: Enable/Disable last.fm bio updating.\n"
-    " - `lastlog` <on/off>: Enable/Disable last.fm bio logging.\n\n"
-    "**All commands can be used with** `.`"]
-})
+                            " - `lastfm`: Shows currently scrobbling track or most recent scrobbles if nothing is playing.\n"
+                            " - `lastbio` <on/off>: Enable/Disable last.fm bio updating.\n"
+                            " - `lastlog` <on/off>: Enable/Disable last.fm bio logging.\n\n"
+                            "**All commands can be used with** `.`"]
+                 })

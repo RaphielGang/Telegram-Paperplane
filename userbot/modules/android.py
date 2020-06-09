@@ -5,8 +5,8 @@
 #
 """ Userbot module containing commands related to android"""
 
-import re
 import json
+import re
 
 from bs4 import BeautifulSoup
 from requests import get
@@ -22,7 +22,9 @@ async def magisk(request):
     """ magisk latest releases """
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
     releases = '**Latest Magisk Releases:**\n\n'
-    for type, branch in {"Stable":["master/stable","master"], "Beta":["master/beta","master"], "Canary (release)":["canary/release","canary"], "Canary (debug)":["canary/debug","canary"]}.items():
+    for type, branch in {"Stable": ["master/stable", "master"], "Beta": ["master/beta", "master"],
+                         "Canary (release)": ["canary/release", "canary"],
+                         "Canary (debug)": ["canary/debug", "canary"]}.items():
         data = get(url + branch[0] + '.json').json()
         releases += f'**{type}**: \n' \
                     f'    • [Changelog](https://github.com/topjohnwu/magisk_files/blob/{branch[1]}/notes.md)\n' \
@@ -83,7 +85,7 @@ async def codename_info(request):
     devices = devices_lower.get(brand)
     results = [
         i for i in devices if i["name"].lower() == device.lower()
-        or i["model"].lower() == device.lower()
+                              or i["model"].lower() == device.lower()
     ]
     if results:
         reply = f"**Search results for {brand} {device}**:\n\n"
@@ -115,8 +117,8 @@ async def devices_specifications(request):
     all_brands = BeautifulSoup(
         get('https://www.devicespecifications.com/en/brand-more').content,
         'lxml').find('div', {
-            'class': 'brand-listing-container-news'
-        }).findAll('a')
+        'class': 'brand-listing-container-news'
+    }).findAll('a')
     brand_page_url = None
     try:
         brand_page_url = [
@@ -181,10 +183,10 @@ async def twrp(request):
 
 
 CMD_HELP.update({"android": ['Android',
-    " - `magisk`: Get the latest Magisk releases.\n"
-    " - `device` <codename>: Get info about an Android device.\n"
-    " - `codename` <brand> <device>: Search for Android device codename.\n"
-    " - `specs` <brand> <device>: Get device specifications info.\n"
-    " - `twrp` <codename>: Get the latest TWRP download for an Android device.\n\n"
-    "**All commands can be used with** `.`"]
-})
+                             " - `magisk`: Get the latest Magisk releases.\n"
+                             " - `device` <codename>: Get info about an Android device.\n"
+                             " - `codename` <brand> <device>: Search for Android device codename.\n"
+                             " - `specs` <brand> <device>: Get device specifications info.\n"
+                             " - `twrp` <codename>: Get the latest TWRP download for an Android device.\n\n"
+                             "**All commands can be used with** `.`"]
+                 })

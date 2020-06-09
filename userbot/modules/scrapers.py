@@ -5,34 +5,31 @@
 #
 """ Userbot module containing various scrapers. """
 
+import asyncio
 import os
 import time
-import asyncio
 from re import findall
 from shutil import rmtree
 from urllib.error import HTTPError
 
-from time import sleep
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
-from requests import get
 from search_engine_parser import GoogleSearch
+from telethon.tl.types import DocumentAttributeAudio
 from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
-from requests import get
 from youtube_dl import YoutubeDL
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
                               MaxDownloadsReached, PostProcessingError,
                               UnavailableVideoError, XAttrMetadataError)
-from telethon.tl.types import DocumentAttributeAudio
 
-from userbot.modules.upload_download import progress, humanbytes, time_formatter                            
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
+from userbot.modules.upload_download import progress
 
 # Default language to EN
 LANG = "en"
@@ -277,68 +274,68 @@ async def download_video(v_url):
     """ For .rip command, download media from YouTube and many other sites. """
     url = v_url.pattern_match.group(2)
     type = v_url.pattern_match.group(1).lower()
- 
+
     await v_url.edit("`Preparing to download...`")
- 
+
     if type == "audio":
         opts = {
             'format':
-            'bestaudio',
+                'bestaudio',
             'addmetadata':
-            True,
+                True,
             'key':
-            'FFmpegMetadata',
+                'FFmpegMetadata',
             'writethumbnail':
-            True,
+                True,
             'prefer_ffmpeg':
-            True,
+                True,
             'geo_bypass':
-            True,
+                True,
             'nocheckcertificate':
-            True,
+                True,
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
                 'preferredquality': '320',
             }],
             'outtmpl':
-            '%(id)s.mp3',
+                '%(id)s.mp3',
             'quiet':
-            True,
+                True,
             'logtostderr':
-            False
+                False
         }
         video = False
         song = True
- 
+
     elif type == "video":
         opts = {
             'format':
-            'best',
+                'best',
             'addmetadata':
-            True,
+                True,
             'key':
-            'FFmpegMetadata',
+                'FFmpegMetadata',
             'prefer_ffmpeg':
-            True,
+                True,
             'geo_bypass':
-            True,
+                True,
             'nocheckcertificate':
-            True,
+                True,
             'postprocessors': [{
                 'key': 'FFmpegVideoConvertor',
                 'preferedformat': 'mp4'
             }],
             'outtmpl':
-            '%(id)s.mp4',
+                '%(id)s.mp4',
             'logtostderr':
-            False,
+                False,
             'quiet':
-            True
+                True
         }
         song = False
         video = True
- 
+
     try:
         await v_url.edit("`Fetching data, please wait..`")
         with YoutubeDL(opts) as rip:
@@ -410,13 +407,13 @@ async def download_video(v_url):
 
 
 CMD_HELP.update({"scrapers": ['Scrapers',
-    " - `img` <query> lim=<n>: Do an Image Search on Google and send n results. Default is 2.\n"
-    " - `google` <query>: Search Google for query (argument or reply).\n"
-    " - `wiki` <query>: Search Wikipedia for query.\n"
-    " - `ud` <query>: Search on Urban Dictionary for query.\n"
-    " - `tts` <query>: Text-to-Speech the query (argument or reply) to the saved language.\n"
-    " - `trt` <query>: Translate the query (argument or reply) to the saved language.\n"
-    " - `lang` <lang>: Changes the default language of trt and TTS modules.\n"
-    " - `ripaudio` <url> or `ripvideo` <url>: Download videos and songs from YouTube (and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).\n\n"
-    "**All commands can be used with** `.`"]
-})
+                              " - `img` <query> lim=<n>: Do an Image Search on Google and send n results. Default is 2.\n"
+                              " - `google` <query>: Search Google for query (argument or reply).\n"
+                              " - `wiki` <query>: Search Wikipedia for query.\n"
+                              " - `ud` <query>: Search on Urban Dictionary for query.\n"
+                              " - `tts` <query>: Text-to-Speech the query (argument or reply) to the saved language.\n"
+                              " - `trt` <query>: Translate the query (argument or reply) to the saved language.\n"
+                              " - `lang` <lang>: Changes the default language of trt and TTS modules.\n"
+                              " - `ripaudio` <url> or `ripvideo` <url>: Download videos and songs from YouTube (and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).\n\n"
+                              "**All commands can be used with** `.`"]
+                 })

@@ -9,16 +9,16 @@
 """ Userbot module which contains everything related to \
     downloading/uploading from/to the server. """
 
+import asyncio
 import json
+import math
 import os
 import subprocess
 import time
-import math
 
-from pySmartDL import SmartDL
-import asyncio
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from pySmartDL import SmartDL
 from telethon.tl.types import DocumentAttributeVideo
 
 from userbot import LOGS, CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
@@ -40,11 +40,11 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
             ''.join(["░" for i in range(10 - math.floor(percentage / 10))]),
             round(percentage, 2))
         tmp = progress_str + \
-            "{0} of {1}\nETA: {2}".format(
-                humanbytes(current),
-                humanbytes(total),
-                time_formatter(estimated_total_time)
-            )
+              "{0} of {1}\nETA: {2}".format(
+                  humanbytes(current),
+                  humanbytes(total),
+                  time_formatter(estimated_total_time)
+              )
         if file_name:
             await event.edit("{}\nFile Name: `{}`\n{}".format(
                 type_of_ps, file_name, tmp))
@@ -59,7 +59,7 @@ def humanbytes(size):
     if not size:
         return ""
     # 2 ** 10 = 1024
-    power = 2**10
+    power = 2 ** 10
     raised_to_pow = 0
     dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
     while size > power:
@@ -76,10 +76,10 @@ def time_formatter(milliseconds: int) -> str:
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     tmp = ((str(days) + " day(s), ") if days else "") + \
-        ((str(hours) + " hour(s), ") if hours else "") + \
-        ((str(minutes) + " minute(s), ") if minutes else "") + \
-        ((str(seconds) + " second(s), ") if seconds else "") + \
-        ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
+          ((str(hours) + " hour(s), ") if hours else "") + \
+          ((str(minutes) + " minute(s), ") if minutes else "") + \
+          ((str(seconds) + " second(s), ") if seconds else "") + \
+          ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
     return tmp[:-2]
 
 
@@ -404,8 +404,8 @@ async def uploadas(uas_event):
 
 
 CMD_HELP.update({"download": ['Download',
-    " - `download [in reply to TG file] or .download <link> | <filename>`: "
-    "Download a file from telegram or link to the server.\n"
-    " - `upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n\n"
-    "**All commands can be used with** `.`"]
-})
+                              " - `download [in reply to TG file] or .download <link> | <filename>`: "
+                              "Download a file from telegram or link to the server.\n"
+                              " - `upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n\n"
+                              "**All commands can be used with** `.`"]
+                 })

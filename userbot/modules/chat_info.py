@@ -5,12 +5,12 @@
 #
 
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types.messages import ChatFull
 from telethon.tl.types import Channel, User, ChatInviteExported
+from telethon.tl.types.messages import ChatFull
 
 from userbot import CMD_HELP
-from userbot.utils import parse_arguments, list_admins, inline_mention, list_bots, get_chat_from_event
 from userbot.events import register
+from userbot.utils import parse_arguments, list_admins, inline_mention, list_bots, get_chat_from_event
 from userbot.utils.tgdoc import *
 
 
@@ -111,12 +111,11 @@ async def fetch_info(event, full_chat, **kwargs):
 
 
 CMD_HELP.update({"chat info": ['Chat Info',
-    " - `chat [options]`: Returns stats for the current chat\n\n"
-    "**Options:**\n\n"
-    "`.id:` Return only the ID.\n"
-    "`.general`: Show general information related to the chat.\n"
-    "`.admins`: Show chat admins (does not mention them).\n"
-    "`.all`: Show everything.\n\n"
-    "**All commands can be used with** `.`"]
-})
-
+                               " - `chat [options]`: Returns stats for the current chat\n\n"
+                               "**Options:**\n\n"
+                               "`.id:` Return only the ID.\n"
+                               "`.general`: Show general information related to the chat.\n"
+                               "`.admins`: Show chat admins (does not mention them).\n"
+                               "`.all`: Show everything.\n\n"
+                               "**All commands can be used with** `.`"]
+                 })

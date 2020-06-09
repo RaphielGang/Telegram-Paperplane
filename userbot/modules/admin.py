@@ -64,7 +64,6 @@ KICK_RIGHTS = ChatBannedRights(until_date=None, view_messages=True)
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
-
 # ================================================
 
 
@@ -143,8 +142,8 @@ async def promote(promt):
     if BOTLOG:
         await promt.client.send_message(
             BOTLOG_CHATID, "#PROMOTE\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
+                           f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
 
 @register(outgoing=True, group_only=True, pattern="^.demote(?: |$)(.*)")
@@ -191,8 +190,8 @@ async def demote(dmod):
     if BOTLOG:
         await dmod.client.send_message(
             BOTLOG_CHATID, "#DEMOTE\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
+                           f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
 
 
 @register(outgoing=True, group_only=True, pattern="^.ban(?: |$)(.*)")
@@ -242,8 +241,8 @@ async def ban(bon):
     if BOTLOG:
         await bon.client.send_message(
             BOTLOG_CHATID, "#BAN\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
+                           f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
 
 @register(outgoing=True, group_only=True, pattern="^.unban(?: |$)(.*)")
@@ -276,8 +275,8 @@ async def nothanos(unbon):
         if BOTLOG:
             await unbon.client.send_message(
                 BOTLOG_CHATID, "#UNBAN\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {unbon.chat.title}(`{unbon.chat_id}`)")
+                               f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                               f"CHAT: {unbon.chat.title}(`{unbon.chat_id}`)")
     except UserIdInvalidError:
         await unbon.edit("`Uh oh my unban logic broke!`")
 
@@ -403,9 +402,9 @@ async def pin(msg):
     if BOTLOG:
         await msg.client.send_message(
             BOTLOG_CHATID, "#PIN\n"
-            f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
-            f"LOUD: {not is_silent}")
+                           f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
+                           f"LOUD: {not is_silent}")
 
 
 @register(outgoing=True, group_only=True, pattern="^.kick(?: |$)(.*)")
@@ -444,8 +443,8 @@ async def kick(usr):
     if BOTLOG:
         await usr.client.send_message(
             BOTLOG_CHATID, "#KICK\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
+                           f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
 
 async def get_user_from_event(event):
@@ -493,13 +492,14 @@ async def get_user_from_id(user, event):
 
     return user_obj
 
+
 CMD_HELP.update({"admins": ['Admins',
-    " - `promote`: Promotes a user. Reply to the user or use their username/ID.\n"
-    " - `demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
-    " - `ban`: Bans a user. Reply to the user or use their username/ID.\n"
-    " - `unban`: Unbans a user. Reply to the user or use their username/ID.\n"
-    " - `delusers`: Searches for deleted accounts in a group/channel.\n"
-    " - `delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
-    " - `adminlist`: Retrieves all admins in the chat.\n\n"
-    "**All commands can be used with** `.`"]
-})
+                            " - `promote`: Promotes a user. Reply to the user or use their username/ID.\n"
+                            " - `demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
+                            " - `ban`: Bans a user. Reply to the user or use their username/ID.\n"
+                            " - `unban`: Unbans a user. Reply to the user or use their username/ID.\n"
+                            " - `delusers`: Searches for deleted accounts in a group/channel.\n"
+                            " - `delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
+                            " - `adminlist`: Retrieves all admins in the chat.\n\n"
+                            "**All commands can be used with** `.`"]
+                 })

@@ -53,7 +53,7 @@ async def killdabot(event):
     await event.edit("`Goodbye *Windows XP shutdown sound*....`")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n"
-                                        "Bot shut down")
+                                                       "Bot shut down")
     await event.client.disconnect()
 
 
@@ -62,7 +62,7 @@ async def knocksomesense(event):
     await event.edit("`Hold tight! I just need a second to be back up....`")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
-                                        "Bot Restarted")
+                                                       "Bot Restarted")
     await event.client.disconnect()
     # Spin a new instance of bot
     execl(sys.executable, sys.executable, *sys.argv)
@@ -77,10 +77,10 @@ async def repo_is_here(wannasee):
 
 
 CMD_HELP.update({"misc": ["Misc",
-    " - `random` <item1> <item2> ... <itemN>: Get a random item from the list of items.\n"
-    " - `sleep` <secs>: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
-    " - `shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
-    "hear Windows XP shutdown sound... but you don't.\n"
-    " - `repo`: Get the link of the source code of Paperplane in GitHub.\n\n"
-    "**All commands can be used with** `.`"]
-})
+                          " - `random` <item1> <item2> ... <itemN>: Get a random item from the list of items.\n"
+                          " - `sleep` <secs>: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
+                          " - `shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
+                          "hear Windows XP shutdown sound... but you don't.\n"
+                          " - `repo`: Get the link of the source code of Paperplane in GitHub.\n\n"
+                          "**All commands can be used with** `.`"]
+                 })

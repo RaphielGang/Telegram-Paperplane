@@ -36,7 +36,7 @@ async def sysdetails(sysd):
 
             stdout, stderr = await fetch.communicate()
             result = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             await sysd.edit("`" + result + "`")
         except FileNotFoundError:
@@ -59,7 +59,7 @@ async def bot_ver(event):
             )
             stdout, stderr = await ver.communicate()
             verout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             rev = await asyncrunapp(
                 "git",
@@ -71,7 +71,7 @@ async def bot_ver(event):
             )
             stdout, stderr = await rev.communicate()
             revout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             await event.edit("`Userbot Version: "
                              f"{verout}"
@@ -102,7 +102,7 @@ async def pipcheck(pip):
 
             stdout, stderr = await pipc.communicate()
             pipout = str(stdout.decode().strip()) \
-                + str(stderr.decode().strip())
+                     + str(stderr.decode().strip())
 
             if pipout:
                 if len(pipout) > 4096:
@@ -170,12 +170,11 @@ async def amireallyalivereset(ureset):
 
 
 CMD_HELP.update({"system stats": ['System Stats',
-    " - `sysd`: Show system information using neofetch.\n"
-    " - `botver`: Show Paperplane version.\n"
-    " - `pip` <module(s)>: Search module(s) in PyPI.\n"
-    " - `alive`: Check if Paperplane is running. \n"
-    " - `aliveu` <new_user>: Change the user name in .alive command (aesthetics change only)\n"
-    " - `resetalive`: Reset the user name in the .alive command to default (aesthetics change only)\n\n"
-    "**All commands can be used with** `.`"]
-})
-
+                                  " - `sysd`: Show system information using neofetch.\n"
+                                  " - `botver`: Show Paperplane version.\n"
+                                  " - `pip` <module(s)>: Search module(s) in PyPI.\n"
+                                  " - `alive`: Check if Paperplane is running. \n"
+                                  " - `aliveu` <new_user>: Change the user name in .alive command (aesthetics change only)\n"
+                                  " - `resetalive`: Reset the user name in the .alive command to default (aesthetics change only)\n\n"
+                                  "**All commands can be used with** `.`"]
+                 })

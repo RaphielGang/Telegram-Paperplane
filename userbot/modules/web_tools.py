@@ -45,7 +45,7 @@ def speed_convert(size):
     """
     Hi human, you can't read bytes?
     """
-    power = 2**10
+    power = 2 ** 10
     zero = 0
     units = {0: '', 1: 'Kb/s', 2: 'Mb/s', 3: 'Gb/s', 4: 'Tb/s'}
     while size > power:
@@ -74,8 +74,8 @@ async def pingme(pong):
 
 
 CMD_HELP.update({"web tools": ["Web Tools",
-    " - `speedtest`: Conduct a SpeedTest.net and show the results.\n"
-    " - `nearestdc`: Find the nearest datacenter from your server.\n"
-    " - `pingme`: Show how long it takes to ping Paperplane.\n\n"
-    "**All commands can be used with** `.`"]
-})
+                               " - `speedtest`: Conduct a SpeedTest.net and show the results.\n"
+                               " - `nearestdc`: Find the nearest datacenter from your server.\n"
+                               " - `pingme`: Show how long it takes to ping Paperplane.\n\n"
+                               "**All commands can be used with** `.`"]
+                 })

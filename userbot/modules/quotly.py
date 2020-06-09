@@ -233,8 +233,7 @@ def get_markdown(reply):
 
 
 CMD_HELP.update({"quotly": ['Quotly',
-    " - `.q <reply_message>`: Enhance ur text to sticker.\n"
-    "**Note:** please add `Q_API_TOKEN` in config. You can get those from http://antiddos.systems.\n\n"
-    "**All commands can be used with** `.`"]
-})
-
+                            " - `.q <reply_message>`: Enhance ur text to sticker.\n"
+                            "**Note:** please add `Q_API_TOKEN` in config. You can get those from http://antiddos.systems.\n\n"
+                            "**All commands can be used with** `.`"]
+                 })
