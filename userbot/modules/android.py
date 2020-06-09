@@ -85,6 +85,7 @@ async def codename_info(request):
     devices = devices_lower.get(brand)
     results = [
         i for i in devices if i["name"].lower() == device.lower()
+        or i["model"].lower() == device.lower()
                               or i["model"].lower() == device.lower()
     ]
     if results:

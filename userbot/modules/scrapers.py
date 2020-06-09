@@ -81,7 +81,7 @@ async def gsearch(q_event):
                            "to a message for Google search!`")
         return
 
-    q_event.edit("`Searching...`")
+    await q_event.edit("`Searching...`")
 
     search_args = (str(query), 1)
     googsearch = GoogleSearch()

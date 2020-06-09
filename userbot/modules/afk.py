@@ -4,8 +4,8 @@ from random import choice, randint
 
 from telethon.events import StopPropagation
 
-from userbot import (CMD_HELP, BOTLOG,
-                     BOTLOG_CHATID)
+from userbot import (AFKREASON, CMD_HELP, BOTLOG,
+                     BOTLOG_CHATID, ISAFK, USERS)
 from userbot.events import register
 
 # ========================= CONSTANTS ============================

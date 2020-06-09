@@ -11,7 +11,12 @@ import random
 import re
 import time
 
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.types import MessageEntityMentionName
+
 from cowpy import cow
+
+from random import choice, getrandbits, randint
 
 from userbot import CMD_HELP, ZALG_LIST
 from userbot.events import register
@@ -175,22 +180,188 @@ FACEREACTS = [
     r"¯\(°_o)/¯",
     "(｡◕‿◕｡)",
 ]
-RUNSREACTS = [
-    "Runs to Thanos",
-    "Runs far, far away from earth",
-    "Running faster than usian bolt coz I'mma Bot",
-    "Runs to Marie",
+
+SHGS = [
+    "┐(´д｀)┌",
+    "┐(´～｀)┌",
+    "┐(´ー｀)┌",
+    "┐(￣ヘ￣)┌",
+    "╮(╯∀╰)╭",
+    "╮(╯_╰)╭",
+    "┐(´д`)┌",
+    "┐(´∀｀)┌",
+    "ʅ(́◡◝)ʃ",
+    "┐(ﾟ～ﾟ)┌",
+    "┐('д')┌",
+    "┐(‘～`;)┌",
+    "ヘ(´－｀;)ヘ",
+    "┐( -“-)┌",
+    "ʅ（´◔౪◔）ʃ",
+    "ヽ(゜～゜o)ノ",
+    "ヽ(~～~ )ノ",
+    "┐(~ー~;)┌",
+    "┐(-。ー;)┌",
+    r"¯\_(ツ)_/¯",
+    r"¯\_(⊙_ʖ⊙)_/¯",
+    r"¯\_༼ ಥ ‿ ಥ ༽_/¯",
+    "乁( ⁰͡  Ĺ̯ ⁰͡ ) ㄏ",
+]
+
+CRI = [
+    "أ‿أ",
+    "╥﹏╥",
+    "(;﹏;)",
+    "(ToT)",
+    "(┳Д┳)",
+    "(ಥ﹏ಥ)",
+    "（；へ：）",
+    "(T＿T)",
+    "（πーπ）",
+    "(Ｔ▽Ｔ)",
+    "(⋟﹏⋞)",
+    "（ｉДｉ）",
+    "(´Д⊂ヽ",
+    "(;Д;)",
+    "（>﹏<）",
+    "(TдT)",
+    "(つ﹏⊂)",
+    "༼☯﹏☯༽",
+    "(ノ﹏ヽ)",
+    "(ノAヽ)",
+    "(╥_╥)",
+    "(T⌓T)",
+    "(༎ຶ⌑༎ຶ)",
+    "(☍﹏⁰)｡",
+    "(ಥ_ʖಥ)",
+    "(つд⊂)",
+    "(≖͞_≖̥)",
+    "(இ﹏இ`｡)",
+    "༼ಢ_ಢ༽",
+    "༼ ༎ຶ ෴ ༎ຶ༽",
+]
+
+SLAP_TEMPLATES = [
+    "{hits} {victim} with **{item}**. {emoji}",
+    "{hits} {victim} in the face with **{item}**. {emoji}",
+    "{hits} {victim} around a bit with **{item}**. {emoji}",
+    "{throws} **{item}** at {victim}. {emoji}",
+    "grabs **{item}** and {throws} it at {victim}'s face. {emoji}",
+    "launches **{item}** in {victim}'s general direction. {emoji}",
+    "starts slapping {victim} silly with **{item}**. {emoji}",
+    "pins {victim} down and repeatedly {hits} them with **{item}**. {emoji}",
+    "grabs up **{item}** and {hits} {victim} with it. {emoji}",
+    "ties {victim} to a chair and {throws} **{item}** at them. {emoji}"
+]
+
+ITEMS = [
+    "a Samsung J5 2017",
+    "a Samsung S10+",
+    "an iPhone XS MAX",
+    "a Note 9",
+    "a Note 10+",
+    "knox 0x0",
+    "OneUI 2.0",
+    "OneUI 69.0",
+    "TwoUI 1.0",
+    "Secure Folder",
+    "Samsung Pay",
+    "prenormal RMM state",
+    "prenormal KG state",
+    "a locked bootloader",
+    "payment lock",
+    "stock rom",
+    "good rom",
+    "Good Lock apps",
+    "Q port",
+    "Pie port",
+    "8.1 port",
+    "Pie port",
+    "Pie OTA",
+    "Q OTA",
+    "LineageOS 16",
+    "LineageOS 17",
+    "a bugless rom",
+    "a kernel",
+    "a kernal",
+    "a karnal",
+    "a karnel",
+    "official TWRP",
+    "VOLTE",
+    "kanged rom",
+    "an antikang",
+    "audio fix",
+    "hwcomposer fix",
+    "mic fix",
+    "random reboots",
+    "bootloops",
+    "unfiltered logs",
+    "a keylogger",
+    "120FPS",
+    "a download link",
+    "168h uptime",
+    "a paypal link",
+    "treble support",
+    "EVO-X gsi",
+    "Q gsi",
+    "Q beta",
+    "a Rom Control",
+    "a hamburger",
+    "a cheeseburger",
+    "a Big-Mac"
+]
+
+THROW = [
+    "throws",
+    "flings",
+    "chucks",
+    "hurls"
+]
+
+HIT = [
+    "hits",
+    "whacks",
+    "slaps",
+    "smacks",
+    "spanks",
+    "bashes"
+]
+
+EMOJI = [
+    "\U0001F923",
+    "\U0001F602",
+    "\U0001F922",
+    "\U0001F605",
+    "\U0001F606",
+    "\U0001F609",
+    "\U0001F60E",
+    "\U0001F929",
+    "\U0001F623",
+    "\U0001F973",
+    "\U0001F9D0",
+    "\U0001F632"
+]
+
+RUNS_STR = [
+    "Runs to Thanos..",
+    "Runs far, far away from earth..",
+    "Running faster than Bolt coz i'mma userbot !!",
+    "Runs to Marie..",
     "This Group is too cancerous to deal with.",
     "Cya bois",
     "Kys",
-    "I am a mad person. Plox Ban me.",
     "I go away",
     "I am just walking off, coz me is too fat.",
     "I Fugged off!",
+    "Will run for chocolate.",
+    "I run because I really like food.",
+    "Running...\nbecause dieting is not an option.",
+    "Wicked fast runnah",
+    "If you wanna catch me, you got to be fast...\nIf you wanna stay with me, you got to be good...\nBut if you wanna pass me...\nYou've got to be kidding.",
+    "Anyone can run a hundred meters, it's the next forty-two thousand and two hundred that count.",
+    "Why are all these people following me?",
+    "Are the kids still chasing me?",
+    "Running a marathon...there's an app for that.",
 ]
-DISABLE_RUN = False
-
-
 # ===========================================
 
 
@@ -210,6 +381,71 @@ async def univsaye(cowmsg):
     await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
+async def get_user(event):
+    if event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
+    else:
+        user = event.pattern_match.group(1)
+        if user.isnumeric():
+            user = int(user)
+        if not user:
+            self_user = await event.client.get_me()
+            user = self_user.id
+        if event.message.entities is not None:
+            probable_user_mention_entity = event.message.entities[0]
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                replied_user = await event.client(GetFullUserRequest(user_id))
+                return replied_user
+        try:
+            user_object = await event.client.get_entity(user)
+            replied_user = await event.client(GetFullUserRequest(user_object.id))
+        except (TypeError, ValueError):
+            await event.edit("`This dude doesn't even exist`")
+            return None
+    return replied_user
+
+
+async def slap(replied_user, event):  # builds the slap msg itself
+    user_id = replied_user.user.id
+    first_name = replied_user.user.first_name
+    username = replied_user.user.username
+    if username:
+        slapped = "@{}".format(username)
+    else:
+        slapped = f"[{first_name}](tg://user?id={user_id})"
+    temp = random.choice(SLAP_TEMPLATES)
+    item = random.choice(ITEMS)
+    hit = random.choice(HIT)
+    throw = random.choice(THROW)
+    emoji = random.choice(EMOJI)
+    caption = "..." + temp.format(victim=slapped, item=item, hits=hit, throws=throw, emoji=emoji)
+    return caption
+
+
+@register(pattern="^.slap(?: |$)(.*)", outgoing=True)
+async def who(event):  # slap
+    if not event.text[0].isalpha() and event.text[0] in ("."):
+        if event.fwd_from:
+            return
+        replied_user = await get_user(event)
+        caption = await slap(replied_user, event)
+        message_id_to_reply = event.message.reply_to_msg_id
+        if not message_id_to_reply:
+            message_id_to_reply = None
+        try:
+            await event.edit(caption)
+        except BaseException:
+            await event.edit("`Can't slap this person, loading 12 gauge buckshot in my shotgun!!`")
+
+
+@register(outgoing=True, pattern="^\.cry$")
+async def cry(e):
+    """ y u du dis, i cry everytime !! """
+    await e.edit(choice(CRI))
+
+
 @register(outgoing=True, pattern="^:/$", ignore_unsafe=True)
 async def kek(keks):
     """ Check yourself ;)"""
@@ -217,15 +453,6 @@ async def kek(keks):
     for i in range(1, 15):
         time.sleep(0.3)
         await keks.edit(":" + uio[i % 2])
-
-
-@register(outgoing=True, pattern="^-_-$", ignore_unsafe=True)
-async def lol(lel):
-    """ Ok... """
-    okay = "-_-"
-    for _ in range(10):
-        okay = okay[:-1] + "_-"
-        await lel.edit(okay, parse_mode='html')
 
 
 @register(outgoing=True, pattern="^.cp(?: |$)(.*)")
@@ -346,13 +573,6 @@ async def zal(zgfy):
     await zgfy.edit("".join(reply_text))
 
 
-@register(outgoing=True, pattern="^hi$", ignore_unsafe=True)
-async def hoi(hello):
-    """ Greet everyone! """
-    if False:
-        await hello.edit("Hoi!😄")
-
-
 @register(outgoing=True, pattern="^.owo(?: |$)(.*)")
 async def faces(owo):
     """ UwU """
@@ -376,43 +596,22 @@ async def faces(owo):
     await owo.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.react$")
-async def react_meme(react):
-    """ Make your userbot react to everything. """
-    index = random.randint(0, len(FACEREACTS))
-    reply_text = FACEREACTS[index]
-    await react.edit(reply_text)
-
-
-@register(outgoing=True, pattern="^.shg$")
+@register(outgoing=True, pattern="^\.shg$")
 async def shrugger(shg):
     r""" ¯\_(ツ)_/¯ """
-    await shg.edit(r"¯\_(ツ)_/¯")
+    await shg.edit(choice(SHGS))
 
 
-@register(outgoing=True, pattern="^.runs$")
+@register(outgoing=True, pattern="^\.react$")
+async def react_meme(react):
+    """ Make your userbot react to everything. """
+    await react.edit(choice(FACEREACTS))
+
+
+@register(outgoing=True, pattern="^\.run$")
 async def runner_lol(run):
     """ Run, run, RUNNN! """
-    if not DISABLE_RUN:
-        index = random.randint(0, len(RUNSREACTS) - 1)
-        reply_text = RUNSREACTS[index]
-        await run.edit(reply_text)
-
-
-@register(outgoing=True, pattern="^.disable runs$")
-async def disable_runs(norun):
-    """ Some people don't like running... """
-    global DISABLE_RUN
-    DISABLE_RUN = True
-    await norun.edit("```Done!```")
-
-
-@register(outgoing=True, pattern="^.enable runs$")
-async def enable_runs(run):
-    """ But some do! """
-    global DISABLE_RUN
-    DISABLE_RUN = False
-    await run.edit("```Done!```")
+    await run.edit(choice(RUNS_STR))
 
 
 @register(outgoing=True, pattern="^.metoo$")
@@ -471,6 +670,17 @@ async def bluetext(bt_e):
         await bt_e.edit(
             "`BLUETEXT MUST CLICK.`\n"
             "`Are you a stupid animal which is attracted to colours?`")
+
+
+@register(outgoing=True, pattern=r"^\.f (.*)")
+async def payf(event):
+    paytext = event.pattern_match.group(1)
+    pay = "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}".format(
+        paytext * 8, paytext * 8, paytext * 2, paytext * 2, paytext * 2,
+        paytext * 6, paytext * 6, paytext * 2, paytext * 2, paytext * 2,
+        paytext * 2, paytext * 2)
+    await event.edit(pay)
+
 
 
 @register(outgoing=True, pattern='^.type(?: |$)(.*)')
