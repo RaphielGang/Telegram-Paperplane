@@ -31,7 +31,7 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
 from telethon.tl.types import DocumentAttributeAudio
 
 from userbot.modules.upload_download import progress, humanbytes, time_formatter                            
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID, bot
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import register
 
 # Default language to EN
@@ -272,25 +272,6 @@ def deEmojify(inputString):
     return get_emoji_regexp().sub(u'', inputString)
 
 
-@register(outgoing=True, pattern=r'^.wolfram (.*)')
-async def wolfram(wvent):
-    """ Wolfram Alpha API """
-    if WOLFRAM_ID is None:
-        await wvent.edit(
-            'Please set your WOLFRAM_ID first !\n'
-            'Get your API KEY from [here](https://'
-            'products.wolframalpha.com/api/)',
-            parse_mode='Markdown')
-        return
-    i = wvent.pattern_match.group(1)
-    appid = WOLFRAM_ID
-    server = f'https://api.wolframalpha.com/v1/spoken?appid={appid}&i={i}'
-    res = get(server)
-    await wvent.edit(f'**{i}**\n\n' + res.text, parse_mode='Markdown')
-    if BOTLOG:
-        await wvent.client.send_message(BOTLOG_CHATID, f'.wolfram {i} was executed successfully')
-
-
 @register(outgoing=True, pattern=r"^\.rip(audio|video) (.*)")
 async def download_video(v_url):
     """ For .rip command, download media from YouTube and many other sites. """
@@ -436,7 +417,6 @@ CMD_HELP.update({"scrapers": ['Scrapers',
     " - `tts` <query>: Text-to-Speech the query (argument or reply) to the saved language.\n"
     " - `trt` <query>: Translate the query (argument or reply) to the saved language.\n"
     " - `lang` <lang>: Changes the default language of trt and TTS modules.\n"
-    " - `ripaudio` <url> or `ripvideo` <url>: Download videos and songs from YouTube (and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).\n"
-    " - `wolfram` <query>: Get answers to questions using WolframAlpha Spoken Results API.\n\n"
+    " - `ripaudio` <url> or `ripvideo` <url>: Download videos and songs from YouTube (and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).\n\n"
     "**All commands can be used with** `.`"]
 })

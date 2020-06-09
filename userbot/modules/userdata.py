@@ -132,4 +132,3 @@ CMD_HELP.update({"userdata": ['Userdata',
     " - `delpfp` or delpfp <number>/<all>: Delete your Telegram avatar(s).\n\n"
     "**All commands can be used with** `.`"]
 })
-

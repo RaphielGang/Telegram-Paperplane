@@ -88,8 +88,6 @@ if not LASTFM_USERNAME == "None":
 else:
     lastfm = None
 
-WOLFRAM_ID = os.environ.get("WOLFRAM_ID", None)
-
 # pylint: disable=invalid-name
 if STRING_SESSION:
     bot = TelegramClient(StringSession(STRING_SESSION), API_KEY, API_HASH)
@@ -119,7 +117,7 @@ with bot:
 
 
 # Global Variables
-VERSION = "1.0-PA"
+VERSION = "1.3-PA"
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}
