@@ -118,19 +118,6 @@ with bot:
         quit(1)
 
 
-# Download binaries for gen_direct_links module, give correct perms
-if not os.path.exists('bin'):
-    os.mkdir('bin')
-
-url1 = 'https://raw.githubusercontent.com/yshalsager/megadown/master/megadown'
-url2 = 'https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py'
-
-dl1 = Downloader(url=url1, filename="bin/megadown")
-dl1 = Downloader(url=url1, filename="bin/cmrudl")
-
-os.chmod('bin/megadown', 0o755)
-os.chmod('bin/cmrudl', 0o755)
-
 # Global Variables
 VERSION = "1.0-PA"
 COUNT_MSG = 0
@@ -139,7 +126,8 @@ COUNT_PM = {}
 LASTMSG = {}
 ENABLE_KILLME = True
 CMD_HELP = {}
-AFKREASON = "no reason"
+ISAFK = False
+AFKREASON = None
 ZALG_LIST = [[
     "̖",
     " ̗",
