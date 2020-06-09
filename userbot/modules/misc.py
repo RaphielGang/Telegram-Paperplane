@@ -77,9 +77,10 @@ async def repo_is_here(wannasee):
 
 
 CMD_HELP.update({"misc": ["Misc",
-    " - `.random <item1> <item2> ... <itemN>`: Get a random item from the list of items.\n"
-    " - `.sleep <secs>`: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
-    " - `.shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
+    " - `random` <item1> <item2> ... <itemN>: Get a random item from the list of items.\n"
+    " - `sleep` <secs>: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
+    " - `shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
     "hear Windows XP shutdown sound... but you don't.\n"
-    " - `.repo`: Get the link of the source code of Paperplane in GitHub.\n"]
+    " - `repo`: Get the link of the source code of Paperplane in GitHub.\n\n"
+    "**All commands can be used with** `.`"]
 })

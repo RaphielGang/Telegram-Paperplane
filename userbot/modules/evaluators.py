@@ -191,7 +191,8 @@ async def terminal_runner(term):
 
 
 CMD_HELP.update({"evaluators": ['Evaluators',
-    " - `.eval <expr>`: Evaluate expressions using Python's eval().\n"
-    " - `.exec <script>`: Execute Python script.\n"
-    " - `.term <command>`: Execute a bash command on Paperplane server.\n"]
+    " - `eval` <expr>: Evaluate expressions using Python's eval().\n"
+    " - `exec` <script>: Execute Python script.\n"
+    " - `term` <command>: Execute a bash command on Paperplane server.\n\n"
+    "**All commands can be used with** `.`"]
 })

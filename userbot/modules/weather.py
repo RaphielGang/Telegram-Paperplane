@@ -130,6 +130,7 @@ async def get_weather(weather):
 
 
 CMD_HELP.update({"weather": ["Weather",
-    " - `.weather <city> or .weather <city>, <country name/code>`: "
-    "Gets the weather of a city.\n"]
+    " - `weather` <city> or weather <city>, <country name/code>: "
+    "Gets the weather of a city.\n\n"
+    "**All commands can be used with** `.`"]
 })

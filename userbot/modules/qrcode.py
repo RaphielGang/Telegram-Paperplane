@@ -23,7 +23,7 @@ def progress(current, total):
                                                      (current / total) * 100))
 
 
-@register(pattern=r"^.getqr$", outgoing=True)
+@register(pattern=r"^.decode$", outgoing=True)
 async def parseqr(qr_e):
     """ For .getqr command, get QR Code content from the replied photo. """
     if qr_e.fwd_from:
@@ -95,6 +95,7 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
 
 
 CMD_HELP.update({"qr codes": ['QR Codes',
-    " - `.getqr`: Get the QR Code content from the replied QR Code.\n"
-    " - `.makeqr <content>`: Make a QR Code from the given message (text, link, etc...).\n"]
+    " - `decode`: Get the QR Code content from the replied QR Code.\n"
+    " - `makeqr` <content>: Make a QR Code from the given message (text, link, etc...).\n\n"
+    "**All commands can be used with** `.`"]
 })

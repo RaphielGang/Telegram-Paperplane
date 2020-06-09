@@ -170,11 +170,12 @@ async def amireallyalivereset(ureset):
 
 
 CMD_HELP.update({"system stats": ['System Stats',
-    " - `.sysd`: Show system information using neofetch.\n"
-    " - `.botver`: Show Paperplane version.\n"
-    " - `.pip <module(s)>`: Search module(s) in PyPI.\n"
-    " - `.alive`: Check if Paperplane is running. \n"
-    " - `.aliveu <new_user>`: Change the user name in .alive command (aesthetics change only)\n"
-    " - `.resetalive`: Reset the user name in the .alive command to default (aesthetics change only)\n"]
+    " - `sysd`: Show system information using neofetch.\n"
+    " - `botver`: Show Paperplane version.\n"
+    " - `pip` <module(s)>: Search module(s) in PyPI.\n"
+    " - `alive`: Check if Paperplane is running. \n"
+    " - `aliveu` <new_user>: Change the user name in .alive command (aesthetics change only)\n"
+    " - `resetalive`: Reset the user name in the .alive command to default (aesthetics change only)\n\n"
+    "**All commands can be used with** `.`"]
 })
 

@@ -15,7 +15,7 @@ from userbot import CMD_HELP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.speed$")
+@register(outgoing=True, pattern="^.speedtest$")
 async def speedtst(spd):
     """ For .speed command, use SpeedTest to check server speeds. """
     await spd.edit("`Running speed test . . .`")
@@ -74,7 +74,8 @@ async def pingme(pong):
 
 
 CMD_HELP.update({"www": ["WWW",
-    " - `.speed`: Conduct a SpeedTest.net and show the results.\n"
-    " - `.nearestdc`: Find the nearest datacenter from your server.\n"
-    " - `.pingme`: Show how long it takes to ping Paperplane.\n"]
+    " - `speedtest`: Conduct a SpeedTest.net and show the results.\n"
+    " - `nearestdc`: Find the nearest datacenter from your server.\n"
+    " - `pingme`: Show how long it takes to ping Paperplane.\n\n"
+    "**All commands can be used with** `.`"]
 })

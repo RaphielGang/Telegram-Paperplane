@@ -116,5 +116,6 @@ async def fetch_info(replied_user, event):
 
 
 CMD_HELP.update({"whois": ['Whois',
-    " - `.whois <username>`: Get info about the target (argument or reply) user."]
+    " - `whois` <username>: Get info about the target (argument or reply) user.\n\n"
+    "**All commands can be used with** `.`"]
 })
