@@ -21,15 +21,14 @@ GITHUB = 'https://github.com'
 async def magisk(request):
     """ magisk latest releases """
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
-    releases = 'Latest Magisk Releases:\n'
-    for variant in [
-            'master/stable', 'master/beta', 'canary/release', 'canary/debug'
-    ]:
-        data = get(url + variant + '.json').json()
-        name = variant.split('_')[0].capitalize()
-        releases += f'{name}: [ZIP v{data["magisk"]["version"]}]({data["magisk"]["link"]}) | ' \
-                    f'[APK v{data["app"]["version"]}]({data["app"]["link"]}) | ' \
-                    f'[Uninstaller]({data["uninstaller"]["link"]})\n'
+    releases = '**Latest Magisk Releases:**\n\n'
+    for type, branch in {"Stable":["master/stable","master"], "Beta":["master/beta","master"], "Canary (release)":["canary/release","canary"], "Canary (debug)":["canary/debug","canary"]}.items():
+        data = get(url + branch[0] + '.json').json()
+        releases += f'**{type}**: \n' \
+                    f'    • [Changelog](https://github.com/topjohnwu/magisk_files/blob/{branch[1]}/notes.md)\n' \
+                    f'    • Zip - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({data["magisk"]["link"]}) \n' \
+                    f'    • App - [{data["app"]["version"]}-{data["app"]["versionCode"]}]({data["app"]["link"]}) \n' \
+                    f'    • Uninstaller - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({data["uninstaller"]["link"]})\n\n'
     await request.edit(releases)
 
 
