@@ -121,7 +121,7 @@ with bot:
         quit(1)
 
 # Global Variables
-VERSION = "1.3-PA"
+VERSION = "2.0-B"
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}
