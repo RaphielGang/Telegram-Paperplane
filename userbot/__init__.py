@@ -10,6 +10,7 @@ from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from sys import version_info
 
+from github import Github
 from dotenv import load_dotenv
 from pylast import LastFMNetwork, md5
 from spamwatch import Client as SpamWatch
@@ -55,6 +56,13 @@ OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 OPEN_WEATHER_MAP_DEFCITY = os.environ.get("OPEN_WEATHER_MAP_DEFCITY", None)
 
 BOTLOG = sb(os.environ.get("BOTLOG", "False"))
+
+GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", None)
+GITHUB_PASSWORD = os.environ.get("GITHUB_PASSWORD", None)
+if GITHUB_USERNAME and GITHUB_PASSWORD:
+    github = Github(GITHUB_USERNAME, GITHUB_PASSWORD)
+else:
+    github = None
 
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID")) if BOTLOG else 0
 
