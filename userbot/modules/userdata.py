@@ -31,8 +31,6 @@ BIO_SUCCESS = "```Successfully edited Bio.```"
 NAME_OK = "```Your name was successfully changed.```"
 USERNAME_SUCCESS = "```Your username was successfully changed.```"
 USERNAME_TAKEN = "```This username is already taken.```"
-
-
 # ===============================================================
 
 
