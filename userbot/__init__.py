@@ -59,9 +59,9 @@ BOTLOG = sb(os.environ.get("BOTLOG", "False"))
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID")) if BOTLOG else 0
 
 UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL",
-                                   "https://github.com/HitaloSama/PaperplaneMinimal.git")  # Custom (forked) repo URL for updater.
+                                   "https://github.com/HitaloSama/PaperplaneMinimal.git")
 
-Q_API_TOKEN = os.environ.get("Q_API_TOKEN", None)  # Quotly API key http://antiddos.systems
+Q_API_TOKEN = os.environ.get("Q_API_TOKEN", None)
 
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
                                              None)
@@ -70,7 +70,7 @@ WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
 
 SPAMWATCH_API_KEY = os.environ.get("SPAMWATCH_API_KEY", None)
 if SPAMWATCH_API_KEY:
-    spamwatch = SpamWatch(SPAMWATCH_API_KEY, host="https://staging.spamwat.ch")
+    spamwatch = SpamWatch(SPAMWATCH_API_KEY, host="https://api.spamwat.ch")
 else:
     spamwatch = None
 
@@ -107,17 +107,18 @@ async def check_botlog_chatid():
     entity = await bot.get_entity(BOTLOG_CHATID)
     if entity.default_banned_rights.send_messages:
         LOGS.error(
-            "Your account doesn't have rights to send messages to BOTLOG_CHATID "
-            "group. Check if you typed the Chat ID correctly.")
+            "Your account doesn't have rights to send messages to "
+            "BOTLOG_CHATID group. Check if you typed the Chat ID correctly.")
         quit(1)
 
 
 with bot:
     try:
         bot.loop.run_until_complete(check_botlog_chatid())
-    except:
+    except Exception as e:
         LOGS.error("BOTLOG_CHATID environment variable isn't a "
                    "valid entity. Check your config.env file.")
+        print(e)
         quit(1)
 
 # Global Variables

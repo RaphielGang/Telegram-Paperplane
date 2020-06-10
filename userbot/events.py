@@ -73,7 +73,8 @@ def register(**args):
             #
             except events.StopPropagation:
                 raise events.StopPropagation
-            # This is a gay exception and must be passed out. So that it doesnt spam chats
+            # This is a gay exception and must be passed out.
+            # So that it doesnt spam chats
             except KeyboardInterrupt:
                 pass
             except BaseException as e:
@@ -85,10 +86,10 @@ def register(**args):
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                     text = "**Sorry, I encountered a error!**\n"
-                    link = "https://github.com/HitaloSama/PaperplaneMinimal"
+                    link = "https://git.io/JfSry"
                     text += "If you wanna you can report it"
                     text += f"- just open an issue on {link}.\n"
-                    text += "I won't log anything except the fact of error and date\n"
+                    text += "I won't log anything except the error and date\n"
 
                     ftext = "\nDisclaimer:\nThis file uploaded ONLY here, "
                     ftext += "we logged only fact of error and date, "
@@ -117,7 +118,7 @@ def register(**args):
                                                   stderr=asyncsub.PIPE)
                     stdout, stderr = await process.communicate()
                     result = str(stdout.decode().strip()) \
-                             + str(stderr.decode().strip())
+                        + str(stderr.decode().strip())
 
                     ftext += result
 
