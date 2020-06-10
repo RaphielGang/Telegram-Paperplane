@@ -7,7 +7,7 @@
 """ Userbot module for other small commands. """
 
 import sys
-from os import execl
+from os import execl, environ, execle
 from random import randint
 from time import sleep
 
@@ -63,11 +63,10 @@ async def knocksomesense(event):
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
                                                        "Bot Restarted")
-    await event.client.disconnect()
     # Spin a new instance of bot
-    execl(sys.executable, sys.executable, *sys.argv)
-    # Shut the existing one down
-    exit()
+    args = [sys.executable, "-m", "userbot"]
+    execle(sys.executable, *args, environ)
+    return
 
 
 @register(outgoing=True, pattern="^.repo$")
@@ -81,6 +80,7 @@ CMD_HELP.update({"misc": ["Misc",
                           " - `sleep` <secs>: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
                           " - `shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
                           "hear Windows XP shutdown sound... but you don't.\n"
+                          " - `restart`: Restarts the userbot\n"
                           " - `repo`: Get the link of the source code of Paperplane in GitHub.\n\n"
                           "**All commands can be used with** `.`"]
                  })
