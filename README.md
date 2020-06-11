@@ -1,5 +1,7 @@
 # Paperplane Minimal Project
 
+[![Build](https://github.com/HitaloSama/PaperplaneMinimal/workflows/ErrorChecking/badge.svg?branch=master)](https://github.com/HitaloSama/PaperplaneMinimal/actions "Build") ![Contributors](https://img.shields.io/github/contributors/HitaloSama/PaperplaneMinimal?color=LightSlateGrey)  
+
 ![logo](https://telegra.ph/file/73cf4c62b2c64f981961e.png)
 
 ```
