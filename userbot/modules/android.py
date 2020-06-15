@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup
 from requests import get
 from hurry.filesize import size as sizee
 
-from telethon import custom
 from userbot import CMD_HELP
 from userbot.events import register
 
@@ -188,10 +187,9 @@ async def twrp(request):
 
 @register(outgoing=True, pattern=r"^.evo(?: |$)(\S*)")
 async def evo(event):
-    if event.from_id == None:
+    if event.from_id is None:
         return
 
-    chat_id = event.chat_id
     try:
         device_ = event.pattern_match.group(1)
         device = urllib.parse.quote_plus(device_)
@@ -257,10 +255,9 @@ async def evo(event):
 
 @register(outgoing=True, pattern=r"^.bootleggers(?: |$)(\S*)")
 async def bootleggers(event):
-    if event.from_id == None:
+    if event.from_id is None:
         return
 
-    chat_id = event.chat_id
     try:
         codename_ = event.pattern_match.group(1)
         codename = urllib.parse.quote_plus(codename_)
@@ -327,10 +324,9 @@ async def bootleggers(event):
 
 @register(outgoing=True, pattern=r"^.los(?: |$)(\S*)")
 async def los(event):
-    if event.from_id == None:
+    if event.from_id is None:
         return
 
-    chat_id = event.chat_id
     try:
         device_ = event.pattern_match.group(1)
         device = urllib.parse.quote_plus(device_)
@@ -366,10 +362,8 @@ async def los(event):
 
 @register(outgoing=True, pattern=r"^.phh")
 async def phh(event):
-    if event.from_id == None:
+    if event.from_id is None:
         return
-
-    chat_id = event.chat_id
 
     fetch = get(
         "https://api.github.com/repos/phhusson/treble_experimentations/releases/latest"
