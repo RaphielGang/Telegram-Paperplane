@@ -156,18 +156,18 @@ def grp_exclude(force_exclude=False):
         async def wrapper(check):
             exclude = await get_exclude(check.chat_id)
             if exclude is not None:
+                LOGS.info(func)
                 if force_exclude:
-                    LOGS.info("EXCLUDED! force_exclude: True")
+                    LOGS.info("EXCLUDED! force_exclude is True")
                     return
 
-                if exclude['excl_type'] == 1:  # all
-                    LOGS.info("EXCLUDED! exclude['excl_type'] == 1")
+                if exclude['excl_type'] == 2:  # all
+                    LOGS.info("EXCLUDED! type=2")
                     return
 
-                if exclude[
-                        'excl_type'] == 0 and check.out is False and func:  # in
+                if exclude['excl_type'] == 1 and check.out is False:  # in
                     LOGS.info(
-                        "EXCLUDED! exclude['excl_type'] == 0 and check.out is False"
+                        "EXCLUDED! type=1 and check.out is False"
                     )
                     return
 

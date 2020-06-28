@@ -25,19 +25,28 @@ async def exclude_grp(excl):
         chat_id = excl.chat_id
 
     ###### Exclude types:
-    ### 0: Blocks incoming events only [default] (also force_exclude events)
-    ### 1: Blocks every event (both incoming and outgoing)
+    ### 0: No exclude [default]
+    ### 1: Block incoming (and force_exclude) events only [default when cmd triggered]
+    ### 2: Block every event (both incoming and outgoing)
     if not exclude_type or exclude_type.lower() == 'in':
-        exclude_type_num = 0
+        exclude_type_num = 1
         exclude_type = 'in'
     if exclude_type == 'all':
-        exclude_type_num = 1
+        exclude_type_num = 2
 
     await add_exclude_group(chat_id, exclude_type_num)
 
     await excl.edit(
         f"`This chat (ID: {chat_id}, Exclude type: {exclude_type}) has been added to Paperplane Exclude!`"
     )
+
+    if BOTLOG:
+        await excl.client.send_message(
+            BOTLOG_CHATID,
+            "#EXCLUDE\n"
+            f"Chat ID: {chat_id}\n"
+            f"Exclude type: {exclude_type}\n"
+        )
     return
 
 
@@ -57,6 +66,14 @@ async def unexclude_grp(excl):
     await excl.edit(
         f"`This chat (ID: {chat_id}) has been removed from Paperplane Exclude!`"
     )
+
+    if BOTLOG:
+        await excl.client.send_message(
+            BOTLOG_CHATID,
+            "#UNEXCLUDE\n"
+            f"Chat ID: {chat_id}\n"
+        )
+
     return
 
 
@@ -71,17 +88,19 @@ async def listexclude_grp(excl):
 
     resp = ""
     for item in excl_list:
-        if item['excl_type'] == 0:
+        if item['excl_type'] == 1:
             excl_type = 'in'
-        else:
+        elif item['excl_type'] == 2:
             excl_type = 'all'
+        else:
+            continue
 
         resp += f"- Chat ID: `{item['chatid']}`, Exclude type: `{excl_type}`\n"
 
     if resp != "":
-        resp = f"`Here is the list of chats in Paperplane Exclude:`\n\n{resp}"
+        resp = f"`Here is the list of the excluded chats in Paperplane Exclude:`\n\n{resp}"
     else:
-        resp = f"`There are no chats in Paperplane Exclude.`"
+        resp = f"`There are no excluded chats in Paperplane Exclude.`"
 
     await excl.edit(resp)
     return
@@ -90,22 +109,22 @@ async def listexclude_grp(excl):
 CMD_HELP.update({
     "paperplane exclude": [
         'Paperplane Exclude',
-        "PAPERPLANE EXCLUDE IS CURRENTLY BETA, and some features MAY NOT WORK PROPERLY. "
-        "We are not responsible for any bugs found in the module.\n"
+        "PAPERPLANE EXCLUDE IS CURRENTLY IN BETA, and some features MAY NOT WORK PROPERLY. "
+        "Paperplane is not responsible for anything happening because of the bugs.\n\n"
         " - `.exclude [chatid] (in|all)`: Exclude this (or the specified) group from the Paperplane event handler. "
-        "This means that Paperplane will behave restricted in that group, by not responding to incoming "
-        "triggers (such as AFK, filters, notes...) and/or your commands (such as .alive).\n"
+        "This means that Paperplane will work restricted in that group, by not responding to incoming "
+        "triggers (such as mention while AFK, filters, notes...) and/or your commands (such as .alive).\n"
         " - `.unexclude [chatid]`: Unexclude this (or the specified) group from the Paperplane event handler. Paperplane "
-        "will behave like normally on that group after this.\n"
-        " - `.listexclude`: Lists every excluded chat, (Chat ID and exclude type). \n\n"
+        "will work normally in that group after this.\n"
+        " - `.listexclude`: Lists every excluded chat (Chat ID and exclude type). \n\n"
         "Exclude types:\n"
         " - `in`: This will exclude all incoming message, and will only allow outgoing messages. "
         "It means that you will be able to execute commands yourself, but other people won't be "
-        "able to trigger Papepplane with notes, filters and mentioning while AFK. Also, AFK module "
+        "able to trigger Paperplane with notes, filters and mentioning while AFK. Also, AFK module "
         "won't un-AFK you when you send a message.\n"
-        " - `all`: This will exclude *all* events, meaning that everything excluded by `in` plus "
-        "you won't be able to execute commands. Paperplane will pretend not to exist when this option "
-        "is set.\n"
+        " - `all`: This will exclude **all** events, meaning that everything excluded by `in` plus "
+        "you won't be able to execute commands. Paperplane will pretend not to exist on that group when "
+        "this option is set.\n\n"
         "`P.S.: The .exclude and .unexclude commands will still work even if that chat is excluded.`"
     ]
 })
