@@ -28,7 +28,7 @@ It has since evolved, becoming extremely modular and simple to use.
 
 ## How do I use it?
 
-For configuring Paperplane, you can checkout our [Wiki](https://wiki.raphielgang.org). Please, before asking us in our groups,
+For configuring Paperplane, you can checkout our [Wiki](https://wiki.raphielgang.org/#/paperplane/getting-started). Please, before asking us in our groups,
 make sure you have followed the Wiki and all the steps required.
 
 Deploy Paperplane to Heroku:
