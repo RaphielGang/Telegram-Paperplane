@@ -34,28 +34,34 @@ LOGS = getLogger(__name__)
 
 if version_info[0] < 3 or version_info[1] < 6:
     LOGS.error("You MUST have a python version of at least 3.6."
-               " Multiple features depend on this. Bot quitting.")
+               " Multiple features depend on this. Halting!")
     quit(1)
 
 # Check if the config was edited by using the already used variable
 CONFIG_CHECK = os.environ.get(
-    "___________PLOX_______REMOVE_____THIS_____LINE__________", None)
+    "___________PLOX_______REMOVE_____THIS_____LINE__________") or None
 
 if CONFIG_CHECK:
     LOGS.error("Please remove the line mentioned in the first \
-         hashtag from the config.env file")
+         hashtag from the config.env file. Halting!")
     quit(1)
 
-API_KEY = os.environ.get("API_KEY", None)
+API_KEY = os.environ.get("API_KEY") or None
+if not API_KEY:
+    LOGS.error("API Key is not set! Check your config.env. Halting!")
+    quit(1)
 
-API_HASH = os.environ.get("API_HASH", None)
+API_HASH = os.environ.get("API_HASH") or None
+if not API_HASH:
+    LOGS.error("API Hash is not set! Check your config.env. Halting!")
+    quit(1)
 
-STRING_SESSION = os.environ.get("STRING_SESSION", None)
+STRING_SESSION = os.environ.get("STRING_SESSION") or None
 
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 OPEN_WEATHER_MAP_DEFCITY = os.environ.get("OPEN_WEATHER_MAP_DEFCITY", None)
 
-BOTLOG = sb(os.environ.get("BOTLOG", "False"))
+BOTLOG = (os.environ.get("BOTLOG") == 'True')
 
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", None)
 GITHUB_PASSWORD = os.environ.get("GITHUB_PASSWORD", None)
@@ -71,10 +77,7 @@ UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL",
 
 Q_API_TOKEN = os.environ.get("Q_API_TOKEN", None)
 
-SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
-                                             None)
-
-WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
+SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY") or None
 
 SPAMWATCH_API_KEY = os.environ.get("SPAMWATCH_API_KEY", None)
 if SPAMWATCH_API_KEY:
@@ -85,13 +88,13 @@ else:
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
 
-BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
-DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
+BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
+DEFAULT_BIO = os.environ.get("DEFAULT_BIO") or None
 
-LASTFM_API = os.environ.get("LASTFM_API", None)
-LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
-LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
-LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
+LASTFM_API = os.environ.get("LASTFM_API") or None
+LASTFM_SECRET = os.environ.get("LASTFM_SECRET") or None
+LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME") or None
+LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD") or None
 LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
 if not LASTFM_USERNAME == "None":
     lastfm = LastFMNetwork(api_key=LASTFM_API,
@@ -126,88 +129,15 @@ with bot:
     except Exception as e:
         LOGS.error("BOTLOG_CHATID environment variable isn't a "
                    "valid entity. Check your config.env file.")
-        print(e)
         quit(1)
 
+
 # Global Variables
-VERSION = "2.0-B"
+VERSION = "2.2"
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}
 LASTMSG = {}
-ENABLE_KILLME = True
 CMD_HELP = {}
 ISAFK = False
 AFKREASON = None
-ZALG_LIST = [[
-    "̖",
-    " ̗",
-    " ̘",
-    " ̙",
-    " ̜",
-    " ̝",
-    " ̞",
-    " ̟",
-    " ̠",
-    " ̤",
-    " ̥",
-    " ̦",
-    " ̩",
-    " ̪",
-    " ̫",
-    " ̬",
-    " ̭",
-    " ̮",
-    " ̯",
-    " ̰",
-    " ̱",
-    " ̲",
-    " ̳",
-    " ̹",
-    " ̺",
-    " ̻",
-    " ̼",
-    " ͅ",
-    " ͇",
-    " ͈",
-    " ͉",
-    " ͍",
-    " ͎",
-    " ͓",
-    " ͔",
-    " ͕",
-    " ͖",
-    " ͙",
-    " ͚",
-    " ",
-],
-    [
-        " ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗",
-        " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌",
-        " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ",
-        " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ",
-        " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"
-    ],
-    [
-        " ̕",
-        " ̛",
-        " ̀",
-        " ́",
-        " ͘",
-        " ̡",
-        " ̢",
-        " ̧",
-        " ̨",
-        " ̴",
-        " ̵",
-        " ̶",
-        " ͜",
-        " ͝",
-        " ͞",
-        " ͟",
-        " ͠",
-        " ͢",
-        " ̸",
-        " ̷",
-        " ͡",
-    ]]

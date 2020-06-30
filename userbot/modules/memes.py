@@ -15,10 +15,8 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from cowpy import cow
-
 from random import choice, getrandbits, randint
-
-from userbot import CMD_HELP, ZALG_LIST
+from userbot import CMD_HELP
 from userbot.events import register
 
 # ================= CONSTANT =================
@@ -362,6 +360,79 @@ RUNS_STR = [
     "Are the kids still chasing me?",
     "Running a marathon...there's an app for that.",
 ]
+
+ZALG_LIST = [[
+    "̖",
+    " ̗",
+    " ̘",
+    " ̙",
+    " ̜",
+    " ̝",
+    " ̞",
+    " ̟",
+    " ̠",
+    " ̤",
+    " ̥",
+    " ̦",
+    " ̩",
+    " ̪",
+    " ̫",
+    " ̬",
+    " ̭",
+    " ̮",
+    " ̯",
+    " ̰",
+    " ̱",
+    " ̲",
+    " ̳",
+    " ̹",
+    " ̺",
+    " ̻",
+    " ̼",
+    " ͅ",
+    " ͇",
+    " ͈",
+    " ͉",
+    " ͍",
+    " ͎",
+    " ͓",
+    " ͔",
+    " ͕",
+    " ͖",
+    " ͙",
+    " ͚",
+    " ",
+],
+[
+    " ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗",
+    " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌",
+    " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ",
+    " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ",
+    " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"
+],
+[
+    " ̕",
+    " ̛",
+    " ̀",
+    " ́",
+    " ͘",
+    " ̡",
+    " ̢",
+    " ̧",
+    " ̨",
+    " ̴",
+    " ̵",
+    " ̶",
+    " ͜",
+    " ͝",
+    " ͞",
+    " ͟",
+    " ͠",
+    " ͢",
+    " ̸",
+    " ̷",
+    " ͡",
+]]
 # ===========================================
 
 
