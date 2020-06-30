@@ -11,10 +11,11 @@ from subprocess import run as runapp
 import pybase64
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern="^.hash (.*)")
+@grp_exclude()
 async def gethash(hash_q):
     """ For .hash command, find the md5,
         sha1, sha256, sha512 of the string. """
@@ -48,6 +49,7 @@ async def gethash(hash_q):
 
 
 @register(outgoing=True, pattern="^.base64 (en|de) (.*)")
+@grp_exclude()
 async def endecrypt(query):
     """ For .base64 command, find the base64 encoding of the given string. """
     if query.pattern_match.group(1) == "en":
@@ -61,7 +63,11 @@ async def endecrypt(query):
                                validate=True))[2:]
         await query.reply("Decoded: `" + lething[:-1] + "`")
 
-CMD_HELP.update({"hash": ['Hash',
-    " - `.base64 <str>`: Find the base64 encoding of the given string.\n"
-    " - `.hash <str>`: Find the md5, sha1, sha256, sha512 of the string when written into a txt file.\n"]
+
+CMD_HELP.update({
+    "hash": [
+        'Hash',
+        " - `.base64 <str>`: Find the base64 encoding of the given string.\n"
+        " - `.hash <str>`: Find the md5, sha1, sha256, sha512 of the string when written into a txt file.\n"
+    ]
 })

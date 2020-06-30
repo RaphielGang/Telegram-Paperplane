@@ -12,10 +12,11 @@ import speedtest
 from telethon import functions
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern="^.speed$")
+@grp_exclude()
 async def speedtst(spd):
     """ For .speed command, use SpeedTest to check server speeds. """
     await spd.edit("`Running speed test . . .`")
@@ -55,6 +56,7 @@ def speed_convert(size):
 
 
 @register(outgoing=True, pattern="^.nearestdc$")
+@grp_exclude()
 async def neardc(event):
     """ For .nearestdc command, get the nearest datacenter information. """
     result = await event.client(functions.help.GetNearestDcRequest())
@@ -64,6 +66,7 @@ async def neardc(event):
 
 
 @register(outgoing=True, pattern="^.pingme$")
+@grp_exclude()
 async def pingme(pong):
     """ FOr .pingme command, ping the userbot from any chat.  """
     start = datetime.now()
@@ -73,8 +76,10 @@ async def pingme(pong):
     await pong.edit("`Pong!\n%sms`" % (duration))
 
 
-CMD_HELP.update({"www": ["WWW",
-    " - `.speed`: Conduct a SpeedTest.net and show the results.\n"
-    " - `.nearestdc`: Find the nearest datacenter from your server.\n"
-    " - `.pingme`: Show how long it takes to ping Paperplane.\n"]
+CMD_HELP.update({
+    "www": [
+        "WWW", " - `.speed`: Conduct a SpeedTest.net and show the results.\n"
+        " - `.nearestdc`: Find the nearest datacenter from your server.\n"
+        " - `.pingme`: Show how long it takes to ping Paperplane.\n"
+    ]
 })

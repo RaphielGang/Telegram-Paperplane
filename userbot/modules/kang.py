@@ -13,13 +13,14 @@ from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import CMD_HELP, bot
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
 A pack can't have more than 120 stickers at the moment."
 
 
 @register(outgoing=True, pattern="^.kang")
+@grp_exclude()
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
     user = await bot.get_me()
@@ -38,12 +39,12 @@ async def kang(args):
         elif "image" in message.media.document.mime_type.split('/'):
             photo = io.BytesIO()
             await bot.download_file(message.media.document, photo)
-            if (DocumentAttributeFilename(file_name='sticker.webp')
-                    in message.media.document.attributes):
+            if (DocumentAttributeFilename(file_name='sticker.webp') in
+                    message.media.document.attributes):
                 emoji = message.media.document.attributes[1].alt
                 emojibypass = True
-        elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs')
-              in message.media.document.attributes):
+        elif (DocumentAttributeFilename(file_name='AnimatedSticker.tgs') in
+              message.media.document.attributes):
             emoji = message.media.document.attributes[0].alt
             emojibypass = True
             is_anim = True
@@ -234,10 +235,13 @@ async def resize_photo(photo):
 
     return image
 
-CMD_HELP.update({"kang": ["Kang",
-    " - `.kang <emoji> <number>`: Reply .kang to a sticker or an image to kang "
-    "it to your Paperplane pack.\n"
-    "If emojis are sent, they will be used as the emojis for the sticker.\n"
-    "If a number is sent, the emoji will be saved in the pack corresponding to that number."]
-})
 
+CMD_HELP.update({
+    "kang": [
+        "Kang",
+        " - `.kang <emoji> <number>`: Reply .kang to a sticker or an image to kang "
+        "it to your Paperplane pack.\n"
+        "If emojis are sent, they will be used as the emojis for the sticker.\n"
+        "If a number is sent, the emoji will be saved in the pack corresponding to that number."
+    ]
+})

@@ -7,10 +7,11 @@
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, is_mongo_alive,
                      is_redis_alive)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern="^.unmutechat$")
+@grp_exclude()
 async def unmute_chat(unm_e):
     """ For .unmutechat command, unmute a muted chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -21,6 +22,7 @@ async def unmute_chat(unm_e):
 
 
 @register(outgoing=True, pattern="^.mutechat$")
+@grp_exclude()
 async def mute_chat(mute_e):
     """ For .mutechat command, mute any chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -36,6 +38,7 @@ async def mute_chat(mute_e):
 
 
 @register(incoming=True, disable_errors=True)
+@grp_exclude()
 async def keep_read(message):
     """ The mute logic. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -47,7 +50,9 @@ async def keep_read(message):
                 await message.client.send_read_acknowledge(message.chat_id)
 
 
-CMD_HELP.update({"muting": ['Muting',
-    " - `.unmutechat`: Unmute a muted chat.\n"
-    " - `.mutechat`: Mute any chat.\n"]
+CMD_HELP.update({
+    "muting": [
+        'Muting', " - `.unmutechat`: Unmute a muted chat.\n"
+        " - `.mutechat`: Mute any chat.\n"
+    ]
 })

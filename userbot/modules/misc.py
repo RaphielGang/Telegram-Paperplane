@@ -12,10 +12,11 @@ from random import randint
 from time import sleep
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern="^.random")
+@grp_exclude()
 async def randomise(items):
     """ For .random command, get a random item from the list of items. """
     itemo = (items.text[8:]).split()
@@ -31,6 +32,7 @@ async def randomise(items):
 
 
 @register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
+@grp_exclude()
 async def sleepybot(time):
     """ For .sleep command, let the userbot snooze for a few second. """
     if " " not in time.pattern_match.group(1):
@@ -48,6 +50,7 @@ async def sleepybot(time):
 
 
 @register(outgoing=True, pattern="^.shutdown$")
+@grp_exclude()
 async def killdabot(event):
     """ For .shutdown command, shut the bot down."""
     await event.edit("`Goodbye *Windows XP shutdown sound*....`")
@@ -58,6 +61,7 @@ async def killdabot(event):
 
 
 @register(outgoing=True, pattern="^.restart$")
+@grp_exclude()
 async def knocksomesense(event):
     await event.edit("`Hold tight! I just need a second to be back up....`")
     if BOTLOG:
@@ -71,22 +75,27 @@ async def knocksomesense(event):
 
 
 @register(outgoing=True, pattern="^.support$")
+@grp_exclude()
 async def bot_support(wannahelp):
     """ For .support command, just returns the group link. """
     await wannahelp.edit("Group: @tgpaperplane")
 
 
 @register(outgoing=True, pattern="^.repo$")
+@grp_exclude()
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
     await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
 
 
-CMD_HELP.update({"misc": ["Misc",
-    " - `.random <item1> <item2> ... <itemN>`: Get a random item from the list of items.\n"
-    " - `.sleep <secs>`: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
-    " - `.shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
-    "hear Windows XP shutdown sound... but you don't.\n"
-    " - `.support`: If you need more help, use this command.\n"
-    " - `.repo`: Get the link of the source code of Paperplane in GitHub.\n"]
+CMD_HELP.update({
+    "misc": [
+        "Misc",
+        " - `.random <item1> <item2> ... <itemN>`: Get a random item from the list of items.\n"
+        " - `.sleep <secs>`: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
+        " - `.shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
+        "hear Windows XP shutdown sound... but you don't.\n"
+        " - `.support`: If you need more help, use this command.\n"
+        " - `.repo`: Get the link of the source code of Paperplane in GitHub.\n"
+    ]
 })

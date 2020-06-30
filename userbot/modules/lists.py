@@ -9,7 +9,7 @@ import re
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
                      is_redis_alive)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (add_list, delete_list, get_list,
                                       get_lists, set_list)
 
@@ -25,6 +25,7 @@ LIST_HEADER = "[Paperplane-List] List **{}({})**\n\n"
 
 
 @register(outgoing=True, pattern="^.lists$")
+@grp_exclude()
 async def lists_active(event):
     """ For .lists command, list all of the lists saved in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -45,6 +46,7 @@ async def lists_active(event):
 
 
 @register(outgoing=True, pattern=r"^.dellist ?(\w*)")
+@grp_exclude()
 async def removelists(event):
     """ For .dellist command, delete list with the given name."""
     if not is_mongo_alive() or not is_redis_alive():
@@ -80,6 +82,7 @@ async def removelists(event):
 
 
 @register(outgoing=True, pattern=r"^.new(g)?list (\w*)")
+@grp_exclude()
 async def addlist(event):
     """ For .new(g)list command, saves lists in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -107,6 +110,7 @@ async def addlist(event):
 
 
 @register(outgoing=True, pattern=r"^.addlistitems? ?(\w*)\n((.|\n*)*)")
+@grp_exclude()
 async def add_list_items(event):
     """ For .addlistitems command, add item(s) to a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -158,6 +162,7 @@ async def add_list_items(event):
 
 
 @register(outgoing=True, pattern=r"^.editlistitem ?(\w*)? ([0-9]+) (.*)")
+@grp_exclude()
 async def edit_list_item(event):
     """ For .editlistitem command, edit an individual item on a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -201,6 +206,7 @@ async def edit_list_item(event):
 
 
 @register(outgoing=True, pattern=r"^.rmlistitems? ?(\w*)? ([0-9 ]+)")
+@grp_exclude()
 async def rmlistitems(event):
     """ For .rmlistitem command, remove an item from the list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -233,7 +239,7 @@ async def rmlistitems(event):
     _list = await get_list(event.chat_id, listname)
 
     try:
-        for elem in sorted(unwanted_indexes, reverse = True):
+        for elem in sorted(unwanted_indexes, reverse=True):
             del _list['items'][elem - 1]
     except TypeError:
         await event.edit(LIST_NOT_FOUND.format('listname'))
@@ -255,10 +261,12 @@ Use` ${} `to get the list.`"
         listat = "global storage" if _list['chat_id'] else str(event.chat_id)
         await event.client.send_message(
             BOTLOG_CHATID,
-            f"Removed item(s) {str(unwanted_indexes)} from {listname} in {listat}")
+            f"Removed item(s) {str(unwanted_indexes)} from {listname} in {listat}"
+        )
 
 
 @register(outgoing=True, pattern=r"^.setlist ?(\w*)? (global|local)")
+@grp_exclude()
 async def setliststate(event):
     """ For .setlist command, changes the state of a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -307,6 +315,7 @@ async def setliststate(event):
           disable_edited=True,
           ignore_unsafe=True,
           disable_errors=True)
+@grp_exclude()
 async def lists_logic(event):
     """ Lists logic. """
     try:
@@ -339,6 +348,7 @@ async def lists_logic(event):
 
 
 @register(pattern=r"^.getlist ?(\w*)?")
+@grp_exclude()
 async def getlist_logic(event):
     """ For .getlist, get the list by the name. """
     if not (await event.get_sender()).bot:
@@ -378,25 +388,27 @@ async def getlist_logic(event):
             await event.edit(f"`List {listname} not found!`")
 
 
-CMD_HELP.update({"lists": ["Lists",
-    " - `.lists`: Get all of the lists (both local and global).\n"
-    " - `$listname`: Get the list called 'listname'.\n"
-    " - `.getlist <listname>`: Same as $listname.\n"
-    " - `.newlist <listname> <items>`: Creates a local list called 'listname' and adds items to it. "
-    "Separate items with a newline. Local lists are only accessible from a specific chat.\n"
-    " - `.newglist <listname> <items>`: Creates a global list called 'listname' and adds items to it. "
-    "Separate items with a newline. Global lists are accessible from every chat you are in.\n"
-    " - `.dellist <listname>`: Deletes the list called 'listname'.\n"
-    " - `.addlistitem(s) <listname> <items>`: Add new items to the list called 'listname'. "
-    "Separate items with a newline. The first items should start from a newline.\n"
-    " - `.rmlistitem(s) <listname> <indexes>`: Remove items accompanying the indexes from the list called 'listname'. "
-    "Indexes are the numbers which the item is on the list. You can remove multiple items at once from the list.\n"
-    " - `.editlistitem <listname> <item_number> <new_content>`: Edit item item_number in listname, changing the "
-    "content to new_content.\n"
-    " - `.setlist <listname> <local|global>`: Change the status of a list to local (accessible only from the current chat) "
-    "or global (accessible from every chat you are in.).\n\n"
-    "By replying to a Paperplane List message(identified by "
-    "\n'[Paperplane-List]' in the beginning of a userbot message), "
-    "\nyou can omit <listname> from all commands (except $<listname>)."
-    "\nPaperplane will recognize the list from the replied message."]
+CMD_HELP.update({
+    "lists": [
+        "Lists", " - `.lists`: Get all of the lists (both local and global).\n"
+        " - `$listname`: Get the list called 'listname'.\n"
+        " - `.getlist <listname>`: Same as $listname.\n"
+        " - `.newlist <listname> <items>`: Creates a local list called 'listname' and adds items to it. "
+        "Separate items with a newline. Local lists are only accessible from a specific chat.\n"
+        " - `.newglist <listname> <items>`: Creates a global list called 'listname' and adds items to it. "
+        "Separate items with a newline. Global lists are accessible from every chat you are in.\n"
+        " - `.dellist <listname>`: Deletes the list called 'listname'.\n"
+        " - `.addlistitem(s) <listname> <items>`: Add new items to the list called 'listname'. "
+        "Separate items with a newline. The first items should start from a newline.\n"
+        " - `.rmlistitem(s) <listname> <indexes>`: Remove items accompanying the indexes from the list called 'listname'. "
+        "Indexes are the numbers which the item is on the list. You can remove multiple items at once from the list.\n"
+        " - `.editlistitem <listname> <item_number> <new_content>`: Edit item item_number in listname, changing the "
+        "content to new_content.\n"
+        " - `.setlist <listname> <local|global>`: Change the status of a list to local (accessible only from the current chat) "
+        "or global (accessible from every chat you are in.).\n\n"
+        "By replying to a Paperplane List message(identified by "
+        "\n'[Paperplane-List]' in the beginning of a userbot message), "
+        "\nyou can omit <listname> from all commands (except $<listname>)."
+        "\nPaperplane will recognize the list from the replied message."
+    ]
 })

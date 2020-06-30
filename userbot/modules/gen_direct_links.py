@@ -16,10 +16,11 @@ from bs4 import BeautifulSoup
 from humanize import naturalsize
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern=r"^.direct(?: |$)([\s\S]*)")
+@grp_exclude()
 async def direct_link_generator(request):
     """ direct links generator """
     await request.edit("`Processing...`")
@@ -348,9 +349,12 @@ def useragent():
     return user_agent.text
 
 
-CMD_HELP.update({"direct links": ['Direct Links',
-    " - `.direct <url>`: Generate direct download link from supported URL(s)\n"
-    "Supported websites:\n"
-    "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - "
-    "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"]
+CMD_HELP.update({
+    "direct links": [
+        'Direct Links',
+        " - `.direct <url>`: Generate direct download link from supported URL(s)\n"
+        "Supported websites:\n"
+        "`Google Drive - MEGA.nz - Cloud Mail - Yandex.Disk - AFH - "
+        "ZippyShare - MediaFire - SourceForge - OSDN - GitHub`"
+    ]
 })

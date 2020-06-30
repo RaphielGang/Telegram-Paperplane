@@ -28,7 +28,7 @@ from pydrive2.drive import GoogleDrive
 from telethon.tl.types import DocumentAttributeVideo, MessageMediaPhoto
 
 from userbot import CMD_HELP, GDRIVE_FOLDER, LOGS
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
@@ -159,6 +159,7 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
 
 
 @register(pattern=r"^.mirror(?: |$)([\s\S]*)", outgoing=True)
+@grp_exclude()
 async def gdrive_mirror(request):
     """ Download a file and upload to Google Drive """
     message = request.pattern_match.group(1)
@@ -194,6 +195,7 @@ async def gdrive_mirror(request):
 
 
 @register(pattern=r"^.drive(?: |$)(\S*.?\/*.?\.?[A-Za-z0-9]*)", outgoing=True)
+@grp_exclude()
 async def gdrive(request):
     """ Upload files from server to Google Drive """
     path = request.pattern_match.group(1)
@@ -210,6 +212,7 @@ async def gdrive(request):
 
 
 @register(pattern=r"^.download(?: |$)(.*)", outgoing=True)
+@grp_exclude()
 async def download(target_file):
     """ For .download command, download files to the userbot's server. """
     if target_file.fwd_from:
@@ -238,6 +241,7 @@ async def download(target_file):
 
 
 @register(pattern=r"^.uploadir (.*)", outgoing=True)
+@grp_exclude()
 async def uploadir(udir_event):
     """ For .uploadir command, allows you to upload
      everything from a folder in the server"""
@@ -313,6 +317,7 @@ async def uploadir(udir_event):
 
 
 @register(pattern=r"^.upload (.*)", outgoing=True)
+@grp_exclude()
 async def upload(u_event):
     """ For .upload command, allows you to \
     upload a file from the userbot's server """
@@ -396,6 +401,7 @@ def extract_w_h(file):
 
 
 @register(pattern=r"^.uploadas(stream|vn|all) (.*)", outgoing=True)
+@grp_exclude()
 async def uploadas(uas_event):
     """ For .uploadas command, allows you \
     to specify some arguments for upload. """
@@ -487,10 +493,14 @@ async def uploadas(uas_event):
     else:
         await uas_event.edit("404: File Not Found")
 
-CMD_HELP.update({"download": ['Download',
-    " - `.download [in reply to TG file] or .download <link> | <filename>`: "
-    "Download a file from telegram or link to the server.\n"
-    " - `.upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n"
-    " - `.drive <filename>`: Upload a locally(where Paperplane runs) stored file to GDrive.\n"
-    " - `.mirror [in reply to TG file] or .mirror <link> | <filename>`: Mirror a file to Google Drive.\n"]
+
+CMD_HELP.update({
+    "download": [
+        'Download',
+        " - `.download [in reply to TG file] or .download <link> | <filename>`: "
+        "Download a file from telegram or link to the server.\n"
+        " - `.upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n"
+        " - `.drive <filename>`: Upload a locally(where Paperplane runs) stored file to GDrive.\n"
+        " - `.mirror [in reply to TG file] or .mirror <link> | <filename>`: Mirror a file to Google Drive.\n"
+    ]
 })

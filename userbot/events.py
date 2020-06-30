@@ -17,6 +17,7 @@ from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
 from userbot import bot, BOTLOG, BOTLOG_CHATID, LOGS
+from userbot.modules.dbhelper import get_exclude
 
 
 def register(**args):
@@ -48,7 +49,7 @@ def register(**args):
 
     if pattern:
         if not ignore_unsafe:
-            args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
+            args['pattern'] = args['pattern'].replace('^.', unsafe_pattern, 1)
 
     def decorator(func):
         async def wrapper(check):
@@ -78,11 +79,9 @@ def register(**args):
             except KeyboardInterrupt:
                 pass
             except BaseException as e:
-
-                # Check if we have to disable error logging.
+                LOGS.exception(e)  # Log the error in console
+                # Check if we have to disable error logging message.
                 if not disable_errors:
-                    LOGS.exception(e) # Log the error in console
-
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                     text = "**Sorry, I encountered a error!**\n"
@@ -146,6 +145,35 @@ def register(**args):
         if not disable_edited:
             bot.add_event_handler(wrapper, events.MessageEdited(**args))
         bot.add_event_handler(wrapper, events.NewMessage(**args))
+        return wrapper
+
+    return decorator
+
+
+def grp_exclude(force_exclude=False):
+    """ Check if the chat is excluded. """
+    def decorator(func):
+        async def wrapper(check):
+            exclude = await get_exclude(check.chat_id)
+            if exclude is not None:
+                LOGS.info(func)
+                if force_exclude:
+                    LOGS.info("EXCLUDED! force_exclude is True")
+                    return
+
+                if exclude['excl_type'] == 2:  # all
+                    LOGS.info("EXCLUDED! type=2")
+                    return
+
+                if exclude['excl_type'] == 1 and check.out is False:  # in
+                    LOGS.info(
+                        "EXCLUDED! type=1 and check.out is False"
+                    )
+                    return
+
+                LOGS.info("NOT EXCLUDED!")
+            await func(check)
+
         return wrapper
 
     return decorator

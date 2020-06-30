@@ -22,13 +22,14 @@ from wikipedia.exceptions import DisambiguationError, PageError
 from requests import get
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID, bot)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 # Default language to EN
 LANG = "en"
 
 
 @register(outgoing=True, pattern="^.img (.*)")
+@grp_exclude()
 async def img_sampler(event):
     """ For .img command, search and return images matching the query. """
     await event.edit("Processing...")
@@ -60,6 +61,7 @@ async def img_sampler(event):
 
 
 @register(outgoing=True, pattern=r"^.google(?: |$)(.*)")
+@grp_exclude()
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     textx = await q_event.get_reply_message()
@@ -99,6 +101,7 @@ async def gsearch(q_event):
 
 
 @register(outgoing=True, pattern=r"^.wiki (.*)")
+@grp_exclude()
 async def wiki(wiki_q):
     """ For .google command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
@@ -131,6 +134,7 @@ async def wiki(wiki_q):
 
 
 @register(outgoing=True, pattern="^.ud (.*)")
+@grp_exclude()
 async def urban_dict(ud_e):
     """ For .ud command, fetch content from Urban Dictionary. """
     await ud_e.edit("Processing...")
@@ -170,6 +174,7 @@ async def urban_dict(ud_e):
 
 
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
+@grp_exclude()
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
     textx = await query.get_reply_message()
@@ -212,6 +217,7 @@ async def text_to_speech(query):
 
 
 @register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)")
+@grp_exclude()
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     translator = Translator()
@@ -247,6 +253,7 @@ async def translateme(trans):
 
 
 @register(pattern="^.lang (.*)", outgoing=True)
+@grp_exclude()
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
     global LANG
@@ -261,7 +268,9 @@ def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return get_emoji_regexp().sub(u'', inputString)
 
+
 @register(outgoing=True, pattern=r'^.wolfram (.*)')
+@grp_exclude()
 async def wolfram(wvent):
     """ Wolfram Alpha API """
     if WOLFRAM_ID is None:
@@ -277,15 +286,20 @@ async def wolfram(wvent):
     res = get(server)
     await wvent.edit(f'**{i}**\n\n' + res.text, parse_mode='Markdown')
     if BOTLOG:
-        await wvent.client.send_message(BOTLOG_CHATID, f'.wolfram {i} was executed successfully')
+        await wvent.client.send_message(
+            BOTLOG_CHATID, f'.wolfram {i} was executed successfully')
 
-CMD_HELP.update({"scrapers": ['Scrapers',
-    " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
-    " - `.google <query>`: Search Google for query (argument or reply).\n"
-    " - `.wiki <query>`: Search Wikipedia for query.\n"
-    " - `.ud <query>`: Search on Urban Dictionary for query.\n"
-    " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
-    " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
-    " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
-    " - `.wolfram <query>: Get answers to questions using WolframAlpha Spoken Results API."]
+
+CMD_HELP.update({
+    "scrapers": [
+        'Scrapers',
+        " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
+        " - `.google <query>`: Search Google for query (argument or reply).\n"
+        " - `.wiki <query>`: Search Wikipedia for query.\n"
+        " - `.ud <query>`: Search on Urban Dictionary for query.\n"
+        " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
+        " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
+        " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
+        " - `.wolfram <query>: Get answers to questions using WolframAlpha Spoken Results API."
+    ]
 })

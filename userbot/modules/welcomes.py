@@ -13,9 +13,11 @@ from telethon.tl.types import ChannelParticipantsAdmins, Message
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
 from userbot.modules.admin import KICK_RIGHTS
+from userbot.events import grp_exclude
 
 
 @bot.on(ChatAction)
+@grp_exclude()
 async def welcome_mute(welcm):
     ''' Ban a recently joined user if it matches the spammer checking algorithm.'''
     try:

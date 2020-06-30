@@ -15,7 +15,7 @@ from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from userbot import CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME, STRING_SESSION
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 async def gen_chlog(repo, diff):
@@ -34,6 +34,7 @@ async def is_off_br(br):
 
 
 @register(outgoing=True, pattern="^.update(?: |$)(.*)")
+@grp_exclude()
 async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"
     await ups.edit("`Checking for updates, please wait....`")
@@ -165,7 +166,10 @@ async def upstream(ups):
         exit()
 
 
-CMD_HELP.update({"updater": ['Updater',
-    " - `.update`: Check if the main repository has any updates and show changelog if so.\n"
-    " - `.update now`: Update Paperplane if there are any updates available."]
+CMD_HELP.update({
+    "updater": [
+        'Updater',
+        " - `.update`: Check if the main repository has any updates and show changelog if so.\n"
+        " - `.update now`: Update Paperplane if there are any updates available."
+    ]
 })

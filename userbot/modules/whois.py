@@ -14,12 +14,13 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 
 
 @register(pattern="^.whois(?: |$)(.*)", outgoing=True)
+@grp_exclude()
 async def who(event):
     """ For .whois command, get info about a user. """
     if event.fwd_from:
@@ -115,6 +116,9 @@ async def fetch_info(replied_user, event):
     return caption
 
 
-CMD_HELP.update({"whois": ['Whois',
-    " - `.whois <username>`: Get info about the target (argument or reply) user."]
+CMD_HELP.update({
+    "whois": [
+        'Whois',
+        " - `.whois <username>`: Get info about the target (argument or reply) user."
+    ]
 })

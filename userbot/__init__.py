@@ -36,49 +36,53 @@ LOGS = getLogger(__name__)
 
 if version_info[0] < 3 or version_info[1] < 6:
     LOGS.error("You MUST have a python version of at least 3.6."
-               " Multiple features depend on this. Bot quitting.")
+               " Multiple features depend on this. Halting!")
     quit(1)
 
 # Check if the config was edited by using the already used variable
 CONFIG_CHECK = os.environ.get(
-    "___________PLOX_______REMOVE_____THIS_____LINE__________", None)
+    "___________PLOX_______REMOVE_____THIS_____LINE__________") or None
 
 if CONFIG_CHECK:
     LOGS.error("Please remove the line mentioned in the first \
-         hashtag from the config.env file")
+         hashtag from the config.env file. Halting!")
     quit(1)
 
-API_KEY = os.environ.get("API_KEY", None)
+API_KEY = os.environ.get("API_KEY") or None
+if not API_KEY:
+    LOGS.error("API Key is not set! Check your config.env. Halting!")
+    quit(1)
 
-API_HASH = os.environ.get("API_HASH", None)
+API_HASH = os.environ.get("API_HASH") or None
+if not API_HASH:
+    LOGS.error("API Hash is not set! Check your config.env. Halting!")
+    quit(1)
 
-STRING_SESSION = os.environ.get("STRING_SESSION", None)
+STRING_SESSION = os.environ.get("STRING_SESSION") or None
 
-BOTLOG = sb(os.environ.get("BOTLOG", "False"))
+BOTLOG = (os.environ.get("BOTLOG") == 'True')
 
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID")) if BOTLOG else 0
 
-PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
+PM_AUTO_BAN = (os.environ.get("PM_AUTO_BAN") == 'True')
 
-MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+MONGO_DB_URI = os.environ.get("MONGO_DB_URI") or None
 
-SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
-                                             None)
+SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY") or None
 
-OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
-print(OPEN_WEATHER_MAP_APPID)
+OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID") or None
 
-WELCOME_MUTE = sb(os.environ.get("WELCOME_MUTE", "False"))
+WELCOME_MUTE = (os.environ.get("WELCOME_MUTE") == 'True')
 
-SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME", None)
-SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS", None)
-BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
-DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
+SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME") or None
+SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS") or None
+BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
+DEFAULT_BIO = os.environ.get("DEFAULT_BIO") or None
 
-LASTFM_API = os.environ.get("LASTFM_API", None)
-LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
-LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
-LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
+LASTFM_API = os.environ.get("LASTFM_API") or None
+LASTFM_SECRET = os.environ.get("LASTFM_SECRET") or None
+LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME") or None
+LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD") or None
 LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
 if not LASTFM_USERNAME == "None":
     lastfm = LastFMNetwork(api_key=LASTFM_API,
@@ -88,12 +92,12 @@ if not LASTFM_USERNAME == "None":
 else:
     lastfm = None
 
-GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER", None)
+GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER") or None
 
-HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY", None)
-HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME", None)
+HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY") or None
+HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME") or None
 
-WOLFRAM_ID = os.environ.get("WOLFRAM_ID", None)
+WOLFRAM_ID = os.environ.get("WOLFRAM_ID") or None
 
 # pylint: disable=invalid-name
 if STRING_SESSION:
@@ -110,7 +114,7 @@ async def check_botlog_chatid():
     if entity.default_banned_rights.send_messages:
         LOGS.error(
             "Your account doesn't have rights to send messages to BOTLOG_CHATID "
-            "group. Check if you typed the Chat ID correctly.")
+            "group. Check if you typed the Chat ID correctly. Halting!")
         quit(1)
 
 
@@ -119,7 +123,7 @@ with bot:
         bot.loop.run_until_complete(check_botlog_chatid())
     except:
         LOGS.error("BOTLOG_CHATID environment variable isn't a "
-                   "valid entity. Check your config.env file.")
+                   "valid entity. Check your config.env file. Halting!")
         quit(1)
 
 # Init Mongo
@@ -168,78 +172,5 @@ COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}
 LASTMSG = {}
-ENABLE_KILLME = True
 CMD_HELP = {}
 AFKREASON = "no reason"
-ZALG_LIST = [[
-    "̖",
-    " ̗",
-    " ̘",
-    " ̙",
-    " ̜",
-    " ̝",
-    " ̞",
-    " ̟",
-    " ̠",
-    " ̤",
-    " ̥",
-    " ̦",
-    " ̩",
-    " ̪",
-    " ̫",
-    " ̬",
-    " ̭",
-    " ̮",
-    " ̯",
-    " ̰",
-    " ̱",
-    " ̲",
-    " ̳",
-    " ̹",
-    " ̺",
-    " ̻",
-    " ̼",
-    " ͅ",
-    " ͇",
-    " ͈",
-    " ͉",
-    " ͍",
-    " ͎",
-    " ͓",
-    " ͔",
-    " ͕",
-    " ͖",
-    " ͙",
-    " ͚",
-    " ",
-],
-             [
-                 " ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗",
-                 " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌",
-                 " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ",
-                 " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ",
-                 " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"
-             ],
-             [
-                 " ̕",
-                 " ̛",
-                 " ̀",
-                 " ́",
-                 " ͘",
-                 " ̡",
-                 " ̢",
-                 " ̧",
-                 " ̨",
-                 " ̴",
-                 " ̵",
-                 " ̶",
-                 " ͜",
-                 " ͝",
-                 " ͞",
-                 " ͟",
-                 " ͠",
-                 " ͢",
-                 " ̸",
-                 " ̷",
-                 " ͡",
-             ]]

@@ -13,7 +13,7 @@ from telethon.tl.types import User as Userbot
 
 from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
                      LASTFM_USERNAME, bot, lastfm)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 # =================== CONSTANT ===================
 LFM_BIO_ENABLED = "```last.fm current music to bio is now enabled.```"
@@ -41,6 +41,7 @@ LastLog = False
 
 
 @register(outgoing=True, pattern="^.lastfm$")
+@grp_exclude()
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
     await lastFM.edit("Processing...")
@@ -173,6 +174,7 @@ async def get_curr_track(lfmbio):
 
 
 @register(outgoing=True, pattern=r"^.lastbio (\S*)")
+@grp_exclude()
 async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1)
     global LASTFMCHECK
@@ -197,6 +199,7 @@ async def lastbio(lfmbio):
 
 
 @register(outgoing=True, pattern=r"^.lastlog (\S*)")
+@grp_exclude()
 async def lastlog(lstlog):
     arg = lstlog.pattern_match.group(1)
     global LastLog
@@ -211,8 +214,11 @@ async def lastlog(lstlog):
         await lstlog.edit(LFM_LOG_ERR)
 
 
-CMD_HELP.update({"lastfm": ["LastFM",
-    " - `.lastfm`: Shows currently scrobbling track or most recent scrobbles if nothing is playing.\n"
-    " - `.lastbio <on/off>`: Enable/Disable last.fm bio updating.\n"
-    " - `.lastlog <on/off>`: Enable/Disable last.fm bio logging.\n"]
+CMD_HELP.update({
+    "lastfm": [
+        "LastFM",
+        " - `.lastfm`: Shows currently scrobbling track or most recent scrobbles if nothing is playing.\n"
+        " - `.lastbio <on/off>`: Enable/Disable last.fm bio updating.\n"
+        " - `.lastlog <on/off>`: Enable/Disable last.fm bio logging.\n"
+    ]
 })

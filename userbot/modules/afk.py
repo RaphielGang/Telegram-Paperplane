@@ -11,11 +11,12 @@ from telethon.events import StopPropagation
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_MSG, USERS,
                      is_redis_alive)
-from userbot.events import register
+from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import afk, afk_reason, is_afk, no_afk
 
 
-@register(incoming=True, disable_edited=True)
+@register(incoming=True, disable_edited=True, disable_errors=True)
+@grp_exclude()
 async def mention_afk(mention):
     """ This function takes care of notifying the
      people who mention you that you are AFK."""
@@ -48,6 +49,7 @@ async def mention_afk(mention):
 
 
 @register(incoming=True, disable_errors=True)
+@grp_exclude()
 async def afk_on_pm(afk_pm):
     global USERS
     global COUNT_MSG
@@ -77,6 +79,7 @@ async def afk_on_pm(afk_pm):
 
 
 @register(outgoing=True, disable_errors=True, pattern="^.afk")
+@grp_exclude()
 async def set_afk(setafk):
     if not is_redis_alive():
         await setafk.edit("`Database connections failing!`")
@@ -95,7 +98,8 @@ async def set_afk(setafk):
     raise StopPropagation
 
 
-@register(outgoing=True)
+@register(outgoing=True, disable_errors=True)
+@grp_exclude(force_exclude=True)
 async def type_afk_is_not_true(notafk):
     global COUNT_MSG
     global USERS
@@ -131,7 +135,10 @@ async def type_afk_is_not_true(notafk):
         USERS = {}
 
 
-CMD_HELP.update({"afk": ['AFK',
-    " - `.afk <reason> (optional)`: Sets your status as AFK. Responds to anyone who tags/PM's "
-    "you telling you are AFK. Switches off AFK when you type back anything."]
+CMD_HELP.update({
+    "afk": [
+        'AFK',
+        " - `.afk <reason> (optional)`: Sets your status as AFK. Responds to anyone who tags/PM's "
+        "you telling you are AFK. Switches off AFK when you type back anything."
+    ]
 })
