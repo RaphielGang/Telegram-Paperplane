@@ -9,7 +9,6 @@ from telethon.errors import AboutTooLongError
 from telethon.errors.rpcerrorlist import FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import User as Userbot
 
 from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
                      LASTFM_USERNAME, bot, lastfm)
