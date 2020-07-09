@@ -15,7 +15,6 @@ from pyDownload import Downloader
 from pylast import LastFMNetwork, md5
 from pymongo import MongoClient
 from redis import StrictRedis
-from requests import get
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 
