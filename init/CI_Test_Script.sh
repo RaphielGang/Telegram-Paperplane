@@ -47,10 +47,6 @@ tg_senderror() {
 }
 
 lint() {
-  if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
-    exit 0
-  fi
-
   RESULT=`yapf -d -r -p userbot`
 
   if [ ! -z "$RESULT" ]; then
@@ -59,26 +55,12 @@ lint() {
     tg_sendinfo "<code>Code doesn't have any lint issues.</code>"
   fi
 }
-tg_yay() {
-  if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
-
-      tg_sendinfo "<code>Compilation success! Checking for lint issues.</code>"
-      if ! yapf -d -r -p userbot; then
-        tg_sendinfo "<code>PR has lint problems.</code>"
-        exit 1
-      else
-        tg_sendinfo "<code>PR doesn't have any lint problems.</code>"
-        exit 0
-      fi
-   fi
-    tg_sendinfo "<code>Compilation success!</code>"
-    lint
-}
 
 # Fin Prober
 fin() {
     echo "Job completed successfully ($((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds)."
-    tg_yay
+    tg_sendinfo "<code>Compilation success!</code>"
+    lint
 }
 
 finerr() {

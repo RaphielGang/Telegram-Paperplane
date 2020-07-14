@@ -19,9 +19,8 @@ from search_engine_parser import GoogleSearch
 from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
-from requests import get
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID, bot)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID)
 from userbot.events import register, grp_exclude
 
 # Default language to EN

@@ -74,16 +74,11 @@ async def bot_ver(event):
             revout = str(stdout.decode().strip()) \
                 + str(stderr.decode().strip())
 
-            await event.edit("`Userbot Version: "
-                             f"{verout}"
-                             "` \n"
-                             "`Revision: "
-                             f"{revout}"
-                             "` \n"
-                             "`Tagged version: v1.0`")
+            await event.edit(f"`Paperplane Version: {verout}`\n"
+                             f"`Revision: {revout}`")
         else:
             await event.edit(
-                "Shame that you don't have Git, you're running v1.0 anyway!")
+                "Shame that you don't have git. Install git for this command to work.")
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
@@ -144,12 +139,11 @@ async def amireallyalive(alive):
     else:
         db = "Databases functioning normally!"
     await alive.edit("`"
-                     "Paperplane is alive! Your bot is running \n\n"
+                     "Paperplane is alive and running!\n\n"
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
                      f"Database status: {db}\n"
-                     f"Tagged bot version: v1.0"
                      "`")
 
 

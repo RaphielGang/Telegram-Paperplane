@@ -28,7 +28,6 @@ for module_name in ALL_MODULES:
 
 LOGS.info("Paperplane is alive! Test it by typing .alive on any chat."
           " Should you need assistance, head to https://t.me/tgpaperplane")
-LOGS.info("Your bot version is v1.0.")
 
 SEM_TEST = os.environ.get("SEMAPHORE", None)
 if SEM_TEST:
