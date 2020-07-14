@@ -28,7 +28,6 @@ PACK_DOESNT_EXIST = "  A <strong>Telegram</strong> user has created the <strong>
 
 
 @register(outgoing=True, pattern="^.kang($| )?((?![0-9]).+?)? ?([0-9]*)?")
-@grp_exclude()
 async def kang(event):
     """ Function for .kang command, create a sticker pack and add stickers. """
     await event.edit('`Kanging...`')
