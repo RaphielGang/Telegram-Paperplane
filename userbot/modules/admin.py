@@ -322,15 +322,14 @@ async def rm_deletedacc(show):
 
     if con != "clean":
         await show.edit("`Searching for zombie accounts...`")
-        async for user in show.client.iter_participants(show.chat_id,
-                                                        aggressive=True):
+        async for user in show.client.iter_participants(show.chat_id):
             if user.deleted:
                 del_u += 1
+                await sleep(1)
 
         if del_u > 0:
-            del_status = f"found **{del_u}** \
-                deleted account(s) in this group \
-            \nclean them by using .delusers clean"
+            del_status = f"Found **{del_u}** deleted account(s) in this group,\
+            \nclean them by using `.delusers clean`"
 
         await show.edit(del_status)
         return
