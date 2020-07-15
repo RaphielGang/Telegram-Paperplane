@@ -16,4 +16,4 @@ API_KEY = input("API_KEY: ")
 API_HASH = input("API_HASH: ")
 
 with TelegramClient(StringSession(), API_KEY, API_HASH) as client:
-    print("Session file 'userbot.session' has been generated successfully! Exiting."
+    print("Session file 'userbot.session' has been generated successfully! Exiting.")
