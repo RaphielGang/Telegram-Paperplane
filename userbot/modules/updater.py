@@ -134,8 +134,7 @@ async def upstream(ups):
 
         # Make a new commit with session and commit (if they exist), this is only temporary to move them to the Docker image
         # Allow empty commit if there is nothing to commit (string session + env vars)
-        repo.git.commit(
-            "-m 'Commit userbot.session and config.env' --allow-empty")
+        repo.git.commit("--allow-empty", "-m 'Commit userbot.session and config.env'")
 
         heroku_remote_url = heroku_app.git_url.replace(
             "https://", f"https://api:{HEROKU_APIKEY}@")
