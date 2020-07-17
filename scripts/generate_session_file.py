@@ -15,5 +15,5 @@ API_KEY is api_id and API_HASH is api_hash. Write them down below when prompted.
 API_KEY = input("API_KEY: ")
 API_HASH = input("API_HASH: ")
 
-with TelegramClient(StringSession(), API_KEY, API_HASH) as client:
-    print("Session file 'userbot.session' has been generated successfully! Exiting."
+with TelegramClient("userbot", API_KEY, API_HASH) as client:
+    print("Session file 'userbot.session' has been generated successfully! Exiting.")
