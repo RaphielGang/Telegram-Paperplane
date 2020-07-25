@@ -2,6 +2,7 @@
 
 [![Build](https://github.com/HitaloSama/PaperplaneMinimal/workflows/ErrorChecking/badge.svg?branch=master)](https://github.com/HitaloSama/PaperplaneMinimal/actions "Build") ![Contributors](https://img.shields.io/github/contributors/HitaloSama/PaperplaneMinimal?color=LightSlateGrey)  
 [![@PaperplaneMinimal](https://img.shields.io/badge/%F0%9F%92%AC%20Telegram-%40PaperplaneMinimal-greem.svg)](https://telegram.me/PaperplaneMinimal)
+[![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/HitaloSama/PaperplaneMinimal/?ref=repository-badge)
 
 ![logo](https://telegra.ph/file/73cf4c62b2c64f981961e.png)
 
