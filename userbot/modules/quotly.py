@@ -23,10 +23,6 @@ from io import BytesIO
 import requests
 import telethon
 from PIL import Image
-from telethon.tl.functions.account import UpdateNotifySettingsRequest
-from telethon.tl.types import (
-    DocumentAttributeFilename
-)
 
 from userbot import Q_API_TOKEN, CMD_HELP, bot
 from userbot.events import register
