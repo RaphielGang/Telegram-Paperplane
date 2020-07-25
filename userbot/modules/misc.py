@@ -8,7 +8,7 @@
 
 import sys
 
-from os import execl, environ, execle
+from os import environ, execle
 from random import randint
 from time import sleep
 

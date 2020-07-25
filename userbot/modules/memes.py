@@ -15,7 +15,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from cowpy import cow
-from random import choice, getrandbits, randint
+from random import choice
 from userbot import CMD_HELP
 from userbot.events import register
 

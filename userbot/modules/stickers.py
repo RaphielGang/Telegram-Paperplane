@@ -7,16 +7,14 @@
 
 import io
 import math
-import random
 
 import urllib.request
-from os import remove
 from PIL import Image
 
 from userbot import bot, CMD_HELP
 from userbot.events import register
 
-from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto, InputPeerNotifySettings
+from telethon.tl.types import InputPeerNotifySettings
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.types import InputStickerSetID
