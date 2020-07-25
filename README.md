@@ -1,5 +1,6 @@
 # Paperplane Minimal Project
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/651f0ed73d94478da6d783c480b60663)](https://app.codacy.com/manual/HitaloSama/PaperplaneMinimal?utm_source=github.com&utm_medium=referral&utm_content=HitaloSama/PaperplaneMinimal&utm_campaign=Badge_Grade_Dashboard)
 [![Build](https://github.com/HitaloSama/PaperplaneMinimal/workflows/ErrorChecking/badge.svg?branch=master)](https://github.com/HitaloSama/PaperplaneMinimal/actions "Build") ![Contributors](https://img.shields.io/github/contributors/HitaloSama/PaperplaneMinimal?color=LightSlateGrey)  
 [![@PaperplaneMinimal](https://img.shields.io/badge/%F0%9F%92%AC%20Telegram-%40PaperplaneMinimal-greem.svg)](https://telegram.me/PaperplaneMinimal)
 [![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/HitaloSama/PaperplaneMinimal/?ref=repository-badge)
