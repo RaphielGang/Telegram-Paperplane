@@ -52,7 +52,7 @@ if 1 == 1:
         "channel": "Channel"
     }
 
-    config = dict({"api_token": Q_API_TOKEN,
+    config = {"api_token": Q_API_TOKEN,
                    "api_url": "http://api.antiddos.systems",
                    "username_colors": ["#fb6169",
                                        "#faa357",
@@ -61,7 +61,7 @@ if 1 == 1:
                                        "#62d4e3",
                                        "#65bdf3",
                                        "#ff5694"],
-                   "default_username_color": "#b48bf2"})
+                   "default_username_color": "#b48bf2"}
 
     client = bot
 
