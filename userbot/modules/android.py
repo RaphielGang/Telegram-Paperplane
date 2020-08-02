@@ -300,9 +300,7 @@ async def bootleggers(event):
                 }
                 if baby and oh not in dontneedlist:
                     if oh in peaksmod:
-                        oh = peaksmod[oh]
-                    else:
-                        oh = oh.title()
+                        oh = peaksmod.get(oh, oh.title())
 
                     if oh == 'SourceForge folder':
                         reply_text += f"\n**{oh}:** [Here]({baby})\n"
