@@ -54,14 +54,18 @@ if 1 == 1:
 
     config = dict({"api_token": Q_API_TOKEN,
                    "api_url": "http://api.antiddos.systems",
-                   "username_colors": ["#fb6169", "#faa357", "#b48bf2", "#85de85",
-                                       "#62d4e3", "#65bdf3", "#ff5694"],
+                   "username_colors": ["#fb6169",
+                                       "#faa357",
+                                       "#b48bf2",
+                                       "#85de85",
+                                       "#62d4e3",
+                                       "#65bdf3",
+                                       "#ff5694"],
                    "default_username_color": "#b48bf2"})
 
     client = bot
 
-
-    @register(outgoing=True, pattern="^\.q$")
+    @register(outgoing=True, pattern=r"^\.q$")
     async def quotecmd(message):  # noqa: C901
         """Quote a message.
         Usage: .quote [template]
@@ -87,7 +91,8 @@ if 1 == 1:
                 try:
                     user = await client(telethon.tl.functions.channels.GetParticipantRequest(message.chat_id,
                                                                                              reply.from_id))
-                    if isinstance(user.participant, telethon.tl.types.ChannelParticipantCreator):
+                    if isinstance(user.participant,
+                                  telethon.tl.types.ChannelParticipantCreator):
                         admintitle = user.participant.rank or strings["creator"]
                     elif isinstance(user.participant, telethon.tl.types.ChannelParticipantAdmin):
                         admintitle = user.participant.rank or strings["admin"]
@@ -97,8 +102,13 @@ if 1 == 1:
             elif isinstance(message.to_id, telethon.tl.types.PeerChat):
                 chat = await client(telethon.tl.functions.messages.GetFullChatRequest(reply.to_id))
                 participants = chat.full_chat.participants.participants
-                participant = next(filter(lambda x: x.user_id == reply.from_id, participants), None)
-                if isinstance(participant, telethon.tl.types.ChatParticipantCreator):
+                participant = next(
+                    filter(
+                        lambda x: x.user_id == reply.from_id,
+                        participants),
+                    None)
+                if isinstance(participant,
+                              telethon.tl.types.ChatParticipantCreator):
                     admintitle = strings["creator"]
                 elif isinstance(participant, telethon.tl.types.ChatParticipantAdmin):
                     admintitle = strings["admin"]
@@ -111,19 +121,23 @@ if 1 == 1:
 
             if reply.fwd_from:
                 if reply.fwd_from.saved_from_peer:
-                    username = telethon.utils.get_display_name(reply.forward.chat)
+                    username = telethon.utils.get_display_name(
+                        reply.forward.chat)
                     profile_photo_url = reply.forward.chat
                     admintitle = strings["channel"]
                 elif reply.fwd_from.from_name:
                     username = reply.fwd_from.from_name
                 elif reply.forward.sender:
-                    username = telethon.utils.get_display_name(reply.forward.sender)
+                    username = telethon.utils.get_display_name(
+                        reply.forward.sender)
                 elif reply.forward.chat:
-                    username = telethon.utils.get_display_name(reply.forward.chat)
+                    username = telethon.utils.get_display_name(
+                        reply.forward.chat)
 
             pfp = await client.download_profile_photo(profile_photo_url, bytes)
             if pfp is not None:
-                profile_photo_url = "data:image/png;base64, " + base64.b64encode(pfp).decode()
+                profile_photo_url = "data:image/png;base64, " + \
+                    base64.b64encode(pfp).decode()
 
             if user_id is not None:
                 username_color = config["username_colors"][user_id % 7]
@@ -141,7 +155,10 @@ if 1 == 1:
                 "APIKey": config["api_token"]
             })
 
-            resp = requests.post(config["api_url"] + "/api/v2/quote", data=request)
+            resp = requests.post(
+                config["api_url"] +
+                "/api/v2/quote",
+                data=request)
             resp.raise_for_status()
             resp = resp.json()
 
@@ -159,20 +176,24 @@ if 1 == 1:
                     raise ValueError("Invalid response from server", resp)
             elif resp["status"] == 404:
                 if resp["message"] == "ERROR_TEMPLATE_NOT_FOUND":
-                    newreq = requests.post(config["api_url"] + "/api/v1/getalltemplates", data={
-                        "token": config["api_token"]
-                    })
+                    newreq = requests.post(
+                        config["api_url"] +
+                        "/api/v1/getalltemplates",
+                        data={
+                            "token": config["api_token"]})
                     newreq = newreq.json()
 
                     if newreq["status"] == "NOT_ENOUGH_PERMISSIONS":
                         return await message.respond(strings["not_enough_permissions"])
                     elif newreq["status"] == "SUCCESS":
-                        templates = strings["delimiter"].join(newreq["message"])
+                        templates = strings["delimiter"].join(
+                            newreq["message"])
                         return await message.respond(strings["templates"].format(templates))
                     elif newreq["status"] == "INVALID_TOKEN":
                         return await message.respond(strings["invalid_token"])
                     else:
-                        raise ValueError("Invalid response from server", newreq)
+                        raise ValueError(
+                            "Invalid response from server", newreq)
                 else:
                     raise ValueError("Invalid response from server", resp)
             elif resp["status"] != 200:
@@ -228,8 +249,10 @@ def get_markdown(reply):
     return markdown
 
 
-CMD_HELP.update({"quotly": ['Quotly',
-                            " - `.q <reply_message>`: Enhance ur text to sticker.\n"
-                            "**Note:** please add `Q_API_TOKEN` in config. You can get those from http://antiddos.systems.\n\n"
-                            "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "quotly": [
+            'Quotly',
+            " - `.q <reply_message>`: Enhance ur text to sticker.\n"
+            "**Note:** please add `Q_API_TOKEN` in config. You can get those from http://antiddos.systems.\n\n"
+            "**All commands can be used with** `.`"]})

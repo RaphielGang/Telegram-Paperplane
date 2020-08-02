@@ -94,7 +94,8 @@ async def get_weather(weather):
             icon = "☁️"
 
         ctimezone = tz(c_tz[country][0])
-        time = datetime.now(ctimezone).strftime("%A %d %b, %H:%M").lstrip("0").replace(" 0", " ")
+        time = datetime.now(ctimezone).strftime(
+            "%A %d %b, %H:%M").lstrip("0").replace(" 0", " ")
         fullc_n = c_n[f"{country}"]
         dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
@@ -110,7 +111,8 @@ async def get_weather(weather):
             return temp[0]
 
         def sun(unix):
-            xx = datetime.fromtimestamp(unix, tz=ctimezone).strftime("%H:%M").lstrip("0").replace(" 0", " ")
+            xx = datetime.fromtimestamp(unix, tz=ctimezone).strftime(
+                "%H:%M").lstrip("0").replace(" 0", " ")
             return xx
 
         await weather.edit(
@@ -134,5 +136,4 @@ async def get_weather(weather):
 CMD_HELP.update({"weather": ["Weather",
                              " - `weather` <city> or weather <city>, <country name/code>: "
                              "Gets the weather of a city.\n\n"
-                             "**All commands can be used with** `.`"]
-                 })
+                             "**All commands can be used with** `.`"]})

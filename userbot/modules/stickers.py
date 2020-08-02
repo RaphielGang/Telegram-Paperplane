@@ -35,17 +35,21 @@ async def kang(event):
         try:
             user.first_name.decode('ascii')
             pack_username = user.first_name
-        except UnicodeDecodeError: # User's first name isn't ASCII, use ID instead
+        except UnicodeDecodeError:  # User's first name isn't ASCII, use ID instead
             pack_username = user.id
-    else: pack_username = user.username
+    else:
+        pack_username = user.username
 
     textx = await event.get_reply_message()
     emoji = event.pattern_match.group(2)
-    number = int(event.pattern_match.group(3) or 1) # If no number specified, use 1
+    # If no number specified, use 1
+    number = int(event.pattern_match.group(3) or 1)
     new_pack = False
 
-    if textx.photo or textx.sticker: message = textx
-    elif event.photo or event.sticker: message = event
+    if textx.photo or textx.sticker:
+        message = textx
+    elif event.photo or event.sticker:
+        message = event
     else:
         await event.edit("`You need to send/reply to a sticker/photo to be able to kang it!`")
         return
@@ -67,25 +71,25 @@ async def kang(event):
 
     # The user didn't specify an emoji...
     if not emoji:
-        if message.file.emoji: # ...but the sticker has one
+        if message.file.emoji:  # ...but the sticker has one
             emoji = message.file.emoji
-        else: # ...and the sticker doesn't have one either
+        else:  # ...and the sticker doesn't have one either
             emoji = "🤔"
 
     packname = f"a{user.id}_by_{pack_username}_{number}{'_anim' if is_anim else ''}"
     packtitle = (f"@{user.username or user.first_name}'s Paperplane Pack "
-                f"{number}{' animated' if is_anim else ''}")
+                 f"{number}{' animated' if is_anim else ''}")
     response = urllib.request.urlopen(
-            urllib.request.Request(f'http://t.me/addstickers/{packname}'))
+        urllib.request.Request(f'http://t.me/addstickers/{packname}'))
     htmlstr = response.read().decode("utf8").split('\n')
     new_pack = PACK_DOESNT_EXIST in htmlstr
 
     # Mute Stickers bot to ensure user doesn't get notification spam
     muted = await bot(UpdateNotifySettingsRequest(
         peer='t.me/Stickers',
-        settings=InputPeerNotifySettings(mute_until=2**31-1)) # Mute forever
+        settings=InputPeerNotifySettings(mute_until=2**31 - 1))  # Mute forever
     )
-    if not muted: # Tell the user just in case, this may rarely happen
+    if not muted:  # Tell the user just in case, this may rarely happen
         await event.edit(
             "`Paperplane couldn't mute the Stickers bot, beware of notification spam.`")
 
@@ -111,8 +115,9 @@ async def kang(event):
                 # Switch to a new pack, create one if it doesn't exist
                 number += 1
                 packname = f"a{user.id}_by_{pack_username}_{number}{'_anim' if is_anim else ''}"
-                packtitle = (f"@{user.username or user.first_name}'s Paperplane Pack "
-                            f"{number}{' animated' if is_anim else ''}")
+                packtitle = (
+                    f"@{user.username or user.first_name}'s Paperplane Pack "
+                    f"{number}{' animated' if is_anim else ''}")
 
                 await event.edit(
                     f"`Switching to Pack {number} due to insufficient space in Pack {number-1}.`"
@@ -120,7 +125,7 @@ async def kang(event):
 
                 await conv.send_message(packname)
                 x = await conv.get_response()
-                if x.text == "Invalid pack selected.": # That pack doesn't exist
+                if x.text == "Invalid pack selected.":  # That pack doesn't exist
                     await newpack(is_anim, sticker, emoji, packtitle, packname)
 
                     # Read all unread messages
@@ -215,6 +220,7 @@ async def newpack(is_anim, sticker, emoji, packtitle, packname):
         await conv.send_message(packname)
         await conv.get_response()
 
+
 async def resize_photo(photo):
     """ Resize the given photo to 512x512 """
     image = Image.open(photo)
@@ -240,7 +246,7 @@ async def resize_photo(photo):
     return image
 
 
-@register(outgoing=True, pattern="^\.stkrinfo$")
+@register(outgoing=True, pattern=r"^\.stkrinfo$")
 async def get_pack_info(event):
     if not event.is_reply:
         await event.edit("`I can't fetch info from nothing, can I ?!`")
@@ -283,11 +289,13 @@ async def get_pack_info(event):
     await event.edit(OUTPUT)
 
 
-CMD_HELP.update({"stickers": ["Stickers",
-    " - `kang`: Reply .kang to a sticker or an image to kang it to your userbot pack.\n"
-    " - `kang [emoji('s)]`: Works just like .kang but uses the emoji('s) you picked.\n"
-    " - `kang [number]`: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\n"
-    " - `kang [emoji('s)] [number]`: Kang's the sticker/image to the specified pack and uses the emoji('s) you picked\n"
-    " - `stkrinfo`: Gets info about the sticker pack.\n\n"
-    "**All commands can be used with** `.`"]
-})
+CMD_HELP.update(
+    {
+        "stickers": [
+            "Stickers",
+            " - `kang`: Reply .kang to a sticker or an image to kang it to your userbot pack.\n"
+            " - `kang [emoji('s)]`: Works just like .kang but uses the emoji('s) you picked.\n"
+            " - `kang [number]`: Kang's the sticker/image to the specified pack but uses 🤔 as emoji.\n"
+            " - `kang [emoji('s)] [number]`: Kang's the sticker/image to the specified pack and uses the emoji('s) you picked\n"
+            " - `stkrinfo`: Gets info about the sticker pack.\n\n"
+            "**All commands can be used with** `.`"]})

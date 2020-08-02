@@ -6,9 +6,12 @@ from telethon.tl.custom import Message
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetFullChatRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import (MessageEntityMentionName,
-                               ChannelParticipantsAdmins,
-                               ChannelParticipantsBots, InputPeerChannel, InputPeerChat)
+from telethon.tl.types import (
+    MessageEntityMentionName,
+    ChannelParticipantsAdmins,
+    ChannelParticipantsBots,
+    InputPeerChannel,
+    InputPeerChat)
 
 
 def parse_arguments(message: str, valid: List[str]) -> (dict, str):

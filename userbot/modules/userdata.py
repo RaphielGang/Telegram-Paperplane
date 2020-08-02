@@ -149,7 +149,8 @@ async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0
         entity = dialog.entity
 
         if isinstance(entity, Channel):
-            # participants_count = (await event.get_participants(dialog, limit=0)).total
+            # participants_count = (await event.get_participants(dialog,
+            # limit=0)).total
             if entity.broadcast:
                 broadcast_channels += 1
                 if entity.creator or entity.admin_rights:
@@ -204,12 +205,14 @@ async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0
     await event.edit(response)
 
 
-CMD_HELP.update({"userdata": ['Userdata',
-                              " - `username` <new_username>: Change your Telegram username.\n"
-                              " - `name` <firstname> or name <firstname> <lastname>: Change your Telegram name.\n"
-                              " - `profilepic`: Change your Telegram avatar with the replied photo.\n"
-                              " - `setbio` <new_bio>: Change your Telegram bio.\n"
-                              " - `delpfp` or delpfp <number>/<all>: Delete your Telegram avatar(s).\n"
-                              " - `stats`: Get some basic Telegram stats about yourself.\n\n"
-                              "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "userdata": [
+            'Userdata',
+            " - `username` <new_username>: Change your Telegram username.\n"
+            " - `name` <firstname> or name <firstname> <lastname>: Change your Telegram name.\n"
+            " - `profilepic`: Change your Telegram avatar with the replied photo.\n"
+            " - `setbio` <new_bio>: Change your Telegram bio.\n"
+            " - `delpfp` or delpfp <number>/<all>: Delete your Telegram avatar(s).\n"
+            " - `stats`: Get some basic Telegram stats about yourself.\n\n"
+            "**All commands can be used with** `.`"]})

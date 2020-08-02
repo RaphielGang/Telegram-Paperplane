@@ -16,7 +16,7 @@ def getData(repoURL):
         with url.urlopen(APIURL + repoURL + "/releases") as data_raw:
             repoData = json.loads(data_raw.read().decode())
             return repoData
-    except:
+    except BaseException:
         return None
 
 

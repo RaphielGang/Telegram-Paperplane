@@ -88,7 +88,7 @@ async def codename_info(request):
     results = [
         i for i in devices if i["name"].lower() == device.lower()
         or i["model"].lower() == device.lower()
-                              or i["model"].lower() == device.lower()
+        or i["model"].lower() == device.lower()
     ]
     if results:
         reply = f"**Search results for {brand} {device}**:\n\n"
@@ -120,8 +120,8 @@ async def devices_specifications(request):
     all_brands = BeautifulSoup(
         get('https://www.devicespecifications.com/en/brand-more').content,
         'lxml').find('div', {
-        'class': 'brand-listing-container-news'
-    }).findAll('a')
+            'class': 'brand-listing-container-news'
+        }).findAll('a')
     brand_page_url = None
     try:
         brand_page_url = [
@@ -208,7 +208,8 @@ async def evo(event):
         device = "X01BD"
 
     if device == '':
-        reply_text = ("Please type your device **codename**!\nFor example, `.{} raphael`").format("evo")
+        reply_text = (
+            "Please type your device **codename**!\nFor example, `.{} raphael`").format("evo")
         await event.edit(reply_text, link_preview=False)
         return
 
@@ -243,7 +244,8 @@ async def evo(event):
             return
 
         except ValueError:
-            reply_text = ("Tell the rom maintainer to fix their OTA json. I'm sure this won't work with OTA and it won't work with this bot too :P")
+            reply_text = (
+                "Tell the rom maintainer to fix their OTA json. I'm sure this won't work with OTA and it won't work with this bot too :P")
             await event.edit(reply_text, link_preview=False)
             return
 
@@ -265,7 +267,8 @@ async def bootleggers(event):
         codename = ''
 
     if codename == '':
-        reply_text = ("Please type your device **codename**!\nFor example, `.{} raphael`").format("bootleggers")
+        reply_text = (
+            "Please type your device **codename**!\nFor example, `.{} raphael`").format("bootleggers")
         await event.edit(reply_text, link_preview=False)
         return
 
@@ -334,7 +337,8 @@ async def los(event):
         device = ''
 
     if device == '':
-        reply_text = ("Please type your device **codename**!\nFor example, `.{} raphael`").format("los")
+        reply_text = (
+            "Please type your device **codename**!\nFor example, `.{} raphael`").format("los")
         await event.edit(reply_text, link_preview=False)
         return
 
@@ -380,16 +384,17 @@ async def phh(event):
     await event.edit(reply_text)
 
 
-CMD_HELP.update({"android": ['Android',
-                             " - `magisk`: Get the latest Magisk releases.\n"
-                             " - `device` <codename>: Get info about an Android device.\n"
-                             " - `codename` <brand> <device>: Search for Android device codename.\n"
-                             " - `specs` <brand> <device>: Get device specifications info.\n"
-                             " - `twrp` <codename>: Get the latest TWRP download for an Android device.\n\n"
-                             "**Thanks to @HarukaAyaBot:**\n"
-                             " - `evo <device>`: Get the latest Evolution X ROM for a device\n"
-                             " - `bootleggers <device>`: Get the latest Bootleggers ROM for a device\n"
-                             " - `los <device>`: Get the latest LineageOS ROM for a device\n"
-                             " - `phh`: Get the latest Phh AOSP GSI!\n\n"
-                             "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "android": [
+            'Android', " - `magisk`: Get the latest Magisk releases.\n"
+            " - `device` <codename>: Get info about an Android device.\n"
+            " - `codename` <brand> <device>: Search for Android device codename.\n"
+            " - `specs` <brand> <device>: Get device specifications info.\n"
+            " - `twrp` <codename>: Get the latest TWRP download for an Android device.\n\n"
+            "**Thanks to @HarukaAyaBot:**\n"
+            " - `evo <device>`: Get the latest Evolution X ROM for a device\n"
+            " - `bootleggers <device>`: Get the latest Bootleggers ROM for a device\n"
+            " - `los <device>`: Get the latest LineageOS ROM for a device\n"
+            " - `phh`: Get the latest Phh AOSP GSI!\n\n"
+            "**All commands can be used with** `.`"]})

@@ -100,8 +100,10 @@ async def upstream(ups):
         return
 
 
-CMD_HELP.update({"updater": ['Updater',
-                             " - `update`: Check if the main repository has any updates and show changelog if so.\n"
-                             " - `update now`: Update Paperplane if there are any updates available.\n\n"
-                             "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "updater": [
+            'Updater',
+            " - `update`: Check if the main repository has any updates and show changelog if so.\n"
+            " - `update now`: Update Paperplane if there are any updates available.\n\n"
+            "**All commands can be used with** `.`"]})

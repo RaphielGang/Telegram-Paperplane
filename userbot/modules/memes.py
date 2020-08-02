@@ -403,14 +403,14 @@ ZALG_LIST = [[
     " ͚",
     " ",
 ],
-[
+    [
     " ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗",
     " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌",
     " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ",
     " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ",
     " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"
 ],
-[
+    [
     " ̕",
     " ̛",
     " ̀",
@@ -465,7 +465,9 @@ async def get_user(event):
             user = self_user.id
         if event.message.entities is not None:
             probable_user_mention_entity = event.message.entities[0]
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+            if isinstance(
+                    probable_user_mention_entity,
+                    MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
                 return replied_user
@@ -491,7 +493,11 @@ async def slap(replied_user, event):  # builds the slap msg itself
     hit = random.choice(HIT)
     throw = random.choice(THROW)
     emoji = random.choice(EMOJI)
-    caption = "..." + temp.format(victim=slapped, item=item, hits=hit, throws=throw, emoji=emoji)
+    caption = "..." + temp.format(victim=slapped,
+                                  item=item,
+                                  hits=hit,
+                                  throws=throw,
+                                  emoji=emoji)
     return caption
 
 
@@ -511,7 +517,7 @@ async def who(event):  # slap
             await event.edit("`Can't slap this person, loading 12 gauge buckshot in my shotgun!!`")
 
 
-@register(outgoing=True, pattern="^\.cry$")
+@register(outgoing=True, pattern=r"^\.cry$")
 async def cry(e):
     """ y u du dis, i cry everytime !! """
     await e.edit(choice(CRI))
@@ -631,13 +637,13 @@ async def zal(zgfy):
 
             if randint == 0:
                 charac = charac.strip() + \
-                         random.choice(ZALG_LIST[0]).strip()
+                    random.choice(ZALG_LIST[0]).strip()
             elif randint == 1:
                 charac = charac.strip() + \
-                         random.choice(ZALG_LIST[1]).strip()
+                    random.choice(ZALG_LIST[1]).strip()
             else:
                 charac = charac.strip() + \
-                         random.choice(ZALG_LIST[2]).strip()
+                    random.choice(ZALG_LIST[2]).strip()
 
         reply_text.append(charac)
 
@@ -667,19 +673,19 @@ async def faces(owo):
     await owo.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^\.shg$")
+@register(outgoing=True, pattern=r"^\.shg$")
 async def shrugger(shg):
     r""" ¯\_(ツ)_/¯ """
     await shg.edit(choice(SHGS))
 
 
-@register(outgoing=True, pattern="^\.react$")
+@register(outgoing=True, pattern=r"^\.react$")
 async def react_meme(react):
     """ Make your userbot react to everything. """
     await react.edit(choice(FACEREACTS))
 
 
-@register(outgoing=True, pattern="^\.run$")
+@register(outgoing=True, pattern=r"^\.run$")
 async def runner_lol(run):
     """ Run, run, RUNNN! """
     await run.edit(choice(RUNS_STR))
@@ -751,7 +757,6 @@ async def payf(event):
         paytext * 6, paytext * 6, paytext * 2, paytext * 2, paytext * 2,
         paytext * 2, paytext * 2)
     await event.edit(pay)
-
 
 
 @register(outgoing=True, pattern='^.type(?: |$)(.*)')

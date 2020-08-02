@@ -534,15 +534,16 @@ def deEmojify(inputString):
     return get_emoji_regexp().sub(u'', inputString)
 
 
-CMD_HELP.update({"scrapers": ['Scrapers',
-                              " - `img` <query> lim=<n>: Do an Image Search on Google and send n results. Default is 2.\n"
-                              " - `google` <query>: Search Google for query (argument or reply).\n"
-                              " - `wiki` <query>: Search Wikipedia for query.\n"
-                              " - `ud` <query>: Search on Urban Dictionary for query.\n"
-                              " - `tts` <query>: Text-to-Speech the query (argument or reply) to the saved language.\n"
-                              " - `trt` <query>: Translate the query (argument or reply) to the saved language.\n"
-                              " - `lang` <lang>: Changes the default language of trt and TTS modules.\n"
-                              " - `ripaudio` <url> or `ripvideo` <url>: Download videos and songs from YouTube (and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).\n"
-                              " - `reverse`: Reply to a pic/sticker to revers-search it on Google Images\n\n"
-                              "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "scrapers": [
+            'Scrapers', " - `img` <query> lim=<n>: Do an Image Search on Google and send n results. Default is 2.\n"
+            " - `google` <query>: Search Google for query (argument or reply).\n"
+            " - `wiki` <query>: Search Wikipedia for query.\n"
+            " - `ud` <query>: Search on Urban Dictionary for query.\n"
+            " - `tts` <query>: Text-to-Speech the query (argument or reply) to the saved language.\n"
+            " - `trt` <query>: Translate the query (argument or reply) to the saved language.\n"
+            " - `lang` <lang>: Changes the default language of trt and TTS modules.\n"
+            " - `ripaudio` <url> or `ripvideo` <url>: Download videos and songs from YouTube (and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).\n"
+            " - `reverse`: Reply to a pic/sticker to revers-search it on Google Images\n\n"
+            "**All commands can be used with** `.`"]})

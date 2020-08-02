@@ -124,16 +124,18 @@ async def fetch_info(replied_user, **kwargs):
                    bot if show_bot else None)
 
 
-CMD_HELP.update({"user info": ['User Info',
-                               " - `u(ser) [options] (username|id)` Or, in response to a message `.u(ser) [options]`:"
-                               " List information about a particular user.\n\n"
-                               "**Options:**\n\n"
-                               "`.id`: Show only the user's ID\n"
-                               "`.general`: Show general user info\n"
-                               "`.bot`: Show bot related info\n"
-                               "`.misc`: Show miscelanious info\n"
-                               "`.all`: Show all info (overrides other options)\n"
-                               "`.mention`: Inline mention the user\n"
-                               "`.forward`: Follow forwarded message\n\n"
-                               "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "user info": [
+            'User Info',
+            " - `u(ser) [options] (username|id)` Or, in response to a message `.u(ser) [options]`:"
+            " List information about a particular user.\n\n"
+            "**Options:**\n\n"
+            "`.id`: Show only the user's ID\n"
+            "`.general`: Show general user info\n"
+            "`.bot`: Show bot related info\n"
+            "`.misc`: Show miscelanious info\n"
+            "`.all`: Show all info (overrides other options)\n"
+            "`.mention`: Inline mention the user\n"
+            "`.forward`: Follow forwarded message\n\n"
+            "**All commands can be used with** `.`"]})

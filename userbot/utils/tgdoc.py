@@ -68,7 +68,8 @@ class Mention(Link):
 class KeyValueItem(FormattedBase):
     """A item that has a key and a value divided by a colon."""
 
-    def __init__(self, key: Union[str, FormattedBase], value: Union[str, FormattedBase]) -> None:
+    def __init__(self, key: Union[str, FormattedBase],
+                 value: Union[str, FormattedBase]) -> None:
         self.key = key
         self.value = value
         self.text = f'{key}: {value}'
@@ -84,7 +85,11 @@ class Item(FormattedBase):
 class Section:
     """A section header"""
 
-    def __init__(self, *args: Union[String, 'FormattedBase'], spacing: int = 1, indent: int = 4) -> None:
+    def __init__(self,
+                 *args: Union[String,
+                              'FormattedBase'],
+                 spacing: int = 1,
+                 indent: int = 4) -> None:
         self.header = args[0]
         self.items = list(args[1:])
         self.indent = indent
@@ -94,15 +99,20 @@ class Section:
         return str(self) + '\n\n' + str(other)
 
     def __str__(self) -> str:
-        return ('\n' * self.spacing).join(
-            [str(self.header)] + [' ' * self.indent + str(item) for item in self.items
-                                  if item is not None])
+        return ('\n' *
+                self.spacing).join([str(self.header)] +
+                                   [' ' *
+                                    self.indent +
+                                    str(item) for item in self.items if item is not None])
 
 
 class SubSection(Section):
     """A subsection Header"""
 
-    def __init__(self, *args: Union[String, 'SubSubSection'], indent: int = 8) -> None:
+    def __init__(self,
+                 *args: Union[String,
+                              'SubSubSection'],
+                 indent: int = 8) -> None:
         super().__init__(*args, indent=indent)
 
 

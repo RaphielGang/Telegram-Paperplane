@@ -140,9 +140,11 @@ def useragent():
     return user_agent.text
 
 
-CMD_HELP.update({"direct links": ['Direct Links',
-                                  " - `direct` <url>: Generate direct download link from supported URL(s)\n"
-                                  "Supported websites:\n"
-                                  "`Google Drive - MediaFire - SourceForge`"
-                                  "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "direct links": [
+            'Direct Links',
+            " - `direct` <url>: Generate direct download link from supported URL(s)\n"
+            "Supported websites:\n"
+            "`Google Drive - MediaFire - SourceForge`"
+            "**All commands can be used with** `.`"]})

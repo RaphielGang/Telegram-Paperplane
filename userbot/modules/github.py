@@ -144,7 +144,7 @@ def getData(url, index):
 async def get_release(event):
     if not event.text[0].isalpha() and event.text[0] in ("."):
         commandArgs = event.text.split(" ")
-        if len(commandArgs) != 2 or not "/" in commandArgs[1]:
+        if len(commandArgs) != 2 or "/" not in commandArgs[1]:
             await event.edit("Invalid arguments! Make sure you are typing a valid combination of user/repo")
             return
         index = 0  # for now...
@@ -153,13 +153,15 @@ async def get_release(event):
         await event.edit(text, parse_mode="html")
 
 
-CMD_HELP.update({"github": ["GitHub",
-                           " - `gh (repo)`: Displays information related to a github repo. Similar to `.user`.\n\n"
-                           "Repos can be in the format `https://github.com/user/repo` or just `user/repo`.\n\n"
-                           "**Options:\n\n**"
-                           "`.general`: Display general information related to the repo.\n"
-                           "`.owner`: Display information about the repo owner.\n"
-                           "`.all`: Display everything.\n\n"
-                           ".git <user>/<repo>: Gets the updated release of the specified user/repo combo\n\n"
-                           "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "github": [
+            "GitHub",
+            " - `gh (repo)`: Displays information related to a github repo. Similar to `.user`.\n\n"
+            "Repos can be in the format `https://github.com/user/repo` or just `user/repo`.\n\n"
+            "**Options:\n\n**"
+            "`.general`: Display general information related to the repo.\n"
+            "`.owner`: Display information about the repo owner.\n"
+            "`.all`: Display everything.\n\n"
+            ".git <user>/<repo>: Gets the updated release of the specified user/repo combo\n\n"
+            "**All commands can be used with** `.`"]})

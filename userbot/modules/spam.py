@@ -78,10 +78,9 @@ async def spammer(e):
 
 
 CMD_HELP.update({"spam": ['Spam',
-                              " - `cspam <text>`: Spam the text letter by letter.\n"
-                              " - `spam <count> <text>`: Floods text in the chat.\n"
-                              " - `wspam`: Spam the text word by word.\n"
-                              " - `picspam`: As if text spam was not enough\n"
-                              " - `delayspam`: .bigspam but with custom delay.\n\n"
-                              "**All commands can be used with** `.`"]
-                 })
+                          " - `cspam <text>`: Spam the text letter by letter.\n"
+                          " - `spam <count> <text>`: Floods text in the chat.\n"
+                          " - `wspam`: Spam the text word by word.\n"
+                          " - `picspam`: As if text spam was not enough\n"
+                          " - `delayspam`: .bigspam but with custom delay.\n\n"
+                          "**All commands can be used with** `.`"]})

@@ -477,6 +477,7 @@ async def kick(usr):
                            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                            f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
+
 @register(outgoing=True, group_only=True, pattern="^.lock$")
 async def emergency_lock(lock):
     """ For emergency-locking a chat """
@@ -495,9 +496,9 @@ async def emergency_lock(lock):
     try:
         await lock.client(
             EditChatDefaultBannedRightsRequest(
-            lock.chat_id,
-            CHATLOCK_RIGHTS
-        ))
+                lock.chat_id,
+                CHATLOCK_RIGHTS
+            ))
         await lock.edit("`Locked!`")
     except ChatNotModifiedError:
         await lock.edit("`Chat has already been locked!`")
@@ -507,6 +508,7 @@ async def emergency_lock(lock):
             BOTLOG_CHATID, "#LOCK\n"
             f"CHAT: {lock.chat.title}(`{lock.chat_id}`)"
         )
+
 
 @register(outgoing=True, group_only=True, pattern="^.unlock$")
 async def chat_unlock(unlock):
@@ -526,9 +528,9 @@ async def chat_unlock(unlock):
     try:
         await unlock.client(
             EditChatDefaultBannedRightsRequest(
-            unlock.chat_id,
-            CHATUNLOCK_RIGHTS
-        ))
+                unlock.chat_id,
+                CHATUNLOCK_RIGHTS
+            ))
         await unlock.edit("`Unlocked!`")
     except ChatNotModifiedError:
         await unlock.edit("`Chat already unlocked`")
@@ -586,15 +588,17 @@ async def get_user_from_id(user, event):
     return user_obj
 
 
-CMD_HELP.update({"admins": ['Admins',
-                            " - `promote`: Promotes a user. Reply to the user or use their username/ID.\n"
-                            " - `demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
-                            " - `ban`: Bans a user. Reply to the user or use their username/ID.\n"
-                            " - `unban`: Unbans a user. Reply to the user or use their username/ID.\n"
-                            " - `delusers`: Searches for deleted accounts in a group/channel.\n"
-                            " - `delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
-                            " - `adminlist`: Retrieves all admins in the chat.\n"
-                            " - `lock`: Lock current chat, allowing read only for non-admins.\n"
-                            " - `unlock`: Unlock current chat, allowing read/write for non-admins.\n\n" 
-                            "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "admins": [
+            'Admins',
+            " - `promote`: Promotes a user. Reply to the user or use their username/ID.\n"
+            " - `demote`: Demotes an admin. Reply to the admin or use their username/ID.\n"
+            " - `ban`: Bans a user. Reply to the user or use their username/ID.\n"
+            " - `unban`: Unbans a user. Reply to the user or use their username/ID.\n"
+            " - `delusers`: Searches for deleted accounts in a group/channel.\n"
+            " - `delusers clean`: Searches for and kicks deleted accounts from a group/channel.\n"
+            " - `adminlist`: Retrieves all admins in the chat.\n"
+            " - `lock`: Lock current chat, allowing read only for non-admins.\n"
+            " - `unlock`: Unlock current chat, allowing read/write for non-admins.\n\n"
+            "**All commands can be used with** `.`"]})

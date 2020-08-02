@@ -40,11 +40,11 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
             ''.join(["░" for i in range(10 - math.floor(percentage / 10))]),
             round(percentage, 2))
         tmp = progress_str + \
-              "{0} of {1}\nETA: {2}".format(
-                  humanbytes(current),
-                  humanbytes(total),
-                  time_formatter(estimated_total_time)
-              )
+            "{0} of {1}\nETA: {2}".format(
+                humanbytes(current),
+                humanbytes(total),
+                time_formatter(estimated_total_time)
+            )
         if file_name:
             await event.edit("{}\nFile Name: `{}`\n{}".format(
                 type_of_ps, file_name, tmp))
@@ -403,9 +403,11 @@ async def uploadas(uas_event):
         await uas_event.edit("404: File Not Found")
 
 
-CMD_HELP.update({"download": ['Download',
-                              " - `download [in reply to TG file] or .download <link> | <filename>`: "
-                              "Download a file from telegram or link to the server.\n"
-                              " - `upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n\n"
-                              "**All commands can be used with** `.`"]
-                 })
+CMD_HELP.update(
+    {
+        "download": [
+            'Download',
+            " - `download [in reply to TG file] or .download <link> | <filename>`: "
+            "Download a file from telegram or link to the server.\n"
+            " - `upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n\n"
+            "**All commands can be used with** `.`"]})

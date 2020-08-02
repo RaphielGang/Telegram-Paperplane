@@ -117,5 +117,4 @@ CMD_HELP.update({"chat info": ['Chat Info',
                                "`.general`: Show general information related to the chat.\n"
                                "`.admins`: Show chat admins (does not mention them).\n"
                                "`.all`: Show everything.\n\n"
-                               "**All commands can be used with** `.`"]
-                 })
+                               "**All commands can be used with** `.`"]})

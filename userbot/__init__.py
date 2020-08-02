@@ -72,12 +72,14 @@ else:
 
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID")) if BOTLOG else 0
 
-UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL",
-                                   "https://github.com/HitaloSama/PaperplaneMinimal.git")
+UPSTREAM_REPO_URL = os.environ.get(
+    "UPSTREAM_REPO_URL",
+    "https://github.com/HitaloSama/PaperplaneMinimal.git")
 
 Q_API_TOKEN = os.environ.get("Q_API_TOKEN", None)
 
-SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY") or None
+SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get(
+    "SCREENSHOT_LAYER_ACCESS_KEY") or None
 
 SPAMWATCH_API_KEY = os.environ.get("SPAMWATCH_API_KEY", None)
 if SPAMWATCH_API_KEY:
