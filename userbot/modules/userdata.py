@@ -127,7 +127,7 @@ async def remove_profilepic(delpfp):
         f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
 
-@register(outgoing=True, pattern=f'^.stats')
+@register(outgoing=True, pattern='^.stats')
 async def stats(event: NewMessage.Event) -> None:  # pylint: disable = R0912, R0914, R0915
     """Command to get stats about the account"""
     waiting_message = await event.edit('Collecting stats. This might take a while.')
