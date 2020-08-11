@@ -19,6 +19,7 @@ bs4
 requests>=2.18.4
 search-engine-parser
 speedtest-cli>=2.0.2
+spotify_token
 telethon>=1.11.0
 urbandict>=0.5
 wikipedia>=1.4.0

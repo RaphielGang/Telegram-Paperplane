@@ -90,6 +90,8 @@ else:
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
 
+SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME") or None
+SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS") or None
 BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO") or None
 
