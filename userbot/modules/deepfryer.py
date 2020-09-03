@@ -33,14 +33,16 @@ import io
 from random import randint, uniform
 
 from PIL import Image, ImageEnhance, ImageOps
+from telethon.errors import (BadRequestError, ChatAdminRequiredError,
+                             ChatNotModifiedError, ImageProcessFailedError,
+                             PhotoCropSizeSmallError, UserAdminInvalidError)
 from telethon.tl.types import DocumentAttributeFilename
 
 from userbot import CMD_HELP, bot
-from userbot.events import errors_handler, register
+from userbot.events import register
 
 
 @register(outgoing=True, pattern="deepfry")
-@errors_handler
 async def deepfryer(event):
     try:
         frycount = int(event.pattern_match.group(1))
