@@ -521,7 +521,7 @@ async def scam(results, lim):
 
     for imglink in oboi:
         counter += 1
-        if not counter >= int(lim):
+        if counter < int(lim):
             imglinks.append(imglink)
         else:
             break
