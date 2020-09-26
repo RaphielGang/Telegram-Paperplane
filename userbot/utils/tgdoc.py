@@ -1,9 +1,15 @@
-""" Adapted from https://github.com/mojurasu/kantek/blob/develop/kantek/utils/mdtex.py """
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# you may not use this file except in compliance with the License.
+#
+"""Adapted from https://github.com/mojurasu/kantek/blob/develop/kantek/utils/mdtex.py"""
+
 from typing import Union
 
 
 class FormattedBase:
-    """Base class for any message type."""
+    """Base class for any message type"""
     text: str
 
     def __add__(self, other: Union[str, 'FormattedBase']) -> str:
@@ -17,56 +23,56 @@ class FormattedBase:
 
 
 class String(FormattedBase):
-    """A plain string."""
+    """ A plain string"""
 
     def __init__(self, text: Union[str, int]) -> None:
         self.text = str(text)
 
 
 class Bold(FormattedBase):
-    """A bold text."""
+    """ A bold text"""
 
     def __init__(self, text: Union[str, int]) -> None:
         self.text = f'**{text}**'
 
 
 class Italic(FormattedBase):
-    """A italic text."""
+    """ A italic text."""
 
     def __init__(self, text: Union[str, int]) -> None:
         self.text = f'__{text}__'
 
 
 class Code(FormattedBase):
-    """A Monospaced text."""
+    """ A Monospaced text"""
 
     def __init__(self, text: Union[str, int]) -> None:
         self.text = f'`{text}`'
 
 
 class Pre(FormattedBase):
-    """A Multiline Monospaced text."""
+    """ A Multiline Monospaced text"""
 
     def __init__(self, text: Union[str, int]) -> None:
         self.text = f'```{text}```'
 
 
 class Link(FormattedBase):
-    """A Hyperlink with a label."""
+    """ A Hyperlink with a label"""
 
     def __init__(self, label: String, url: str) -> None:
         self.text = f'[{label}]({url})'
 
 
 class Mention(Link):
-    """Inline Mention of a User."""
+    """ Inline Mention of a User"""
 
     def __init__(self, label: String, uid: int):
         super().__init__(label, f'tg://user?id={uid}')
 
 
 class KeyValueItem(FormattedBase):
-    """A item that has a key and a value divided by a colon."""
+    """ A item that has a key and a value divided by a colon"""
 
     def __init__(self, key: Union[str, FormattedBase],
                  value: Union[str, FormattedBase]) -> None:
@@ -76,14 +82,14 @@ class KeyValueItem(FormattedBase):
 
 
 class Item(FormattedBase):
-    """A simple item without any formatting."""
+    """ A simple item without any formatting"""
 
     def __init__(self, text: Union[str, int]) -> None:
         self.text = str(text)
 
 
 class Section:
-    """A section header"""
+    """ A section header"""
 
     def __init__(self,
                  *args: Union[String,
@@ -107,7 +113,7 @@ class Section:
 
 
 class SubSection(Section):
-    """A subsection Header"""
+    """ A subsection Header"""
 
     def __init__(self,
                  *args: Union[String,
@@ -117,14 +123,14 @@ class SubSection(Section):
 
 
 class SubSubSection(SubSection):
-    """A subsubsection Header"""
+    """ A subsubsection Header"""
 
     def __init__(self, *args: String, indent: int = 12) -> None:
         super().__init__(*args, indent=indent)
 
 
 class TGDoc:
-    """Document containing sections."""
+    """ Document containing sections"""
 
     def __init__(self, *args: Union[String, 'Section']) -> None:
         self.sections = args

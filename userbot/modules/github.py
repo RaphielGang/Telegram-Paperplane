@@ -1,3 +1,10 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# you may not use this file except in compliance with the License.
+#
+"""Userbot module containing commands related to GitHub"""
+
 import re
 from typing import List
 
@@ -10,7 +17,7 @@ import userbot.utils.git_api as api
 from userbot import CMD_HELP, github
 from userbot.events import register
 from userbot.utils import parse_arguments
-from userbot.utils.tgdoc import *
+from userbot.utils.tgdoc import Bold, Link, SubSection, KeyValueItem, Section
 
 GITHUB_REPO_RE = r"(?:github\.com\/|^|\s+)([\w\d_\-]+)\/([\w\d_\-.]+)"
 

@@ -3,6 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
+"""Userbot module for getting info about any chat on Telegram"""
 
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import Channel, User, ChatInviteExported
@@ -11,11 +12,12 @@ from telethon.tl.types.messages import ChatFull
 from userbot import CMD_HELP
 from userbot.events import register
 from userbot.utils import parse_arguments, list_admins, inline_mention, list_bots, get_chat_from_event
-from userbot.utils.tgdoc import *
+from userbot.utils.tgdoc import Bold, Link, SubSection, KeyValueItem, Section, Code, String, TGDoc
 
 
 @register(outgoing=True, pattern=r"^\.c(?:hat)?(\s+[\S\s]+|$)")
 async def chat_info(e):
+	"""For .chat command, get info about a chat"""
     params = e.pattern_match.group(1) or ""
     args, chat = parse_arguments(
         params, ['id', 'general', 'admins', 'bots', 'all'])

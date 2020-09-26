@@ -3,20 +3,20 @@
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
-""" Userbot module for getting info
-    about any user on Telegram(including you!). """
+"""Userbot module for getting info
+   about any user on Telegram(including you!)"""
 
 from telethon.events import NewMessage
 
 from userbot import CMD_HELP, spamwatch
 from userbot.events import register
 from userbot.utils import parse_arguments, get_user_from_event
-from userbot.utils.tgdoc import *
+from userbot.utils.tgdoc import Bold, Link, SubSection, KeyValueItem, Section, Code
 
 
 @register(pattern=r"^\.u(?:ser)?(\s+[\S\s]+|$)", outgoing=True)
 async def who(event: NewMessage.Event):
-    """ For .user command, get info about a user. """
+    """For .user command, get info about a user"""
     if event.fwd_from:
         return
 
@@ -44,7 +44,7 @@ async def who(event: NewMessage.Event):
 
 
 async def fetch_info(replied_user, **kwargs):
-    """ Get details from the User object. """
+    """Get details from the User object"""
     user = replied_user.user
 
     id_only = kwargs.get('id', False)
