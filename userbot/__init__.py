@@ -77,8 +77,6 @@ UPSTREAM_REPO_URL = os.environ.get(
     "UPSTREAM_REPO_URL",
     "https://github.com/HitaloSama/PaperplaneMinimal.git")
 
-Q_API_TOKEN = os.environ.get("Q_API_TOKEN", None)
-
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get(
     "SCREENSHOT_LAYER_ACCESS_KEY") or None
 
@@ -91,8 +89,6 @@ else:
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
 
-SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME") or None
-SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS") or None
 BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO") or None
 
@@ -138,7 +134,7 @@ with bot:
 
 
 # Global Variables
-VERSION = "3.0.1"
+VERSION = "3.0.3"
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}
