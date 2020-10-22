@@ -138,7 +138,7 @@ with bot:
 
 
 # Global Variables
-VERSION = "2.2"
+VERSION = "3.0.1"
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}

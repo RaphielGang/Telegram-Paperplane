@@ -15,6 +15,7 @@ from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
 from userbot import LOGS, VERSION, bot
 from userbot.modules import ALL_MODULES
+from userbot.modules_user import ALL_UMODULES
 
 INVALID_PH = '\nERROR: The phone no. entered is incorrect' \
              '\n  Tip: Use country code (eg +44) along with num.' \
@@ -28,6 +29,9 @@ except PhoneNumberInvalidError:
 
 for module_name in ALL_MODULES:
     imported_module = import_module("userbot.modules." + module_name)
+
+for module_name in ALL_UMODULES:
+    imported_umodule = import_module("userbot.modules_user." + module_name)
 
 LOGS.info("You are running Paperplane Minimal " + VERSION)
 
