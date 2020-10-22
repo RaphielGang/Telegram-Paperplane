@@ -67,5 +67,5 @@ CMD_HELP.update(
     {
         "package manager": [
             'Package Manager',
-            " - `pkg uninstall`: Remove user modules (modules loaded with the .sideload command)\n\n"
+            " - `pkg uninstall` <py file name>: Remove user modules (modules loaded with the .sideload command)\n\n"
             "**All commands can be used with** `.`"]})

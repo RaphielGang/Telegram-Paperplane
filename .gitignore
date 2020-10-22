@@ -5,7 +5,8 @@ learning-data-root.check
 downloads/
 userbot/__pycache__/
 userbot/modules/__pycache__/
-userbot/user_modules/__pycache__/
+userbot/modules_user/__pycache__/
+userbot/modules_user/
 userbot/utils/__pycache__/
 .progress
 .vscode/*

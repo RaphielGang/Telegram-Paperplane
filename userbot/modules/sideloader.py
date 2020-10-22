@@ -66,5 +66,5 @@ CMD_HELP.update(
             'Sideloader',
             " - `sideload`: [in response to a compatible py file] load modules to user space.\n\n"
             "**WARRANTY:** Keep in mind that loading incompatible modules may break your userbot and you will need manual removal of the module.\n"
-            "__NO SUPPORT WILL BE OFFERED TO UNOFFICIAL MODULES!__"
+            "__NO SUPPORT WILL BE OFFERED TO UNOFFICIAL MODULES!__\n\n"
             "**All commands can be used with** `.`"]})
