@@ -11,9 +11,6 @@ import os
 import time
 
 from logging import getLogger
-from os.path import basename
-
-from telethon.events import NewMessage
 
 from userbot.events import register
 from userbot import CMD_HELP

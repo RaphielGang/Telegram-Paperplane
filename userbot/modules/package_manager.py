@@ -6,15 +6,11 @@
 # You may not use this file or any of the content within it, unless in
 # compliance with the PE License
 
-import requests
 import glob
 import os
 import time
 import sys
-
-from telethon.events import NewMessage
 from logging import getLogger
-from os.path import basename, dirname
 from os import path
 
 from userbot import CMD_HELP
