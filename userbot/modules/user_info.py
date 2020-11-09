@@ -6,12 +6,14 @@
 """Userbot module for getting info
    about any user on Telegram(including you!)"""
 
+from kantex.md import (Bold, Link, SubSection,
+                       KeyValueItem, Section, Code)
+
 from telethon.events import NewMessage
 
 from userbot import CMD_HELP, spamwatch
 from userbot.events import register
 from userbot.utils import parse_arguments, get_user_from_event
-from userbot.utils.tgdoc import Bold, Link, SubSection, KeyValueItem, Section, Code
 
 
 @register(pattern=r"^\.u(?:ser)?(\s+[\S\s]+|$)", outgoing=True)

@@ -4,14 +4,45 @@
 # you may not use this file except in compliance with the License.
 #
 
+from typing import Union
+from kantex.md import (Bold, Link, SubSection, SubSubSection,
+                       KeyValueItem, Section, Code)
+
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import Channel, User, ChatInviteExported
 from telethon.tl.types.messages import ChatFull
 
 from userbot import CMD_HELP
 from userbot.events import register
-from userbot.utils import parse_arguments, list_admins, inline_mention, list_bots, get_chat_from_event
-from userbot.utils.tgdoc import Bold, Link, SubSection, KeyValueItem, Section, Code, String, TGDoc
+from userbot.utils import (parse_arguments, list_admins, inline_mention,
+                           list_bots, get_chat_from_event)
+
+
+class FormattedBase:
+
+    def __add__(self, other: Union[str, 'FormattedBase']) -> str:
+        return str(self) + str(other)
+
+    def __repr__(self) -> str:
+        return f'{type(self).__name__}({self.text})'
+
+    def __str__(self) -> str:
+        return self.text
+
+
+class String(FormattedBase):
+
+    def __init__(self, text: Union[str, int]) -> None:
+        self.text = str(text)
+
+
+class TGDoc:
+
+    def __init__(self, *args: Union[String, 'Section']) -> None:
+        self.sections = args
+
+    def __str__(self) -> str:
+        return '\n\n'.join([str(section) for section in self.sections]) 
 
 
 @register(outgoing=True, pattern=r"^\.c(?:hat)?(\s+[\S\s]+|$)")

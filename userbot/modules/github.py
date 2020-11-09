@@ -6,18 +6,19 @@
 """Userbot module containing commands related to GitHub"""
 
 import re
+
 from typing import List
+from kantex.md import (Bold, Link, SubSection,
+                         KeyValueItem, Section)
 
 from github import UnknownObjectException
 from github.NamedUser import NamedUser
 from github.Repository import Repository
 
 import userbot.utils.git_api as api
-
 from userbot import CMD_HELP, github
 from userbot.events import register
 from userbot.utils import parse_arguments
-from userbot.utils.tgdoc import Bold, Link, SubSection, KeyValueItem, Section
 
 GITHUB_REPO_RE = r"(?:github\.com\/|^|\s+)([\w\d_\-]+)\/([\w\d_\-.]+)"
 
