@@ -7,12 +7,9 @@
 
 import io
 import math
-
 import urllib.request
-from PIL import Image
 
-from userbot import bot, CMD_HELP
-from userbot.events import register
+from PIL import Image
 
 from telethon.tl.types import InputPeerNotifySettings
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
@@ -20,12 +17,15 @@ from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.types import InputStickerSetID
 from telethon.tl.types import DocumentAttributeSticker
 
+from userbot import bot, CMD_HELP
+from userbot.events import register
+
 PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
 A pack can't have more than 120 stickers at the moment."
 PACK_DOESNT_EXIST = "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
 
 
-@register(outgoing=True, pattern="^.kang($| )?((?![0-9]).+?)? ?([0-9]*)?")
+@register(outgoing=True, pattern="^\.kang($| )?((?![0-9]).+?)? ?([0-9]*)?")
 async def kang(event):
     """ Function for .kang command, create a sticker pack and add stickers. """
     await event.edit('`Kanging...`')

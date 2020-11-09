@@ -22,7 +22,7 @@ DEFAULTUSER = uname().node
 # ============================================
 
 
-@register(outgoing=True, pattern="^.sysd$")
+@register(outgoing=True, pattern="^\.sysd$")
 async def sysdetails(sysd):
     """ For .sysd command, get system info using neofetch. """
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
@@ -43,7 +43,7 @@ async def sysdetails(sysd):
             await sysd.edit("`Hella install neofetch first kthx`")
 
 
-@register(outgoing=True, pattern="^.botver$")
+@register(outgoing=True, pattern="^\.botver$")
 async def bot_ver(event):
     """ For .botver command, get the bot version. """
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
@@ -85,7 +85,7 @@ async def bot_ver(event):
                 "Shame that you don't have Git, you're running v1.0 anyway!")
 
 
-@register(outgoing=True, pattern="^.pip(?: |$)(.*)")
+@register(outgoing=True, pattern="^\.pip(?: |$)(.*)")
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
@@ -144,7 +144,7 @@ async def amireallyalive(alive):
     )
 
 
-@register(outgoing=True, pattern="^.aliveu")
+@register(outgoing=True, pattern="^\.aliveu")
 async def amireallyaliveuser(username):
     """ For .aliveu command, change the username in the .alive command. """
     if not username.text[0].isalpha() and username.text[0] not in ("/", "#",
@@ -159,7 +159,7 @@ async def amireallyaliveuser(username):
         await username.edit("`" f"{output}" "`")
 
 
-@register(outgoing=True, pattern="^.resetalive$")
+@register(outgoing=True, pattern="^\.resetalive$")
 async def amireallyalivereset(ureset):
     """ For .resetalive command, reset the username in the .alive command. """
     if not ureset.text[0].isalpha() and ureset.text[0] not in ("/", "#", "@",

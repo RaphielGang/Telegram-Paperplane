@@ -1,9 +1,9 @@
 import json
-from datetime import datetime
 
+from datetime import datetime
+from requests import get
 from pytz import (country_timezones as c_tz,
                   timezone as tz, country_names as c_n)
-from requests import get
 
 from userbot import (OPEN_WEATHER_MAP_APPID as OWM_API,
                      OPEN_WEATHER_MAP_DEFCITY as DEFCITY, CMD_HELP)
@@ -21,7 +21,7 @@ async def get_tz(con):
         return
 
 
-@register(outgoing=True, pattern="^.weather(?: |$)(.*)")
+@register(outgoing=True, pattern="^\.weather(?: |$)(.*)")
 async def get_weather(weather):
     if not weather.text[0].isalpha() and weather.text[0] in ("."):
         if not OWM_API:

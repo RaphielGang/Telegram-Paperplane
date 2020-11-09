@@ -19,7 +19,7 @@ from userbot.events import register
 GITHUB = 'https://github.com'
 
 
-@register(outgoing=True, pattern="^.magisk$")
+@register(outgoing=True, pattern="^\.magisk$")
 async def magisk(request):
     """ magisk latest releases """
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
@@ -36,7 +36,7 @@ async def magisk(request):
     await request.edit(releases)
 
 
-@register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^\.device(?: |$)(\S*)")
 async def device_info(request):
     """ get android device basic info from its codename """
     textx = await request.get_reply_message()
@@ -63,7 +63,7 @@ async def device_info(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^.codename(?: |)([\S]*)(?: |)([\s\S]*)")
+@register(outgoing=True, pattern=r"^\.codename(?: |)([\S]*)(?: |)([\s\S]*)")
 async def codename_info(request):
     """ search for android codename """
     textx = await request.get_reply_message()
@@ -103,7 +103,7 @@ async def codename_info(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^.specs(?: |)([\S]*)(?: |)([\s\S]*)")
+@register(outgoing=True, pattern=r"^\.specs(?: |)([\S]*)(?: |)([\s\S]*)")
 async def devices_specifications(request):
     """ Mobile devices specifications """
     textx = await request.get_reply_message()
@@ -156,7 +156,7 @@ async def devices_specifications(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^.twrp(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^\.twrp(?: |$)(\S*)")
 async def twrp(request):
     """ get android device twrp """
     textx = await request.get_reply_message()
@@ -185,7 +185,7 @@ async def twrp(request):
     await request.edit(reply)
 
 
-@register(outgoing=True, pattern=r"^.evo(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^\.evo(?: |$)(\S*)")
 async def evo(event):
     if event.from_id is None:
         return
@@ -255,7 +255,7 @@ async def evo(event):
         return
 
 
-@register(outgoing=True, pattern=r"^.bootleggers(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^\.bootleggers(?: |$)(\S*)")
 async def bootleggers(event):
     if event.from_id is None:
         return
@@ -323,7 +323,7 @@ async def bootleggers(event):
     await event.edit(reply_text, link_preview=False)
 
 
-@register(outgoing=True, pattern=r"^.los(?: |$)(\S*)")
+@register(outgoing=True, pattern=r"^\.los(?: |$)(\S*)")
 async def los(event):
     if event.from_id is None:
         return
@@ -362,7 +362,7 @@ async def los(event):
     await event.edit(reply_text, link_preview=False)
 
 
-@register(outgoing=True, pattern=r"^.phh")
+@register(outgoing=True, pattern=r"^\.phh")
 async def phh(event):
     if event.from_id is None:
         return

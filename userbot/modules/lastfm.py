@@ -3,8 +3,8 @@ from os import environ
 from re import sub
 from sys import setrecursionlimit
 from urllib import parse
-
 from pylast import User, WSError
+
 from telethon.errors import AboutTooLongError
 from telethon.errors.rpcerrorlist import FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
@@ -39,7 +39,7 @@ LastLog = False
 # ================================================
 
 
-@register(outgoing=True, pattern="^.lastfm$")
+@register(outgoing=True, pattern="^\.lastfm$")
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
     await lastFM.edit("Processing...")
@@ -171,7 +171,7 @@ async def get_curr_track(lfmbio):
     RUNNING = False
 
 
-@register(outgoing=True, pattern=r"^.lastbio (\S*)")
+@register(outgoing=True, pattern=r"^\.lastbio (\S*)")
 async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1)
     global LASTFMCHECK
@@ -195,7 +195,7 @@ async def lastbio(lfmbio):
         await lfmbio.edit(LFM_BIO_ERR)
 
 
-@register(outgoing=True, pattern=r"^.lastlog (\S*)")
+@register(outgoing=True, pattern=r"^\.lastlog (\S*)")
 async def lastlog(lstlog):
     arg = lstlog.pattern_match.group(1)
     global LastLog

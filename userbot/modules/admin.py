@@ -98,7 +98,7 @@ CHATUNLOCK_RIGHTS = ChatBannedRights(
 # ================================================
 
 
-@register(outgoing=True, group_only=True, pattern="^.setgrouppic$")
+@register(outgoing=True, group_only=True, pattern="^\.setgrouppic$")
 async def set_group_photo(gpic):
     """For .setgrouppic command, changes the picture of a group"""
     replymsg = await gpic.get_reply_message()
@@ -128,7 +128,7 @@ async def set_group_photo(gpic):
             await gpic.edit(PP_ERROR)
 
 
-@register(outgoing=True, group_only=True, pattern="^.promote(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^\.promote(?: |$)(.*)")
 async def promote(promt):
     """For .promote command, do promote targeted person"""
     # Get targeted chat
@@ -177,7 +177,7 @@ async def promote(promt):
                            f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
 
 
-@register(outgoing=True, group_only=True, pattern="^.demote(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^\.demote(?: |$)(.*)")
 async def demote(dmod):
     """For .demote command, do demote targeted person"""
     # Admin right check
@@ -225,7 +225,7 @@ async def demote(dmod):
                            f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
 
 
-@register(outgoing=True, group_only=True, pattern="^.ban(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^\.ban(?: |$)(.*)")
 async def ban(bon):
     """For .ban command, do a ban at targeted person"""
     # Here laying the sanity check
@@ -276,7 +276,7 @@ async def ban(bon):
                            f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
 
 
-@register(outgoing=True, group_only=True, pattern="^.unban(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^\.unban(?: |$)(.*)")
 async def nothanos(unbon):
     """For .unban command, unban the target"""
     # Here laying the sanity check
@@ -312,7 +312,7 @@ async def nothanos(unbon):
         await unbon.edit("`Uh oh my unban logic broke!`")
 
 
-@register(outgoing=True, group_only=True, pattern="^.delusers(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^\.delusers(?: |$)(.*)")
 async def rm_deletedacc(show):
     """For .delusers command, clean deleted accounts."""
     con = show.pattern_match.group(1)
@@ -372,7 +372,7 @@ async def rm_deletedacc(show):
     await show.edit(del_status)
 
 
-@register(outgoing=True, group_only=True, pattern="^.adminlist$")
+@register(outgoing=True, group_only=True, pattern="^\.adminlist$")
 async def get_admin(show):
     """For .adminlist command, list all of the admins of the chat."""
     info = await show.client.get_entity(show.chat_id)
@@ -393,7 +393,7 @@ async def get_admin(show):
     await show.edit(mentions, parse_mode="html")
 
 
-@register(outgoing=True, group_only=True, pattern="^.pin(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^\.pin(?: |$)(.*)")
 async def pin(msg):
     """The .pin pins the replied to message at the top of the chat."""
     # Admin or creator check
@@ -437,7 +437,7 @@ async def pin(msg):
                            f"LOUD: {not is_silent}")
 
 
-@register(outgoing=True, group_only=True, pattern="^.kick(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern="^\.kick(?: |$)(.*)")
 async def kick(usr):
     """For .kick command, kick someone from the group using the userbot."""
     # Admin or creator check
@@ -477,7 +477,7 @@ async def kick(usr):
                            f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
 
 
-@register(outgoing=True, group_only=True, pattern="^.lock$")
+@register(outgoing=True, group_only=True, pattern="^\.lock$")
 async def emergency_lock(lock):
     """For emergency-locking a chat"""
     # Admin or creator check
@@ -509,7 +509,7 @@ async def emergency_lock(lock):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.unlock$")
+@register(outgoing=True, group_only=True, pattern="^\.unlock$")
 async def chat_unlock(unlock):
     """For unlocking a chat"""
     # Admin or creator check

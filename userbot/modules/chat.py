@@ -12,7 +12,7 @@ from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.userid$")
+@register(outgoing=True, pattern="^\.userid$")
 async def useridgetter(target):
     """ For .userid command, returns the ID of the target user. """
     message = await target.get_reply_message()
@@ -34,13 +34,13 @@ async def useridgetter(target):
             name, user_id))
 
 
-@register(outgoing=True, pattern="^.chatid$")
+@register(outgoing=True, pattern="^\.chatid$")
 async def chatidgetter(chat):
     """ For .chatid, returns the ID of the chat you are in at that moment. """
     await chat.edit("Chat ID: `" + str(chat.chat_id) + "`")
 
 
-@register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
+@register(outgoing=True, pattern=r"^\.log(?: |$)([\s\S]*)")
 async def log(log_text):
     """ For .log command, forwards a message
      or the command argument to the bot logs group """
@@ -62,7 +62,7 @@ async def log(log_text):
     await log_text.delete()
 
 
-@register(outgoing=True, pattern="^.kickme$")
+@register(outgoing=True, pattern="^\.kickme$")
 async def kickme(leave):
     """ Basically it's .kickme command """
     await leave.edit("`Nope, no, no, I go away`")

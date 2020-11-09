@@ -1,9 +1,14 @@
+# Copyright (C) 2020 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# you may not use this file except in compliance with the License.
+#
 """
 This module updates the userbot based on Upstream revision
 """
 import sys
-from os import remove, environ, execle
 
+from os import remove, environ, execle
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
@@ -26,7 +31,7 @@ async def is_off_br(br):
     return
 
 
-@register(outgoing=True, pattern="^.update(?: |$)(.*)")
+@register(outgoing=True, pattern="^\.update(?: |$)(.*)")
 async def upstream(ups):
     if not ups.text[0].isalpha() and ups.text[0] in ("."):
         await ups.edit("`Checking for updates, please wait....`")
