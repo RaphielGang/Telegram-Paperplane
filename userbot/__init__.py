@@ -89,6 +89,7 @@ else:
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
 
+ALIVE_NAME = os.environ.get("ALIVE_NAME") or None
 BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO") or None
 
@@ -134,7 +135,7 @@ with bot:
 
 
 # Global Variables
-VERSION = "3.0.3"
+VERSION = "3.1.0"
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}
