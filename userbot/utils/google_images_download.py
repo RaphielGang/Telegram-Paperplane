@@ -471,7 +471,8 @@ class googleimagesdownload:
         pass
 
     # Downloading entire Web Document (Raw Page Content)
-    def download_page(self, url):
+    @staticmethod
+    def download_page(url):
         version = (3, 0)
         cur_version = sys.version_info
         if cur_version >= version:  # If the Current Version of Python is 3.0 or above
@@ -508,7 +509,8 @@ class googleimagesdownload:
 
     # Download Page for more than 100 images
 
-    def download_extended_page(self, url, chromedriver):
+    @staticmethod
+    def download_extended_page(url, chromedriver):
         from selenium import webdriver
         from selenium.webdriver.common.keys import Keys
         if sys.version_info[0] < 3:
@@ -561,7 +563,8 @@ class googleimagesdownload:
 
     # Correcting the escape characters for python2
 
-    def replace_with_byte(self, match):
+    @staticmethod
+    def replace_with_byte(match):
         return chr(int(match.group(0)[1:], 8))
 
     def repair(self, brokenjson):
@@ -571,7 +574,8 @@ class googleimagesdownload:
 
     # Finding 'Next Image' from the given raw page
 
-    def get_next_tab(self, s):
+    @staticmethod
+    def get_next_tab(s):
         start_line = s.find('class="dtviD"')
         if start_line == -1:  # If no links are found then give an error!
             end_quote = 0
@@ -619,7 +623,8 @@ class googleimagesdownload:
 
     # Format the object in readable format
 
-    def format_object(self, object):
+    @staticmethod
+    def format_object(object):
         data = object[1]
         main = data[3]
         info = data[9]
@@ -637,7 +642,8 @@ class googleimagesdownload:
 
     # function to download single image
 
-    def single_image(self, image_url):
+    @staticmethod
+    def single_image(image_url):
         main_directory = "downloads"
         extensions = (".jpg", ".gif", ".png", ".bmp", ".svg", ".webp", ".ico")
         url = image_url
@@ -679,7 +685,8 @@ class googleimagesdownload:
             "completed ====> " +
             image_name.encode('raw_unicode_escape').decode('utf-8'))
 
-    def similar_images(self, similar_images):
+    @staticmethod
+    def similar_images(similar_images):
         version = (3, 0)
         cur_version = sys.version_info
         if cur_version >= version:  # If the Current Version of Python is 3.0 or above
@@ -728,7 +735,8 @@ class googleimagesdownload:
                 return "Cloud not connect to Google Images endpoint"
 
     # Building URL parameters
-    def build_url_parameters(self, arguments):
+    @staticmethod
+    def build_url_parameters(arguments):
         if arguments['language']:
             lang = "&lr="
             lang_param = {
@@ -896,7 +904,8 @@ class googleimagesdownload:
 
     # measures the file size
 
-    def file_size(self, file_path):
+    @staticmethod
+    def file_size(file_path):
         if os.path.isfile(file_path):
             file_info = os.stat(file_path)
             size = file_info.st_size
@@ -907,7 +916,8 @@ class googleimagesdownload:
             return size
 
     # keywords from file
-    def keywords_from_file(self, file_name):
+    @staticmethod
+    def keywords_from_file(file_name):
         search_keyword = []
         with codecs.open(file_name, 'r', encoding='utf-8-sig') as f:
             if '.csv' in file_name:
@@ -936,8 +946,8 @@ class googleimagesdownload:
         return search_keyword
 
     # make directories
+    @staticmethod
     def create_directories(
-            self,
             main_directory,
             dir_name,
             thumbnail,
@@ -1267,7 +1277,8 @@ class googleimagesdownload:
 
     # Getting all links with the help of '_images_get_next_image'
 
-    def _get_image_objects(self, s):
+    @staticmethod
+    def _get_image_objects(s):
         start_line = s.find("AF_initDataCallback({key: \\'ds:1\\'") - 10
         start_object = s.find('[', start_line + 1)
         end_object = s.find('</script>', start_object + 1) - 4
