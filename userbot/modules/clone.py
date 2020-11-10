@@ -143,5 +143,5 @@ CMD_HELP.update(
     {
         "fake acc": [
             'Fake Acc', " - `.clone`: reply to user who you want to clone the profile.\n"
-            " - `revert: Reverts back to your profile.\n\n"
+            " - `revert`: Reverts back to your profile.\n\n"
             "**All commands can be used with** `.`"]})
