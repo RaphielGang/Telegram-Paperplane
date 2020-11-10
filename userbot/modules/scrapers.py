@@ -19,7 +19,6 @@ from re import findall
 from shutil import rmtree
 from urllib.error import HTTPError
 from emoji import get_emoji_regexp
-from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
 from search_engine_parser import GoogleSearch
@@ -34,6 +33,7 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
 
 from telethon.tl.types import DocumentAttributeAudio
 
+from userbot.utils.google_images_download import googleimagesdownload
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import register
 from userbot.modules.upload_download import progress
@@ -61,7 +61,7 @@ async def img_sampler(event):
         query = query.replace("lim=" + lim[0], "")
     except IndexError:
         lim = 2
-    response = google_images_download.googleimagesdownload()
+    response = googleimagesdownload()
 
     # creating list of arguments
     arguments = {
