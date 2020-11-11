@@ -89,6 +89,7 @@ else:
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
 
+ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
 ALIVE_NAME = os.environ.get("ALIVE_NAME") or None
 BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO") or None
