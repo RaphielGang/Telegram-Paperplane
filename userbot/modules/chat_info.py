@@ -42,7 +42,7 @@ class TGDoc:
         self.sections = args
 
     def __str__(self) -> str:
-        return '\n\n'.join([str(section) for section in self.sections]) 
+        return '\n\n'.join([str(section) for section in self.sections])
 
 
 @register(outgoing=True, pattern=r"^\.c(?:hat)?(\s+[\S\s]+|$)")

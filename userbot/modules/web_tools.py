@@ -3,8 +3,10 @@
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
-""" Userbot module containing commands related to the \
-    Information Superhighway(yes, Internet). """
+"""
+Userbot module containing commands related to the
+Information Superhighway(yes, Internet)
+"""
 
 import speedtest
 
@@ -17,7 +19,10 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^\.speedtest$")
 async def speedtst(spd):
-    """ For .speed command, use SpeedTest to check server speeds. """
+    """
+    For .speed command,
+    use SpeedTest to check server speeds.
+    """
     await spd.edit("`Running speed test . . .`")
     test = speedtest.Speedtest()
 
@@ -43,7 +48,8 @@ async def speedtst(spd):
 
 def speed_convert(size):
     """
-    Hi human, you can't read bytes?
+    Hi human,
+    you can't read bytes?
     """
     power = 2 ** 10
     zero = 0
@@ -56,7 +62,10 @@ def speed_convert(size):
 
 @register(outgoing=True, pattern="^\.nearestdc$")
 async def neardc(event):
-    """ For .nearestdc command, get the nearest datacenter information. """
+    """
+    For .nearestdc command,
+    get the nearest datacenter information.
+    """
     result = await event.client(functions.help.GetNearestDcRequest())
     await event.edit(f"Country : `{result.country}` \n"
                      f"Nearest Datacenter : `{result.nearest_dc}` \n"
@@ -65,7 +74,10 @@ async def neardc(event):
 
 @register(outgoing=True, pattern="^\.pingme$")
 async def pingme(pong):
-    """ FOr .pingme command, ping the userbot from any chat.  """
+    """
+    For.pingme command,
+    ping the userbot from any chat.
+    """
     start = datetime.now()
     await pong.edit("`Pong!`")
     end = datetime.now()

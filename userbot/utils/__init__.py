@@ -1,3 +1,12 @@
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# you may not use this file except in compliance with the License.
+#
+"""
+Some various utilities for userbot
+"""
+
 from re import findall, match
 from typing import List
 
@@ -68,7 +77,9 @@ async def get_user_from_id(user, event):
 
 
 async def get_user_from_event(event: NewMessage.Event, **kwargs):
-    """ Get the user from argument or replied message. """
+    """
+    Get the user from argument or replied message
+    """
     reply_msg: Message = await event.get_reply_message()
     user = kwargs.get('user', None)
 
@@ -92,7 +103,7 @@ async def get_user_from_event(event: NewMessage.Event, **kwargs):
             replied_user = await event.client(
                 GetFullUserRequest(user_object.id))
         except (TypeError, ValueError) as err:
-            return None
+            return err
 
     # Check for a forwarded message
     elif (reply_msg and
@@ -116,7 +127,6 @@ async def get_user_from_event(event: NewMessage.Event, **kwargs):
 
 
 async def get_chat_from_event(event: NewMessage.Event, **kwargs):
-    reply_msg: Message = await event.get_reply_message()
     chat = kwargs.get('chat', None)
 
     if chat:
@@ -130,8 +140,6 @@ async def get_chat_from_event(event: NewMessage.Event, **kwargs):
                 return None
         except(TypeError, ValueError):
             return None
-    # elif reply_msg and reply_msg.forward:
-    #     return None
     else:
         chat = await event.get_chat()
         return await event.client(GetFullChannelRequest(chat.id))
