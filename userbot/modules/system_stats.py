@@ -7,17 +7,20 @@
 
 import kantex
 import platform
+import shutil
 import time
 import psutil
+import datetime
+import sys
 
+from datetime import datetime
 from asyncio import create_subprocess_exec as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 from os import remove
 from platform import python_version, uname
 from shutil import which
 
-from telethon import version
-
+from telethon import __version__, version
 from userbot import CMD_HELP, VERSION, ALIVE_NAME, ALIVE_LOGO, bot
 from userbot.events import register
 from userbot.modules import ALL_MODULES
@@ -249,8 +252,9 @@ CMD_HELP.update({"system stats": ['System Stats',
                                   " - `sysd`: Show system information using neofetch.\n"
                                   " - `botver`: Show Paperplane version.\n"
                                   " - `pip` <module(s)>: Search module(s) in PyPI.\n"
-                                  " - `alive`: Check if Paperplane is running. \n"
+                                  " - `alive`: Check if Paperplane is running.\n"
                                   " - `aliveu` <new_user>: Change the user name in .alive command (aesthetics change only)\n"
+                                  " - `spc`: shows some information from your server.\n"
                                   " - `resetalive`: Reset the user name in the .alive command to default (aesthetics change only)\n\n"
                                   "**All commands can be used with** `.`"]
                  })
