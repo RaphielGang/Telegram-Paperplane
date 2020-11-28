@@ -32,7 +32,7 @@ For configuring Paperplane, you can checkout our [Wiki](https://wiki.raphielgang
 make sure you have followed the Wiki and all the steps required.
 
 Deploy Paperplane to Heroku:
-<p align="left"><a href="https://heroku.com/deploy"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" /></a></p>
+<p align="left"><a href="https://heroku.com/deploy?template=https://github.com/RaphielGang/Telegram-Paperplane"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" /></a></p>
 
 ## Groups and support
 
