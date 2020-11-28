@@ -76,7 +76,6 @@ async def upstream(ups):
                 f'\n`Your BOT is`  **up-to-date**  `with`  **{ac_br}**\n')
             return
 
-<<<<<<< HEAD
         if conf != "now":
             changelog_str = f'**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`'
             if len(changelog_str) > 4096:
@@ -93,41 +92,6 @@ async def upstream(ups):
             else:
                 await ups.edit(changelog_str)
             await ups.respond('`do \".update now\" to update`')
-=======
-        await ups.edit(
-            "`Heroku configuration found! Updater will try to update and restart Paperplane"
-            "automatically if succeeded. Try checking if Paperplane is alive by using the"
-            "\".alive\" command after a few minutes.`")
-        if not STRING_SESSION:
-            repo.git.add('userbot.session', force=True)
-        if path.isfile('config.env'):
-            repo.git.add('config.env', force=True)
-
-        # Set git config for commiting session and config
-        repo.config_writer().set_value("user", "name",
-                                       "Paperplane Updater").release()
-        repo.config_writer().set_value("user", "email",
-                                       "<>").release()  # No Email
-
-        # Make a new commit with session and commit (if they exist), this is only temporary to move them to the Docker image
-        # Allow empty commit if there is nothing to commit (string session + env vars)
-        repo.git.commit("--allow-empty", "-m 'Commit userbot.session and config.env'")
-
-        heroku_remote_url = heroku_app.git_url.replace(
-            "https://", f"https://api:{HEROKU_APIKEY}@")
-
-        remote = None
-        if 'heroku' in repo.remotes:
-            remote = repo.remote('heroku')
-            remote.set_url(heroku_remote_url)
-        else:
-            remote = repo.create_remote('heroku', heroku_remote_url)
-
-        try:
-            remote.push(refspec="HEAD:refs/heads/master", force=True)
-        except GitCommandError as e:
-            await ups.edit(f'{txt}\n`Early failure! {e}`')
->>>>>>> 7e91f53cd83be10d7b76c5a4ccd1f35c17c8670d
             return
 
         await ups.edit('`New update found, updating...`')
