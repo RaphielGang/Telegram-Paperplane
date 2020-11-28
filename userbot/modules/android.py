@@ -24,7 +24,7 @@ async def magisk(request):
     url = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/'
     releases = 'Latest Magisk Releases:\n'
     for variant in [
-            'master/stable', 'master/beta', 'canary/release', 'canary/debug'
+            'master/stable', 'master/beta'
     ]:
         data = get(url + variant + '.json').json()
         name = variant.split('_')[0].capitalize()
