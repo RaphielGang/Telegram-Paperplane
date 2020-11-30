@@ -538,19 +538,17 @@ async def rm_deletedacc(show):
     """ For .delusers command, clean deleted accounts. """
     con = show.pattern_match.group(1)
     del_u = 0
-    del_status = "`No deleted accounts found, Group is cleaned as Hell`"
+    del_status = "`No deleted accounts found, the group is clean!`"
 
     if con != "clean":
-        await show.edit("`Searching for zombie accounts...`")
-        async for user in show.client.iter_participants(show.chat_id,
-                                                        aggressive=True):
+        await show.edit("`Searching for deleted accounts...`")
+        async for user in show.client.iter_participants(show.chat_id):
             if user.deleted:
                 del_u += 1
 
         if del_u > 0:
-            del_status = f"found **{del_u}** \
-                deleted account(s) in this group \
-            \nclean them by using .delusers clean"
+            del_status = f"Found **{del_u}** deleted account(s) in this group.\
+            \nClean them by using `.delusers clean`."
 
         await show.edit(del_status)
         return
@@ -585,11 +583,11 @@ async def rm_deletedacc(show):
             del_u += 1
             await sleep(1)
     if del_u > 0:
-        del_status = f"cleaned **{del_u}** deleted account(s)"
+        del_status = f"Cleaned **{del_u}** deleted account(s)!"
 
     if del_a > 0:
-        del_status = f"cleaned **{del_u}** deleted account(s) \
-\n**{del_a}** deleted admin accounts are not removed"
+        del_status = f"Cleaned **{del_u}** deleted account(s)! \
+\n**{del_a}** deleted admin accounts are not removed."
 
     await show.edit(del_status)
 
