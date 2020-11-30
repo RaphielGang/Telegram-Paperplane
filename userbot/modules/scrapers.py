@@ -15,7 +15,7 @@ from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
 from requests import get
-from search_engine_parser import GoogleSearch
+from search_engine_parser.core.engines.google import Search as GoogleSearch
 from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
@@ -81,12 +81,12 @@ async def gsearch(q_event):
     googsearch = GoogleSearch()
     gresults = await googsearch.async_search(*search_args)
     msg = ""
-    for i in range(1, 6):
+    for i in range(0, 5):
         try:
             title = gresults["titles"][i]
             link = gresults["links"][i]
             desc = gresults["descriptions"][i]
-            msg += f"{i}. [{title}]({link})\n`{desc}`\n\n"
+            msg += f"{i+1}. [{title}]({link})\n`{desc}`\n\n"
         except IndexError:
             break
     await q_event.edit("**Search Query:**\n`" + query + "`\n\n**Results:**\n" +
