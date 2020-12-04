@@ -16,6 +16,7 @@ from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
 from requests import get
 from search_engine_parser.core.engines.google import Search as GoogleSearch
+from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
@@ -79,19 +80,27 @@ async def gsearch(q_event):
 
     search_args = (str(query), 1)
     googsearch = GoogleSearch()
-    gresults = await googsearch.async_search(*search_args)
-    msg = ""
-    for i in range(0, 5):
-        try:
-            title = gresults["titles"][i]
-            link = gresults["links"][i]
-            desc = gresults["descriptions"][i]
-            msg += f"{i+1}. [{title}]({link})\n`{desc}`\n\n"
-        except IndexError:
-            break
-    await q_event.edit("**Search Query:**\n`" + query + "`\n\n**Results:**\n" +
-                       msg,
-                       link_preview=False)
+    try :
+        gresults = await googsearch.async_search(*search_args)
+        msg = ""
+        for i in range(0, 5):
+            try:
+                title = gresults["titles"][i]
+                link = gresults["links"][i]
+                desc = gresults["descriptions"][i]
+                msg += f"{i+1}. [{title}]({link})\n`{desc}`\n\n"
+            except IndexError:
+                break
+        await q_event.edit("**Search Query:**\n`" + query + "`\n\n**Results:**\n" +
+                           msg,
+                           link_preview=False)
+    except NoResultsOrTrafficError as error:
+        if BOTLOG:
+            await q_event.client.send_message(
+                BOTLOG_CHATID,
+                f"`GoogleSearch error: {error}`",
+            )
+        return
     if BOTLOG:
         await q_event.client.send_message(
             BOTLOG_CHATID,
