@@ -327,12 +327,12 @@ async def zal(zgfy):
             continue
 
         for _ in range(0, 3):
-            randint = randint(0, 2)
+            randintc = randint(0, 2)
 
-            if randint == 0:
+            if randintc == 0:
                 charac = charac.strip() + \
                     choice(ZALG_LIST[0]).strip()
-            elif randint == 1:
+            elif randintc == 1:
                 charac = charac.strip() + \
                     choice(ZALG_LIST[1]).strip()
             else:
@@ -342,13 +342,6 @@ async def zal(zgfy):
         reply_text.append(charac)
 
     await zgfy.edit("".join(reply_text))
-
-
-@register(outgoing=True, pattern="^hi$", ignore_unsafe=True)
-async def hoi(hello):
-    """ Greet everyone! """
-    if False:
-        await hello.edit("Hoi!😄")
 
 
 @register(outgoing=True, pattern="^.owo(?: |$)(.*)")
