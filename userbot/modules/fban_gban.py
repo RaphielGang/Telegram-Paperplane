@@ -148,7 +148,7 @@ async def fedban_all(msg):
             await sleep(0.2)
     if failed:
         failedstr = ""
-        for i in failed.keys():
+        for i in failed:
             failedstr += failed[i]
             failedstr += " "
         await msg.reply(f"`Failed to fban in {failedstr}`")

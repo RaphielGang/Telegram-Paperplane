@@ -108,7 +108,8 @@ async def add_filter(chatid, keyword, msg):
             'msg': msg
         })
         return True
-    else:
+
+    if to_check:
         MONGO.filters.update_one(
             {
                 '_id': to_check["_id"],
@@ -118,7 +119,6 @@ async def add_filter(chatid, keyword, msg):
             {
                 "$set": {'msg': msg}
             })
-
         return False
 
 
@@ -128,14 +128,14 @@ async def delete_filter(chatid, keyword):
 
     if not to_check:
         return False
-    else:
+
+    if to_check:
         MONGO.filters.delete_one({
             '_id': to_check["_id"],
             'chat_id': to_check["chat_id"],
             'keyword': to_check["keyword"],
             'msg': to_check["msg"]
         })
-
         return True
 
 
@@ -156,9 +156,9 @@ async def add_note(chatid, name, text):
 
     if not to_check:
         MONGO.notes.insert_one({'chat_id': chatid, 'name': name, 'text': text})
-
         return True
-    else:
+
+    if to_check:
         MONGO.notes.update_one(
             {
                 '_id': to_check["_id"],
@@ -168,7 +168,6 @@ async def add_note(chatid, name, text):
             {
                 "$set": {'text': text}
             })
-
         return False
 
 
@@ -178,7 +177,8 @@ async def delete_note(chatid, name):
 
     if not to_check:
         return False
-    else:
+
+    if to_check:
         MONGO.notes.delete_one({
             '_id': to_check["_id"],
             'chat_id': to_check["chat_id"],
@@ -215,9 +215,9 @@ async def add_list(chatid, name, items):
             'name': name,
             'items': items
         })
-
         return True
-    else:
+
+    if to_check:
         MONGO.lists.update_one(
             {
                 '_id': to_check["_id"],
@@ -226,7 +226,6 @@ async def add_list(chatid, name, items):
             }, {"$set": {
                 'items': items
             }})
-
         return False
 
 
@@ -236,7 +235,8 @@ async def delete_list(chatid, name):
 
     if not to_check:
         return False
-    else:
+
+    if to_check:
         MONGO.lists.delete_one({
             '_id': to_check["_id"],
             'chat_id': to_check["chat_id"],
@@ -251,7 +251,8 @@ async def set_list(oldchatid, name, newchatid):
 
     if not to_check:
         return False
-    else:
+
+    if to_check:
         MONGO.lists.update_one(
             {
                 '_id': to_check["_id"],
@@ -260,7 +261,6 @@ async def set_list(oldchatid, name, newchatid):
             }, {"$set": {
                 'chat_id': newchatid
             }})
-
         return True
 
 
@@ -273,11 +273,11 @@ async def approval(userid):
 
     if to_check is None:
         MONGO.pmpermit.insert_one({'user_id': userid, 'approval': False})
+        return False
 
+    if to_check['approval'] is False:
         return False
-    elif to_check['approval'] is False:
-        return False
-    elif to_check['approval'] is True:
+    if to_check['approval'] is True:
         return True
 
 
@@ -318,9 +318,11 @@ async def notif_state():
     if not state:
         MONGO.notif.insert_one({'state': True})
         return True
-    elif state["state"] is False:
+
+    if state["state"] is False:
         return False
-    elif state["state"] is True:
+
+    if state["state"] is True:
         return True
 
 
