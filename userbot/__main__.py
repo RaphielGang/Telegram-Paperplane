@@ -5,12 +5,13 @@
 #
 """ Userbot start point """
 
+import sys
 from importlib import import_module
 from os import environ
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
-from userbot import LOGS, bot, PAPERPLANE_VERSION
+from userbot import LOGS, PAPERPLANE_VERSION, bot
 from userbot.modules import ALL_MODULES
 
 INVALID_PH = '\nERROR: The phone no. entered is INVALID' \
@@ -21,7 +22,7 @@ try:
     bot.start()
 except PhoneNumberInvalidError:
     print(INVALID_PH)
-    exit(1)
+    sys.exit(1)
 
 for module_name in ALL_MODULES:
     imported_module = import_module("userbot.modules." + module_name)

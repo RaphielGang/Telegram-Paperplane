@@ -6,6 +6,7 @@
 """ Userbot initialization. """
 
 import os
+import sys
 from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from sys import version_info
@@ -36,7 +37,7 @@ LOGS = getLogger(__name__)
 if version_info < (3, 6, 0):
     LOGS.error("You MUST have a python version of at least 3.6."
                " Multiple features depend on this. Bot quitting.")
-    quit(1)
+    sys.exit(1)
 
 # Global declaration for bot version
 PAPERPLANE_VERSION = "4.3"
@@ -48,7 +49,7 @@ CONFIG_CHECK = os.environ.get(
 if CONFIG_CHECK:
     LOGS.error("Please remove the line mentioned in the first \
          hashtag from the config.env file")
-    quit(1)
+    sys.exit(1)
 
 API_KEY = os.environ.get("API_KEY", None)
 
@@ -103,7 +104,7 @@ async def check_botlog_chatid():
         LOGS.error(
             "Your account doesn't have rights to send messages to BOTLOG_CHATID "
             "group. Check if you typed the Chat ID correctly.")
-        quit(1)
+        sys.exit(1)
 
 
 with bot:
@@ -112,7 +113,7 @@ with bot:
     except:
         LOGS.error("BOTLOG_CHATID environment variable isn't a "
                    "valid entity. Check your config.env file.")
-        quit(1)
+        sys.exit(1)
 
 # Init Mongo
 MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
