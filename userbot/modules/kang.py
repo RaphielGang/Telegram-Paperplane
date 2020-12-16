@@ -12,7 +12,6 @@ from os import remove as DelFile
 
 from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
-
 from userbot import CMD_HELP, bot
 from userbot.events import register
 
@@ -102,8 +101,13 @@ async def kang(args):
             packnick += " animated"
             cmd = '/newanimated'
 
-        response = urllib.request.urlopen(
-            urllib.request.Request(f'http://t.me/addstickers/{packname}'))
+        url = f'http://t.me/addstickers/{packname}'
+        if url.lower().startswith('http'):
+            req = urllib.request.Request(url)
+        else:
+            raise ValueError from None
+
+        response = urllib.request.urlopen(req)
         htmlstr = response.read().decode("utf8").split('\n')
 
         if CREATE_RESP not in htmlstr:
@@ -255,4 +259,3 @@ CMD_HELP.update({"kang": ["Kang",
     "If emojis are sent, they will be used as the emojis for the sticker.\n"
     "If a number is sent, the emoji will be saved in the pack corresponding to that number."]
 })
-
