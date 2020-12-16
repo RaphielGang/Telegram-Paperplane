@@ -309,7 +309,7 @@ async def block_pm(userid):
 
 async def notif_state():
     """ Get notification setting """
-    state = dict()
+    state = {}
     state_db = MONGO.notif.find()
 
     for stat in state_db:
@@ -326,7 +326,7 @@ async def notif_state():
 
 async def __notif_id():
     """ Get notification ID from Database """
-    id_real = dict()
+    id_real = {}
     id_db = MONGO.notif.find()
 
     for id_s in id_db:
