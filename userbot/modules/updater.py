@@ -100,10 +100,10 @@ async def upstream(ups):
     ups_rem.fetch(ac_br)
     repo.git.reset('--hard', 'FETCH_HEAD')
 
-    if HEROKU_APIKEY != None:
+    if HEROKU_APIKEY is not None:
         # Heroku configuration, which can rebuild the Docker image with newer changes
         heroku = heroku3.from_key(HEROKU_APIKEY)
-        if HEROKU_APPNAME != None:
+        if HEROKU_APPNAME is not None:
             try:
                 heroku_app = heroku.apps()[HEROKU_APPNAME]
             except KeyError:
