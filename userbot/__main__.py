@@ -7,6 +7,7 @@
 
 from importlib import import_module
 import os
+import sys
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
@@ -21,7 +22,7 @@ try:
     bot.start()
 except PhoneNumberInvalidError:
     print(INVALID_PH)
-    exit(1)
+    sys.exit(1)
 
 for module_name in ALL_MODULES:
     imported_module = import_module("userbot.modules." + module_name)

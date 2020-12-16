@@ -162,7 +162,7 @@ async def upstream(ups):
         # Spin a new instance of bot
         execl(sys.executable, sys.executable, *sys.argv)
         # Shut the existing one down
-        exit()
+        sys.exit()
 
 
 CMD_HELP.update({

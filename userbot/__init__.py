@@ -6,6 +6,7 @@
 """ Userbot initialization. """
 
 import os
+import sys
 from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from sys import version_info
@@ -36,7 +37,7 @@ LOGS = getLogger(__name__)
 if version_info[0] < 3 or version_info[1] < 6:
     LOGS.error("You MUST have a python version of at least 3.6."
                " Multiple features depend on this. Halting!")
-    quit(1)
+    sys.exit(1)
 
 # Check if the config was edited by using the already used variable
 CONFIG_CHECK = os.environ.get(
@@ -45,17 +46,17 @@ CONFIG_CHECK = os.environ.get(
 if CONFIG_CHECK:
     LOGS.error("Please remove the line mentioned in the first \
          hashtag from the config.env file. Halting!")
-    quit(1)
+    sys.exit(1)
 
 API_KEY = os.environ.get("API_KEY") or None
 if not API_KEY:
     LOGS.error("API Key is not set! Check your config.env. Halting!")
-    quit(1)
+    sys.exit(1)
 
 API_HASH = os.environ.get("API_HASH") or None
 if not API_HASH:
     LOGS.error("API Hash is not set! Check your config.env. Halting!")
-    quit(1)
+    sys.exit(1)
 
 STRING_SESSION = os.environ.get("STRING_SESSION") or None
 
@@ -114,7 +115,7 @@ async def check_botlog_chatid():
         LOGS.error(
             "Your account doesn't have rights to send messages to BOTLOG_CHATID "
             "group. Check if you typed the Chat ID correctly. Halting!")
-        quit(1)
+        sys.exit(1)
 
 
 with bot:
@@ -123,7 +124,7 @@ with bot:
     except:
         LOGS.error("BOTLOG_CHATID environment variable isn't a "
                    "valid entity. Check your config.env file. Halting!")
-        quit(1)
+        sys.exit(1)
 
 # Init Mongo
 MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
