@@ -166,12 +166,12 @@ async def edit_list_item(event):
 
     textx = await event.get_reply_message()
     listname = None
-    arg_index = event.pattern_match.group(2)
+    arg_indexes = event.pattern_match.group(2)
 
     if textx:
         x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
         listname = x.group(1)
-        arg_index = event.pattern_match.group(1) + " " + arg_indexes
+        arg_indexes = event.pattern_match.group(1) + " " + arg_indexes
     elif event.pattern_match.group(1):
         listname = event.pattern_match.group(1)
     else:
