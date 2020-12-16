@@ -340,7 +340,7 @@ async def copypasta(cp_e):
 @grp_exclude()
 async def vapor(vpr):
     """ Vaporize everything! """
-    reply_text = list()
+    reply_text = []
     textx = await vpr.get_reply_message()
     message = vpr.pattern_match.group(1)
     if message:
@@ -387,7 +387,7 @@ async def stretch(stret):
 @grp_exclude()
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
-    reply_text = list()
+    reply_text = []
     textx = await zgfy.get_reply_message()
     message = zgfy.pattern_match.group(1)
     if message:
@@ -484,7 +484,7 @@ async def metoo(hahayes):
 @grp_exclude()
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
-    reply_text = list()
+    reply_text = []
     textx = await mock.get_reply_message()
     message = mock.pattern_match.group(1)
     if message:
