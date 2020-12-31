@@ -11,9 +11,9 @@ async def mute(chatid, userid):
 
 
 async def is_muted(chatid, userid):
-    is_muted = MONGO.mutes.find_one({'chat_id': chatid, 'user_id': userid})
+    is_user_muted = MONGO.mutes.find_one({'chat_id': chatid, 'user_id': userid})
 
-    if not is_muted:
+    if not is_user_muted:
         return False
 
     return True
@@ -47,9 +47,9 @@ async def gmute(userid):
 
 
 async def is_gmuted(userid):
-    is_gmuted = MONGO.gmutes.find_one({'user_id': userid})
+    is_user_gmuted = MONGO.gmutes.find_one({'user_id': userid})
 
-    if not is_gmuted:
+    if not is_user_gmuted:
         return False
 
     return True

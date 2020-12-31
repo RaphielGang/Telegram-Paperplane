@@ -91,7 +91,7 @@ async def save_note(event):
           ignore_unsafe=True,
           disable_errors=True)
 @grp_exclude()
-async def note(event):
+async def note_check(event):
     """ Notes logic. """
     try:
         if not (await event.get_sender()).bot:
