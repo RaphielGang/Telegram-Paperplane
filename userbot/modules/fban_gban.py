@@ -42,7 +42,7 @@ async def gban_all(msg):
 
             if isinstance(probable_user_mention_entity,
                           MessageEntityMentionName):
-                ban_id = probable_user_mention_entity.user_id
+                banid = probable_user_mention_entity.user_id
         try:
             banreason = "[paperplane] "
             banreason += banreason.join(msg.text.split(" ")[2:])
@@ -67,7 +67,7 @@ async def gban_all(msg):
                 c = await msg.forward_to(banbot)
                 await c.reply("/id")
             await conv.send_message(f"/gban {banid} {banreason}")
-            resp = await conv.get_response()
+            await conv.get_response()
             await bot.send_read_acknowledge(conv.chat_id)
             count += 1
             # We cant see if he actually Gbanned. Let this stay for now
@@ -102,7 +102,7 @@ async def fedban_all(msg):
 
             if isinstance(probable_user_mention_entity,
                           MessageEntityMentionName):
-                ban_id = probable_user_mention_entity.user_id
+                banid = probable_user_mention_entity.user_id
         try:
             banreason = "[paperplane] "
             banreason += banreason.join(msg.text.split(" ")[2:])
@@ -148,8 +148,8 @@ async def fedban_all(msg):
             await asyncio.sleep(0.2)
     if failed:
         failedstr = ""
-        for i in failed.keys():
-            failedstr += failed[i]
+        for i in failed.values():
+            failedstr += i
             failedstr += " "
         await msg.reply(f"`Failed to fban in {failedstr}`")
     else:
