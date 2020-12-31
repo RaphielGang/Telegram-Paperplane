@@ -11,7 +11,7 @@ from telethon.events import ChatAction
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChannelParticipantsAdmins, Message
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
+from userbot import BOTLOG, BOTLOG_CHATID, WELCOME_MUTE, bot
 from userbot.modules.admin import KICK_RIGHTS
 from userbot.events import grp_exclude
 

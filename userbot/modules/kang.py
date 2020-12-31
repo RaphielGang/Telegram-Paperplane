@@ -10,7 +10,7 @@ import math
 import urllib.request
 from PIL import Image
 
-from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto, InputPeerNotifySettings
+from telethon.tl.types import InputPeerNotifySettings
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 
 from userbot import CMD_HELP, bot

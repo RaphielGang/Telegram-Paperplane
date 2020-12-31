@@ -6,9 +6,8 @@
 """ Paperplane Exclude, a module for excluding a group from the Paperplane event handler. """
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive)
-from userbot.modules.dbhelper import (get_excludes, get_exclude,
-                                      add_exclude_group, remove_exclude_group,
-                                      is_excluded)
+from userbot.modules.dbhelper import (get_excludes, add_exclude_group,
+                                      remove_exclude_group)
 from userbot.events import register, grp_exclude
 
 
