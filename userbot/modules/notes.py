@@ -21,10 +21,10 @@ async def notes_active(event):
         await event.edit("`Database connections failing!`")
         return
 
-    message = "`There are no saved notes in this chat`"
+    message = "`There are no saved notes in this chat.`"
     notes = await get_notes(event.chat_id)
     for note in notes:
-        if message == "`There are no saved notes in this chat`":
+        if message == "`There are no saved notes in this chat.`":
             message = "Notes saved in this chat:\n"
             message += "🔹 **{}**\n".format(note["name"])
         else:
@@ -46,7 +46,7 @@ async def remove_notes(event):
                                 )
     else:
         return await event.edit(
-            "`Successfully deleted note:` **{}**".format(notename))
+            "`Deleted note:` **{}**".format(notename))
 
 
 @register(outgoing=True, pattern=r"^.save (\w*)")
@@ -109,13 +109,13 @@ async def note(event):
 @register(outgoing=True, pattern="^.rmnotes (.*)")
 @grp_exclude()
 async def kick_marie_notes(kick):
-    """ For .rmfilters command, allows you to kick all \
-        Marie(or her clones) filters from a chat. """
+    """ For .rmfilters command, allows you to remove all \
+        Marie(or her clones) notes from a chat. """
     bot_type = kick.pattern_match.group(1)
     if bot_type not in ["marie", "rose"]:
         await kick.edit("`That bot is not yet supported!`")
         return
-    await kick.edit("```Will be kicking away all Notes!```")
+    await kick.edit("```Purging all bot notes...```")
     await sleep(3)
     resp = await kick.get_reply_message()
     filters = resp.text.split("-")[1:]
@@ -127,10 +127,10 @@ async def kick_marie_notes(kick):
             await kick.reply("/clear %s" % (i.strip()))
         await sleep(0.3)
     await kick.respond(
-        "```Successfully purged bots notes yaay!```\n Gimme cookies!")
+        "```Purged bot's notes!```")
     if BOTLOG:
         await kick.client.send_message(
-            BOTLOG_CHATID, "I cleaned all Notes at " + str(kick.chat_id))
+            BOTLOG_CHATID, "I cleaned all notes at " + str(kick.chat_id))
 
 
 CMD_HELP.update({

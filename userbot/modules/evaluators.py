@@ -19,13 +19,13 @@ from userbot.events import register, grp_exclude
 async def evaluate(query):
     """ For .eval command, evaluates the given Python expression. """
     if query.is_channel and not query.is_group:
-        await query.edit("`Eval isn't permitted on channels`")
+        await query.edit("`Eval isn't permitted on channels!`")
         return
 
     if query.pattern_match.group(1):
         expression = query.pattern_match.group(1)
     else:
-        await query.edit("``` Give an expression to evaluate. ```")
+        await query.edit("```Give an expression to evaluate!```")
         return
 
     if expression in ("userbot.session", "config.env"):
@@ -80,7 +80,7 @@ async def run(run_q):
         return
 
     if not code:
-        await run_q.edit("``` At least a variable is required to \
+        await run_q.edit("```At least a variable is required to \
 execute. Use .help exec for an example.```")
         return
 
@@ -152,7 +152,7 @@ async def terminal_runner(term):
         return
 
     if not command:
-        await term.edit("``` Give a command or use .help term for \
+        await term.edit("```Give a command or use .help term for \
             an example.```")
         return
 

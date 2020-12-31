@@ -33,7 +33,7 @@ async def paste(pstl):
         message = (await pstl.get_reply_message()).message
 
     # Dogbin
-    await pstl.edit("`Pasting text . . .`")
+    await pstl.edit("`Pasting text...`")
     resp = post(DOGBIN_URL + "documents", data=message.encode('utf-8'))
 
     if resp.status_code == 200:
@@ -42,12 +42,12 @@ async def paste(pstl):
         dogbin_final_url = DOGBIN_URL + key
 
         if response['isUrl']:
-            reply_text = ("`Pasted successfully!`\n\n"
+            reply_text = ("`Pasted!`\n\n"
                           f"`Shortened URL:` {dogbin_final_url}\n\n"
                           "Original(non-shortened) URLs`\n"
                           f"`Dogbin URL`: {DOGBIN_URL}v/{key}\n")
         else:
-            reply_text = ("`Pasted successfully!`\n\n"
+            reply_text = ("`Pasted!`\n\n"
                           f"`Dogbin URL`: {dogbin_final_url}")
     else:
         reply_text = ("`Failed to reach Dogbin`")

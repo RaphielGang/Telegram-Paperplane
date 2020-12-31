@@ -71,7 +71,7 @@ async def removelists(event):
         await event.edit("`Couldn't find list:` **{}**".format(listname))
         return
     else:
-        await event.edit("`Successfully deleted list:` **{}**".format(listname)
+        await event.edit("`Deleted list:` **{}**".format(listname)
                          )
 
     if BOTLOG:
@@ -127,7 +127,7 @@ async def add_list_items(event):
         listname = event.pattern_match.group(1)
 
     if not listname:
-        return_msg = f"`Pass a list to add items into!` {CHK_HELP}"
+        return_msg = f"`Pass a list to add items into it!` {CHK_HELP}"
         await event.edit(return_msg)
         return
 

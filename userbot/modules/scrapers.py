@@ -130,7 +130,7 @@ async def wiki(wiki_q):
             wiki_q.chat_id,
             "output.txt",
             reply_to=wiki_q.id,
-            caption="`Output too large, sending as file`",
+            caption="`Output too large, sending as file.`",
         )
         if os.path.exists("output.txt"):
             os.remove("output.txt")
@@ -150,7 +150,7 @@ async def urban_dict(ud_e):
     try:
         define(query)
     except HTTPError:
-        await ud_e.edit(f"Sorry, couldn't find any results for: {query}")
+        await ud_e.edit(f"Sorry, couldn't find any results for: {query}.")
         return
     mean = define(query)
     deflen = sum(len(i) for i in mean[0]["def"])

@@ -24,12 +24,12 @@ async def gban_all(msg):
     textx = await msg.get_reply_message()
     if textx:
         try:
-            banreason = "[userbot] "
+            banreason = "[paperplane] "
             banreason += banreason.join(msg.text.split(" ")[1:])
-            if banreason == "[userbot]":
+            if banreason == "[paperplane]":
                 raise TypeError
         except TypeError:
-            banreason = "[userbot] gban"
+            banreason = "[paperplane] gban"
     else:
         banid = msg.text.split(" ")[1]
         if banid.isnumeric():
@@ -44,15 +44,15 @@ async def gban_all(msg):
                           MessageEntityMentionName):
                 ban_id = probable_user_mention_entity.user_id
         try:
-            banreason = "[userbot] "
+            banreason = "[paperplane] "
             banreason += banreason.join(msg.text.split(" ")[2:])
-            if banreason == "[userbot]":
+            if banreason == "[paperplane]":
                 raise TypeError
         except TypeError:
-            banreason = "[userbot] gban"
+            banreason = "[paperplane] gban"
     if not textx:
         await msg.edit(
-            "Reply Message missing! Might fail on many bots! Still attempting Gban!"
+            "Reply message missing! Might fail on many bots! Still attempting to Gban!"
         )
         # Ensure User Read the warning
         await asyncio.sleep(1)
@@ -84,12 +84,12 @@ async def fedban_all(msg):
     textx = await msg.get_reply_message()
     if textx:
         try:
-            banreason = "[userbot] "
+            banreason = "[paperplane] "
             banreason += banreason.join(msg.text.split(" ")[1:])
-            if banreason == "[userbot]":
+            if banreason == "[paperplane]":
                 raise TypeError
         except TypeError:
-            banreason = "[userbot] fban"
+            banreason = "[paperplane] fban"
     else:
         banid = msg.text.split(" ")[1]
         if banid.isnumeric():
@@ -104,12 +104,12 @@ async def fedban_all(msg):
                           MessageEntityMentionName):
                 ban_id = probable_user_mention_entity.user_id
         try:
-            banreason = "[userbot] "
+            banreason = "[paperplane] "
             banreason += banreason.join(msg.text.split(" ")[2:])
-            if banreason == "[userbot]":
+            if banreason == "[paperplane]":
                 raise TypeError
         except TypeError:
-            banreason = "[userbot] fban"
+            banreason = "[paperplane] fban"
         if "spam" in banreason:
             spamwatch = True
         else:

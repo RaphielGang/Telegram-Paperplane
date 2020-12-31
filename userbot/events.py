@@ -83,17 +83,17 @@ def register(**args):
                 if not disable_errors:
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
-                    text = "**Sorry, I encountered a error!**\n"
+                    text = "**Sorry, I encountered an error!**\n"
                     link = "[https://t.me/tgpaperplane](Userbot Support Chat)"
-                    text += "If you wanna you can report it"
-                    text += f"- just forward this message to {link}.\n"
-                    text += "I won't log anything except the fact of error and date\n"
+                    text += "If you want to report it, "
+                    text += f"just forward this message to {link}.\n"
+                    text += "I won't log anything except the fact of error and date.\n"
 
-                    ftext = "\nDisclaimer:\nThis file uploaded ONLY here, "
+                    ftext = "\nDisclaimer:\nThis file is uploaded ONLY here, "
                     ftext += "we logged only fact of error and date, "
-                    ftext += "we respect your privacy, "
-                    ftext += "you may not report this error if you've "
-                    ftext += "any confidential data here, no one will see your data "
+                    ftext += "we respect your privacy. "
+                    ftext += "You may not report this error if you have "
+                    ftext += "any confidential data here. No one will see your data "
                     ftext += "if you choose not to do so.\n\n"
                     ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
                     ftext += "\nDate: " + date

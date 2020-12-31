@@ -79,13 +79,13 @@ async def remove_filter(event):
 @register(outgoing=True, pattern="^.rmfilters (.*)")
 @grp_exclude()
 async def kick_marie_filter(event):
-    """ For .rmfilters command, allows you to kick all \
+    """ For .rmfilters command, allows you to remove all \
         Marie(or her clones) filters from a chat. """
     bot_type = event.pattern_match.group(1)
     if bot_type not in ["marie", "rose"]:
         await event.edit("`That bot is not yet supported!`")
         return
-    await event.edit("```Will be kicking away all Filters!```")
+    await event.edit("```Purging all bot filters...```")
     await sleep(3)
     resp = await event.get_reply_message()
     filters = resp.text.split("-")[1:]
@@ -97,7 +97,7 @@ async def kick_marie_filter(event):
             await event.reply("/stop %s" % (i.strip()))
         await sleep(0.3)
     await event.respond(
-        "```Successfully purged bots filters yaay!```\n Gimme cookies!")
+        "```Purged bot's filters!```\n")
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID, "I cleaned all filters at " + str(event.chat_id))

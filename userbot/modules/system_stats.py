@@ -40,7 +40,7 @@ async def sysdetails(sysd):
 
             await sysd.edit("`" + result + "`")
         except FileNotFoundError:
-            await sysd.edit("`Hella install neofetch first kthx`")
+            await sysd.edit("`Install neofetch on the host first!`")
 
 
 @register(outgoing=True, pattern="^.botver$")
@@ -78,7 +78,7 @@ async def bot_ver(event):
                              f"`Revision: {revout}`")
         else:
             await event.edit(
-                "Shame that you don't have git. Install git for this command to work.")
+                "Install git on the host first!")
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
@@ -139,9 +139,9 @@ async def amireallyalive(alive):
     else:
         db = "Databases functioning normally!"
     await alive.edit("`"
-                     "Paperplane is alive and running!\n\n"
+                     "Paperplane is running!\n\n"
                      f"Telethon version: {version.__version__} \n"
-                     f"Python: {python_version()} \n"
+                     f"Python version: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
                      f"Database status: {db}\n"
                      "`")

@@ -85,7 +85,7 @@ async def bot_support(wannahelp):
 @grp_exclude()
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
-    await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
+    await wannasee.edit("https://github.com/RaphielGang/Telegram-Paperplane")
 
 
 CMD_HELP.update({

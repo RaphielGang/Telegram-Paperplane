@@ -170,7 +170,7 @@ async def gdrive_mirror(request):
     reply_msg = await request.get_reply_message()
     links = re.findall(r'\bhttps?://.*\.\S+', message)
     if not (links or reply_msg or reply_msg.media or reply_msg.media.document):
-        reply = "`No links or telegram files found!`\n"
+        reply = "`No links or Telegram files found!`\n"
         await request.edit(reply)
         return
     if request.reply_to_msg_id:
@@ -190,7 +190,7 @@ async def gdrive_mirror(request):
         reply += await gdrive_upload(file_name)
     if "nosecret" in reply:
         reply = "`Run the generate_drive_session.py file " \
-                "in your machine to authenticate on google drive!!`"
+                "in your machine to authenticate on Google Drive!`"
     await request.edit(reply)
 
 
@@ -324,7 +324,7 @@ async def upload(u_event):
     if u_event.fwd_from:
         return
     if u_event.is_channel and not u_event.is_group:
-        await u_event.edit("`Uploading isn't permitted on channels`")
+        await u_event.edit("`Uploading isn't permitted on channels!`")
         return
     await u_event.edit("Processing ...")
     input_str = u_event.pattern_match.group(1)

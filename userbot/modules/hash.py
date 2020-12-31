@@ -42,7 +42,7 @@ async def gethash(hash_q):
             hash_q.chat_id,
             "hashes.txt",
             reply_to=hash_q.id,
-            caption="`It's too big, sending a text file instead. `")
+            caption="`It's too big, sending a text file instead.`")
         runapp(["rm", "hashes.txt"], stdout=PIPE, check=True)
     else:
         await hash_q.reply(ans)

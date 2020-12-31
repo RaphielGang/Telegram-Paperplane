@@ -167,7 +167,7 @@ async def promote(promt):
     try:
         await promt.client(
             EditAdminRequest(promt.chat_id, user.id, new_rights, "Admin"))
-        await promt.edit("`Promoted Successfully!`")
+        await promt.edit("`Promoted!`")
 
     # If Telethon spit BadRequestError, assume
     # we don't have Promote permission
@@ -222,7 +222,7 @@ async def demote(dmod):
     except BadRequestError:
         await dmod.edit(NO_PERM)
         return
-    await dmod.edit("`Demoted Successfully!`")
+    await dmod.edit("`Demoted!`")
 
     # Announce to the logging group if we have demoted successfully
     if BOTLOG:
@@ -253,7 +253,7 @@ async def ban(bon):
         return
 
     # Announce that we're going to whack the pest
-    await bon.edit("`Whacking the pest!`")
+    await bon.edit("`Banning...`")
 
     try:
         await bon.client(EditBannedRequest(bon.chat_id, user.id,
@@ -267,13 +267,13 @@ async def ban(bon):
         if reply:
             await reply.delete()
     except BadRequestError:
-        bmsg = "`I dont have enough rights! But still he was banned!`"
+        bmsg = "`The user was banned, but I don't have enough rights to delete their message!`"
         await bon.edit(bmsg)
         return
+
     # Delete message and then tell that the command
     # is done gracefully
     # Shout out the ID, so that fedadmins can fban later
-
     await bon.edit("`{}` was banned!".format(str(user.id)))
 
     # Announce to the logging group if we have demoted successfully
@@ -310,7 +310,7 @@ async def nothanos(unbon):
     try:
         await unbon.client(
             EditBannedRequest(unbon.chat_id, user.id, UNBAN_RIGHTS))
-        await unbon.edit("```Unbanned Successfully```")
+        await unbon.edit("```Unbanned!```")
 
         if BOTLOG:
             await unbon.client.send_message(
@@ -318,7 +318,7 @@ async def nothanos(unbon):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {unbon.chat.title}(`{unbon.chat_id}`)")
     except UserIdInvalidError:
-        await unbon.edit("`Uh oh my unban logic broke!`")
+        await unbon.edit("`Uh oh, my unban logic broke!`")
 
 
 @register(outgoing=True, group_only=True, pattern="^.mute(?: |$)(.*)")
@@ -355,14 +355,14 @@ async def spider(spdr):
         return
 
     # If everything goes well, do announcing and mute
-    await spdr.edit("`Gets a tape!`")
+    await spdr.edit("`Muting...`")
     if await mute(spdr.chat_id, user.id) is False:
         return await spdr.edit('`Error! User probably already muted.`')
     try:
         await spdr.client(EditBannedRequest(spdr.chat_id, user.id,
                                             MUTE_RIGHTS))
         # Announce that the function is done
-        await spdr.edit("`Safely taped!`")
+        await spdr.edit("`Muted!`")
 
         # Announce to logging group
         if BOTLOG:
@@ -371,7 +371,7 @@ async def spider(spdr):
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
     except UserIdInvalidError:
-        return await spdr.edit("`Uh oh my unmute logic broke!`")
+        return await spdr.edit("`Uh oh my, mute logic broke!`")
 
     # These indicate we couldn't hit him an API mute, possibly an
     # admin?
@@ -382,10 +382,10 @@ async def spider(spdr):
             return await spdr.edit(NO_PERM)
         else:
             return await spdr.edit("""`I couldn't mute on the API,
-            could be an admin possibly?
-            Anyways muted on the userbot.
+            could the user be an admin possibly?
+            Anyways, muted on Paperplane.
             I'll automatically delete messages
-            in this chat from this person`""")
+            in this chat from this person.`""")
 
 
 @register(outgoing=True, group_only=True, pattern="^.unmute(?: |$)(.*)")
@@ -415,14 +415,14 @@ async def unmoot(unmot):
         return
 
     if await unmute(unmot.chat_id, user.id) is False:
-        return await unmot.edit("`Error! User probably already unmuted.`")
+        return await unmot.edit("`Error! User is probably already unmuted.`")
 
     try:
         await unmot.client(
             EditBannedRequest(unmot.chat_id, user.id, UNMUTE_RIGHTS))
-        await unmot.edit("```Unmuted Successfully```")
+        await unmot.edit("```Unmuted!```")
     except UserIdInvalidError:
-        await unmot.edit("`Uh oh my unmute logic broke!`")
+        await unmot.edit("`Uh oh, my unmute logic broke!`")
         return
 
     if BOTLOG:
@@ -490,11 +490,11 @@ async def ungmoot(un_gmute):
     await un_gmute.edit('```Ungmuting...```')
 
     if await ungmute(user.id) is False:
-        await un_gmute.edit("`Error! User probably not gmuted.`")
+        await un_gmute.edit("`Error! User is probably not gmuted.`")
     else:
 
         # Inform about success
-        await un_gmute.edit("```Ungmuted Successfully```")
+        await un_gmute.edit("```Ungmuted!```")
         if BOTLOG:
             await un_gmute.client.send_message(
                 BOTLOG_CHATID, "#UNGMUTE\n"
@@ -518,12 +518,12 @@ async def gspider(gspdr):
         return
 
     # If pass, inform and start gmuting
-    await gspdr.edit("`Grabs a huge, sticky duct tape!`")
+    await gspdr.edit("`Gmuting...`")
 
     if await gmute(user.id) is False:
-        await gspdr.edit('`Error! User probably already gmuted.`')
+        await gspdr.edit('`Error! User is probably already gmuted.`')
     else:
-        await gspdr.edit("`Globally taped!`")
+        await gspdr.edit("`Gmuted!`")
 
         if BOTLOG:
             await gspdr.client.send_message(
@@ -647,7 +647,7 @@ async def pin(msg):
         await msg.edit(NO_PERM)
         return
 
-    await msg.edit("`Pinned Successfully!`")
+    await msg.edit("`Pinned!`")
 
     user = await get_user_from_id(msg.from_id, msg)
 

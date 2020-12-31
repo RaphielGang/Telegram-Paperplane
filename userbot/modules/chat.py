@@ -58,7 +58,7 @@ async def log(log_text):
         else:
             await log_text.edit("`What am I supposed to log?`")
             return
-        await log_text.edit("`Logged Successfully`")
+        await log_text.edit("`Logged!`")
     else:
         await log_text.edit("`This feature requires Logging to be enabled!`")
     sleep(2)
