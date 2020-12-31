@@ -120,9 +120,8 @@ def register(**args):
 
                     ftext += result
 
-                    file = open("error.log", "w+")
-                    file.write(ftext)
-                    file.close()
+                    with open("error.log", "w+") as output_file:
+                        output_file.write(ftext)
 
                     if BOTLOG:
                         await check.client.send_file(

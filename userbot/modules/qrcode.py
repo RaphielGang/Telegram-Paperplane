@@ -33,11 +33,11 @@ async def parseqr(qr_e):
     downloaded_file_name = await qr_e.client.download_media(
         await qr_e.get_reply_message(), progress_callback=progress)
     url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
-    file = open(downloaded_file_name, "rb")
-    files = {"file": file}
-    resp = post(url, files=files).json()
-    qr_contents = resp[0]["symbol"][0]["data"]
-    file.close()
+    with open(downloaded_file_name, "rb") as dl_file:
+        files = {"file": dl_file}
+        resp = post(url, files=files).json()
+        qr_contents = resp[0]["symbol"][0]["data"]
+
     os.remove(downloaded_file_name)
     end = datetime.now()
     duration = (end - start).seconds

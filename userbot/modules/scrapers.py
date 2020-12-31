@@ -123,9 +123,8 @@ async def wiki(wiki_q):
         return
     result = summary(match)
     if len(result) >= 4096:
-        file = open("output.txt", "w+")
-        file.write(result)
-        file.close()
+        with open("output.txt", "w+") as output_file:
+            output_file.write(result)
         await wiki_q.client.send_file(
             wiki_q.chat_id,
             "output.txt",
@@ -159,10 +158,10 @@ async def urban_dict(ud_e):
     if int(meanlen) >= 0:
         if int(meanlen) >= 4096:
             await ud_e.edit("`Output too large, sending as file.`")
-            file = open("output.txt", "w+")
-            file.write("Text: " + query + "\n\nMeaning: " + mean[0]["def"] +
+            with open("output.txt", "w+") as output_file:
+                output_file.write("Text: " + query + "\n\nMeaning: " + mean[0]["def"] +
                        "\n\n" + "Example: \n" + mean[0]["example"])
-            file.close()
+
             await ud_e.client.send_file(
                 ud_e.chat_id,
                 "output.txt",
