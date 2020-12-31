@@ -110,10 +110,6 @@ async def fedban_all(msg):
                 raise TypeError
         except TypeError:
             banreason = "[paperplane] fban"
-        if "spam" in banreason:
-            spamwatch = True
-        else:
-            spamwatch = False
     failed = {}
     count = 1
     fbanlist = []
@@ -121,19 +117,6 @@ async def fedban_all(msg):
     for i in x:
         fbanlist.append(i["chatid"])
     for bangroup in fbanlist:
-
-        # Send to proof to Spamwatch in case it was spam
-        # Spamwatch is a reputed fed fighting against spam on telegram
-
-        if bangroup == -1001312712379:
-            if spamwatch:
-                if textx:
-                    await textx.forward_to(-1001312712379)
-                else:
-                    await msg.reply(
-                        "`Spam message detected. But no reply message, can't forward to SpamWatch.`"
-                    )
-            continue
         async with bot.conversation(bangroup) as conv:
             await conv.send_message(f"!fban {banid} {banreason}")
             resp = await conv.get_response()
