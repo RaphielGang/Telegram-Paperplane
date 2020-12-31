@@ -158,8 +158,8 @@ async def set_default_city(city):
     if not city.pattern_match.group(1):
         await city.edit("`Please specify a city to set one as default.`")
         return
-    else:
-        city_name = city.pattern_match.group(1)
+
+    city_name = city.pattern_match.group(1)
 
     timezone_countries = {
         timezone: country

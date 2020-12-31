@@ -44,9 +44,9 @@ async def remove_notes(event):
     if await delete_note(event.chat_id, notename) is False:
         return await event.edit("`Couldn't find note:` **{}**".format(notename)
                                 )
-    else:
-        return await event.edit(
-            "`Deleted note:` **{}**".format(notename))
+
+    return await event.edit(
+        "`Deleted note:` **{}**".format(notename))
 
 
 @register(outgoing=True, pattern=r"^.save (\w*)")
@@ -66,8 +66,8 @@ async def add_filter(event):
 
     if await add_note(event.chat_id, notename, string[1:]) is False:
         return await event.edit(msg.format('updated', notename))
-    else:
-        return await event.edit(msg.format('added', notename))
+
+    return await event.edit(msg.format('added', notename))
 
 
 @register(outgoing=True, pattern=r"^.note (\w*)")
@@ -81,8 +81,8 @@ async def save_note(event):
     note_db = await get_note(event.chat_id, note)
     if not await get_note(event.chat_id, note):
         return await event.edit("`Note` **{}** `doesn't exist!`".format(note))
-    else:
-        return await event.edit(" 🔹 **{}** - `{}`".format(
+
+    return await event.edit(" 🔹 **{}** - `{}`".format(
             note, note_db["text"]))
 
 

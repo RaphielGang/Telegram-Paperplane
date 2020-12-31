@@ -128,8 +128,8 @@ async def notifoff(noff_event):
         notifications from unapproved PMs. """
     if await notif_off() is False:
         return await noff_event.edit('`Notifications already silenced!`')
-    else:
-        return await noff_event.edit("`Notifications silenced!`")
+
+    return await noff_event.edit("`Notifications silenced!`")
 
 
 @register(outgoing=True, pattern="^.notifon$")
@@ -138,8 +138,8 @@ async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
         return await non_event.edit("`Notifications ain't muted!")
-    else:
-        return await non_event.edit("`Notifications unmuted!`")
+
+    return await non_event.edit("`Notifications unmuted!`")
 
 
 @register(outgoing=True, pattern="^.approve$")
@@ -152,27 +152,27 @@ async def approvepm(apprvpm):
 
     if await approve(apprvpm.chat_id) is False:
         return await apprvpm.edit("`User was already approved!`")
+
+    if apprvpm.reply_to_msg_id:
+        reply = await apprvpm.get_reply_message()
+        replied_user = await apprvpm.client(
+            GetFullUserRequest(reply.from_id))
+        aname = replied_user.user.id
+        name0 = str(replied_user.user.first_name)
+        uid = replied_user.user.id
+
     else:
-        if apprvpm.reply_to_msg_id:
-            reply = await apprvpm.get_reply_message()
-            replied_user = await apprvpm.client(
-                GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
+        aname = await apprvpm.client.get_entity(apprvpm.chat_id)
+        name0 = str(aname.first_name)
+        uid = apprvpm.chat_id
 
-        else:
-            aname = await apprvpm.client.get_entity(apprvpm.chat_id)
-            name0 = str(aname.first_name)
-            uid = apprvpm.chat_id
+    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
 
-        await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
-
-        if BOTLOG:
-            await apprvpm.client.send_message(
-                BOTLOG_CHATID,
-                "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
-            )
+    if BOTLOG:
+        await apprvpm.client.send_message(
+            BOTLOG_CHATID,
+            "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+        )
 
 
 @register(outgoing=True, pattern="^.block$")
@@ -185,30 +185,30 @@ async def blockpm(block):
 
     if await block_pm(block.chat_id) is False:
         return await block.edit("`First approve, before blocc'ing`")
+
+    await block.edit("`You are gonna be blocked from PM-ing my Master!`")
+
+    if block.reply_to_msg_id:
+        reply = await block.get_reply_message()
+        replied_user = await block.client(GetFullUserRequest(reply.from_id)
+                                            )
+        aname = replied_user.user.id
+        name0 = str(replied_user.user.first_name)
+        await block.client(BlockRequest(replied_user.user.id))
+        uid = replied_user.user.id
     else:
-        await block.edit("`You are gonna be blocked from PM-ing my Master!`")
+        await block.client(BlockRequest(block.chat_id))
+        aname = await block.client.get_entity(block.chat_id)
+        name0 = str(aname.first_name)
+        uid = block.chat_id
 
-        if block.reply_to_msg_id:
-            reply = await block.get_reply_message()
-            replied_user = await block.client(GetFullUserRequest(reply.from_id)
-                                              )
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            await block.client(BlockRequest(replied_user.user.id))
-            uid = replied_user.user.id
-        else:
-            await block.client(BlockRequest(block.chat_id))
-            aname = await block.client.get_entity(block.chat_id)
-            name0 = str(aname.first_name)
-            uid = block.chat_id
+    await block.edit("`Blocked.`")
 
-        await block.edit("`Blocked.`")
-
-        if BOTLOG:
-            await block.client.send_message(
-                BOTLOG_CHATID,
-                "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
-            )
+    if BOTLOG:
+        await block.client.send_message(
+            BOTLOG_CHATID,
+            "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+        )
 
 
 @register(outgoing=True, pattern="^.unblock$")
@@ -221,10 +221,9 @@ async def unblockpm(unblock):
         name0 = str(replied_user.user.first_name)
         if await approve(reply.from_id) is False:
             return await unblock.edit("`You haven't blocked this user yet!`")
-        else:
-            return await unblock.edit("`My Master has forgiven you to PM now`")
 
         await unblock.client(UnblockRequest(replied_user.user.id))
+        await unblock.edit("`My Master has forgiven you to PM now`")
 
     if BOTLOG:
         await unblock.client.send_message(

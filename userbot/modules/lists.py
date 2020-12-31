@@ -70,9 +70,8 @@ async def removelists(event):
     if await delete_list(event.chat_id, listname) is False:
         await event.edit("`Couldn't find list:` **{}**".format(listname))
         return
-    else:
-        await event.edit("`Deleted list:` **{}**".format(listname)
-                         )
+
+    await event.edit("`Deleted list:` **{}**".format(listname))
 
     if BOTLOG:
         listat = "global storage" if _list['chat_id'] == 0 else str(

@@ -380,12 +380,12 @@ async def spider(spdr):
         if not admin.delete_messages:
             await unmute(spdr.chat_id, user.id)
             return await spdr.edit(NO_PERM)
-        else:
-            return await spdr.edit("""`I couldn't mute on the API,
-            could the user be an admin possibly?
-            Anyways, muted on Paperplane.
-            I'll automatically delete messages
-            in this chat from this person.`""")
+
+        return await spdr.edit("""`I couldn't mute on the API,
+        could the user be an admin possibly?
+        Anyways, muted on Paperplane.
+        I'll automatically delete messages
+        in this chat from this person.`""")
 
 
 @register(outgoing=True, group_only=True, pattern="^.unmute(?: |$)(.*)")
