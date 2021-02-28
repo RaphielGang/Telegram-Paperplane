@@ -12,10 +12,7 @@ from platform import python_version, uname
 from shutil import which
 
 from telethon import version
-from telethon import events, version
-from telethon.events import NewMessage
-from telethon.tl.custom import Dialog
-from telethon.tl.types import Channel, Chat, User
+from telethon import TelegramClient
 
 
 from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
