@@ -148,8 +148,7 @@ async def amireallyalive(alive):
                      f"User: {DEFAULTUSER} \n"
                      f"Database status: {db}\n"
                   ]
-    await alive.client.send_file(
-                            alive.chat_id, PP_IMG, PP_CAPTION)
+    await alive.client.send_file(alive.chat_id, PP_IMG, PP_CAPTION)
     await alive.delete()
 
 
