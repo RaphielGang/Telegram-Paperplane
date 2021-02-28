@@ -56,6 +56,7 @@ API_HASH = os.environ.get("API_HASH") or None
 if not API_HASH:
     LOGS.error("API Hash is not set! Check your config.env. Halting!")
     quit(1)
+ALIVE_PIC = os.environ.get("ALIVE_PIC") or None
 
 STRING_SESSION = os.environ.get("STRING_SESSION") or None
 
