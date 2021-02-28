@@ -147,11 +147,7 @@ async def amireallyalive(alive):
     else:
         db = "Databases functioning normally!"
        
-     if PP_IMG: 
-         await alive.client.send_file(
-          PP_IMG, PP_CAPTION,
-        )
-     else:
+     if not is_PM_IMG_alive
          await alive.edit("`"
                           "Paperplane is alive and running!\n\n"
                           f"Telethon version: {version.__version__} \n"
@@ -159,6 +155,10 @@ async def amireallyalive(alive):
                           f"User: {DEFAULTUSER} \n"
                           f"Database status: {db}\n"
                           "`")
+    else:
+         await alive.client.send_file(
+           PP_IMG, PP_CAPTION,
+         )
 
 
 @register(outgoing=True, pattern="^.aliveu")
