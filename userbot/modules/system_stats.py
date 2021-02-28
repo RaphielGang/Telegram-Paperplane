@@ -130,6 +130,7 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
 async def amireallyalive(alive):
+    PP_IMG = Config.ALIVE_PIC
     if not is_mongo_alive() and not is_redis_alive():
         db = "Both Mongo and Redis Database seems to be failing!"
     elif not is_mongo_alive():
@@ -138,13 +139,25 @@ async def amireallyalive(alive):
         db = "Redis Cache seems to be failing!"
     else:
         db = "Databases functioning normally!"
-    await alive.edit("`"
-                     "Paperplane is alive and running!\n\n"
+       PP_CAPTION = ("`"
+                     "**Paperplane is alive and running!**\n\n"
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
                      f"Database status: {db}\n"
                      "`")
+     if PP_IMG: 
+         await alive.client.send_file(
+          PP_IMG, PP_CAPTION,
+        )
+     else:
+         await alive.edit("`"
+                          "Paperplane is alive and running!\n\n"
+                          f"Telethon version: {version.__version__} \n"
+                          f"Python: {python_version()} \n"
+                          f"User: {DEFAULTUSER} \n"
+                          f"Database status: {db}\n"
+                          "`")
 
 
 @register(outgoing=True, pattern="^.aliveu")
