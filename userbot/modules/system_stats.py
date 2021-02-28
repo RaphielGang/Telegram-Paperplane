@@ -132,7 +132,7 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
 async def amireallyalive(alive):
-    PP_IMG = ALIVE_PIC
+    PP_IMG = "https://telegra.ph/file/beae262c54323e4dafc93.jpg"
     PP_CAPTION = [
                      "**Paperplane is alive and running!**\n\n"
                      f"Telethon version: {version.__version__} \n"
