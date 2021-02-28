@@ -148,9 +148,9 @@ async def amireallyalive(alive):
         db = "Redis Cache seems to be failing!"
     else:
         db = "Databases functioning normally!"
-         await client.send_file("me",
-           PP_IMG, PP_CAPTION,
-            )
+    await client.send_file(
+                           PP_IMG, PP_CAPTION,
+                          )
           await alive.delete()
 
 
