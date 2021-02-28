@@ -151,7 +151,7 @@ async def amireallyalive(alive):
     await client.send_file(
                            PP_IMG, PP_CAPTION,
                           )
-          await alive.delete()
+    await alive.delete()
 
 
 @register(outgoing=True, pattern="^.aliveu")
