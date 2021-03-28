@@ -20,7 +20,7 @@ from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
-PP_IMG = Config.ALIVE_IMAGE
+PP_IMG = ALIVE_IMAGE
 # ============================================
 
 
