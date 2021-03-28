@@ -141,16 +141,14 @@ async def amireallyalive(alive):
         db = "Redis Cache seems to be failing!"
     else:
         db = "Databases functioning normally!"
-        
-    pp_caption = [
+    await alive.edit(
+                     "pp_img\n\n\n\n\n"
                      "**Paperplane is alive and running!**\n\n"
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
                      f"User: {DEFAULTUSER} \n"
                      f"Database status: {db}\n"
-                  ]
-    await alive.client.send_file(pp_img, caption=pp_caption)
-    await alive.delete()
+    )
 
 
 @register(outgoing=True, pattern="^.aliveu")
