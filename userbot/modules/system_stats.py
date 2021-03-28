@@ -140,21 +140,21 @@ async def amireallyalive(alive):
     elif not is_redis_alive():
         db = "Redis Cache seems to be failing!"
     else:
-        db = "Databases functioning normally!"
+        db = "Database's functioning normally!"
    
-    ppcaption = (
-                     "**PAPERPLANE IS RUNNING SUCCESSFULLY!**\n\n"
-                     f"__Telethon Version__: {version.__version__} \n"
-                     f"__Python Version__: {python_version()} \n"
-                     f"__Database Status__: {db} \n"
-                     f"__User__: {DEFAULT_USER}\n"
+    PP_CAPTION = (
+                     "**PAPERPLANE IS ALIVE AND KICKING!**\n\n"
+                     f"🤖 __Telethon Version__: {version.__version__} \n"
+                     f"🤖 __Python Version__: {python_version()} \n"
+                     f"🤖 __Database Status__: {db} \n"
+                     f"🤖 __User__: {DEFAULT_USER}\n"
     )
     
     if ALIVE_IMAGE:
          await alive.client.send_file(
                     alive.chat_id,
                     PP_IMG,
-                    caption=ppcaption,
+                    caption=PP_CAPTION,
                     reply=alive.id, 
     )
          await alive.delete()
