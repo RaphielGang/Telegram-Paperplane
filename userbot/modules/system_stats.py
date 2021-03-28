@@ -143,7 +143,7 @@ async def amireallyalive(alive):
         db = "Database's functioning normally!"
    
     PP_CAPTION = (
-                     "**PAPERPLANE IS ALIVE AND KICKING!**\n\n"
+                     "**PAPERPLANE IS ALIVE AND KICKING!**✔\n\n"
                      f"🤖 __Telethon Version__: {version.__version__} \n"
                      f"🤖 __Python Version__: {python_version()} \n"
                      f"🤖 __Database Status__: {db} \n"
