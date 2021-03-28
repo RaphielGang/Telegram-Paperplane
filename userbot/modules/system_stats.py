@@ -19,7 +19,7 @@ from userbot import (CMD_HELP, ALIVE_IMAGE, is_mongo_alive, is_redis_alive)
 from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
-DEFAULTUSER = uname().node
+DEFAULT_USER = uname().node
 PP_IMG = ALIVE_IMAGE
 # ============================================
 
