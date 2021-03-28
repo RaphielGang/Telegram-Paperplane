@@ -142,7 +142,7 @@ async def amireallyalive(alive):
     else:
         db = "Databases functioning normally!"
     await alive.edit(
-                     "pp_img\n\n\n\n\n"
+                     pp_img,
                      "**Paperplane is alive and running!**\n\n"
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
