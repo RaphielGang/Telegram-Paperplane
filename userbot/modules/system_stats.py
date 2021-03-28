@@ -140,7 +140,8 @@ async def amireallyalive(alive):
     elif not is_redis_alive():
         db = "Redis Cache seems to be failing!"
     else:
-        db = "Databases functioning normally!"\  
+        db = "Databases functioning normally!"
+        continue
     pp_caption = [
                      "**Paperplane is alive and running!**\n\n"
                      f"Telethon version: {version.__version__} \n"
