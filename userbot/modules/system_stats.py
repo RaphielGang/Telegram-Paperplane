@@ -143,11 +143,11 @@ async def amireallyalive(alive):
         db = "Databases functioning normally!"
    
     ppcaption = (
-                     "**Paperplane is alive and running!**\n\n"
-                     f"Telethon version: {version.__version__} \n"
-                     f"Python: {python_version()} \n"
-                     f"User: {DEFAULTUSER} \n"
-                     f"Database status: {db}\n"
+                     "**PAPERPLANE IS RUNNING SUCCESSFULLY!**\n\n"
+                     f"__Telethon Version__: {version.__version__} \n"
+                     f"__Python Version__: {python_version()} \n"
+                     f"__Database Status__: {db} \n"
+                     f"__User__: {DEFAULTUSER}\n"
     )
     
     if ALIVE_IMAGE:
