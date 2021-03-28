@@ -147,7 +147,7 @@ async def amireallyalive(alive):
                      f"__Telethon Version__: {version.__version__} \n"
                      f"__Python Version__: {python_version()} \n"
                      f"__Database Status__: {db} \n"
-                     f"__User__: {DEFAULTUSER}\n"
+                     f"__User__: {DEFAULT_USER}\n"
     )
     
     if ALIVE_IMAGE:
