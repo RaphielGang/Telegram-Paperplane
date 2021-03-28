@@ -20,6 +20,7 @@ from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
+PP = "https://telegra.ph/file/beae262c54323e4dafc93.jpg"
 # ============================================
 
 
@@ -132,7 +133,6 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
 async def amireallyalive(alive):
-    pp_img = "https://telegra.ph/file/beae262c54323e4dafc93.jpg"
     if not is_mongo_alive() and not is_redis_alive():
         db = "Both Mongo and Redis Database seems to be failing!"
     elif not is_mongo_alive():
@@ -141,7 +141,7 @@ async def amireallyalive(alive):
         db = "Redis Cache seems to be failing!"
     else:
         db = "Databases functioning normally!"
-    await alive.edit({pp_img}, 
+    await alive.edit(
                      "**Paperplane is alive and running!**\n\n"
                      f"Telethon version: {version.__version__} \n"
                      f"Python: {python_version()} \n"
