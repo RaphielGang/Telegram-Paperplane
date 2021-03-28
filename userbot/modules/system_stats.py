@@ -151,9 +151,9 @@ async def amireallyalive(alive):
     )
     
     await alive.client.send_file(
-                     alive.chat_id, 
-                     caption=ppcaption,
+                     alive.chat_id,
                      PP,
+                     caption=ppcaption,
                      reply=alive.id, 
     )
     await alive.delete()
