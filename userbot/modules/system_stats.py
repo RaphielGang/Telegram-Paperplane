@@ -15,7 +15,7 @@ from telethon import version
 from telethon import TelegramClient
 
 
-from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot import (CMD_HELP, ALIVE_IMAGE, is_mongo_alive, is_redis_alive)
 from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
