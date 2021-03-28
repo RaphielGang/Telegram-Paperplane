@@ -150,13 +150,21 @@ async def amireallyalive(alive):
                      f"Database status: {db}\n"
     )
     
-    await alive.client.send_file(
-                     alive.chat_id,
-                     PP_IMG,
-                     caption=ppcaption,
-                     reply=alive.id, 
+        if ALIVE_IMAGE:
+            await alive.client.send_file(
+                      alive.chat_id,
+                      PP_IMG,
+                      caption=ppcaption,
+                      reply=alive.id, 
+            )
+            await alive.delete()
+        else:
+            await alive.edit("**Paperplane is alive and running!**\n\n"
+                     f"Telethon version: {version.__version__} \n"
+                     f"Python: {python_version()} \n"
+                     f"User: {DEFAULTUSER} \n"
+                     f"Database status: {db}\n"
     )
-    await alive.delete()
 
 @register(outgoing=True, pattern="^.aliveu")
 @grp_exclude()
