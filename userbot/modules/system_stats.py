@@ -20,7 +20,7 @@ from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
-PP = "https://telegra.ph/file/beae262c54323e4dafc93.jpg"
+PP_IMG = Config.ALIVE_IMAGE
 # ============================================
 
 
@@ -152,7 +152,7 @@ async def amireallyalive(alive):
     
     await alive.client.send_file(
                      alive.chat_id,
-                     PP,
+                     PP_IMG,
                      caption=ppcaption,
                      reply=alive.id, 
     )
