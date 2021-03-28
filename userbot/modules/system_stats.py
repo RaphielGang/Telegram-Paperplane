@@ -152,7 +152,7 @@ async def amireallyalive(alive):
     
     await alive.client.send_file(
                      alive.chat_id, 
-                     ppcaption, 
+                     "ppcaption", 
                      reply=alive.id, 
     )
 
