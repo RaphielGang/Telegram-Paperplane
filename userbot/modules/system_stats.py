@@ -155,6 +155,7 @@ async def amireallyalive(alive):
                      caption=ppcaption, 
                      reply=alive.id, 
     )
+    await alive.delete()
 
 @register(outgoing=True, pattern="^.aliveu")
 @grp_exclude()
