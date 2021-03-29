@@ -82,7 +82,7 @@ async def set_afk(setafk):
         return
     message = setafk.text
     try:
-        AFKREASON = "str(message[5:])\n"
+        AFKREASON = str(message[5:])
     except BaseException:
         AFKREASON = ''
     if not AFKREASON:
