@@ -30,7 +30,7 @@ async def mention_afk(mention):
         if IsAway is True:
             if mention.sender_id not in USERS:
                 await mention.reply(
-                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '  .Would ping him/her to look into the message soon😉')
+                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '.  Would ping him/her to look into the message soon😉')
                 USERS.update({mention.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif mention.sender_id in USERS:
@@ -58,7 +58,7 @@ async def afk_on_pm(afk_pm):
         if IsAway is True:
             if afk_pm.sender_id not in USERS:
                 await afk_pm.reply(
-                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '  .I\'ll ping my owner to look into the message soon😉')
+                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '.  I\'ll ping my owner to look into the message soon😉')
                 USERS.update({afk_pm.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif afk_pm.sender_id in USERS:
