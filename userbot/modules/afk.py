@@ -58,7 +58,7 @@ async def afk_on_pm(afk_pm):
         if IsAway is True:
             if afk_pm.sender_id not in USERS:
                 await afk_pm.reply(
-                    "Sorry! My owner is AFK!\n" 'He/She said:' + await afk_reason() + 'I\'ll ping my owner to look into the message soon😉')
+                    "Sorry! My owner is AFK!\n" 'He/She said:\n' + await afk_reason() + 'I\'ll ping my owner to look into the message soon😉')
                 USERS.update({afk_pm.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif afk_pm.sender_id in USERS:
@@ -82,11 +82,11 @@ async def set_afk(setafk):
         return
     message = setafk.text
     try:
-        AFKREASON = str(message[5:])
+        AFKREASON = "str(message[5:])\n"
     except BaseException:
         AFKREASON = ''
     if not AFKREASON:
-        AFKREASON = '"Too busy to write reason!"'
+        AFKREASON = '"Too busy to write reason!\n"'
     await setafk.edit("Going AFK!💨")
     if BOTLOG:
         await setafk.client.send_message(BOTLOG_CHATID, "You went AFK!")
