@@ -38,7 +38,7 @@ async def mention_afk(mention):
                     await mention.reply(
                         "My owner is still not here. "
                         "Try to ping my owner a little later. I am sorry😖."
-                        'I recall my owner saying' + await afk_reason() + )
+                        "I recall my owner saying ```" + await afk_reason() + "```" )
                     USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
@@ -66,7 +66,7 @@ async def afk_on_pm(afk_pm):
                     await afk_pm.reply(
                         "Sorry! But my owner is still not here. "
                         "Try to ping my owner a little later. I am sorry😖."
-                        'I recall my owner saying' + await afk_reason() + )
+                        "I recall my owner saying ```" + await afk_reason() + "```" )
                     USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
