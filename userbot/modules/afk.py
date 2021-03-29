@@ -86,7 +86,7 @@ async def set_afk(setafk):
     except BaseException:
         AFKREASON = ''
     if not AFKREASON:
-        AFKREASON = '"Too busy to write reason!\n"'
+        AFKREASON = '"Too busy to write reason!" '
     await setafk.edit("Going AFK!💨")
     if BOTLOG:
         await setafk.client.send_message(BOTLOG_CHATID, "You went AFK!")
