@@ -147,8 +147,8 @@ async def notifon(non_event):
 @grp_exclude()
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
-    if event.is_private:
-        chat = await event.get_chat()
+    if apprvpm.is_private:
+        chat = await apprvpm.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             await apprvpm.edit("`Database connections failing!`")
             return
@@ -183,8 +183,8 @@ async def approvepm(apprvpm):
 @grp_exclude()
 async def disapprovepm(dapprvpm):
     """ For .disapprove command, revokes the permissions from someone to PM you. """
-    if event.is_private:
-        chat = await event.get_chat()
+    if dapprvpm.is_private:
+        chat = await dapprvpm.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             await dapprvpm.edit("`Database connections failing!`")
             return
