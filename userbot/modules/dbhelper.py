@@ -261,6 +261,18 @@ async def approve(userid):
                                       'approval': True
                                   }})
         return True
+    
+
+async def disapprove(userid):
+    if await approval(userid) is False:
+        return False
+    else:
+        MONGO.pmpermit.update_one({'user_id': userid},
+                                  {"$set": {
+                                      'approval': False
+                                  }})
+        return True
+
 
 
 async def block_pm(userid):
