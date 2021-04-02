@@ -147,68 +147,72 @@ async def notifon(non_event):
 @grp_exclude()
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
-    if not is_mongo_alive() or not is_redis_alive():
-        await apprvpm.edit("`Database connections failing!`")
-        return
+    if event.is_private:
+        chat = await event.get_chat()
+        if not is_mongo_alive() or not is_redis_alive():
+            await apprvpm.edit("`Database connections failing!`")
+            return
 
-    if await approve(apprvpm.chat_id) is False:
-        return await apprvpm.edit("`User was already approved!`")
-    else:
-        if apprvpm.reply_to_msg_id:
-            reply = await apprvpm.get_reply_message()
-            replied_user = await apprvpm.client(
-                GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-
+        if await approve(apprvpm.chat_id) is False:
+            return await apprvpm.edit("`User was already approved!`")
         else:
-            aname = await apprvpm.client.get_entity(apprvpm.chat_id)
-            name0 = str(aname.first_name)
-            uid = apprvpm.chat_id
-       
-        await approve(chat.id)
-        await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
+            if apprvpm.reply_to_msg_id:
+                reply = await apprvpm.get_reply_message()
+                replied_user = await apprvpm.client(
+                    GetFullUserRequest(reply.from_id))
+                aname = replied_user.user.id
+                name0 = str(replied_user.user.first_name)
+                uid = replied_user.user.id
 
-        if BOTLOG:
-            await apprvpm.client.send_message(
-                BOTLOG_CHATID,
-                "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
-            )
+            else:
+                aname = await apprvpm.client.get_entity(apprvpm.chat_id)
+                name0 = str(aname.first_name)
+                uid = apprvpm.chat_id
+       
+            await approve(chat.id)
+            await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
+
+            if BOTLOG:
+                await apprvpm.client.send_message(
+                    BOTLOG_CHATID,
+                    "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+                )
             
             
 @register(outgoing=True, pattern="^.disapprove$")
 @grp_exclude()
 async def disapprovepm(dapprvpm):
     """ For .disapprove command, revokes the permissions from someone to PM you. """
-    if not is_mongo_alive() or not is_redis_alive():
-        await dapprvpm.edit("`Database connections failing!`")
-        return
+    if event.is_private:
+        chat = await event.get_chat()
+        if not is_mongo_alive() or not is_redis_alive():
+            await dapprvpm.edit("`Database connections failing!`")
+            return
 
-    if await disapprove(dapprvpm.chat_id) is False:
-        return await dapprvpm.edit("`User isn't approved yet!`")
-    else:
-        if dapprvpm.reply_to_msg_id:
-            reply = await dapprvpm.get_reply_message()
-            replied_user = await dapprvpm.client(
-                GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-
+        if await disapprove(dapprvpm.chat_id) is False:
+            return await dapprvpm.edit("`User isn't approved yet!`")
         else:
-            aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
-            name0 = str(aname.first_name)
-            uid = dapprvpm.chat_id
-       
-        await disapprove(chat.id)
-        await dapprvpm.edit(f"[{name0}](tg://user?id={uid}) `disapproved to PM!`")
+            if dapprvpm.reply_to_msg_id:
+                reply = await dapprvpm.get_reply_message()
+                replied_user = await dapprvpm.client(
+                    GetFullUserRequest(reply.from_id))
+                aname = replied_user.user.id
+                name0 = str(replied_user.user.first_name)
+                uid = replied_user.user.id
 
-        if BOTLOG:
-            await dapprvpm.client.send_message(
-                BOTLOG_CHATID,
-                "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
-            )
+            else:
+                aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
+                name0 = str(aname.first_name)
+                uid = dapprvpm.chat_id
+       
+            await disapprove(chat.id)
+            await dapprvpm.edit(f"[{name0}](tg://user?id={uid}) `disapproved to PM!`")
+
+            if BOTLOG:
+               await dapprvpm.client.send_message(
+                    BOTLOG_CHATID,
+                    "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+                )
 
 
 @register(outgoing=True, pattern="^.block$")
