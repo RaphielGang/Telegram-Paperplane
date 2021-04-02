@@ -98,28 +98,28 @@ async def permitpm(event):
                         )
 
 
-@register(disable_edited=True, outgoing=True, disable_errors=True)
-@grp_exclude()
-async def auto_accept(event):
-    """ Will approve automatically if you texted them first. """
-    if event.is_private:
-        chat = await event.get_chat()
-        if not is_mongo_alive() or not is_redis_alive():
-            return
-        if isinstance(chat, User):
-            if await approval(event.chat_id) or chat.bot:
-                return
-            async for message in event.client.iter_messages(chat.id,
-                                                            reverse=True,
-                                                            limit=1):
-                if message.from_id == (await event.client.get_me()).id:
-                    await approve(chat.id)
-                    if BOTLOG:
-                        await event.client.send_message(
-                            BOTLOG_CHATID,
-                            "#AUTO-APPROVED\n" + "User: " +
-                            f"[{chat.first_name}](tg://user?id={chat.id})",
-                        )
+#@register(disable_edited=True, outgoing=True, disable_errors=True)
+#@grp_exclude()
+#async def auto_accept(event):
+    #""" Will approve automatically if you texted them first. """
+    #if event.is_private:
+        #chat = await event.get_chat()
+        #if not is_mongo_alive() or not is_redis_alive():
+            #return
+        #if isinstance(chat, User):
+            #if await approval(event.chat_id) or chat.bot:
+                #return
+            #async for message in event.client.iter_messages(chat.id,
+                                                            #reverse=True,
+                                                            #limit=1):
+                #if message.from_id == (await event.client.get_me()).id:
+                    #await approve(chat.id)
+                    #if BOTLOG:
+                        #await event.client.send_message(
+                            #BOTLOG_CHATID,
+                            #"#AUTO-APPROVED\n" + "User: " +
+                            #f"[{chat.first_name}](tg://user?id={chat.id})",
+                        #)
 
 
 @register(outgoing=True, pattern="^.notifoff$")
@@ -166,13 +166,48 @@ async def approvepm(apprvpm):
             aname = await apprvpm.client.get_entity(apprvpm.chat_id)
             name0 = str(aname.first_name)
             uid = apprvpm.chat_id
-
+       
+        await approve(chat.id)
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
 
         if BOTLOG:
             await apprvpm.client.send_message(
                 BOTLOG_CHATID,
                 "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+            )
+            
+            
+@register(outgoing=True, pattern="^.disapprove$")
+@grp_exclude()
+async def disapprovepm(dapprvpm):
+    """ For .disapprove command, revokes the permissions from someone to PM you. """
+    if not is_mongo_alive() or not is_redis_alive():
+        await dapprvpm.edit("`Database connections failing!`")
+        return
+
+    if await disapprove(dapprvpm.chat_id) is False:
+        return await dapprvpm.edit("`User isn't approved yet!`")
+    else:
+        if dapprvpm.reply_to_msg_id:
+            reply = await dapprvpm.get_reply_message()
+            replied_user = await dapprvpm.client(
+                GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
+
+        else:
+            aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
+            name0 = str(aname.first_name)
+            uid = dapprvpm.chat_id
+       
+        await disapprove(chat.id)
+        await dapprvpm.edit(f"[{name0}](tg://user?id={uid}) `disapproved to PM!`")
+
+        if BOTLOG:
+            await dapprvpm.client.send_message(
+                BOTLOG_CHATID,
+                "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
             )
 
 
