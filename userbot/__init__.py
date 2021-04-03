@@ -172,8 +172,8 @@ os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
 COUNT_MSG = 0
-MAX_FLOOD_IN_PM = os.environ.get("MAX_FLOOD_IN_PM") or None #Maximum number of messages you want to allow an unapproved user to text you. It is 4 at default
-PM_PERMIT_TEXT = os.environ.get("PM_PERMIT_TEXT") or None #If you want to customize your Pm Permit text
+MAX_FLOOD_IN_PM = os.environ.get("MAX_FLOOD_IN_PM") or None
+PM_PERMIT_TEXT = os.environ.get("PM_PERMIT_TEXT") or None
 USERS = {}
 COUNT_PM = {}
 LASTMSG = {}
