@@ -82,26 +82,19 @@ async def permitpm(event):
                     
                 if COUNT_PM[event.chat_id] < MAX_MSG - 1:
                     WARNS = MAX_MSG - COUNT_PM[event.chat_id]
-                    await event.reply(f"You have {WARNS} warns left.")
+                    n = await event.reply(f"You have {WARNS} warns left.")
                     
                 if MAX_MSG - COUNT_PM[event.chat_id] == 1:
-                    await event.reply("You have 1 warn left.")
+                    n = await event.reply("You have 1 warn left.")
                     
                 if COUNT_PM[event.chat_id] == MAX_MSG:
-                    await event.reply("It's the last warning. I will block")
+                    n = await event.reply("It's the last warning. I will block")
 
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
-                    n = ("You have {WARNS} warns left.")
-                    n = ("You have 1 warn left.")
-                    n = ("It's the last warning. I will block")
-                    async for reply in event.client.iter_messages(
-                                event.chat_id,
-                                from_user='me',
-                                search=n):
-                            await reply.delete()
+                    await n.delete()
 
                     try:
                         del COUNT_PM[event.chat_id]
@@ -162,13 +155,13 @@ async def notifoff(noff_event):
     """ For .notifoff command, stop getting
         notifications from unapproved PMs. """
     if await notif_off() is False:
-        return await noff_event.edit('`Notifications already silenced!`')
-        time.sleep(5)
-        noff_event.delete()
+        x = return await noff_event.edit('`Notifications already silenced!`')
+    time.sleep(5)
+    await x.delete()
     else:
-        return await noff_event.edit("`Notifications silenced!`")
-        time.sleep(5)
-        noff_event.delete()
+        x = return await noff_event.edit("`Notifications silenced!`")
+    time.sleep(5)
+    await x.delete()
 
 
 @register(outgoing=True, pattern="^.notifon$")
@@ -176,13 +169,13 @@ async def notifoff(noff_event):
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
-        return await non_event.edit("`Notifications ain't muted!")
-        time.sleep(5)
-        non_event.delete()
+        x = return await non_event.edit("`Notifications ain't muted!")
+    time.sleep(5)
+    await x.delete()
     else:
-        return await non_event.edit("`Notifications unmuted!`")
-        time.sleep(5)
-        non_event.delete()
+        x = return await non_event.edit("`Notifications unmuted!`")
+    time.sleep(5)
+    await x.delete()
 
 
 @register(outgoing=True, pattern="^.approve$|.a$")
@@ -196,9 +189,9 @@ async def approvepm(apprvpm):
             return
 
         if await approve(apprvpm.chat_id) is False:
-            return await apprvpm.edit("`User was already approved!`")
-            time.sleep(5)
-            await x.delete()
+            x = return await apprvpm.edit("`User was already approved!`")
+        time.sleep(5)
+        await x.delete()
         else:
             if apprvpm.reply_to_msg_id:
                 reply = await apprvpm.get_reply_message()
@@ -236,9 +229,9 @@ async def disapprovepm(dapprvpm):
             return
 
         if await disapprove(dapprvpm.chat_id) is False:
-            return await dapprvpm.edit("`User isn't approved yet!`")
+            x = return await dapprvpm.edit("`User isn't approved yet!`")
             time.sleep(5)
-            dapprvpm_event.delete()
+            x.delete()
         else:
             if dapprvpm.reply_to_msg_id:
                 reply = await dapprvpm.get_reply_message()
@@ -254,9 +247,9 @@ async def disapprovepm(dapprvpm):
                 uid = dapprvpm.chat_id
        
             await disapprove(chat.id)
-            await dapprvpm.edit(f"[{name0}](tg://user?id={uid}) `disapproved to PM!`")
+            x = await dapprvpm.edit(f"[{name0}](tg://user?id={uid}) `disapproved to PM!`")
             time.sleep(5)
-            dapprvpm_event.delete()
+            x.delete()
 
             if BOTLOG:
                await dapprvpm.client.send_message(
