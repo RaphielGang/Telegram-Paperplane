@@ -70,7 +70,7 @@ async def permitpm(event):
                     WARNS = 4 - COUNT_PM[event.chat_id]
                     await event.reply(f"You have {WARNS} warns left.")
                     
-                if 4 - COUNT_PM[event.chat_id] == 1
+                if 4 - COUNT_PM[event.chat_id] == 1:
                      WARNS = 4 - COUNT_PM[event.chat_id]
                      await event.reply(f"You have {WARNS} warn left.")
                     
@@ -290,6 +290,7 @@ CMD_HELP.update({
     "pmpermit": [
         "PMPermit",
         " - `.approve`: Approve the mentioned/replied person to PM.\n"
+        " - `.disapprove`: Disapprove the mentioned/replied person to PM.\n"
         " - `.block`: Blocks the person from PMing you.\n"
         " - `.unblock`: Unblocks the person, so they can PM you again.\n"
         " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
