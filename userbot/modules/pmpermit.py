@@ -107,10 +107,10 @@ async def permitpm(event):
                         LOGS.info("CountPM wen't rarted boi")
                         return
 
+                    PREV_MSG = n 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
-                    await PREV_MSG.delete()
-                    PREV_MSG = n   
+                    await PREV_MSG.delete()  
                     
 
                     if BOTLOG:
