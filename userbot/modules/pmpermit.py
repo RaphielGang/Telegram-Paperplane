@@ -96,7 +96,7 @@ async def permitpm(event):
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
                     n = UNAPPROVED_MSG
-                    n = (f"You have {range(1:)} warns left.")
+                    n = (f"You have {range(1, 999)} warns left.")
                     n = ("You have 1 warn left.")
                     n = ("It's the last warning. I will block")
                     async for reply in event.client.iter_messages(
@@ -222,7 +222,7 @@ async def approvepm(apprvpm):
             await x.delete()
             
             n = UNAPPROVED_MSG
-            n = (f"You have {range(1:)} warns left.")
+            n = (f"You have {range(1, 999)} warns left.")
             n = ("You have 1 warn left.")
             n = ("It's the last warning. I will block")
             async for reply in apprvpm.client.iter_messages(
