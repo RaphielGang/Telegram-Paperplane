@@ -203,7 +203,7 @@ async def approvepm(apprvpm):
                 )
             
             
-@register(outgoing=True, pattern="^.disapprove$|.da&")
+@register(outgoing=True, pattern="^.disapprove$|.da$")
 @grp_exclude()
 async def disapprovepm(dapprvpm):
     """ For .disapprove command, revokes the permissions from someone to PM you. """
@@ -301,8 +301,8 @@ async def unblockpm(unblock):
 CMD_HELP.update({
     "pmpermit": [
         "PMPermit",
-        " - `.approve`: Approve the mentioned/replied person to PM.\n"
-        " - `.disapprove`: Disapprove the mentioned/replied person to PM.\n"
+        " - `.approve` or `.a`: Approve the mentioned/replied person to PM.\n"
+        " - `.disapprove` or `.da`: Disapprove the mentioned/replied person to PM.\n"
         " - `.block`: Blocks the person from PMing you.\n"
         " - `.unblock`: Unblocks the person, so they can PM you again.\n"
         " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
