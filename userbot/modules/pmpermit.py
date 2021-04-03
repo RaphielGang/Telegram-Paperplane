@@ -53,7 +53,7 @@ async def permitpm(event):
                                 search=UNAPPROVED_MSG):
                             # ... and deletes them !!
                             await message.delete()
-                        await event.reply(UNAPPROVED_MSG)
+                        #await event.reply(UNAPPROVED_MSG)# ignore this please
                     LASTMSG.update({event.chat_id: event.text})
                 else:
                     await event.reply(UNAPPROVED_MSG)
@@ -65,7 +65,7 @@ async def permitpm(event):
                     COUNT_PM.update({event.chat_id: 1})
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
-                    WARNS = COUNT_PM[event.chat_id] + 1
+                    WARNS = COUNT_PM[event.chat_id]
                     await event.reply(f"You have {WARNS} warns left out of 4")
 
                 if COUNT_PM[event.chat_id] > 4:
@@ -100,6 +100,7 @@ async def permitpm(event):
                         )
 
 
+#Ignore this please
 #@register(disable_edited=True, outgoing=True, disable_errors=True)
 #@grp_exclude()
 #async def auto_accept(event):
