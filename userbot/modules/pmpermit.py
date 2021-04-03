@@ -18,13 +18,16 @@ from userbot.modules.dbhelper import (approval, disapprove, approve, block_pm, n
 
 # ========================= CONSTANTS ============================
 #1
-UNAPPROVED_MSG = (
-    "`Bleep blop! This is a bot. Don't fret.\n\n`"
-    "`My master hasn't approved you to PM.`"
-    "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
-    "`As far as I know, he doesn't usually approve retards though.`")
+UNAPPROVED_MSG = PM_PERMIT_MSG or (
+                        "`Bleep blop! This is a bot. Don't fret.\n\n`"
+                        "`My master hasn't approved you to PM.`"
+                        "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
+                        "`As far as I know, he doesn't usually approve retards though.`")
 #2
 MAX_MSG = MAX_FLOOD_IN_PM or 4
+
+#3
+
 # =================================================================
 
 
