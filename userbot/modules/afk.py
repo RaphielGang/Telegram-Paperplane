@@ -108,9 +108,9 @@ async def type_afk_is_not_true(notafk):
             "`You recieved " + str(COUNT_MSG) +
             " messages while you were away. Check log for more details.`" +
             " `This auto-generated message " +
-            "shall be self destructed in 2 seconds.`")
+            "shall be self destructed in 5 seconds.`")
         await no_afk()
-        time.sleep(2)
+        time.sleep(5)
         await x.delete()
         await y.delete()
         if BOTLOG:
