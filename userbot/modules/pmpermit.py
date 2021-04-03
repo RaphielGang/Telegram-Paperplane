@@ -102,7 +102,10 @@ async def permitpm(event):
                     async for reply in event.client.iter_messages(
                                 event.chat_id,
                                 from_user='me',
-                                search=n_1, n_2, n_3, n_4):
+                                search=n_1,
+                                search=n_2,
+                                search=n_3,
+                                search=n_4):
                       await reply.delete()
                       
 
@@ -228,7 +231,10 @@ async def approvepm(apprvpm):
             async for reply in apprvpm.client.iter_messages(
                                 apprvpm.chat_id,
                                 from_user='me',
-                                search=n_1, n_2, n_3, n_4):
+                                search=n_1,
+                                search=n_2,
+                                search=n_3,
+                                search=n_4):
               await reply.delete()
 
             if BOTLOG:
