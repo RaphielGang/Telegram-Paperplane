@@ -11,7 +11,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_PM, LASTMSG, LOGS,
-                     PM_AUTO_BAN, is_mongo_alive, is_redis_alive)
+                     PM_AUTO_BAN, MAX_FLOOD_IN_PM, is_mongo_alive, is_redis_alive)
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (approval, disapprove, approve, block_pm, notif_off,
                                       notif_on, notif_state)
@@ -23,6 +23,8 @@ UNAPPROVED_MSG = (
     "`My master hasn't approved you to PM.`"
     "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
     "`As far as I know, he doesn't usually approve retards though.`")
+#2
+MAX_MSG = MAX_FLOOD_IN_PM or 4
 # =================================================================
 
 
@@ -66,18 +68,17 @@ async def permitpm(event):
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
                     
-                if COUNT_PM[event.chat_id] < 4 - 1:
-                    WARNS = 4 - COUNT_PM[event.chat_id]
+                if COUNT_PM[event.chat_id] < MAX_MSG - 1:
+                    WARNS = MAX_MSG - COUNT_PM[event.chat_id]
                     await event.reply(f"You have {WARNS} warns left.")
                     
-                if 4 - COUNT_PM[event.chat_id] == 1:
-                     WARNS = 4 - COUNT_PM[event.chat_id]
-                     await event.reply(f"You have {WARNS} warn left.")
+                if MAX_MSG - COUNT_PM[event.chat_id] == 1:
+                     await event.reply(f"You have 1 warn left.")
                     
-                if COUNT_PM[event.chat_id] == 4:
+                if COUNT_PM[event.chat_id] == MAX_MSG:
                      await event.reply("It's the last warning. I will block")
 
-                if COUNT_PM[event.chat_id] > 4:
+                if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
