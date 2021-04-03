@@ -231,7 +231,7 @@ async def disapprovepm(dapprvpm):
         if await disapprove(dapprvpm.chat_id) is False:
            x = await dapprvpm.edit("`User isn't approved yet!`")
            time.sleep(5)
-           x.delete()
+           await x.delete()
         else:
             if dapprvpm.reply_to_msg_id:
                 reply = await dapprvpm.get_reply_message()
@@ -249,7 +249,7 @@ async def disapprovepm(dapprvpm):
             await disapprove(chat.id)
             x = await dapprvpm.edit(f"[{name0}](tg://user?id={uid}) `disapproved to PM!`")
             time.sleep(5)
-            x.delete()
+            await x.delete()
 
             if BOTLOG:
                await dapprvpm.client.send_message(
