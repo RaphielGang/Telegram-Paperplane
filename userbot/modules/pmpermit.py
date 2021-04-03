@@ -95,17 +95,14 @@ async def permitpm(event):
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
-                    n_1 = UNAPPROVED_MSG
-                    n_2 = (f"You have {range(1, 999)} warns left.")
-                    n_3 = ("You have 1 warn left.")
-                    n_4 = ("It's the last warning. I will block")
+                    n = UNAPPROVED_MSG
+                    d = (f"You have {range(1, 999)} warns left.")
+                    n = ("You have 1 warn left.")
+                    n = ("It's the last warning. I will block")
                     async for reply in event.client.iter_messages(
                                 event.chat_id,
                                 from_user='me',
-                                search=n_1,
-                                search=n_2,
-                                search=n_3,
-                                search=n_4):
+                                search=n):
                       await reply.delete()
                       
 
@@ -224,17 +221,14 @@ async def approvepm(apprvpm):
             time.sleep(5)
             await x.delete()
             
-            n_1 = UNAPPROVED_MSG
-            n_2 = (f"You have {range(1, 999)} warns left.")
-            n_3 = ("You have 1 warn left.")
-            n_4 = ("It's the last warning. I will block")
+            n = UNAPPROVED_MSG
+            d = (f"You have {range(1, 999)} warns left.")
+            n = ("You have 1 warn left.")
+            n = ("It's the last warning. I will block")
             async for reply in apprvpm.client.iter_messages(
                                 apprvpm.chat_id,
                                 from_user='me',
-                                search=n_1,
-                                search=n_2,
-                                search=n_3,
-                                search=n_4):
+                                search=n):
               await reply.delete()
 
             if BOTLOG:
