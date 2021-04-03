@@ -59,7 +59,8 @@ async def permitpm(event):
                                 search=UNAPPROVED_MSG):
                             # ... and deletes them !!
                             await message.delete()
-                        #await event.reply(UNAPPROVED_MSG)# ignore this please
+                        #await event.reply(UNAPPROVED_MSG) 
+                        # ignore this please
                     LASTMSG.update({event.chat_id: event.text})
                 else:
                     if PM_PERMIT_IMAGE:
@@ -94,7 +95,11 @@ async def permitpm(event):
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
-                    await event.delete()
+                    async for reply in event.client.iter_messages(
+                                event.chat_id,
+                                from_user='me',
+                                search=n):
+                      await reply.delete()
 
                     try:
                         del COUNT_PM[event.chat_id]
@@ -211,7 +216,11 @@ async def approvepm(apprvpm):
             time.sleep(5)
             await x.delete()
             
-            await event.delete()
+            async for reply in apprvpm.client.iter_messages(
+                                event.chat_id,
+                                from_user='me',
+                                search=n):
+              await reply.delete()
 
             if BOTLOG:
                 await apprvpm.client.send_message(
