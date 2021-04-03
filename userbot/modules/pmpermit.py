@@ -19,10 +19,10 @@ from userbot.modules.dbhelper import (approval, disapprove, approve, block_pm, n
 # ========================= CONSTANTS ============================
 #1
 UNAPPROVED_MSG = PM_PERMIT_MSG or (
-                        "`**Bleep blop! I am a bot.**\n\n`"
+                        "**Bleep blop! I am a bot.**\n\n"
                         "`My master hasn't approved you to PM.`"
                         "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
-                        "`**So please don't spam here. Otherwise you will be blocked.**`")
+                        "**So please don't spam here. Otherwise you will be blocked.**")
 #2
 MAX_MSG = MAX_FLOOD_IN_PM or 4
 
@@ -97,7 +97,6 @@ async def permitpm(event):
                     try:
                         del COUNT_PM[event.chat_id]
                         del LASTMSG[event.chat_id]
-                        del n
                     except KeyError:
                         if BOTLOG:
                             await event.client.send_message(
@@ -110,6 +109,9 @@ async def permitpm(event):
 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
+                    await PREV_MSG.delete()
+                    PREV_MSG = n   
+                    
 
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
