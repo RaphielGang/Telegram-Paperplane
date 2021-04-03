@@ -97,7 +97,7 @@ async def permitpm(event):
                                 event.chat_id,
                                 from_user='me',
                                 search=n):
-                            await message.delete()
+                            await reply.delete()
 
                     try:
                         del COUNT_PM[event.chat_id]
