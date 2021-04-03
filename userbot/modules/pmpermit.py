@@ -27,7 +27,7 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 MAX_MSG = MAX_FLOOD_IN_PM or 4
 
 #3
-
+PP_PM_PIC = PM_PERMIT_IMAGE
 # =================================================================
 
 
@@ -61,8 +61,16 @@ async def permitpm(event):
                         #await event.reply(UNAPPROVED_MSG)# ignore this please
                     LASTMSG.update({event.chat_id: event.text})
                 else:
-                    await event.reply(UNAPPROVED_MSG)
-                    LASTMSG.update({event.chat_id: event.text})
+                    if PM_PERMIT_IMAGE:
+                       await event.client.send_file(
+                                          event.chat_id,
+                                          PP_PM_PIC,
+                                          caption=UNAPPROVED_MSG,
+                                  )
+                       LASTMSG.update({event.chat_id: event.text})
+                    else:
+                       await event.reply(UNAPPROVED_MSG)
+                       LASTMSG.update({event.chat_id: event.text})
 
                 if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
