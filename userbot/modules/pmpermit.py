@@ -94,7 +94,7 @@ async def permitpm(event):
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
-                    await n.delete()
+                    await event.delete()
 
                     try:
                         del COUNT_PM[event.chat_id]
@@ -210,6 +210,8 @@ async def approvepm(apprvpm):
             x = await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
             time.sleep(5)
             await x.delete()
+            
+            await event.delete()
 
             if BOTLOG:
                 await apprvpm.client.send_message(
