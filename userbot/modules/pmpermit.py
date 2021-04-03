@@ -66,7 +66,7 @@ async def permitpm(event):
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
                     WARNS = COUNT_PM[event.chat_id] + 1
-                    await event.reply("You have {WARNS} warns left out of 4")
+                    await event.reply(f"You have {WARNS} warns left out of 4")
 
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond("`You were spamming my master's PM, "
