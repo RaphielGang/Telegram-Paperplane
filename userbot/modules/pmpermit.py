@@ -162,8 +162,12 @@ async def notifoff(noff_event):
         notifications from unapproved PMs. """
     if await notif_off() is False:
         return await noff_event.edit('`Notifications already silenced!`')
+               sleep.time(5)
+               noff_event.delete()
     else:
         return await noff_event.edit("`Notifications silenced!`")
+               sleep.time(5)
+               noff_event.delete()
 
 
 @register(outgoing=True, pattern="^.notifon$")
@@ -172,8 +176,12 @@ async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
         return await non_event.edit("`Notifications ain't muted!")
+               sleep.time(5)
+               non_event.delete()
     else:
         return await non_event.edit("`Notifications unmuted!`")
+               sleep.time(5)
+               non_event.delete()
 
 
 @register(outgoing=True, pattern="^.approve$|.a$")
@@ -188,6 +196,8 @@ async def approvepm(apprvpm):
 
         if await approve(apprvpm.chat_id) is False:
             return await apprvpm.edit("`User was already approved!`")
+                   sleep.time(5)
+                   apprvpm_event.delete()
         else:
             if apprvpm.reply_to_msg_id:
                 reply = await apprvpm.get_reply_message()
@@ -204,6 +214,8 @@ async def approvepm(apprvpm):
        
             await approve(chat.id)
             await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
+                  sleep.time(5)
+                  apprvpm_event.delete()
 
             if BOTLOG:
                 await apprvpm.client.send_message(
@@ -224,6 +236,8 @@ async def disapprovepm(dapprvpm):
 
         if await disapprove(dapprvpm.chat_id) is False:
             return await dapprvpm.edit("`User isn't approved yet!`")
+                   sleep.time(5)
+                   dapprvpm_event.delete()
         else:
             if dapprvpm.reply_to_msg_id:
                 reply = await dapprvpm.get_reply_message()
@@ -240,6 +254,8 @@ async def disapprovepm(dapprvpm):
        
             await disapprove(chat.id)
             await dapprvpm.edit(f"[{name0}](tg://user?id={uid}) `disapproved to PM!`")
+                  sleep.time(5)
+                  dapprvpm_event.delete()
 
             if BOTLOG:
                await dapprvpm.client.send_message(
@@ -257,7 +273,9 @@ async def blockpm(block):
         return
 
     if await block_pm(block.chat_id) is False:
-        return await block.edit("`First approve, before blocc'ing`")
+        return await block.edit("`First approve before blocking`")
+               sleep.time(5)
+               block_event.delete()
     else:
         await block.edit("`You are gonna be blocked from PM-ing my Master!`")
 
@@ -294,8 +312,12 @@ async def unblockpm(unblock):
         name0 = str(replied_user.user.first_name)
         if await approve(reply.from_id) is False:
             return await unblock.edit("`You haven't blocked this user yet!`")
+                   sleep.time(5)
+                   unblock_event.delete()
         else:
             return await unblock.edit("`My Master has forgiven you to PM now`")
+                   sleep.time(10)
+                   unblock_event.delete()
 
         await unblock.client(UnblockRequest(replied_user.user.id))
 
