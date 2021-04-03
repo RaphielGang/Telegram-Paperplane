@@ -196,9 +196,9 @@ async def approvepm(apprvpm):
             return
 
         if await approve(apprvpm.chat_id) is False:
-            return await apprvpm.edit("`User was already approved!`")
-            time.sleep(5)
-            apprvpm_event.delete()
+            return x = await apprvpm.edit("`User was already approved!`")
+        time.sleep(5)
+        await x.delete()
         else:
             if apprvpm.reply_to_msg_id:
                 reply = await apprvpm.get_reply_message()
@@ -214,9 +214,9 @@ async def approvepm(apprvpm):
                 uid = apprvpm.chat_id
        
             await approve(chat.id)
-            await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
+            x = await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
             time.sleep(5)
-            apprvpm_event.delete()
+            await x.delete()
 
             if BOTLOG:
                 await apprvpm.client.send_message(
