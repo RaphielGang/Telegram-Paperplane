@@ -95,6 +95,7 @@ async def permitpm(event):
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
+                    WARNS = MAX_MSG - COUNT_PM[event.chat_id]
                     n = UNAPPROVED_MSG
                     n = (f"You have {WARNS} warns left.")
                     n = ("You have 1 warn left.")
