@@ -173,7 +173,7 @@ os.chmod('bin/cmrudl', 0o755)
 # Global Variables
 COUNT_MSG = 0
 MAX_FLOOD_IN_PM = os.environ.get("MAX_FLOOD_IN_PM") or None
-PM_PERMIT_TEXT = os.environ.get("PM_PERMIT_TEXT") or None
+PM_PERMIT_MSG = os.environ.get("PM_PERMIT_TEXT") or None
 USERS = {}
 COUNT_PM = {}
 LASTMSG = {}
