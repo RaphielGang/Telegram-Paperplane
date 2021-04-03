@@ -24,7 +24,7 @@ UNAPPROVED_MSG = (
     "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
     "`As far as I know, he doesn't usually approve retards though.`")
 #2
-warns = COUNT_PM[chat_id] + 1
+warns = COUNT_PM[event.chat_id] + 1
 # =================================================================
 
 
