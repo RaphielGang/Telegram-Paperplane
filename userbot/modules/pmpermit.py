@@ -99,7 +99,7 @@ async def permitpm(event):
                                 event.chat_id,
                                 from_user='me',
                                 search=n):
-                      await reply.delete()
+                      
 
                     try:
                         del COUNT_PM[event.chat_id]
@@ -217,7 +217,7 @@ async def approvepm(apprvpm):
             await x.delete()
             
             async for reply in apprvpm.client.iter_messages(
-                                event.chat_id,
+                                apprvpm.chat_id,
                                 from_user='me',
                                 search=n):
               await reply.delete()
