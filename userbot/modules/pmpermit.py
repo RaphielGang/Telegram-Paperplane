@@ -196,9 +196,9 @@ async def approvepm(apprvpm):
             return
 
         if await approve(apprvpm.chat_id) is False:
-            return x = await apprvpm.edit("`User was already approved!`")
-        time.sleep(5)
-        await x.delete()
+            return await apprvpm.edit("`User was already approved!`")
+            time.sleep(5)
+            await x.delete()
         else:
             if apprvpm.reply_to_msg_id:
                 reply = await apprvpm.get_reply_message()
