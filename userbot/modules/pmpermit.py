@@ -212,6 +212,7 @@ async def approvepm(apprvpm):
             time.sleep(5)
             await x.delete()
             
+            n = ("You have 1 warn left.")
             async for reply in apprvpm.client.iter_messages(
                                 apprvpm.chat_id,
                                 from_user='me',
