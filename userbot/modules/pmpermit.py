@@ -155,15 +155,13 @@ async def notifoff(noff_event):
     """ For .notifoff command, stop getting
         notifications from unapproved PMs. """
     if await notif_off() is False:
-        return 
-    x = await noff_event.edit('`Notifications already silenced!`')
-    time.sleep(5)
-    await x.delete()
+       x = await noff_event.edit('`Notifications already silenced!`')
+       time.sleep(5)
+       await x.delete()
     else:
-        return 
-    x = await noff_event.edit("`Notifications silenced!`")
-    time.sleep(5)
-    await x.delete()
+       x = await noff_event.edit("`Notifications silenced!`")
+       time.sleep(5)
+       await x.delete()
 
 
 @register(outgoing=True, pattern="^.notifon$")
@@ -171,15 +169,13 @@ async def notifoff(noff_event):
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
-        return 
-    x = await non_event.edit("`Notifications ain't muted!")
-    time.sleep(5)
-    await x.delete()
+       x = await non_event.edit("`Notifications ain't muted!")
+       time.sleep(5)
+       await x.delete()
     else:
-        return 
-    x = await non_event.edit("`Notifications unmuted!`")
-    time.sleep(5)
-    await x.delete()
+       x = await non_event.edit("`Notifications unmuted!`")
+       time.sleep(5)
+       await x.delete()
 
 
 @register(outgoing=True, pattern="^.approve$|.a$")
@@ -193,10 +189,9 @@ async def approvepm(apprvpm):
             return
 
         if await approve(apprvpm.chat_id) is False:
-            return 
-        x = await apprvpm.edit("`User was already approved!`")
-        time.sleep(5)
-        await x.delete()
+           x = await apprvpm.edit("`User was already approved!`")
+           time.sleep(5)
+           await x.delete()
         else:
             if apprvpm.reply_to_msg_id:
                 reply = await apprvpm.get_reply_message()
@@ -234,10 +229,9 @@ async def disapprovepm(dapprvpm):
             return
 
         if await disapprove(dapprvpm.chat_id) is False:
-            return 
-        x = await dapprvpm.edit("`User isn't approved yet!`")
-        time.sleep(5)
-        x.delete()
+           x = await dapprvpm.edit("`User isn't approved yet!`")
+           time.sleep(5)
+           x.delete()
         else:
             if dapprvpm.reply_to_msg_id:
                 reply = await dapprvpm.get_reply_message()
