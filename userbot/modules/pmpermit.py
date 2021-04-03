@@ -95,10 +95,6 @@ async def permitpm(event):
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
-                    async for reply in event.client.iter_messages(
-                                event.chat_id,
-                                from_user='me',
-                                search=n):
                       
 
                     try:
