@@ -170,8 +170,9 @@ os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
 COUNT_MSG = 0
+MAX_FLOOD_IN_PM = os.environ.get("MAX_FLOOD_IN_PM") or None
 USERS = {}
 COUNT_PM = {}
 LASTMSG = {}
 CMD_HELP = {}
-AFKREASON = "no reason"
+AFKREASON = "Too busy to write reason!"
