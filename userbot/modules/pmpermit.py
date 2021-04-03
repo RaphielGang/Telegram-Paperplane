@@ -98,7 +98,7 @@ async def permitpm(event):
                 n = ("You have 1 warn left.")
                 n = ("It's the last warning. I will block")
                 
-                async for reply in event.client.iter_messages(
+                    async for reply in event.client.iter_messages(
                                 event.chat_id,
                                 from_user='me',
                                 search=n):
