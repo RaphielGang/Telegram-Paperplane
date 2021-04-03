@@ -23,8 +23,6 @@ UNAPPROVED_MSG = (
     "`My master hasn't approved you to PM.`"
     "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
     "`As far as I know, he doesn't usually approve retards though.`")
-#2
-warns = COUNT_PM[event.chat_id] + 1
 # =================================================================
 
 
@@ -67,6 +65,7 @@ async def permitpm(event):
                     COUNT_PM.update({event.chat_id: 1})
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
+                    warns = COUNT_PM[event.chat_id] + 1
                     await event.reply("You have {warns} warns left out of 4")
 
                 if COUNT_PM[event.chat_id] > 4:
