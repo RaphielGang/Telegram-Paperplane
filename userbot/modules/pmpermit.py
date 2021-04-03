@@ -81,13 +81,13 @@ async def permitpm(event):
                     
                 if COUNT_PM[event.chat_id] < MAX_MSG - 1:
                     WARNS = MAX_MSG - COUNT_PM[event.chat_id]
-                    await event.reply(f"You have {WARNS} warns left.")
+                   n = await event.reply(f"You have {WARNS} warns left.")
                     
                 if MAX_MSG - COUNT_PM[event.chat_id] == 1:
-                     await event.reply(f"You have 1 warn left.")
+                   n = await event.reply(f"You have 1 warn left.")
                     
                 if COUNT_PM[event.chat_id] == MAX_MSG:
-                     await event.reply("It's the last warning. I will block")
+                   n = await event.reply("It's the last warning. I will block")
 
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond("`You were spamming my master's PM, "
@@ -97,6 +97,7 @@ async def permitpm(event):
                     try:
                         del COUNT_PM[event.chat_id]
                         del LASTMSG[event.chat_id]
+                        del n
                     except KeyError:
                         if BOTLOG:
                             await event.client.send_message(
