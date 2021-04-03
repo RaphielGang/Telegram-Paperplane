@@ -68,7 +68,7 @@ async def permitpm(event):
                     
                 if COUNT_PM[event.chat_id] < 4:
                     WARNS = 4 - COUNT_PM[event.chat_id]
-                    await event.reply(f"You have {WARNS} warns left out of 4")
+                    await event.reply(f"You have {WARNS} warns left.")
                     
                 if COUNT_PM[event.chat_id] == 4:
                      WARNS = COUNT_PM[event.chat_id]
