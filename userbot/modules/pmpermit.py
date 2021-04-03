@@ -19,10 +19,10 @@ from userbot.modules.dbhelper import (approval, disapprove, approve, block_pm, n
 # ========================= CONSTANTS ============================
 #1
 UNAPPROVED_MSG = PM_PERMIT_MSG or (
-                        "`Bleep blop! This is a bot. Don't fret.\n\n`"
+                        "`**Bleep blop! I am a bot.**\n\n`"
                         "`My master hasn't approved you to PM.`"
                         "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
-                        "`As far as I know, he doesn't usually approve retards though.`")
+                        "`**So please don't spam here. Otherwise you will be blocked.**`")
 #2
 MAX_MSG = MAX_FLOOD_IN_PM or 4
 
@@ -117,7 +117,7 @@ async def permitpm(event):
                             BOTLOG_CHATID,
                             "[" + name0 + "](tg://user?id=" +
                             str(event.chat_id) + ")" +
-                            " was just another retarded nibba",
+                            " was just another retard.",
                         )
 
 
@@ -167,7 +167,7 @@ async def notifon(non_event):
         return await non_event.edit("`Notifications unmuted!`")
 
 
-@register(outgoing=True, pattern="^.approve$")
+@register(outgoing=True, pattern="^.approve$|.a$")
 @grp_exclude()
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
@@ -203,7 +203,7 @@ async def approvepm(apprvpm):
                 )
             
             
-@register(outgoing=True, pattern="^.disapprove$")
+@register(outgoing=True, pattern="^.disapprove$|.da&")
 @grp_exclude()
 async def disapprovepm(dapprvpm):
     """ For .disapprove command, revokes the permissions from someone to PM you. """
