@@ -95,6 +95,15 @@ async def permitpm(event):
                     await event.reply("It's the last warning. I will block")
 
                 if COUNT_PM[event.chat_id] > MAX_MSG:
+                    message = event.text
+                    count = int(message[9:])
+                    i = 1
+
+                    async for message in event.client.iter_messages(event.chat_id, from_user="me"):
+                        if i > count + 1:
+                           break
+                        i += 1
+                    await message.delete()
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
