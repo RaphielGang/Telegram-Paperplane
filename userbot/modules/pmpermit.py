@@ -64,7 +64,7 @@ async def permitpm(event):
                     LASTMSG.update({event.chat_id: event.text})
                 else:
                     if PM_PERMIT_IMAGE:
-                       await event.client.send_file(
+                       r = await event.client.send_file(
                                           event.chat_id,
                                           PP_PM_PIC,
                                           caption=UNAPPROVED_MSG,
@@ -83,12 +83,14 @@ async def permitpm(event):
                     
                 if COUNT_PM[event.chat_id] < MAX_MSG - 1:
                     WARNS = MAX_MSG - COUNT_PM[event.chat_id]
-                    await event.reply(f"You have {WARNS} warns left.")
+                    await r.delete()
+                    s = await event.reply(f"You have {WARNS} warns left.")
                     
                 if MAX_MSG - COUNT_PM[event.chat_id] == 1:
-                    await event.reply("You have 1 warn left.")
+                    t = await event.reply("You have 1 warn left.")
                     
                 if COUNT_PM[event.chat_id] == MAX_MSG:
+                    await t.delete()
                     await event.reply("It's the last warning. I will block")
 
                 if COUNT_PM[event.chat_id] > MAX_MSG:
@@ -98,11 +100,6 @@ async def permitpm(event):
                     d = (f"You have {range(1, 999)} warns left.")
                     n = ("You have 1 warn left.")
                     n = ("It's the last warning. I will block")
-                    async for reply in event.client.iter_messages(
-                                event.chat_id,
-                                from_user='me',
-                                search=n):
-                      await reply.delete()
                       
 
                     try:
