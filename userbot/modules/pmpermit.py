@@ -82,11 +82,12 @@ async def permitpm(event):
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
                     
                 if COUNT_PM[event.chat_id] < MAX_MSG - 1:
+                    await r.delete
                     WARNS = MAX_MSG - COUNT_PM[event.chat_id]
-                    await r.delete()
                     s = await event.reply(f"You have {WARNS} warns left.")
                     
                 if MAX_MSG - COUNT_PM[event.chat_id] == 1:
+                    await s.delete
                     t = await event.reply("You have 1 warn left.")
                     
                 if COUNT_PM[event.chat_id] == MAX_MSG:
@@ -97,9 +98,6 @@ async def permitpm(event):
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
-                    d = (f"You have {range(1, 999)} warns left.")
-                    n = ("You have 1 warn left.")
-                    n = ("It's the last warning. I will block")
                       
 
                     try:
@@ -218,13 +216,11 @@ async def approvepm(apprvpm):
             await x.delete()
             
             d = (f"You have {range(1, 999)} warns left.")
-            n = ("You have 1 warn left.")
-            n = ("It's the last warning. I will block")
             async for reply in apprvpm.client.iter_messages(
                                 apprvpm.chat_id,
                                 from_user='me',
-                                search=n):
-              await reply.delete()
+                                search=d):
+                            await reply.delete()
 
             if BOTLOG:
                 await apprvpm.client.send_message(
