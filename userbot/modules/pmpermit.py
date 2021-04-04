@@ -107,8 +107,9 @@ async def permitpm(event):
                                 from_user='me',
                                 search=t):
                             await reply.delete()
-                    d = (f"You have {range(1, 999)} warns left.")
-                    async for reply in event.client.iter_messages(
+                    for n in range(1, 999):
+                     d = ("You have", n, "warns left.")
+                     async for reply in event.client.iter_messages(
                                 event.chat_id,
                                 from_user='me',
                                 search=d):
