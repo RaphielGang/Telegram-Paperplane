@@ -96,7 +96,7 @@ async def permitpm(event):
 
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     message = event.text
-                    count = int(message[9:])
+                    count = int(message[1:])
                     i = 1
 
                     async for message in event.client.iter_messages(event.chat_id, from_user="me"):
