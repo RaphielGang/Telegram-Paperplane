@@ -70,7 +70,7 @@ async def permitpm(event):
                                           caption=UNAPPROVED_MSG,
                                   )
                        if event.chat_id == MAX_MSG:
-                       await r.delete()
+                          await r.delete()
                        LASTMSG.update({event.chat_id: event.text})
                     else:
                        await event.reply(UNAPPROVED_MSG)
