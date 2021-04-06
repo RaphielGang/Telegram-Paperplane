@@ -69,9 +69,9 @@ async def permitpm(event):
                                           PP_PM_PIC,
                                           caption=UNAPPROVED_MSG,
                                   )
-                       LASTMSG.update({event.chat_id: event.text})
-                      if event.chat_id == MAX_MSG:
+                       if event.chat_id == MAX_MSG:
                        await r.delete()
+                       LASTMSG.update({event.chat_id: event.text})
                     else:
                        await event.reply(UNAPPROVED_MSG)
                        LASTMSG.update({event.chat_id: event.text})
