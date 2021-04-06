@@ -27,7 +27,7 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 #2
 MAX_MSG = MAX_FLOOD_IN_PM or 4
 
-#3
+#4
 PP_PM_PIC = PM_PERMIT_IMAGE
 # =================================================================
 
@@ -70,6 +70,8 @@ async def permitpm(event):
                                           caption=UNAPPROVED_MSG,
                                   )
                        LASTMSG.update({event.chat_id: event.text})
+                      if event.chat_id == MAX_MSG:
+                       await r.delete()
                     else:
                        await event.reply(UNAPPROVED_MSG)
                        LASTMSG.update({event.chat_id: event.text})
@@ -85,10 +87,14 @@ async def permitpm(event):
                     #await r.delete
                     WARNS = MAX_MSG - COUNT_PM[event.chat_id]
                     s = await event.reply(f"You have {WARNS} warns left.")
+                    if COUNT_PM[event.chat_id] == MAX_MSG:
+                      await s.delete()
                     
                 if MAX_MSG - COUNT_PM[event.chat_id] == 1:
                     #await s.delete
                     t = await event.reply("You have 1 warn left.")
+                    time.sleep(5)
+                    await t.delete()
                     
                 if COUNT_PM[event.chat_id] == MAX_MSG:
                     #await t.delete()
@@ -106,13 +112,6 @@ async def permitpm(event):
                                 event.chat_id,
                                 from_user='me',
                                 search=t):
-                            await reply.delete()
-                    for n in range(1, 999):
-                     d = ("You have", n, "warns left.")
-                     async for reply in event.client.iter_messages(
-                                event.chat_id,
-                                from_user='me',
-                                search=d):
                             await reply.delete()
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
