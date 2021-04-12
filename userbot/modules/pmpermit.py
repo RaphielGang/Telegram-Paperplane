@@ -166,7 +166,7 @@ async def auto_accept(event):
             return
         if auto_approval(auto_accept.event) is False:
            return
-        elifif isinstance(chat, User):
+        elif isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
                 return
             async for message in event.client.iter_messages(chat.id,
