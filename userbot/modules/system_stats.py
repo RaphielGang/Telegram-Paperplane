@@ -160,7 +160,7 @@ async def amireallyalive(alive):
          await alive.delete()
     else:
          await alive.edit(
-                    "**PAPERPLANE IS ALIVE AND KICKING!**✔\n\n"
+                    "**PAPERPLANE IS FLYING SUCCESSFULLY!**✔\n\n"
                     f"🤖 __Telethon Version__: {version.__version__} \n"
                     f"🤖 __Python Version__: {python_version()} \n"
                     f"🤖 __Database Status__: {db} \n"
