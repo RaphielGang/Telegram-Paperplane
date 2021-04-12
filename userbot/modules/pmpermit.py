@@ -146,14 +146,27 @@ async def permitpm(event):
                         )
 
 
+async def auto_approval(useridf):
+    to_check = MONGO.pmpermit.find_one({'user_idf': useridf})
 
+    if to_check is None:
+        MONGO.pmpermit.insert_one({'user_idf': useridf, 'auto_approval': False})
+
+        return False
+    elif to_check['auto_approval'] is False:
+        return False
+    elif to_check['auto_approval'] is True:
+        return True
+                        
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if event.is_private:
         chat = await event.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             return
-        if isinstance(chat, User):
+        if auto_approval(auto_accept.event) is False:
+           return
+        elifif isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
                 return
             async for message in event.client.iter_messages(chat.id,
@@ -170,22 +183,22 @@ async def auto_accept(event):
 
 @register(outgoing=True, pattern="^.allowon$")
 @grp_exclude()
-async def autoapprove(event):
-  if await auto_accept(event) is True:
+async def autoapprove(useridf):
+  if await auto_accept(useridf) is True:
     return False
   else:
-    MONGO.pmpermit.update_one({'event': event},
+    MONGO.pmpermit.update_one({'user_idf': useridf},
                                          {"$set": {
                                             'auto_accept': True
                                          }})
     
 @register(outgoing=True, pattern="^.allowoff$")
 @grp_exclude()
-async def autoapprove(event):
-  if await auto_accept(event) is False:
+async def autoapprove(userid):
+  if await auto_accept(userid) is False:
     return False
   else:
-    MONGO.pmpermit.update_one({'event': event},
+    MONGO.pmpermit.update_one({'user_idf': useridf},
                                          {"$set": {
                                             'auto_accept': False
                                          }})
