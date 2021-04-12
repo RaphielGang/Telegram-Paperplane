@@ -12,7 +12,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_PM, LASTMSG, LOGS,
-                     PM_AUTO_BAN, MAX_FLOOD_IN_PM, PM_PERMIT_MSG, PM_PERMIT_IMAGE, is_mongo_alive, is_redis_alive)
+                     PM_AUTO_BAN, MAX_FLOOD_IN_PM, PM_PERMIT_MSG, PM_PERMIT_IMAGE, MONGO, is_mongo_alive, is_redis_alive)
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (approval, disapprove, approve, block_pm, notif_off,
                                       notif_on, notif_state)
