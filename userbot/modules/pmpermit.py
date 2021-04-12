@@ -165,7 +165,7 @@ async def auto_accept(event):
         if not is_mongo_alive() or not is_redis_alive():
             return
           
-        if await auto_approval(auto_accept.chat_id) is False:
+        if await auto_approval(event.chat_id) is False:
            return
         elif isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
