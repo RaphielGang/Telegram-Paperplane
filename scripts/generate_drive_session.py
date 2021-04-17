@@ -26,5 +26,5 @@ def main():
     gauth.SaveCredentialsFile("secret.json")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

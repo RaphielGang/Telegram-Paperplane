@@ -11,9 +11,14 @@ from telethon.tl.types import MessageEntityMentionName
 
 from userbot import CMD_HELP, bot, is_mongo_alive, is_redis_alive
 from userbot.events import register, grp_exclude
-from userbot.modules.dbhelper import (add_chat_fban, add_chat_gban, get_fban,
-                                      get_gban, remove_chat_fban,
-                                      remove_chat_gban)
+from userbot.modules.dbhelper import (
+    add_chat_fban,
+    add_chat_gban,
+    get_fban,
+    get_gban,
+    remove_chat_fban,
+    remove_chat_gban,
+)
 
 
 @register(outgoing=True, pattern="^.gban")
@@ -25,12 +30,9 @@ async def gban_all(msg):
     textx = await msg.get_reply_message()
     if textx:
         try:
-            banreason = "[paperplane] "
-            banreason += banreason.join(msg.text.split(" ")[1:])
-            if banreason == "[paperplane]":
-                raise TypeError
+            banreason = banreason.join(msg.text.split(" ")[1:])
         except TypeError:
-            banreason = "[paperplane] gban"
+            banreason = "[paperplane] GBan"
     else:
         banid = msg.text.split(" ")[1]
         if banid.isnumeric():
@@ -41,23 +43,19 @@ async def gban_all(msg):
             if msg.message.entities is not None:
                 probable_user_mention_entity = msg.message.entities[0]
 
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 banid = probable_user_mention_entity.user_id
         try:
-            banreason = "[paperplane] "
-            banreason += banreason.join(msg.text.split(" ")[2:])
-            if banreason == "[paperplane]":
-                raise TypeError
+            banreason = banreason.join(msg.text.split(" ")[2:])
         except TypeError:
-            banreason = "[paperplane] gban"
+            banreason = "[paperplane] GBan"
     if not textx:
         await msg.edit(
             "Reply message missing! Might fail on many bots! Still attempting to Gban!"
         )
         # Ensure User Read the warning
         await asyncio.sleep(1)
-    x = (await get_gban())
+    x = await get_gban()
     count = 0
     banlist = []
     for i in x:
@@ -85,12 +83,9 @@ async def fedban_all(msg):
     textx = await msg.get_reply_message()
     if textx:
         try:
-            banreason = "[paperplane] "
-            banreason += banreason.join(msg.text.split(" ")[1:])
-            if banreason == "[paperplane]":
-                raise TypeError
+            banreason = banreason.join(msg.text.split(" ")[1:])
         except TypeError:
-            banreason = "[paperplane] fban"
+            banreason = "[paperplane] FBan"
     else:
         banid = msg.text.split(" ")[1]
         if banid.isnumeric():
@@ -101,20 +96,16 @@ async def fedban_all(msg):
             if msg.message.entities is not None:
                 probable_user_mention_entity = msg.message.entities[0]
 
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 banid = probable_user_mention_entity.user_id
         try:
-            banreason = "[paperplane] "
-            banreason += banreason.join(msg.text.split(" ")[2:])
-            if banreason == "[paperplane]":
-                raise TypeError
+            banreason = banreason.join(msg.text.split(" ")[2:])
         except TypeError:
-            banreason = "[paperplane] fban"
+            banreason = "[paperplane] FBan"
     failed = {}
     count = 1
     fbanlist = []
-    x = (await get_fban())
+    x = await get_fban()
     for i in x:
         fbanlist.append(i["chatid"])
     for bangroup in fbanlist:
@@ -181,14 +172,16 @@ async def remove_from_gban(chat):
     await chat.edit("`Removed this bot from the Gbanlist!`")
 
 
-CMD_HELP.update({
-    "fbans/gbans": [
-        'FBans/GBans',
-        " - `.gban`: Reply to a user to ban them in all the bots provided by you.\n"
-        " - `.fban`: Reply to a user to fban them in all the groups provided by you.\n"
-        " - `.addfban`: Add this group to the fbanlist.\n"
-        " - `.addgban`: Add this group to the gbanlist.\n"
-        " - `.removefban`: Remove this group from the fbanlist.\n"
-        " - `.removegban`: Remove this group from the gbanlist.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "fbans/gbans": [
+            "FBans/GBans",
+            " - `.gban`: Reply to a user to ban them in all the bots provided by you.\n"
+            " - `.fban`: Reply to a user to fban them in all the groups provided by you.\n"
+            " - `.addfban`: Add this group to the fbanlist.\n"
+            " - `.addgban`: Add this group to the gbanlist.\n"
+            " - `.removefban`: Remove this group from the fbanlist.\n"
+            " - `.removegban`: Remove this group from the gbanlist.\n",
+        ]
+    }
+)

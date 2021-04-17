@@ -15,8 +15,16 @@ from requests import get
 from telethon.errors import AboutTooLongError
 from telethon.tl.functions.account import UpdateProfileRequest
 
-from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
-                     SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
+from userbot import (
+    BIO_PREFIX,
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    DEFAULT_BIO,
+    SPOTIFY_PASS,
+    SPOTIFY_USERNAME,
+    bot,
+)
 from userbot.events import register, grp_exclude
 
 # =================== CONSTANT ===================
@@ -60,12 +68,12 @@ async def update_spotify_info():
         try:
             RUNNING = True
             spftoken = environ.get("spftoken", None)
-            hed = {'Authorization': 'Bearer ' + spftoken}
-            url = 'https://api.spotify.com/v1/me/player/currently-playing'
+            hed = {"Authorization": "Bearer " + spftoken}
+            url = "https://api.spotify.com/v1/me/player/currently-playing"
             response = get(url, headers=hed)
             data = loads(response.content)
-            artist = data['item']['album']['artists'][0]['name']
-            song = data['item']['name']
+            artist = data["item"]["album"]["artists"][0]["name"]
+            song = data["item"]["name"]
             OLDEXCEPT = False
             oldsong = environ.get("oldsong", None)
             if song != oldsong and artist != oldartist:
@@ -139,9 +147,12 @@ async def set_biodgraph(setdbio):
     await setdbio.edit(SPO_BIO_DISABLED)
 
 
-CMD_HELP.update({
-    "spotify": [
-        'Spotify', " - `.enablespotify`: Enable Spotify bio updating.\n"
-        " - `.disablespotify`: Disable Spotify bio updating.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "spotify": [
+            "Spotify",
+            " - `.enablespotify`: Enable Spotify bio updating.\n"
+            " - `.disablespotify`: Disable Spotify bio updating.\n",
+        ]
+    }
+)

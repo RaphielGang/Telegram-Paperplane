@@ -10,18 +10,34 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_PM, LASTMSG, LOGS,
-                     PM_AUTO_BAN, is_mongo_alive, is_redis_alive)
+from userbot import (
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    COUNT_PM,
+    LASTMSG,
+    LOGS,
+    PM_AUTO_BAN,
+    is_mongo_alive,
+    is_redis_alive,
+)
 from userbot.events import register, grp_exclude
-from userbot.modules.dbhelper import (approval, approve, block_pm, notif_off,
-                                      notif_on, notif_state)
+from userbot.modules.dbhelper import (
+    approval,
+    approve,
+    block_pm,
+    notif_off,
+    notif_on,
+    notif_state,
+)
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
     "`Bleep blop! This is a bot. Don't fret.\n\n`"
     "`My master hasn't approved you to PM.`"
     "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
-    "`As far as I know, he doesn't usually approve retards though.`")
+    "`As far as I know, he doesn't usually approve retards though.`"
+)
 # =================================================================
 
 
@@ -47,9 +63,8 @@ async def permitpm(event):
                     if event.text != prevmsg:
                         # Searches for previously sent UNAPPROVED_MSGs
                         async for message in event.client.iter_messages(
-                                event.chat_id,
-                                from_user='me',
-                                search=UNAPPROVED_MSG):
+                            event.chat_id, from_user="me", search=UNAPPROVED_MSG
+                        ):
                             # ... and deletes them !!
                             await message.delete()
                         await event.reply(UNAPPROVED_MSG)
@@ -66,9 +81,11 @@ async def permitpm(event):
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
 
                 if COUNT_PM[event.chat_id] > 4:
-                    await event.respond("`You were spamming my master's PM, "
-                                        " which I don't like.`"
-                                        " `I'mma Report Spam.`")
+                    await event.respond(
+                        "`You were spamming my master's PM, "
+                        " which I don't like.`"
+                        " `I'mma Report Spam.`"
+                    )
 
                     try:
                         del COUNT_PM[event.chat_id]
@@ -91,9 +108,12 @@ async def permitpm(event):
                         name0 = str(name.first_name)
                         await event.client.send_message(
                             BOTLOG_CHATID,
-                            "[" + name0 + "](tg://user?id=" +
-                            str(event.chat_id) + ")" +
-                            " was just another retarded nibba",
+                            "["
+                            + name0
+                            + "](tg://user?id="
+                            + str(event.chat_id)
+                            + ")"
+                            + " was just another retarded nibba",
                         )
 
 
@@ -108,16 +128,17 @@ async def auto_accept(event):
         if isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
                 return
-            async for message in event.client.iter_messages(chat.id,
-                                                            reverse=True,
-                                                            limit=1):
+            async for message in event.client.iter_messages(
+                chat.id, reverse=True, limit=1
+            ):
                 if message.from_id == (await event.client.get_me()).id:
                     await approve(chat.id)
                     if BOTLOG:
                         await event.client.send_message(
                             BOTLOG_CHATID,
-                            "#AUTO-APPROVED\n" + "User: " +
-                            f"[{chat.first_name}](tg://user?id={chat.id})",
+                            "#AUTO-APPROVED\n"
+                            + "User: "
+                            + f"[{chat.first_name}](tg://user?id={chat.id})",
                         )
 
 
@@ -127,7 +148,7 @@ async def notifoff(noff_event):
     """ For .notifoff command, stop getting
         notifications from unapproved PMs. """
     if await notif_off() is False:
-        return await noff_event.edit('`Notifications already silenced!`')
+        return await noff_event.edit("`Notifications already silenced!`")
 
     return await noff_event.edit("`Notifications silenced!`")
 
@@ -155,8 +176,7 @@ async def approvepm(apprvpm):
 
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
-        replied_user = await apprvpm.client(
-            GetFullUserRequest(reply.from_id))
+        replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
@@ -170,8 +190,7 @@ async def approvepm(apprvpm):
 
     if BOTLOG:
         await apprvpm.client.send_message(
-            BOTLOG_CHATID,
-            "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+            BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
 
 
@@ -190,8 +209,7 @@ async def blockpm(block):
 
     if block.reply_to_msg_id:
         reply = await block.get_reply_message()
-        replied_user = await block.client(GetFullUserRequest(reply.from_id)
-                                            )
+        replied_user = await block.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
         await block.client(BlockRequest(replied_user.user.id))
@@ -206,8 +224,7 @@ async def blockpm(block):
 
     if BOTLOG:
         await block.client.send_message(
-            BOTLOG_CHATID,
-            "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+            BOTLOG_CHATID, "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
 
 
@@ -228,18 +245,19 @@ async def unblockpm(unblock):
     if BOTLOG:
         await unblock.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={replied_user.user.id})"
-            " was unblocc'd!.",
+            f"[{name0}](tg://user?id={replied_user.user.id})" " was unblocc'd!.",
         )
 
 
-CMD_HELP.update({
-    "pmpermit": [
-        "PMPermit",
-        " - `.approve`: Approve the mentioned/replied person to PM.\n"
-        " - `.block`: Blocks the person from PMing you.\n"
-        " - `.unblock`: Unblocks the person, so they can PM you again.\n"
-        " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
-        " - `.notifon`: Allow notifications coming from unapproved PMs.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "pmpermit": [
+            "PMPermit",
+            " - `.approve`: Approve the mentioned/replied person to PM.\n"
+            " - `.block`: Blocks the person from PMing you.\n"
+            " - `.unblock`: Unblocks the person, so they can PM you again.\n"
+            " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
+            " - `.notifon`: Allow notifications coming from unapproved PMs.\n",
+        ]
+    }
+)

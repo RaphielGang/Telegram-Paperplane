@@ -8,13 +8,13 @@
 import os
 
 from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,
-                                          UsernameOccupiedError)
-from telethon.tl.functions.account import (UpdateProfileRequest,
-                                           UpdateUsernameRequest)
-from telethon.tl.functions.photos import (DeletePhotosRequest,
-                                          GetUserPhotosRequest,
-                                          UploadProfilePhotoRequest)
+from telethon.errors.rpcerrorlist import PhotoExtInvalidError, UsernameOccupiedError
+from telethon.tl.functions.account import UpdateProfileRequest, UpdateUsernameRequest
+from telethon.tl.functions.photos import (
+    DeletePhotosRequest,
+    GetUserPhotosRequest,
+    UploadProfilePhotoRequest,
+)
 from telethon.tl.types import InputPhoto, MessageMediaPhoto
 
 from userbot import CMD_HELP, bot
@@ -61,7 +61,7 @@ async def set_profilepic(propic):
     if replymsg.media:
         if isinstance(replymsg.media, MessageMediaPhoto):
             photo = await bot.download_media(message=replymsg.photo)
-        elif "image" in replymsg.media.document.mime_type.split('/'):
+        elif "image" in replymsg.media.document.mime_type.split("/"):
             photo = await bot.download_file(replymsg.media.document)
         else:
             await propic.edit(INVALID_MEDIA)
@@ -106,7 +106,7 @@ async def remove_profilepic(delpfp):
     """ For .delpfp command, delete your current
         profile picture in Telegram. """
     group = delpfp.text[8:]
-    if group == 'all':
+    if group == "all":
         lim = 0
     elif group.isdigit():
         lim = int(group)
@@ -114,28 +114,30 @@ async def remove_profilepic(delpfp):
         lim = 1
 
     pfplist = await bot(
-        GetUserPhotosRequest(user_id=delpfp.from_id,
-                             offset=0,
-                             max_id=0,
-                             limit=lim))
+        GetUserPhotosRequest(user_id=delpfp.from_id, offset=0, max_id=0, limit=lim)
+    )
     input_photos = []
     for sep in pfplist.photos:
         input_photos.append(
-            InputPhoto(id=sep.id,
-                       access_hash=sep.access_hash,
-                       file_reference=sep.file_reference))
+            InputPhoto(
+                id=sep.id,
+                access_hash=sep.access_hash,
+                file_reference=sep.file_reference,
+            )
+        )
     await bot(DeletePhotosRequest(id=input_photos))
-    await delpfp.edit(
-        f"`Successfully deleted {len(input_photos)} profile picture(s).`")
+    await delpfp.edit(f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
 
-CMD_HELP.update({
-    "userdata": [
-        'Userdata',
-        " - `.username <new_username>`: Change your Telegram username.\n"
-        " - `.name <firstname> or .name <firstname> <lastname>`: Change your Telegram name.\n"
-        " - `.profilepic`: Change your Telegram avatar with the replied photo.\n"
-        " - `.setbio <new_bio>`: Change your Telegram bio.\n"
-        " - `..delpfp or .delpfp <number>/<all>`: Delete your Telegram avatar(s).\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "userdata": [
+            "Userdata",
+            " - `.username <new_username>`: Change your Telegram username.\n"
+            " - `.name <firstname> or .name <firstname> <lastname>`: Change your Telegram name.\n"
+            " - `.profilepic`: Change your Telegram avatar with the replied photo.\n"
+            " - `.setbio <new_bio>`: Change your Telegram bio.\n"
+            " - `..delpfp or .delpfp <number>/<all>`: Delete your Telegram avatar(s).\n",
+        ]
+    }
+)

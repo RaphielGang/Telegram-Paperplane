@@ -5,8 +5,14 @@
 #
 """ Userbot module for muting chats. """
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, is_mongo_alive,
-                     is_redis_alive)
+from userbot import (
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    MONGO,
+    is_mongo_alive,
+    is_redis_alive,
+)
 from userbot.events import register, grp_exclude
 
 
@@ -33,8 +39,8 @@ async def mute_chat(mute_e):
     await mute_e.edit("`This chat has been muted!`")
     if BOTLOG:
         await mute_e.client.send_message(
-            BOTLOG_CHATID,
-            str(mute_e.chat_id) + " has been muted.")
+            BOTLOG_CHATID, str(mute_e.chat_id) + " has been muted."
+        )
 
 
 @register(incoming=True, disable_errors=True)
@@ -50,9 +56,12 @@ async def keep_read(message):
                 await message.client.send_read_acknowledge(message.chat_id)
 
 
-CMD_HELP.update({
-    "muting": [
-        'Muting', " - `.unmutechat`: Unmute a muted chat.\n"
-        " - `.mutechat`: Mute any chat.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "muting": [
+            "Muting",
+            " - `.unmutechat`: Unmute a muted chat.\n"
+            " - `.mutechat`: Mute any chat.\n",
+        ]
+    }
+)

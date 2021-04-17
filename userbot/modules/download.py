@@ -36,8 +36,9 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
 def progress(current, total):
     """ Logs the download progress """
-    LOGS.info("Downloaded %s of %s\nCompleted %s", current, total,
-              (current / total) * 100)
+    LOGS.info(
+        "Downloaded %s of %s\nCompleted %s", current, total, (current / total) * 100
+    )
 
 
 async def download_from_url(url: str, file_name: str) -> str:
@@ -59,11 +60,10 @@ async def download_from_tg(target_file) -> (str, BytesIO):
     """
     Download files from Telegram
     """
+
     async def dl_file(buffer: BytesIO) -> BytesIO:
         buffer = await target_file.client.download_media(
-            reply_msg,
-            buffer,
-            progress_callback=progress,
+            reply_msg, buffer, progress_callback=progress
         )
         return buffer
 
@@ -72,10 +72,11 @@ async def download_from_tg(target_file) -> (str, BytesIO):
     reply_msg = await target_file.get_reply_message()
     avail_mem = psutil.virtual_memory().available + psutil.swap_memory().free
     try:
-        if reply_msg.media.document.size >= avail_mem:  # unlikely to happen but baalaji crai
+        if (
+            reply_msg.media.document.size >= avail_mem
+        ):  # unlikely to happen but baalaji crai
             filen = await target_file.client.download_media(
-                reply_msg,
-                progress_callback=progress,
+                reply_msg, progress_callback=progress
             )
         else:
             buf = await dl_file(buf)
@@ -86,12 +87,16 @@ async def download_from_tg(target_file) -> (str, BytesIO):
             filen = reply_msg.media.document.attributes[0].file_name
         except AttributeError:
             if isinstance(reply_msg.media, MessageMediaPhoto):
-                filen = 'photo-' + str(datetime.today())\
-                    .split('.')[0].replace(' ', '-') + '.jpg'
+                filen = (
+                    "photo-"
+                    + str(datetime.today()).split(".")[0].replace(" ", "-")
+                    + ".jpg"
+                )
             else:
-                filen = reply_msg.media.document.mime_type\
-                    .replace('/', '-' + str(datetime.today())
-                             .split('.')[0].replace(' ', '-') + '.')
+                filen = reply_msg.media.document.mime_type.replace(
+                    "/",
+                    "-" + str(datetime.today()).split(".")[0].replace(" ", "-") + ".",
+                )
     end = datetime.now()
     duration = (end - start).seconds
     await target_file.edit(f"`Downloaded {filen} in {duration} seconds.`")
@@ -104,8 +109,7 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     """
     # a workaround for disabling cache errors
     # https://github.com/googleapis/google-api-python-client/issues/299
-    logging.getLogger('googleapiclient.discovery_cache').setLevel(
-        logging.CRITICAL)
+    logging.getLogger("googleapiclient.discovery_cache").setLevel(logging.CRITICAL)
 
     # Authenticate Google Drive automatically
     # https://stackoverflow.com/a/24542604
@@ -123,39 +127,34 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
     gauth.SaveCredentialsFile("secret.json")
     drive = GoogleDrive(gauth)
 
-    if filename.count('/') > 1:
-        filename = filename.split('/')[-1]
+    if filename.count("/") > 1:
+        filename = filename.split("/")[-1]
     filedata = {
-        'title': filename,
-        "parents": [{
-            "kind": "drive#fileLink",
-            "id": GDRIVE_FOLDER
-        }]
+        "title": filename,
+        "parents": [{"kind": "drive#fileLink", "id": GDRIVE_FOLDER}],
     }
 
     if filebuf:
         mime_type = mimetypes.guess_type(filename)
         if mime_type[0] and mime_type[1]:
-            filedata['mimeType'] = f"{mime_type[0]}/{mime_type[1]}"
+            filedata["mimeType"] = f"{mime_type[0]}/{mime_type[1]}"
         else:
-            filedata['mimeType'] = 'text/plain'
+            filedata["mimeType"] = "text/plain"
         file = drive.CreateFile(filedata)
         file.content = filebuf
     else:
         file = drive.CreateFile(filedata)
         file.SetContentFile(filename)
-    name = filename.split('/')[-1]
+    name = filename.split("/")[-1]
     file.Upload()
     # insert new permission
-    file.InsertPermission({
-        'type': 'anyone',
-        'value': 'anyone',
-        'role': 'reader'
-    })
+    file.InsertPermission({"type": "anyone", "value": "anyone", "role": "reader"})
     if not filebuf:
         os.remove(filename)
-    reply = f"[{name}]({file['alternateLink']})\n" \
+    reply = (
+        f"[{name}]({file['alternateLink']})\n"
         f"__Direct link:__ [Here]({file['downloadUrl']})"
+    )
     return reply
 
 
@@ -167,31 +166,32 @@ async def gdrive_mirror(request):
     if not request.reply_to_msg_id and not message:
         await request.edit("`Usage: .mirror <url> <url>`")
         return
-    reply = ''
+    reply = ""
     reply_msg = await request.get_reply_message()
-    links = re.findall(r'\bhttps?://.*\.\S+', message)
+    links = re.findall(r"\bhttps?://.*\.\S+", message)
     if not (links or reply_msg or reply_msg.media or reply_msg.media.document):
         reply = "`No links or Telegram files found!`\n"
         await request.edit(reply)
         return
     if request.reply_to_msg_id:
-        await request.edit('`Downloading from Telegram...`')
+        await request.edit("`Downloading from Telegram...`")
         filen, buf = await download_from_tg(request)
-        await request.edit(f'`Uploading {filen} to GDrive...`')
-        reply += await gdrive_upload(
-            filen, buf) if buf else await gdrive_upload(filen)
+        await request.edit(f"`Uploading {filen} to GDrive...`")
+        reply += await gdrive_upload(filen, buf) if buf else await gdrive_upload(filen)
     elif "|" in message:
         url, file_name = message.split("|")
         url = url.strip()
         file_name = file_name.strip()
-        await request.edit(f'`Downloading {file_name}`')
+        await request.edit(f"`Downloading {file_name}`")
         status = await download_from_url(url, file_name)
         await request.edit(status)
-        await request.edit(f'`Uploading {file_name} to GDrive...`')
+        await request.edit(f"`Uploading {file_name} to GDrive...`")
         reply += await gdrive_upload(file_name)
     if "nosecret" in reply:
-        reply = "`Run the generate_drive_session.py file " \
-                "in your machine to authenticate on Google Drive!`"
+        reply = (
+            "`Run the generate_drive_session.py file "
+            "in your machine to authenticate on Google Drive!`"
+        )
     await request.edit(reply)
 
 
@@ -206,8 +206,8 @@ async def gdrive(request):
     if not os.path.isfile(path):
         await request.edit("`No such file!`\n")
         return
-    file_name = path.split('/')[-1]
-    await request.edit(f'`Uploading {file_name} to GDrive...`')
+    file_name = path.split("/")[-1]
+    await request.edit(f"`Uploading {file_name} to GDrive...`")
     reply = await gdrive_upload(path)
     await request.edit(reply)
 
@@ -224,21 +224,23 @@ async def download(target_file):
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     if reply_msg and reply_msg.media:
-        await target_file.edit('`Downloading file from Telegram....`')
+        await target_file.edit("`Downloading file from Telegram....`")
         filen, buf = await download_from_tg(target_file)
         if buf:
-            with open(filen, 'wb') as to_save:
+            with open(filen, "wb") as to_save:
                 to_save.write(buf.read())
     elif "|" in input_str:
         url, file_name = input_str.split("|")
         url = url.strip()
         file_name = file_name.strip()
-        await target_file.edit(f'`Downloading {file_name}`')
+        await target_file.edit(f"`Downloading {file_name}`")
         status = await download_from_url(url, file_name)
         await target_file.edit(status)
     else:
-        await target_file.edit("`Reply to a message to \
-            download to my local server.`\n")
+        await target_file.edit(
+            "`Reply to a message to \
+            download to my local server.`\n"
+        )
 
 
 @register(pattern=r"^.uploadir (.*)", outgoing=True)
@@ -260,8 +262,12 @@ async def uploadir(udir_event):
                 lst_of_files.append(os.path.join(r, file))
         LOGS.info(lst_of_files)
         uploaded = 0
-        await udir_event.edit("Found {} files. Uploading will \
-                start soon. Please wait!".format(len(lst_of_files)))
+        await udir_event.edit(
+            "Found {} files. Uploading will \
+                start soon. Please wait!".format(
+                len(lst_of_files)
+            )
+        )
         for single_file in lst_of_files:
             if os.path.exists(single_file):
                 # https://stackoverflow.com/a/678242/4723940
@@ -311,8 +317,9 @@ async def uploadir(udir_event):
                 uploaded = uploaded + 1
         end = datetime.now()
         duration = (end - start).seconds
-        await udir_event.edit("Uploaded {} files in {} seconds.".format(
-            uploaded, duration))
+        await udir_event.edit(
+            "Uploaded {} files in {} seconds.".format(uploaded, duration)
+        )
     else:
         await udir_event.edit("404: Directory Not Found")
 
@@ -359,8 +366,8 @@ def get_video_thumb(file, output=None, width=90):
             file,
             "-ss",
             str(
-                int((0, metadata.get("duration").seconds
-                     )[metadata.has("duration")] / 2)),
+                int((0, metadata.get("duration").seconds)[metadata.has("duration")] / 2)
+            ),
             "-filter:v",
             "scale={}:-1".format(width),
             "-vframes",
@@ -389,8 +396,7 @@ def extract_w_h(file):
     ]
     # https://stackoverflow.com/a/11236144/4723940
     try:
-        t_response = subprocess.check_output(command_to_run,
-                                             stderr=subprocess.STDOUT)
+        t_response = subprocess.check_output(command_to_run, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as exc:
         LOGS.warning(exc)
     else:
@@ -495,13 +501,15 @@ async def uploadas(uas_event):
         await uas_event.edit("404: File Not Found")
 
 
-CMD_HELP.update({
-    "download": [
-        'Download',
-        " - `.download [in reply to TG file] or .download <link> | <filename>`: "
-        "Download a file from telegram or link to the server.\n"
-        " - `.upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n"
-        " - `.drive <filename>`: Upload a locally(where Paperplane runs) stored file to GDrive.\n"
-        " - `.mirror [in reply to TG file] or .mirror <link> | <filename>`: Mirror a file to Google Drive.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "download": [
+            "Download",
+            " - `.download [in reply to TG file] or .download <link> | <filename>`: "
+            "Download a file from telegram or link to the server.\n"
+            " - `.upload <link>`: Upload a locally(where Paperplane runs) stored file to Telegram.\n"
+            " - `.drive <filename>`: Upload a locally(where Paperplane runs) stored file to GDrive.\n"
+            " - `.mirror [in reply to TG file] or .mirror <link> | <filename>`: Mirror a file to Google Drive.\n",
+        ]
+    }
+)

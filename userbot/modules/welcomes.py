@@ -3,7 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
-''' A module for helping ban group join spammers. '''
+""" A module for helping ban group join spammers. """
 
 from asyncio import sleep
 
@@ -19,7 +19,7 @@ from userbot.events import grp_exclude
 @bot.on(ChatAction)
 @grp_exclude()
 async def welcome_mute(welcm):
-    ''' Ban a recently joined user if it matches the spammer checking algorithm.'''
+    """ Ban a recently joined user if it matches the spammer checking algorithm."""
     try:
         if not WELCOME_MUTE:
             return
@@ -34,7 +34,8 @@ async def welcome_mute(welcm):
                 adder = welcm.action_message.from_id
 
             async for admin in bot.iter_participants(
-                    welcm.chat_id, filter=ChannelParticipantsAdmins):
+                welcm.chat_id, filter=ChannelParticipantsAdmins
+            ):
                 if admin.id == adder:
                     ignore = True
                     break
@@ -51,8 +52,9 @@ async def welcome_mute(welcm):
             await sleep(5)
 
             for user_id in users:
-                async for message in bot.iter_messages(welcm.chat_id,
-                                                       from_user=user_id):
+                async for message in bot.iter_messages(
+                    welcm.chat_id, from_user=user_id
+                ):
                     correct_type = isinstance(message, Message)
                     if not message or not correct_type:
                         break
@@ -78,9 +80,14 @@ async def welcome_mute(welcm):
                     elif "https://" in message.text:
                         spambot = True
                     else:
-                        if user.first_name in ("Bitmex", "Promotion",
-                                               "Information", "Dex",
-                                               "Announcements", "Info"):
+                        if user.first_name in (
+                            "Bitmex",
+                            "Promotion",
+                            "Information",
+                            "Dex",
+                            "Announcements",
+                            "Info",
+                        ):
                             if user.last_name == "Bot":
                                 spambot = True
 
@@ -100,7 +107,8 @@ async def welcome_mute(welcm):
                     await welcm.reply(
                         "@admins\n"
                         "`ANTI SPAMBOT DETECTOR!\n"
-                        "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
+                        "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`"
+                    )
                 else:
                     try:
                         await welcm.reply(
@@ -110,8 +118,8 @@ async def welcome_mute(welcm):
                         )
 
                         await welcm.client(
-                            EditBannedRequest(welcm.chat_id, user.id,
-                                              KICK_RIGHTS))
+                            EditBannedRequest(welcm.chat_id, user.id, KICK_RIGHTS)
+                        )
 
                         await sleep(1)
 
@@ -119,12 +127,15 @@ async def welcome_mute(welcm):
                         await welcm.reply(
                             "@admins\n"
                             "`ANTI SPAMBOT DETECTOR!\n"
-                            "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
+                            "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`"
+                        )
 
                 if BOTLOG:
                     await welcm.client.send_message(
-                        BOTLOG_CHATID, "#SPAMBOT-KICK\n"
+                        BOTLOG_CHATID,
+                        "#SPAMBOT-KICK\n"
                         f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                        f"CHAT: {welcm.chat.title}(`{welcm.chat_id}`)")
+                        f"CHAT: {welcm.chat.title}(`{welcm.chat_id}`)",
+                    )
     except ValueError:
         pass

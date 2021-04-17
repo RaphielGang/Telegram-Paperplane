@@ -21,34 +21,34 @@ from userbot.modules.dbhelper import get_exclude
 
 def register(**args):
     """ Register a new event. """
-    pattern = args.get('pattern', None)
-    disable_edited = args.get('disable_edited', False)
-    ignore_unsafe = args.get('ignore_unsafe', False)
-    unsafe_pattern = r'^[^/!#@\$A-Za-z]'
-    group_only = args.get('group_only', False)
-    disable_errors = args.get('disable_errors', False)
-    insecure = args.get('insecure', False)
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
+    pattern = args.get("pattern", None)
+    disable_edited = args.get("disable_edited", False)
+    ignore_unsafe = args.get("ignore_unsafe", False)
+    unsafe_pattern = r"^[^/!#@\$A-Za-z]"
+    group_only = args.get("group_only", False)
+    disable_errors = args.get("disable_errors", False)
+    insecure = args.get("insecure", False)
+    if pattern is not None and not pattern.startswith("(?i)"):
+        args["pattern"] = "(?i)" + pattern
 
     if "disable_edited" in args:
-        del args['disable_edited']
+        del args["disable_edited"]
 
     if "ignore_unsafe" in args:
-        del args['ignore_unsafe']
+        del args["ignore_unsafe"]
 
     if "group_only" in args:
-        del args['group_only']
+        del args["group_only"]
 
     if "disable_errors" in args:
-        del args['disable_errors']
+        del args["disable_errors"]
 
     if "insecure" in args:
-        del args['insecure']
+        del args["insecure"]
 
     if pattern:
         if not ignore_unsafe:
-            args['pattern'] = args['pattern'].replace('^.', unsafe_pattern, 1)
+            args["pattern"] = args["pattern"].replace("^.", unsafe_pattern, 1)
 
     def decorator(func):
         async def wrapper(check):
@@ -107,16 +107,15 @@ def register(**args):
                     ftext += str(sys.exc_info()[1])
                     ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
 
-                    command = "git log --pretty=format:\"%an: %s\" -5"
+                    command = 'git log --pretty=format:"%an: %s" -5'
 
                     ftext += "\n\n\nLast 5 commits:\n"
 
-                    process = await asyncsubshell(command,
-                                                  stdout=asyncsub.PIPE,
-                                                  stderr=asyncsub.PIPE)
+                    process = await asyncsubshell(
+                        command, stdout=asyncsub.PIPE, stderr=asyncsub.PIPE
+                    )
                     stdout, stderr = await process.communicate()
-                    result = str(stdout.decode().strip()) \
-                        + str(stderr.decode().strip())
+                    result = str(stdout.decode().strip()) + str(stderr.decode().strip())
 
                     ftext += result
 
@@ -125,15 +124,11 @@ def register(**args):
 
                     if BOTLOG:
                         await check.client.send_file(
-                            BOTLOG_CHATID,
-                            "error.log",
-                            caption=text,
+                            BOTLOG_CHATID, "error.log", caption=text
                         )
                     else:
                         await check.client.send_file(
-                            check.chat_id,
-                            "error.log",
-                            caption=text,
+                            check.chat_id, "error.log", caption=text
                         )
 
                     remove("error.log")
@@ -150,6 +145,7 @@ def register(**args):
 
 def grp_exclude(force_exclude=False):
     """ Check if the chat is excluded. """
+
     def decorator(func):
         async def wrapper(check):
             exclude = await get_exclude(check.chat_id)
@@ -159,14 +155,12 @@ def grp_exclude(force_exclude=False):
                     LOGS.info("EXCLUDED! force_exclude is True")
                     return
 
-                if exclude['excl_type'] == 2:  # all
+                if exclude["excl_type"] == 2:  # all
                     LOGS.info("EXCLUDED! type=2")
                     return
 
-                if exclude['excl_type'] == 1 and check.out is False:  # in
-                    LOGS.info(
-                        "EXCLUDED! type=1 and check.out is False"
-                    )
+                if exclude["excl_type"] == 1 and check.out is False:  # in
+                    LOGS.info("EXCLUDED! type=1 and check.out is False")
                     return
 
                 LOGS.info("NOT EXCLUDED!")

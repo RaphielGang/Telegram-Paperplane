@@ -31,8 +31,19 @@ async def gethash(hash_q):
     sha512 = runapp(["sha512sum", "hashdis.txt"], stdout=PIPE, check=True)
     runapp(["rm", "hashdis.txt"], stdout=PIPE, check=True)
     sha512 = sha512.stdout.decode()
-    ans = ("Text: `" + hashtxt_ + "`\nMD5: `" + md5 + "`SHA1: `" + sha1 +
-           "`SHA256: `" + sha256 + "`SHA512: `" + sha512[:-1] + "`")
+    ans = (
+        "Text: `"
+        + hashtxt_
+        + "`\nMD5: `"
+        + md5
+        + "`SHA1: `"
+        + sha1
+        + "`SHA256: `"
+        + sha256
+        + "`SHA512: `"
+        + sha512[:-1]
+        + "`"
+    )
     if len(ans) > 4096:
         with open("hashes.txt", "w+") as hashfile:
             hashfile.write(ans)
@@ -40,7 +51,8 @@ async def gethash(hash_q):
             hash_q.chat_id,
             "hashes.txt",
             reply_to=hash_q.id,
-            caption="`It's too big, sending a text file instead.`")
+            caption="`It's too big, sending a text file instead.`",
+        )
         runapp(["rm", "hashes.txt"], stdout=PIPE, check=True)
     else:
         await hash_q.reply(ans)
@@ -51,21 +63,25 @@ async def gethash(hash_q):
 async def endecrypt(query):
     """ For .base64 command, find the base64 encoding of the given string. """
     if query.pattern_match.group(1) == "en":
-        lething = str(
-            pybase64.b64encode(bytes(query.pattern_match.group(2),
-                                     "utf-8")))[2:]
+        lething = str(pybase64.b64encode(bytes(query.pattern_match.group(2), "utf-8")))[
+            2:
+        ]
         await query.reply("Encoded: `" + lething[:-1] + "`")
     else:
         lething = str(
-            pybase64.b64decode(bytes(query.pattern_match.group(2), "utf-8"),
-                               validate=True))[2:]
+            pybase64.b64decode(
+                bytes(query.pattern_match.group(2), "utf-8"), validate=True
+            )
+        )[2:]
         await query.reply("Decoded: `" + lething[:-1] + "`")
 
 
-CMD_HELP.update({
-    "hash": [
-        'Hash',
-        " - `.base64 <str>`: Find the base64 encoding of the given string.\n"
-        " - `.hash <str>`: Find the md5, sha1, sha256, sha512 of the string when written into a txt file.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "hash": [
+            "Hash",
+            " - `.base64 <str>`: Find the base64 encoding of the given string.\n"
+            " - `.hash <str>`: Find the md5, sha1, sha256, sha512 of the string when written into a txt file.\n",
+        ]
+    }
+)

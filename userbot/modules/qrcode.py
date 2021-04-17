@@ -20,8 +20,11 @@ from userbot.events import register, grp_exclude
 
 def progress(current, total):
     """ Calculate and return the download progress with given arguments. """
-    print("Downloaded {} of {}\nCompleted {}".format(current, total,
-                                                     (current / total) * 100))
+    print(
+        "Downloaded {} of {}\nCompleted {}".format(
+            current, total, (current / total) * 100
+        )
+    )
 
 
 @register(pattern=r"^.getqr$", outgoing=True)
@@ -32,7 +35,8 @@ async def parseqr(qr_e):
         return
     start = datetime.now()
     downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message(), progress_callback=progress)
+        await qr_e.get_reply_message(), progress_callback=progress
+    )
     url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
     with open(downloaded_file_name, "rb") as dl_file:
         files = {"file": dl_file}
@@ -42,8 +46,9 @@ async def parseqr(qr_e):
     os.remove(downloaded_file_name)
     end = datetime.now()
     duration = (end - start).seconds
-    await qr_e.edit("Obtained QRCode contents in {} seconds.\n{}".format(
-        duration, qr_contents))
+    await qr_e.edit(
+        "Obtained QRCode contents in {} seconds.\n{}".format(duration, qr_contents)
+    )
 
 
 @register(pattern=r"^.makeqr(?: |$)([\s\S]*)", outgoing=True)
@@ -63,7 +68,8 @@ async def make_qr(qrcode):
         reply_msg_id = previous_message.id
         if previous_message.media:
             downloaded_file_name = await qrcode.client.download_media(
-                previous_message, progress_callback=progress)
+                previous_message, progress_callback=progress
+            )
             m_list = None
             with open(downloaded_file_name, "rb") as file:
                 m_list = file.readlines()
@@ -97,10 +103,12 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     await qrcode.delete()
 
 
-CMD_HELP.update({
-    "qr codes": [
-        'QR Codes',
-        " - `.getqr`: Get the QR Code content from the replied QR Code.\n"
-        " - `.makeqr <content>`: Make a QR Code from the given message (text, link, etc...).\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "qr codes": [
+            "QR Codes",
+            " - `.getqr`: Get the QR Code content from the replied QR Code.\n"
+            " - `.makeqr <content>`: Make a QR Code from the given message (text, link, etc...).\n",
+        ]
+    }
+)
