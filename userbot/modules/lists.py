@@ -1,4 +1,4 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
@@ -7,11 +7,15 @@
 
 import re
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
-                     is_redis_alive)
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive, is_redis_alive
 from userbot.events import register, grp_exclude
-from userbot.modules.dbhelper import (add_list, delete_list, get_list,
-                                      get_lists, set_list)
+from userbot.modules.dbhelper import (
+    add_list,
+    delete_list,
+    get_list,
+    get_lists,
+    set_list,
+)
 
 # =================== CONSTANTS ===================
 
@@ -39,8 +43,8 @@ async def lists_active(event):
 
         for _list in lists:
             message += "🔹 **{} ({})**\n".format(
-                _list["name"], "Local" if
-                (_list["chat_id"] != 0) else "Global")
+                _list["name"], "Local" if (_list["chat_id"] != 0) else "Global"
+            )
 
     await event.edit(message)
 
@@ -70,15 +74,14 @@ async def removelists(event):
     if await delete_list(event.chat_id, listname) is False:
         await event.edit("`Couldn't find list:` **{}**".format(listname))
         return
-    else:
-        await event.edit("`Successfully deleted list:` **{}**".format(listname)
-                         )
+
+    await event.edit("`Deleted list:` **{}**".format(listname))
 
     if BOTLOG:
-        listat = "global storage" if _list['chat_id'] == 0 else str(
-            event.chat_id)
+        listat = "global storage" if _list["chat_id"] == 0 else str(event.chat_id)
         await event.client.send_message(
-            BOTLOG_CHATID, f"Removed list {listname} from {listat}")
+            BOTLOG_CHATID, f"Removed list {listname} from {listat}"
+        )
 
 
 @register(outgoing=True, pattern=r"^.new(g)?list (\w*)")
@@ -99,14 +102,15 @@ async def addlist(event):
     chatid = 0 if is_global else event.chat_id
 
     if await add_list(chatid, listname, content) is False:
-        await event.edit(msg.format('updated', listname))
+        await event.edit(msg.format("updated", listname))
     else:
-        await event.edit(msg.format('created', listname))
+        await event.edit(msg.format("created", listname))
 
     if BOTLOG:
         listat = "global storage" if is_global else str(event.chat_id)
         await event.client.send_message(
-            BOTLOG_CHATID, f"Created list {listname} in {listat}")
+            BOTLOG_CHATID, f"Created list {listname} in {listat}"
+        )
 
 
 @register(outgoing=True, pattern=r"^.addlistitems? ?(\w*)\n((.|\n*)*)")
@@ -127,7 +131,7 @@ async def add_list_items(event):
         listname = event.pattern_match.group(1)
 
     if not listname:
-        return_msg = f"`Pass a list to add items into!` {CHK_HELP}"
+        return_msg = f"`Pass a list to add items into it!` {CHK_HELP}"
         await event.edit(return_msg)
         return
 
@@ -136,7 +140,7 @@ async def add_list_items(event):
     if not _list:
         await x.edit(LIST_NOT_FOUND.format(listname))
 
-    content = _list['items']
+    content = _list["items"]
     newitems = event.pattern_match.group(2)
     content.extend(newitems.splitlines())
 
@@ -152,7 +156,7 @@ async def add_list_items(event):
         return
 
     if BOTLOG:
-        listat = "global storage" if _list['chat_id'] else str(event.chat_id)
+        listat = "global storage" if _list["chat_id"] else str(event.chat_id)
 
         log = f"Added item(s) to {listname} in {listat}.\n"
         log += "New items:\n"
@@ -171,12 +175,12 @@ async def edit_list_item(event):
 
     textx = await event.get_reply_message()
     listname = None
-    arg_index = event.pattern_match.group(2)
+    arg_indexes = event.pattern_match.group(2)
 
     if textx:
         x = re.search(r"\[Paperplane-List] List \*\*(\w*)", textx.text)
         listname = x.group(1)
-        arg_index = event.pattern_match.group(1) + " " + arg_indexes
+        arg_indexes = event.pattern_match.group(1) + " " + arg_indexes
     elif event.pattern_match.group(1):
         listname = event.pattern_match.group(1)
     else:
@@ -186,7 +190,7 @@ async def edit_list_item(event):
     item_number = int(event.pattern_match.group(2))
 
     _list = await get_list(event.chat_id, listname)
-    content = _list['items']
+    content = _list["items"]
     content[item_number - 1] = event.pattern_match.group(3)
 
     msg = f"`Item {item_number} edited successfully.\n"
@@ -198,7 +202,7 @@ async def edit_list_item(event):
         await event.edit(LIST_NOT_FOUND.format(listname))
 
     if BOTLOG:
-        listat = "global storage" if _list['chat_id'] else str(event.chat_id)
+        listat = "global storage" if _list["chat_id"] else str(event.chat_id)
 
         log = f"Edited item {item_number} of "
         log += f"{listname} in {listat} successfully."
@@ -240,28 +244,30 @@ async def rmlistitems(event):
 
     try:
         for elem in sorted(unwanted_indexes, reverse=True):
-            del _list['items'][elem - 1]
+            del _list["items"][elem - 1]
     except TypeError:
-        await event.edit(LIST_NOT_FOUND.format('listname'))
+        await event.edit(LIST_NOT_FOUND.format("listname"))
         return
     except IndexError:
-        await event.edit(f"`Item `**{unwanted_indexes}**\
-` in list `**{listname}**` not found!`")
+        await event.edit(
+            f"`Item `**{unwanted_indexes}**\
+` in list `**{listname}**` not found!`"
+        )
         return
 
     msg = "`Item(s) {} removed from the list successfully. \
 Use` ${} `to get the list.`"
 
-    if await add_list(event.chat_id, listname, _list['items']) is False:
+    if await add_list(event.chat_id, listname, _list["items"]) is False:
         await event.edit(msg.format(unwanted_indexes, listname))
     else:
         await event.edit(f"List {listname} doesn't exist!")
 
     if BOTLOG:
-        listat = "global storage" if _list['chat_id'] else str(event.chat_id)
+        listat = "global storage" if _list["chat_id"] else str(event.chat_id)
         await event.client.send_message(
             BOTLOG_CHATID,
-            f"Removed item(s) {str(unwanted_indexes)} from {listname} in {listat}"
+            f"Removed item(s) {str(unwanted_indexes)} from {listname} in {listat}",
         )
 
 
@@ -300,21 +306,20 @@ async def setliststate(event):
     msg = f"`The state of list {listname} changed to \
 {_futureState} successfully.`"
 
-    if await set_list(_list['chat_id'], listname, chatid) is True:
+    if await set_list(_list["chat_id"], listname, chatid) is True:
         await event.edit(msg)
     else:
         await event.edit(f"`List {listname} not found!`")
 
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID,
-            f"Changed state of list {listname} to {_futureState}")
+            BOTLOG_CHATID, f"Changed state of list {listname} to {_futureState}"
+        )
 
 
-@register(pattern=r"\$\w*",
-          disable_edited=True,
-          ignore_unsafe=True,
-          disable_errors=True)
+@register(
+    pattern=r"\$\w*", disable_edited=True, ignore_unsafe=True, disable_errors=True
+)
 @grp_exclude()
 async def lists_logic(event):
     """ Lists logic. """
@@ -327,15 +332,15 @@ async def lists_logic(event):
             _list = await get_list(event.chat_id, listname)
             if _list:
                 storage = "None"
-                if _list['chat_id'] == 0:
+                if _list["chat_id"] == 0:
                     storage = "global"
                 else:
-                    storage = str(_list['chat_id'])
+                    storage = str(_list["chat_id"])
 
                 return_str = LIST_HEADER.format(listname, storage)
 
-                if _list['items']:
-                    for i, item in enumerate(_list['items']):
+                if _list["items"]:
+                    for i, item in enumerate(_list["items"]):
                         return_str += f"{i+1}. {item}\n"
 
                     return_str += f"\n{CHK_HELP}"
@@ -370,15 +375,15 @@ async def getlist_logic(event):
         _list = await get_list(event.chat_id, listname)
         if _list:
             storage = "None"
-            if _list['chat_id'] == 0:
+            if _list["chat_id"] == 0:
                 storage = "global"
             else:
-                storage = str(_list['chat_id'])
+                storage = str(_list["chat_id"])
 
             return_str = LIST_HEADER.format(listname, storage)
 
-            if _list['items']:
-                for i, item in enumerate(_list['items']):
+            if _list["items"]:
+                for i, item in enumerate(_list["items"]):
                     return_str += f"{i+1}. {item}\n"
             else:
                 return_str = "`This list is empty!`"
@@ -388,27 +393,30 @@ async def getlist_logic(event):
             await event.edit(f"`List {listname} not found!`")
 
 
-CMD_HELP.update({
-    "lists": [
-        "Lists", " - `.lists`: Get all of the lists (both local and global).\n"
-        " - `$listname`: Get the list called 'listname'.\n"
-        " - `.getlist <listname>`: Same as $listname.\n"
-        " - `.newlist <listname> <items>`: Creates a local list called 'listname' and adds items to it. "
-        "Separate items with a newline. Local lists are only accessible from a specific chat.\n"
-        " - `.newglist <listname> <items>`: Creates a global list called 'listname' and adds items to it. "
-        "Separate items with a newline. Global lists are accessible from every chat you are in.\n"
-        " - `.dellist <listname>`: Deletes the list called 'listname'.\n"
-        " - `.addlistitem(s) <listname> <items>`: Add new items to the list called 'listname'. "
-        "Separate items with a newline. The first items should start from a newline.\n"
-        " - `.rmlistitem(s) <listname> <indexes>`: Remove items accompanying the indexes from the list called 'listname'. "
-        "Indexes are the numbers which the item is on the list. You can remove multiple items at once from the list.\n"
-        " - `.editlistitem <listname> <item_number> <new_content>`: Edit item item_number in listname, changing the "
-        "content to new_content.\n"
-        " - `.setlist <listname> <local|global>`: Change the status of a list to local (accessible only from the current chat) "
-        "or global (accessible from every chat you are in.).\n\n"
-        "By replying to a Paperplane List message(identified by "
-        "\n'[Paperplane-List]' in the beginning of a userbot message), "
-        "\nyou can omit <listname> from all commands (except $<listname>)."
-        "\nPaperplane will recognize the list from the replied message."
-    ]
-})
+CMD_HELP.update(
+    {
+        "lists": [
+            "Lists",
+            " - `.lists`: Get all of the lists (both local and global).\n"
+            " - `$listname`: Get the list called 'listname'.\n"
+            " - `.getlist <listname>`: Same as $listname.\n"
+            " - `.newlist <listname> <items>`: Creates a local list called 'listname' and adds items to it. "
+            "Separate items with a newline. Local lists are only accessible from a specific chat.\n"
+            " - `.newglist <listname> <items>`: Creates a global list called 'listname' and adds items to it. "
+            "Separate items with a newline. Global lists are accessible from every chat you are in.\n"
+            " - `.dellist <listname>`: Deletes the list called 'listname'.\n"
+            " - `.addlistitem(s) <listname> <items>`: Add new items to the list called 'listname'. "
+            "Separate items with a newline. The first items should start from a newline.\n"
+            " - `.rmlistitem(s) <listname> <indexes>`: Remove items accompanying the indexes from the list called 'listname'. "
+            "Indexes are the numbers which the item is on the list. You can remove multiple items at once from the list.\n"
+            " - `.editlistitem <listname> <item_number> <new_content>`: Edit item item_number in listname, changing the "
+            "content to new_content.\n"
+            " - `.setlist <listname> <local|global>`: Change the status of a list to local (accessible only from the current chat) "
+            "or global (accessible from every chat you are in.).\n\n"
+            "By replying to a Paperplane List message(identified by "
+            "\n'[Paperplane-List]' in the beginning of a userbot message), "
+            "\nyou can omit <listname> from all commands (except $<listname>)."
+            "\nPaperplane will recognize the list from the replied message.",
+        ]
+    }
+)

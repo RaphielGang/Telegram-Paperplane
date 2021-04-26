@@ -1,12 +1,18 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for muting chats. """
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, MONGO, is_mongo_alive,
-                     is_redis_alive)
+from userbot import (
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    MONGO,
+    is_mongo_alive,
+    is_redis_alive,
+)
 from userbot.events import register, grp_exclude
 
 
@@ -18,7 +24,7 @@ async def unmute_chat(unm_e):
         await unm_e.edit("`Database connections failing!`")
         return
     MONGO.bot.mute_chats.delete_one({"chat_id": unm_e.chat_id})
-    await unm_e.edit("```Unmuted this chat Successfully```")
+    await unm_e.edit("```Unmuted this chat!```")
 
 
 @register(outgoing=True, pattern="^.mutechat$")
@@ -30,11 +36,11 @@ async def mute_chat(mute_e):
         return
     await mute_e.edit(str(mute_e.chat_id))
     MONGO.bot.mute_chats.insert_one({"chat_id": mute_e.chat_id})
-    await mute_e.edit("`Shush! This chat will be silenced!`")
+    await mute_e.edit("`This chat has been muted!`")
     if BOTLOG:
         await mute_e.client.send_message(
-            BOTLOG_CHATID,
-            str(mute_e.chat_id) + " was silenced.")
+            BOTLOG_CHATID, str(mute_e.chat_id) + " has been muted."
+        )
 
 
 @register(incoming=True, disable_errors=True)
@@ -50,9 +56,12 @@ async def keep_read(message):
                 await message.client.send_read_acknowledge(message.chat_id)
 
 
-CMD_HELP.update({
-    "muting": [
-        'Muting', " - `.unmutechat`: Unmute a muted chat.\n"
-        " - `.mutechat`: Mute any chat.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "muting": [
+            "Muting",
+            " - `.unmutechat`: Unmute a muted chat.\n"
+            " - `.mutechat`: Mute any chat.\n",
+        ]
+    }
+)

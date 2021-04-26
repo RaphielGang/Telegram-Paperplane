@@ -1,4 +1,4 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ from userbot.events import register, grp_exclude
 async def evaluate(query):
     """ For .eval command, evaluates the given Python expression. """
     if query.is_channel and not query.is_group:
-        await query.edit("`Eval isn't permitted on channels`")
+        await query.edit("`Eval isn't permitted on channels!`")
         return
 
     if query.pattern_match.group(1):
         expression = query.pattern_match.group(1)
     else:
-        await query.edit("``` Give an expression to evaluate. ```")
+        await query.edit("```Give an expression to evaluate!```")
         return
 
     if expression in ("userbot.session", "config.env"):
@@ -37,9 +37,8 @@ async def evaluate(query):
         if evaluation:
             if isinstance(evaluation, str):
                 if len(evaluation) >= 4096:
-                    file = open("output.txt", "w+")
-                    file.write(evaluation)
-                    file.close()
+                    with open("output.txt", "w+") as output_file:
+                        output_file.write(evaluation)
                     await query.client.send_file(
                         query.chat_id,
                         "output.txt",
@@ -48,25 +47,28 @@ async def evaluate(query):
                     )
                     remove("output.txt")
                     return
-                await query.edit("**Query: **\n`"
-                                 f"{expression}"
-                                 "`\n**Result: **\n`"
-                                 f"{evaluation}"
-                                 "`")
+                await query.edit(
+                    "**Query: **\n`"
+                    f"{expression}"
+                    "`\n**Result: **\n`"
+                    f"{evaluation}"
+                    "`"
+                )
         else:
-            await query.edit("**Query: **\n`"
-                             f"{expression}"
-                             "`\n**Result: **\n`No Result Returned/False`")
+            await query.edit(
+                "**Query: **\n`"
+                f"{expression}"
+                "`\n**Result: **\n`No Result Returned/False`"
+            )
     except Exception as err:
-        await query.edit("**Query: **\n`"
-                         f"{expression}"
-                         "`\n**Exception: **\n"
-                         f"`{err}`")
+        await query.edit(
+            "**Query: **\n`" f"{expression}" "`\n**Exception: **\n" f"`{err}`"
+        )
 
     if BOTLOG:
         await query.client.send_message(
-            BOTLOG_CHATID,
-            f"Eval query {expression} was executed successfully")
+            BOTLOG_CHATID, f"Eval query {expression} was executed successfully"
+        )
 
 
 @register(outgoing=True, pattern=r"^.exec(?: |$)([\s\S]*)")
@@ -80,8 +82,10 @@ async def run(run_q):
         return
 
     if not code:
-        await run_q.edit("``` At least a variable is required to \
-execute. Use .help exec for an example.```")
+        await run_q.edit(
+            "```At least a variable is required to \
+execute. Use .help exec for an example.```"
+        )
         return
 
     if code in ("userbot.session", "config.env"):
@@ -92,25 +96,25 @@ execute. Use .help exec for an example.```")
         codepre = code
     else:
         clines = code.splitlines()
-        codepre = clines[0] + "\n" + clines[1] + "\n" + clines[2] + \
-            "\n" + clines[3] + "..."
+        codepre = (
+            clines[0] + "\n" + clines[1] + "\n" + clines[2] + "\n" + clines[3] + "..."
+        )
 
     command = "".join(f"\n {l}" for l in code.split("\n.strip()"))
     process = await asyncio.create_subprocess_exec(
         executable,
-        '-c',
+        "-c",
         command.strip(),
         stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE)
+        stderr=asyncio.subprocess.PIPE,
+    )
     stdout, stderr = await process.communicate()
-    result = str(stdout.decode().strip()) \
-        + str(stderr.decode().strip())
+    result = str(stdout.decode().strip()) + str(stderr.decode().strip())
 
     if result:
         if len(result) > 4096:
-            file = open("output.txt", "w+")
-            file.write(result)
-            file.close()
+            with open("output.txt", "w+") as output_file:
+                output_file.write(result)
             await run_q.client.send_file(
                 run_q.chat_id,
                 "output.txt",
@@ -119,20 +123,18 @@ execute. Use .help exec for an example.```")
             )
             remove("output.txt")
             return
-        await run_q.edit("**Query: **\n`"
-                         f"{codepre}"
-                         "`\n**Result: **\n`"
-                         f"{result}"
-                         "`")
+        await run_q.edit(
+            "**Query: **\n`" f"{codepre}" "`\n**Result: **\n`" f"{result}" "`"
+        )
     else:
-        await run_q.edit("**Query: **\n`"
-                         f"{codepre}"
-                         "`\n**Result: **\n`No Result Returned/False`")
+        await run_q.edit(
+            "**Query: **\n`" f"{codepre}" "`\n**Result: **\n`No Result Returned/False`"
+        )
 
     if BOTLOG:
         await run_q.client.send_message(
-            BOTLOG_CHATID,
-            "Exec query " + codepre + " was executed successfully")
+            BOTLOG_CHATID, "Exec query " + codepre + " was executed successfully"
+        )
 
 
 @register(outgoing=True, pattern="^.term(?: |$)(.*)")
@@ -143,6 +145,7 @@ async def terminal_runner(term):
     command = term.pattern_match.group(1)
     try:
         from os import geteuid
+
         uid = geteuid()
     except ImportError:
         uid = "This ain't it chief!"
@@ -152,8 +155,10 @@ async def terminal_runner(term):
         return
 
     if not command:
-        await term.edit("``` Give a command or use .help term for \
-            an example.```")
+        await term.edit(
+            "```Give a command or use .help term for \
+            an example.```"
+        )
         return
 
     if command in ("userbot.session", "config.env"):
@@ -161,17 +166,14 @@ async def terminal_runner(term):
         return
 
     process = await asyncio.create_subprocess_shell(
-        command,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE)
+        command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+    )
     stdout, stderr = await process.communicate()
-    result = str(stdout.decode().strip()) \
-        + str(stderr.decode().strip())
+    result = str(stdout.decode().strip()) + str(stderr.decode().strip())
 
     if len(result) > 4096:
-        output = open("output.txt", "w+")
-        output.write(result)
-        output.close()
+        with open("output.txt", "w+") as output:
+            output.write(result)
         await term.client.send_file(
             term.chat_id,
             "output.txt",
@@ -188,16 +190,17 @@ async def terminal_runner(term):
 
     if BOTLOG:
         await term.client.send_message(
-            BOTLOG_CHATID,
-            "Terminal Command " + command + " was executed sucessfully",
+            BOTLOG_CHATID, "Terminal Command " + command + " was executed sucessfully"
         )
 
 
-CMD_HELP.update({
-    "evaluators": [
-        'Evaluators',
-        " - `.eval <expr>`: Evaluate expressions using Python's eval().\n"
-        " - `.exec <script>`: Execute Python script.\n"
-        " - `.term <command>`: Execute a bash command on Paperplane server.\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "evaluators": [
+            "Evaluators",
+            " - `.eval <expr>`: Evaluate expressions using Python's eval().\n"
+            " - `.exec <script>`: Execute Python script.\n"
+            " - `.term <command>`: Execute a bash command on Paperplane server.\n",
+        ]
+    }
+)

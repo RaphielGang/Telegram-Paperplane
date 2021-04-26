@@ -1,4 +1,4 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,8 +62,8 @@ async def time_func(tdata):
     t_form = "%H:%M"
 
     saved_props = await get_time() if is_mongo_alive() else None
-    saved_country = saved_props['timec'] if saved_props else None
-    saved_tz_num = saved_props['timezone'] if saved_props else None
+    saved_country = saved_props["timec"] if saved_props else None
+    saved_tz_num = saved_props["timezone"] if saved_props else None
 
     if con:
         try:
@@ -110,12 +110,13 @@ async def time_func(tdata):
     dtnow = dt.now(tz(time_zone)).strftime(t_form)
 
     if not con and saved_country:
-        await tdata.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
-                         f"({time_zone} timezone).`")
+        await tdata.edit(
+            f"`It's`  **{dtnow}**  `here, in {saved_country}"
+            f"({time_zone} timezone).`"
+        )
         return
 
-    await tdata.edit(
-        f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
+    await tdata.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
 @register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
@@ -132,8 +133,8 @@ async def date_func(dat):
     d_form = "%d/%m/%y - %A"
 
     saved_props = await get_time() if is_mongo_alive() else None
-    saved_country = saved_props['timec'] if saved_props else None
-    saved_tz_num = saved_props['timezone'] if saved_props else None
+    saved_country = saved_props["timec"] if saved_props else None
+    saved_tz_num = saved_props["timezone"] if saved_props else None
 
     if con:
         try:
@@ -180,12 +181,13 @@ async def date_func(dat):
     dtnow = dt.now(tz(time_zone)).strftime(d_form)
 
     if not con and saved_country:
-        await dat.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
-                       f"({time_zone} timezone).`")
+        await dat.edit(
+            f"`It's`  **{dtnow}**  `here, in {saved_country}"
+            f"({time_zone} timezone).`"
+        )
         return
 
-    await dat.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
-                   )
+    await dat.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
 @register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
@@ -240,20 +242,24 @@ async def set_time_country(loc):
 
     await set_time(c_name, tz_num)
 
-    await loc.edit("`Default country for date and time set to "
-                   f"{c_name}({tz_name} timezone).`")
+    await loc.edit(
+        "`Default country for date and time set to " f"{c_name}({tz_name} timezone).`"
+    )
 
 
-CMD_HELP.update({
-    "date/time": [
-        'Date/Time', " - `.time <country name/code> <timezone number>`: "
-        "Get the time of a country. If a country has multiple timezones, "
-        "Paperplane will list all of them and let you select one.\n"
-        " - `.date <country name/code> <timezone number>`: "
-        "Get the date of a country. If a country has multiple timezones, "
-        "Paperplane will list all of them and let you select one.\n"
-        " - `.settime <country name/code> <timezone number>`: "
-        "Set the default country for .time and .date command. If a country "
-        "has multiple timezones, Paperplane will list all of them and let you select one."
-    ]
-})
+CMD_HELP.update(
+    {
+        "date/time": [
+            "Date/Time",
+            " - `.time <country name/code> <timezone number>`: "
+            "Get the time of a country. If a country has multiple timezones, "
+            "Paperplane will list all of them and let you select one.\n"
+            " - `.date <country name/code> <timezone number>`: "
+            "Get the date of a country. If a country has multiple timezones, "
+            "Paperplane will list all of them and let you select one.\n"
+            " - `.settime <country name/code> <timezone number>`: "
+            "Set the default country for .time and .date command. If a country "
+            "has multiple timezones, Paperplane will list all of them and let you select one.",
+        ]
+    }
+)

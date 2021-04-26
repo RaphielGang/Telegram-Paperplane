@@ -1,8 +1,7 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
-#
 #
 """ Userbot module for having some fun. """
 
@@ -188,78 +187,121 @@ RUNSREACTS = [
     "I am just walking off, coz me is too fat.",
     "I Fugged off!",
 ]
-ZALG_LIST = [[
-    "̖",
-    " ̗",
-    " ̘",
-    " ̙",
-    " ̜",
-    " ̝",
-    " ̞",
-    " ̟",
-    " ̠",
-    " ̤",
-    " ̥",
-    " ̦",
-    " ̩",
-    " ̪",
-    " ̫",
-    " ̬",
-    " ̭",
-    " ̮",
-    " ̯",
-    " ̰",
-    " ̱",
-    " ̲",
-    " ̳",
-    " ̹",
-    " ̺",
-    " ̻",
-    " ̼",
-    " ͅ",
-    " ͇",
-    " ͈",
-    " ͉",
-    " ͍",
-    " ͎",
-    " ͓",
-    " ͔",
-    " ͕",
-    " ͖",
-    " ͙",
-    " ͚",
-    " ",
-],
-[
-    " ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗",
-    " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌",
-    " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ",
-    " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ",
-    " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"
-],
-[
-    " ̕",
-    " ̛",
-    " ̀",
-    " ́",
-    " ͘",
-    " ̡",
-    " ̢",
-    " ̧",
-    " ̨",
-    " ̴",
-    " ̵",
-    " ̶",
-    " ͜",
-    " ͝",
-    " ͞",
-    " ͟",
-    " ͠",
-    " ͢",
-    " ̸",
-    " ̷",
-    " ͡",
-]]
+ZALG_LIST = [
+    [
+        "̖",
+        " ̗",
+        " ̘",
+        " ̙",
+        " ̜",
+        " ̝",
+        " ̞",
+        " ̟",
+        " ̠",
+        " ̤",
+        " ̥",
+        " ̦",
+        " ̩",
+        " ̪",
+        " ̫",
+        " ̬",
+        " ̭",
+        " ̮",
+        " ̯",
+        " ̰",
+        " ̱",
+        " ̲",
+        " ̳",
+        " ̹",
+        " ̺",
+        " ̻",
+        " ̼",
+        " ͅ",
+        " ͇",
+        " ͈",
+        " ͉",
+        " ͍",
+        " ͎",
+        " ͓",
+        " ͔",
+        " ͕",
+        " ͖",
+        " ͙",
+        " ͚",
+        " ",
+    ],
+    [
+        " ̍",
+        " ̎",
+        " ̄",
+        " ̅",
+        " ̿",
+        " ̑",
+        " ̆",
+        " ̐",
+        " ͒",
+        " ͗",
+        " ͑",
+        " ̇",
+        " ̈",
+        " ̊",
+        " ͂",
+        " ̓",
+        " ̈́",
+        " ͊",
+        " ͋",
+        " ͌",
+        " ̃",
+        " ̂",
+        " ̌",
+        " ͐",
+        " ́",
+        " ̋",
+        " ̏",
+        " ̽",
+        " ̉",
+        " ͣ",
+        " ͤ",
+        " ͥ",
+        " ͦ",
+        " ͧ",
+        " ͨ",
+        " ͩ",
+        " ͪ",
+        " ͫ",
+        " ͬ",
+        " ͭ",
+        " ͮ",
+        " ͯ",
+        " ̾",
+        " ͛",
+        " ͆",
+        " ̚",
+    ],
+    [
+        " ̕",
+        " ̛",
+        " ̀",
+        " ́",
+        " ͘",
+        " ̡",
+        " ̢",
+        " ̧",
+        " ̨",
+        " ̴",
+        " ̵",
+        " ̶",
+        " ͜",
+        " ͝",
+        " ͞",
+        " ͟",
+        " ͠",
+        " ͢",
+        " ̸",
+        " ̷",
+        " ͡",
+    ],
+]
 
 # ===========================================
 
@@ -298,7 +340,7 @@ async def lol(lel):
     okay = "-_-"
     for _ in range(10):
         okay = okay[:-1] + "_-"
-        await lel.edit(okay, parse_mode='html')
+        await lel.edit(okay, parse_mode="html")
 
 
 @register(outgoing=True, pattern="^.cp(?: |$)(.*)")
@@ -340,7 +382,7 @@ async def copypasta(cp_e):
 @grp_exclude()
 async def vapor(vpr):
     """ Vaporize everything! """
-    reply_text = list()
+    reply_text = []
     textx = await vpr.get_reply_message()
     message = vpr.pattern_match.group(1)
     if message:
@@ -378,8 +420,7 @@ async def stretch(stret):
         return
 
     count = random.randint(3, 10)
-    reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count),
-                        message)
+    reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count), message)
     await stret.edit(reply_text)
 
 
@@ -387,7 +428,7 @@ async def stretch(stret):
 @grp_exclude()
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
-    reply_text = list()
+    reply_text = []
     textx = await zgfy.get_reply_message()
     message = zgfy.pattern_match.group(1)
     if message:
@@ -409,14 +450,11 @@ async def zal(zgfy):
             randint = random.randint(0, 2)
 
             if randint == 0:
-                charac = charac.strip() + \
-                    random.choice(ZALG_LIST[0]).strip()
+                charac = charac.strip() + random.choice(ZALG_LIST[0]).strip()
             elif randint == 1:
-                charac = charac.strip() + \
-                    random.choice(ZALG_LIST[1]).strip()
+                charac = charac.strip() + random.choice(ZALG_LIST[1]).strip()
             else:
-                charac = charac.strip() + \
-                    random.choice(ZALG_LIST[2]).strip()
+                charac = charac.strip() + random.choice(ZALG_LIST[2]).strip()
 
         reply_text.append(charac)
 
@@ -484,7 +522,7 @@ async def metoo(hahayes):
 @grp_exclude()
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
-    reply_text = list()
+    reply_text = []
     textx = await mock.get_reply_message()
     message = mock.pattern_match.group(1)
     if message:
@@ -531,10 +569,11 @@ async def bluetext(bt_e):
     if await bt_e.get_reply_message():
         await bt_e.edit(
             "`BLUETEXT MUST CLICK.`\n"
-            "`Are you a stupid animal which is attracted to colours?`")
+            "`Are you a stupid animal which is attracted to colours?`"
+        )
 
 
-@register(outgoing=True, pattern='^.type(?: |$)(.*)')
+@register(outgoing=True, pattern="^.type(?: |$)(.*)")
 @grp_exclude()
 async def typewriter(typew):
     """ Just a small command to make your keyboard become a typewriter! """
@@ -549,7 +588,7 @@ async def typewriter(typew):
         return
     sleep_time = 0.03
     typing_symbol = "|"
-    old_text = ''
+    old_text = ""
     await typew.edit(typing_symbol)
     await asyncio.sleep(sleep_time)
     for character in message:
@@ -561,5 +600,4 @@ async def typewriter(typew):
         await asyncio.sleep(sleep_time)
 
 
-CMD_HELP.update(
-    {"memes": ["Memes", "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."]})
+CMD_HELP.update({"memes": ["Memes", "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."]})

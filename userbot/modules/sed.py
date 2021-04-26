@@ -1,10 +1,11 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 # The entire source code is OSSRPL except 'sed' which is GPLv3
 # License: GPLv3 and OSSRPL
+#
 """ Userbot command for sed. """
 
 import re
@@ -18,8 +19,11 @@ DELIMITERS = ("/", ":", "|", "_")
 
 def separate_sed(sed_string):
     """ Separate sed arguments. """
-    if (len(sed_string) > 3 and sed_string[3] in DELIMITERS
-            and sed_string.count(sed_string[3]) >= 2):
+    if (
+        len(sed_string) > 3
+        and sed_string[3] in DELIMITERS
+        and sed_string.count(sed_string[3]) >= 2
+    ):
         delim = sed_string[3]
         start = counter = 4
         while counter < len(sed_string):
@@ -38,9 +42,12 @@ def separate_sed(sed_string):
             return None
 
         while counter < len(sed_string):
-            if (sed_string[counter] == "\\" and counter + 1 < len(sed_string)
-                    and sed_string[counter + 1] == delim):
-                sed_string = sed_string[:counter] + sed_string[counter + 1:]
+            if (
+                sed_string[counter] == "\\"
+                and counter + 1 < len(sed_string)
+                and sed_string[counter + 1] == delim
+            ):
+                sed_string = sed_string[:counter] + sed_string[counter + 1 :]
 
             elif sed_string[counter] == delim:
                 replace_with = sed_string[start:counter]
@@ -69,14 +76,16 @@ async def sed(command):
             to_fix = textx.text
         else:
             await command.edit(
-                "`Master, I don't have brains. Well you too don't I guess.`")
+                "`I don't have brains. Well you don't too, I guess.`"
+            )
             return
 
         repl, repl_with, flags = sed_result
 
         if not repl:
             await command.edit(
-                "`Master, I don't have brains. Well you too don't I guess.`")
+                "`I don't have brains. Well you don't too, I guess.`"
+            )
             return
 
         try:
@@ -88,8 +97,7 @@ async def sed(command):
             if "i" in flags and "g" in flags:
                 text = re.sub(repl, repl_with, to_fix, flags=re.I).strip()
             elif "i" in flags:
-                text = re.sub(repl, repl_with, to_fix, count=1,
-                              flags=re.I).strip()
+                text = re.sub(repl, repl_with, to_fix, count=1, flags=re.I).strip()
             elif "g" in flags:
                 text = re.sub(repl, repl_with, to_fix).strip()
             else:
@@ -101,10 +109,13 @@ async def sed(command):
             await command.edit("Did you mean? \n\n`" + text + "`")
 
 
-CMD_HELP.update({
-    "sed": [
-        "Sed", " - `sed<delimiter><old word(s)><delimiter><new word(s)>`: "
-        "Replaces a word or words using sed. You can find more online. "
-        "Delimiters: `/`, `:`, `|`, `_`\n"
-    ]
-})
+CMD_HELP.update(
+    {
+        "sed": [
+            "Sed",
+            " - `sed<delimiter><old word(s)><delimiter><new word(s)>`: "
+            "Replaces a word or words using sed. You can find more online. "
+            "Delimiters: `/`, `:`, `|`, `_`\n",
+        ]
+    }
+)

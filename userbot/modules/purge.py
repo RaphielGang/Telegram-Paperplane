@@ -1,4 +1,4 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,22 +31,23 @@ async def fastpurger(purg):
                 await purg.client.delete_messages(chat, msgs)
                 msgs = []
     else:
-        await purg.edit("`No message specified.`", )
+        await purg.edit("`No message specified.`")
         return
 
     if msgs:
         await purg.client.delete_messages(chat, msgs)
     done = await purg.client.send_message(
         purg.chat_id,
-        "`Fast purge complete!\n`Purged " + str(count) +
-        " messages. **This auto-generated message " +
-        "  shall be self destructed in 2 seconds.**",
+        "`Fast purge complete!\n`Purged "
+        + str(count)
+        + " messages. **This auto-generated message "
+        + "  shall be self destructed in 2 seconds.**",
     )
 
     if BOTLOG:
         await purg.client.send_message(
-            BOTLOG_CHATID,
-            "Purge of " + str(count) + " messages done successfully.")
+            BOTLOG_CHATID, "Purge of " + str(count) + " messages done successfully."
+        )
     await sleep(2)
     await done.delete()
 
@@ -59,8 +60,7 @@ async def purgeme(delme):
     count = int(message[9:])
     i = 1
 
-    async for message in delme.client.iter_messages(delme.chat_id,
-                                                    from_user='me'):
+    async for message in delme.client.iter_messages(delme.chat_id, from_user="me"):
         if i > count + 1:
             break
         i = i + 1
@@ -68,14 +68,15 @@ async def purgeme(delme):
 
     smsg = await delme.client.send_message(
         delme.chat_id,
-        "`Purge complete!` Purged " + str(count) +
-        " messages. **This auto-generated message " +
-        " shall be self destructed in 2 seconds.**",
+        "`Purge complete!` Purged "
+        + str(count)
+        + " messages. **This auto-generated message "
+        + " shall be self destructed in 2 seconds.**",
     )
     if BOTLOG:
         await delme.client.send_message(
-            BOTLOG_CHATID,
-            "Purge of " + str(count) + " messages done successfully.")
+            BOTLOG_CHATID, "Purge of " + str(count) + " messages done successfully."
+        )
     await sleep(2)
     i = 1
     await smsg.delete()
@@ -92,11 +93,13 @@ async def delete_it(delme):
             await delme.delete()
             if BOTLOG:
                 await delme.client.send_message(
-                    BOTLOG_CHATID, "Deletion of message was successful")
+                    BOTLOG_CHATID, "Deletion of message was successful"
+                )
         except rpcbaseerrors.BadRequestError:
             if BOTLOG:
                 await delme.client.send_message(
-                    BOTLOG_CHATID, "Well, I can't delete a message")
+                    BOTLOG_CHATID, "Well, I can't delete a message"
+                )
 
 
 @register(outgoing=True, pattern="^.sd")
@@ -111,16 +114,18 @@ async def selfdestruct(destroy):
     await sleep(counter)
     await smsg.delete()
     if BOTLOG:
-        await destroy.client.send_message(BOTLOG_CHATID,
-                                          "sd query done successfully")
+        await destroy.client.send_message(BOTLOG_CHATID, "sd query done successfully")
 
 
-CMD_HELP.update({
-    "purge": [
-        "Purge", " - `.purge`: Purge all messages starting from the reply.\n"
-        " - `.purgeme <x>`: Delete x amount of *your* latest messages.\n"
-        " - `.del`: Delete the message you replied to.\n"
-        " - `.sd <x> <msg>`: Create a message that self-destructs in x seconds. "
-        "Keep the seconds under 100 since it puts your bot to sleep."
-    ]
-})
+CMD_HELP.update(
+    {
+        "purge": [
+            "Purge",
+            " - `.purge`: Purge all messages starting from the reply.\n"
+            " - `.purgeme <x>`: Delete x amount of *your* latest messages.\n"
+            " - `.del`: Delete the message you replied to.\n"
+            " - `.sd <x> <msg>`: Create a message that self-destructs in x seconds. "
+            "Keep the seconds under 100 since it puts your bot to sleep.",
+        ]
+    }
+)
