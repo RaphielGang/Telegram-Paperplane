@@ -34,9 +34,9 @@ from userbot.modules.dbhelper import (
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
     "`Bleep blop! This is a bot. Don't fret.\n\n`"
-    "`My master hasn't approved you to PM.`"
-    "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
-    "`As far as I know, he doesn't usually approve retards though.`"
+    "`My owner hasn't approved you to PM. `"
+    "`Please wait for my owner to look in, they mostly approve PMs.\n\n`"
+    "`As far as I know, they don't usually approve retards though.\n\n`"
 )
 # =================================================================
 
@@ -82,9 +82,9 @@ async def permitpm(event):
 
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
-                        "`You were spamming my master's PM, "
-                        " which I don't like.`"
-                        " `I'mma Report Spam.`"
+                        "`You were spamming my owner's PM, "
+                        "which I don't like.`"
+                        " `Reporting you as spam.`"
                     )
 
                     try:
@@ -94,10 +94,9 @@ async def permitpm(event):
                         if BOTLOG:
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "Count PM is seemingly going retard, "
-                                "plis restart bot!",
+                                "PMPermit broke, please restart Paperplane."
                             )
-                        LOGS.info("CountPM wen't rarted boi")
+                        LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
 
                     await event.client(BlockRequest(event.chat_id))
@@ -113,7 +112,7 @@ async def permitpm(event):
                             + "](tg://user?id="
                             + str(event.chat_id)
                             + ")"
-                            + " was just another retarded nibba",
+                            + " was spamming your PM and has been blocked.",
                         )
 
 
@@ -148,7 +147,7 @@ async def notifoff(noff_event):
     """ For .notifoff command, stop getting
         notifications from unapproved PMs. """
     if await notif_off() is False:
-        return await noff_event.edit("`Notifications already silenced!`")
+        return await noff_event.edit("`Notifications are already silenced!`")
 
     return await noff_event.edit("`Notifications silenced!`")
 
@@ -158,7 +157,7 @@ async def notifoff(noff_event):
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
-        return await non_event.edit("`Notifications ain't muted!")
+        return await non_event.edit("`Notifications aren't muted!")
 
     return await non_event.edit("`Notifications unmuted!`")
 
@@ -203,9 +202,9 @@ async def blockpm(block):
         return
 
     if await block_pm(block.chat_id) is False:
-        return await block.edit("`First approve, before blocc'ing`")
+        return await block.edit("`This user isn't approved.`")
 
-    await block.edit("`You are gonna be blocked from PM-ing my Master!`")
+    await block.edit("`You are gonna be blocked from PM-ing my owner!`")
 
     if block.reply_to_msg_id:
         reply = await block.get_reply_message()
@@ -240,12 +239,12 @@ async def unblockpm(unblock):
             return await unblock.edit("`You haven't blocked this user yet!`")
 
         await unblock.client(UnblockRequest(replied_user.user.id))
-        await unblock.edit("`My Master has forgiven you to PM now`")
+        await unblock.edit("`My owner has forgiven you. You can PM them now.`")
 
     if BOTLOG:
         await unblock.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={replied_user.user.id})" " was unblocc'd!.",
+            f"[{name0}](tg://user?id={replied_user.user.id})" " was unblocked!.",
         )
 
 
