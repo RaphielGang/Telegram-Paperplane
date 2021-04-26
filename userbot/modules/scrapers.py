@@ -21,7 +21,7 @@ from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID)
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID
 from userbot.events import register, grp_exclude
 
 # Default language to EN
@@ -31,7 +31,7 @@ LANG = "en"
 @register(outgoing=True, pattern="^.img (.*)")
 @grp_exclude()
 async def img_sampler(event):
-    """ For .img command, search and return images matching the query. """
+    """For .img command, search and return images matching the query."""
     await event.edit("Processing...")
     query = event.pattern_match.group(1)
     lim = findall(r"lim=\d+", query)
@@ -48,14 +48,15 @@ async def img_sampler(event):
         "keywords": query,
         "limit": lim,
         "format": "jpg",
-        "no_directory": "no_directory"
+        "no_directory": "no_directory",
     }
 
     # passing the arguments to the function
     paths = response.download(arguments)
     lst = paths[0][query]
     await event.client.send_file(
-        await event.client.get_input_entity(event.chat_id), lst)
+        await event.client.get_input_entity(event.chat_id), lst
+    )
     rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await event.delete()
 
@@ -63,7 +64,7 @@ async def img_sampler(event):
 @register(outgoing=True, pattern=r"^.google(?: |$)(.*)")
 @grp_exclude()
 async def gsearch(q_event):
-    """ For .google command, do a Google search. """
+    """For .google command, do a Google search."""
     textx = await q_event.get_reply_message()
     query = q_event.pattern_match.group(1)
 
@@ -72,15 +73,16 @@ async def gsearch(q_event):
     elif textx:
         query = textx.text
     else:
-        await q_event.edit("`Pass a query as an argument or reply "
-                           "to a message for Google search!`")
+        await q_event.edit(
+            "`Pass a query as an argument or reply " "to a message for Google search!`"
+        )
         return
 
     await q_event.edit("`Searching...`")
 
     search_args = (str(query), 1)
     googsearch = GoogleSearch()
-    try :
+    try:
         gresults = await googsearch.async_search(*search_args)
         msg = ""
         for i in range(0, 5):
@@ -91,14 +93,14 @@ async def gsearch(q_event):
                 msg += f"{i+1}. [{title}]({link})\n`{desc}`\n\n"
             except IndexError:
                 break
-        await q_event.edit("**Search Query:**\n`" + query + "`\n\n**Results:**\n" +
-                           msg,
-                           link_preview=False)
+        await q_event.edit(
+            "**Search Query:**\n`" + query + "`\n\n**Results:**\n" + msg,
+            link_preview=False,
+        )
     except NoResultsOrTrafficError as error:
         if BOTLOG:
             await q_event.client.send_message(
-                BOTLOG_CHATID,
-                f"`GoogleSearch error: {error}`",
+                BOTLOG_CHATID, f"`GoogleSearch error: {error}`"
             )
         return
     if BOTLOG:
@@ -111,7 +113,7 @@ async def gsearch(q_event):
 @register(outgoing=True, pattern=r"^.wiki (.*)")
 @grp_exclude()
 async def wiki(wiki_q):
-    """ For .google command, fetch content from Wikipedia. """
+    """For .google command, fetch content from Wikipedia."""
     match = wiki_q.pattern_match.group(1)
     try:
         summary(match)
@@ -137,13 +139,14 @@ async def wiki(wiki_q):
     await wiki_q.edit("**Search:**\n`" + match + "`\n\n**Result:**\n" + result)
     if BOTLOG:
         await wiki_q.client.send_message(
-            BOTLOG_CHATID, f"Wiki query {match} was executed successfully")
+            BOTLOG_CHATID, f"Wiki query {match} was executed successfully"
+        )
 
 
 @register(outgoing=True, pattern="^.ud (.*)")
 @grp_exclude()
 async def urban_dict(ud_e):
-    """ For .ud command, fetch content from Urban Dictionary. """
+    """For .ud command, fetch content from Urban Dictionary."""
     await ud_e.edit("Processing...")
     query = ud_e.pattern_match.group(1)
     try:
@@ -159,23 +162,39 @@ async def urban_dict(ud_e):
         if int(meanlen) >= 4096:
             await ud_e.edit("`Output too large, sending as file.`")
             with open("output.txt", "w+") as output_file:
-                output_file.write("Text: " + query + "\n\nMeaning: " + mean[0]["def"] +
-                       "\n\n" + "Example: \n" + mean[0]["example"])
+                output_file.write(
+                    "Text: "
+                    + query
+                    + "\n\nMeaning: "
+                    + mean[0]["def"]
+                    + "\n\n"
+                    + "Example: \n"
+                    + mean[0]["example"]
+                )
 
             await ud_e.client.send_file(
                 ud_e.chat_id,
                 "output.txt",
-                caption="`Output was too large, sent it as a file.`")
+                caption="`Output was too large, sent it as a file.`",
+            )
             if os.path.exists("output.txt"):
                 os.remove("output.txt")
             await ud_e.delete()
             return
-        await ud_e.edit("Text: **" + query + "**\n\nMeaning: **" +
-                        mean[0]["def"] + "**\n\n" + "Example: \n__" +
-                        mean[0]["example"] + "__")
+        await ud_e.edit(
+            "Text: **"
+            + query
+            + "**\n\nMeaning: **"
+            + mean[0]["def"]
+            + "**\n\n"
+            + "Example: \n__"
+            + mean[0]["example"]
+            + "__"
+        )
         if BOTLOG:
             await ud_e.client.send_message(
-                BOTLOG_CHATID, "ud query " + query + " executed successfully.")
+                BOTLOG_CHATID, "ud query " + query + " executed successfully."
+            )
     else:
         await ud_e.edit("No result found for **" + query + "**")
 
@@ -183,7 +202,7 @@ async def urban_dict(ud_e):
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
 @grp_exclude()
 async def text_to_speech(query):
-    """ For .tts command, a wrapper for Google Text-to-Speech. """
+    """For .tts command, a wrapper for Google Text-to-Speech."""
     textx = await query.get_reply_message()
     message = query.pattern_match.group(1)
     if message:
@@ -191,27 +210,30 @@ async def text_to_speech(query):
     elif textx:
         message = textx.text
     else:
-        await query.edit("`Give a text or reply to a "
-                         "message for Text-to-Speech!`")
+        await query.edit("`Give a text or reply to a " "message for Text-to-Speech!`")
         return
 
     try:
-        tts = gTTS(message, tld='com', lang=LANG)
+        tts = gTTS(message, tld="com", lang=LANG)
         tts.save("k.mp3")
     except AssertionError:
-        await query.edit('The text is empty.\n'
-                         'Nothing left to speak after pre-precessing, '
-                         'tokenizing and cleaning.')
+        await query.edit(
+            "The text is empty.\n"
+            "Nothing left to speak after pre-precessing, "
+            "tokenizing and cleaning."
+        )
         return
     except ValueError:
-        await query.edit('Language is not supported.')
+        await query.edit("Language is not supported.")
         return
     except RuntimeError:
-        await query.edit('Error loading the languages dictionary.')
+        await query.edit("Error loading the languages dictionary.")
         return
     except gTTSError:
-        await query.edit('Error in Google Text-to-Speech API request! '
-                         'Check Paperplane logs for details.')
+        await query.edit(
+            "Error in Google Text-to-Speech API request! "
+            "Check Paperplane logs for details."
+        )
         return
 
     with open("k.mp3", "r"):
@@ -219,14 +241,15 @@ async def text_to_speech(query):
         os.remove("k.mp3")
         if BOTLOG:
             await query.client.send_message(
-                BOTLOG_CHATID, "TTS of " + message + " executed successfully!")
+                BOTLOG_CHATID, "TTS of " + message + " executed successfully!"
+            )
         await query.delete()
 
 
 @register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)")
 @grp_exclude()
 async def translateme(trans):
-    """ For .trt command, translate the given text using Google Translate. """
+    """For .trt command, translate the given text using Google Translate."""
     translator = Translator()
     textx = await trans.get_reply_message()
     message = trans.pattern_match.group(1)
@@ -235,8 +258,7 @@ async def translateme(trans):
     elif textx:
         message = textx.text
     else:
-        await trans.edit("`Give a text or reply "
-                         "to a message to translate!`")
+        await trans.edit("`Give a text or reply " "to a message to translate!`")
         return
 
     try:
@@ -245,8 +267,8 @@ async def translateme(trans):
         await trans.edit("Invalid destination language.")
         return
 
-    source_lan = LANGUAGES[f'{reply_text.src.lower()}']
-    transl_lan = LANGUAGES[f'{reply_text.dest.lower()}']
+    source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
+    transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
     reply_text = f"**Source ({source_lan.title()}):**`\n{message}`**\n\
 \nTranslation ({transl_lan.title()}):**`\n{reply_text.text}`"
 
@@ -254,59 +276,63 @@ async def translateme(trans):
     await trans.delete()
     if BOTLOG:
         await trans.client.send_message(
-            BOTLOG_CHATID,
-            f"Translate query {message} was executed successfully",
+            BOTLOG_CHATID, f"Translate query {message} was executed successfully"
         )
 
 
 @register(pattern="^.lang (.*)", outgoing=True)
 @grp_exclude()
 async def lang(value):
-    """ For .lang command, change the default langauge of userbot scrapers. """
+    """For .lang command, change the default langauge of userbot scrapers."""
     global LANG
     LANG = value.pattern_match.group(1)
     await value.edit("Default language changed to **" + LANG + "**")
     if BOTLOG:
         await value.client.send_message(
-            BOTLOG_CHATID, "Default language changed to **" + LANG + "**")
+            BOTLOG_CHATID, "Default language changed to **" + LANG + "**"
+        )
 
 
 def deEmojify(inputString):
-    """ Remove emojis and other non-safe characters from string """
-    return get_emoji_regexp().sub(u'', inputString)
+    """Remove emojis and other non-safe characters from string"""
+    return get_emoji_regexp().sub("", inputString)
 
 
-@register(outgoing=True, pattern=r'^.wolfram (.*)')
+@register(outgoing=True, pattern=r"^.wolfram (.*)")
 @grp_exclude()
 async def wolfram(wvent):
-    """ Wolfram Alpha API """
+    """Wolfram Alpha API"""
     if WOLFRAM_ID is None:
         await wvent.edit(
-            'Please set your WOLFRAM_ID first !\n'
-            'Get your API KEY from [here](https://'
-            'products.wolframalpha.com/api/)',
-            parse_mode='Markdown')
+            "Please set your WOLFRAM_ID first !\n"
+            "Get your API KEY from [here](https://"
+            "products.wolframalpha.com/api/)",
+            parse_mode="Markdown",
+        )
         return
     i = wvent.pattern_match.group(1)
     appid = WOLFRAM_ID
-    server = f'https://api.wolframalpha.com/v1/spoken?appid={appid}&i={i}'
+    server = f"https://api.wolframalpha.com/v1/spoken?appid={appid}&i={i}"
     res = get(server)
-    await wvent.edit(f'**{i}**\n\n' + res.text, parse_mode='Markdown')
+    await wvent.edit(f"**{i}**\n\n" + res.text, parse_mode="Markdown")
     if BOTLOG:
         await wvent.client.send_message(
-            BOTLOG_CHATID, f'.wolfram {i} was executed successfully')
+            BOTLOG_CHATID, f".wolfram {i} was executed successfully"
+        )
 
 
-CMD_HELP.update({
-    "scrapers": [
-        'Scrapers',
-        " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
-        " - `.google <query>`: Search Google for query (argument or reply).\n"
-        " - `.wiki <query>`: Search Wikipedia for query.\n"
-        " - `.ud <query>`: Search on Urban Dictionary for query.\n"
-        " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
-        " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
-        " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
-        " - `.wolfram <query>: Get answers to questions using WolframAlpha Spoken Results API."
-    ]
-})
+CMD_HELP.update(
+    {
+        "scrapers": [
+            "Scrapers",
+            " - `.img <query> lim=<n>`: Do an Image Search on Google and send n results. Default is 2.\n"
+            " - `.google <query>`: Search Google for query (argument or reply).\n"
+            " - `.wiki <query>`: Search Wikipedia for query.\n"
+            " - `.ud <query>`: Search on Urban Dictionary for query.\n"
+            " - `.tts <query>`: Text-to-Speech the query (argument or reply) to the saved language.\n"
+            " - `.trt <query>`: Translate the query (argument or reply) to the saved language.\n"
+            " - `.lang <lang>`: Changes the default language of trt and TTS modules.\n"
+            " - `.wolfram <query>: Get answers to questions using WolframAlpha Spoken Results API.",
+        ]
+    }
+)

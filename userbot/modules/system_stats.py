@@ -24,7 +24,7 @@ DEFAULTUSER = uname().node
 @register(outgoing=True, pattern="^.sysd$")
 @grp_exclude()
 async def sysdetails(sysd):
-    """ For .sysd command, get system info using neofetch. """
+    """For .sysd command, get system info using neofetch."""
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
             fetch = await asyncrunapp(
@@ -42,7 +42,7 @@ async def sysdetails(sysd):
 @register(outgoing=True, pattern="^.botver$")
 @grp_exclude()
 async def bot_ver(event):
-    """ For .botver command, get the bot version. """
+    """For .botver command, get the bot version."""
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
         if which("git") is not None:
             ver = await asyncrunapp(
@@ -72,7 +72,7 @@ async def bot_ver(event):
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
 @grp_exclude()
 async def pipcheck(pip):
-    """ For .pip command, do a pip search. """
+    """For .pip command, do a pip search."""
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
         pipmodule = pip.pattern_match.group(1)
         if pipmodule:
@@ -136,7 +136,7 @@ async def amireallyalive(alive):
 @register(outgoing=True, pattern="^.aliveu")
 @grp_exclude()
 async def amireallyaliveuser(username):
-    """ For .aliveu command, change the username in the .alive command. """
+    """For .aliveu command, change the username in the .alive command."""
     if not username.text[0].isalpha() and username.text[0] not in ("/", "#", "@", "!"):
         message = username.text
         output = ".aliveu [new user without brackets] nor can it be empty"
@@ -151,7 +151,7 @@ async def amireallyaliveuser(username):
 @register(outgoing=True, pattern="^.resetalive$")
 @grp_exclude()
 async def amireallyalivereset(ureset):
-    """ For .resetalive command, reset the username in the .alive command. """
+    """For .resetalive command, reset the username in the .alive command."""
     if not ureset.text[0].isalpha() and ureset.text[0] not in ("/", "#", "@", "!"):
         global DEFAULTUSER
         DEFAULTUSER = uname().node

@@ -24,7 +24,7 @@ kickstart_pub
 req_install() {
     pip3 install --upgrade setuptools pip
     pip3 install -r requirements.txt
-    pip3 install yapf
+    pip3 install black
 }
 
 test_run() {
@@ -35,11 +35,11 @@ test_run() {
 
 tg_senderror() {
     if [ ! -z "$PULL_REQUEST_NUMBER" ]; then
-        tg_sendinfo "<code>This PR is having build issues and won't be merged until it's fixed<code>"
+        tg_sendinfo "<code>This PR is having build issues and won't be merged until it's fixed!<code>"
         exit 1
     fi
     tg_sendinfo "<code>Build Throwing Error(s)!</code>" \
-        "${REVIEWERS} please look in!" \
+        "${REVIEWERS} please take a look!" \
         "Logs: https://semaphoreci.com/zakaryan2004/telegram-paperplane"
 
     [ -n "${STATUS}" ] &&
@@ -48,12 +48,12 @@ tg_senderror() {
 }
 
 lint() {
-  RESULT=`yapf -d -r -p userbot`
+  RESULT=`black --check .`
 
-  if [ ! -z "$RESULT" ]; then
-    tg_sendinfo "<code>Code has lint issues, but hasn't been linted.</code>"
+  if $RESULT; then
+    tg_sendinfo "<code>Code doesn't have any formatting issues. [black]</code>"
   else
-    tg_sendinfo "<code>Code doesn't have any lint issues.</code>"
+    tg_sendinfo "<code>Code has formatting issues, but hasn't been formatted. [black]</code>"
   fi
 }
 

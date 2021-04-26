@@ -119,7 +119,7 @@ CHATUNLOCK_RIGHTS = ChatBannedRights(
 @register(outgoing=True, group_only=True, pattern="^.setgrouppic$")
 @grp_exclude()
 async def set_group_photo(gpic):
-    """ For .setgrouppic command, changes the picture of a group """
+    """For .setgrouppic command, changes the picture of a group"""
     replymsg = await gpic.get_reply_message()
     chat = await gpic.get_chat()
     photo = None
@@ -150,7 +150,7 @@ async def set_group_photo(gpic):
 @register(outgoing=True, group_only=True, pattern="^.promote(?: |$)(.*)")
 @grp_exclude()
 async def promote(promt):
-    """ For .promote command, do promote targeted person """
+    """For .promote command, do promote targeted person"""
     # Get targeted chat
     chat = await promt.get_chat()
     # Grab admin status or creator in a chat
@@ -205,7 +205,7 @@ async def promote(promt):
 @register(outgoing=True, group_only=True, pattern="^.demote(?: |$)(.*)")
 @grp_exclude()
 async def demote(dmod):
-    """ For .demote command, do demote targeted person """
+    """For .demote command, do demote targeted person"""
     # Admin right check
     chat = await dmod.get_chat()
     admin = chat.admin_rights
@@ -257,7 +257,7 @@ async def demote(dmod):
 @register(outgoing=True, group_only=True, pattern="^.ban(?: |$)(.*)")
 @grp_exclude()
 async def ban(bon):
-    """ For .ban command, do a ban at targeted person """
+    """For .ban command, do a ban at targeted person"""
     # Here laying the sanity check
     chat = await bon.get_chat()
     admin = chat.admin_rights
@@ -310,7 +310,7 @@ async def ban(bon):
 @register(outgoing=True, group_only=True, pattern="^.unban(?: |$)(.*)")
 @grp_exclude()
 async def nothanos(unbon):
-    """ For .unban command, unban the target """
+    """For .unban command, unban the target"""
     # Here laying the sanity check
     chat = await unbon.get_chat()
     admin = chat.admin_rights
@@ -418,7 +418,7 @@ async def spider(spdr):
 @register(outgoing=True, group_only=True, pattern="^.unmute(?: |$)(.*)")
 @grp_exclude()
 async def unmoot(unmot):
-    """ For .unmute command, unmute the target """
+    """For .unmute command, unmute the target"""
     # Admin or creator check
     chat = await unmot.get_chat()
     admin = chat.admin_rights
@@ -463,7 +463,7 @@ async def unmoot(unmot):
 @register(incoming=True, disable_errors=True)
 @grp_exclude()
 async def muter(moot):
-    """ Used for deleting the messages of muted people """
+    """Used for deleting the messages of muted people"""
     if not is_mongo_alive() or not is_redis_alive():
         return
     muted = await get_muted(moot.chat_id)
@@ -505,7 +505,7 @@ async def muter(moot):
 @register(outgoing=True, group_only=True, pattern="^.ungmute(?: |$)(.*)")
 @grp_exclude()
 async def ungmoot(un_gmute):
-    """ For .ungmute command, ungmutes the target in the userbot """
+    """For .ungmute command, ungmutes the target in the userbot"""
 
     # Check if the function running under SQL mode
     if not is_mongo_alive() or not is_redis_alive():
@@ -539,7 +539,7 @@ async def ungmoot(un_gmute):
 @register(outgoing=True, group_only=True, pattern="^.gmute(?: |$)(.*)")
 @grp_exclude()
 async def gspider(gspdr):
-    """ For .gmute command, gmutes the target in the userbot """
+    """For .gmute command, gmutes the target in the userbot"""
 
     # Check if the function running under SQL mode
     if not is_mongo_alive() or not is_redis_alive():
@@ -571,7 +571,7 @@ async def gspider(gspdr):
 @register(outgoing=True, group_only=True, pattern="^.delusers(?: |$)(.*)")
 @grp_exclude()
 async def rm_deletedacc(show):
-    """ For .delusers command, clean deleted accounts. """
+    """For .delusers command, clean deleted accounts."""
     con = show.pattern_match.group(1)
     del_u = 0
     del_status = "`No deleted accounts found, the group is clean!`"
@@ -631,7 +631,7 @@ async def rm_deletedacc(show):
 @register(outgoing=True, group_only=True, pattern="^.adminlist$")
 @grp_exclude()
 async def get_admin(show):
-    """ For .adminlist command, list all of the admins of the chat. """
+    """For .adminlist command, list all of the admins of the chat."""
     info = await show.client.get_entity(show.chat_id)
     title = info.title if info.title else "this chat"
     mentions = f"<b>Admins in {title}:</b> \n"
@@ -654,7 +654,7 @@ async def get_admin(show):
 @register(outgoing=True, group_only=True, pattern="^.pin(?: |$)(.*)")
 @grp_exclude()
 async def pin(msg):
-    """ .pin pins the replied to message at the top of the chat. """
+    """.pin pins the replied to message at the top of the chat."""
     # Admin or creator check
     chat = await msg.get_chat()
     admin = chat.admin_rights
@@ -700,7 +700,7 @@ async def pin(msg):
 @register(outgoing=True, group_only=True, pattern="^.kick(?: |$)(.*)")
 @grp_exclude()
 async def kick(usr):
-    """ For .kick command, kick someone from the group using the userbot. """
+    """For .kick command, kick someone from the group using the userbot."""
     # Admin or creator check
     chat = await usr.get_chat()
     admin = chat.admin_rights
@@ -742,7 +742,7 @@ async def kick(usr):
 
 @register(outgoing=True, group_only=True, pattern="^.lock$")
 async def emergency_lock(lock):
-    """ For emergency-locking a chat """
+    """For emergency-locking a chat"""
     # Admin or creator check
     chat = await lock.get_chat()
     admin = chat.admin_rights
@@ -771,7 +771,7 @@ async def emergency_lock(lock):
 
 @register(outgoing=True, group_only=True, pattern="^.unlock$")
 async def chat_unlock(unlock):
-    """ For unlocking a chat """
+    """For unlocking a chat"""
     # Admin or creator check
     chat = await unlock.get_chat()
     admin = chat.admin_rights
@@ -799,7 +799,7 @@ async def chat_unlock(unlock):
 
 
 async def get_user_from_event(event):
-    """ Get the user from argument or replied message. """
+    """Get the user from argument or replied message."""
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         user_obj = await event.client.get_entity(previous_message.from_id)
@@ -830,7 +830,7 @@ async def get_user_from_event(event):
 
 
 async def get_user_from_id(user, event):
-    """ Getting user from user ID """
+    """Getting user from user ID"""
     if isinstance(user, str):
         user = int(user)
 

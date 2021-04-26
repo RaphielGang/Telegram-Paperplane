@@ -12,7 +12,7 @@ from userbot.events import register, grp_exclude
 @register(outgoing=True, pattern="^.help(?: |$)(.*)")
 @grp_exclude()
 async def help(event):
-    """ For .help command"""
+    """For .help command"""
     args = event.pattern_match.group(1).lower()
 
     if args:

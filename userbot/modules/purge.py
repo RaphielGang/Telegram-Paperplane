@@ -16,7 +16,7 @@ from userbot.events import register, grp_exclude
 @register(outgoing=True, pattern="^.purge$")
 @grp_exclude()
 async def fastpurger(purg):
-    """ For .purge command, purge all messages starting from the reply. """
+    """For .purge command, purge all messages starting from the reply."""
     chat = await purg.get_input_chat()
     msgs = []
     itermsg = purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
@@ -55,7 +55,7 @@ async def fastpurger(purg):
 @register(outgoing=True, pattern="^.purgeme")
 @grp_exclude()
 async def purgeme(delme):
-    """ For .purgeme, delete x count of your latest message."""
+    """For .purgeme, delete x count of your latest message."""
     message = delme.text
     count = int(message[9:])
     i = 1
@@ -85,7 +85,7 @@ async def purgeme(delme):
 @register(outgoing=True, pattern="^.del$")
 @grp_exclude()
 async def delete_it(delme):
-    """ For .del command, delete the replied message. """
+    """For .del command, delete the replied message."""
     msg_src = await delme.get_reply_message()
     if delme.reply_to_msg_id:
         try:
@@ -105,7 +105,7 @@ async def delete_it(delme):
 @register(outgoing=True, pattern="^.sd")
 @grp_exclude()
 async def selfdestruct(destroy):
-    """ For .sd command, make self-destructable messages. """
+    """For .sd command, make self-destructable messages."""
     message = destroy.text
     counter = int(message[4:6])
     text = str(destroy.text[6:])

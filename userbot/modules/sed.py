@@ -18,7 +18,7 @@ DELIMITERS = ("/", ":", "|", "_")
 
 
 def separate_sed(sed_string):
-    """ Separate sed arguments. """
+    """Separate sed arguments."""
     if (
         len(sed_string) > 3
         and sed_string[3] in DELIMITERS
@@ -68,24 +68,20 @@ def separate_sed(sed_string):
 @register(outgoing=True, pattern="^sed", ignore_unsafe=True)
 @grp_exclude()
 async def sed(command):
-    """ For sed command, use sed on Telegram. """
+    """For sed command, use sed on Telegram."""
     sed_result = separate_sed(command.text)
     textx = await command.get_reply_message()
     if sed_result:
         if textx:
             to_fix = textx.text
         else:
-            await command.edit(
-                "`I don't have brains. Well you don't too, I guess.`"
-            )
+            await command.edit("`I don't have brains. Well you don't too, I guess.`")
             return
 
         repl, repl_with, flags = sed_result
 
         if not repl:
-            await command.edit(
-                "`I don't have brains. Well you don't too, I guess.`"
-            )
+            await command.edit("`I don't have brains. Well you don't too, I guess.`")
             return
 
         try:

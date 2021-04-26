@@ -58,7 +58,7 @@ LastLog = False
 @register(outgoing=True, pattern="^.lastfm$")
 @grp_exclude()
 async def last_fm(lastFM):
-    """ For .lastfm command, fetch scrobble data from last.fm. """
+    """For .lastfm command, fetch scrobble data from last.fm."""
     await lastFM.edit("Processing...")
     preview = None
     playing = User(LASTFM_USERNAME, lastfm).get_now_playing()

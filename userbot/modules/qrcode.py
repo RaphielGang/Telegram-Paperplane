@@ -19,7 +19,7 @@ from userbot.events import register, grp_exclude
 
 
 def progress(current, total):
-    """ Calculate and return the download progress with given arguments. """
+    """Calculate and return the download progress with given arguments."""
     print(
         "Downloaded {} of {}\nCompleted {}".format(
             current, total, (current / total) * 100
@@ -30,7 +30,7 @@ def progress(current, total):
 @register(pattern=r"^.getqr$", outgoing=True)
 @grp_exclude()
 async def parseqr(qr_e):
-    """ For .getqr command, get QR Code content from the replied photo. """
+    """For .getqr command, get QR Code content from the replied photo."""
     if qr_e.fwd_from:
         return
     start = datetime.now()
@@ -54,7 +54,7 @@ async def parseqr(qr_e):
 @register(pattern=r"^.makeqr(?: |$)([\s\S]*)", outgoing=True)
 @grp_exclude()
 async def make_qr(qrcode):
-    """ For .makeqr command, make a QR Code containing the given content. """
+    """For .makeqr command, make a QR Code containing the given content."""
     if qrcode.fwd_from:
         return
     start = datetime.now()

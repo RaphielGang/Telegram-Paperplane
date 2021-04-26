@@ -15,7 +15,7 @@ from userbot.modules.dbhelper import add_note, delete_note, get_note, get_notes
 @register(outgoing=True, pattern="^.saved$")
 @grp_exclude()
 async def notes_active(event):
-    """ For .saved command, list all of the notes saved in a chat. """
+    """For .saved command, list all of the notes saved in a chat."""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
@@ -35,7 +35,7 @@ async def notes_active(event):
 @register(outgoing=True, pattern=r"^.clear (\w*)")
 @grp_exclude()
 async def remove_notes(event):
-    """ For .clear command, clear note with the given name."""
+    """For .clear command, clear note with the given name."""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
@@ -49,7 +49,7 @@ async def remove_notes(event):
 @register(outgoing=True, pattern=r"^.save (\w*)")
 @grp_exclude()
 async def add_filter(event):
-    """ For .save command, saves notes in a chat. """
+    """For .save command, saves notes in a chat."""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
@@ -70,7 +70,7 @@ async def add_filter(event):
 @register(outgoing=True, pattern=r"^.note (\w*)")
 @grp_exclude()
 async def save_note(event):
-    """ For .save command, saves notes in a chat. """
+    """For .save command, saves notes in a chat."""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
@@ -85,7 +85,7 @@ async def save_note(event):
 @register(pattern=r"#\w*", disable_edited=True, ignore_unsafe=True, disable_errors=True)
 @grp_exclude()
 async def note_check(event):
-    """ Notes logic. """
+    """Notes logic."""
     try:
         if not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():

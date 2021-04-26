@@ -17,8 +17,8 @@ from userbot.events import register, grp_exclude
 @register(outgoing=True, pattern="^.hash (.*)")
 @grp_exclude()
 async def gethash(hash_q):
-    """ For .hash command, find the md5,
-        sha1, sha256, sha512 of the string. """
+    """For .hash command, find the md5,
+    sha1, sha256, sha512 of the string."""
     hashtxt_ = hash_q.pattern_match.group(1)
     with open("hashdis.txt", "w+") as hashtxt:
         hashtxt.write(hashtxt_)
@@ -61,7 +61,7 @@ async def gethash(hash_q):
 @register(outgoing=True, pattern="^.base64 (en|de) (.*)")
 @grp_exclude()
 async def endecrypt(query):
-    """ For .base64 command, find the base64 encoding of the given string. """
+    """For .base64 command, find the base64 encoding of the given string."""
     if query.pattern_match.group(1) == "en":
         lething = str(pybase64.b64encode(bytes(query.pattern_match.group(2), "utf-8")))[
             2:

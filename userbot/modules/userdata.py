@@ -38,7 +38,7 @@ USERNAME_TAKEN = "```This username is already taken.```"
 @register(outgoing=True, pattern="^.name")
 @grp_exclude()
 async def update_name(name):
-    """ For .name command, change your name in Telegram. """
+    """For .name command, change your name in Telegram."""
     newname = name.text[6:]
     if " " not in newname:
         firstname = newname
@@ -55,7 +55,7 @@ async def update_name(name):
 @register(outgoing=True, pattern="^.profilepic$")
 @grp_exclude()
 async def set_profilepic(propic):
-    """ For .profilepic command, change your profile picture in Telegram. """
+    """For .profilepic command, change your profile picture in Telegram."""
     replymsg = await propic.get_reply_message()
     photo = None
     if replymsg.media:
@@ -82,7 +82,7 @@ async def set_profilepic(propic):
 @register(outgoing=True, pattern="^.setbio (.*)")
 @grp_exclude()
 async def set_biograph(setbio):
-    """ For .setbio command, set a new bio for your profile in Telegram. """
+    """For .setbio command, set a new bio for your profile in Telegram."""
     newbio = setbio.pattern_match.group(1)
     await bot(UpdateProfileRequest(about=newbio))
     await setbio.edit(BIO_SUCCESS)
@@ -91,7 +91,7 @@ async def set_biograph(setbio):
 @register(outgoing=True, pattern="^.username (.*)")
 @grp_exclude()
 async def update_username(username):
-    """ For .username command, set a new username in Telegram. """
+    """For .username command, set a new username in Telegram."""
     newusername = username.pattern_match.group(1)
     try:
         await bot(UpdateUsernameRequest(newusername))
@@ -103,8 +103,8 @@ async def update_username(username):
 @register(outgoing=True, pattern=r"^.delpfp")
 @grp_exclude()
 async def remove_profilepic(delpfp):
-    """ For .delpfp command, delete your current
-        profile picture in Telegram. """
+    """For .delpfp command, delete your current
+    profile picture in Telegram."""
     group = delpfp.text[8:]
     if group == "all":
         lim = 0

@@ -17,7 +17,7 @@ from userbot.events import register, grp_exclude
 @register(outgoing=True, pattern="^.eval(?: |$)(.*)")
 @grp_exclude()
 async def evaluate(query):
-    """ For .eval command, evaluates the given Python expression. """
+    """For .eval command, evaluates the given Python expression."""
     if query.is_channel and not query.is_group:
         await query.edit("`Eval isn't permitted on channels!`")
         return
@@ -74,7 +74,7 @@ async def evaluate(query):
 @register(outgoing=True, pattern=r"^.exec(?: |$)([\s\S]*)")
 @grp_exclude()
 async def run(run_q):
-    """ For .exec command, which executes the dynamically created program """
+    """For .exec command, which executes the dynamically created program"""
     code = run_q.pattern_match.group(1)
 
     if run_q.is_channel and not run_q.is_group:
@@ -140,7 +140,7 @@ execute. Use .help exec for an example.```"
 @register(outgoing=True, pattern="^.term(?: |$)(.*)")
 @grp_exclude()
 async def terminal_runner(term):
-    """ For .term command, runs bash commands and scripts on your server. """
+    """For .term command, runs bash commands and scripts on your server."""
     curruser = getuser()
     command = term.pattern_match.group(1)
     try:

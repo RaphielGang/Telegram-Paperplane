@@ -94,7 +94,7 @@ async def permitpm(event):
                         if BOTLOG:
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "PMPermit broke, please restart Paperplane."
+                                "PMPermit broke, please restart Paperplane.",
                             )
                         LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
@@ -119,7 +119,7 @@ async def permitpm(event):
 @register(disable_edited=True, outgoing=True, disable_errors=True)
 @grp_exclude()
 async def auto_accept(event):
-    """ Will approve automatically if you texted them first. """
+    """Will approve automatically if you texted them first."""
     if event.is_private:
         chat = await event.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
@@ -144,8 +144,8 @@ async def auto_accept(event):
 @register(outgoing=True, pattern="^.notifoff$")
 @grp_exclude()
 async def notifoff(noff_event):
-    """ For .notifoff command, stop getting
-        notifications from unapproved PMs. """
+    """For .notifoff command, stop getting
+    notifications from unapproved PMs."""
     if await notif_off() is False:
         return await noff_event.edit("`Notifications are already silenced!`")
 
@@ -155,7 +155,7 @@ async def notifoff(noff_event):
 @register(outgoing=True, pattern="^.notifon$")
 @grp_exclude()
 async def notifon(non_event):
-    """ For .notifoff command, get notifications from unapproved PMs. """
+    """For .notifoff command, get notifications from unapproved PMs."""
     if await notif_on() is False:
         return await non_event.edit("`Notifications aren't muted!")
 
@@ -165,7 +165,7 @@ async def notifon(non_event):
 @register(outgoing=True, pattern="^.approve$")
 @grp_exclude()
 async def approvepm(apprvpm):
-    """ For .approve command, give someone the permissions to PM you. """
+    """For .approve command, give someone the permissions to PM you."""
     if not is_mongo_alive() or not is_redis_alive():
         await apprvpm.edit("`Database connections failing!`")
         return
@@ -196,7 +196,7 @@ async def approvepm(apprvpm):
 @register(outgoing=True, pattern="^.block$")
 @grp_exclude()
 async def blockpm(block):
-    """ For .block command, block people from PMing you! """
+    """For .block command, block people from PMing you!"""
     if not is_mongo_alive() or not is_redis_alive():
         await block.edit("`Database connections failing!`")
         return
@@ -230,7 +230,7 @@ async def blockpm(block):
 @register(outgoing=True, pattern="^.unblock$")
 @grp_exclude()
 async def unblockpm(unblock):
-    """ For .unblock command, let people PMing you again! """
+    """For .unblock command, let people PMing you again!"""
     if unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))

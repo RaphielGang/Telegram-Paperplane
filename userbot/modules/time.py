@@ -24,7 +24,7 @@ DB_FAILED = "`Database connections failed!`"
 
 # ===== CONSTANT =====
 async def get_tz(con):
-    """ Get time zone of the given country. """
+    """Get time zone of the given country."""
     if "(Uk)" in con:
         con = con.replace("Uk", "UK")
     if "(Us)" in con:
@@ -51,10 +51,10 @@ async def get_tz(con):
 @register(outgoing=True, pattern="^.time(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
 @grp_exclude()
 async def time_func(tdata):
-    """ For .time command, return the time of
-        1. The country passed as an argument,
-        2. The default userbot country(set it by using .settime),
-        3. The server where the userbot runs.
+    """For .time command, return the time of
+    1. The country passed as an argument,
+    2. The default userbot country(set it by using .settime),
+    3. The server where the userbot runs.
     """
     con = tdata.pattern_match.group(1).title()
     tz_num = tdata.pattern_match.group(2)
@@ -122,10 +122,10 @@ async def time_func(tdata):
 @register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
 @grp_exclude()
 async def date_func(dat):
-    """ For .date command, return the date of
-        1. The country passed as an argument,
-        2. The default userbot country(set it by using .settime),
-        3. The server where the userbot runs.
+    """For .date command, return the date of
+    1. The country passed as an argument,
+    2. The default userbot country(set it by using .settime),
+    3. The server where the userbot runs.
     """
     con = dat.pattern_match.group(1).title()
     tz_num = dat.pattern_match.group(2)
@@ -193,8 +193,8 @@ async def date_func(dat):
 @register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
 @grp_exclude()
 async def set_time_country(loc):
-    """ For .settime command, change the default userbot
-        country for date and time commands. """
+    """For .settime command, change the default userbot
+    country for date and time commands."""
     if not is_mongo_alive() or not is_redis_alive():
         await loc.edit(DB_FAILED)
         return

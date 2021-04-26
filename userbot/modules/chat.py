@@ -16,7 +16,7 @@ from userbot.events import register, grp_exclude
 @register(outgoing=True, pattern="^.userid$")
 @grp_exclude()
 async def useridgetter(target):
-    """ For .userid command, returns the ID of the target user. """
+    """For .userid command, returns the ID of the target user."""
     message = await target.get_reply_message()
     if message:
         if not message.forward:
@@ -38,15 +38,15 @@ async def useridgetter(target):
 @register(outgoing=True, pattern="^.chatid$")
 @grp_exclude()
 async def chatidgetter(chat):
-    """ For .chatid, returns the ID of the chat you are in at that moment. """
+    """For .chatid, returns the ID of the chat you are in at that moment."""
     await chat.edit("Chat ID: `" + str(chat.chat_id) + "`")
 
 
 @register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
 @grp_exclude()
 async def log(log_text):
-    """ For .log command, forwards a message
-     or the command argument to the bot logs group """
+    """For .log command, forwards a message
+    or the command argument to the bot logs group"""
     if BOTLOG:
         if log_text.reply_to_msg_id:
             reply_msg = await log_text.get_reply_message()
@@ -68,7 +68,7 @@ async def log(log_text):
 @register(outgoing=True, pattern="^.kickme$")
 @grp_exclude()
 async def kickme(leave):
-    """ Basically it's .kickme command """
+    """Basically it's .kickme command"""
     await leave.edit("`Nope, no, no, I go away`")
     await bot(LeaveChannelRequest(leave.chat_id))
 

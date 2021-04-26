@@ -24,7 +24,7 @@ PACK_DOESNT_EXIST = "  A <strong>Telegram</strong> user has created the <strong>
 @register(outgoing=True, pattern="^.kang($| )?((?![0-9]).+?)? ?([0-9]*)?")
 @grp_exclude()
 async def kang(event):
-    """ Function for .kang command, create a sticker pack and add stickers. """
+    """Function for .kang command, create a sticker pack and add stickers."""
     await event.edit("`Kanging...`")
     user = await bot.get_me()
     pack_username = ""
@@ -238,7 +238,7 @@ async def newpack(is_anim, sticker, emoji, packtitle, packname):
 
 
 async def resize_photo(photo):
-    """ Resize the given photo to 512x512 """
+    """Resize the given photo to 512x512"""
     image = Image.open(photo)
     maxsize = (512, 512)
     if (image.width and image.height) < 512:
