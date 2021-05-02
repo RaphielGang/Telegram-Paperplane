@@ -20,7 +20,7 @@ from userbot.modules.dbhelper import get_exclude
 
 
 def register(**args):
-    """ Register a new event. """
+    """Register a new event."""
     pattern = args.get("pattern", None)
     disable_edited = args.get("disable_edited", False)
     ignore_unsafe = args.get("ignore_unsafe", False)
@@ -144,7 +144,7 @@ def register(**args):
 
 
 def grp_exclude(force_exclude=False):
-    """ Check if the chat is excluded. """
+    """Check if the chat is excluded."""
 
     def decorator(func):
         async def wrapper(check):

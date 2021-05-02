@@ -18,7 +18,7 @@ from userbot.events import register, grp_exclude
 @register(outgoing=True, pattern="^.speed$")
 @grp_exclude()
 async def speedtst(spd):
-    """ For .speed command, use SpeedTest to check server speeds. """
+    """For .speed command, use SpeedTest to check server speeds."""
     await spd.edit("`Running speed test . . .`")
     test = speedtest.Speedtest()
 
@@ -60,7 +60,7 @@ def speed_convert(size):
 @register(outgoing=True, pattern="^.nearestdc$")
 @grp_exclude()
 async def neardc(event):
-    """ For .nearestdc command, get the nearest datacenter information. """
+    """For .nearestdc command, get the nearest datacenter information."""
     result = await event.client(functions.help.GetNearestDcRequest())
     await event.edit(
         f"Country : `{result.country}` \n"
@@ -72,7 +72,7 @@ async def neardc(event):
 @register(outgoing=True, pattern="^.pingme$")
 @grp_exclude()
 async def pingme(pong):
-    """ FOr .pingme command, ping the userbot from any chat.  """
+    """FOr .pingme command, ping the userbot from any chat."""
     start = datetime.now()
     await pong.edit("`Pong!`")
     end = datetime.now()

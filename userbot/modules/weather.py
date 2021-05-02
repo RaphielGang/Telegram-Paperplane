@@ -44,7 +44,7 @@ async def get_tz(con):
 @register(outgoing=True, pattern="^.weather(?: |$)(.*)")
 @grp_exclude()
 async def fetch_weather(weather):
-    """ For .weather command, gets the current weather of a city. """
+    """For .weather command, gets the current weather of a city."""
     if OWM_API is None:
         await weather.edit(NO_API_KEY)
         return
@@ -143,8 +143,8 @@ async def fetch_weather(weather):
 @register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
 @grp_exclude()
 async def set_default_city(city):
-    """ For .setcity command, change the default
-        city for weather command. """
+    """For .setcity command, change the default
+    city for weather command."""
     if not is_mongo_alive() or not is_redis_alive():
         await city.edit(DB_FAILED)
         return

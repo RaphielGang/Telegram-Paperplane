@@ -17,8 +17,8 @@ from userbot.modules.dbhelper import afk, afk_reason, is_afk, no_afk
 @register(incoming=True, disable_edited=True, disable_errors=True)
 @grp_exclude()
 async def mention_afk(mention):
-    """ This function takes care of notifying the
-     people who mention you that you are AFK."""
+    """This function takes care of notifying the
+    people who mention you that you are AFK."""
 
     global COUNT_MSG
     global USERS

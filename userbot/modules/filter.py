@@ -15,7 +15,7 @@ from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
 @register(incoming=True, disable_errors=True)
 @grp_exclude()
 async def filter_incoming_handler(handler):
-    """ Checks if the incoming message contains handler of a filter """
+    """Checks if the incoming message contains handler of a filter"""
     try:
         if not (await handler.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
@@ -39,7 +39,7 @@ async def filter_incoming_handler(handler):
 @register(outgoing=True, pattern="^.filter\\s.*")
 @grp_exclude()
 async def add_new_filter(event):
-    """ Command for adding a new filter """
+    """Command for adding a new filter"""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
@@ -63,7 +63,7 @@ async def add_new_filter(event):
 @register(outgoing=True, pattern="^.stop\\s.*")
 @grp_exclude()
 async def remove_filter(event):
-    """ Command for removing a filter """
+    """Command for removing a filter"""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
@@ -105,7 +105,7 @@ async def kick_marie_filter(event):
 @register(outgoing=True, pattern="^.filters$")
 @grp_exclude()
 async def filters_active(event):
-    """ For .filters command, lists all of the active filters in a chat. """
+    """For .filters command, lists all of the active filters in a chat."""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return

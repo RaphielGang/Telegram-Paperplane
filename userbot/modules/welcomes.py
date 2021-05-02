@@ -19,7 +19,7 @@ from userbot.events import grp_exclude
 @bot.on(ChatAction)
 @grp_exclude()
 async def welcome_mute(welcm):
-    """ Ban a recently joined user if it matches the spammer checking algorithm."""
+    """Ban a recently joined user if it matches the spammer checking algorithm."""
     try:
         if not WELCOME_MUTE:
             return

@@ -17,8 +17,8 @@ DOGBIN_URL = "https://del.dog/"
 @register(outgoing=True, pattern=r"^.paste(?: |$)([\s\S]*)")
 @grp_exclude()
 async def paste(pstl):
-    """ For .paste command, allows using
-        dogbin functionality with the command. """
+    """For .paste command, allows using
+    dogbin functionality with the command."""
     dogbin_final_url = ""
 
     match = pstl.pattern_match.group(1).strip()
@@ -63,8 +63,8 @@ async def paste(pstl):
 @register(outgoing=True, pattern="^.getpaste(?: |$)(.*)")
 @grp_exclude()
 async def get_dogbin_content(dog_url):
-    """ For .get_dogbin_content command,
-        fetches the content of a dogbin URL. """
+    """For .get_dogbin_content command,
+    fetches the content of a dogbin URL."""
     textx = await dog_url.get_reply_message()
     message = dog_url.pattern_match.group(1)
     await dog_url.edit("`Getting dogbin content . . .`")

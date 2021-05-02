@@ -35,7 +35,7 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./")
 
 
 def progress(current, total):
-    """ Logs the download progress """
+    """Logs the download progress"""
     LOGS.info(
         "Downloaded %s of %s\nCompleted %s", current, total, (current / total) * 100
     )
@@ -161,7 +161,7 @@ async def gdrive_upload(filename: str, filebuf: BytesIO = None) -> str:
 @register(pattern=r"^.mirror(?: |$)([\s\S]*)", outgoing=True)
 @grp_exclude()
 async def gdrive_mirror(request):
-    """ Download a file and upload to Google Drive """
+    """Download a file and upload to Google Drive"""
     message = request.pattern_match.group(1)
     if not request.reply_to_msg_id and not message:
         await request.edit("`Usage: .mirror <url> <url>`")
@@ -198,7 +198,7 @@ async def gdrive_mirror(request):
 @register(pattern=r"^.drive(?: |$)(\S*.?\/*.?\.?[A-Za-z0-9]*)", outgoing=True)
 @grp_exclude()
 async def gdrive(request):
-    """ Upload files from server to Google Drive """
+    """Upload files from server to Google Drive"""
     path = request.pattern_match.group(1)
     if not path:
         await request.edit("`Usage: .drive <file>`")
@@ -215,7 +215,7 @@ async def gdrive(request):
 @register(pattern=r"^.download(?: |$)(.*)", outgoing=True)
 @grp_exclude()
 async def download(target_file):
-    """ For .download command, download files to the userbot's server. """
+    """For .download command, download files to the userbot's server."""
     if target_file.fwd_from:
         return
     await target_file.edit("Processing ...")
@@ -246,8 +246,8 @@ async def download(target_file):
 @register(pattern=r"^.uploadir (.*)", outgoing=True)
 @grp_exclude()
 async def uploadir(udir_event):
-    """ For .uploadir command, allows you to upload
-     everything from a folder in the server"""
+    """For .uploadir command, allows you to upload
+    everything from a folder in the server"""
     if udir_event.fwd_from:
         return
     input_str = udir_event.pattern_match.group(1)
@@ -357,7 +357,7 @@ async def upload(u_event):
 
 
 def get_video_thumb(file, output=None, width=90):
-    """ Get video thhumbnail """
+    """Get video thumbnail"""
     metadata = extractMetadata(createParser(file))
     popen = subprocess.Popen(
         [
@@ -383,7 +383,7 @@ def get_video_thumb(file, output=None, width=90):
 
 
 def extract_w_h(file):
-    """ Get width and height of media """
+    """Get width and height of media"""
     command_to_run = [
         "ffprobe",
         "-v",

@@ -20,7 +20,7 @@ GITHUB = "https://github.com"
 @register(outgoing=True, pattern="^.magisk$")
 @grp_exclude()
 async def magisk(request):
-    """ magisk latest releases """
+    """magisk latest releases"""
     url = "https://raw.githubusercontent.com/topjohnwu/magisk_files/"
     releases = "Latest Magisk Releases:\n"
     for variant in ["master/stable", "master/beta"]:
@@ -37,7 +37,7 @@ async def magisk(request):
 @register(outgoing=True, pattern=r"^.device(?: |$)(\S*)")
 @grp_exclude()
 async def device_info(request):
-    """ get android device basic info from its codename """
+    """get android device basic info from its codename"""
     textx = await request.get_reply_message()
     codename = request.pattern_match.group(1)
     if codename:
@@ -70,7 +70,7 @@ async def device_info(request):
 @register(outgoing=True, pattern=r"^.codename(?: |)([\S]*)(?: |)([\s\S]*)")
 @grp_exclude()
 async def codename_info(request):
-    """ search for android codename """
+    """search for android codename"""
     textx = await request.get_reply_message()
     brand = request.pattern_match.group(1).lower()
     device = request.pattern_match.group(2).lower()
@@ -115,7 +115,7 @@ async def codename_info(request):
 @register(outgoing=True, pattern=r"^.specs(?: |)([\S]*)(?: |)([\s\S]*)")
 @grp_exclude()
 async def devices_specifications(request):
-    """ Mobile devices specifications """
+    """Mobile devices specifications"""
     textx = await request.get_reply_message()
     brand = request.pattern_match.group(1).lower()
     device = request.pattern_match.group(2).lower()
@@ -176,7 +176,7 @@ async def devices_specifications(request):
 @register(outgoing=True, pattern=r"^.twrp(?: |$)(\S*)")
 @grp_exclude()
 async def twrp(request):
-    """ get android device twrp """
+    """get android device twrp"""
     textx = await request.get_reply_message()
     device = request.pattern_match.group(1)
     if device:
