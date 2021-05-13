@@ -86,8 +86,6 @@ async def permitpm(event):
                 while COUNT_PM[event.chat_id] < MAX_MSG - 1:
                                warns = MAX_MSG - COUNT_PM[event.chat_id]
                                event.reply(f"You have {warns} left.")
-                               time.sleep(3)
-                               await event.delete()
 
                 await event.respond("`You were spamming my master's PM, "
                                     " which I don't like.`"
