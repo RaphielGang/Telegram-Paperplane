@@ -106,8 +106,8 @@ async def permitpm(event):
                         LOGS.info("CountPM wen't rarted boi")
                         return
 
-                    await event.client(BlockRequest(event.chat_id))
-                    await event.client(ReportSpamRequest(peer=event.chat_id)) 
+                await event.client(BlockRequest(event.chat_id))
+                await event.client(ReportSpamRequest(peer=event.chat_id)) 
                     
 
                     if BOTLOG:
