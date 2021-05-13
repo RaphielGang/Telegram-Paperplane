@@ -84,8 +84,9 @@ async def permitpm(event):
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
                     warn = MAX_MSG - COUNT_PM[event.chat_id] 
-                    
-                if COUNT_PM[event.chat_id] < MAX_MSG - 1:
+                
+                for x in range(MAX_MSG):
+                 if COUNT_PM[event.chat_id] < MAX_MSG - 1:
                   x = await event.reply(f"You have {warn} warns left.")
                   #asyncio.sleep(3)
                   #await x.delete()
