@@ -109,15 +109,14 @@ async def permitpm(event):
                     except KeyError:
                             if BOTLOG:
                                 await event.client.send_message(
-                                    BOTLOG_CHATID,
+                                   BOTLOG_CHATID,
                                     "Count PM is seemingly going retard, "
                                     "plis restart bot!",
                                 )
                             LOGS.info("CountPM wen't rarted boi")
                             return
-
-                await event.client(BlockRequest(event.chat_id))
-                await event.client(ReportSpamRequest(peer=event.chat_id)) 
+                    await event.client(BlockRequest(event.chat_id))
+                    await event.client(ReportSpamRequest(peer=event.chat_id)) 
                     
 
                 if BOTLOG:
