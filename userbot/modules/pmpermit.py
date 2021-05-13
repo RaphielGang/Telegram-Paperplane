@@ -87,16 +87,16 @@ async def permitpm(event):
                     
                 if COUNT_PM[event.chat_id] < MAX_MSG - 1:
                   x = await event.reply(f"You have {warn} warns left.")
-                  asyncio.sleep(3)
-                  await x.delete()
+                  #asyncio.sleep(3)
+                  #await x.delete()
                 if COUNT_PM[event.chat_id] == 1:
                   y = await event.reply(f"You have 1 warn left.")
-                  asyncio.sleep(3)
-                  await y.delete()
+                  #asyncio.sleep(3)
+                  #await y.delete()
                 if COUNT_PM[event.chat_id] == MAX_MSG:
                   z = await event.reply("**This is my last warning. Please stop spamming!**")
-                  asyncio.sleep(5)
-                  await z.delete()
+                  #asyncio.sleep(5)
+                  #await z.delete()
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond("`You were spamming my master's PM`, "
                                         " `which I don't like.`"
@@ -111,7 +111,7 @@ async def permitpm(event):
                                     "Count PM is seemingly going retard, "
                                     "plis restart bot!",
                                 )
-                            LOGS.info("CountPM wen't rarted boi")
+                            LOGS.info("CountPM went retard boi")
                             return
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id)) 
