@@ -110,7 +110,7 @@ async def permitpm(event):
                 await event.client(ReportSpamRequest(peer=event.chat_id)) 
                     
 
-                    if BOTLOG:
+                if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
                         await event.client.send_message(
