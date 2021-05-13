@@ -93,10 +93,10 @@ async def permitpm(event):
                                     " `I'mma Report Spam.`")
                      
 
-                    try:
-                        del COUNT_PM[event.chat_id]
-                        del LASTMSG[event.chat_id]
-                    except KeyError:
+                try:
+                    del COUNT_PM[event.chat_id]
+                    del LASTMSG[event.chat_id]
+                except KeyError:
                         if BOTLOG:
                             await event.client.send_message(
                                 BOTLOG_CHATID,
