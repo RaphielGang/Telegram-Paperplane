@@ -86,7 +86,7 @@ async def permitpm(event):
                 while cpm < MAX_MSG:
                   warn = MAX_MSG - cpm
                   await event.reply(f"You have {warn} warns left.")
-                  continue
+                  break
 
                 await event.respond("`You were spamming my master's PM, "
                                     " which I don't like.`"
