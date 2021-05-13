@@ -89,23 +89,23 @@ async def permitpm(event):
                   break
 
                 if cpm > MAX_MSG:
-                await event.respond("`You were spamming my master's PM, "
+                    await event.respond("`You were spamming my master's PM, "
                                     " which I don't like.`"
                                     " `I'mma Report Spam.`")
                      
 
-                try:
-                    del COUNT_PM[event.chat_id]
-                    del LASTMSG[event.chat_id]
-                except KeyError:
-                        if BOTLOG:
-                            await event.client.send_message(
-                                BOTLOG_CHATID,
-                                "Count PM is seemingly going retard, "
-                                "plis restart bot!",
-                            )
-                        LOGS.info("CountPM wen't rarted boi")
-                        return
+                    try:
+                        del COUNT_PM[event.chat_id]
+                        del LASTMSG[event.chat_id]
+                    except KeyError:
+                            if BOTLOG:
+                                await event.client.send_message(
+                                    BOTLOG_CHATID,
+                                    "Count PM is seemingly going retard, "
+                                    "plis restart bot!",
+                                )
+                            LOGS.info("CountPM wen't rarted boi")
+                            return
 
                 await event.client(BlockRequest(event.chat_id))
                 await event.client(ReportSpamRequest(peer=event.chat_id)) 
