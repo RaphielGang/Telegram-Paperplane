@@ -81,25 +81,12 @@ async def permitpm(event):
                 if event.chat_id not in COUNT_PM:
                     COUNT_PM.update({event.chat_id: 1})
                 else:
-                    COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
-                    
-                if COUNT_PM[event.chat_id] < MAX_MSG - 1:
-                    #await r.delete
-                    WARNS = MAX_MSG - COUNT_PM[event.chat_id]
-                    s = await event.reply(f"You have {WARNS} warns left.")
-                    if COUNT_PM[event.chat_id] == MAX_MSG:
-                      await s.delete()
-                    
-                if MAX_MSG - COUNT_PM[event.chat_id] == 1:
-                    #await s.delete
-                    t = await event.reply("You have 1 warn left.")
-                    time.sleep(5)
-                    await t.delete()
-                    
-                if COUNT_PM[event.chat_id] == MAX_MSG:
-                    #await t.delete()
-                    u = await event.reply("It's the last warning. I will block")
-
+                    COUNT_PM[event.chat_id] += 1
+                while COUNT_PM[event.chat_id] < MAX_MSG - 1:
+                               warns = MAX_MSG - COUNT_PM[event.chat_id]
+                               r = event.reply(f"You have {warns} left.")
+                               time.sleep(3)
+                               await r.delete()
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     u = ("It's the last warning. I will block")
                     async for reply in event.client.iter_messages(
@@ -108,11 +95,7 @@ async def permitpm(event):
                                 search=u):
                             await reply.delete()
                     t = ("You have 1 warn left.")
-                    async for reply in event.client.iter_messages(
-                                event.chat_id,
-                                from_user='me',
-                                search=t):
-                            await reply.delete()
+                    
                     await event.respond("`You were spamming my master's PM, "
                                         " which I don't like.`"
                                         " `I'mma Report Spam.`")
