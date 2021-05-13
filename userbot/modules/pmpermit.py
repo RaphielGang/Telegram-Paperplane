@@ -5,6 +5,7 @@
 #
 """ Userbot module for keeping control on who can PM you. """
 
+import asyncio
 import time
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
@@ -80,18 +81,25 @@ async def permitpm(event):
                     await event.client.send_read_acknowledge(event.chat_id)
                 if event.chat_id not in COUNT_PM:
                     COUNT_PM.update({event.chat_id: 1})
-                #else:
-                    #COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
-                cpm = COUNT_PM[event.chat_id] 
-                while cpm < MAX_MSG:
-                  warn = MAX_MSG - cpm
+                else:
+                    COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
+                    warn = MAX_MSG - COUNT_PM[event.chat_id] 
+                    
+                if COUNT_PM[event.chat_id] < MAX_MSG - 1:
                   await event.reply(f"You have {warn} warns left.")
-                  break
-
-                if cpm > MAX_MSG:
-                    await event.respond("`You were spamming my master's PM, "
-                                    " which I don't like.`"
-                                    " `I'mma Report Spam.`")
+                  asyncio.sleep(3)
+                  event.delete()
+                if COUNT_PM[event.chat_id] = 1:
+                  await event.reply(f"You have 1 warn left.")
+                  asyncio.sleep(3)
+                  event.delete()
+                if COUNT_PM[event.chat_id] = MAX_MSG:
+                  await event.reply("**This is my last warning. Please stop spamming!**")
+                    await event.respond("`You were spamming my master's PM`, "
+                                        " `which I don't like.`"
+                                        " `I'mma Block and Report Spam.`")
+                    asyncio.sleep(5)
+                    event.delete()
                      
 
                     try:
