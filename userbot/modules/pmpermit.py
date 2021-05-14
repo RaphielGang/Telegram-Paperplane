@@ -97,10 +97,8 @@ async def permitpm(event):
                   await y.delete()
                 if COUNT_PM[event.chat_id] == MAX_MSG:
                   z = await event.reply("**This is my last warning. Please stop spamming!**")
-                  time.sleep(5)
-                  await z.delete()
                 if COUNT_PM[event.chat_id] > MAX_MSG:
-                    await event.respond("`You were spamming my master's PM`, "
+                    await event.respond(" `You were spamming my master's PM`, "
                                         " `which I don't like.`"
                                         " `I'mma Block and Report Spam.`")
                     try:
@@ -111,7 +109,7 @@ async def permitpm(event):
                                 await event.client.send_message(
                                    BOTLOG_CHATID,
                                     "Count PM is seemingly going retard, "
-                                    "plis restart bot!",
+                                    "please restart the bot!",
                                 )
                             LOGS.info("CountPM went retard boi")
                             return
