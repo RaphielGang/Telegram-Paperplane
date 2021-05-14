@@ -89,10 +89,12 @@ async def permitpm(event):
                     warn = MAX_MSG - COUNT_PM[event.chat_id]
                 
                 while COUNT_PM[event.chat_id] < MAX_MSG - 1:
-                    await event.respond(f"You have {warn} warns left.", del_in=5)
+                    y = await event.respond(f"You have {warn} warns left.")
+                    await z.delete(5)
                     break
                 if MAX_MSG - COUNT_PM[event.chat_id] == 1:
-                    await event.respond("You have one warn left.", del_in=5)
+                    z = await event.respond("You have one warn left.")
+                    await z.delete(5)
                 elif COUNT_PM[event.chat_id] == MAX_MSG:
                     await event.respond("**It is the last warning. Please stop spamming!!**")
                 if COUNT_PM[event.chat_id] > 4:
