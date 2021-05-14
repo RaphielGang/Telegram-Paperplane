@@ -26,7 +26,7 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
                         "`Please wait for my master to look in, he mostly approves PMs.\n\n`"
                         "**So please don't spam here. Otherwise you will be blocked.**")
 #2
-MAX_MSG = MAX_FLOOD_IN_PM or 4
+MAX_MSG = MAX_FLOOD_IN_PM or 5
 
 #4
 PP_PM_PIC = PM_PERMIT_IMAGE
@@ -88,16 +88,16 @@ async def permitpm(event):
                 while COUNT_PM[event.chat_id] < MAX_MSG - 1:
                   x = await event.reply(f"You have {warn} warns left.")
                   warn = MAX_MSG - COUNT_PM[event.chat_id]
-                  asyncio.sleep(3)
+                  time.sleep(3)
                   await x.delete()
                   break
                 if COUNT_PM[event.chat_id] - MAX_MSG == 1:
                   y = await event.reply(f"You have 1 warn left.")
-                  asyncio.sleep(3)
+                  time.sleep(3)
                   await y.delete()
                 if COUNT_PM[event.chat_id] == MAX_MSG:
                   z = await event.reply("**This is my last warning. Please stop spamming!**")
-                  asyncio.sleep(5)
+                  time.sleep(5)
                   await z.delete()
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond("`You were spamming my master's PM`, "
