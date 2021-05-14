@@ -18,7 +18,7 @@ from userbot import (
     LASTMSG,
     LOGS,
     PM_AUTO_BAN,
-    MAX_FLOOD_IN_PM
+    MAX_FLOOD_IN_PM,
     is_mongo_alive,
     is_redis_alive,
     PM_PERMIT_IMAGE,
