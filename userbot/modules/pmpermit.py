@@ -18,13 +18,18 @@ from userbot import (
     LASTMSG,
     LOGS,
     PM_AUTO_BAN,
+    MAX_FLOOD_IN_PM
     is_mongo_alive,
     is_redis_alive,
+    PM_PERMIT_IMAGE,
+    PM_PERMIT_MSG,
+    
 )
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     approval,
     approve,
+    disapprove,
     block_pm,
     notif_off,
     notif_on,
@@ -32,12 +37,14 @@ from userbot.modules.dbhelper import (
 )
 
 # ========================= CONSTANTS ============================
-UNAPPROVED_MSG = (
+UNAPPROVED_MSG = PM_PERMIT_MSG or (
     "`Bleep blop! This is a bot. Don't fret.\n\n`"
     "`My owner hasn't approved you to PM. `"
     "`Please wait for my owner to look in, they mostly approve PMs.\n\n`"
     "`As far as I know, they don't usually approve retards though.\n\n`"
 )
+
+MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
 
@@ -79,12 +86,20 @@ async def permitpm(event):
                     COUNT_PM.update({event.chat_id: 1})
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
-
+                    warn = MAX_MSG - COUNT_PM[event.chat_id]
+                
+                while COUNT_PM[event.chat_id] < MAX_MSG - 1:
+                    await event.respond(f"You have {warn} warns left.", del_in=5)
+                    break
+                if MAX_MSG - COUNT_PM[event.chat_id] = 1:
+                    await event.respond("You have one warn left.", del_in=5)
+                elif COUNT_PM[event.chat_id] == MAX_MSG:
+                    await.respond("**It is the last warning. Please stop spamming!!**")
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
-                        "`You were spamming my owner's PM, "
-                        "which I don't like.`"
-                        " `Reporting you as spam.`"
+                        "`You were spamming my owner's PM, `"
+                        "`which I don't like.`"
+                        "`You are BLOCKED and Reported as SPAM.`"
                     )
 
                     try:
