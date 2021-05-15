@@ -5,7 +5,7 @@
 #
 """ Userbot module for keeping control on who can PM you. """
 
-import time
+import asyncio
 
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
@@ -50,7 +50,7 @@ MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
 async def del_in(pp_event, seconds):
-    time.sleep(seconds)
+    asyncio.sleep(seconds)
     await pp_event.delete()
 
 
