@@ -49,6 +49,10 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
+async def del_in(event, time):
+    time.sleep(time)
+    await event.delete()
+
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
 @grp_exclude()
@@ -91,14 +95,15 @@ async def permitpm(event):
                 while warn > 1:
                     x = f"You have {warn} warns left."
                     await event.reply(f"You have {warn} warns left.")
-                    await delete(event, x, time = 5)
+                    del_in(x, 5)
                     break
                 if warn == 1: 
                     y = "You have 1 warn left."
                     await event.reply("You have 1 warn left.")
-                    await y.delete(time = 5)
+                    del_in(y, 5)
                 elif warn == 0:
                     await event.reply("**It is the last warning. Please stop spamming!!**")
+                    del_in(z, 5)
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond(
                         "`You were spamming my owner's PM, `"
