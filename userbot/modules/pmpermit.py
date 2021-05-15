@@ -48,6 +48,7 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 z = "You have 1 warn left."
+y = "**It is the last warning. Please stop spamming!!**"
 # =================================================================
 
 
@@ -90,10 +91,11 @@ async def permitpm(event):
                     warn = MAX_MSG - COUNT_PM[event.chat_id]
                 
                 while warn > 1:
-                    await event.respond(y)
+                    await event.respond(x)
                     break
                 if warn == 1:
-                    await event.respond(z)
+                    x = f"You have {warn} warns left."
+                    await event.respond(x)
                 elif warn == 0:
                     await event.respond("**It is the last warning. Please stop spamming!!**")
                 if COUNT_PM[event.chat_id] > MAX_MSG:
