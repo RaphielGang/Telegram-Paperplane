@@ -5,6 +5,8 @@
 #
 """ Userbot module for keeping control on who can PM you. """
 
+import time
+
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
@@ -72,10 +74,7 @@ async def permitpm(event):
                         async for message in event.client.iter_messages(
                             event.chat_id, from_user="me", search=UNAPPROVED_MSG
                         ):
-                            # ... and deletes them !!
                             continue
-                            #await message.delete()
-                        #await event.reply(UNAPPROVED_MSG)
                     LASTMSG.update({event.chat_id: event.text})
                 else:
                     await event.reply(UNAPPROVED_MSG)
@@ -106,7 +105,10 @@ async def permitpm(event):
                         "`which I don't like.`"
                         "`You are BLOCKED and Reported as SPAM.`"
                     )
-                    await message.delete()
+                    async for message in event.client.iter_messages(
+                            event.chat_id, from_user="me", search=UNAPPROVED_MSG
+                        ):
+                        await message.delete()
                     
                     try:
                         del COUNT_PM[event.chat_id]
