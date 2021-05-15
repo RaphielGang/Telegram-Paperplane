@@ -107,10 +107,10 @@ async def permitpm(event):
                             event.chat_id, from_user="me", search=UNAPPROVED_MSG
                         ):
                         await message.delete()
-                    async for y in event.client.iter_messages(
+                    async for a in event.client.iter_messages(
                             event.chat_id, from_user="me", search=y
                         ):
-                        await y.delete()    
+                        await a.delete()    
                     
                     try:
                         del COUNT_PM[event.chat_id]
