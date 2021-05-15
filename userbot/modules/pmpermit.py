@@ -49,7 +49,8 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
-async def del_in(pp_event, seconds):
+async def del_in(pp_event, seconds=None):
+    seconds = seconds or 5
     await asyncio.sleep(seconds)
     return await pp_event.delete()
 
