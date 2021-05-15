@@ -50,8 +50,8 @@ MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
 async def del_in(pp_event, seconds):
-    asyncio.sleep(seconds)
-    await pp_event.delete()
+    await asyncio.sleep(seconds)
+    return await pp_event.delete()
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
