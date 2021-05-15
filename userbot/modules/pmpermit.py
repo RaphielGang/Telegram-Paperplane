@@ -47,7 +47,6 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
-y = f"You have {warn} warns left."
 z = "You have 1 warn left."
 # =================================================================
 
