@@ -92,12 +92,12 @@ async def permitpm(event):
                 
                 while warn > 1:
                     x = f"You have {warn} warns left."
-                    await event.respond(x)
+                    await event.reply(x)
                     break
                 if warn == 1: 
-                    await event.respond(z)
+                    await event.reply(z)
                 elif warn == 0:
-                    await event.respond("**It is the last warning. Please stop spamming!!**")
+                    await event.reply("**It is the last warning. Please stop spamming!!**")
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond(
                         "`You were spamming my owner's PM, `"
