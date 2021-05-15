@@ -49,9 +49,9 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
-async def del_in(event, time):
+async def del_in(pp_event, time):
     time.sleep(time)
-    await event.delete()
+    await pp_event.delete()
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
