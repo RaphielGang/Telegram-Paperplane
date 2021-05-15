@@ -74,7 +74,7 @@ async def permitpm(event):
                         ):
                             # ... and deletes them !!
                             await message.delete()
-                        await event.reply(UNAPPROVED_MSG)
+                        #await event.reply(UNAPPROVED_MSG)
                     LASTMSG.update({event.chat_id: event.text})
                 else:
                     await event.reply(UNAPPROVED_MSG)
@@ -94,7 +94,7 @@ async def permitpm(event):
                     await y.delete()
                     break
                 if warn == 1:
-                    z = await event.respond("You have one warn left.")
+                    z = await event.respond("You have 1 warn left.")
                     time.sleep(5)
                     await z.delete()
                 elif warn == 0:
@@ -105,7 +105,8 @@ async def permitpm(event):
                         "`which I don't like.`"
                         "`You are BLOCKED and Reported as SPAM.`"
                     )
-
+                    await message.delete()
+                    
                     try:
                         del COUNT_PM[event.chat_id]
                         del LASTMSG[event.chat_id]
