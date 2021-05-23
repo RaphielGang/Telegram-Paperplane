@@ -144,30 +144,49 @@ async def permitpm(event):
                             + " was spamming your PM and has been blocked.",
                         )
 
+                        
+@register(outgoing=True, pattern="^.autoapprove$|^.autoa$")
+@grp_exclude()
+async def autoapprove(autoapprv):
+    if await autoapproval(autoapprv) is True:
+        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
+                                  {"$set": {
+                                      'autoapproval': False
+                                  }})
+        return
+    else:
+        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
+                                  {"$set": {
+                                      'autoapproval': True
+                                  }})
+        return
+                        
+                        
 
-'''@register(disable_edited=True, outgoing=True, disable_errors=True)
+@register(disable_edited=True, outgoing=True, disable_errors=True)
 @grp_exclude()
 async def auto_accept(event):
     """Will approve automatically if you texted them first."""
-    if event.is_private:if event.is_private:
-        chat = await event.get_chat()
-        if not is_mongo_alive() or not is_redis_alive():
-            return
-        if isinstance(chat, User):
-            if await approval(event.chat_id) or chat.bot:
+    if await autoapproval(autoapprv) is True:
+        if event.is_private:if event.is_private:
+            chat = await event.get_chat()
+            if not is_mongo_alive() or not is_redis_alive():
                 return
-            async for message in event.client.iter_messages(
-                chat.id, reverse=True, limit=1
-            ):
-                if message.from_id == (await event.client.get_me()).id:
-                    await approve(chat.id)
-                    if BOTLOG:
-                        await event.client.send_message(
-                            BOTLOG_CHATID,
-                            "#AUTO-APPROVED\n"
-                            + "User: "
-                            + f"[{chat.first_name}](tg://user?id={chat.id})",
-                        )'''
+            if isinstance(chat, User):
+                if await approval(event.chat_id) or chat.bot:
+                    return
+                async for message in event.client.iter_messages(
+                    chat.id, reverse=True, limit=1
+                ):
+                    if message.from_id == (await event.client.get_me()).id:
+                        await approve(chat.id)
+                        if BOTLOG:
+                            await event.client.send_message(
+                                BOTLOG_CHATID,
+                                "#AUTO-APPROVED\n"
+                                + "User: "
+                                + f"[{chat.first_name}](tg://user?id={chat.id})",
+                            )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
