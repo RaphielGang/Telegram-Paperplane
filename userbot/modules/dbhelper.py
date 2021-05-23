@@ -253,11 +253,11 @@ async def approval(userid):
         return True
 
     
-async def autoapproval(autoapprv):
-    to_check = MONGO.pmpermit.find_one({'autoapprv': autoapprv})
+async def autoapproval(userid):
+    to_check = MONGO.pmpermit.find_one({'autoapprv': userid})
 
     if to_check is None:
-        MONGO.pmpermit.insert_one({'autoapprv': autoapprv, 'autoapproval': False})
+        MONGO.pmpermit.insert_one({'autoapprv': userid, 'autoapproval': False})
 
         return False
     elif to_check['autoapproval'] is False:
@@ -273,24 +273,7 @@ async def approve(userid):
                                   {"$set": {
                                       'approval': True
                                   }})
-        return True
-    
-    
-@register(outgoing=True, pattern="^.autoapprove$|^.autoa$")
-@grp_exclude()
-async def autoapprove(autoapprv):
-    if await autoapproval(autoapprv) is True:
-        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
-                                  {"$set": {
-                                      'autoapproval': False
-                                  }})
-        return
-    else:
-        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
-                                  {"$set": {
-                                      'autoapproval': True
-                                  }})
-        return    
+        return True   
     
 
 async def disapprove(userid):
