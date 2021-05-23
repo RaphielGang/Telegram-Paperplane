@@ -198,7 +198,7 @@ async def approvepm(apprvpm):
         return
 
     if await approve(apprvpm.chat_id) is False:
-        return await apprvpm.edit("`User was already approved!`")
+        return await apprvpm.edit("`I already know this user! You can chat!`")
 
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
@@ -226,13 +226,13 @@ async def approvepm(apprvpm):
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
     if not is_mongo_alive() or not is_redis_alive():
-        await apprvpm.edit("`Database connections failing!`")
+        await dapprvpm.edit("`Database connections failing!`")
         return
 
-    if await approve(apprvpm.chat_id) is False:
-        return await apprvpm.edit("`User was already approved!`")
+    if await dapprove(dapprvpm.chat_id) is False:
+        return await dapprvpm.edit("`I don't remember approving this user!`")
 
-    if apprvpm.reply_to_msg_id:
+    if dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
         replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
