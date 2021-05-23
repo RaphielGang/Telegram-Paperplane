@@ -274,6 +274,23 @@ async def approve(userid):
                                   }})
         return True
     
+    
+@register(outgoing=True, pattern="^.autoapprove$|^.autoa$")
+@grp_exclude()
+async def autoapprove(autoapprv):
+    if await autoapproval(autoapprv) is True:
+        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
+                                  {"$set": {
+                                      'autoapproval': False
+                                  }})
+        return
+    else:
+        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
+                                  {"$set": {
+                                      'autoapproval': True
+                                  }})
+        return    
+    
 
 async def disapprove(userid):
     if await approval(userid) is False:
