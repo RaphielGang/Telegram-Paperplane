@@ -49,8 +49,9 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
-async def del_in(pp_event, seconds=None):
+async def del_in(event, text, seconds=None):
     seconds = seconds or 5
+    pp_event = await event.edit(text)
     await asyncio.sleep(seconds)
     return await pp_event.delete()
 
@@ -95,14 +96,14 @@ async def permitpm(event):
                 
                 while warn > 1:
                     x = await event.reply(f"You have {warn} warns left.")
-                    del_in(x, seconds=5)
+                    del_in(event, x, 5)
                     break
                 if warn == 1: 
                     y = await event.reply("You have 1 warn left.")
-                    del_in(y, seconds=5)
+                    del_in(event, y, 5)
                 elif warn == 0:
                     z = await event.reply("**It is the last warning. Please stop spamming!!**")
-                    del_in(z, seconds=5)
+                    del_in(event, z, 5)
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond(
                         "`You were spamming my owner's PM, `"
@@ -201,7 +202,7 @@ async def approvepm(apprvpm):
         chat = await apprvpm.get_chat()
     if await approve(apprvpm.chat_id) is False:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
-        del_in(x, seconds=3)
+        del_in(apprvpm, x, 5)
         return
         
     if apprvpm.reply_to_msg_id:
@@ -218,7 +219,7 @@ async def approvepm(apprvpm):
 
     await approve(chat.id)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
     await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot!")
 
     if BOTLOG:
@@ -238,7 +239,7 @@ async def dapprovepm(dapprvpm):
         chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
         x = await dapprvpm.edit("`I don't remember approving this user!`")
-        del_in(x, seconds=3)
+        del_in(dapprvpm, x, 5)
         return
         
     if dapprvpm.reply_to_msg_id:
@@ -261,7 +262,6 @@ async def dapprovepm(dapprvpm):
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ...")
     await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
-    await asyncio.sleep(2)
     await dapprvpm.edit("I don't like strangers in the pm!! Get lost!")
 
     if BOTLOG:
