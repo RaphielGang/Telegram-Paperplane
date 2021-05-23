@@ -94,14 +94,14 @@ async def permitpm(event):
                 
                 while warn > 1:
                     x = await event.reply(f"You have {warn} warns left.")
-                    del_in(event, x, 5)
+                    del_in(x, 5)
                     break
                 if warn == 1: 
                     y = await event.reply("You have 1 warn left.")
-                    del_in(event, y, 5)
+                    del_in(y, 5)
                 elif warn == 0:
                     z = await event.reply("**It is the last warning. Please stop spamming!!**")
-                    del_in(event, z, 5)
+                    del_in(z, 5)
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond(
                         "`You were spamming my owner's PM, `"
@@ -200,7 +200,7 @@ async def approvepm(apprvpm):
         chat = await apprvpm.get_chat()
     if await approve(apprvpm.chat_id) is False:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
-        del_in(apprvpm, x, 5)
+        del_in(x, 5)
         return
         
     if apprvpm.reply_to_msg_id:
@@ -236,8 +236,8 @@ async def dapprovepm(dapprvpm):
     if dapprvpm.is_private:
         chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
-        x = await dapprvpm.edit("I don't remember approving this user!")
-        del_in(dapprvpm, x, 5)
+        x = await dapprvpm.edit("`I don't remember approving this user!`")
+        del_in(x, 5)
         return
         
     if dapprvpm.reply_to_msg_id:
