@@ -237,7 +237,7 @@ async def dapprovepm(dapprvpm):
     if dapprvpm.is_private:
         chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
-        x = await dapprvpm.edit("`I don't remember approving this user!`")
+        x = await dapprvpm.edit("I don't remember approving this user!")
         del_in(dapprvpm, "I don't remember approving this user!", 5)
         return
         
