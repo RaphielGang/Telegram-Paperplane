@@ -147,7 +147,7 @@ async def permitpm(event):
 @grp_exclude()
 async def auto_accept(event):
     """Will approve automatically if you texted them first."""
-    if event.is_private:
+    if event.is_private:if event.is_private:
         chat = await event.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             return
@@ -196,7 +196,9 @@ async def approvepm(apprvpm):
     if not is_mongo_alive() or not is_redis_alive():
         await apprvpm.edit("`Database connections failing!`")
         return
-
+    
+    if apprvpm.is_private:
+        chat = await apprvpm.get_chat()
     if await approve(apprvpm.chat_id) is False:
         return await apprvpm.edit("`I already know this user! You can chat!`")
 
@@ -211,7 +213,7 @@ async def approvepm(apprvpm):
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
-    
+
     await approve(chat.id)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await apprvpm.respond("Hey there! Nice to meet you☺ I am an obidient bot!")
@@ -229,6 +231,8 @@ async def dapprovepm(dapprvpm):
         await dapprvpm.edit("`Database connections failing!`")
         return
 
+    if dapprvpm.is_private:
+        chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
         return await dapprvpm.edit("`I don't remember approving this user!`")
 
