@@ -146,24 +146,25 @@ async def permitpm(event):
                         )
 
                         
+    
+    
 @register(outgoing=True, pattern="^.autoapprove$|^.autoa$")
 @grp_exclude()
-async def autoapprove(autoapprv):
-    if await autoapproval(autoapprv) is True:
-        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
+async def autoapprove(userid):
+    if await autoapproval(userid) is True:
+        MONGO.pmpermit.update_one({'autoapprv': userid},
                                   {"$set": {
                                       'autoapproval': False
                                   }})
         return
     else:
-        MONGO.pmpermit.update_one({'autoapprv': autoapprv},
+        MONGO.pmpermit.update_one({'autoapprv': userid},
                                   {"$set": {
                                       'autoapproval': True
                                   }})
-        return
-                        
-                        
-
+        return 
+    
+    
 @register(disable_edited=True, outgoing=True, disable_errors=True)
 @grp_exclude()
 async def auto_accept(event):
