@@ -239,7 +239,7 @@ async def dapprovepm(dapprvpm):
         chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
         x = await dapprvpm.edit("`I don't remember approving this user!`")
-        del_in(dapprvpm, x, 5)
+        del_in(dapprvpm, "I don't remember approving this user!", 5)
         return
         
     if dapprvpm.reply_to_msg_id:
