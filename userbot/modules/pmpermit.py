@@ -202,6 +202,7 @@ async def approvepm(apprvpm):
     if await approve(apprvpm.chat_id) is False:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
         del_in(x, seconds=3)
+        return
         
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
@@ -238,6 +239,7 @@ async def dapprovepm(dapprvpm):
     if await approve(dapprvpm.chat_id) is True:
         x = await dapprvpm.edit("`I don't remember approving this user!`")
         del_in(x, seconds=3)
+        return
         
     if dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
@@ -253,8 +255,11 @@ async def dapprovepm(dapprvpm):
     
     await disapprove(chat.id)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) .")
+    await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ..")
+    await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ...")
+    await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(2)
     await dapprvpm.edit("I don't like strangers in the pm!! Get lost!")
