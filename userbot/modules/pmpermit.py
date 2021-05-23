@@ -31,8 +31,8 @@ from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     autoapproval,
     approval,
-    #approve,
-    #disapprove,
+    approve,
+    disapprove,
     block_pm,
     notif_off,
     notif_on,
@@ -152,13 +152,13 @@ async def permitpm(event):
 @grp_exclude()
 async def autoapprove(userid):
     if await autoapproval(userid) is True:
-        MONGO.pmpermit.update_one({'autoapprv': userid},
+        MONGO.pmpermit.update_one({'userid': userid},
                                   {"$set": {
                                       'autoapproval': False
                                   }})
         return
     else:
-        MONGO.pmpermit.update_one({'autoapprv': userid},
+        MONGO.pmpermit.update_one({'userid': userid},
                                   {"$set": {
                                       'autoapproval': True
                                   }})
