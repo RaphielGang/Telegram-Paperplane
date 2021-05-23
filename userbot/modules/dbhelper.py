@@ -1,4 +1,5 @@
-from userbot import MONGO, REDIS, register
+from userbot import MONGO, REDIS
+from userbot.events import register
 
 
 # Mutes
