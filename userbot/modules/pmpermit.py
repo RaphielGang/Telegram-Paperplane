@@ -229,7 +229,7 @@ async def dapprovepm(dapprvpm):
         await dapprvpm.edit("`Database connections failing!`")
         return
 
-    if await dapprove(dapprvpm.chat_id) is False:
+    if await approve(dapprvpm.chat_id) is True:
         return await dapprvpm.edit("`I don't remember approving this user!`")
 
     if dapprvpm.reply_to_msg_id:
@@ -244,7 +244,7 @@ async def dapprovepm(dapprvpm):
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
     
-    await dapprove(chat.id)
+    await disapprove(chat.id)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done! ")
     await dapprvpm.respond("I don't like strangers in the pm!! Get lost!")
 
