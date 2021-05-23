@@ -49,10 +49,9 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
-async def del_in(event, text, seconds):
-    pp_event = await event.edit(text)
+async def del_in(text, seconds):
     await asyncio.sleep(seconds)
-    return await pp_event.delete()
+    return await text.delete()
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
@@ -238,7 +237,7 @@ async def dapprovepm(dapprvpm):
         chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
         x = await dapprvpm.edit("I don't remember approving this user!")
-        del_in(dapprvpm, "I don't remember approving this user!", 5)
+        del_in(dapprvpm, x, 5)
         return
         
     if dapprvpm.reply_to_msg_id:
@@ -261,6 +260,7 @@ async def dapprovepm(dapprvpm):
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ...")
     await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
+    await asyncio.sleep(1)
     await dapprvpm.edit("I don't like strangers in the pm!! Get lost!")
 
     if BOTLOG:
