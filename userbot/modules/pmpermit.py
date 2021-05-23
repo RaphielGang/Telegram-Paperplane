@@ -85,7 +85,7 @@ async def permitpm(event):
                     LASTMSG.update({event.chat_id: event.text})
                 else:
                     await event.reply(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
-                                          
+                    LASTMSG.update({event.chat_id: event.text})                      
 
                 if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
