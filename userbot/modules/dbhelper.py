@@ -1,4 +1,4 @@
-from userbot import MONGO, REDIS
+from userbot import MONGO, REDIS, register
 
 
 # Mutes
