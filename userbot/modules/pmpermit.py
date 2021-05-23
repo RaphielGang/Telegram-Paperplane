@@ -233,8 +233,7 @@ async def dapprovepm(dapprvpm):
         await dapprvpm.edit("`Database connections failing!`")
         return
 
-    if dapprvpm.is_private:
-        chat = await dapprvpm.get_chat()
+    chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
         x = await dapprvpm.edit("`I don't remember approving this user!`")
         del_in(x, 5)
@@ -261,7 +260,10 @@ async def dapprovepm(dapprvpm):
     await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
-    await dapprvpm.edit("I don't like strangers in the pm!! Get lost!")
+    if dapprvpm.is_private:
+        await dapprvpm.edit("I don't like strangers in the PM!! Get lost!")
+    else:
+        await dapprvpm.edit("Don't you dare PM!!")
 
     if BOTLOG:
         await dapprvpm.client.send_message(
