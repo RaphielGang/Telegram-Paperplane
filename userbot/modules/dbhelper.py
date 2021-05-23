@@ -253,16 +253,16 @@ async def approval(userid):
 
     
 async def autoapproval(userid):
-    #to_check = MONGO.pmpermit.find_one({'autoapprv': userid})
+    to_check = MONGO.pmpermitt.find_one({'autoapprv': userid})
 
-    #if to_check is None:
-        MONGO.pmpermit.insert_one({'autoapprv': userid, 'autoapproval': False})
+    if to_check is None:
+        MONGO.pmpermitt.insert_one({'autoapprv': userid, 'autoapproval': False})
 
         return False
-    #elif to_check['autoapproval'] is False:
-        #return False
-    #elif to_check['autoapproval'] is True:
-        #return True    
+    elif to_check['autoapproval'] is False:
+        return False
+    elif to_check['autoapproval'] is True:
+        return True    
 
 async def approve(userid):
     if await approval(userid) is True:
