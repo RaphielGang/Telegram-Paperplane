@@ -80,9 +80,12 @@ async def permitpm(event):
                         ):
                             continue
                     LASTMSG.update({event.chat_id: event.text})
-                else:
+                elif not PM_PERMIT_IMAGE:
                     await event.reply(UNAPPROVED_MSG)
                     LASTMSG.update({event.chat_id: event.text})
+                else:
+                    await event.reply(PM_PERMIT_IMAGE, UNAPPROVED_MSG)
+                                          
 
                 if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
@@ -101,7 +104,7 @@ async def permitpm(event):
                     await del_in(y, 5)
                 elif warn == 0:
                     z = await event.reply("**It is the last warning. Please stop spamming!!**")
-                    await del_in(z, 5)
+                    await del_in(z, 10)
                 if COUNT_PM[event.chat_id] > MAX_MSG:
                     await event.respond(
                         "`You were spamming my owner's PM, `"
