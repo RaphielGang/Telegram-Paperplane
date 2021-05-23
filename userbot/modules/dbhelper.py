@@ -259,9 +259,9 @@ async def autoapproval(userid):
         MONGO.pmpermit.insert_one({'user_id': userid, 'autoapproval': False})
 
         return False
-    elif to_check['autoapproval'] is False:
+    elif to_check['approval'] is False:
         return False
-    elif to_check['autoapproval'] is True:
+    elif to_check['approval'] is True:
         return True
     
 
