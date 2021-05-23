@@ -143,7 +143,7 @@ async def permitpm(event):
                         )
 
 
-@register(disable_edited=True, outgoing=True, disable_errors=True)
+'''@register(disable_edited=True, outgoing=True, disable_errors=True)
 @grp_exclude()
 async def auto_accept(event):
     """Will approve automatically if you texted them first."""
@@ -165,7 +165,7 @@ async def auto_accept(event):
                             "#AUTO-APPROVED\n"
                             + "User: "
                             + f"[{chat.first_name}](tg://user?id={chat.id})",
-                        )
+                        )'''
 
 
 @register(outgoing=True, pattern="^.notifoff$")
@@ -189,7 +189,7 @@ async def notifon(non_event):
     return await non_event.edit("`Notifications unmuted!`")
 
 
-@register(outgoing=True, pattern="^.approve$")
+@register(outgoing=True, pattern="^.approve$|^.a$")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -211,15 +211,50 @@ async def approvepm(apprvpm):
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
-
-    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
+    
+    await approve(chat.id)
+    await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
+    await apprvpm.respond("Hey there! Nice to meet you☺ I am an obidient bot!")
 
     if BOTLOG:
         await apprvpm.client.send_message(
             BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
 
+@register(outgoing=True, pattern="^.disapprove$|^.da$")
+@grp_exclude()
+async def dapprovepm(dapprvpm):
+    """For .disapprove command, revokes someone's permission to PM you."""
+    if not is_mongo_alive() or not is_redis_alive():
+        await apprvpm.edit("`Database connections failing!`")
+        return
 
+    if await approve(apprvpm.chat_id) is False:
+        return await apprvpm.edit("`User was already approved!`")
+
+    if apprvpm.reply_to_msg_id:
+        reply = await dapprvpm.get_reply_message()
+        replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
+        aname = replied_user.user.id
+        name0 = str(replied_user.user.first_name)
+        uid = replied_user.user.id
+
+    else:
+        aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
+        name0 = str(aname.first_name)
+        uid = dapprvpm.chat_id
+    
+    await dapprove(chat.id)
+    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done! ")
+    await dapprvpm.respond("I don't like strangers in the pm!! Get lost!")
+
+    if BOTLOG:
+        await dapprvpm.client.send_message(
+            BOTLOG_CHATID, "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
+        )
+        
+        
+        
 @register(outgoing=True, pattern="^.block$")
 @grp_exclude()
 async def blockpm(block):
@@ -279,7 +314,8 @@ CMD_HELP.update(
     {
         "pmpermit": [
             "PMPermit",
-            " - `.approve`: Approve the mentioned/replied person to PM.\n"
+            " - `.approve|.a`: Approve the mentioned/replied person to PM.\n"
+            " - `.disapprove|.da`: Disapprove the mentioned/replied person to PM.\n"
             " - `.block`: Blocks the person from PMing you.\n"
             " - `.unblock`: Unblocks the person, so they can PM you again.\n"
             " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
