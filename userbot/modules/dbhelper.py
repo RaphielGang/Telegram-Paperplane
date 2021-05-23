@@ -265,7 +265,7 @@ async def autoapproval(userid):
         return True
     
 
-"""async def approve(userid):
+async def approve(userid):
     if await approval(userid) is True:
         return False
     else:
@@ -284,7 +284,7 @@ async def disapprove(userid):
                                   {"$set": {
                                       'approval': False
                                   }})
-        return True"""
+        return True
 
 
 
