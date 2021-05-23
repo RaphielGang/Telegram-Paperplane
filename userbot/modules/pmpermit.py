@@ -196,8 +196,7 @@ async def approvepm(apprvpm):
         await apprvpm.edit("`Database connections failing!`")
         return
     
-    if apprvpm.is_private:
-        chat = await apprvpm.get_chat()
+    chat = await apprvpm.get_chat()
     if await approve(apprvpm.chat_id) is False:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
         del_in(x, 5)
@@ -218,7 +217,7 @@ async def approvepm(apprvpm):
     await approve(chat.id)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
-    await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot!")
+    await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot of my owner!")
 
     if BOTLOG:
         await apprvpm.client.send_message(
