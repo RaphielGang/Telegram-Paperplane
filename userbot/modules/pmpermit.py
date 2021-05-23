@@ -31,8 +31,8 @@ from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     autoapproval,
     approval,
-    approve,
-    disapprove,
+    #approve,
+    #disapprove,
     block_pm,
     notif_off,
     notif_on,
