@@ -200,8 +200,9 @@ async def approvepm(apprvpm):
     if apprvpm.is_private:
         chat = await apprvpm.get_chat()
     if await approve(apprvpm.chat_id) is False:
-        return await apprvpm.edit("`I already know this user! You can chat!`")
-
+        x = await apprvpm.edit("`I already know this user! You can chat!`")
+        del_in(x, seconds=3)
+        
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
         replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
@@ -216,7 +217,8 @@ async def approvepm(apprvpm):
 
     await approve(chat.id)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
-    await apprvpm.respond("Hey there! Nice to meet you☺ I am an obidient bot!")
+    await asyncio.sleep(2)
+    await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot!")
 
     if BOTLOG:
         await apprvpm.client.send_message(
@@ -234,8 +236,9 @@ async def dapprovepm(dapprvpm):
     if dapprvpm.is_private:
         chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
-        return await dapprvpm.edit("`I don't remember approving this user!`")
-
+        x = await dapprvpm.edit("`I don't remember approving this user!`")
+        del_in(x, seconds=3)
+        
     if dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
         replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
@@ -249,8 +252,12 @@ async def dapprovepm(dapprvpm):
         uid = dapprvpm.chat_id
     
     await disapprove(chat.id)
-    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done! ")
-    await dapprvpm.respond("I don't like strangers in the pm!! Get lost!")
+    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) .")
+    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ..")
+    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ...")
+    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
+    await asyncio.sleep(2)
+    await dapprvpm.edit("I don't like strangers in the pm!! Get lost!")
 
     if BOTLOG:
         await dapprvpm.client.send_message(
