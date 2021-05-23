@@ -29,6 +29,7 @@ from userbot import (
 )
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
+    autoapproval,
     approval,
     approve,
     disapprove,
