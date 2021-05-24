@@ -17,10 +17,11 @@ from telethon import TelegramClient
 
 from userbot import (CMD_HELP, ALIVE_IMAGE, is_mongo_alive, is_redis_alive)
 from userbot.events import register, grp_exclude
+from userbot.modules.dbhelper import alive_pic, set_pic, get_pic
 
 # ================= CONSTANT =================
 DEFAULT_USER = uname().node
-PP_IMG = ALIVE_IMAGE
+#PP_IMG = ALIVE_IMAGE
 # ============================================
 
 
@@ -129,7 +130,20 @@ async def pipcheck(pip):
         else:
             await pip.edit("`Use .help pip to see an example`")
 
-
+@register(outgoing=True, pattern="^.setapic$")
+@grp_exclude()
+async def setmyalivepic(setapic):
+    if not is_mongo_alive() and not is_redis_alive():
+        return setapic.edit("`Database seems to be falling.`")
+    else:
+        await setapic.reply("Send a telegraph link below.")
+        z = "bla"
+        await set_alive_pic(z)
+        x = await get_alive_pic(z)
+        await asyncio.sleep(3)
+        await setapic.reply(x)
+        
+                                               
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
 async def amireallyalive(alive):
