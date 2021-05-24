@@ -160,11 +160,11 @@ async def auto_approve_switch(event):
         chat = await event.get_chat()
         await autoapprove(chat.id)
         if await autoapproval(event.chat_id) is True:
-            await event.edit("`Autoapprove` ON! I will approve an user after you PM them.")
-            await del_in(await event.edit("`Autoapprove` ON! I will approve an user after you PM them"), 3)
+            x = await event.edit("`Autoapprove` ON! I will approve an user after you PM them.")
+            await del_in(x, 3)
         else:
-            await event.edit("`Autoapprove` OFF! You will have to manually approbe users now.")
-            await del_in(await event.edit("`Autoapprove` OFF! You will have to manually approbe users now."), 3)
+            y = await event.edit("`Autoapprove` OFF! You will have to manually approve users now.")
+            await del_in(y, 3)
     
     
 @register(disable_edited=True, outgoing=True, disable_errors=True)
