@@ -553,4 +553,4 @@ async def set_alive_pic(apic):
         return
 
 async def get_alive_pic():
-        Mongo.pictures.get_one({'apic'})
+        MONGO.pictures.get_one({'apic'})
