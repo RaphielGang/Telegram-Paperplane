@@ -130,16 +130,18 @@ async def pipcheck(pip):
                                "`\n**Result: **\n`No Result Returned/False`")
         else:
             await pip.edit("`Use .help pip to see an example`")
+            
+            
 
 @register(outgoing=True, pattern="^.setapic$")
 @grp_exclude()
 async def setmyalivepic(setapic):
-    if not is_mongo_alive() and not is_redis_alive():
-        return setapic.edit("`Database seems to be falling.`")
-    #await setapic.edit("Send a telegraph link below. To cancel send `/cancel`")
-    pp_pic = str(setapic.text[9: ]
-    z = "hello"
-    await set_alive_pic(z)
+    if not is_mongo_alive() or not is_redis_alive():
+        return await setpic.reply("`Database seems to be failing!`"
+    else:
+        z="hello"
+        await set_alive_pic(z)    
+                                  
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
