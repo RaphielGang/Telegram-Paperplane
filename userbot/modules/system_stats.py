@@ -133,15 +133,20 @@ async def pipcheck(pip):
             
             
 
-@register(outgoing=True, pattern="^.setapic (.*)")
+@register(outgoing=True, pattern="^.setapic")
 @grp_exclude()
 async def setmyalivepic(setapic):
-    PP_IMG = str(setapic.text[9: ])
-    
     if not is_mongo_alive() or not is_redis_alive():
         return await setapic.reply("`Database seems to be falling!`")
-    await set_alive_pic(PP_IMG)
-    await setapic.edit("**ALIVE_IMAGE set!**")
+
+    await setapic.edit("Pleae send a telegraph link below. To cancel send `/cancel`.")
+    PP_IMG = setapic.pattern_match.group(1)
+    if PP_IMG == "/cancel":
+        setapic.reply("Aborted.")
+        return
+    else: 
+        await set_alive_pic(PP_IMG)
+        await setapic.edit("**ALIVE_IMAGE set!**")
                                    
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
