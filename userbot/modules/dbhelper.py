@@ -546,12 +546,16 @@ async def alive_pic(apic):
     
     
 async def set_alive_pic(apic):
-    alive_pic(apic)
-    MONGO.pictures.update_one({'apic': apic},
-                                 {"$set": {
-                                     'apic': apic
-                                 }})
-    return
+    to_check = MONGO.pictures.find_one({'apic': apic, 'alive_pic': True or False})
+    
+    if to_check is None:
+        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic, 'alive_pic': False})
+    else:
+        MONGO.pictures.update_one({'apic': apic},
+                                     {"$set": {
+                                         'apic': apic
+                                     }})
+        return
 
 async def get_alive_pic():
     x = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})
