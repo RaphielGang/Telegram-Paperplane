@@ -141,7 +141,7 @@ async def setmyalivepic(setapic):
     else:
         pp_img = str(setapic.txt[9: ])
         await set_alive_pic(pp_img)
-        return
+        await setapic.edit("**ALIVE_IMAGE set!**")
                                    
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
