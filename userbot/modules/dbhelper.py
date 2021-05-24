@@ -537,7 +537,7 @@ async def alive_pic(apic):
     
     if to_check is None:
         MONGO.pictures.insert_one({'alive_pic': apic})
-        return True
+        return
     
 async def set_alive_pic(apic):
     if await alive_pic(apic) is True:
