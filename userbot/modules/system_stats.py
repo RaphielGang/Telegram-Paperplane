@@ -137,15 +137,7 @@ async def setmyalivepic(setapic):
     if not is_mongo_alive() and not is_redis_alive():
         return setapic.edit("`Database seems to be falling.`")
     else:
-        await setapic.edit("Send a telegraph link below.")
-        z = "https://telegra.ph/file/f5946078425605c3f0f0b.jpg"
-        await set_alive_pic(z)
-        x = await get_alive_pic()
-        await asyncio.sleep(3)
-        y = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})
-        pic = y['apic']
-        image = pic
-        await setapic.client.send_file(setapic.chat_id, pic, reply_to=setapic.id)
+        await setapic.edit("Send a telegraph link below. Send /cancel to cancel.")
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
