@@ -204,7 +204,7 @@ async def auto_accept(event):
                 if BOTLOG:
                     await apprvpm.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
                     LOGS.info("PMPermit broke, please restart Paperplane.")
-                        return
+                    return
             if BOTLOG:
                 await event.client.send_message(
                 BOTLOG_CHATID,
