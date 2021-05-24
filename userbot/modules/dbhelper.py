@@ -530,3 +530,19 @@ async def is_excluded(chatid):
         return False
     else:
         return True
+    
+# PICTURES
+async def alive_pic(apic):
+    to_check = MONGO.pictures.find_one({'alive_pic': apic})
+    
+    if to_check is None:
+        MONGO.pictures.insert_one({'alive_pic': apic})
+        return True
+    
+async def set_alive_pic(apic):
+    if await alive_pic(apic) is True
+        MONGO.pictures.update_one({'alive_pic': apic},
+                                     {"$set": {
+                                         'alive_pic': True
+                                     }})
+        return
