@@ -139,7 +139,7 @@ async def setmyalivepic(setapic):
         await setapic.reply("Send a telegraph link below.")
         z = "bla"
         await set_alive_pic(z)
-        x = await get_alive_pic(z)
+        x = await get_alive_pic()
         await asyncio.sleep(3)
         await setapic.reply(x)
         
