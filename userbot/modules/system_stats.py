@@ -138,7 +138,8 @@ async def setmyalivepic(setapic):
         return setapic.edit("`Database seems to be falling.`")
     #await setapic.edit("Send a telegraph link below. To cancel send `/cancel`")
     pp_pic = str(setapic.text[9: ]
-    await set_alive_pic(pp_pic)
+    z = "hello"
+    await set_alive_pic(z)
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
