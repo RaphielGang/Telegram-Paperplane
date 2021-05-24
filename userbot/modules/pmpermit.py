@@ -177,9 +177,10 @@ async def auto_accept(event):
             if not is_mongo_alive() or not is_redis_alive():
                     return
             if isinstance(chat, User):
-                if await approval(event.chat_id) or chat.bot:
+                if await approval(chat.id) or chat.bot:
                     return
-                async for message in event.client.iter_messages(
+                else:
+                    async for message in event.client.iter_messages(
                     chat.id, reverse=True, limit=1
                 ):
                     if message.from_id == (await event.client.get_me()).id:
