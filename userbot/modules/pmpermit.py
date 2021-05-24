@@ -30,6 +30,7 @@ from userbot import (
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     autoapproval,
+    autoapprove,
     approval,
     approve,
     disapprove,
@@ -150,19 +151,15 @@ async def permitpm(event):
     
 @register(outgoing=True, pattern="^.autoapprove$|^.autoa$")
 @grp_exclude()
-async def autoapprove(userid):
-    if await autoapproval(userid) is True:
-        MONGO.pmpermit.update_one({'userid': userid},
-                                  {"$set": {
-                                      'autoapproval': False
-                                  }})
+async def auto_approve_switch(event):
+    """Will switch auto approve on or off"""
+    if not is_mongo_alive() or not is_redis_alive():
+        await apprvpm.edit("`Database connections failing!`")
         return
     else:
-        MONGO.pmpermit.update_one({'userid': userid},
-                                  {"$set": {
-                                      'autoapproval': True
-                                  }})
-        return 
+        chat = await event.get_chat()
+        await autoapprove(chat.id)
+        
     
     
 @register(disable_edited=True, outgoing=True, disable_errors=True)
