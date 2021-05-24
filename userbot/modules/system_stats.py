@@ -137,9 +137,11 @@ async def pipcheck(pip):
 @grp_exclude()
 async def setmyalivepic(setapic):
     if not is_mongo_alive() or not is_redis_alive():
-        return await setapic.reply("`Database seems to be failing!`"
+        return await setapic.reply("`Database seems to be falling!`")
     else:
-        z = "hello"
+        pp_img = str(setapic.txt[9: ])
+        await set_alive_pic(pp_img)
+        return
                                    
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
