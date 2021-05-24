@@ -97,7 +97,7 @@ async def permitpm(event):
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
                     warn = MAX_MSG - COUNT_PM[event.chat_id]
                 
-                while warn > 1:
+                async while warn > 1:
                     x = await event.reply(f"You have {warn} warns left.")
                     await del_in(x, 5)
                     break
@@ -242,17 +242,17 @@ async def approvepm(apprvpm):
     await approve(chat.id)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
-    async for message in event.client.iter_messages(
-        event.chat_id, from_user="me", search=UNAPPROVED_MSG):
+    async for message in apprvpm.client.iter_messages(
+        apprvpm.chat_id, from_user="me", search=UNAPPROVED_MSG):
         await message.delete()
     await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot of my owner!")
     
     try:
-        del COUNT_PM[event.chat_id]
-        del LASTMSG[event.chat_id]
+        del COUNT_PM[apprvpm.chat_id]
+        del LASTMSG[apprvpm.chat_id]
     except KeyError:
         if BOTLOG:
-           await event.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
+           await apprvpm.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
            LOGS.info("PMPermit broke, please restart Paperplane.")
            return
   
