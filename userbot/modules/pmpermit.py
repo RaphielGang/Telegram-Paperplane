@@ -344,7 +344,7 @@ async def blockpm(block):
         return await del_in(x, 5)
     else:    
         y = await block.edit("`You are gonna be blocked from PM-ing my owner!`")
-        asyncio.sleep(2)
+        await asyncio.sleep(2)
         
     if block.reply_to_msg_id:
         reply = await block.get_reply_message()
