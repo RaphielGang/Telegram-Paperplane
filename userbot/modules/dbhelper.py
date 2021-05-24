@@ -240,7 +240,7 @@ async def set_list(oldchatid, name, newchatid):
 
 
 async def approval(userid):
-    to_check = MONGO.pmpermit.find_one({'user_id': userid})
+    to_check = MONGO.pmpermit.find_one({'user_id': userid, 'approval': True or False})
 
     if to_check is None:
         MONGO.pmpermit.insert_one({'user_id': userid, 'approval': False})
