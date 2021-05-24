@@ -133,7 +133,7 @@ async def pipcheck(pip):
             
             
 
-@register(outgoing=True, pattern="^.setapic$")
+@register(outgoing=True, pattern="^.setapic")
 @grp_exclude()
 async def setmyalivepic(setapic):
     PP_IMG = str(setapic.txt[9: ])
