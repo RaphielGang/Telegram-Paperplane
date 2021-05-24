@@ -139,7 +139,7 @@ async def setmyalivepic(setapic):
     else:
         await setapic.edit("Send a telegraph link below. To cancel send /cancel")
         pp_pic = str(setapic.text[9: ]
-        await set_alive_pic(pic)
+        await set_alive_pic(pp_pic)
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
