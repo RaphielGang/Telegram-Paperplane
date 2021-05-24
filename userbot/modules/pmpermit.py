@@ -172,7 +172,7 @@ async def auto_approve_switch(event):
 @grp_exclude()
 async def auto_accept(event):
     """Will approve automatically if you texted them first."""
-    if autoapproval(event.chat_id):
+    if await autoapproval(event.chat_id) is True:
         chat = await event.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             return
