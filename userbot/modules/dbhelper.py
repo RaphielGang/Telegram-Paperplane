@@ -554,4 +554,5 @@ async def set_alive_pic(apic):
         return
 
 async def get_alive_pic():
-        MONGO.pictures.find_one({'id': 'ALIVE_PIC'})
+       x = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})
+       pic = x['apic']
