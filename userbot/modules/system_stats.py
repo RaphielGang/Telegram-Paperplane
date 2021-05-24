@@ -142,7 +142,7 @@ async def setmyalivepic(setapic):
         await set_alive_pic(z)
         x = await get_alive_pic(z)
         await asyncio.sleep(3)
-        await setapic.reply("hello", file=z)
+        await setapic.reply("hello", file=x)
         
                                                
 @register(outgoing=True, pattern="^.alive$")
