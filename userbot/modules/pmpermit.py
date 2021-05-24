@@ -238,18 +238,30 @@ async def approvepm(apprvpm):
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
-
+        
     await approve(chat.id)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
+    async for message in event.client.iter_messages(
+        event.chat_id, from_user="me", search=UNAPPROVED_MSG):
+        await message.delete()
     await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot of my owner!")
-
+    
+    try:
+        del COUNT_PM[event.chat_id]
+        del LASTMSG[event.chat_id]
+        except KeyError:
+            if BOTLOG:
+               await event.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
+               LOGS.info("PMPermit broke, please restart Paperplane.")
+               return
+  
     if BOTLOG:
         await apprvpm.client.send_message(
             BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
 
-'''@register(outgoing=True, pattern="^.disapprove$|^.da$")
+@register(outgoing=True, pattern="^.disapprove$|^.da$")
 @grp_exclude()
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
@@ -292,7 +304,7 @@ async def dapprovepm(dapprvpm):
     if BOTLOG:
         await dapprvpm.client.send_message(
             BOTLOG_CHATID, "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
-        )'''
+        )
         
         
         
