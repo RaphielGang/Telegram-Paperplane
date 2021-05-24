@@ -139,7 +139,7 @@ async def setmyalivepic(setapic):
     if not is_mongo_alive() or not is_redis_alive():
         return await setapic.reply("`Database seems to be falling!`")
 
-    PP_PIC = str(setapic.text[9: ])   
+    PP_IMG = str(setapic.text[9: ])   
     await set_alive_pic(PP_IMG)
     await setapic.edit("**ALIVE_IMAGE set!**")
                                    
