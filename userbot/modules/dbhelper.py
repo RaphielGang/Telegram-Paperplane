@@ -547,7 +547,7 @@ async def set_alive_pic(apic):
                                      }})
         return
 
-async def get_alive_pic():
+async def get_alive_pic(apic):
     if await alive_pic(apic) is True:
         Mongo.pictures.get_one({'alive_pic'})
         return
