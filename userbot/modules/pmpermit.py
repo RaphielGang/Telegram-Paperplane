@@ -42,10 +42,10 @@ from userbot.modules.dbhelper import (
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = PM_PERMIT_MSG or (
-    "`Bleep blop! This is a bot. Don't fret.\n\n`"
-    "`My owner hasn't approved you to PM. `"
-    "`Please wait for my owner to look in, they mostly approve PMs.\n\n`"
-    "`As far as I know, they don't usually approve retards though.\n\n`"
+    "Bleep blop! I am a bot. I don't remember seeing you around.\n\n"
+    "So I will wait for my owner to look in and approve you. "
+    "They mostly approve PMs.\n\n"
+    "**Till then, don't try to spam!! Follow my warnings or I will block you!**"
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
@@ -67,7 +67,7 @@ async def permitpm(event):
                 return
             apprv = await approval(event.chat_id)
 
-            # This part basically is a sanity check
+            # This part is basically a sanity check
             # If the message that sent before is Unapproved Message
             # then stop sending it again to prevent FloodHit
             if not apprv and event.text != UNAPPROVED_MSG:
@@ -87,8 +87,22 @@ async def permitpm(event):
                     LASTMSG.update({event.chat_id: event.text})
                 else:
                     await event.reply(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
-                    LASTMSG.update({event.chat_id: event.text})                      
-
+                    LASTMSG.update({event.chat_id: event.text})
+                    
+                '''if BOTLOG:
+                        name = await event.client.get_entity(event.chat_id)
+                        name0 = str(name.first_name)
+                        await event.client.send_message(
+                            BOTLOG_CHATID,
+                            "#INCOMMING_PM\n"
+                            "["
+                            + name0
+                            + "](tg://user?id="
+                            + str(event.chat_id)
+                            + ")"
+                            + " is waiting in your PM.",
+                        )'''
+                    
                 if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
                 if event.chat_id not in COUNT_PM:
@@ -139,6 +153,7 @@ async def permitpm(event):
                         name0 = str(name.first_name)
                         await event.client.send_message(
                             BOTLOG_CHATID,
+                            "#BLOCKED\n"
                             "["
                             + name0
                             + "](tg://user?id="
@@ -161,11 +176,11 @@ async def auto_approve_switch(event):
         chat = await event.get_chat()
         await autoapprove(chat.id)
         if await autoapproval(event.chat_id) is True:
-            x = await event.edit("`Autoapprove` ON! I will approve an user after you PM them.")
-            await del_in(x, 3)
+            x = await event.edit("`Auto-Approve` ON! I will approve an user after you PM them.")
+            await del_in(x, 5)
         else:
-            y = await event.edit("`Autoapprove` OFF! You will have to manually approve users now.")
-            await del_in(y, 3)
+            y = await event.edit("`Auto-Approve` OFF! You will have to manually approve users now.")
+            await del_in(y, 5)
     
     
 @register(disable_edited=True, outgoing=True, disable_errors=True)
@@ -180,6 +195,16 @@ async def auto_accept(event):
             return
         if event.is_private and not await approval(event.chat_id) and not chat.bot:
             await approve(chat.id)
+            async for message in apprvpm.client.iter_messages(apprvpm.chat_id, from_user="me", search=UNAPPROVED_MSG):
+            await message.delete()
+            try:
+                del COUNT_PM[apprvpm.chat_id]
+                del LASTMSG[apprvpm.chat_id]
+            except KeyError:
+                if BOTLOG:
+                    await apprvpm.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
+                    LOGS.info("PMPermit broke, please restart Paperplane.")
+                        return
             if BOTLOG:
                 await event.client.send_message(
                 BOTLOG_CHATID,
@@ -364,8 +389,9 @@ CMD_HELP.update(
     {
         "pmpermit": [
             "PMPermit",
-            " - `.approve|.a`: Approve the mentioned/replied person to PM.\n"
-            " - `.disapprove|.da`: Disapprove the mentioned/replied person to PM.\n"
+            " - `.autoapprove`|`.autoa`: Switches Auto-Approve module on/off.\n"
+            " - `.approve`|`.a`: Approve the mentioned/replied person to PM.\n"
+            " - `.disapprove`|`.da`: Disapprove the mentioned/replied person to PM.\n"
             " - `.block`: Blocks the person from PMing you.\n"
             " - `.unblock`: Unblocks the person, so they can PM you again.\n"
             " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
