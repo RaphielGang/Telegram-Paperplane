@@ -143,7 +143,7 @@ async def setmyalivepic(setapic):
     await set_alive_pic(PP_IMG)
     await setapic.edit("**ALIVE_IMAGE set!**")
                                    
-@register(outgoing=True, pattern="^.alive (.*)")
+@register(outgoing=True, pattern="^.alive")
 @grp_exclude()
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
