@@ -191,7 +191,7 @@ async def auto_accept(event):
         chat = await event.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             return
-        if event.text.startswith((".block", ".autoa", ".a", ".da", ".autoapprove", ".approve", ".disapprove")):
+        if event.text.startswith((".block", ".autoa", ".a", ".da", ".autoapprove", ".approve", ".disapprove", ".notifon", ".notifoff")):
             return
         if event.is_private and not await approval(event.chat_id) and not chat.bot:
             await approve(chat.id)
