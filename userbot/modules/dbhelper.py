@@ -543,7 +543,7 @@ async def set_alive_pic(apic):
     if await alive_pic(apic) is True:
         MONGO.pictures.update_one({'alive_pic': apic},
                                      {"$set": {
-                                         'alive_pic': True
+                                         'alive_pic': apic
                                      }})
         return
 
