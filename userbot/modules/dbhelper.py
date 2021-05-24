@@ -537,7 +537,7 @@ async def alive_pic(apic):
     to_check = MONGO.pictures.find_one({'apic': apic, 'alive_pic': True or False})
     
     if to_check is None:
-        MONGO.pictures.insert_one({'apic': apic, 'alive_pic': False})
+        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic, 'alive_pic': False})
         return False
     elif to_check['alive_pic'] is False:
         return False
@@ -554,4 +554,4 @@ async def set_alive_pic(apic):
         return
 
 async def get_alive_pic():
-        MONGO.pictures.find_one({'apic'})
+        MONGO.pictures.find_one({'id': 'ALIVE_PIC'})
