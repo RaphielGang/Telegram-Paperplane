@@ -177,20 +177,19 @@ async def auto_accept(event):
         if not is_mongo_alive() or not is_redis_alive():
             return
         if isinstance(chat, User):
-            if await approval(event.chat_id) or chat.bot:
-                return
-            async for message in event.client.iter_messages(
-                chat.id, reverse=True, limit=1
-            ):
-                if message.from_id == (await event.client.get_me()).id:
-                    await approve(chat.id)
-                    if BOTLOG:
-                        await event.client.send_message(
-                            BOTLOG_CHATID,
-                            "#AUTO-APPROVED\n"
-                            + "User: "
-                            + f"[{chat.first_name}](tg://user?id={chat.id})",
-                        )
+            if await approval(event.chat_id) is False:
+                async for message in event.client.iter_messages(
+                    chat.id, reverse=True, limit=1
+                ):
+                    if message.from_id == (await event.client.get_me()).id:
+                        await approve(chat.id)
+                        if BOTLOG:
+                            await event.client.send_message(
+                                BOTLOG_CHATID,
+                                "#AUTO-APPROVED\n"
+                                + "User: "
+                                + f"[{chat.first_name}](tg://user?id={chat.id})",
+                            )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
