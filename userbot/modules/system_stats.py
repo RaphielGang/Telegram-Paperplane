@@ -144,7 +144,8 @@ async def setmyalivepic(setapic):
         await asyncio.sleep(3)
         y = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})
         pic = y['apic']
-        await setapic.reply("hello", pic)
+        image = pic
+        await setapic.client.send_file(setapic.chat_id, pic, reply_to=setapic.id)
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
