@@ -249,7 +249,7 @@ async def approvepm(apprvpm):
             BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
 
-@register(outgoing=True, pattern="^.disapprove$|^.da$")
+'''@register(outgoing=True, pattern="^.disapprove$|^.da$")
 @grp_exclude()
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
@@ -292,7 +292,7 @@ async def dapprovepm(dapprvpm):
     if BOTLOG:
         await dapprvpm.client.send_message(
             BOTLOG_CHATID, "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
-        )
+        )'''
         
         
         
