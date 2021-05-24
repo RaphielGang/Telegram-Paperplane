@@ -173,25 +173,24 @@ async def auto_approve_switch(event):
 async def auto_accept(event):
     """Will approve automatically if you texted them first."""
     if event.is_private:
-            chat = await event.get_chat()
-            if not is_mongo_alive() or not is_redis_alive():
-                    return
-            if isinstance(chat, User):
-                if await approval(chat.id) or chat.bot:
-                    return
-                else:
-                    async for message in event.client.iter_messages(
-                    chat.id, reverse=True, limit=1
-                ):
-                        if message.from_id == (await event.client.get_me()).id:
-                            await approve(chat.id)
-                            if BOTLOG:
-                                await event.client.send_message(
-                                    BOTLOG_CHATID,
-                                    "#AUTO-APPROVED\n"
-                                    + "User: "
-                                    + f"[{chat.first_name}](tg://user?id={chat.id})",
-                                )
+        chat = await event.get_chat()
+        if not is_mongo_alive() or not is_redis_alive():
+            return
+        if isinstance(chat, User):
+            if await approval(event.chat_id) or chat.bot:
+                return
+            async for message in event.client.iter_messages(
+                chat.id, reverse=True, limit=1
+            ):
+                if message.from_id == (await event.client.get_me()).id:
+                    await approve(chat.id)
+                    if BOTLOG:
+                        await event.client.send_message(
+                            BOTLOG_CHATID,
+                            "#AUTO-APPROVED\n"
+                            + "User: "
+                            + f"[{chat.first_name}](tg://user?id={chat.id})",
+                        )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
