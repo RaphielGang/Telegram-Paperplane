@@ -17,7 +17,7 @@ from telethon import TelegramClient
 
 from userbot import (CMD_HELP, ALIVE_IMAGE, is_mongo_alive, is_redis_alive)
 from userbot.events import register, grp_exclude
-from userbot.modules.dbhelper import alive_pic, set_pic, get_pic
+from userbot.modules.dbhelper import alive_pic, set_alive_pic, get_alive_pic
 
 # ================= CONSTANT =================
 DEFAULT_USER = uname().node
