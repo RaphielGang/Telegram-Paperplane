@@ -137,7 +137,9 @@ async def setmyalivepic(setapic):
     if not is_mongo_alive() and not is_redis_alive():
         return setapic.edit("`Database seems to be falling.`")
     else:
-        await setapic.edit("Send a telegraph link below. Send /cancel to cancel.")
+        await setapic.edit("Send a telegraph link below. To cancel send /cancel")
+        pp_pic = str(setapic.text[9: ]
+        await set_alive_pic(pic)
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
@@ -158,8 +160,8 @@ async def amireallyalive(alive):
                      f"🤖 __Database Status__: {db} \n"
                      f"🤖 __User__: {DEFAULT_USER}\n"
     )
-    
-    if ALIVE_IMAGE:
+    PP_IMG = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
+    if PP_IMG:
          await alive.client.send_file(
                     alive.chat_id,
                     PP_IMG,
