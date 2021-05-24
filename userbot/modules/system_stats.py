@@ -140,7 +140,7 @@ async def setmyalivepic(setapic):
         return await setapic.reply("`Database seems to be falling!`")
 
     await setapic.edit("Pleae send a telegraph link below. To cancel send `/cancel`.")
-    PP_IMG = setapic.pattern_match.group(1)
+    PP_IMG = setapic.pattern_match(1)
     if PP_IMG == "/cancel":
         setapic.reply("Aborted.")
         return
