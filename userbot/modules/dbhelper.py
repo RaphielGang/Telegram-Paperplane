@@ -1,4 +1,5 @@
 from userbot import MONGO, REDIS
+import pymongo
 
 
 # Mutes
@@ -553,4 +554,4 @@ async def set_alive_pic(apic):
         return
 
 async def get_alive_pic():
-        MONGO.pictures.getIndexes({'apic'})
+        MONGO.pictures.find_one({'apic'})
