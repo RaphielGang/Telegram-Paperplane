@@ -172,20 +172,21 @@ async def auto_approve_switch(event):
 @grp_exclude()
 async def auto_accept(event):
     """Will approve automatically if you texted them first."""
-    chat = await event.get_chat()
-    if not is_mongo_alive() or not is_redis_alive():
-        return
-    if event.text.startswith((".block", ".autoa", ".a", ".da", ".autoapprove", ".approve", ".disapprove")):
-        return
-    if event.is_private and not await approval(event.chat_id):
-        await approve(chat.id)
-        if BOTLOG:
-            await event.client.send_message(
-            BOTLOG_CHATID,
-            "#AUTO-APPROVED\n"
-            + "User: "
-            + f"[{chat.first_name}](tg://user?id={chat.id})",
-      )
+    if autoapproval(event.chat_id):
+        chat = await event.get_chat()
+        if not is_mongo_alive() or not is_redis_alive():
+            return
+        if event.text.startswith((".block", ".autoa", ".a", ".da", ".autoapprove", ".approve", ".disapprove")):
+            return
+        if event.is_private and not await approval(event.chat_id) and not chat.bot:
+            await approve(chat.id)
+            if BOTLOG:
+                await event.client.send_message(
+                BOTLOG_CHATID,
+                "#AUTO-APPROVED\n"
+                + "User: "
+                + f"[{chat.first_name}](tg://user?id={chat.id})",
+          )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
