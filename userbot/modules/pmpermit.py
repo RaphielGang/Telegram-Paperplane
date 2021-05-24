@@ -42,10 +42,10 @@ from userbot.modules.dbhelper import (
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = PM_PERMIT_MSG or (
-    "Bleep blop! I am a bot. I don't remember seeing you around.\n\n"
+    "Bleep blop! I am a bot. Hmm... I don't remember seeing you around.\n\n"
     "So I will wait for my owner to look in and approve you. "
     "They mostly approve PMs.\n\n"
-    "**Till then, don't try to spam!! Follow my warnings or I will block you!**"
+    "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
@@ -88,8 +88,8 @@ async def permitpm(event):
                 else:
                     await event.reply(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
                     LASTMSG.update({event.chat_id: event.text})
-                    
-                '''if BOTLOG:
+                if await notif_state():    
+                    if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
                         await event.client.send_message(
@@ -101,7 +101,7 @@ async def permitpm(event):
                             + str(event.chat_id)
                             + ")"
                             + " is waiting in your PM.",
-                        )'''
+                        )
                     
                 if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
@@ -220,20 +220,23 @@ async def notifoff(noff_event):
     """For .notifoff command, stop getting
     notifications from unapproved PMs."""
     if await notif_off() is False:
-        return await noff_event.edit("`Notifications are already silenced!`")
-
-    return await noff_event.edit("`Notifications silenced!`")
-
+        x = await noff_event.edit("`Notifications are already silenced!`")
+        return await del_in(x, 5)
+    else:
+        y = await noff_event.edit("`Notifications silenced!`")
+        return await del_in(y, 5)  
+ 
 
 @register(outgoing=True, pattern="^.notifon$")
 @grp_exclude()
 async def notifon(non_event):
     """For .notifoff command, get notifications from unapproved PMs."""
     if await notif_on() is False:
-        return await non_event.edit("`Notifications aren't muted!")
-
-    return await non_event.edit("`Notifications unmuted!`")
-
+        x = await non_event.edit("`Notifications aren't muted!")
+        return await del_in(x, 5)
+    else:
+        y = await non_event.edit("`Notifications unmuted!`")
+        return await del_in(y, 5)
 
 @register(outgoing=True, pattern="^.approve$|^.a$")
 @grp_exclude()
@@ -246,8 +249,7 @@ async def approvepm(apprvpm):
     chat = await apprvpm.get_chat()
     if await approve(apprvpm.chat_id) is False:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
-        await del_in(x, 5)
-        return
+        return await del_in(x, 5)
         
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
@@ -294,8 +296,7 @@ async def dapprovepm(dapprvpm):
     chat = await dapprvpm.get_chat()
     if await approve(dapprvpm.chat_id) is True:
         x = await dapprvpm.edit("`I don't remember approving this user!`")
-        await del_in(x, 5)
-        return
+        return await del_in(x, 5)
         
     if dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
@@ -339,10 +340,12 @@ async def blockpm(block):
         return
 
     if await block_pm(block.chat_id) is False:
-        return await block.edit("`This user isn't approved.`")
-
-    await block.edit("`You are gonna be blocked from PM-ing my owner!`")
-
+        x = await block.edit("`The user isn't approved.`")
+        return await del_in(x, 5)
+    else:    
+        y = await block.edit("`You are gonna be blocked from PM-ing my owner!`")
+        asyncio.sleep(2)
+        
     if block.reply_to_msg_id:
         reply = await block.get_reply_message()
         replied_user = await block.client(GetFullUserRequest(reply.from_id))
@@ -356,7 +359,7 @@ async def blockpm(block):
         name0 = str(aname.first_name)
         uid = block.chat_id
 
-    await block.edit("`Blocked.`")
+    await block.edit("**Blocked.**")
 
     if BOTLOG:
         await block.client.send_message(
@@ -373,10 +376,12 @@ async def unblockpm(unblock):
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         if await approve(reply.from_id) is False:
-            return await unblock.edit("`You haven't blocked this user yet!`")
+            x = await unblock.edit("`You haven't blocked this user yet!`")
+            return await del_in(x, 5)
 
         await unblock.client(UnblockRequest(replied_user.user.id))
-        await unblock.edit("`My owner has forgiven you. You can PM them now.`")
+        await unblock.edit("`My owner has unblocked you. You can PM them now.`")
+        
 
     if BOTLOG:
         await unblock.client.send_message(
