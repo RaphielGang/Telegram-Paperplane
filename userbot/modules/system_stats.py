@@ -16,7 +16,7 @@ from telethon import version
 from telethon import TelegramClient
 
 
-from userbot import (CMD_HELP, ALIVE_IMAGE, is_mongo_alive, is_redis_alive)
+from userbot import (CMD_HELP, ALIVE_IMAGE, MONGO, is_mongo_alive, is_redis_alive)
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import alive_pic, set_alive_pic, get_alive_pic
 
@@ -142,7 +142,9 @@ async def setmyalivepic(setapic):
         await set_alive_pic(z)
         x = await get_alive_pic()
         await asyncio.sleep(3)
-        await setapic.reply("hello", file=x)
+        y = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})
+        pic = y['apic']
+        await setapic.edit(f'{pic}')
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
