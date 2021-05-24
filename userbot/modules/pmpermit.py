@@ -196,7 +196,7 @@ async def auto_accept(event):
         if event.is_private and not await approval(event.chat_id) and not chat.bot:
             await approve(chat.id)
             async for message in apprvpm.client.iter_messages(apprvpm.chat_id, from_user="me", search=UNAPPROVED_MSG):
-            await message.delete()
+                await message.delete()
             try:
                 del COUNT_PM[apprvpm.chat_id]
                 del LASTMSG[apprvpm.chat_id]
