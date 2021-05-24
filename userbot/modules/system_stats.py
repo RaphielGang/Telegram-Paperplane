@@ -137,9 +137,9 @@ async def setmyalivepic(setapic):
     if not is_mongo_alive() and not is_redis_alive():
         return setapic.edit("`Database seems to be falling.`")
     else:
-        await setapic.edit("Send a telegraph link below. To cancel send /cancel")
+        #await setapic.edit("Send a telegraph link below. To cancel send `/cancel`")
         pp_pic = str(setapic.text[9: ]
-        await set_alive_pic(pp_pic)
+        set_alive_pic(pp_pic)
                                                
 @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
