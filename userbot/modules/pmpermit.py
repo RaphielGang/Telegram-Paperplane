@@ -173,7 +173,7 @@ async def auto_accept(event):
     """Will approve automatically if you texted them first."""
     if event.is_private:
         chat = await event.get_chat()
-        if await autoapproval(event.chat_id) is True:
+        if await autoapproval(chat.id) is True:
             if not is_mongo_alive() or not is_redis_alive():
                     return
             if isinstance(chat, User):
