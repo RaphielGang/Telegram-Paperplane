@@ -239,11 +239,11 @@ async def set_list(oldchatid, name, newchatid):
 ##########
 
 
-async def approval(user_id):
-    to_check = MONGO.pmpermit.find_one({'user_id': user_id})
+async def approval(userid):
+    to_check = MONGO.pmpermit.find_one({'user_id': userid})
 
     if to_check is None:
-        MONGO.pmpermit.insert_one({'user_id': user_id, 'approval': False})
+        MONGO.pmpermit.insert_one({'user_id': userid, 'approval': False})
 
         return False
     elif to_check['approval'] is False:
@@ -252,6 +252,27 @@ async def approval(user_id):
         return True
 
     
+async def approve(userid):
+    if await approval(userid) is True:
+        return False
+    else:
+        MONGO.pmpermit.update_one({'user_id': userid},
+                                  {"$set": {
+                                      'approval': True
+                                  }})
+        return True   
+    
+
+async def disapprove(userid):
+    if await approval(userid) is False:
+        return False
+    else:
+        MONGO.pmpermit.update_one({'user_id': userid},
+                                  {"$set": {
+                                      'approval': False
+                                  }})
+        return True
+
 async def autoapproval(autouserid):
     to_check = MONGO.pmpermit.find_one({'auto_user_id': autouserid})
 
@@ -278,28 +299,6 @@ async def autoapprove(autouserid):
                                       'autoapproval': True
                                   }})
         return 
-
-async def approve(user_id):
-    if await approval(user_id) is True:
-        return False
-    else:
-        MONGO.pmpermit.update_one({'user_id': user_id},
-                                  {"$set": {
-                                      'approval': True
-                                  }})
-        return True   
-    
-
-async def disapprove(user_id):
-    if await approval(user_id) is False:
-        return False
-    else:
-        MONGO.pmpermit.update_one({'user_id': user_id},
-                                  {"$set": {
-                                      'approval': False
-                                  }})
-        return True
-
 
 
 async def block_pm(userid):
