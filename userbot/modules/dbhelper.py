@@ -267,13 +267,13 @@ async def autoapproval(userid):
 
 async def autoapprove(userid):
     if await autoapproval(userid) is True:
-        MONGO.pmpermit.update_one({'auto_userid': userid},
+        MONGO.pmpermit.update_one({'auto_user_id': userid},
                                   {"$set": {
                                       'autoapproval': False
                                   }})
         return
     else:
-        MONGO.pmpermit.update_one({'auto_userid': userid},
+        MONGO.pmpermit.update_one({'auto_user_id': userid},
                                   {"$set": {
                                       'autoapproval': True
                                   }})
