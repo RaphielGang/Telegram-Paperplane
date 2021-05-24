@@ -138,7 +138,7 @@ async def setmyalivepic(setapic):
         return setapic.edit("`Database seems to be falling.`")
     else:
         await setapic.reply("Send a telegraph link below.")
-        z = "bla"
+        z = "https://telegra.ph/file/f5946078425605c3f0f0b.jpg"
         await set_alive_pic(z)
         x = await get_alive_pic(z)
         await asyncio.sleep(3)
