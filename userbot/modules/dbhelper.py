@@ -280,7 +280,7 @@ async def autoapprove(autouserid):
         return 
 
 async def approve(user_id):
-    if await approval(userid) is True:
+    if await approval(user_id) is True:
         return False
     else:
         MONGO.pmpermit.update_one({'user_id': user_id},
@@ -291,7 +291,7 @@ async def approve(user_id):
     
 
 async def disapprove(user_id):
-    if await approval(userid) is False:
+    if await approval(user_id) is False:
         return False
     else:
         MONGO.pmpermit.update_one({'user_id': user_id},
