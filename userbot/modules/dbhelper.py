@@ -549,9 +549,10 @@ async def set_alive_pic(apic):
     if MONGO.pictures.find_one({'id': 'ALIVE_PIC', 'apic': apic}) is None:
         MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
     else:
-        MONGO.pictures.delete_one({'id': 'ALIVE_PIC', 'apic': apic})
-        #await asyncio.sleep(1)
-        #MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
+        prev_pic = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
+        MONGO.pictures.delete_one({'id': 'ALIVE_PIC', 'apic': prev_pic})
+        await asyncio.sleep(1)
+        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
         
         
 async def get_alive_pic():
