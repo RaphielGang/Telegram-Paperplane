@@ -141,7 +141,7 @@ async def setmyalivepic(setapic):
 
     PP_IMG = str(setapic.text[9: ])   
     await set_alive_pic(PP_IMG)
-    await setapic.edit("**ALIVE_IMAGE set!**")
+    await setapic.edit(MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic'])
                                    
 @register(outgoing=True, pattern="^.alive")
 @grp_exclude()
