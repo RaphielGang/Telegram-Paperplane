@@ -533,7 +533,7 @@ async def is_excluded(chatid):
         return True
     
 # PICTURES
-async def alive_pic(apic):
+'''async def alive_pic(apic):
     to_check = MONGO.pictures.find_one({'apic': apic, 'alive_pic': True or False})
     
     if to_check is None:
@@ -542,7 +542,7 @@ async def alive_pic(apic):
     elif to_check['alive_pic'] is False:
         return False
     elif to_check['alive_pic'] is True:
-        return True
+        return True'''
     
     
 async def set_alive_pic(apic):
@@ -551,8 +551,8 @@ async def set_alive_pic(apic):
     else:
         prev_pic = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
         MONGO.pictures.delete_one({'id': 'ALIVE_PIC', 'apic': prev_pic})
-        await asyncio.sleep(1)
-        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
+        #await asyncio.sleep(1)
+        #MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
         
         
 async def get_alive_pic():
