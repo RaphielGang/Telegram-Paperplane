@@ -550,8 +550,8 @@ async def set_alive_pic(apic):
         MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
     else:
         MONGO.pictures.delete_one({'id': 'ALIVE_PIC', 'apic': apic})
-        await asyncio.sleep(1)
-        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
+        #await asyncio.sleep(1)
+        #MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
         
         
 async def get_alive_pic():
