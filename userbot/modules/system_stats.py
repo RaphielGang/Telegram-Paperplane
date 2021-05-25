@@ -141,7 +141,9 @@ async def setmyalivepic(setapic):
 
     PP_IMG = str(setapic.text[9: ])   
     await set_alive_pic(PP_IMG)
-    await setapic.edit(MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic'])
+    x = await setapic.edit("**ALIVE_IMAGE set!**")
+    await asyncio.sleep(5)
+    await x.delete()
                                    
 @register(outgoing=True, pattern="^.alive")
 @grp_exclude()
@@ -163,7 +165,7 @@ async def amireallyalive(alive):
                      f"🤖 __User__: {DEFAULT_USER}\n"
     )
     #try:
-    PP_IMG = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
+    PP_IMG = await get_alive_pic
     #except TypeError:
         #PP_IMG = False
         
