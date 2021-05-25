@@ -549,7 +549,8 @@ async def set_alive_pic(apic):
     if MONGO.pictures.find_one({'id': 'ALIVE_PIC', 'apic': apic}) is None:
         MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
     else:
-        MONGO.pictures.replace_one({'id': 'ALIVE_PIC', 'apic': apic})
+        MONGO.pictures.delete_one({'id': 'ALIVE_PIC', 'apic': apic})
+        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
         
         
 async def get_alive_pic():
