@@ -162,10 +162,10 @@ async def amireallyalive(alive):
                      f"🤖 __Database Status__: {db} \n"
                      f"🤖 __User__: {DEFAULT_USER}\n"
     )
-    try:
-        PP_IMG = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
-    except TypeError:
-        PP_IMG = False
+    #try:
+    PP_IMG = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
+    #except TypeError:
+        #PP_IMG = False
         
     if PP_IMG:
          await alive.client.send_file(
