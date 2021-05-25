@@ -1,5 +1,5 @@
 from userbot import MONGO, REDIS
-import pymongo
+import asyncio
 
 
 # Mutes
@@ -550,6 +550,7 @@ async def set_alive_pic(apic):
         MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
     else:
         MONGO.pictures.delete_one({'id': 'ALIVE_PIC', 'apic': apic})
+        await asyncio.sleep(1)
         MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
         
         
