@@ -163,7 +163,7 @@ async def amireallyalive(alive):
                      f"🤖 __User__: {DEFAULT_USER}\n"
     )
     PP_IMG = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
-    if PP_IMG:
+    if type(PP_IMG) is str:
          await alive.client.send_file(
                     alive.chat_id,
                     PP_IMG,
