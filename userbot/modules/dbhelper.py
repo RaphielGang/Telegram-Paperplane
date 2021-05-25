@@ -549,8 +549,8 @@ async def set_alive_pic(apic):
     #if MONGO.pictures.find_one({'id': 'ALIVE_PIC', 'apic': apic}) is None:
         MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
         return
-    '''else:
-        MONGO.pictures.update_one({'id': 'ALIVE_PIC', 'apic': apic},
+    #else:
+        '''MONGO.pictures.update_one({'id': 'ALIVE_PIC', 'apic': apic},
                                      {"$set": {
                                          'apic': apic
                                      }})
