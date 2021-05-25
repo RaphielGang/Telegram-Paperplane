@@ -165,7 +165,7 @@ async def amireallyalive(alive):
                      f"🤖 __User__: {DEFAULT_USER}\n"
     )
     #try:
-    PP_IMG = await get_alive_pic
+    PP_IMG = await get_alive_pic()
     #except TypeError:
         #PP_IMG = False
         
