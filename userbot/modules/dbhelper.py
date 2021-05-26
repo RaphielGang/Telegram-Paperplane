@@ -546,7 +546,7 @@ async def is_excluded(chatid):
     
     
 async def set_alive_pic(apic):
-    if MONGO.pictures.find_one({'id': 'ALIVE_PIC', 'apic': apic}) is None:
+    if MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['id', 'apic'] is None:
         MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
     else:
         prev_pic = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
