@@ -174,7 +174,7 @@ async def amireallyalivereset(ureset):
         await ureset.edit("`" "Successfully reset user for alive!" "`")
 
 
-        @register(outgoing=True, pattern="^.alive$")
+@register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
