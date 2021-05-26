@@ -139,6 +139,7 @@ async def setmyalivepic(event):
     if not is_mongo_alive() or not is_redis_alive():
         return await setapic.reply("`Database seems to be falling!`")
 
+    await event.delete()
     async with event.client.conversation(event.sender_id) as setapic:
         await setapic.send_message("Send me a telegraph link. To cancel send `/cancel`")
         PP_IMG = await setapic.get_reply(z)
