@@ -139,8 +139,8 @@ async def setmyalivepic(setapic):
     if not is_mongo_alive() or not is_redis_alive():
         return await setapic.reply("`Database seems to be falling!`")
 
-    await setapic.edit("Send me a telegraph link. To cancel send `/cancel`")
-    PP_IMG = await setapic.get_response(setapic.chat_id)
+    z = await setapic.edit("Send me a telegraph link. To cancel send `/cancel`")
+    PP_IMG = await setapic.get_reply()
     if PP_IMG == "/cancel":
         asyncio.sleep(1)
         x = setapic.edit("`Operation Canceled.`")
