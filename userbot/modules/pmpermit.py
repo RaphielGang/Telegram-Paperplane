@@ -93,17 +93,13 @@ async def permitpm(event):
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
-                        if BOTLOG_CHATID in LASTMSG:
-                            async for log_message in event.client.iter_messages(
-                            BOTLOG_CHATID, from_user="me", search="#INCOMMING_PM\n["+ name0+ "](tg://user?id="+ str(event.chat_id)+ ")"+ " is waiting in your PM"):
-                                continue
+                        pm_log = "#INCOMMING_PM\n["+ name0+ "](tg://user?id="+ str(event.chat_id)+ ")"+ " is waiting in your PM"
+                        while pm_log = LASTMSG[BOTLOG_CHATID]:
+                            continue
                         else:
-                            name = await event.client.get_entity(event.chat_id)
-                            name0 = str(name.first_name)
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "#INCOMMING_PM\n["+ name0+ "](tg://user?id="+ str(event.chat_id)+ ")"+ 
-                                " is waiting in your PM"
+                                pm_log,
                             )
                     
                 if await notif_state() is False:
@@ -112,8 +108,8 @@ async def permitpm(event):
                     COUNT_PM.update({event.chat_id: 1})
                 else:
                     COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
-                    warn = MAX_MSG - COUNT_PM[event.chat_id]
-                
+                    
+                warn = MAX_MSG - COUNT_PM[event.chat_id]
                 if warn > 1:
                     warn = MAX_MSG - COUNT_PM[event.chat_id]
                     x = await event.reply(f"You have {warn} warns left.")
