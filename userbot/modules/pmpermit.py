@@ -118,7 +118,6 @@ async def permitpm(event):
                     warn = MAX_MSG - COUNT_PM[event.chat_id]
                     x = await event.reply(f"You have {warn} warns left.")
                     await del_in(x, 5)
-                    break
                 if warn == 1: 
                     y = await event.reply("You have 1 warn left.")
                     await del_in(y, 5)
