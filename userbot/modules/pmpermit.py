@@ -70,10 +70,11 @@ async def permitpm(event):
                     if not PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG)
                     elif PM_PERMIT_IMAGE:
-                        if event.file == (UNAPPROVED_MSG, file=PM_PERMIT_IMAGE):
+                        if event.file == LASTMSG[event.chat_id]
                             continue
                         else:
                             await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
+                            LASTMSG.update({event.chat_id: event.file})
                         
 
                         
