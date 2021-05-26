@@ -145,7 +145,7 @@ async def setmyalivepic(setapic):
     await asyncio.sleep(5)
     await x.delete()
                                    
-@register(outgoing=True, pattern="^.alive")
+@register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
@@ -164,10 +164,10 @@ async def amireallyalive(alive):
                      f"🤖 __Database Status__: {db} \n"
                      f"🤖 __User__: {DEFAULT_USER}\n"
     )
-    #try:
+    try:
     PP_IMG = await get_alive_pic()
-    #except TypeError:
-        #PP_IMG = False
+    except TypeError:
+        PP_IMG = False
         
     if PP_IMG:
          await alive.client.send_file(
