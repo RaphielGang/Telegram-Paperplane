@@ -204,7 +204,7 @@ async def auto_accept(event):
                 del LASTMSG[apprvpm.chat_id]
             except KeyError:
                 if BOTLOG:
-                    await apprvpm.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
+                    await event.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
                     LOGS.info("PMPermit broke, please restart Paperplane.")
                     return
             if BOTLOG:
