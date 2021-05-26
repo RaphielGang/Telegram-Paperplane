@@ -140,7 +140,7 @@ async def setmyalivepic(setapic):
         return await setapic.reply("`Database seems to be falling!`")
 
     z = await setapic.edit("Send me a telegraph link. To cancel send `/cancel`")
-    PP_IMG = await setapic.get_reply()
+    PP_IMG = await setapic.get_reply(z)
     if PP_IMG == "/cancel":
         asyncio.sleep(1)
         x = setapic.edit("`Operation Canceled.`")
