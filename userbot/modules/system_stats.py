@@ -145,7 +145,36 @@ async def setmyalivepic(setapic):
     await asyncio.sleep(5)
     await x.delete()
                                    
-@register(outgoing=True, pattern="^.alive$")
+
+
+@register(outgoing=True, pattern="^.aliveu")
+@grp_exclude()
+async def amireallyaliveuser(username):
+    """ For .aliveu command, change the username in the .alive command. """
+    if not username.text[0].isalpha() and username.text[0] not in ("/", "#",
+                                                                   "@", "!"):
+        message = username.text
+        output = '.aliveu [new user without brackets] nor can it be empty'
+        if not (message == '.aliveu' or message[7:8] != ' '):
+            newuser = message[8:]
+            global DEFAULTUSER
+            DEFAULTUSER = newuser
+            output = 'Successfully changed user to ' + newuser + '!'
+        await username.edit("`" f"{output}" "`")
+
+
+@register(outgoing=True, pattern="^.resetalive$")
+@grp_exclude()
+async def amireallyalivereset(ureset):
+    """ For .resetalive command, reset the username in the .alive command. """
+    if not ureset.text[0].isalpha() and ureset.text[0] not in ("/", "#", "@",
+                                                               "!"):
+        global DEFAULTUSER
+        DEFAULTUSER = uname().node
+        await ureset.edit("`" "Successfully reset user for alive!" "`")
+
+
+        @register(outgoing=True, pattern="^.alive$")
 @grp_exclude()
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
@@ -185,34 +214,8 @@ async def amireallyalive(alive):
                     f"🤖 __Database Status__: {db} \n"
                     f"🤖 __User__: {DEFAULT_USER}\n"
     )
-
-@register(outgoing=True, pattern="^.aliveu")
-@grp_exclude()
-async def amireallyaliveuser(username):
-    """ For .aliveu command, change the username in the .alive command. """
-    if not username.text[0].isalpha() and username.text[0] not in ("/", "#",
-                                                                   "@", "!"):
-        message = username.text
-        output = '.aliveu [new user without brackets] nor can it be empty'
-        if not (message == '.aliveu' or message[7:8] != ' '):
-            newuser = message[8:]
-            global DEFAULTUSER
-            DEFAULTUSER = newuser
-            output = 'Successfully changed user to ' + newuser + '!'
-        await username.edit("`" f"{output}" "`")
-
-
-@register(outgoing=True, pattern="^.resetalive$")
-@grp_exclude()
-async def amireallyalivereset(ureset):
-    """ For .resetalive command, reset the username in the .alive command. """
-    if not ureset.text[0].isalpha() and ureset.text[0] not in ("/", "#", "@",
-                                                               "!"):
-        global DEFAULTUSER
-        DEFAULTUSER = uname().node
-        await ureset.edit("`" "Successfully reset user for alive!" "`")
-
-
+            
+            
 CMD_HELP.update({
     "system stats": [
         'System Stats', " - `.sysd`: Show system information using neofetch.\n"
