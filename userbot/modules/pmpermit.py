@@ -66,15 +66,17 @@ async def permitpm(event):
             if not is_mongo_alive() or not is_redis_alive():
                 return
             if await approval(event.chat_id) is False:
-                for i in range(0, 2):
-                    if not PM_PERMIT_IMAGE:
+                if MONGO.userbot.pmpermit.find_one({'prev_msg': event.chat_id}) is None:
+                    if PM_PERMIT_IMAGE:
+                        await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
+                        MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
+                    elif not PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG)
-                    elif PM_PERMIT_IMAGE:
-                        if event.file == await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE):
-                            break
-                        else:
-                            await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
-                        
+                        MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
+                else:
+                    async for message in event.client.iter_messages(event.chat_id, from_user="me", search=UNAPPROVED_MSG):
+                        await message.delete()
+                            
 
                         
     
