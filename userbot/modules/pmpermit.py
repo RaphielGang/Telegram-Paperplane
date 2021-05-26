@@ -65,7 +65,7 @@ async def permitpm(event):
         if event.is_private and not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
                 return
-            if await approval(event.chat_id) id False:
+            if await approval(event.chat_id) is False:
                 while True:
                     if event.text == UNAPPROVED_MSG:
                         continue
