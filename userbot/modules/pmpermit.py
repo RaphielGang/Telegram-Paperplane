@@ -23,7 +23,7 @@ from userbot import (
     MAX_FLOOD_IN_PM,
     is_mongo_alive,
     is_redis_alive,
-    #PM_PERMIT_IMAGE,
+    PM_PERMIT_IMAGE,
     PM_PERMIT_MSG,
     
 )
@@ -49,7 +49,6 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
-PM_PERMIT_IMAGE = ""
 # =================================================================
 
 async def del_in(text, seconds):
@@ -66,99 +65,15 @@ async def permitpm(event):
         if event.is_private and not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
                 return
-            apprv = await approval(event.chat_id)
-
-            # This part is basically a sanity check
-            # If the message that sent before is Unapproved Message
-            # then stop sending it again to prevent FloodHit
-            if not apprv and event.text != UNAPPROVED_MSG:
-                if event.chat_id in LASTMSG:
-                    prevmsg = LASTMSG[event.chat_id]
-                    # If the message doesn't same as previous one
-                    # Send the Unapproved Message again
-                    if event.text != prevmsg:
-                        # Searches for previously sent UNAPPROVED_MSGs
-                        async for message in event.client.iter_messages(
-                            event.chat_id, from_user="me", search=UNAPPROVED_MSG
-                        ):
-                            continue
-                    LASTMSG.update({event.chat_id: event.text})
-                elif not PM_PERMIT_IMAGE:
-                    await event.reply(UNAPPROVED_MSG)
-                    LASTMSG.update({event.chat_id: event.text})
-                else:
-                    await event.reply(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
-                    LASTMSG.update({event.chat_id: event.text})
-                if await notif_state():
-                    if BOTLOG:
-                        name = await event.client.get_entity(event.chat_id)
-                        name0 = str(name.first_name)
-                        pm_log = "#INCOMMING_PM\n["+ name0+ "](tg://user?id="+ str(event.chat_id)+ ")"+ " is waiting in your PM"
-                        while pm_log == LASTMSG[BOTLOG_CHATID]:
-                            continue
-                        else:
-                            await event.client.send_message(
-                                BOTLOG_CHATID,
-                                pm_log,
-                            )
-                    
-                if await notif_state() is False:
-                    await event.client.send_read_acknowledge(event.chat_id)
-                if event.chat_id not in COUNT_PM:
-                    COUNT_PM.update({event.chat_id: 1})
-                else:
-                    COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
-                    
-                warn = MAX_MSG - COUNT_PM[event.chat_id]
-                if warn > 1:
-                    warn = MAX_MSG - COUNT_PM[event.chat_id]
-                    x = await event.reply(f"You have {warn} warns left.")
-                    await del_in(x, 5)
-                if warn == 1: 
-                    y = await event.reply("You have 1 warn left.")
-                    await del_in(y, 5)
-                elif warn == 0:
-                    z = await event.reply("**It is the last warning. Please stop spamming!!**")
-                    await del_in(z, 10)
-                if warn == -1:
-                    await event.respond(
-                        "`You were spamming my owner's PM, `"
-                        "`which I don't like.`"
-                        "`You are BLOCKED and Reported as SPAM.`"
-                    )
-                    async for message in event.client.iter_messages(
-                            event.chat_id, from_user="me", search=UNAPPROVED_MSG
-                        ):
-                        await message.delete()
-
-                    try:
-                        del COUNT_PM[event.chat_id]
-                        del LASTMSG[event.chat_id]
-                    except KeyError:
-                        if BOTLOG:
-                            await event.client.send_message(
-                                BOTLOG_CHATID,
-                                "PMPermit broke, please restart Paperplane.",
-                            )
-                        LOGS.info("PMPermit broke, please restart Paperplane.")
-                        return
-
-                    await event.client(BlockRequest(event.chat_id))
-                    await event.client(ReportSpamRequest(peer=event.chat_id))
-
-                    if BOTLOG:
-                        name = await event.client.get_entity(event.chat_id)
-                        name0 = str(name.first_name)
-                        await event.client.send_message(
-                            BOTLOG_CHATID,
-                            "#BLOCKED\n"
-                            "["
-                            + name0
-                            + "](tg://user?id="
-                            + str(event.chat_id)
-                            + ")"
-                            + " was spamming your PM and has been blocked.",
-                        )
+            if await approval(event.chat_id) id False:
+                while True:
+                    if event.text == UNAPPROVED_MSG:
+                        continue
+                    elif not PM_PERMIT_IMAGE:
+                        await event.respond(UNAPPROVED_MSG)
+                    elif PM_PERMIT_IMAGE:
+                        await event.respond(UNAPPROVED_MSG, PM_PERMIT_IMAGE)
+                        
 
                         
     
