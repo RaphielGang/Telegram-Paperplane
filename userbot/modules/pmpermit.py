@@ -67,7 +67,7 @@ async def permitpm(event):
                 return
             if await approval(event.chat_id) is False:
                 while True:
-                    if event.text == UNAPPROVED_MSG:
+                    if event.file == UNAPPROVED_MSG:
                         continue
                     elif not PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG)
