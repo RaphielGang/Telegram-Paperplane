@@ -13,6 +13,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
 from userbot import (
+    MONGO,
     BOTLOG,
     BOTLOG_CHATID,
     CMD_HELP,
