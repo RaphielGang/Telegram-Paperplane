@@ -90,7 +90,7 @@ async def permitpm(event):
                     LASTMSG.update({event.chat_id: event.text})
                 if await notif_state():
                     if BOTLOG:
-                        if event.chat_id in LASTMSG:
+                        if BOTLOG_CHATID in LASTMSG:
                             name = await event.client.get_entity(event.chat_id)
                             name0 = str(name.first_name)
                             async for log_message in event.client.iter_messages(
