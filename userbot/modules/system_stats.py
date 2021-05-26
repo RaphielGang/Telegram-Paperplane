@@ -135,21 +135,22 @@ async def pipcheck(pip):
 
 @register(outgoing=True, pattern="^.setapic")
 @grp_exclude()
-async def setmyalivepic(setapic):
+async def setmyalivepic(event):
     if not is_mongo_alive() or not is_redis_alive():
         return await setapic.reply("`Database seems to be falling!`")
 
-    z = await setapic.edit("Send me a telegraph link. To cancel send `/cancel`")
-    PP_IMG = await setapic.get_reply(z)
-    if PP_IMG == "/cancel":
-        asyncio.sleep(1)
-        x = setapic.edit("`Operation Canceled.`")
-        return await x.delete()
-    else:
-        await set_alive_pic(PP_IMG)
-        y = await setapic.edit("**ALIVE_IMAGE set!**")
-        await asyncio.sleep(5)
-        await y.delete()
+    async with event.client.conversation(event.sender_id) as setapic:
+        await setapic.send_message("Send me a telegraph link. To cancel send `/cancel`")
+        PP_IMG = await setapic.get_reply(z)
+        if PP_IMG == "/cancel":
+            asyncio.sleep(1)
+            x = setapic.respond("`Operation Canceled.`")
+            return await x.delete()
+        else:
+            await set_alive_pic(PP_IMG)
+            y = await setapic.respond("**ALIVE_IMAGE set!**")
+            await asyncio.sleep(5)
+            await y.delete()
                                    
 
 
