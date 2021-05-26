@@ -94,7 +94,7 @@ async def permitpm(event):
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
                         pm_log = "#INCOMMING_PM\n["+ name0+ "](tg://user?id="+ str(event.chat_id)+ ")"+ " is waiting in your PM"
-                        while pm_log = LASTMSG[BOTLOG_CHATID]:
+                        while pm_log == LASTMSG[BOTLOG_CHATID]:
                             continue
                         else:
                             await event.client.send_message(
