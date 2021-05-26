@@ -66,7 +66,7 @@ async def permitpm(event):
             if not is_mongo_alive() or not is_redis_alive():
                 return
             if await approval(event.chat_id) is False:
-                while i < 2:
+                for i in range(0, 2):
                     if not PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG)
                     elif PM_PERMIT_IMAGE:
@@ -74,7 +74,6 @@ async def permitpm(event):
                             break
                         else:
                             await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
-                            i +=1
                         
 
                         
