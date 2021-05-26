@@ -95,7 +95,7 @@ async def permitpm(event):
                         if BOTLOG_CHATID in LASTMSG:
                             async for log_message in event.client.iter_messages(
                             BOTLOG_CHATID, from_user="me", search="#INCOMMING_PM\n["+ name0+ "](tg://user?id="+ str(event.chat_id)+ ")"+ " is waiting in your PM"):
-                            continue
+                                continue
                         else:
                             name = await event.client.get_entity(event.chat_id)
                             name0 = str(name.first_name)
