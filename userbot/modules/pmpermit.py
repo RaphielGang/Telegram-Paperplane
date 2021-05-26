@@ -70,7 +70,7 @@ async def permitpm(event):
                     if not PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG)
                     elif PM_PERMIT_IMAGE:
-                        if event.file == UNAPPROVED_MSG and PM_PERMIT_IMAGE:
+                        if event.file == await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE):
                             continue
                         else:
                             await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
