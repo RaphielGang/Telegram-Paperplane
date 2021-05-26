@@ -88,7 +88,17 @@ async def permitpm(event):
                 else:
                     await event.reply(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
                     LASTMSG.update({event.chat_id: event.text})
-                if await notif_state():    
+                if await notif_state():
+                    async for message in event.client.iter_messages(
+                            BOTLOG_CHATID, from_user="me", search="#INCOMMING_PM\n"
+                                                                  "["
+                                                                  + name0
+                                                                  + "](tg://user?id="
+                                                                  + str(event.chat_id)
+                                                                  + ")"
+                                                                  + " is waiting in your PM.",
+                        ):
+                            continue
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
