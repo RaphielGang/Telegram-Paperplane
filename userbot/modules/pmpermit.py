@@ -50,6 +50,7 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
+PM_PERMIT_IMAGE=""
 # =================================================================
 
 async def del_in(text, seconds):
