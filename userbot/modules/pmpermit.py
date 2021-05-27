@@ -50,6 +50,9 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
+
+DUH = (UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
+
 # =================================================================
 
 async def del_in(text, seconds):
@@ -75,7 +78,7 @@ async def permitpm(event):
                         await event.respond(UNAPPROVED_MSG)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
                 else:
-                    async for message in event.client.iter_messages(event.chat_id, from_user="me", search=[UNAPPROVED_MSG, file=PM_PERMIT_IMAGE]):
+                    async for message in event.client.iter_messages(event.chat_id, from_user="me", search=DUH):
                         await message.delete()
                             
 
