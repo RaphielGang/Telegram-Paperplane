@@ -24,7 +24,7 @@ from userbot import (
     MAX_FLOOD_IN_PM,
     is_mongo_alive,
     is_redis_alive,
-    PM_PERMIT_IMAGE,
+    #PM_PERMIT_IMAGE,
     PM_PERMIT_MSG,
     
 )
@@ -75,7 +75,7 @@ async def permitpm(event):
                         await event.respond(UNAPPROVED_MSG)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
                 else:
-                    message = await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
+                    message = await event.respond(UNAPPROVED_MSG)
                     await message.delete()
                             
 
