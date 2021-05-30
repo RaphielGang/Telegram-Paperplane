@@ -76,7 +76,7 @@ async def permitpm(event):
                         y = await event.respond(UNAPPROVED_MSG)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
                 else:
-                    x.delete()
+                    y.delete()
                             
 
                         
