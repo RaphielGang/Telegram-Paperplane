@@ -105,8 +105,8 @@ async def permitpm(event):
                                 BOTLOG_CHATID,
                                 "PMPermit broke, please restart Paperplane.",
                             )
-                        LOGS.info("PMPermit broke, please restart Paperplane.")
-                        return
+                    LOGS.info("PMPermit broke, please restart Paperplane.")
+                    return
                     
                 await async for message in event.client.iter_messages(
                             event.chat_id, from_user="me", search=UNAPPROVED_MSG):
