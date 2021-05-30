@@ -110,7 +110,8 @@ async def permitpm(event):
                     
                     async for message in event.client.iter_messages(
                                 event.chat_id, from_user="me", search=str(UNAPPROVED_MSG)):
-                        await message.respond(message + "/n Done")
+                        if message.message == UNAPPROVED_MSG:
+                            await message.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
