@@ -108,7 +108,7 @@ async def permitpm(event):
                     LOGS.info("PMPermit broke, please restart Paperplane.")
                     return
                     
-                await async for message in event.client.iter_messages(
+                async for message in event.client.iter_messages(
                             event.chat_id, from_user="me", search=UNAPPROVED_MSG):
                     await message.delete()
                 
