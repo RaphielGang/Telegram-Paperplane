@@ -75,50 +75,50 @@ async def permitpm(event):
                         await event.respond(UNAPPROVED_MSG)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
                         
-            if await notif_state() is False:
-                await event.client.send_read_acknowledge(event.chat_id)
-            if event.chat_id not in COUNT_PM:
-                COUNT_PM.update({event.chat_id: 1})
-            else:
-                COUNT_PM[event.chat_id] += 1
+                if await notif_state() is False:
+                    await event.client.send_read_acknowledge(event.chat_id)
+                if event.chat_id not in COUNT_PM:
+                    COUNT_PM.update({event.chat_id: 1})
+                else:
+                    COUNT_PM[event.chat_id] += 1
                 
-            WARN = MAX_MSG - COUNT_PM[event.chat_id]
-            if WARN > 1:
-                message = await event.reply(f"You have {WARN} warns left.")
-                await del_in(message, 5)
-            elif WARN == 1:
-                message = await event.reply("You have 1 warn left.")
-                await del_in(message, 5)
-            elif WARN == 0:
-                message = await event.reply("**This is the last warning. Please stop spamming!!**")
-                await del_in(message, 10)
-            elif WARN < 0:
-                await event.respond("You were spamming the PM, inspite of my warnings.\n"
+                WARN = MAX_MSG - COUNT_PM[event.chat_id]
+                if WARN > 1:
+                    message = await event.reply(f"You have {WARN} warns left.")
+                    await del_in(message, 5)
+                elif WARN == 1:
+                    message = await event.reply("You have 1 warn left.")
+                    await del_in(message, 5)
+                elif WARN == 0:
+                    message = await event.reply("**This is the last warning. Please stop spamming!!**")
+                    await del_in(message, 10)
+                elif WARN < 0:
+                    await event.respond("You were spamming the PM, inspite of my warnings.\n"
                                     "So now you are BLOCKED and REPORTED spam!!")
                 
-                try:
-                    del COUNT_PM[event.chat_id]
-                    MONGO.userbot.pmpermit.delete_one({'prev_msg': event.chat_id})
-                except KeyError:
-                    if BOTLOG:
-                            await event.client.send_message(
-                                BOTLOG_CHATID,
-                                "PMPermit broke, please restart Paperplane.",
-                            )
-                    LOGS.info("PMPermit broke, please restart Paperplane.")
-                    return
+                    try:
+                        del COUNT_PM[event.chat_id]
+                        MONGO.userbot.pmpermit.delete_one({'prev_msg': event.chat_id})
+                    except KeyError:
+                        if BOTLOG:
+                                await event.client.send_message(
+                                    BOTLOG_CHATID,
+                                    "PMPermit broke, please restart Paperplane.",
+                                )
+                        LOGS.info("PMPermit broke, please restart Paperplane.")
+                        return
                     
-                async for message in event.client.iter_messages(
-                            event.chat_id, from_user="me", search=UNAPPROVED_MSG):
-                    await message.delete()
+                    async for message in event.client.iter_messages(
+                                event.chat_id, from_user="me", search=UNAPPROVED_MSG):
+                        await message.delete()
                 
-                await event.client(BlockRequest(event.chat_id))
-                await event.client(ReportSpamRequest(peer=event.chat_id))
+                    await event.client(BlockRequest(event.chat_id))
+                    await event.client(ReportSpamRequest(peer=event.chat_id))
                 
-                if BOTLOG:
-                        name = await event.client.get_entity(event.chat_id)
-                        name0 = str(name.first_name)
-                        await event.client.send_message(
+                    if BOTLOG:
+                         name = await event.client.get_entity(event.chat_id)
+                         name0 = str(name.first_name)
+                         await event.client.send_message(
                             BOTLOG_CHATID,
                             "["
                             + name0
