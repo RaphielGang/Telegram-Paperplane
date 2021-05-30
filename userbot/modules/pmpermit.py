@@ -109,7 +109,7 @@ async def permitpm(event):
                         return
                     
                     async for message in event.client.iter_messages(
-                                event.chat_id, from_user="me", search=UNAPPROVED_MSG):
+                                event.chat_id, from_user="me", search=str(UNAPPROVED_MSG)):
                         await message.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
@@ -229,7 +229,7 @@ async def approvepm(apprvpm):
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
         
-    await approve(chat.id)
+    await approve(uid)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
     async for message in apprvpm.client.iter_messages(
@@ -276,7 +276,7 @@ async def dapprovepm(dapprvpm):
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
     
-    await disapprove(chat.id)
+    await disapprove(uid)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) .")
     await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ..")
