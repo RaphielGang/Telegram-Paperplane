@@ -50,7 +50,7 @@ So I will wait for my owner to look in and approve you.
 They mostly approve PMs.
 
 
-**Till then, don't try to spam! Follow my warnings or I will block you!!**"""
+Till then, don't try to spam! Follow my warnings or I will block you!!"""
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
