@@ -24,7 +24,7 @@ from userbot import (
     MAX_FLOOD_IN_PM,
     is_mongo_alive,
     is_redis_alive,
-    #PM_PERMIT_IMAGE,
+    PM_PERMIT_IMAGE,
     PM_PERMIT_MSG,
     
 )
@@ -50,7 +50,6 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
 )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
-PM_PERMIT_IMAGE=""
 # =================================================================
 
 async def del_in(text, seconds):
@@ -70,13 +69,30 @@ async def permitpm(event):
             if await approval(event.chat_id) is False:
                 if MONGO.userbot.pmpermit.find_one({'prev_msg': event.chat_id}) is None:
                     if PM_PERMIT_IMAGE:
-                        x = await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
+                        await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
                     elif not PM_PERMIT_IMAGE:
-                        y = await event.respond(UNAPPROVED_MSG)
+                        await event.respond(UNAPPROVED_MSG)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
-                else:
-                    y.delete()
+                        
+            if await notif_state() is False:
+                await event.client.send_read_acknowledge(event.chat_id)
+            if event.chat_id not in COUNT_PM:
+                COUNT_PM.update({event.chat_id: 1})
+            else:
+                COUNT_PM[event.chat_id] += 1
+                
+            WARN = MAX_MSG - COUNT_PM[event.chat_id]
+            if WARN > 1:
+                event.reply("You have {WARN} warns left.")
+                await del_in(5)
+            elif WARN == 1:
+                event.reply("You have 1 warn left.")
+                await del_in(5)
+            elif WARN < 0:
+                await event.reply("**This is the last warning. Please stop spamming!!**)
+                    
+
                             
 
                         
