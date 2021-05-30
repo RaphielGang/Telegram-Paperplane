@@ -70,16 +70,13 @@ async def permitpm(event):
             if await approval(event.chat_id) is False:
                 if MONGO.userbot.pmpermit.find_one({'prev_msg': event.chat_id}) is None:
                     if PM_PERMIT_IMAGE:
-                        await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
+                        x = await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
                     elif not PM_PERMIT_IMAGE:
-                        await event.respond(UNAPPROVED_MSG)
+                        y = await event.respond(UNAPPROVED_MSG)
                         MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
                 else:
-                    async for message in event.client.iter_messages(
-                        event.chat_id, from_user="me", search=UNAPPROVED_MSG
-                    ):
-                        await message.delete()
+                    x.delete()
                             
 
                         
