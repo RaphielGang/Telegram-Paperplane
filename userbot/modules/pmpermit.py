@@ -89,13 +89,46 @@ async def permitpm(event):
             elif WARN == 1:
                 event.reply("You have 1 warn left.")
                 await del_in(5)
+            elif WARN == 0:
+                await event.reply("**This is the last warning. Please stop spamming!!**")
+                await del_in(10)
             elif WARN < 0:
-                await event.reply("**This is the last warning. Please stop spamming!!**)
+                await event.respond("You were spamming the PM, inspite of my warnings.\n"
+                                    "So now you are BLOCKED and REPORTED spam!!")
+                
+                try:
+                    del COUNT_PM[event.chat_id]
+                    MONGO.userbot.pmpermit.delete_one({'prev_msg': event.chat_id})
+                except KeyError:
+                    if BOTLOG:
+                            await event.client.send_message(
+                                BOTLOG_CHATID,
+                                "PMPermit broke, please restart Paperplane.",
+                            )
+                        LOGS.info("PMPermit broke, please restart Paperplane.")
+                        return
                     
-
-                            
-
-                        
+                await async for message in event.client.iter_messages(
+                            event.chat_id, from_user="me", search=UNAPPROVED_MSG):
+                    await message.delete()
+                
+                await event.client(BlockRequest(event.chat_id))
+                await event.client(ReportSpamRequest(peer=event.chat_id))
+                
+                if BOTLOG:
+                        name = await event.client.get_entity(event.chat_id)
+                        name0 = str(name.first_name)
+                        await event.client.send_message(
+                            BOTLOG_CHATID,
+                            "["
+                            + name0
+                            + "](tg://user?id="
+                            + str(event.chat_id)
+                            + ")"
+                            + " was spamming your PM and has been blocked.",
+                        )
+                    
+         
     
     
 @register(outgoing=True, pattern="^.autoapprove$|^.autoa$")
