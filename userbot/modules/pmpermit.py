@@ -43,12 +43,10 @@ from userbot.modules.dbhelper import (
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = PM_PERMIT_MSG or (
-'''Bleep blop! I am a bot. Hmm...
-I don't remember seeing you around.
-
-So I will wait for my owner to look in and approve you. They mostly approve PMs.
-
-**Till then, don't try to spam! Follow my warnings or I will block you!!**'''
+    "Bleep blop! I am a bot.\n"
+    "Hmm...I don't remember seeing you around.\n\n"
+    "So I will wait for my owner to look in and approve you. They mostly approve PMs.\n\n"
+    "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
     )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
@@ -62,7 +60,7 @@ async def iterate_delete(event, event_id, text):
     async for message in event.client.iter_messages(
         event_id, from_user="me"
     ):
-        clean_msg = message.message.replace('**', ' ')
+        clean_msg = message.text.replace('**', '')
         if clean_msg == text:
             await message.delete()
 
