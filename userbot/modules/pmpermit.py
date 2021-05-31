@@ -60,8 +60,8 @@ async def iterate_delete(event, event_id, text):
     async for message in event.client.iter_messages(
         event_id, from_user="me"
     ):
-        clean_msg = message.replace('**', '')
-        if clean_msg.message == text:
+        clean_msg = message.message.replace('**', '')
+        if clean_msg == text:
             await message.delete()
 
 
