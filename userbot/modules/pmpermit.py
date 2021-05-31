@@ -64,9 +64,9 @@ async def iterate(event, event_id):
     async for msg in event.client.iter_messages(
         event_id, from_user="me"
     ):
-       message = msg.message.replace('**', '')
-       message = msg.message.replace('__', '')
-       return message
+       #message = msg.message.replace('**', '')
+       #message = msg.message.replace('__', '')
+       return msg
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
@@ -121,8 +121,8 @@ async def permitpm(event):
                         return
                     
                     message = await iterate(event, event.chat_id)
-                    if message == UNAPPROVED_MSG:
-                        await message.delete()
+                    if msg == UNAPPROVED_MSG:
+                        await msg.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
