@@ -60,6 +60,14 @@ async def del_in(text, seconds):
     await asyncio.sleep(seconds)
     return await text.delete()
 
+async def iterate(event_id):
+    async for msg in event.client.iter_messages(
+        event_id, from_user="me"
+    ):
+       message = msg.message.replace('**', '')
+       message = msg.message.replace('__', '')
+       return message
+
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
 @grp_exclude()
@@ -112,10 +120,9 @@ async def permitpm(event):
                         LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
                     
-                    async for message in event.client.iter_messages(
-                                event.chat_id, from_user="me"):
-                        if message.message == UNAPPROVED_MSG:
-                            await message.delete()
+                    message = await iterate(event.chat_id)
+                    if message.message == UNAPPROVED_MSG:
+                        await message.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
