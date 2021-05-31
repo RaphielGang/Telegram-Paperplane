@@ -234,7 +234,10 @@ async def approvepm(apprvpm):
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
     await iterate_delete(apprvpm, uid, UNAPPROVED_MSG)
-    await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot of my owner!")
+    if apprvpm.reply_to_msg_id:
+        await apprvpm.edit("[{name0}](tg://user?id={uid}), you can PM without an issue😊")
+    else:
+        await apprvpm.edit("Hey there! Nice to meet you😊 I am an obidient bot of my owner!")
 
     if BOTLOG:
         await apprvpm.client.send_message(
