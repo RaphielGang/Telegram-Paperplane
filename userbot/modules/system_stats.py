@@ -138,7 +138,7 @@ async def pipcheck(pip):
 @grp_exclude()
 async def setmyalivepic(setapic):
     x = await setapic.respond("duh")
-    LASTMSG.update({'something': True})
+    SOME_MSG.update({'something': True})
     
     
 @register(outgoing=True)
