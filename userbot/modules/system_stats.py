@@ -136,7 +136,7 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern="^.setapic")
 @grp_exclude()
 async def setmyalivepic(setapic):
-    x = event.respond("duh")
+    x = setapic.respond("duh")
     @register(outgoing=True)
     async def bruh(event):
         hmph = event.text
