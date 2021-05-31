@@ -135,7 +135,8 @@ async def pipcheck(pip):
 
 @register(outgoing=True, pattern="^.setapic")
 @grp_exclude()
-async with client.conversation(...) as conv:
+async def name(event):
+  async with event.client.conversation(...) as conv:
     await conv.send_message('Hey, what is your name?')
 
     response = await conv.get_response()
