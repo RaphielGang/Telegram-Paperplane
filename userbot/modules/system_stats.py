@@ -135,14 +135,13 @@ async def pipcheck(pip):
 
 @register(outgoing=True, pattern="^.setapic")
 @grp_exclude()
-async def name(event):
-  async with event.client.conversation(event.sender_id) as conv:
-    await conv.send_message('Hey, what is your name?')
-
-    response = await conv.get_response()
-    name = response.text
-
-    await conv.send_message(f'Nice to meet you, {name}!')    
+async def setmyalivepic(setapic):
+    x = event.respond("duh")
+    @register(outgoing=True)
+    async def bruh(event):
+        hmph = event.text
+        await event.respond(hmph)
+    
 
 
 @register(outgoing=True, pattern="^.aliveu")
