@@ -62,7 +62,7 @@ async def del_in(text, seconds):
 
 async def iterate(event, event_id):
     async for msg in event.client.iter_messages(
-        event_id, from_user="me"
+        event_id, from_user="me",
     ):
        #message = msg.message.replace('**', '')
        #message = msg.message.replace('__', '')
