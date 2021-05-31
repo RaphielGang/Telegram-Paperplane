@@ -120,9 +120,11 @@ async def permitpm(event):
                         LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
                     
-                    message = await iterate(event, event.chat_id)
-                    if message.message == UNAPPROVED_MSG:
-                        await message.delete()
+                    async for message in event.client.iter_messages(
+                        event.chat_id, from_user="me",
+                    ):
+                        if message.message == UNAPPROVED_MSG:
+                            await message.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
