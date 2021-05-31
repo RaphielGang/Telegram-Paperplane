@@ -121,7 +121,6 @@ async def permitpm(event):
                         event.chat_id, from_user="me",
                     ):
                         message = message.message.replace('**', '')
-                        message = message.replace('__', '')
                         if message == UNAPPROVED_MSG:
                            await message.delete()
                 
