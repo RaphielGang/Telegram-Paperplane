@@ -160,25 +160,24 @@ async def auto_approve_switch(event):
 async def auto_accept(event):
     """Will approve automatically if you text them."""
     if await autoapproval(event.chat_id) is True:
-        
+        chat = await event.get_chat()
         if not is_mongo_alive() or not is_redis_alive():
             return
-        
-        if event.text.startswith((".block", ".autoa", ".a", ".da", ".autoapprove", ".approve", ".disapprove", ".notifon", ".notifoff")):
+        if event.text.startswith((".block", ".autoa", ".a", ".da", ".autoapprove", 
+                                  ".approve", ".disapprove", ".notifon", ".notifoff")):
             return
-        
-        if event.is_private and not await approval(event.chat_id) and not chat.bot:
-            chat = await event.get_chat()
-            await approve(chat.id)
-            await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
+        if event.is_private: 
+            if not await approval(event.chat_id) and not chat.bot:
+                await approve(chat.id)
+                await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
 
-            if BOTLOG:
-                await event.client.send_message(
-                BOTLOG_CHATID,
-                "#AUTO-APPROVED\n"
-                + "User: "
-                + f"[{chat.first_name}](tg://user?id={chat.id})",
-          )
+                if BOTLOG:
+                    await event.client.send_message(
+                    BOTLOG_CHATID,
+                    "#AUTO-APPROVED\n"
+                    + "User: "
+                    + f"[{chat.first_name}](tg://user?id={chat.id})",
+              )
 
 
 @register(outgoing=True, pattern="^.notifoff$")
