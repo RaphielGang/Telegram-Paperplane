@@ -43,15 +43,11 @@ from userbot.modules.dbhelper import (
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = PM_PERMIT_MSG or (
-"""Bleep blop! I am a bot. Hmm... I don't remember seeing you around.
-
-
-So I will wait for my owner to look in and approve you. 
-They mostly approve PMs.
-
-
-Till then, don't try to spam! Follow my warnings or I will block you!!"""
-)
+        "Bleep blop! I am a bot. Hmm... I don't remember seeing you around.\n\n"
+        "So I will wait for my owner to look in and approve you. "
+        "They mostly approve PMs.\n\n"
+        "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
+    )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
@@ -60,13 +56,14 @@ async def del_in(text, seconds):
     await asyncio.sleep(seconds)
     return await text.delete()
 
-async def iterate(event, event_id):
+async def iterate(event, event_id, text):
     async for msg in event.client.iter_messages(
         event_id, from_user="me",
     ):
-       #message = msg.message.replace('**', '')
-       #message = msg.message.replace('__', '')
-       return msg
+       message = msg.message.replace('**', '')
+       message = msg.message.replace('__', '')
+       if message == text:
+           await message.delete()
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
@@ -123,8 +120,10 @@ async def permitpm(event):
                     async for message in event.client.iter_messages(
                         event.chat_id, from_user="me",
                     ):
+                        message = message.message.replace('**', '')
+                        message = message.message.replace('__', '')
                         if message.message == UNAPPROVED_MSG:
-                            await message.delete()
+                           await message.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
