@@ -74,13 +74,13 @@ async def permitpm(event):
             if not is_mongo_alive() or not is_redis_alive():
                 return
             if await approval(event.chat_id) is False:
-                if MONGO.userbot.pmpermit.find_one({'prev_msg': event.chat_id}) is None:
+                if LASTMSG[event.chat_id] is None:
                     if PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
-                        MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
+                        LASTMSG.update({event.chat_id: event.text})
                     elif not PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG)
-                        MONGO.userbot.pmpermit.insert_one({'prev_msg': event.chat_id})
+                        LASTMSG.update({event.chat_id: event.text})
                         
                 if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
