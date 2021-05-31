@@ -121,8 +121,8 @@ async def permitpm(event):
                         return
                     
                     message = await iterate(event, event.chat_id)
-                    if msg == UNAPPROVED_MSG:
-                        await msg.delete()
+                    if message == UNAPPROVED_MSG:
+                        await message.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
