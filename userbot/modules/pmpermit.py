@@ -60,7 +60,7 @@ async def del_in(text, seconds):
     await asyncio.sleep(seconds)
     return await text.delete()
 
-async def iterate(event_id):
+async def iterate(event, event_id):
     async for msg in event.client.iter_messages(
         event_id, from_user="me"
     ):
@@ -120,7 +120,7 @@ async def permitpm(event):
                         LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
                     
-                    message = await iterate(event.chat_id)
+                    message = await iterate(event, event.chat_id)
                     if message.message == UNAPPROVED_MSG:
                         await message.delete()
                 
