@@ -352,13 +352,13 @@ CMD_HELP.update(
     {
         "pmpermit": [
             "PMPermit",
-            " - `.autoapprove`|`.autoa`: Switches Auto-Approve module on/off.\n"
-            " - `.approve`|`.a`: Approve the mentioned/replied person to PM.\n"
-            " - `.disapprove`|`.da`: Disapprove the mentioned/replied person to PM.\n"
-            " - `.block`: Blocks the person from PMing you.\n"
-            " - `.unblock`: Unblocks the person, so they can PM you again.\n"
-            " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
-            " - `.notifon`: Allow notifications coming from unapproved PMs.\n",
+            " - `.autoapprove`|`.autoa`: __Switches Auto-Approve module on/off.__\n"
+            " - `.approve`|`.a`: __Approve the mentioned/replied person to PM.__\n"
+            " - `.disapprove`|`.da`: __Disapprove the mentioned/replied person to PM.__\n"
+            " - `.block`: __Blocks the person from PMing you.__\n"
+            " - `.unblock`: __Unblocks the person, so they can PM you again.__\n"
+            " - `.notifoff`: __Stop any notifications coming from unapproved PMs.__\n"
+            " - `.notifon`: __Allow notifications coming from unapproved PMs.__\n",
         ]
     }
 )
