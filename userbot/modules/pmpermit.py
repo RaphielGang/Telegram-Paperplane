@@ -121,7 +121,7 @@ async def permitpm(event):
                         return
                     
                     message = await iterate(event, event.chat_id)
-                    if message.message == UNAPPROVED_MSG:
+                    if message == UNAPPROVED_MSG:
                         await message.delete()
                 
                     await event.client(BlockRequest(event.chat_id))
