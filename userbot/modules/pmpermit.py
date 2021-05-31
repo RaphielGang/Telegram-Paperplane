@@ -157,25 +157,20 @@ async def auto_approve_switch(event):
 @register(disable_edited=True, outgoing=True, disable_errors=True)
 @grp_exclude()
 async def auto_accept(event):
-    """Will approve automatically if you texted them first."""
+    """Will approve automatically if you text them."""
     if await autoapproval(event.chat_id) is True:
-        chat = await event.get_chat()
+        
         if not is_mongo_alive() or not is_redis_alive():
             return
+        
         if event.text.startswith((".block", ".autoa", ".a", ".da", ".autoapprove", ".approve", ".disapprove", ".notifon", ".notifoff")):
             return
+        
         if event.is_private and not await approval(event.chat_id) and not chat.bot:
+            chat = await event.get_chat()
             await approve(chat.id)
-            async for message in apprvpm.client.iter_messages(apprvpm.chat_id, from_user="me", search=UNAPPROVED_MSG):
-                await message.delete()
-            try:
-                del COUNT_PM[apprvpm.chat_id]
-                del LASTMSG[apprvpm.chat_id]
-            except KeyError:
-                if BOTLOG:
-                    await event.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
-                    LOGS.info("PMPermit broke, please restart Paperplane.")
-                    return
+            await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
+
             if BOTLOG:
                 await event.client.send_message(
                 BOTLOG_CHATID,
@@ -237,20 +232,9 @@ async def approvepm(apprvpm):
     await approve(uid)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
-    async for message in apprvpm.client.iter_messages(
-        apprvpm.chat_id, from_user="me", search=UNAPPROVED_MSG):
-        await message.delete()
+    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
     await apprvpm.edit("Hey there! Nice to meet you☺ I am an obidient bot of my owner!")
-    
-    try:
-        del COUNT_PM[apprvpm.chat_id]
-        del LASTMSG[apprvpm.chat_id]
-    except KeyError:
-        if BOTLOG:
-           await apprvpm.client.send_message(BOTLOG_CHATID, "PMPermit broke, please restart Paperplane.")
-           LOGS.info("PMPermit broke, please restart Paperplane.")
-           return
-  
+
     if BOTLOG:
         await apprvpm.client.send_message(
             BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
