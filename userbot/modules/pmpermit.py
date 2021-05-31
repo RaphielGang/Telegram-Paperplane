@@ -57,7 +57,7 @@ async def del_in(text, seconds):
     return await text.delete()
 
 async def iterate_delete(event, event_id, text):
-    async for msg in event.client.iter_messages(
+    async for message in event.client.iter_messages(
         event_id, from_user="me",
     ):
        if message == text:
