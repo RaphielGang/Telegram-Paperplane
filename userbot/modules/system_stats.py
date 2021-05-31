@@ -142,7 +142,7 @@ async def name(event):
     response = await conv.get_response()
     name = response.text
 
-    await conv.send_message('Nice to meet you, {}!'.format(name))    
+    await conv.send_message(f'Nice to meet you, {name}!')    
 
 
 @register(outgoing=True, pattern="^.aliveu")
