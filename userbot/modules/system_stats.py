@@ -144,9 +144,9 @@ async def setmyalivepic(setapic):
 @register(outgoing=True)
 async def bruh(event):
         if SOME_MSG['something'] is True:
-        hmph = event.text
-        await event.respond(hmph)
-        del SOME_MSG[event.chat_id]
+          hmph = event.text
+          await event.respond(hmph)
+          del SOME_MSG[event.chat_id]
     
 
 
