@@ -74,7 +74,7 @@ async def permitpm(event):
             if not is_mongo_alive() or not is_redis_alive():
                 return
             if await approval(event.chat_id) is False:
-                if LASTMSG[event.chat_id] is None:
+                if event.chat_id not in LASTMSG:
                     if PM_PERMIT_IMAGE:
                         await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
                         LASTMSG.update({event.chat_id: event.text})
@@ -105,7 +105,7 @@ async def permitpm(event):
                 
                     try:
                         del COUNT_PM[event.chat_id]
-                        MONGO.userbot.pmpermit.delete_one({'prev_msg': event.chat_id})
+                        del LASTMSG[event.chat_id]
                     except KeyError:
                         if BOTLOG:
                                 await event.client.send_message(
