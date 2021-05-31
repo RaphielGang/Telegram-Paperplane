@@ -23,6 +23,7 @@ from userbot.modules.dbhelper import set_alive_pic, get_alive_pic
 # ================= CONSTANT =================
 DEFAULT_USER = uname().node
 #PP_IMG = ALIVE_IMAGE
+SOME_MSG = {}
 # ============================================
 
 
@@ -137,10 +138,15 @@ async def pipcheck(pip):
 @grp_exclude()
 async def setmyalivepic(setapic):
     x = setapic.respond("duh")
-    @register(outgoing=True)
+    LASTMSG.update({'something': True})
+    
+    
+@register(outgoing=True)
     async def bruh(event):
+        if SOME_MSG['something'] is True:
         hmph = event.text
         await event.respond(hmph)
+        del SOME_MSG[event.chat_id]
     
 
 
