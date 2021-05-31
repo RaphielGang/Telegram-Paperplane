@@ -46,7 +46,7 @@ UNAPPROVED_MSG = PM_PERMIT_MSG or (
         "Bleep blop! I am a bot. Hmm... I don't remember seeing you around.\n\n"
         "So I will wait for my owner to look in and approve you. "
         "They mostly approve PMs.\n\n"
-        "Till then, don't try to spam! Follow my warnings or I will block you!!"
+        "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
     )
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
@@ -60,8 +60,9 @@ async def iterate_delete(event, event_id, text):
     async for message in event.client.iter_messages(
         event_id, from_user="me"
     ):
-       if message.message == text:
-           await message.delete()
+        clean_msg = message.replace('**', '')
+        if clean_msg.message == text:
+            await message.delete()
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
