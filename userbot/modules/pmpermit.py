@@ -94,10 +94,12 @@ async def permitpm(event):
                     name = await event.client.get_entity(event.chat_id)
                     name0 = str(name.first_name)
                     log_message = (
-                        "#Incoming PM/n"
-                        + name0 + "is waiting in your PM.\n"
-                        + name0 + "has sent {} messages."
+                        "#Incoming PM\n"
+                        + name0 + " is waiting in your PM.\n"
+                        + name0 + " has sent {} messages."
                     )
+                    await iterate_delete(event, BOTLOG_CHATID, 
+                                         log_message.format(COUNT_PM[event.chat_id] - 1))
                     if COUNT_PM[event.chat_id] <= MAX_MSG:
                         await event.client.send_message(BOTLOG_CHATID, 
                                           log_message.format(COUNT_PM[event.chat_id]))
