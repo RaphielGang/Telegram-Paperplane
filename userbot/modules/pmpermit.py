@@ -95,15 +95,16 @@ async def permitpm(event):
                 #=======================================
                 
 #==============#                                      
-                async def pm_notifier():
+                async def pm_notifier():        
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
+                        
                         log_message = (
                             "#Incoming\n"
-                            + f"[{name0}](tg://user?id={event.chat_id})
-                            + " is waiting in your PM.\n"
-                            + f"[{name0}](tg://user?id={event.chat_id})
+                            + f"[{name0}](tg://user?id={event.chat_id})"                            
+                            + " is waiting in your PM.\n" 
+                            + f"[{name0}](tg://user?id={event.chat_id})" 
                             + " has sent {} messages."
                         )
                         await event.client.send_message(BOTLOG_CHATID, 
