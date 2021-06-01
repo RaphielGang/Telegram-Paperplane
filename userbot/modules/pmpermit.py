@@ -99,10 +99,10 @@ async def permitpm(event):
                         + name0 + " has sent {} messages."
                     )
                     if COUNT_PM[event.chat_id] <= MAX_MSG:
-                        await iterate_delete(event, BOTLOG_CHATID, 
-                                             log_message.format(COUNT_PM[event.chat_id] - 1))
                         await event.client.send_message(BOTLOG_CHATID, 
                                              log_message.format(COUNT_PM[event.chat_id]))
+                        await iterate_delete(event, BOTLOG_CHATID, 
+                                             log_message.format(COUNT_PM[event.chat_id] - 1))
                                                         
                 WARN = MAX_MSG - COUNT_PM[event.chat_id]
                 if WARN > 1:
