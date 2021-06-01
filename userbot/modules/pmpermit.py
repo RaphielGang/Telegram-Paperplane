@@ -92,29 +92,31 @@ async def permitpm(event):
                 #=======================================   
                 WARN = MAX_MSG - COUNT_PM[event.chat_id] #
                 #=======================================
-                if BOTLOG:
-                    name = await event.client.get_entity(event.chat_id)
-                    name0 = str(name.first_name)
-                    log_message = (
-                        "#Incoming PM\n"
-                        + name0 + " is waiting in your PM.\n"
-                        + name0 + " has sent {} messages."
-                    )
-                    while WARN >= 0:
+                async def pm_notifier()
+                    if BOTLOG:
+                        name = await event.client.get_entity(event.chat_id)
+                        name0 = str(name.first_name)
+                        log_message = (
+                            "#Incoming\n"
+                            + name0 + " is waiting in your PM.\n"
+                            + name0 + " has sent {} messages."
+                        )
                         await event.client.send_message(BOTLOG_CHATID, 
                                              log_message.format(COUNT_PM[event.chat_id]))
                         await iterate_delete(event, BOTLOG_CHATID, 
                                              log_message.format(COUNT_PM[event.chat_id] - 1))
-                        break
                                                         
                 if WARN > 1:
                     message = await event.reply(f"You have {WARN} warns left.")
+                    await pm_notifier()
                     await del_in(message, 5)
                 elif WARN == 1:
                     message = await event.reply("You have 1 warn left.")
+                    await pm_notifier()
                     await del_in(message, 5)
                 elif WARN == 0:
                     message = await event.reply("**This is the last warning. Please stop spamming!!**")
+                    await pm_notifier()
                     await del_in(message, 10)
                 elif WARN < 0:
                     await event.respond("You were spamming the PM, inspite of my warnings.\n"
