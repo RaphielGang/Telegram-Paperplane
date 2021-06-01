@@ -89,6 +89,7 @@ async def permitpm(event):
                     COUNT_PM.update({event.chat_id: 1})
                 else:
                     COUNT_PM[event.chat_id] += 1
+                WARN = MAX_MSG - COUNT_PM[event.chat_id]
                 
                 if BOTLOG:
                     name = await event.client.get_entity(event.chat_id)
@@ -103,7 +104,6 @@ async def permitpm(event):
                                           log_message.format(COUNT_PM[event.chat_id])
                                                         
                 
-                WARN = MAX_MSG - COUNT_PM[event.chat_id]
                 if WARN > 1:
                     message = await event.reply(f"You have {WARN} warns left.")
                     await del_in(message, 5)
