@@ -92,7 +92,7 @@ async def permitpm(event):
                 #=======================================   
                 WARN = MAX_MSG - COUNT_PM[event.chat_id] #
                 #=======================================
-                async def pm_notifier()
+                async def pm_notifier():
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
