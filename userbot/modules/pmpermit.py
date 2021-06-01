@@ -101,6 +101,7 @@ async def permitpm(event):
                     if COUNT_PM[event.chat_id] <= MAX_MSG:
                         await event.client.send_message(BOTLOG_CHATID, 
                                           log_message.format(COUNT_PM[event.chat_id])
+                                                        
                 
                 WARN = MAX_MSG - COUNT_PM[event.chat_id]
                 if WARN > 1:
