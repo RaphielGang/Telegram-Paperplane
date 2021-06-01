@@ -240,7 +240,7 @@ async def approvepm(apprvpm):
         return
     
     chat = await apprvpm.get_chat()
-    if await approve(apprvpm.chat_id) is True:
+    if await approval(apprvpm.chat_id) is True:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
         return await del_in(x, 5)
         
@@ -279,7 +279,7 @@ async def dapprovepm(dapprvpm):
         return
 
     chat = await dapprvpm.get_chat()
-    if await approve(dapprvpm.chat_id) is False:
+    if await approval(dapprvpm.chat_id) is False:
         x = await dapprvpm.edit("`I don't remember approving this user!`")
         return await del_in(x, 5)
         
