@@ -115,9 +115,9 @@ async def permitpm(event):
                             COUNT_PM_LOG[event.chat_id] += 1
                             
                         await iterate_delete(event, BOTLOG_CHATID, 
-                                             log_message.format(COUNT_PM_LOG[event.chat_id]))
+                                             log_message.format(range(COUNT_PM[event.chat_id])))
                         await event.client.send_message(BOTLOG_CHATID, 
-                                             log_message.format(COUNT_PM_LOG[event.chat_id] + 1))
+                                             log_message.format(COUNT_PM[event.chat_id] + 1))
                         return
 #==============#                                      
                                                         
