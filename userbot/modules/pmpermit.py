@@ -138,6 +138,13 @@ async def permitpm(event):
                     await event.respond("You were spamming the PM, inspite of my warnings.\n"
                                     "So now you are BLOCKED and REPORTED spam!!")
                 
+
+                    
+                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
+                
+                    await event.client(BlockRequest(event.chat_id))
+                    await event.client(ReportSpamRequest(peer=event.chat_id))
+                    
                     try:
                         del COUNT_PM[event.chat_id]
                         del LASTMSG[event.chat_id]
@@ -149,11 +156,6 @@ async def permitpm(event):
                                 )
                         LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
-                    
-                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
-                
-                    await event.client(BlockRequest(event.chat_id))
-                    await event.client(ReportSpamRequest(peer=event.chat_id))
                 
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
