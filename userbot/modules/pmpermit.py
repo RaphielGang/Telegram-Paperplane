@@ -148,10 +148,15 @@ async def permitpm(event):
                         del LASTMSG[event.chat_id]
                     except KeyError:
                         if BOTLOG:
+                            crash_message = "PMPermit broke, please restart Paperplane."
+                            async for crash_message in event.client.iter_messages(
+                                BOTLOG_CHATID, from_user="me", search=crash_message
+                            ):
+                                return
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "PMPermit broke, please restart Paperplane.",
-                                )
+                                crash_message,
+                            )
                         LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
                 
