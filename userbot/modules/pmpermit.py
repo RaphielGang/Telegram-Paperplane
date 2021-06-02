@@ -108,12 +108,17 @@ async def permitpm(event):
                             + f"[{name0}](tg://user?id={event.chat_id})" 
                             + " has sent {} messages."
                         )
+                        
                         if event.chat_id in COUNT_PM_LOG:
                             await COUNT_PM_LOG[event.chat_id].delete()
                             
-                        COUNT_PM_LOG[event.chat_id] = await event.client.send_message(
-                            BOTLOG_CHATID, 
-                            log_message.format(COUNT_PM[event.chat_id]))
+                            if COUNT_PM[event.chat_id] > MAX_MSG:
+                                return
+                            
+                            else:
+                                COUNT_PM_LOG[event.chat_id] = await event.client.send_message(
+                                        BOTLOG_CHATID, 
+                                        log_message.format(COUNT_PM[event.chat_id]))
 #==============#                                      
                                                         
     
