@@ -53,7 +53,7 @@ UNAPPROVED_MSG_ON = PM_PERMIT_MSG or (
 UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
     "Bleep blop! I am a bot.\n"
     "Hmm...I don't remember seeing you around here.\n\n"
-    "So I will wait for my owner to look in and approve you. It may take a long time.\n"
+    "So I will wait for my owner to look in and approve you. It may take a long time.\n\n"
     "My owner has turned off notifications, so I will read your messages and won't notify them.\n\n"
     "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
 )
