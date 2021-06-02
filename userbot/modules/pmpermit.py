@@ -240,10 +240,7 @@ async def approvepm(apprvpm):
         return
     
     chat = await apprvpm.get_chat()
-    if await approval(apprvpm.chat_id) or await approval(replied_user.user.id):
-        x = await apprvpm.edit("`I already know this user! You can chat!`")
-        return await del_in(x, 5)
-        
+         
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
         replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
@@ -256,6 +253,10 @@ async def approvepm(apprvpm):
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
         
+    if await approval(uid) is True:
+        x = await apprvpm.edit("`I already know this user! You can chat!`")
+        return await del_in(x, 5)
+    
     await approve(uid)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
@@ -279,9 +280,6 @@ async def dapprovepm(dapprvpm):
         return
 
     chat = await dapprvpm.get_chat()
-    if not await approval(dapprvpm.chat_id) or not await approval(replied_user.user.id):
-        x = await dapprvpm.edit("`I don't remember approving this user!`")
-        return await del_in(x, 5)
         
     if dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
@@ -294,6 +292,10 @@ async def dapprovepm(dapprvpm):
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
+    
+    if await approval(uid) is False:
+        x = await dapprvpm.edit("`The user is already a stranger for me.`")
+        return await del_in(x, 5)
     
     await disapprove(uid)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) .")
