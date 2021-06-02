@@ -134,7 +134,7 @@ async def permitpm(event):
                     message = await event.reply("**This is the last warning. Please stop spamming!!**")
                     await del_in(message, 10)
                     await pm_notifier()
-                elif WARN < 0:
+                elif WARN == -1:
                     await event.respond("You were spamming the PM, inspite of my warnings.\n"
                                     "So now you are BLOCKED and REPORTED spam!!")
                 
