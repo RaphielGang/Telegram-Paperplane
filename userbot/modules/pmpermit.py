@@ -43,22 +43,20 @@ from userbot.modules.dbhelper import (
 )
 
 # ========================= CONSTANTS ============================
-if await notif_state() is True:
-    UNAPPROVED_MSG = PM_PERMIT_MSG or (
-        "Bleep blop! I am a bot.\n"
-        "Hmm...I don't remember seeing you around here.\n\n"
-        "So I will wait for my owner to look in and approve you. They mostly approve PMs.\n\n"
-        "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
-    )
+UNAPPROVED_MSG_ON = PM_PERMIT_MSG or (
+    "Bleep blop! I am a bot.\n"
+    "Hmm...I don't remember seeing you around here.\n\n"
+    "So I will wait for my owner to look in and approve you. They mostly approve PMs.\n\n"
+    "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
+)
     
-if await notif_state() is False:
-    UNAPPROVED_MSG = PM_PERMIT_MSG or (
-        "Bleep blop! I am a bot.\n"
-        "Hmm...I don't remember seeing you around here.\n\n"
-        "So I will wait for my owner to look in and approve you. It may take a long time.\n"
-        "My owner has turned off notifications, so I will read your messages and won't notify them.\n\n"
-        "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
-    )
+UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
+    "Bleep blop! I am a bot.\n"
+    "Hmm...I don't remember seeing you around here.\n\n"
+    "So I will wait for my owner to look in and approve you. It may take a long time.\n"
+    "My owner has turned off notifications, so I will read your messages and won't notify them.\n\n"
+    "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
+)
         
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
@@ -88,11 +86,19 @@ async def permitpm(event):
             if await approval(event.chat_id) is False:
                 if event.chat_id not in LASTMSG:
                     if PM_PERMIT_IMAGE:
-                        await event.respond(UNAPPROVED_MSG, file=PM_PERMIT_IMAGE)
-                        LASTMSG.update({event.chat_id: event.text})
+                        if await notif_state() is True:
+                            await event.respond(UNAPPROVED_MSG_ON, file=PM_PERMIT_IMAGE)
+                            LASTMSG.update({event.chat_id: event.text})
+                        if await notif_state() is False:
+                            await event.respond(UNAPPROVED_MSG_OFF, file=PM_PERMIT_IMAGE)
+                            LASTMSG.update({event.chat_id: event.text})
                     elif not PM_PERMIT_IMAGE:
-                        await event.respond(UNAPPROVED_MSG)
-                        LASTMSG.update({event.chat_id: event.text})
+                        if await notif_state() is True:
+                            await event.respond(UNAPPROVED_MSG_ON)
+                            LASTMSG.update({event.chat_id: event.text})
+                        if await notif_state() is False:
+                            await event.respond(UNAPPROVED_MSG_OFF)
+                            LASTMSG.update({event.chat_id: event.text})
                         
                 if await notif_state() is False:
                     await event.client.send_read_acknowledge(event.chat_id)
@@ -146,7 +152,8 @@ async def permitpm(event):
                 elif WARN == -1:
                     await event.respond("You were spamming the PM, inspite of my warnings.\n"
                                     "So now you are BLOCKED and REPORTED spam!!")
-                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
+                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
+                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
                 
                 if WARN <= -1:
                     await event.client(BlockRequest(event.chat_id))
@@ -213,7 +220,8 @@ async def auto_accept(event):
         if event.is_private: 
             if not await approval(event.chat_id) and not chat.bot:
                 await approve(chat.id)
-                await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
+                await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
+                await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
 
                 if BOTLOG:
                     await event.client.send_message(
@@ -277,7 +285,9 @@ async def approvepm(apprvpm):
     await approve(uid)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
-    await iterate_delete(apprvpm, uid, UNAPPROVED_MSG)
+    await iterate_delete(apprvpm, uid, UNAPPROVED_MSG_ON)
+    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
+    
     if apprvpm.reply_to_msg_id:
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}), you can PM without an issue😊")
     else:
@@ -323,6 +333,7 @@ async def dapprovepm(dapprvpm):
     await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
+    
     if dapprvpm.is_private:
         await dapprvpm.edit("I don't like strangers in the PM!! Get lost!")
     else:
