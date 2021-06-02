@@ -109,16 +109,16 @@ async def permitpm(event):
                             + " has sent {} messages."
                         )
                             
-                        await event.client.send_message(BOTLOG_CHATID, 
-                                             log_message.format(COUNT_PM[event.chat_id]))
+                        await event.client.send(BOTLOG_CHATID, 
+                                             log_message.format(COUNT_PM[event.chat_id]), reply_to=BOTLOG_CHATID)
                         
-                        if event.chat_id not in COUNT_PM_LOG:
-                            COUNT_PM_LOG.update({event.chat_id: 1})
+                        '''if event.chat_id not in COUNT_PM_LOG:
+                            COUNT_PM_LOG.update({event.chat_id: 0})
                         else:
                             COUNT_PM_LOG[event.chat_id] += 1
                             
                         await iterate_delete(event, BOTLOG_CHATID, 
-                                             log_message.format((COUNT_PM_LOG[event.chat_id] - 1)))
+                                             log_message.format(COUNT_PM_LOG[event.chat_id]))'''
                         return
 #==============#                                      
                                                         
