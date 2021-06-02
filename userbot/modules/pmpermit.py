@@ -109,7 +109,7 @@ async def permitpm(event):
                             + " has sent {} messages."
                         )
                             
-                        await event.client.send(BOTLOG_CHATID, 
+                        await event.client.send_message(BOTLOG_CHATID, 
                                              log_message.format(COUNT_PM[event.chat_id]), reply_to=BOTLOG_CHATID)
                         
                         '''if event.chat_id not in COUNT_PM_LOG:
