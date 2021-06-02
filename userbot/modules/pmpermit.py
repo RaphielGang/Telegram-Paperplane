@@ -137,11 +137,9 @@ async def permitpm(event):
                 elif WARN == -1:
                     await event.respond("You were spamming the PM, inspite of my warnings.\n"
                                     "So now you are BLOCKED and REPORTED spam!!")
-                
-
-                    
                     await iterate_delete(event, event.chat_id, UNAPPROVED_MSG)
                 
+                elif WARN < -1:
                     await event.client(BlockRequest(event.chat_id))
                     await event.client(ReportSpamRequest(peer=event.chat_id))
                     
