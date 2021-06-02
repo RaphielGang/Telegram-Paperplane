@@ -114,10 +114,10 @@ async def permitpm(event):
                             
                             if WARN < 0:
                                 return
-                            
-                            COUNT_PM_LOG[event.chat_id] = await event.client.send_message(
-                                    BOTLOG_CHATID, 
-                                    log_message.format(COUNT_PM[event.chat_id]))
+                    
+                        COUNT_PM_LOG[event.chat_id] = await event.client.send_message(
+                                BOTLOG_CHATID, 
+                                log_message.format(COUNT_PM[event.chat_id]))
 #==============#                                      
                                                         
     
