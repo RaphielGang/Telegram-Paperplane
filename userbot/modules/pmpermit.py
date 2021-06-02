@@ -43,7 +43,7 @@ from userbot.modules.dbhelper import (
 )
 
 # ========================= CONSTANTS ============================
-if notif_state() is True:
+if await notif_state() is True:
     UNAPPROVED_MSG = PM_PERMIT_MSG or (
         "Bleep blop! I am a bot.\n"
         "Hmm...I don't remember seeing you around here.\n\n"
@@ -51,7 +51,7 @@ if notif_state() is True:
         "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
     )
     
-if notif_state() is False:
+if await notif_state() is False:
     UNAPPROVED_MSG = PM_PERMIT_MSG or (
         "Bleep blop! I am a bot.\n"
         "Hmm...I don't remember seeing you around here.\n\n"
