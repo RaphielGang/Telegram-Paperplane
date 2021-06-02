@@ -43,12 +43,21 @@ from userbot.modules.dbhelper import (
 )
 
 # ========================= CONSTANTS ============================
-UNAPPROVED_MSG = PM_PERMIT_MSG or (
-    "Bleep blop! I am a bot.\n"
-    "Hmm...I don't remember seeing you around.\n\n"
-    "So I will wait for my owner to look in and approve you. They mostly approve PMs.\n\n"
-    "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
-    )
+if notif_state() is True:
+    UNAPPROVED_MSG = PM_PERMIT_MSG or (
+        "Bleep blop! I am a bot.\n"
+        "Hmm...I don't remember seeing you around here.\n\n"
+        "So I will wait for my owner to look in and approve you. They mostly approve PMs.\n\n"
+        "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
+        )
+if notif_state() is False:
+    UNAPPROVED_MSG = PM_PERMIT_MSG or (
+        "Bleep blop! I am a bot.\n"
+        "Hmm...I don't remember seeing you around here.\n\n"
+        "So I will wait for my owner to look in and approve you. It may take a long time.\n"
+        "My owner has turned off notifications, so I will read your messages and won't notify them.\n\n"
+        "**Till then, don't try to spam! Follow my warnings or I will block you!!**"
+        
 
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
@@ -102,7 +111,7 @@ async def permitpm(event):
                         name0 = str(name.first_name)
                         
                         log_message = (
-                            "#Incoming\n"
+                            "#INCOMING\n"
                             + f"[{name0}](tg://user?id={event.chat_id})"                            
                             + " is waiting in your PM.\n" 
                             + f"[{name0}](tg://user?id={event.chat_id})" 
@@ -112,12 +121,12 @@ async def permitpm(event):
                         if event.chat_id in COUNT_PM_LOG:
                             await COUNT_PM_LOG[event.chat_id].delete()
                             
-                            if WARN < 0:
-                                return
-                    
-                        COUNT_PM_LOG[event.chat_id] = await event.client.send_message(
-                                BOTLOG_CHATID, 
-                                log_message.format(COUNT_PM[event.chat_id]))
+                        if WARN < 0:
+                            return
+                        else:
+                            COUNT_PM_LOG[event.chat_id] = await event.client.send_message(
+                                    BOTLOG_CHATID, 
+                                    log_message.format(COUNT_PM[event.chat_id]))
 #==============#                                      
                                                         
     
@@ -147,15 +156,11 @@ async def permitpm(event):
                         del LASTMSG[event.chat_id]
                     except KeyError:
                         if BOTLOG:
-                            crash_message = "PMPermit broke, please restart Paperplane."
-                            async for crash_message in event.client.iter_messages(
-                                BOTLOG_CHATID, from_user="me", search=crash_message
-                            ):
-                                return
-                            await event.client.send_message(
-                                BOTLOG_CHATID,
-                                crash_message,
-                            )
+                            for i in range(1):
+                                await event.client.send_message(
+                                    BOTLOG_CHATID,
+                                    "PMPermit broke, please restart Paperplane.",
+                                )
                         LOGS.info("PMPermit broke, please restart Paperplane.")
                         return
                 
