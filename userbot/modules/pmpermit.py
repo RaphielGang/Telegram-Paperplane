@@ -280,9 +280,9 @@ async def approvepm(apprvpm):
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
         
-    if apprvpm.text[9: ]:
-        if str(apprvpm.text[9: ]).startswith("@"):
-            username = str(apprvpm.text[3: ])
+    if apprvpm.text[8: ]:
+        if str(apprvpm.text[8: ]).startswith("@"):
+            username = str(apprvpm.text[8: ])
             aname = await apprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
             uid = await apprvpm.client.get_peer_id(username)
@@ -343,9 +343,9 @@ async def dapprovepm(dapprvpm):
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
         
-    if dapprvpm.text[9: ]:
-        if str(dapprvpm.text[9: ]).startswith("@"):
-            username = str(dapprvpm.text[3: ])
+    if dapprvpm.text[11: ]:
+        if str(dapprvpm.text[11: ]).startswith("@"):
+            username = str(dapprvpm.text[11: ])
             aname = await dapprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
             uid = await dapprvpm.client.get_peer_id(username)
