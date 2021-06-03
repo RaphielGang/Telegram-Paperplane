@@ -278,20 +278,7 @@ async def approvepm(apprvpm):
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
     
-    if apprvpm.text[3: ] or apprvpm.text[9: ]:
-        if str(apprvpm.text[3: ]).startswith("@"):
-            aname = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
-            name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
-        if str(apprvpm.text[9: ]).startswith("@"):
-            aname = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
-            name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
-            
-    else:
-        apprvpm.edit("`I am sorry. I am not sure about that user.`")
-        return
-        
+    
     if await approval(uid) is True:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
         return await del_in(x, 5)
