@@ -284,11 +284,11 @@ async def approvepm(apprvpm):
         if str(apprvpm.text[3: ]).startswith("@"):
             aname = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
             name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
+            uid = await apprvpm.client.get_entity(str(apprvpm.text[3: ])).user.id
         if str(apprvpm.text[9: ]).startswith("@"):
             aname = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
             name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
+            uid = await apprvpm.client.get_entity(str(apprvpm.text[9: ])).user.id
     
     
     if await approval(uid) is True:
