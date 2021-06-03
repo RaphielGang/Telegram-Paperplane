@@ -278,7 +278,7 @@ async def approvepm(apprvpm):
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
     
-    if str(apprvpm.text[3: ]) or str(apprvpm.text[9: ]):
+    if apprvpm.text[3: ] or apprvpm.text[9: ]:
         if str(apprvpm.text[3: ]).startswith("@"):
             aname = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
             name0 = str(aname.first_name)
