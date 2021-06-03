@@ -286,10 +286,6 @@ async def approvepm(apprvpm):
             aname = await apprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
             uid = await apprvpm.client.get_peer_id(username)
-            
-    if not uid:
-        apprvpm.edit("I am sorry. I can't seem to find that user😥")
-        return
     
     
     if await approval(uid) is True:
