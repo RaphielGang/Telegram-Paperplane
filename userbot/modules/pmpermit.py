@@ -287,6 +287,9 @@ async def approvepm(apprvpm):
             aname = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
             name0 = str(aname.first_name)
             uid = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
+            
+    else:
+        apprvpm.edit("I am sorry. I am not sure about that user.")
         
     if await approval(uid) is True:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
