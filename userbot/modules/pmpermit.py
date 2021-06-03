@@ -303,8 +303,8 @@ async def approvepm(apprvpm):
     else:
         await apprvpm.edit("Hey there! Nice to meet you😊 I am an obidient bot of my owner!")
         
-    if uid in LAST_MSG:
-        del LAST_MSG[uid]
+    if uid in LASTMSG:
+        del LASTMSG[uid]
     if uid in COUNT_PM:
         del COUNT_PM[uid]
 
