@@ -122,7 +122,7 @@ async def permitpm(event):
                             + f"[{name0}](tg://user?id={event.chat_id})"                            
                             + " is waiting in your PM.\n" 
                             + f"[{name0}](tg://user?id={event.chat_id})" 
-                            + " has sent {} messages."
+                            + " has sent {} message(s)."
                         )
                         
                         if event.chat_id in COUNT_PM_LOG:
@@ -273,10 +273,16 @@ async def approvepm(apprvpm):
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
 
-    else:
+    if apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
+    
+    if str(apprvpm.text[3: ]) or str(apprvpm.text[9: ]):
+        if str(apprvpm.text[3: ]).startswith("@"):
+            aname = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
+            name0 = str(aname.first_name)
+            uid = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
         
     if await approval(uid) is True:
         x = await apprvpm.edit("`I already know this user! You can chat!`")
@@ -292,6 +298,11 @@ async def approvepm(apprvpm):
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}), you can PM without an issue😊")
     else:
         await apprvpm.edit("Hey there! Nice to meet you😊 I am an obidient bot of my owner!")
+        
+    if uid in LAST_MSG:
+        del LAST_MSG[uid]
+    if uid in COUNT_PM:
+        del COUNT_PM[uid]
 
     if BOTLOG:
         await apprvpm.client.send_message(
@@ -409,9 +420,9 @@ CMD_HELP.update(
     {
         "pmpermit": [
             "PMPermit",
-            " - `.autoapprove`|`.autoa`: Switches Auto-Approve module on/off.\n"
-            " - `.approve`|`.a`: Approve the mentioned/replied person to PM.\n"
-            " - `.disapprove`|`.da`: Disapprove the mentioned/replied person to PM.\n"
+            " - `.autoapprove`||`.autoa`: Switches Auto-Approve module on/off.\n"
+            " - `.approve`||`.a`: Approve the mentioned/replied person to PM.\n"
+            " - `.disapprove`||`.da`: Disapprove the mentioned/replied person to PM.\n"
             " - `.block`: Blocks the person from PMing you.\n"
             " - `.unblock`: Unblocks the person, so they can PM you again.\n"
             " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
