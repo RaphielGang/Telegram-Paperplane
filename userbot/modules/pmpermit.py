@@ -258,7 +258,7 @@ async def notifon(non_event):
     
     
 
-@register(outgoing=True, pattern="^.approve$|^.a$")
+@register(outgoing=True, pattern="^.approve|^.a")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -284,11 +284,11 @@ async def approvepm(apprvpm):
         if str(apprvpm.text[3: ]).startswith("@"):
             aname = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
             name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_entity(str(apprvpm.text[3: ])).id
+            uid = await apprvpm.client.get_peer_id(str(apprvpm.text[3: ]))
         if str(apprvpm.text[9: ]).startswith("@"):
             aname = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
             name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_entity(str(apprvpm.text[9: ])).id
+            uid = await apprvpm.client.get_peer_id(str(apprvpm.text[9: ]))
     
     
     if await approval(uid) is True:
