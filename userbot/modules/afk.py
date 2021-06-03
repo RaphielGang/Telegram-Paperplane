@@ -30,7 +30,7 @@ async def mention_afk(mention):
         if IsAway is True:
             if mention.sender_id not in USERS:
                 await mention.reply(
-                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '...\n'  'Would ping him/her to look into the message soon😉')
+                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '\n\n'  'I would ping him/her to look into the message soon😉')
                 USERS.update({mention.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif mention.sender_id in USERS:
@@ -38,7 +38,7 @@ async def mention_afk(mention):
                     await mention.reply(
                         "My owner is still not here. "
                         "Try to ping my owner a little later. I am sorry😖."
-                        "I recall my owner saying ```" + await afk_reason() + "```" )
+                        "I recall my owner saying ```" + '..."' + await afk_reason() + '"' +  "```" )
                     USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
@@ -58,7 +58,7 @@ async def afk_on_pm(afk_pm):
         if IsAway is True:
             if afk_pm.sender_id not in USERS:
                 await afk_pm.reply(
-                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '...\n' 'I\'ll ping my owner to look into the message soon😉')
+                    "Sorry! My owner is AFK!\n" 'He/She said: ' + await afk_reason() + '\n\n' 'I\'ll ping my owner to look into the message soon😉')
                 USERS.update({afk_pm.sender_id: 1})
                 COUNT_MSG = COUNT_MSG + 1
             elif afk_pm.sender_id in USERS:
@@ -66,7 +66,7 @@ async def afk_on_pm(afk_pm):
                     await afk_pm.reply(
                         "Sorry! But my owner is still not here. "
                         "Try to ping my owner a little later. I am sorry😖."
-                        "I recall my owner saying ```" + await afk_reason() + "```" )
+                        "I recall my owner saying ```" + '..."' + await afk_reason() + '"' + "```" )
                     USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
                 else:
@@ -106,9 +106,8 @@ async def type_afk_is_not_true(notafk):
         x = await notafk.respond("I'm no longer AFK.")
         y = await notafk.respond(
             "`You recieved " + str(COUNT_MSG) +
-            " messages while you were away. Check log for more details.`" +
-            " `This auto-generated message " +
-            "shall be self destructed in 5 seconds.`")
+            " messages while you were away. Check log for more details.`"
+        )
         await no_afk()
         time.sleep(5)
         await x.delete()
