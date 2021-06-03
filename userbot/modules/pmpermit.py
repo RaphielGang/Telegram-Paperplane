@@ -255,8 +255,10 @@ async def notifon(non_event):
     else:
         y = await non_event.edit("`Notifications unmuted!`")
         return await del_in(y, 5)
+    
+    
 
-@register(outgoing=True, pattern="^.approve$|^.a$")
+@register(outgoing=True, pattern="^.approve|^.a")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -277,6 +279,16 @@ async def approvepm(apprvpm):
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
+        
+    if apprvpm.text[3: ] or apprvpm.text[9: ]:
+        if str(apprvpm.text[3: ]).startswith("@"):
+            aname = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
+            name0 = str(aname.first_name)
+            uid = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
+        if str(apprvpm.text[9: ]).startswith("@"):
+            aname = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
+            name0 = str(aname.first_name)
+            uid = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
     
     
     if await approval(uid) is True:
@@ -303,6 +315,8 @@ async def approvepm(apprvpm):
         await apprvpm.client.send_message(
             BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
+        
+        
 
 @register(outgoing=True, pattern="^.disapprove$|^.da$")
 @grp_exclude()
