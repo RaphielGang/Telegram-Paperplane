@@ -287,7 +287,7 @@ async def approvepm(apprvpm):
             name0 = str(aname.first_name)
             uid = await apprvpm.client.get_peer_id(username)
   
-    if not uid:
+    else:
         apprvpm.edit("I am sorry. I can't seem to find that user😥")
         return
     
@@ -350,7 +350,7 @@ async def dapprovepm(dapprvpm):
             name0 = str(aname.first_name)
             uid = await dapprvpm.client.get_peer_id(username)
     
-    if not uid:
+    else:
         dapprvpm.edit("I am sorry. I can't seem to find that user😥")
         return
     
