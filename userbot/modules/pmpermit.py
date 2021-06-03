@@ -258,7 +258,7 @@ async def notifon(non_event):
     
     
 
-@register(outgoing=True, pattern="^.approve|^.a")
+@register(outgoing=True, pattern="^approve")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -280,15 +280,16 @@ async def approvepm(apprvpm):
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
         
-    if apprvpm.text[3: ] or apprvpm.text[9: ]:
-        if str(apprvpm.text[3: ]).startswith("@"):
-            aname = await apprvpm.client.get_entity(str(apprvpm.text[3: ]))
-            name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_peer_id(str(apprvpm.text[3: ]))
+    if apprvpm.text[9: ]:
         if str(apprvpm.text[9: ]).startswith("@"):
-            aname = await apprvpm.client.get_entity(str(apprvpm.text[9: ]))
+            username = str(apprvpm.text[3: ])
+            aname = await apprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_peer_id(str(apprvpm.text[9: ]))
+            uid = await apprvpm.client.get_peer_id(username)
+            
+    if not uid:
+        apprvpm.edit("I am sorry. I can't seem to find that user😥")
+        return
     
     
     if await approval(uid) is True:
@@ -303,8 +304,10 @@ async def approvepm(apprvpm):
     
     if apprvpm.reply_to_msg_id:
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}), you can PM without an issue😊")
-    else:
+    elif apprvpm.is_private:
         await apprvpm.edit("Hey there! Nice to meet you😊 I am an obidient bot of my owner!")
+    elif username:
+        await apprvpm.edit(f"[{name0}](tg://user?id={uid}) can PM you now.")
         
     if uid in LASTMSG:
         del LASTMSG[uid]
@@ -318,7 +321,7 @@ async def approvepm(apprvpm):
         
         
 
-@register(outgoing=True, pattern="^.disapprove$|^.da$")
+@register(outgoing=True, pattern="^.disapprove")
 @grp_exclude()
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
@@ -335,10 +338,22 @@ async def dapprovepm(dapprvpm):
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
 
-    else:
+    if dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
+        
+    if dapprvpm.text[9: ]:
+        if str(dapprvpm.text[9: ]).startswith("@"):
+            username = str(dapprvpm.text[3: ])
+            aname = await dapprvpm.client.get_entity(username)
+            name0 = str(aname.first_name)
+            uid = await dapprvpm.client.get_peer_id(username)
+    
+    if not uid:
+        dapprvpm.edit("I am sorry. I can't seem to find that user😥")
+        return
+    
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("`The user is already a stranger for me.`")
@@ -356,8 +371,10 @@ async def dapprovepm(dapprvpm):
     
     if dapprvpm.is_private:
         await dapprvpm.edit("I don't like strangers in the PM!! Get lost!")
-    else:
+    elif dapprvpm.reply_to_msg_id:
         await dapprvpm.edit("Don't you dare PM!!")
+    elif username:
+        await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
 
     if BOTLOG:
         await dapprvpm.client.send_message(
@@ -430,8 +447,8 @@ CMD_HELP.update(
         "pmpermit": [
             "PMPermit",
             " - `.autoapprove`||`.autoa`: Switches Auto-Approve module on/off.\n"
-            " - `.approve`||`.a`: Approve the mentioned/replied person to PM.\n"
-            " - `.disapprove`||`.da`: Disapprove the mentioned/replied person to PM.\n"
+            " - `.approve`: Approve the mentioned/replied person to PM.\n"
+            " - `.disapprove`: Disapprove the mentioned/replied person to PM.\n"
             " - `.block`: Blocks the person from PMing you.\n"
             " - `.unblock`: Unblocks the person, so they can PM you again.\n"
             " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
