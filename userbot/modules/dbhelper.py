@@ -278,7 +278,7 @@ async def autoapproval():
     to_check = MONGO.pmpermit.find_one({'autoapproval': 'Check'})
 
     if to_check is None:
-        MONGO.pmpermit.insert_one({'auto_approval_state': False})
+        MONGO.pmpermit.insert_one({'autoapproval': 'Check', 'auto_approval_state': False})
         return False
     
     elif to_check['auto_approval_state'] is False:
