@@ -171,6 +171,7 @@ os.chmod('bin/megadown', 0o755)
 os.chmod('bin/cmrudl', 0o755)
 
 # Global Variables
+COMMAND_TRIGGER = os.environ.get("COMMAND_TRIGGER") or None
 COUNT_MSG = 0
 MAX_FLOOD_IN_PM = os.environ.get("MAX_FLOOD_IN_PM") or None
 PM_PERMIT_MSG = os.environ.get("PM_PERMIT_TEXT") or None
