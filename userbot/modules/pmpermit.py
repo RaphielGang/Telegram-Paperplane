@@ -267,10 +267,15 @@ async def approvepm(apprvpm):
         return
          
     if apprvpm.pattern_match.group(1):
-        username = apprvpm.pattern_match.group(1)
-        aname = await apprvpm.client.get_entity(username)
-        name0 = str(aname.first_name)
-        uid = await apprvpm.client.get_peer_id(username)
+        try:
+            username = apprvpm.pattern_match.group(1)
+            aname = await apprvpm.client.get_entity(username)
+            name0 = str(aname.first_name)
+            uid = await apprvpm.client.get_peer_id(username)
+        except ValueError:
+            x = apprvpm.edit("I am sorry. I can't find this user😥\n"
+                            "Have you entered the correct username?")
+            return del_in(x, 5)
         
     elif apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
@@ -331,10 +336,15 @@ async def dapprovepm(dapprvpm):
         return
     
     if dapprvpm.pattern_match.group(1):
-        username = dapprvpm.pattern_match.group(1)
-        aname = await dapprvpm.client.get_entity(username)
-        name0 = str(aname.first_name)
-        uid = await dapprvpm.client.get_peer_id(username)
+        try:
+            username = dapprvpm.pattern_match.group(1)
+            aname = await dapprvpm.client.get_entity(username)
+            name0 = str(aname.first_name)
+            uid = await dapprvpm.client.get_peer_id(username)
+        except ValueError:
+            x = dapprvpm.edit("I am sorry. I can't find this user😥\n"
+                              "Have you entered the correct username?")
+            return del_in(x, 5)
         
     elif dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
