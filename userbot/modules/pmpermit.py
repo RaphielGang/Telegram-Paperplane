@@ -285,7 +285,7 @@ async def approvepm(apprvpm):
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
         except TypeError:
-            dapprvpm.edit(
+            apprvpm.edit(
                  "I am sorry, I am unable to fetch that user. "
                  "Probably it's an anonymous admin."
             )
@@ -360,7 +360,7 @@ async def dapprovepm(dapprvpm):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
-        except ValueError:
+        except TypeError:
             dapprvpm.edit(
                  "I am sorry, I am unable to fetch that user. "
                  "Probably it's an anonymous admin."
