@@ -28,7 +28,7 @@ def register(**args):
     group_only = args.get('group_only', False)
     disable_errors = args.get('disable_errors', False)
     insecure = args.get('insecure', False)
-    if pattern is not None: and not pattern.startswith('(?i)'):
+    if pattern is not None and not pattern.startswith('(?i)'):
         if COMMAND_TRIGGER:
             if len(COMMAND_TRIGGER) == 1:
                 args['pattern'] = '(?i)^\\' + COMMAND_TRIGGER
