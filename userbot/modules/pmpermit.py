@@ -296,10 +296,6 @@ async def approvepm(apprvpm):
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
     
-    elif apprvpm.is_private and apprvpm.reply_to_msg_id:
-        x = apprvpm.edit("There's no need to reply the person in a private chat.")
-        return await del_in(x, 10)
-    
     else:
         x = await apprvpm.edit("I can't see the user you want to approve😳")
         return await del_in(x, 5)
@@ -371,10 +367,6 @@ async def dapprovepm(dapprvpm):
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
-    
-    elif dapprvpm.is_private and dapprvpm.reply_to_msg_id:
-        x = dapprvpm.edit("There's no need to reply the person in a private chat.")
-        return await del_in(x, 10)
         
     else:
         x = await dapprvpm.edit("I can't see the user you want to disapprove😳")
@@ -419,23 +411,37 @@ async def blockpm(block):
     if await block_pm(block.chat_id) is False:
         x = await block.edit("`The user isn't approved.`")
         return await del_in(x, 5)
-    else:    
-        y = await block.edit("`You are gonna be blocked from PM-ing my owner!`")
-        await asyncio.sleep(2)
+    
         
-    if block.reply_to_msg_id:
+    if block.pattern_match.group(1):
+        username = block.pattern_match.group(1)
+        aname = await block.client.get_entity(username)
+        name0 = str(aname.first_name)
+        uid = await block.client.get_peer_id(username)
+        x = block.edit(f"[{name0}](tg://user?id={uid}) is going to be blocked in 2 seconds")
+ 
+    elif block.reply_to_msg_id:
         reply = await block.get_reply_message()
         replied_user = await block.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
-        await block.client(BlockRequest(replied_user.user.id))
         uid = replied_user.user.id
-    else:
-        await block.client(BlockRequest(block.chat_id))
+        x = block.edit(f"You are gonna be blocked from PM-ing my owner.")
+        
+    elif block.is_private:
         aname = await block.client.get_entity(block.chat_id)
         name0 = str(aname.first_name)
         uid = block.chat_id
-
+        x = block.edit(f"You are gonna be blocked from PM-ing my owner.")
+        
+    else:
+        x = block.edit("Nope, I can't find that user.")
+        
+        
+    
+    asyncio.sleep(2)
+    await x.delete()
+    await block.client(BlockRequest(uid))
     await block.edit("**Blocked.**")
 
     if BOTLOG:
@@ -448,16 +454,39 @@ async def blockpm(block):
 @grp_exclude()
 async def unblockpm(unblock):
     """For .unblock command, let people PMing you again!"""
-    if unblock.reply_to_msg_id:
+    if not is_mongo_alive() or not is_redis_alive():
+        await unblock.edit("`Database connections failing!`")
+        return
+
+    if await block_pm(unblock.chat_id) is False:
+        x = await unblock.edit("You haven't blocked this user yet!")
+        return await del_in(x, 5)
+    
+    
+    if unblock.pattern_match.group(1):
+        username = unblock.pattern_match.group(1)
+        aname = await unblock.client.get_entity(username)
+        name0 = str(aname.first_name)
+        uid = await unblock.client.get_peer_id(username)
+        x = unblock.edit("Well, I am going to unblock "
+                         f"[{name0}](tg://user?id={replied_user.user.id}) "
+                         "but are you sure?"
+                        )
+        
+    elif unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
-        if await approve(reply.from_id) is False:
-            x = await unblock.edit("`You haven't blocked this user yet!`")
-            return await del_in(x, 5)
+        x = await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
 
+        asyncio.sleep(2)
+        await x.delete()
         await unblock.client(UnblockRequest(replied_user.user.id))
-        await unblock.edit("`My owner has unblocked you. You can PM them now.`")
+        
+        if unblock.reply_to_msg_id:
+            await unblock.edit("`I have unblocked you now. You can PM my owner now.`")
+        else:
+            await unblock.edit(f"`I have unblocked [{name0}](tg://user?id={replied_user.user.id}). They can message you now."
         
 
     if BOTLOG:
