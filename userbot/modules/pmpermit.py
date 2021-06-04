@@ -265,35 +265,44 @@ async def approvepm(apprvpm):
     if not is_mongo_alive() or not is_redis_alive():
         await apprvpm.edit("`Database connections failing!`")
         return
-    
-    chat = await apprvpm.get_chat()
          
     if apprvpm.pattern_match.group(1):
-        username = apprvpm.pattern_match.group(1)
-        aname = await apprvpm.client.get_entity(username)
-        name0 = str(aname.first_name)
+        try:
+            username = apprvpm.pattern_match.group(1)
+            aname = await apprvpm.client.get_entity(username)
+            name0 = str(aname.first_name)
+            uid = await apprvpm.client.get_peer_id(username)
+        except ValueError:
+            apprvpm.edit(
+                "I am sorry. I can't find the user😥\n"
+                "Have you used the correct username?"
+            )
+            return
         
-    elif apprvpm.reply_to_msg_id:
-        reply = await apprvpm.get_reply_message()
-        replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
-        aname = replied_user.user.id
-        name0 = str(replied_user.user.first_name)
+    if apprvpm.reply_to_msg_id:
+        try:
+            reply = await apprvpm.get_reply_message()
+            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
+        except ValueError:
+            apprvpm.edit(
+                "I am sorry, I am unable to fetch that user. "
+                "Probably it's an anonymous admin."
+            )
+            return
 
-    elif apprvpm.is_private:
+    if apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
+        uid = apprvpm.chat_id
 
     try:
         uid = (apprvpm.chat_id or
                replied_user.user.id or
                await apprvpm.client.get_peer_id(username)
               )
-    except ValueError:
-        await apprvpm.edit("I am sorry. I can't find the user😥\n"
-                           "Probably you have entered the wrong username "
-                           "or the user is an anonymous admin."
-                          )
-        return
     
     
     if await approval(uid) is True:
@@ -332,36 +341,26 @@ async def dapprovepm(dapprvpm):
     if not is_mongo_alive() or not is_redis_alive():
         await dapprvpm.edit("`Database connections failing!`")
         return
-
-    chat = await dapprvpm.get_chat()
     
     if dapprvpm.pattern_match.group(1):
-        username = dapprvpm.pattern_match.group(1)
+        try:
+        rname = dapprvpm.pattern_match.group(1)
         aname = await dapprvpm.client.get_entity(username)
         name0 = str(aname.first_name)
+        uid = await apprvpm.client.get_peer_id(username)
         
     elif dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
         replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
+        uid = replied_user.user.id
 
     elif dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
-        
-    try:
-        uid = (dapprvpm.chat_id or
-               replied_user.user.id or
-               await dapprvpm.client.get_peer_id(username)
-              )
-    except ValueError:
-        await dapprvpm.edit("I am sorry. I can't find the user😥\n"
-                           "Probably you have entered the wrong username "
-                           "or the user is an anonymous admin."
-                          )
-        return
-    
+        uid = dapprvpm.chat_id
+   
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("`The user is already a stranger for me.`")
