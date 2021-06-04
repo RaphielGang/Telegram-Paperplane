@@ -486,7 +486,7 @@ async def unblockpm(unblock):
         if unblock.reply_to_msg_id:
             await unblock.edit("`I have unblocked you now. You can PM my owner now.`")
         else:
-            await unblock.edit(f"`I have unblocked [{name0}](tg://user?id={replied_user.user.id}). They can message you now."
+            await unblock.edit(f"`I have unblocked [{name0}](tg://user?id={replied_user.user.id}). They can message you now.")
         
 
     if BOTLOG:
