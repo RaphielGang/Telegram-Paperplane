@@ -284,7 +284,7 @@ async def approvepm(apprvpm):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
-        except ValueError:
+        except TypeError:
             dapprvpm.edit(
                  "I am sorry, I am unable to fetch that user. "
                  "Probably it's an anonymous admin."
@@ -348,7 +348,7 @@ async def dapprovepm(dapprvpm):
             aname = await dapprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
             uid = await dapprvpm.client.get_peer_id(username)
-        except ValueError:
+        except TypeError:
             x = dapprvpm.edit("I am sorry. I can't find this user😥\n"
                               "Have you entered the correct username?")
             return del_in(x, 5)
