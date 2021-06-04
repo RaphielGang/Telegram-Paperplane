@@ -272,20 +272,28 @@ async def approvepm(apprvpm):
         username = apprvpm.pattern_match.group(1)
         aname = await apprvpm.client.get_entity(username)
         name0 = str(aname.first_name)
-        uid = await apprvpm.client.get_peer_id(username)
         
     elif apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
         replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
 
     elif apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
-        uid = apprvpm.chat_id
 
+    try:
+        uid = (apprvpm.chat_id or
+               replied_user.user.id or
+               await apprvpm.client.get_peer_id(username)
+              )
+    except ValueError:
+        await apprvpm.edit("I am sorry. I can't find the user😥\n"
+                           "Probably you have entered the wrong username "
+                           "or the user is an anonymous admin."
+                          )
+        return
     
     
     if await approval(uid) is True:
@@ -298,12 +306,12 @@ async def approvepm(apprvpm):
     await iterate_delete(apprvpm, uid, UNAPPROVED_MSG_ON)
     await iterate_delete(apprvpm, uid, UNAPPROVED_MSG_OFF)
     
-    if apprvpm.reply_to_msg_id:
+    if username:
+        await apprvpm.edit(f"[{name0}](tg://user?id={uid}) can PM you now.")
+    elif apprvpm.reply_to_msg_id:
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}), you can PM without an issue😊")
     elif apprvpm.is_private:
         await apprvpm.edit("Hey there! Nice to meet you😊 I am an obidient bot of my owner!")
-    elif username:
-        await apprvpm.edit(f"[{name0}](tg://user?id={uid}) can PM you now.")
         
     if uid in LASTMSG:
         del LASTMSG[uid]
@@ -331,20 +339,29 @@ async def dapprovepm(dapprvpm):
         username = dapprvpm.pattern_match.group(1)
         aname = await dapprvpm.client.get_entity(username)
         name0 = str(aname.first_name)
-        uid = await dapprvpm.client.get_peer_id(username)
         
     elif dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
         replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
 
     elif dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
-        uid = dapprvpm.chat_id
         
+    try:
+        uid = (dapprvpm.chat_id or
+               replied_user.user.id or
+               await dapprvpm.client.get_peer_id(username)
+              )
+    except ValueError:
+        await dapprvpm.edit("I am sorry. I can't find the user😥\n"
+                           "Probably you have entered the wrong username "
+                           "or the user is an anonymous admin."
+                          )
+        return
+    
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("`The user is already a stranger for me.`")
@@ -360,12 +377,12 @@ async def dapprovepm(dapprvpm):
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
     
-    if dapprvpm.is_private:
+    if username:
+        await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
+    elif dapprvpm.is_private:
         await dapprvpm.edit("I don't like strangers in the PM!! Get lost!")
     elif dapprvpm.reply_to_msg_id:
-        await dapprvpm.edit("Don't you dare PM!!")
-    elif username:
-        await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
+        await dapprvpm.edit(f"[{name0}](tg://user?id={uid}), don't you dare PM!!")
 
     if BOTLOG:
         await dapprvpm.client.send_message(
