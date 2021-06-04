@@ -279,7 +279,7 @@ async def approvepm(apprvpm):
             )
             return
         
-    if apprvpm.reply_to_msg_id:
+    elif apprvpm.reply_to_msg_id:
         try:
             reply = await apprvpm.get_reply_message()
             replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
@@ -293,7 +293,7 @@ async def approvepm(apprvpm):
             )
             return
 
-    if apprvpm.is_private:
+    elif apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
@@ -349,7 +349,7 @@ async def dapprovepm(dapprvpm):
             )
             return
         
-    if dapprvpm.reply_to_msg_id:
+    elif dapprvpm.reply_to_msg_id:
         try:
             reply = await dapprvpm.get_reply_message()
             replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
@@ -363,7 +363,7 @@ async def dapprovepm(dapprvpm):
             )
             return
 
-    if dapprvpm.is_private:
+    elif dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
