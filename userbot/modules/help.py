@@ -9,7 +9,7 @@ from userbot import CMD_HELP
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.help(?: |$)(.*)")
+@register(outgoing=True, pattern="^\.help(?: |$)(.*)")
 @grp_exclude()
 async def help(event):
     """ For .help command"""
