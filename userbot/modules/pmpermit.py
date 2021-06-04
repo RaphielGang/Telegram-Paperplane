@@ -297,12 +297,6 @@ async def approvepm(apprvpm):
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
-
-    try:
-        uid = (apprvpm.chat_id or
-               replied_user.user.id or
-               await apprvpm.client.get_peer_id(username)
-              )
     
     
     if await approval(uid) is True:
