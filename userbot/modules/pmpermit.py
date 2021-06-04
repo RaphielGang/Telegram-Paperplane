@@ -258,7 +258,7 @@ async def notifon(non_event):
     
     
 
-@register(outgoing=True, pattern="^.approve")
+@register(outgoing=True, pattern="^.approve (.*)$|^.a (.*)$")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -268,7 +268,13 @@ async def approvepm(apprvpm):
     
     chat = await apprvpm.get_chat()
          
-    if apprvpm.reply_to_msg_id:
+    if apprvpm.pattern_match.group(1):
+        username = apprvpm.pattern_match.group(1)
+        aname = await apprvpm.client.get_entity(username)
+        name0 = str(aname.first_name)
+        uid = await apprvpm.client.get_peer_id(username)
+        
+    elif apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
         replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
@@ -279,17 +285,7 @@ async def approvepm(apprvpm):
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
-        
-    elif apprvpm.text[8: ]:
-        if str(apprvpm.text[8: ]).startswith("@"):
-            username = str(apprvpm.text[8: ])
-            aname = await apprvpm.client.get_entity(username)
-            name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_peer_id(username)
-  
-    #$else:
-        apprvpm.edit("I am sorry. I can't seem to find that user😥")
-       # return
+
     
     
     if await approval(uid) is True:
