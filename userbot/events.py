@@ -15,7 +15,7 @@ from traceback import format_exc
 
 from telethon import events
 
-from userbot import bot, BOTLOG, BOTLOG_CHATID, LOGS
+from userbot import bot, BOTLOG, BOTLOG_CHATID, LOGS, COMMAND_TRIGGER
 from userbot.modules.dbhelper import get_exclude
 
 
@@ -28,8 +28,14 @@ def register(**args):
     group_only = args.get('group_only', False)
     disable_errors = args.get('disable_errors', False)
     insecure = args.get('insecure', False)
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
+    if pattern is not None: #and not pattern.startswith('(?i)'):
+        if COMMAND_TRIGGER:
+            if len(COMMAND_TRIGGER) == 1:
+                args['pattern'] = '^\\' + COMMAND_TRIGGER
+            else:
+                LOGS.info("Make sure to set only one command trigger.")
+        else:
+            args['pattern'] = '^\.' + pattern
 
     if "disable_edited" in args:
         del args['disable_edited']
