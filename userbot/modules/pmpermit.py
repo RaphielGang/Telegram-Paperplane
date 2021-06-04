@@ -258,7 +258,7 @@ async def notifon(non_event):
     
     
 
-@register(outgoing=True, pattern="^(?:.approve|.a)\s|$(.*)$")
+@register(outgoing=True, pattern="^(?:.approve|.a)(?: |$)(.*)$")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -309,7 +309,7 @@ async def approvepm(apprvpm):
     await iterate_delete(apprvpm, uid, UNAPPROVED_MSG_ON)
     await iterate_delete(apprvpm, uid, UNAPPROVED_MSG_OFF)
     
-    if username:
+    if apprvpm.pattern_match.group(1):
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}) can PM you now.")
     elif apprvpm.reply_to_msg_id:
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}), you can PM without an issue😊")
@@ -328,7 +328,7 @@ async def approvepm(apprvpm):
         
         
 
-@register(outgoing=True, pattern="^(?:.disapprove|.da)\s|$(.*)$")
+@register(outgoing=True, pattern="^(?:.disapprove|.da)(?: |$)(.*)$")
 @grp_exclude()
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
@@ -383,7 +383,7 @@ async def dapprovepm(dapprvpm):
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
     
-    if username:
+    if dapprvpm.pattern_match.group(1):
         await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
     elif dapprvpm.is_private:
         await dapprvpm.edit("I don't like strangers in the PM!! Get lost!")
