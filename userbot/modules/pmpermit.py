@@ -344,19 +344,32 @@ async def dapprovepm(dapprvpm):
     
     if dapprvpm.pattern_match.group(1):
         try:
-        rname = dapprvpm.pattern_match.group(1)
-        aname = await dapprvpm.client.get_entity(username)
-        name0 = str(aname.first_name)
-        uid = await apprvpm.client.get_peer_id(username)
+            username = dapprvpm.pattern_match.group(1)
+            aname = await dapprvpm.client.get_entity(username)
+            name0 = str(aname.first_name)
+            uid = await dapprvpm.client.get_peer_id(username)
+        except ValueError:
+            dapprvpm.edit(
+                "I am sorry. I can't find the user😥\n"
+                "Have you used the correct username?"
+            )
+            return
         
-    elif dapprvpm.reply_to_msg_id:
-        reply = await dapprvpm.get_reply_message()
-        replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
-        aname = replied_user.user.id
-        name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
+    if dapprvpm.reply_to_msg_id:
+        try:
+            reply = await dapprvpm.get_reply_message()
+            replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
+        except ValueError:
+            dapprvpm.edit(
+                "I am sorry, I am unable to fetch that user. "
+                "Probably it's an anonymous admin."
+            )
+            return
 
-    elif dapprvpm.is_private:
+    if dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
