@@ -196,14 +196,14 @@ async def auto_approve_switch(event):
         await apprvpm.edit("`Database connections failing!`")
         return
     else:
-        chat = await event.get_chat()
-        await autoapprove(chat.id)
-        if await autoapproval(event.chat_id) is True:
-            x = await event.edit("`Auto-Approve` ON! I will approve an user after you PM them.")
-            await del_in(x, 5)
-        else:
-            y = await event.edit("`Auto-Approve` OFF! You will have to manually approve users now.")
-            await del_in(y, 5)
+        await autoapprove()
+        
+    if await autoapproval() is True:
+        x = await event.edit("`Auto-Approve` ON! I will approve an user after you PM them.")
+        await del_in(x, 5)
+    else:
+        y = await event.edit("`Auto-Approve` OFF! You will have to manually approve users now.")
+        await del_in(y, 5)
     
     
 @register(disable_edited=True, outgoing=True, disable_errors=True)
