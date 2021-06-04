@@ -286,7 +286,7 @@ async def approvepm(apprvpm):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
-        except ValueError:
+        except NoneTypeError:
             apprvpm.edit(
                 "I am sorry, I am unable to fetch that user. "
                 "Probably it's an anonymous admin."
@@ -297,6 +297,10 @@ async def approvepm(apprvpm):
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
+        
+    else:
+        await apprvpm.edit("I can't see the user you want to approve😳")
+        return
     
     
     if await approval(uid) is True:
@@ -356,7 +360,7 @@ async def dapprovepm(dapprvpm):
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
-        except ValueError:
+        except NoneTypeError:
             dapprvpm.edit(
                 "I am sorry, I am unable to fetch that user. "
                 "Probably it's an anonymous admin."
@@ -367,7 +371,10 @@ async def dapprovepm(dapprvpm):
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
-   
+        
+    else:
+        await dapprvpm.edit("I can't see the user you want to disapprove😳")
+        return
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("`The user is already a stranger for me.`")
@@ -397,7 +404,7 @@ async def dapprovepm(dapprvpm):
         
         
         
-@register(outgoing=True, pattern="block$")
+@register(outgoing=True, pattern="block(?: |$)(.*)$")
 @grp_exclude()
 async def blockpm(block):
     """For .block command, block people from PMing you!"""
@@ -433,7 +440,7 @@ async def blockpm(block):
         )
 
 
-@register(outgoing=True, pattern="unblock$")
+@register(outgoing=True, pattern="unblock(?: |$)(.*)$")
 @grp_exclude()
 async def unblockpm(unblock):
     """For .unblock command, let people PMing you again!"""
