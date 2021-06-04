@@ -267,40 +267,30 @@ async def approvepm(apprvpm):
         return
          
     if apprvpm.pattern_match.group(1):
-        try:
-            username = apprvpm.pattern_match.group(1)
-            aname = await apprvpm.client.get_entity(username)
-            name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_peer_id(username)
-        except ValueError:
-            apprvpm.edit(
-                "I am sorry. I can't find the user😥\n"
-                "Have you used the correct username?"
-            )
-            return
+        username = apprvpm.pattern_match.group(1)
+        aname = await apprvpm.client.get_entity(username)
+        name0 = str(aname.first_name)
+        uid = await apprvpm.client.get_peer_id(username)
         
     elif apprvpm.reply_to_msg_id:
-        try:
-            reply = await apprvpm.get_reply_message()
-            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-        except NoneTypeError:
-            apprvpm.edit(
-                "I am sorry, I am unable to fetch that user. "
-                "Probably it's an anonymous admin."
-            )
-            return
+        reply = await apprvpm.get_reply_message()
+        replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+        aname = replied_user.user.id
+        name0 = str(replied_user.user.first_name)
+        uid = replied_user.user.id
 
     elif apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
-        
+    
+    elif apprvpm.is_private and apprvpm.reply_to_msg_id:
+        x = apprvpm.edit("There's no need to reply the person in a private chat.")
+        return await del_in(x, 10)
+    
     else:
-        await apprvpm.edit("I can't see the user you want to approve😳")
-        return
+        x = await apprvpm.edit("I can't see the user you want to approve😳")
+        return await del_in(x, 5)
     
     
     if await approval(uid) is True:
@@ -341,40 +331,30 @@ async def dapprovepm(dapprvpm):
         return
     
     if dapprvpm.pattern_match.group(1):
-        try:
-            username = dapprvpm.pattern_match.group(1)
-            aname = await dapprvpm.client.get_entity(username)
-            name0 = str(aname.first_name)
-            uid = await dapprvpm.client.get_peer_id(username)
-        except ValueError:
-            dapprvpm.edit(
-                "I am sorry. I can't find the user😥\n"
-                "Have you used the correct username?"
-            )
-            return
+        username = dapprvpm.pattern_match.group(1)
+        aname = await dapprvpm.client.get_entity(username)
+        name0 = str(aname.first_name)
+        uid = await dapprvpm.client.get_peer_id(username)
         
     elif dapprvpm.reply_to_msg_id:
-        try:
-            reply = await dapprvpm.get_reply_message()
-            replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-        except NoneTypeError:
-            dapprvpm.edit(
-                "I am sorry, I am unable to fetch that user. "
-                "Probably it's an anonymous admin."
-            )
-            return
+        reply = await dapprvpm.get_reply_message()
+        replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
+        aname = replied_user.user.id
+        name0 = str(replied_user.user.first_name)
+        uid = replied_user.user.id
 
     elif dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
+    
+    elif dapprvpm.is_private and dapprvpm.reply_to_msg_id:
+        x = dapprvpm.edit("There's no need to reply the person in a private chat.")
+        return await del_in(x, 10)
         
     else:
-        await dapprvpm.edit("I can't see the user you want to disapprove😳")
-        return
+        x = await dapprvpm.edit("I can't see the user you want to disapprove😳")
+        return await del_in(x, 5)
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("`The user is already a stranger for me.`")
