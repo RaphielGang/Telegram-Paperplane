@@ -275,21 +275,21 @@ async def approvepm(apprvpm):
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
 
-    if apprvpm.is_private:
+    elif apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
         
-    if apprvpm.text[8: ]:
+    elif apprvpm.text[8: ]:
         if str(apprvpm.text[8: ]).startswith("@"):
             username = str(apprvpm.text[8: ])
             aname = await apprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
             uid = await apprvpm.client.get_peer_id(username)
   
-    else:
+    #$else:
         apprvpm.edit("I am sorry. I can't seem to find that user😥")
-        return
+       # return
     
     
     if await approval(uid) is True:
@@ -338,21 +338,21 @@ async def dapprovepm(dapprvpm):
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
 
-    if dapprvpm.is_private:
+    elif dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
         
-    if dapprvpm.text[11: ]:
+    elif dapprvpm.text[11: ]:
         if str(dapprvpm.text[11: ]).startswith("@"):
             username = str(dapprvpm.text[11: ])
             aname = await dapprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
             uid = await dapprvpm.client.get_peer_id(username)
     
-    else:
+    #else:
         dapprvpm.edit("I am sorry. I can't seem to find that user😥")
-        return
+       # return
     
     
     if await approval(uid) is False:
