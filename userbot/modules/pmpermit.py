@@ -458,7 +458,7 @@ async def unblockpm(unblock):
         await unblock.edit("`Database connections failing!`")
         return
 
-    if await block_pm(unblock.chat_id) is False:
+    if await block_pm(unblock.chat_id) is True:
         x = await unblock.edit("You haven't blocked this user yet!")
         return await del_in(x, 5)
     
