@@ -284,10 +284,19 @@ async def approvepm(apprvpm):
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
 
-    elif apprvpm.is_private:
-        aname = await apprvpm.client.get_entity(apprvpm.chat_id)
-        name0 = str(aname.first_name)
-        uid = apprvpm.chat_id
+    elif apprvpm.reply_to_msg_id:
+        try:
+            reply = await apprvpm.get_reply_message()
+            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
+        except TypeError:
+            apprvpm.edit(
+                "I am sorry, I am unable to fetch that user. "
+                "Probably it's an anonymous admin."
+            )
+            return
     
     elif apprvpm.is_private and apprvpm.reply_to_msg_id:
         x = apprvpm.edit("There's no need to reply the person in a private chat.")
@@ -346,12 +355,19 @@ async def dapprovepm(dapprvpm):
                               "Have you entered the correct username?")
             return del_in(x, 5)
         
-    elif dapprvpm.reply_to_msg_id:
-        reply = await dapprvpm.get_reply_message()
-        replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
-        aname = replied_user.user.id
-        name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
+    elif apprvpm.reply_to_msg_id:
+        try:
+            reply = await dapprvpm.get_reply_message()
+            replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
+        except ValueError:
+            dapprvpm.edit(
+                 "I am sorry, I am unable to fetch that user. "
+                 "Probably it's an anonymous admin."
+            )
+            return
 
     elif dapprvpm.is_private:
         aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
