@@ -418,7 +418,7 @@ async def blockpm(block):
         aname = await block.client.get_entity(username)
         name0 = str(aname.first_name)
         uid = await block.client.get_peer_id(username)
-        x = block.edit(f"[{name0}](tg://user?id={uid}) is going to be blocked in 2 seconds")
+        block.edit(f"[{name0}](tg://user?id={uid}) is going to be blocked in 2 seconds")
  
     elif block.reply_to_msg_id:
         reply = await block.get_reply_message()
@@ -426,21 +426,21 @@ async def blockpm(block):
         aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
-        x = block.edit(f"You are gonna be blocked from PM-ing my owner.")
+        block.edit(f"You are gonna be blocked from PM-ing my owner.")
         
     elif block.is_private:
         aname = await block.client.get_entity(block.chat_id)
         name0 = str(aname.first_name)
         uid = block.chat_id
-        x = block.edit(f"You are gonna be blocked from PM-ing my owner.")
+        block.edit(f"You are gonna be blocked from PM-ing my owner.")
         
     else:
         x = block.edit("Nope, I can't find that user.")
+        await del_in(x, 5)
         
         
     
     asyncio.sleep(2)
-    await x.delete()
     await block.client(BlockRequest(uid))
     await block.edit("**Blocked.**")
 
@@ -468,19 +468,20 @@ async def unblockpm(unblock):
         aname = await unblock.client.get_entity(username)
         name0 = str(aname.first_name)
         uid = await unblock.client.get_peer_id(username)
-        x = unblock.edit("Well, I am going to unblock "
+        x = await unblock.edit("Well, I am going to unblock "
                          f"[{name0}](tg://user?id={replied_user.user.id}) "
                          "but are you sure?"
                         )
+        await del_in(x, 5)
         
     elif unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         x = await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
+        await del_in(x, 5)
 
         asyncio.sleep(2)
-        await x.delete()
         await unblock.client(UnblockRequest(replied_user.user.id))
         
         if unblock.reply_to_msg_id:
