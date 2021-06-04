@@ -317,7 +317,7 @@ async def approvepm(apprvpm):
         
         
 
-@register(outgoing=True, pattern="^.disapprove")
+@register(outgoing=True, pattern="^.disapprove (.*)$|^.da (.*)$")
 @grp_exclude()
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
@@ -326,8 +326,14 @@ async def dapprovepm(dapprvpm):
         return
 
     chat = await dapprvpm.get_chat()
+    
+    if dapprvpm.pattern_match.group(1):
+        username = dapprvpm.pattern_match.group(1)
+        aname = await dapprvpm.client.get_entity(username)
+        name0 = str(aname.first_name)
+        uid = await dapprvpm.client.get_peer_id(username)
         
-    if dapprvpm.reply_to_msg_id:
+    elif dapprvpm.reply_to_msg_id:
         reply = await dapprvpm.get_reply_message()
         replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
         aname = replied_user.user.id
@@ -339,17 +345,6 @@ async def dapprovepm(dapprvpm):
         name0 = str(aname.first_name)
         uid = dapprvpm.chat_id
         
-    elif dapprvpm.text[11: ]:
-        if str(dapprvpm.text[11: ]).startswith("@"):
-            username = str(dapprvpm.text[11: ])
-            aname = await dapprvpm.client.get_entity(username)
-            name0 = str(aname.first_name)
-            uid = await dapprvpm.client.get_peer_id(username)
-    
-    #else:
-        dapprvpm.edit("I am sorry. I can't seem to find that user😥")
-       # return
-    
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("`The user is already a stranger for me.`")
