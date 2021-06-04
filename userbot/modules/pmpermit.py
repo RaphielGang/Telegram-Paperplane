@@ -188,7 +188,7 @@ async def permitpm(event):
          
     
     
-@register(outgoing=True, pattern="autoapprove$|autoa$")
+@register(outgoing=True, pattern="^\.autoapprove$|^\.autoa$")
 @grp_exclude()
 async def auto_approve_switch(event):
     """Will switch auto approve on or off"""
@@ -232,7 +232,7 @@ async def auto_accept(event):
               )
 
 
-@register(outgoing=True, pattern="notifoff$")
+@register(outgoing=True, pattern="^\.notifoff$")
 @grp_exclude()
 async def notifoff(noff_event):
     """For .notifoff command, stop getting
@@ -245,7 +245,7 @@ async def notifoff(noff_event):
         return await del_in(y, 5)  
  
 
-@register(outgoing=True, pattern="notifon$")
+@register(outgoing=True, pattern="^\.notifon$")
 @grp_exclude()
 async def notifon(non_event):
     """For .notifoff command, get notifications from unapproved PMs."""
@@ -258,7 +258,7 @@ async def notifon(non_event):
     
     
 
-@register(outgoing=True, pattern="(?:approve|a)(?: |$)(.*)$")
+@register(outgoing=True, pattern="^\.(?:approve|a)(?: |$)(.*)$")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -328,7 +328,7 @@ async def approvepm(apprvpm):
         
         
 
-@register(outgoing=True, pattern="(?:disapprove|da)(?: |$)(.*)$")
+@register(outgoing=True, pattern="^\.(?:disapprove|da)(?: |$)(.*)$")
 @grp_exclude()
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
@@ -397,7 +397,7 @@ async def dapprovepm(dapprvpm):
         
         
         
-@register(outgoing=True, pattern="block$")
+@register(outgoing=True, pattern="^\.block$")
 @grp_exclude()
 async def blockpm(block):
     """For .block command, block people from PMing you!"""
@@ -433,7 +433,7 @@ async def blockpm(block):
         )
 
 
-@register(outgoing=True, pattern="unblock$")
+@register(outgoing=True, pattern="^\.unblock$")
 @grp_exclude()
 async def unblockpm(unblock):
     """For .unblock command, let people PMing you again!"""
