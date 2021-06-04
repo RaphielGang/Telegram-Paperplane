@@ -52,9 +52,9 @@ def register(**args):
     if "insecure" in args:
         del args['insecure']
 
-    if pattern:
+    '''if pattern:
         if not ignore_unsafe:
-            args['pattern'] = args['pattern'].replace('^.', unsafe_pattern, 1)
+            args['pattern'] = args['pattern'].replace('^.', unsafe_pattern, 1)'''
 
     def decorator(func):
         async def wrapper(check):
