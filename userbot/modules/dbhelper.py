@@ -323,6 +323,8 @@ async def block_pm(userid):
                                      'blocked': True
                                  }})
         return
+    else:
+        await block.edit("The user is already in your blocked list.")
     
     
 async def unblock_pm(userid):
@@ -333,6 +335,8 @@ async def unblock_pm(userid):
                                      'blocked': False
                                  }})
         return
+    else:
+        await unblock.edit("The user isn't approved...yet.")
 
 
 async def notif_state():
