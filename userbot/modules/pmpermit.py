@@ -454,8 +454,7 @@ async def unblockpm(unblock):
     
     elif unblock.is_private:
         x = unblock.edit("You aren't serious, right?")
-        await delete_in(x, 5)
-        return
+        return await delete_in(x, 5)
                    
     elif unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
