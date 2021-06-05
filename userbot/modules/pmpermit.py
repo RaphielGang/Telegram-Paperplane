@@ -391,7 +391,7 @@ async def dapprovepm(dapprvpm):
 @grp_exclude()
 async def blockpm(block):
     if not is_mongo_alive() or not is_redis_alive():
-        await block.edit("Databases are failing!")
+        await block.reply("Databases are failing!")
         return
     
     if block.pattern_match.group(1):
@@ -399,14 +399,14 @@ async def blockpm(block):
         bname = await block.client.get_entity(username)
         name0 = str(bname.first_name)
         uid = await block.client.get_peer_id(username)
-        block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
+        block.reply(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
         asyncio.sleep(2)
     
     elif block.is_private:
         bname= await block.client.get_entity(block.chat_id)
         name0 = str(bname.first_name)
         uid = block.chat_id
-        block.edit("I am blocking you now.")
+        block.reply("I am blocking you now.")
         asyncio.sleep(2)
                    
     elif block.reply_to_message_id:
@@ -414,11 +414,11 @@ async def blockpm(block):
         replied_user = await block.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
-        block.edit("You are going to be blocked from PM-ing me now.")
+        block.reply("You are going to be blocked from PM-ing me now.")
         asyncio.sleep(2)
         
     else:
-        x = await block.edit("Gimme the user to block!")
+        x = await block.reply("Gimme the user to block!")
         return await delete_in(x, 5)
     
     if await is_blocked(uid) is True:
@@ -438,7 +438,7 @@ async def blockpm(block):
 @grp_exclude()
 async def unblockpm(unblock):
     if not is_mongo_alive() or not is_redis_alive():
-        await unblock.edit("Databases are failing!")
+        await unblock.reply("Databases are failing!")
         return
     
     if unblock.pattern_match.group(1):
@@ -446,11 +446,11 @@ async def unblockpm(unblock):
         ubname = await unblock.client.get_entity(username)
         name0 = str(ubname.first_name)
         uid = await unblock.client.get_peer_id(username)
-        unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
+        unblock.reply(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
         asyncio.sleep(2)
     
     elif unblock.is_private:
-        x = unblock.edit("You aren't serious, right?")
+        x = unblock.reply("You aren't serious, right?")
         await delete_in(x, 5)
                    
     elif unblock.reply_to_message_id:
@@ -458,11 +458,11 @@ async def unblockpm(unblock):
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
-        unblock.edit("You are gonna be unblocked now. Aren't you happy?")
+        unblock.reply("You are gonna be unblocked now. Aren't you happy?")
         asyncio.sleep(2)
     
     else:
-        x = await unblock.edit("I can't unblock '__NOBODY__'")
+        x = await unblock.reply("I can't unblock '__NOBODY__'")
         return await delete_in(x, 5)
     
     if await is_blocked(uid) is False:
