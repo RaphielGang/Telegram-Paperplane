@@ -421,13 +421,13 @@ async def blockpm(block):
         
     if block.pattern_match.group(1):
         block.reply(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
-        asyncio.sleep(2)
+        asyncio.sleep(4)
     elif block.is_private:
         block.reply("I am blocking you now.")
-        asyncio.sleep(2)
+        asyncio.sleep(4)
     elif block.reply_to_msg_id:
         block.edit("You are going to be blocked from PM-ing me now.")
-        asyncio.sleep(2)
+        asyncio.sleep(4)
     
     await block.client(BlockRequest(uid))
     await block_pm(uid)
@@ -455,6 +455,7 @@ async def unblockpm(unblock):
     elif unblock.is_private:
         x = unblock.edit("You aren't serious, right?")
         await delete_in(x, 5)
+        return
                    
     elif unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
@@ -473,10 +474,10 @@ async def unblockpm(unblock):
     
     if unblock.pattern_match.group(1):
         unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
-        asyncio.sleep(2)
+        asyncio.sleep(4)
     elif unblock.reply_to_msg_id:
         unblock.edit("You are gonna be unblocked now. Aren't you happy?")
-        asyncio.sleep(2)
+        asyncio.sleep(4)
         
     await unblock.client(UnblockRequest(uid))
     await unblock_pm(uid)
