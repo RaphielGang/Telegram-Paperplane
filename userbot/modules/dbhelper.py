@@ -268,7 +268,7 @@ async def disapprove(userid):
     if await approval(userid) is False:
         return False
     else:
-        MONGO.pmpermit.update_one({'user_id': userid},
+        MONGO.pmpermit.update_one({'userid': userid},
                                   {"$set": {
                                       'approval': False
                                   }})
@@ -303,13 +303,37 @@ async def autoapprove():
         return 
 
 
-async def block_pm(userid):
-    if await approval(userid) is False:
+async def is_blocked(userid):
+    to_check = MONGO.blocked.find_one({'Contact': userid})
+    
+    if to_check in None:
+        MONGO.blocked.instert_one({'Contact': userid, 'blocked': False})
         return False
-    else:
-        await disapprove(userid)
-
+    elif to_check['blocked'] is False:
+        return False
+    elif to_check['blocked'] is True:
         return True
+
+
+async def block_pm(userid):
+    if await is_blocked(userid) is False:
+        await block.client(BlockRequest(userid))
+        await disapprove(userid)
+        MONGO.blocked.update_one({'Contact': userid},
+                                 {"$set": {
+                                     'blocked': True
+                                 }})
+        return
+    
+    
+async def unblock_pm(event, userid):
+    if await is_blocked(userid) is True:
+        await unblock.client(UnblockRequest(userid))
+        MONGO.blocked.update_one({'Contact': userid},
+                                 {"$set": {
+                                     'blocked': False
+                                 }})
+        return
 
 
 async def notif_state():
