@@ -33,10 +33,13 @@ from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     autoapproval,
     autoapprove,
+    is_afk,
     approval,
     approve,
     disapprove,
+    is_blocked,
     block_pm,
+    unblock_pm,
     notif_off,
     notif_on,
     notif_state,
@@ -61,7 +64,7 @@ UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 # =================================================================
 
-async def del_in(text, seconds):
+async def delete_in(text, seconds):
     await asyncio.sleep(seconds)
     return await text.delete()
 
@@ -139,15 +142,15 @@ async def permitpm(event):
     
                 if WARN > 1:
                     message = await event.reply(f"You have {WARN} warns left.")
-                    await del_in(message, 5)
+                    await delete_in(message, 5)
                     await pm_notifier()
                 elif WARN == 1:
                     message = await event.reply("You have 1 warn left.")
-                    await del_in(message, 5)
+                    await delete_in(message, 5)
                     await pm_notifier()
                 elif WARN == 0:
                     message = await event.reply("**This is the last warning. Please stop spamming!!**")
-                    await del_in(message, 10)
+                    await delete_in(message, 10)
                     await pm_notifier()
                 elif WARN == -1:
                     await event.respond("You were spamming the PM, inspite of my warnings.\n"
@@ -193,17 +196,17 @@ async def permitpm(event):
 async def auto_approve_switch(event):
     """Will switch auto approve on or off"""
     if not is_mongo_alive() or not is_redis_alive():
-        await apprvpm.edit("`Database connections failing!`")
+        await apprvpm.edit("Database connections failing!")
         return
     else:
         await autoapprove()
         
     if await autoapproval() is True:
         x = await event.edit("`Auto-Approve` ON! I will approve an user after you PM them.")
-        await del_in(x, 5)
+        await delete_in(x, 5)
     else:
         y = await event.edit("`Auto-Approve` OFF! You will have to manually approve users now.")
-        await del_in(y, 5)
+        await delete_in(y, 5)
     
     
 @register(disable_edited=True, outgoing=True, disable_errors=True)
@@ -218,7 +221,7 @@ async def auto_accept(event):
                                   ".approve", ".disapprove", ".notifon", ".notifoff")):
             return
         if event.is_private: 
-            if not await approval(event.chat_id) and not chat.bot:
+            if not await approval(event.chat_id) and not is_afk and not chat.bot:
                 await approve(chat.id)
                 await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
                 await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
@@ -238,11 +241,11 @@ async def notifoff(noff_event):
     """For .notifoff command, stop getting
     notifications from unapproved PMs."""
     if await notif_off() is False:
-        x = await noff_event.edit("`Notifications are already silenced!`")
-        return await del_in(x, 5)
+        x = await noff_event.edit("Notifications are already silenced.")
+        return await delete_in(x, 5)
     else:
-        y = await noff_event.edit("`Notifications silenced!`")
-        return await del_in(y, 5)  
+        y = await noff_event.edit("Notifications silenced!")
+        return await delete_in(y, 5)  
  
 
 @register(outgoing=True, pattern="notifon$")
@@ -250,11 +253,11 @@ async def notifoff(noff_event):
 async def notifon(non_event):
     """For .notifoff command, get notifications from unapproved PMs."""
     if await notif_on() is False:
-        x = await non_event.edit("`Notifications aren't muted!")
-        return await del_in(x, 5)
+        x = await non_event.edit("Notifications aren't muted.")
+        return await delete_in(x, 5)
     else:
-        y = await non_event.edit("`Notifications unmuted!`")
-        return await del_in(y, 5)
+        y = await non_event.edit("Notifications unmuted!")
+        return await delete_in(y, 5)
     
     
 
@@ -263,7 +266,7 @@ async def notifon(non_event):
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
     if not is_mongo_alive() or not is_redis_alive():
-        await apprvpm.edit("`Database connections failing!`")
+        await apprvpm.edit("Database connections failing!")
         return
          
     if apprvpm.pattern_match.group(1):
@@ -275,35 +278,27 @@ async def approvepm(apprvpm):
         except ValueError:
             x = apprvpm.edit("I am sorry. I can't find this user😥\n"
                             "Have you entered the correct username?")
-            return del_in(x, 5)
-        
-    elif apprvpm.reply_to_msg_id:
-        try:
-            reply = await apprvpm.get_reply_message()
-            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-        except TypeError:
-            apprvpm.edit(
-                 "I am sorry, I am unable to fetch that user. "
-                 "Probably it's an anonymous admin."
-            )
-            return
-
+            return delete_in(x, 5)
+    
     elif apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
+        
+    elif apprvpm.reply_to_msg_id:
+        reply = await apprvpm.get_reply_message()
+        replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+        aname = replied_user.user.id
+        name0 = str(replied_user.user.first_name)
+        uid = replied_user.user.id
     
     else:
         x = await apprvpm.edit("I can't see the user you want to approve😳")
-        return await del_in(x, 5)
-    
+        return await delete_in(x, 5)
     
     if await approval(uid) is True:
-        x = await apprvpm.edit("`I already know this user! You can chat!`")
-        return await del_in(x, 5)
+        x = await apprvpm.edit("I already know this user! You can chat!")
+        return await delete_in(x, 5)
     
     await approve(uid)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
@@ -335,46 +330,38 @@ async def approvepm(apprvpm):
 async def dapprovepm(dapprvpm):
     """For .disapprove command, revokes someone's permission to PM you."""
     if not is_mongo_alive() or not is_redis_alive():
-        await dapprvpm.edit("`Database connections failing!`")
+        await dapprvpm.edit("Database connections failing!")
         return
     
     if dapprvpm.pattern_match.group(1):
         try:
             username = dapprvpm.pattern_match.group(1)
-            aname = await dapprvpm.client.get_entity(username)
-            name0 = str(aname.first_name)
+            daname = await dapprvpm.client.get_entity(username)
+            name0 = str(daname.first_name)
             uid = await dapprvpm.client.get_peer_id(username)
         except TypeError:
             x = dapprvpm.edit("I am sorry. I can't find this user😥\n"
                               "Have you entered the correct username?")
-            return del_in(x, 5)
-        
-    elif dapprvpm.reply_to_msg_id:
-        try:
-            reply = await dapprvpm.get_reply_message()
-            replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-        except TypeError:
-            dapprvpm.edit(
-                 "I am sorry, I am unable to fetch that user. "
-                 "Probably it's an anonymous admin."
-            )
-            return
-
+            return delete_in(x, 5)
+    
     elif dapprvpm.is_private:
-        aname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
-        name0 = str(aname.first_name)
+        daname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
+        name0 = str(daname.first_name)
         uid = dapprvpm.chat_id
         
+    elif dapprvpm.reply_to_msg_id:
+        reply = await dapprvpm.get_reply_message()
+        replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
+        name0 = str(replied_user.user.first_name)
+        uid = replied_user.user.id
+
     else:
         x = await dapprvpm.edit("I can't see the user you want to disapprove😳")
-        return await del_in(x, 5)
+        return await delete_in(x, 5)
     
     if await approval(uid) is False:
-        x = await dapprvpm.edit("`The user is already a stranger for me.`")
-        return await del_in(x, 5)
+        x = await dapprvpm.edit("The user is already a stranger for me.")
+        return await delete_in(x, 5)
     
     await disapprove(uid)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) .")
@@ -403,47 +390,38 @@ async def dapprovepm(dapprvpm):
 @register(outgoing=True, pattern="block(?: |$)(.*)$")
 @grp_exclude()
 async def blockpm(block):
-    """For .block command, block people from PMing you!"""
     if not is_mongo_alive() or not is_redis_alive():
-        await block.edit("`Database connections failing!`")
+        await block.edit("Databases are failing!")
         return
-
-    if await block_pm(block.chat_id) is False:
-        x = await block.edit("`The user isn't approved.`")
-        return await del_in(x, 5)
     
-        
     if block.pattern_match.group(1):
         username = block.pattern_match.group(1)
-        aname = await block.client.get_entity(username)
-        name0 = str(aname.first_name)
+        bname = await block.client.get_entity(username)
+        name0 = str(bname.first_name)
         uid = await block.client.get_peer_id(username)
-        block.edit(f"[{name0}](tg://user?id={uid}) is going to be blocked in 2 seconds")
- 
-    elif block.reply_to_msg_id:
+        block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
+    
+    elif block.is_private:
+        bname= await block.client.get_entity(block.chat_id)
+        name0 = str(bname.first_name)
+        uid = block.chat_id
+        block.edit("I am blocking you now.")
+                   
+    elif block.reply_to_message_id:
         reply = await block.get_reply_message()
         replied_user = await block.client(GetFullUserRequest(reply.from_id))
-        aname = replied_user.user.id
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
-        block.edit(f"You are gonna be blocked from PM-ing my owner.")
-        
-    elif block.is_private:
-        aname = await block.client.get_entity(block.chat_id)
-        name0 = str(aname.first_name)
-        uid = block.chat_id
-        block.edit(f"You are gonna be blocked from PM-ing my owner.")
+        block.edit("You are going to be blocked from PM-ing me now.")
         
     else:
-        x = block.edit("Nope, I can't find that user.")
-        await del_in(x, 5)
-        
-        
+        x = await block.edit("Gimme the user to block!")
+        return await delete_in(x, 5)
     
     asyncio.sleep(2)
-    await block.client(BlockRequest(uid))
-    await block.edit("**Blocked.**")
-
+    await block_pm(uid)
+    await block.edit("***BLOCKED!!**")
+    
     if BOTLOG:
         await block.client.send_message(
             BOTLOG_CHATID, "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
@@ -453,47 +431,36 @@ async def blockpm(block):
 @register(outgoing=True, pattern="unblock(?: |$)(.*)$")
 @grp_exclude()
 async def unblockpm(unblock):
-    """For .unblock command, let people PMing you again!"""
     if not is_mongo_alive() or not is_redis_alive():
-        await unblock.edit("`Database connections failing!`")
+        await unblock.edit("Databases are failing!")
         return
-
-    if await block_pm(unblock.chat_id) is True:
-        x = await unblock.edit("You haven't blocked this user yet!")
-        return await del_in(x, 5)
-    
     
     if unblock.pattern_match.group(1):
         username = unblock.pattern_match.group(1)
-        aname = await unblock.client.get_entity(username)
-        name0 = str(aname.first_name)
+        ubname = await unblock.client.get_entity(username)
+        name0 = str(bname.first_name)
         uid = await unblock.client.get_peer_id(username)
-        x = await unblock.edit("Well, I am going to unblock "
-                         f"[{name0}](tg://user?id={replied_user.user.id}) "
-                         "but are you sure?"
-                        )
-        await del_in(x, 5)
-        
-    elif unblock.reply_to_msg_id:
+        unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
+                   
+    elif unblock.reply_to_message_id:
         reply = await unblock.get_reply_message()
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
-        x = await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
-        await del_in(x, 5)
-
-        asyncio.sleep(2)
-        await unblock.client(UnblockRequest(replied_user.user.id))
-        
-        if unblock.reply_to_msg_id:
-            await unblock.edit("`I have unblocked you now. You can PM my owner now.`")
-        else:
-            await unblock.edit(f"`I have unblocked [{name0}](tg://user?id={replied_user.user.id}). They can message you now.")
-        
-
+        uid = replied_user.user.id
+        unblock.edit("You are gonna be unblocked now. Aren't you happy?")
+    
+    else:
+        x = await unblock.edit("I can't unblock '__NOBODY__'")
+        return await delete_in(x, 5)
+    
+    asyncio.sleep(2)
+    await unblock_pm(uid)
+    await unblock.edit("Let's make peace.")
+                     
     if BOTLOG:
         await unblock.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={replied_user.user.id})" " was unblocked!.",
+            f"#UNBLOCKED\n[{name0}](tg://user?id={replied_user.user.id}) was unblocked!.",
         )
 
 
