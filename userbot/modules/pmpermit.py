@@ -421,7 +421,12 @@ async def blockpm(block):
         x = await block.edit("Gimme the user to block!")
         return await delete_in(x, 5)
     
-    await block_pm(uid)
+    if await is_blocked is True:
+        x = await block.edit("The user is already in your block list.")
+        return await delete_in(x, 5)
+    else:    
+        await block.client(BlockRequest(uid))
+        await block_pm(uid)
     
     if BOTLOG:
         await block.client.send_message(
@@ -459,8 +464,9 @@ async def unblockpm(unblock):
     if is_blocked(uid) is False:
         x = await unblock.edit("The user isn't blocked...yet.")
         return await delete_in(x, 5)
-    
-    await unblock_pm(uid)
+    else:
+        await unblock.client(UnblockRequest(uid))
+        await unblock_pm(uid)
                      
     if BOTLOG:
         await unblock.client.send_message(
