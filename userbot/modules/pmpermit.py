@@ -409,7 +409,7 @@ async def blockpm(block):
         block.reply("I am blocking you now.")
         asyncio.sleep(2)
                    
-    elif block.reply_to_message_id:
+    elif block.reply_to_msg_id:
         reply = await block.get_reply_message()
         replied_user = await block.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
@@ -453,7 +453,7 @@ async def unblockpm(unblock):
         x = unblock.reply("You aren't serious, right?")
         await delete_in(x, 5)
                    
-    elif unblock.reply_to_message_id:
+    elif unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
