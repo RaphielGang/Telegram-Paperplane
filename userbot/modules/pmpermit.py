@@ -458,7 +458,7 @@ async def unblockpm(unblock):
         return await delete_in(x, 5)
     
     if is_blocked(uid) is False:
-        x = await ublock.edit("The user isn't blocked...yet.")
+        x = await unblock.edit("The user isn't blocked...yet.")
         return await delete_in(x, 5)
     
     asyncio.sleep(2)
