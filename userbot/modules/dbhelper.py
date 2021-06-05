@@ -325,7 +325,7 @@ async def block_pm(userid):
         return
     
     
-async def unblock_pm(event, userid):
+async def unblock_pm(userid):
     if await is_blocked(userid) is True:
         await unblock.client(UnblockRequest(userid))
         MONGO.blocked.update_one({'Contact': userid},
