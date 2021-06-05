@@ -305,7 +305,7 @@ async def autoapprove():
 async def is_blocked(userid):
     to_check = MONGO.blocked.find_one({'contact': userid})
     
-    if to_check in None:
+    if to_check is None:
         MONGO.blocked.insert_one({'contact': userid, 'blocked': False})
         return False
     elif to_check['blocked'] is False:
