@@ -442,7 +442,7 @@ async def unblockpm(unblock):
     if unblock.pattern_match.group(1):
         username = unblock.pattern_match.group(1)
         ubname = await unblock.client.get_entity(username)
-        name0 = str(bname.first_name)
+        name0 = str(ubname.first_name)
         uid = await unblock.client.get_peer_id(username)
         unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
                    
