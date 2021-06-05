@@ -303,10 +303,10 @@ async def autoapprove():
 
 
 async def is_blocked(userid):
-    to_check = MONGO.blocked.find_one({'Contact': userid, 'blocked': True or False})
+    to_check = MONGO.blocked.find_one({'contact': userid})
     
     if to_check in None:
-        MONGO.blocked.insert_one({'Contact': userid, 'blocked': False})
+        MONGO.blocked.insert_one({'contact': userid, 'blocked': False})
         return False
     elif to_check['blocked'] is False:
         return False
@@ -318,7 +318,7 @@ async def block_pm(userid):
     if await is_blocked(userid) is False:
         await block.client(BlockRequest(userid))
         await disapprove(userid)
-        MONGO.blocked.update_one({'Contact': userid},
+        MONGO.blocked.update_one({'contact': userid},
                                  {"$set": {
                                      'blocked': True
                                  }})
@@ -328,7 +328,7 @@ async def block_pm(userid):
 async def unblock_pm(userid):
     if await is_blocked(userid) is True:
         await unblock.client(UnblockRequest(userid))
-        MONGO.blocked.update_one({'Contact': userid},
+        MONGO.blocked.update_one({'contact': userid},
                                  {"$set": {
                                      'blocked': False
                                  }})
