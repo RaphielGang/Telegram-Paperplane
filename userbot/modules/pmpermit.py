@@ -468,7 +468,7 @@ async def unblockpm(unblock):
     if BOTLOG:
         await unblock.client.send_message(
             BOTLOG_CHATID,
-            f"#UNBLOCKED\n[{name0}](tg://user?id={replied_user.user.id}) was unblocked!.",
+            f"#UNBLOCKED\n[{name0}](tg://user?id={uid}) was unblocked!.",
         )
 
 
