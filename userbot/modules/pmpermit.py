@@ -461,7 +461,7 @@ async def unblockpm(unblock):
         x = await unblock.edit("I can't unblock '__NOBODY__'")
         return await delete_in(x, 5)
     
-    if is_blocked(uid) is False:
+    if await is_blocked(uid) is False:
         x = await unblock.edit("The user isn't blocked...yet.")
         return await delete_in(x, 5)
     else:
