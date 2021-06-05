@@ -418,6 +418,10 @@ async def blockpm(block):
         x = await block.edit("Gimme the user to block!")
         return await delete_in(x, 5)
     
+    if is_blocked(uid) is True:
+        x = await block.edit("The user is already in your blocked list.")
+        return await delete_in(x, 5)
+    
     asyncio.sleep(2)
     await block_pm(uid)
     await block.edit("***BLOCKED!!**")
@@ -451,6 +455,10 @@ async def unblockpm(unblock):
     
     else:
         x = await unblock.edit("I can't unblock '__NOBODY__'")
+        return await delete_in(x, 5)
+    
+    if is_blocked(uid) is False:
+        x = await ublock.edit("The user isn't blocked...yet.")
         return await delete_in(x, 5)
     
     asyncio.sleep(2)
