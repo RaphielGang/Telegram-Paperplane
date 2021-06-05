@@ -400,12 +400,14 @@ async def blockpm(block):
         name0 = str(bname.first_name)
         uid = await block.client.get_peer_id(username)
         block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
+        asyncio.sleep(2)
     
     elif block.is_private:
         bname= await block.client.get_entity(block.chat_id)
         name0 = str(bname.first_name)
         uid = block.chat_id
         block.edit("I am blocking you now.")
+        asyncio.sleep(2)
                    
     elif block.reply_to_message_id:
         reply = await block.get_reply_message()
@@ -413,18 +415,13 @@ async def blockpm(block):
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
         block.edit("You are going to be blocked from PM-ing me now.")
+        asyncio.sleep(2)
         
     else:
         x = await block.edit("Gimme the user to block!")
         return await delete_in(x, 5)
     
-    if is_blocked(uid) is True:
-        x = await block.edit("The user is already in your blocked list.")
-        return await delete_in(x, 5)
-    
-    asyncio.sleep(2)
     await block_pm(uid)
-    await block.edit("***BLOCKED!!**")
     
     if BOTLOG:
         await block.client.send_message(
@@ -445,6 +442,7 @@ async def unblockpm(unblock):
         name0 = str(ubname.first_name)
         uid = await unblock.client.get_peer_id(username)
         unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
+        asyncio.sleep(2)
                    
     elif unblock.reply_to_message_id:
         reply = await unblock.get_reply_message()
@@ -452,6 +450,7 @@ async def unblockpm(unblock):
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
         unblock.edit("You are gonna be unblocked now. Aren't you happy?")
+        asyncio.sleep(2)
     
     else:
         x = await unblock.edit("I can't unblock '__NOBODY__'")
@@ -461,9 +460,7 @@ async def unblockpm(unblock):
         x = await unblock.edit("The user isn't blocked...yet.")
         return await delete_in(x, 5)
     
-    asyncio.sleep(2)
     await unblock_pm(uid)
-    await unblock.edit("Let's make peace.")
                      
     if BOTLOG:
         await unblock.client.send_message(
