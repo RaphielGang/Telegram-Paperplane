@@ -421,7 +421,7 @@ async def blockpm(block):
         x = await block.edit("Gimme the user to block!")
         return await delete_in(x, 5)
     
-    if await is_blocked is True:
+    if await is_blocked(uid) is True:
         x = await block.edit("The user is already in your block list.")
         return await delete_in(x, 5)
     else:    
@@ -448,6 +448,10 @@ async def unblockpm(unblock):
         uid = await unblock.client.get_peer_id(username)
         unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
         asyncio.sleep(2)
+    
+    elif unblock.is_private:
+        x = unblock.edit("You aren't serious, right?")
+        await delete_in(x, 5)
                    
     elif unblock.reply_to_message_id:
         reply = await unblock.get_reply_message()
