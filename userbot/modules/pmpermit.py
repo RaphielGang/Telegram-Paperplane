@@ -33,7 +33,6 @@ from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     autoapproval,
     autoapprove,
-    is_afk,
     approval,
     approve,
     disapprove,
@@ -222,7 +221,7 @@ async def auto_accept(event):
                                   ".approve", ".disapprove", ".notifon", ".notifoff")):
             return
         if event.is_private: 
-            if not await approval(chat.id) and not is_afk and not chat.bot:
+            if not await approval(chat.id) and not chat.bot:
                 await approve(chat.id)
                 await iterate_delete(event, chat.id, UNAPPROVED_MSG_ON)
                 await iterate_delete(event, chat.id, UNAPPROVED_MSG_OFF)
