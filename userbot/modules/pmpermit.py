@@ -222,10 +222,10 @@ async def auto_accept(event):
                                   ".approve", ".disapprove", ".notifon", ".notifoff")):
             return
         if event.is_private: 
-            if not await approval(event.chat_id) and not is_afk and not chat.bot:
+            if not await approval(chat.id) and not is_afk and not chat.bot:
                 await approve(chat.id)
-                await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
-                await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
+                await iterate_delete(event, chat.id, UNAPPROVED_MSG_ON)
+                await iterate_delete(event, chat.id, UNAPPROVED_MSG_OFF)
 
                 if BOTLOG:
                     await event.client.send_message(
