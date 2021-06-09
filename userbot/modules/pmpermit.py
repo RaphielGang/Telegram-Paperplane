@@ -77,6 +77,7 @@ async def iterate_delete(event, event_id, text):
             await message.delete()
 
 
+            
 @register(incoming=True, disable_edited=True, disable_errors=True)
 @grp_exclude()
 async def permitpm(event):
@@ -234,6 +235,7 @@ async def auto_accept(event):
                     + f"[{chat.first_name}](tg://user?id={chat.id})",
               )
 
+                    
 
 @register(outgoing=True, pattern="notifoff$")
 @grp_exclude()
@@ -261,6 +263,7 @@ async def notifon(non_event):
     
     
 
+    
 @register(outgoing=True, pattern="(?:approve|a)(?: |$)(.*)$")
 @grp_exclude()
 async def approvepm(apprvpm):
@@ -270,15 +273,10 @@ async def approvepm(apprvpm):
         return
          
     if apprvpm.pattern_match.group(1):
-        try:
-            username = apprvpm.pattern_match.group(1)
-            aname = await apprvpm.client.get_entity(username)
-            name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_peer_id(username)
-        except ValueError:
-            x = apprvpm.edit("I am sorry. I can't find this user😥\n"
-                            "Have you entered the correct username?")
-            return delete_in(x, 5)
+        username = apprvpm.pattern_match.group(1)
+        aname = await apprvpm.client.get_entity(username)
+        name0 = str(aname.first_name)
+        uid = await apprvpm.client.get_peer_id(username)
     
     elif apprvpm.is_private:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
@@ -324,7 +322,7 @@ async def approvepm(apprvpm):
         )
         
         
-
+        
 @register(outgoing=True, pattern="(?:disapprove|da)(?: |$)(.*)$")
 @grp_exclude()
 async def dapprovepm(dapprvpm):
@@ -334,15 +332,10 @@ async def dapprovepm(dapprvpm):
         return
     
     if dapprvpm.pattern_match.group(1):
-        try:
-            username = dapprvpm.pattern_match.group(1)
-            daname = await dapprvpm.client.get_entity(username)
-            name0 = str(daname.first_name)
-            uid = await dapprvpm.client.get_peer_id(username)
-        except TypeError:
-            x = dapprvpm.edit("I am sorry. I can't find this user😥\n"
-                              "Have you entered the correct username?")
-            return delete_in(x, 5)
+        username = dapprvpm.pattern_match.group(1)
+        daname = await dapprvpm.client.get_entity(username)
+        name0 = str(daname.first_name)
+        uid = await dapprvpm.client.get_peer_id(username)
     
     elif dapprvpm.is_private:
         daname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
@@ -385,7 +378,9 @@ async def dapprovepm(dapprvpm):
             BOTLOG_CHATID, "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
         
-        
+   
+
+
         
 @register(outgoing=True, pattern="block(?: |$)(.*)$")
 @grp_exclude()
@@ -399,17 +394,23 @@ async def blockpm(block):
         bname = await block.client.get_entity(username)
         name0 = str(bname.first_name)
         uid = await block.client.get_peer_id(username)
+        await block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
+        await asyncio.sleep(2)
     
     elif block.is_private:
         bname= await block.client.get_entity(block.chat_id)
         name0 = str(bname.first_name)
         uid = block.chat_id
+        await block.edit("I am blocking you now.")
+        await asyncio.sleep(2)
                 
     elif block.reply_to_msg_id:
         reply = await block.get_reply_message()
         replied_user = await block.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
+        await block.edit("You are going to be blocked from PM-ing me now.")
+        asyncio.sleep(2)
         
     else:
         x = await block.edit("Gimme the user to block!")
@@ -418,16 +419,6 @@ async def blockpm(block):
     if await is_blocked(uid) is True:
         x = await block.edit("The user is already in your block list.")
         return await delete_in(x, 5)
-        
-    if block.pattern_match.group(1):
-        block.reply(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
-        asyncio.sleep(4)
-    elif block.is_private:
-        block.reply("I am blocking you now.")
-        asyncio.sleep(4)
-    elif block.reply_to_msg_id:
-        block.edit("You are going to be blocked from PM-ing me now.")
-        asyncio.sleep(4)
     
     await block.client(BlockRequest(uid))
     await block_pm(uid)
@@ -451,9 +442,11 @@ async def unblockpm(unblock):
         ubname = await unblock.client.get_entity(username)
         name0 = str(ubname.first_name)
         uid = await unblock.client.get_peer_id(username)
+        await unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
+        asyncio.sleep(2)
     
     elif unblock.is_private:
-        x = unblock.edit("You aren't serious, right?")
+        x = await unblock.edit("You aren't serious, right?")
         return await delete_in(x, 5)
                    
     elif unblock.reply_to_msg_id:
@@ -461,7 +454,8 @@ async def unblockpm(unblock):
         replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
         name0 = str(replied_user.user.first_name)
         uid = replied_user.user.id
-       
+        await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
+        asyncio.sleep(2)
     
     else:
         x = await unblock.edit("I can't unblock '__NOBODY__'")
@@ -470,13 +464,6 @@ async def unblockpm(unblock):
     if await is_blocked(uid) is False:
         x = await unblock.edit("The user isn't blocked...yet.")
         return await delete_in(x, 5)
-    
-    if unblock.pattern_match.group(1):
-        unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
-        asyncio.sleep(4)
-    elif unblock.reply_to_msg_id:
-        unblock.edit("You are gonna be unblocked now. Aren't you happy?")
-        asyncio.sleep(4)
         
     await unblock.client(UnblockRequest(uid))
     await unblock_pm(uid)
@@ -488,6 +475,8 @@ async def unblockpm(unblock):
             f"#UNBLOCKED\n[{name0}](tg://user?id={uid}) was unblocked!.",
         )
 
+        
+        
 
 CMD_HELP.update(
     {
