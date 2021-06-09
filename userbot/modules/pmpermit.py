@@ -273,22 +273,22 @@ async def approvepm(apprvpm):
         return
          
     if apprvpm.pattern_match.group(1):
-        username = apprvpm.pattern_match.group(1)
-        aname = await apprvpm.client.get_entity(username)
-        name0 = str(aname.first_name)
-        uid = await apprvpm.client.get_peer_id(username)
+            username = apprvpm.pattern_match.group(1)
+            aname = await apprvpm.client.get_entity(username)
+            name0 = str(aname.first_name)
+            uid = await apprvpm.client.get_peer_id(username)
     
     elif apprvpm.is_private:
-        aname = await apprvpm.client.get_entity(apprvpm.chat_id)
-        name0 = str(aname.first_name)
-        uid = apprvpm.chat_id
+            aname = await apprvpm.client.get_entity(apprvpm.chat_id)
+            name0 = str(aname.first_name)
+            uid = apprvpm.chat_id
         
     elif apprvpm.reply_to_msg_id:
-        reply = await apprvpm.get_reply_message()
-        replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
-        aname = replied_user.user.id
-        name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
+            reply = await apprvpm.get_reply_message()
+            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
+            aname = replied_user.user.id
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
     
     else:
         x = await apprvpm.edit("I can't see the user you want to approve😳")
@@ -332,21 +332,21 @@ async def dapprovepm(dapprvpm):
         return
     
     if dapprvpm.pattern_match.group(1):
-        username = dapprvpm.pattern_match.group(1)
-        daname = await dapprvpm.client.get_entity(username)
-        name0 = str(daname.first_name)
-        uid = await dapprvpm.client.get_peer_id(username)
+            username = dapprvpm.pattern_match.group(1)
+            daname = await dapprvpm.client.get_entity(username)
+            name0 = str(daname.first_name)
+            uid = await dapprvpm.client.get_peer_id(username)
     
     elif dapprvpm.is_private:
-        daname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
-        name0 = str(daname.first_name)
-        uid = dapprvpm.chat_id
-        
+            daname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
+            name0 = str(daname.first_name)
+            uid = dapprvpm.chat_id
+         
     elif dapprvpm.reply_to_msg_id:
-        reply = await dapprvpm.get_reply_message()
-        replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
-        name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
+            reply = await dapprvpm.get_reply_message()
+            replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
 
     else:
         x = await dapprvpm.edit("I can't see the user you want to disapprove😳")
@@ -390,27 +390,27 @@ async def blockpm(block):
         return
     
     if block.pattern_match.group(1):
-        username = block.pattern_match.group(1)
-        bname = await block.client.get_entity(username)
-        name0 = str(bname.first_name)
-        uid = await block.client.get_peer_id(username)
-        await block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
-        await asyncio.sleep(2)
+            username = block.pattern_match.group(1)
+            bname = await block.client.get_entity(username)
+            name0 = str(bname.first_name)
+            uid = await block.client.get_peer_id(username)
+            await block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
+            await asyncio.sleep(4)
     
     elif block.is_private:
-        bname= await block.client.get_entity(block.chat_id)
-        name0 = str(bname.first_name)
-        uid = block.chat_id
-        await block.edit("I am blocking you now.")
-        await asyncio.sleep(2)
+            bname= await block.client.get_entity(block.chat_id)
+            name0 = str(bname.first_name)
+            uid = block.chat_id
+            await block.edit("I am blocking you now.")
+            await asyncio.sleep(4)
                 
     elif block.reply_to_msg_id:
-        reply = await block.get_reply_message()
-        replied_user = await block.client(GetFullUserRequest(reply.from_id))
-        name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
-        await block.edit("You are going to be blocked from PM-ing me now.")
-        asyncio.sleep(2)
+            reply = await block.get_reply_message()
+            replied_user = await block.client(GetFullUserRequest(reply.from_id))
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
+            await block.edit("You are going to be blocked from PM-ing me now.")
+            asyncio.sleep(4)
         
     else:
         x = await block.edit("Gimme the user to block!")
@@ -438,24 +438,24 @@ async def unblockpm(unblock):
         return
     
     if unblock.pattern_match.group(1):
-        username = unblock.pattern_match.group(1)
-        ubname = await unblock.client.get_entity(username)
-        name0 = str(ubname.first_name)
-        uid = await unblock.client.get_peer_id(username)
-        await unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
-        asyncio.sleep(2)
+            username = unblock.pattern_match.group(1)
+            ubname = await unblock.client.get_entity(username)
+            name0 = str(ubname.first_name)
+            uid = await unblock.client.get_peer_id(username)
+            await unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
+            asyncio.sleep(4)
     
     elif unblock.is_private:
-        x = await unblock.edit("You aren't serious, right?")
-        return await delete_in(x, 5)
+            x = await unblock.edit("You aren't serious, right?")
+            return await delete_in(x, 5)
                    
     elif unblock.reply_to_msg_id:
-        reply = await unblock.get_reply_message()
-        replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
-        name0 = str(replied_user.user.first_name)
-        uid = replied_user.user.id
-        await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
-        asyncio.sleep(2)
+            reply = await unblock.get_reply_message()
+            replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
+            name0 = str(replied_user.user.first_name)
+            uid = replied_user.user.id
+            await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
+            asyncio.sleep(4)
     
     else:
         x = await unblock.edit("I can't unblock '__NOBODY__'")
