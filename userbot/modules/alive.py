@@ -38,9 +38,9 @@ async def livestatus(alive):
   else:
     db = "__Databases are functioning smoothly.__"
     await alive.edit("**I am running all fine~**")
-    time.sleep(4)
-    x = await alive.edit("*wink*")
-    await delete_in(x, 2)
+    time.sleep(2)
+    x = await alive.edit("***wink***")
+    await delete_in(x, 1)
   
   ALIVE_PIC = "ALIVE_PIC" 
   try:
