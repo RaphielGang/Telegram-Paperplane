@@ -37,20 +37,23 @@ async def myalivepics(apic):
     prv_links = {}
     pics = await get_a_pic("ALIVE_PIC")
     if pics is False:
-      x = alive.edit("You haven't set any pics.")
+      x = apic.edit("You haven't set any pics.")
       return await delete_in(x, 5)
     num_pics = len(pics)
     prev_msg = {}
     for i in range(num_pics):
+      n = 1
       links = (
-        f"[Link{i}]({pics[i]})\n"
+        f"PIC {n} - [Link]({pics[i]})\n"
       )
+      n += 1
       if "Check" in prv_links:
         prv_links["Check"] += links
       else:
         prv_links["Check"] = links
     mypics = prv_links["Check"]    
-    await alive.edit(mypics)
+    await apic.edit(mypics)
+    del prv_links["Check"]
     
 
 @register(outgoing=True, pattern="alive$")
