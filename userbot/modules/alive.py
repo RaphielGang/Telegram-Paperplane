@@ -93,7 +93,7 @@ async def livestatus(alive):
              "         <b>——————————————————————</b>\n"
             f"    <b>|•| Telethon version:</b> <i>{version.__version__}</i>\n"
              "         <b>——————————————————————</b>\n"
-            f"    <b>|•| Python version: <i>{python_version()}</i>\n"
+            f"    <b>|•| Python version:</b> <i>{python_version()}</i>\n"
              "         <b>——————————————————————</b>\n\n"
              "<b>===========================================</b>\n"
              "<b>Mapleplane is ready to take off🍁</b>"
