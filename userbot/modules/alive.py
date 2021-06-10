@@ -1,5 +1,4 @@
 import asyncio
-import time
 from userbot.modules.dbhelper import set_a_pic, get_a_pic
 from platform import python_version
 
@@ -7,6 +6,7 @@ import random
 from userbot import is_mongo_alive, is_redis_alive
 from userbot.events import register, grp_exclude
 
+import time
 from telethon import version
 
 #============= Some random function
@@ -50,7 +50,7 @@ async def livestatus(alive):
     ALIVE_PIC = False
   
   caption = (
-            "Status🎗\n"
+            "<u>Status🎗</u>\n"
             f"    **|•| Database:** {db}\n"
              "         **——————————————————————**\n"
             f"    **|•| Telethon version:** __{version.__version__}__\n"
@@ -65,4 +65,4 @@ async def livestatus(alive):
   if ALIVE_PIC:
     await alive.reply(caption, file=ALIVE_PIC)
   else:
-    await alive.reply(caption)
+    await alive.client.send_message(caption, parse_mode="html")
