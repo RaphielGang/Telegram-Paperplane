@@ -20,11 +20,21 @@ async def delete_in(text, seconds):
 async def setapic(apic):
   cmd_msg = apic.text
   pic = str(cmd_msg[9: ]).split(" ")
+    
+  if pic == "Nothing".capitalize() or "None".capitalize() or "False".capitalize() or " " or "0":
+    x = await apic.edit("**Deleted all the pictures!!**")
+    return delete_in(x, 5)
+
   ALIVE_PIC = "ALIVE_PIC"
   await set_a_pic(pic, ALIVE_PIC)
   x = await apic.edit("**ALIVE_PIC has been set!!**")
   await delete_in(x, 5)
   return
+
+@register(outgoing=True, pattern="getapic$")
+@grp_exclude()
+async def getapic(apic):
+    
 
 @register(outgoing=True, pattern="alive$")
 @grp_exclude()
@@ -54,7 +64,7 @@ async def livestatus(alive):
     ALIVE_PIC = random.choice(ALIVE_PIC)
   except TypeError:
     ALIVE_PIC = False
-  
+
   caption = (
             "<u><b>Status🎗</u></b>\n\n"
             f"    <b>|•| Database:</b> <i>{db}</i>\n"
