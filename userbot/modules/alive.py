@@ -31,12 +31,18 @@ async def setapic(apic):
 async def livestatus(alive):
   if not is_mongo_alive() and not is_redis_alive():
     db = "Both Mongo db and Redis are malfunctioning!!"
+    await alive.edit("**Something's wrong with me...**")
+    time.sleep(5)
   if not is_mongo_alive():
     db = "Mongo db isn't working right!!"
+    await alive.edit("**Something's wrong with me...**")
+    time.sleep(5)
   if not is_redis_alive():
     db = "Redis seems to be failing!!"
+    await alive.edit("Something's wrong with me...")
+    time.sleep(5)
   else:
-    db = "__Databases are functioning smoothly.__"
+    db = "Databases are functioning smoothly."
     await alive.edit("**I am running all fine~**")
     time.sleep(2)
     x = await alive.edit("***wink***")
@@ -51,11 +57,11 @@ async def livestatus(alive):
   
   caption = (
             "<u><b>Status🎗</u></b>\n\n"
-            f"    <b>|•| Database:</b> {db}\n"
+            f"    <b>|•| Database:</b> <i>{db}</i>\n"
              "         <b>——————————————————————</b>\n"
             f"    <b>|•| Telethon version:</b> <i>{version.__version__}</i>\n"
              "         <b>——————————————————————</b>\n"
-            f"    <b>|•| Python version:** <i>{python_version()}</i>\n"
+            f"    <b>|•| Python version: <i>{python_version()}</i>\n"
              "         <b>——————————————————————</b>\n\n"
              "<b>===========================================</b>\n"
              "<b>Mapleplane is ready to take off🍁</b>"
