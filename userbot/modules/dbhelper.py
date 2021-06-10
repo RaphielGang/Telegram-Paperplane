@@ -565,5 +565,7 @@ async def set_a_pic(apic, name):
                                    }})
         
 async def get_a_pic(name):
+    if MONGO.pictures.find_one({'Name': name}) is None:
+        return False
     pic = MONGO.pictures.find_one({'Name': name})['apic']
     return pic
