@@ -26,8 +26,8 @@ async def setmyalivepic(apic):
     x = await apic.edit("All pics deleted.")
     return await delete_in(x, 5)
 
-  ALIVE_PIC = "ALIVE_PIC"
-  await set_a_pic(pic, ALIVE_PIC)
+  ALIVE_PIC == "ALIVE_PIC"
+  await set_a_pic(pic, ALIVE_PIC):
   x = await apic.edit("ALIVE_PIC has been set!!")
   await delete_in(x, 5)
   return
@@ -84,7 +84,7 @@ async def livestatus(alive):
   
   ALIVE_PIC = "ALIVE_PIC" 
   ALIVE_PIC = await get_a_pic(ALIVE_PIC)
-  if ALIVE_PIC = "False"
+  if ALIVE_PIC == "False":
     ALIVE_PIC = False
 
   caption = (
