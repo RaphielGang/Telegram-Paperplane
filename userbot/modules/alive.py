@@ -8,6 +8,11 @@ from userbot.events import register, grp_exclude
 
 from telethon import version
 
+#============= Some random function
+async def delete_in(text, seconds):
+    await asyncio.sleep(seconds)
+    return await text.delete()
+#=============
 
 @register(outgoing=True, pattern="setapic")
 @grp_exclude()
@@ -17,8 +22,7 @@ async def setapic(apic):
   ALIVE_PIC = "ALIVE_PIC"
   await set_a_pic(pic, ALIVE_PIC)
   x = await apic.edit("**ALIVE_PIC has been set!!**")
-  asyncio.sleep(5)
-  await x.delete()
+  await delete_in(x, 5)
   return
 
 @register(outgoing=True, pattern="alive$")
@@ -33,14 +37,16 @@ async def livestatus(alive):
   else:
     db = "__Databases are functioning smoothly.__"
     await alive.edit("**I am running all fine~**")
-    asyncio.sleep(3)
+    asyncio.sleep(5)
     x = await alive.edit("*wink*")
-    asyncio.sleep(0.5)
-    await x.delete() 
+    await delete_in(x, 3)
   
   ALIVE_PIC = "ALIVE_PIC" 
-  ALIVE_PIC = await get_a_pic(ALIVE_PIC) or None
-  ALIVE_PIC = random.choice(ALIVE_PIC) or Nne
+  try:
+    ALIVE_PIC = await get_a_pic(ALIVE_PIC)
+    ALIVE_PIC = random.choice(ALIVE_PIC)
+  except TypeError:
+    ALIVE_PIC = False
   
   caption = (
             "Status🎗\n"
@@ -50,9 +56,9 @@ async def livestatus(alive):
              "         **——————————————————————**\n"
             f"    **|•| Python version:** __{python_version()}__\n"
              "         **——————————————————————**\n\n"
-             "**===========================================**"
+             "**===========================================**\n"
              "**Mapleplane is ready to take off🍁**" +
-             "**===========================================**"
+             "**===========================================**\n"
   )
   
   if ALIVE_PIC:
