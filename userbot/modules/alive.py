@@ -17,23 +17,40 @@ async def delete_in(text, seconds):
 
 @register(outgoing=True, pattern="setapic")
 @grp_exclude()
-async def setapic(apic):
+async def setmyalivepic(apic):
   cmd_msg = apic.text
   pic = str(cmd_msg[9: ]).split(" ")
     
   if pic == "Nothing".capitalize() or "None".capitalize() or "False".capitalize() or " " or "0":
-    x = await apic.edit("**Deleted all the pictures!!**")
+    x = await apic.edit("Deleted all the pictures!!")
     return delete_in(x, 5)
 
   ALIVE_PIC = "ALIVE_PIC"
   await set_a_pic(pic, ALIVE_PIC)
-  x = await apic.edit("**ALIVE_PIC has been set!!**")
+  x = await apic.edit("ALIVE_PIC has been set!!")
   await delete_in(x, 5)
   return
 
 @register(outgoing=True, pattern="getapic$")
 @grp_exclude()
-async def getapic(apic):
+async def myalivepics(apic):
+    prv_links = {}
+    pics = await get_a_pic("ALIVE_PIC")
+    if pics is False:
+      x = alive.edit("You haven't set any pics.")
+      return await delete_in(x, 5)
+    num_pics = len(pics)
+    prev_msg = {}
+    for i in range(num_pics):
+      links = (
+        f"[Link{i}]({pics[i]})\n"
+      )
+      if "Check" in prv_links:
+        prv_links["Check"] += links
+      else:
+        prv_links["Check"] = links
+    mypics = prv_links["Check"]    
+    await alive.edit(mypics)
     
 
 @register(outgoing=True, pattern="alive$")
@@ -59,11 +76,8 @@ async def livestatus(alive):
     await delete_in(x, 1)
   
   ALIVE_PIC = "ALIVE_PIC" 
-  try:
-    ALIVE_PIC = await get_a_pic(ALIVE_PIC)
-    ALIVE_PIC = random.choice(ALIVE_PIC)
-  except TypeError:
-    ALIVE_PIC = False
+  ALIVE_PIC = await get_a_pic(ALIVE_PIC)
+  ALIVE_PIC = random.choice(ALIVE_PIC)
 
   caption = (
             "<u><b>Status🎗</u></b>\n\n"
