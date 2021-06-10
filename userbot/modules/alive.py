@@ -22,7 +22,7 @@ async def setmyalivepic(apic):
   cmd_msg = apic.text
   pic = str(cmd_msg[9: ]).split(" ")
     
-  if pic == "False"
+  if pic == "False":
     x = await apic.edit("All pics deleted.")
     return await delete_in(x, 5)
 
