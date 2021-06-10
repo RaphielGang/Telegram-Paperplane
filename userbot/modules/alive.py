@@ -37,7 +37,7 @@ async def myalivepics(apic):
     prv_links = {}
     pics = await get_a_pic("ALIVE_PIC")
     if pics is False:
-      x = apic.edit("You haven't set any pics.")
+      x = await apic.edit("You haven't set any pics.")
       return await delete_in(x, 5)
     num_pics = len(pics)
     prev_msg = {}
