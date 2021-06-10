@@ -241,7 +241,7 @@ async def set_list(oldchatid, name, newchatid):
 
 
 async def approval(userid):
-    to_check = MONGO.pmpermit.find_one({'user_id': userid, 'approval': True or False})
+    to_check = MONGO.pmpermit.find_one({'user_id': userid})
 
     if to_check is None:
         MONGO.pmpermit.insert_one({'user_id': userid, 'approval': False})
@@ -274,10 +274,10 @@ async def disapprove(userid):
         return True
 
 async def autoapproval(userid):
-    to_check = MONGO.pmpermit.find_one({'autoapproval': userid})
+    to_check = MONGO.pmpermit.find_one({'autoapproval': 'Check'})
 
     if to_check is None:
-        MONGO.pmpermit.insert_one({'autoapproval': userid, 'auto_approval_state': False})
+        MONGO.pmpermit.insert_one({'autoapproval': 'Check', 'auto_approval_state': False})
         return False
     
     elif to_check['auto_approval_state'] is False:
@@ -289,13 +289,13 @@ async def autoapproval(userid):
 
 async def autoapprove(userid):
     if await autoapproval(userid) is True:
-        MONGO.pmpermit.update_one({'autoapproval': userid},
+        MONGO.pmpermit.update_one({'autoapproval': 'Check'},
                                   {"$set": {
                                       'auto_approval_state': False
                                   }})
         return
     else:
-        MONGO.pmpermit.update_one({'autoapproval': userid},
+        MONGO.pmpermit.update_one({'autoapproval': 'Check'},
                                   {"$set": {
                                       'auto_approval_state': True
                                   }})
