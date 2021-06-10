@@ -47,7 +47,7 @@ async def myalivepics(apic):
         f"PIC {n} - [Link]({pics[i]})\n"
       )
       n += 1
-      if "ALIVE_PIC" in VARIABLES:
+      if "ALIVE_PIC" in VARIABLE:
         VARIABLE["ALIVE_PIC"] += links
       else:
         VARIABLE["ALIVE_PIC"] = links
