@@ -40,16 +40,19 @@ async def livestatus(alive):
   ALIVE_PIC = await get_a_pic(ALIVE_PIC) or None
   ALIVE_PIC = random.choice(ALIVE_PIC) or Nne
   
-  caption = "Status🎗\n" +
-            f"    **|•| Database:** {db}\n" +
-             "         **——————————————————————**\n" +
-            f"    **|•| Telethon version:** __{version.__version__}__\n" +
+  caption = (
+            "Status🎗\n"
+            f"    **|•| Database:** {db}\n"
              "         **——————————————————————**\n"
-            f"    **|•| Python version:** __{python_version()}__\n" +
+            f"    **|•| Telethon version:** __{version.__version__}__\n"
+             "         **——————————————————————**\n"
+            f"    **|•| Python version:** __{python_version()}__\n"
              "         **——————————————————————**\n\n"
-             "**===========================================**" +
+             "**===========================================**"
              "**Mapleplane is ready to take off🍁**" +
              "**===========================================**"
+  )
+  
   if ALIVE_PIC:
     await alive.reply(caption, file=ALIVE_PIC)
   else:
