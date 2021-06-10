@@ -21,9 +21,9 @@ async def setmyalivepic(apic):
   cmd_msg = apic.text
   pic = str(cmd_msg[9: ]).split(" ")
     
-  if pic == "Nothing".capitalize() or "None".capitalize() or "False".capitalize() or " " or "0":
+ ''' if pic == "Nothing".capitalize() or "None".capitalize() or "False".capitalize() or " " or "0":
     x = await apic.edit("Deleted all the pictures!!")
-    return delete_in(x, 5)
+    return delete_in(x, 5)'''
 
   ALIVE_PIC = "ALIVE_PIC"
   await set_a_pic(pic, ALIVE_PIC)
