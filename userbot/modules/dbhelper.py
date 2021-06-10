@@ -254,7 +254,7 @@ async def approval(userid):
     
 async def approve(userid):
     if await approval(userid) is True:
-        return False
+        return
     else:
         MONGO.pmpermit.update_one({'user_id': userid},
                                   {"$set": {
@@ -264,7 +264,7 @@ async def approve(userid):
 
 async def disapprove(userid):
     if await approval(userid) is False:
-        return False
+        return
     else:
         MONGO.pmpermit.update_one({'userid': userid},
                                   {"$set": {
@@ -554,15 +554,16 @@ async def is_excluded(chatid):
         return True
     
 # PICTURES
-async def set_alive_pic(apic):
-    if MONGO.pictures.find_one({'id': 'ALIVE_PIC'}) is None:
-        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
+async def set_a_pic(apic, name):
+    if MONGO.pictures.find_one({'Name': name}) is None:
+       MONGO.pictures.insert_one({'Name': name, 'apic': apic})
     else:
-        prev_pic = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
-        MONGO.pictures.delete_one({'id': 'ALIVE_PIC', 'apic': prev_pic})
-        await asyncio.sleep(1)
-        MONGO.pictures.insert_one({'id': 'ALIVE_PIC', 'apic': apic})
+        prev_pic = MONGO.pictures.find_one({'Name': name})['apic']
+        MONGO.pictures.update_one({'Name': name, 
+                                   {$set: {
+                                       'apic': apic
+                                   }})
         
-async def get_alive_pic():
-    pic = MONGO.pictures.find_one({'id': 'ALIVE_PIC'})['apic']
+async def get_a_pic(name):
+    pic = MONGO.pictures.find_one({'Name': name})['apic']
     return pic
