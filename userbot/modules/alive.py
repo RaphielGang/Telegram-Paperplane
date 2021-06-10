@@ -22,8 +22,7 @@ async def setmyalivepic(apic):
   cmd_msg = apic.text
   pic = str(cmd_msg[9: ]).split(" ")
     
-  if pic.startswith("None".capitalize(), "False".capitalize(), 
-                    " ", "0"):
+  if pic.startswith("False")
     x = await apic.edit("All pics deleted.")
     return await delete_in(x, 5)
 
@@ -38,7 +37,7 @@ async def setmyalivepic(apic):
 async def myalivepics(apic):
     prv_links = {}
     pics = await get_a_pic("ALIVE_PIC")
-    if not pics:
+    if pics is False:
       x = await apic.edit("You haven't set any pics.")
       return await delete_in(x, 5)
     num_pics = len(pics)
@@ -85,8 +84,7 @@ async def livestatus(alive):
   
   ALIVE_PIC = "ALIVE_PIC" 
   ALIVE_PIC = await get_a_pic(ALIVE_PIC)
-  if ALIVE_PIC.startswith("None".capitalize(), "False".capitalize(), 
-                          " ", "0"):
+  if ALIVE_PIC = "False"
     ALIVE_PIC = False
 
   caption = (
