@@ -53,10 +53,10 @@ async def myalivepics(apic):
         VARIABLE["ALIVE_PIC"] = links
     mypics = VARIABLE["ALIVE_PIC"]
     message = (
-        "<b><u>My Alive Pics</u></b>\n\n"
+        "**My Alive Pics**\n\n"
         f"{mypics}"
     )
-    await apic.edit(message, parse_mode="html")
+    await apic.edit(message)
     del VARIABLE["ALIVE_PIC"]
     
 
