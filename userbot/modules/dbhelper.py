@@ -560,7 +560,7 @@ async def set_a_pic(apic, name):
     else:
         prev_pic = MONGO.pictures.find_one({'Name': name})['apic']
         MONGO.pictures.update_one({'Name': name, 
-                                   {$set: {
+                                   {"$set": {
                                        'apic': apic
                                    }})
         
