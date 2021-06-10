@@ -1,4 +1,5 @@
 import asyncio
+import time
 from userbot.modules.dbhelper import set_a_pic, get_a_pic
 from platform import python_version
 
@@ -37,9 +38,9 @@ async def livestatus(alive):
   else:
     db = "__Databases are functioning smoothly.__"
     await alive.edit("**I am running all fine~**")
-    asyncio.sleep(5)
+    time.sleep(4)
     x = await alive.edit("*wink*")
-    await delete_in(x, 3)
+    await delete_in(x, 2)
   
   ALIVE_PIC = "ALIVE_PIC" 
   try:
