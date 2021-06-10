@@ -50,7 +50,7 @@ async def livestatus(alive):
     ALIVE_PIC = False
   
   caption = (
-            "<u>Status🎗</u>\n", parse_mode = "html
+            "<u>Status🎗</u>\n", parse_mode="html
             f"    **|•| Database:** {db}\n"
              "         **——————————————————————**\n"
             f"    **|•| Telethon version:** __{version.__version__}__\n"
