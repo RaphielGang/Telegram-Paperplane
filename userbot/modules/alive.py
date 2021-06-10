@@ -14,7 +14,8 @@ from telethon import version
 async def setapic(apic):
   cmd_msg = apic.text
   pic = str(cmd_msg[9: ]).split(" ")
-  await set_a_pic(pic, "ALIVE_PIC")
+  ALIVE_PIC = "ALIVE_PIC"
+  await set_a_pic(pic, ALIVE_PIC)
   x = await apic.edit("**ALIVE_PIC has been set!!**")
   asyncio.sleep(5)
   await x.delete()
@@ -36,9 +37,10 @@ async def livestatus(alive):
     x = await alive.edit("*wink*")
     asyncio.sleep(0.5)
     await x.delete() 
-    
-  ALIVE_PIC = await get_a_pic("ALIVE_PIC") or None
-  ALIVE_PIC = random.choice("ALIVE_PIC") or Nne
+  
+  ALIVE_PIC = "ALIVE_PIC" 
+  ALIVE_PIC = await get_a_pic(ALIVE_PIC) or None
+  ALIVE_PIC = random.choice(ALIVE_PIC) or Nne
   
   caption = (
             "Status🎗\n"
