@@ -273,12 +273,12 @@ async def approvepm(apprvpm):
          
     if apprvpm.pattern_match.group(1):
             username = apprvpm.pattern_match.group(1)
-            aname = await apprvpm.client.get_entity(username)
+            aname = await apprvpm.client.get_peer_id(username)
             name0 = str(aname.first_name)
             uid = await apprvpm.client.get_peer_id(username)
     
     elif apprvpm.is_private:
-            aname = await apprvpm.client.get_entity(apprvpm.chat_id)
+            aname = await apprvpm.client.get_peer_id(apprvpm.chat_id)
             name0 = str(aname.first_name)
             uid = apprvpm.chat_id
         
