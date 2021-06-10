@@ -8,6 +8,7 @@ from userbot.events import register, grp_exclude
 
 import time
 from telethon import version
+from userbot import CMD_HELP, VARIABLE
 
 #============= Some random function
 async def delete_in(text, seconds):
@@ -20,6 +21,11 @@ async def delete_in(text, seconds):
 async def setmyalivepic(apic):
   cmd_msg = apic.text
   pic = str(cmd_msg[9: ]).split(" ")
+    
+  if pic.startswith("None".capitalize(), "False".capitalize(), 
+                    " ", "0"):
+    x = await apic.edit("All pics deleted.")
+    return await delete_in(x, 5)
 
   ALIVE_PIC = "ALIVE_PIC"
   await set_a_pic(pic, ALIVE_PIC)
@@ -32,24 +38,27 @@ async def setmyalivepic(apic):
 async def myalivepics(apic):
     prv_links = {}
     pics = await get_a_pic("ALIVE_PIC")
-    if pics is False:
+    if not pics:
       x = await apic.edit("You haven't set any pics.")
       return await delete_in(x, 5)
     num_pics = len(pics)
-    prev_msg = {}
+    n = 1
     for i in range(num_pics):
-      n = 1
       links = (
         f"PIC {n} - [Link]({pics[i]})\n"
       )
       n += 1
-      if "Check" in prv_links:
-        prv_links["Check"] += links
+      if "ALIVE_PIC" in VARIABLES:
+        VARIABLE["ALIVE_PIC"] += links
       else:
-        prv_links["Check"] = links
-    mypics = prv_links["Check"]    
-    await apic.edit(mypics)
-    del prv_links["Check"]
+        VARIABLE["ALIVE_PIC"] = links
+    mypics = VARIABLE["ALIVE_PIC"]
+    message = (
+        "<b><u>My Alive Pics</u></b>"
+        f"{mypics}"
+    )
+    await apic.edit(message, parse_mode="html")
+    del VARIABLE["ALIVE_PIC"]
     
 
 @register(outgoing=True, pattern="alive$")
@@ -76,6 +85,9 @@ async def livestatus(alive):
   
   ALIVE_PIC = "ALIVE_PIC" 
   ALIVE_PIC = await get_a_pic(ALIVE_PIC)
+  if ALIVE_PIC.startswith("None".capitalize(), "False".capitalize(), 
+                          " ", "0"):
+    ALIVE_PIC = False
 
   caption = (
             "<u><b>Status🎗</u></b>\n\n"
