@@ -27,7 +27,7 @@ async def setmyalivepic(apic):
     return await delete_in(x, 5)
 
   ALIVE_PIC = "ALIVE_PIC"
-  await set_a_pic(pic, ALIVE_PIC):
+  await set_a_pic(pic, ALIVE_PIC)
   x = await apic.edit("ALIVE_PIC has been set!!")
   await delete_in(x, 5)
   return
