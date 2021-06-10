@@ -29,12 +29,12 @@ async def setapic(apic):
 @register(outgoing=True, pattern="alive$")
 @grp_exclude()
 async def livestatus(alive):
+  if not is_mongo_alive() and not is_redis_alive():
+    db = "Both Mongo db and Redis are malfunctioning!!"
   if not is_mongo_alive():
     db = "Mongo db isn't working right!!"
   if not is_redis_alive():
     db = "Redis seems to be failing!!"
-  if not is_mongo_alive() and not is_redis_alive():
-    db = "Both Mongo db and Redis are malfunctioning!!"
   else:
     db = "__Databases are functioning smoothly.__"
     await alive.edit("**I am running all fine~**")
