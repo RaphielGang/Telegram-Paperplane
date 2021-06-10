@@ -63,6 +63,6 @@ async def livestatus(alive):
   )
   
   if ALIVE_PIC:
-    await alive.reply(caption, file=ALIVE_PIC, parse_mode="html)
+    await alive.reply(caption, file=ALIVE_PIC, parse_mode="html")
   else:
     await alive.reply(caption, parse_mode="html")
