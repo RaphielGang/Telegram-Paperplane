@@ -80,7 +80,6 @@ async def livestatus(alive):
   
   ALIVE_PIC = "ALIVE_PIC" 
   ALIVE_PIC = await get_a_pic(ALIVE_PIC)
-  ALIVE_PIC = random.choice(ALIVE_PIC)
 
   caption = (
             "<u><b>Status🎗</u></b>\n\n"
@@ -96,6 +95,7 @@ async def livestatus(alive):
   )
   
   if ALIVE_PIC:
+    ALIVE_PIC = random.choice(ALIVE_PIC)
     await alive.reply(caption, file=ALIVE_PIC, parse_mode="html")
   else:
     await alive.reply(caption, parse_mode="html")
