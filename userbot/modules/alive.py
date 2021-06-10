@@ -50,7 +50,7 @@ async def livestatus(alive):
     ALIVE_PIC = False
   
   caption = (
-            "<u>Status🎗</u>\n", parse_mode="html
+            "<u>Status🎗</u>\n"
             f"    **|•| Database:** {db}\n"
              "         **——————————————————————**\n"
             f"    **|•| Telethon version:** __{version.__version__}__\n"
@@ -63,6 +63,8 @@ async def livestatus(alive):
   )
   
   if ALIVE_PIC:
+    await event.client.parse_mode = "html"
     await alive.reply(caption, file=ALIVE_PIC)
   else:
+    await event.client.parse_mode = "html"
     await alive.reply(caption)
