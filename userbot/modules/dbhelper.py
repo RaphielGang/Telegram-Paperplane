@@ -273,7 +273,7 @@ async def disapprove(userid):
                                   }})
         return True
 
-async def autoapproval(userid):
+async def autoapproval():
     to_check = MONGO.pmpermit.find_one({'autoapproval': 'Check'})
 
     if to_check is None:
@@ -287,8 +287,8 @@ async def autoapproval(userid):
         return True
     
 
-async def autoapprove(userid):
-    if await autoapproval(userid) is True:
+async def autoapprove():
+    if await autoapproval() is True:
         MONGO.pmpermit.update_one({'autoapproval': 'Check'},
                                   {"$set": {
                                       'auto_approval_state': False
