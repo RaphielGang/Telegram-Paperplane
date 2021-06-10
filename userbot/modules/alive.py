@@ -9,7 +9,7 @@ from userbot.events import register, grp_exclude
 from telethon import version
 
 
-@register(outgoing=True, pattern="setapic$")
+@register(outgoing=True, pattern="setapic")
 @grp_exclude()
 async def setapic(apic):
   cmd_msg = apic.text
