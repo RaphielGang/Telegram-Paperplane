@@ -75,7 +75,7 @@ async def setmyalivepic(pmpic):
   
 @register(outgoing=True, pattern="getpmpic$")
 @grp_exclude()
-async def myalivepics(apic):
+async def myalivepics(pmpic):
     pics = await get_a_pic("PM_PERMIT_IMAGE")
     
     if pics is False:
@@ -104,7 +104,7 @@ async def myalivepics(apic):
 
 @register(outgoing=True, pattern="delpmpic$")
 @grp_exclude()
-async def deletemyalivepics(apic):
+async def deletemyalivepics(pmpic):
     PM_PERMIT_IMAGE = "PM_PERMIT_IMAGE"
     
     if del_a_pic(PM_PERMIT_IMAGE) is False:
