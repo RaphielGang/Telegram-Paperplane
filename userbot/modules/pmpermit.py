@@ -25,7 +25,6 @@ from userbot import (
     MAX_FLOOD_IN_PM,
     is_mongo_alive,
     is_redis_alive,
-    PM_PERMIT_IMAGE,
     PM_PERMIT_MSG,
     
 )
@@ -37,6 +36,7 @@ from userbot.modules.dbhelper import (
     approve,
     disapprove,
     is_blocked,
+    get_a_pic,
     block_pm,
     unblock_pm,
     notif_off,
@@ -61,6 +61,8 @@ UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
 )
         
 MAX_MSG = MAX_FLOOD_IN_PM or 5
+
+PM_PERMIT_IMAGE = get_a_pic("PM_PERMIT_IMAGE")
 # =================================================================
 
 async def delete_in(text, seconds):
@@ -272,10 +274,16 @@ async def approvepm(apprvpm):
         return
          
     if apprvpm.pattern_match.group(1):
+        try:
             username = apprvpm.pattern_match.group(1)
             aname = await apprvpm.client.get_entity(username)
             name0 = str(aname.first_name)
             uid = await apprvpm.client.get_peer_id(username)
+        except ValueError:
+            x = await apprvpm.edit("I am sorry. I can't find that user😥. "
+                               "Have you entered the correct username?"
+                                  )
+            return await delete_in(x, 5)
     
     elif apprvpm.is_private:
             aname = await apprvpm.client.get_entity(apprvpm.chat_id)
@@ -283,11 +291,17 @@ async def approvepm(apprvpm):
             uid = apprvpm.chat_id
         
     elif apprvpm.reply_to_msg_id:
+        try:
             reply = await apprvpm.get_reply_message()
             replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
             aname = replied_user.user.id
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
+        except TypeError:
+            x = await apprvpm.edit("Excuse me..."
+                                   "is that an anonymous admin?"
+                                  )
+            await delete_in(x, 5)
     
     else:
         x = await apprvpm.edit("I can't see the user you want to approve😳")
@@ -331,10 +345,16 @@ async def dapprovepm(dapprvpm):
         return
     
     if dapprvpm.pattern_match.group(1):
+        try:
             username = dapprvpm.pattern_match.group(1)
             daname = await dapprvpm.client.get_entity(username)
             name0 = str(daname.first_name)
             uid = await dapprvpm.client.get_peer_id(username)
+        except ValueError:
+            x = await dapprvpm.edit("I am sorry. I can't find that user😥. "
+                               "Have you entered the correct username?"
+                                  )
+            return await delete_in(x, 5)
     
     elif dapprvpm.is_private:
             daname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
@@ -342,10 +362,16 @@ async def dapprovepm(dapprvpm):
             uid = dapprvpm.chat_id
          
     elif dapprvpm.reply_to_msg_id:
+        try:
             reply = await dapprvpm.get_reply_message()
             replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
+        except TypeError:
+            x = await dapprvpm.edit("Excuse me..."
+                                   "is that an anonymous admin?"
+                                  )
+            await delete_in(x, 5)
 
     else:
         x = await dapprvpm.edit("I can't see the user you want to disapprove😳")
@@ -384,17 +410,24 @@ async def dapprovepm(dapprvpm):
 @register(outgoing=True, pattern="block(?: |$)(.*)$")
 @grp_exclude()
 async def blockpm(block):
+    """You can block some unwanted people."""
     if not is_mongo_alive() or not is_redis_alive():
         await block.reply("Databases are failing!")
         return
     
     if block.pattern_match.group(1):
+        try:
             username = block.pattern_match.group(1)
             bname = await block.client.get_entity(username)
             name0 = str(bname.first_name)
             uid = await block.client.get_peer_id(username)
             await block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
             await asyncio.sleep(4)
+        except ValueError:
+            x = await block.edit("I am sorry. I can't find that user😥. "
+                               "Have you entered the correct username?"
+                                  )
+            return await delete_in(x, 5)
     
     elif block.is_private:
             bname= await block.client.get_entity(block.chat_id)
@@ -404,12 +437,18 @@ async def blockpm(block):
             await asyncio.sleep(4)
                 
     elif block.reply_to_msg_id:
+        try:
             reply = await block.get_reply_message()
             replied_user = await block.client(GetFullUserRequest(reply.from_id))
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
             await block.edit("You are going to be blocked from PM-ing me now.")
             asyncio.sleep(4)
+        except TypeError:
+            x = await block.edit("Excuse me..."
+                                   "is that an anonymous admin?"
+                                  )
+            await delete_in(x, 5)
         
     else:
         x = await block.edit("Gimme the user to block!")
@@ -432,29 +471,43 @@ async def blockpm(block):
 @register(outgoing=True, pattern="unblock(?: |$)(.*)$")
 @grp_exclude()
 async def unblockpm(unblock):
+    """You can unblock the people 
+            so that they can PM again."""
     if not is_mongo_alive() or not is_redis_alive():
         await unblock.reply("Databases are failing!")
         return
     
     if unblock.pattern_match.group(1):
+        try:
             username = unblock.pattern_match.group(1)
             ubname = await unblock.client.get_entity(username)
             name0 = str(ubname.first_name)
             uid = await unblock.client.get_peer_id(username)
             await unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
             asyncio.sleep(4)
+        except ValueError:
+            x = await unblock.edit("I am sorry. I can't find that user😥. "
+                               "Have you entered the correct username?"
+                                  )
+            return await delete_in(x, 5)
     
     elif unblock.is_private:
             x = await unblock.edit("You aren't serious, right?")
             return await delete_in(x, 5)
                    
     elif unblock.reply_to_msg_id:
+        try:
             reply = await unblock.get_reply_message()
             replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
             await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
             asyncio.sleep(4)
+        except TypeError:
+            x = await unblock.edit("Excuse me..."
+                                   "is that an anonymous admin?"
+                                  )
+            await delete_in(x, 5)
     
     else:
         x = await unblock.edit("I can't unblock '__NOBODY__'")
@@ -484,10 +537,13 @@ CMD_HELP.update(
             " - `.autoapprove`||`.autoa`: Switches Auto-Approve module on/off.\n"
             " - `.approve`||`.a`: Approve the mentioned/replied person to PM.\n"
             " - `.disapprove`||`.da`: Disapprove the mentioned/replied person to PM.\n"
-            " - `.block`: Blocks the person from PMing you.\n"
-            " - `.unblock`: Unblocks the person, so they can PM you again.\n"
+            " - `.block`: Block the person from PMing you.\n"
+            " - `.unblock`: Unblock the person, so they can PM you again.\n"
             " - `.notifoff`: Stop any notifications coming from unapproved PMs.\n"
-            " - `.notifon`: Allow notifications coming from unapproved PMs.\n",
+            " - `.notifon`: Allow notifications coming from unapproved PMs.\n"
+            " - `.setpmpic <links>`: Set picture for your alive message.\n"
+            " - `.getpmpic`: List all the pictures you have set.\n"
+            " - `.delpmpic`: Delete all the pictures you have set.\n"
         ]
     }
 )
