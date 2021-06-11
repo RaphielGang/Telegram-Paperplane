@@ -73,3 +73,17 @@ async def livestatus(alive):
     await alive.reply(caption, file=ALIVE_PIC, parse_mode="html")
   else:
     await alive.reply(caption, parse_mode="html")
+
+    
+CMD_HELP.update(
+    {
+        "alive": [
+            "Alive",
+            " - `.alive`: Check if your bot is running."
+            " - `setapic`: Set picture for your alive message."
+            " - `getapic`: List all the pictures you have set."
+            " - `delapic`: Delete all the pictures you have set."
+        ]
+    }
+)
+ 
