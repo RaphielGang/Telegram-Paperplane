@@ -70,7 +70,7 @@ async def setmyalivepic(pmpic):
     CMD_MSG = pmpic.text
     PIC = str(CMD_MSG[9: ]).split(" ")
     await set_a_pic(PIC, PM_PERMIT_IMAGE)
-    x = await pmpic.edit("Pmpermit pic has been set!!")
+    x = await pmpic.edit("PMPermit pic has been set!!")
     return await delete_in(x, 5)
   
 @register(outgoing=True, pattern="getpmpic$")
@@ -96,7 +96,7 @@ async def myalivepics(pmpic):
         
     mypics = VARIABLE["PM_PERMIT_IMAGE"]
     message = (
-        "**My PMpermit Pics**\n\n"
+        "**My PMPermit Pics**\n\n"
         f"{mypics}"
     )
     await pmpic.edit(message)
