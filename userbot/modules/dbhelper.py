@@ -569,3 +569,8 @@ async def get_a_pic(name):
         return False
     pic = MONGO.pictures.find_one({'Name': name})['apic']
     return pic
+
+async def del_a_pic(name):
+    if MONGO.pictures.find_one({'Name': name}) is None:
+        return False
+    MONGO.pictures.delete_one({'Name': name})
