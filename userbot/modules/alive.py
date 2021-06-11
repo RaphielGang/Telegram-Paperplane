@@ -37,7 +37,7 @@ async def livestatus(alive):
     await alive.edit("**I am running all fine~**")
     time.sleep(2)
     x = await alive.edit("***wink***")
-    await delete_in(x, 1)
+    await delete_in(x, 0.5)
   
   ALIVE_PIC = "ALIVE_PIC" 
   ALIVE_PIC = await get_a_pic(ALIVE_PIC)
