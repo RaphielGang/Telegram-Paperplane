@@ -28,7 +28,7 @@ async def myalivepics(apic):
     pics = await get_a_pic("ALIVE_PIC")
     
     if pics is False:
-      x = await apic.edit("You haven't set any pics.")
+      x = await apic.edit("You haven't set any pictures.")
       return await delete_in(x, 5)
     
     num_pics = len(pics)
@@ -60,3 +60,5 @@ async def deletemyalivepics(APIC):
         x = await apic.edit("I am sorry but you haven't set any pictures yet.")
         return delete_in(x, 5)
     await del_a_pic(ALIVE_PIC)
+    x = await apic.edit("All pictures have been deleted.")
+    return await delete_in(x, 5)
