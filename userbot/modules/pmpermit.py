@@ -6,6 +6,7 @@
 """ Userbot module for keeping control on who can PM you. """
 
 import asyncio
+import time
 
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
@@ -422,7 +423,6 @@ async def blockpm(block):
             name0 = str(bname.first_name)
             uid = await block.client.get_peer_id(username)
             await block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
-            await asyncio.sleep(4)
         except ValueError:
             x = await block.edit("I am sorry. I can't find that user😥. "
                                "Have you entered the correct username?"
@@ -434,7 +434,6 @@ async def blockpm(block):
             name0 = str(bname.first_name)
             uid = block.chat_id
             await block.edit("I am blocking you now.")
-            await asyncio.sleep(4)
                 
     elif block.reply_to_msg_id:
         try:
@@ -443,7 +442,6 @@ async def blockpm(block):
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
             await block.edit("You are going to be blocked from PM-ing me now.")
-            asyncio.sleep(4)
         except TypeError:
             x = await block.edit("Excuse me..."
                                    "is that an anonymous admin?"
@@ -459,6 +457,7 @@ async def blockpm(block):
         return await delete_in(x, 5)
     
     await block.client(BlockRequest(uid))
+    time.sleep(2)
     await block_pm(uid)
     await block.edit("***BLOCKED!!***")
     
@@ -467,6 +466,7 @@ async def blockpm(block):
             BOTLOG_CHATID, "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
         )
 
+        
 
 @register(outgoing=True, pattern="unblock(?: |$)(.*)$")
 @grp_exclude()
@@ -484,7 +484,6 @@ async def unblockpm(unblock):
             name0 = str(ubname.first_name)
             uid = await unblock.client.get_peer_id(username)
             await unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
-            asyncio.sleep(4)
         except ValueError:
             x = await unblock.edit("I am sorry. I can't find that user😥. "
                                "Have you entered the correct username?"
@@ -502,7 +501,6 @@ async def unblockpm(unblock):
             name0 = str(replied_user.user.first_name)
             uid = replied_user.user.id
             await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
-            asyncio.sleep(4)
         except TypeError:
             x = await unblock.edit("Excuse me..."
                                    "is that an anonymous admin?"
@@ -516,8 +514,9 @@ async def unblockpm(unblock):
     if await is_blocked(uid) is False:
         x = await unblock.edit("The user isn't blocked...yet.")
         return await delete_in(x, 5)
-        
+    
     await unblock.client(UnblockRequest(uid))
+    time.sleep(2)
     await unblock_pm(uid)
     await unblock.edit("Let's make peace.")
     
