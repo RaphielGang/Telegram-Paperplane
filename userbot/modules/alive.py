@@ -54,7 +54,7 @@ async def livestatus(alive):
              "<b>Mapleplane is ready to take off🍁</b>"
              "<b>===========================================</b>\n"
   )
-  if fdb:
+  if not db:
       caption = (
             "<u><b>Status🎗</u></b>\n\n"
             f"    <b>|•| Database:</b> <i>{fdb}</i>\n"
