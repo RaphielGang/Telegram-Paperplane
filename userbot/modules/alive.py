@@ -80,9 +80,9 @@ CMD_HELP.update(
         "alive": [
             "Alive",
             " - `.alive`: Check if your bot is running.\n"
-            " - `setapic`: Set picture for your alive message.\n"
-            " - `getapic`: List all the pictures you have set.\n"
-            " - `delapic`: Delete all the pictures you have set.\n"
+            " - `.setapic <links>`: Set picture for your alive message.\n"
+            " - `.getapic`: List all the pictures you have set.\n"
+            " - `.delapic`: Delete all the pictures you have set.\n"
         ]
     }
 )
