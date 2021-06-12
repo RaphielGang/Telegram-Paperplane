@@ -302,7 +302,7 @@ async def approvepm(apprvpm):
             x = await apprvpm.edit("Excuse me..."
                                    "is that an anonymous admin?"
                                   )
-            await delete_in(x, 5)
+            return await delete_in(x, 5)
     
     else:
         x = await apprvpm.edit("I can't see the user you want to approve😳")
