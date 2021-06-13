@@ -18,14 +18,14 @@ async def setmyalivepic(apic):
     ALIVE_IMAGE = "ALIVE_IMAGE"
     CMD_MSG = apic.text
     PIC = str(CMD_MSG[9: ]).split(" ")
-    await set_a_pic(PIC, ALIVE_PIC)
+    await set_a_pic(PIC, ALIVE_IMAGE)
     x = await apic.edit("Alive pic has been set!!")
     return await delete_in(x, 5)
   
 @register(outgoing=True, pattern="getapic$")
 @grp_exclude()
 async def myalivepics(apic):
-    pics = await get_a_pic("ALIVE_PIC")
+    pics = await get_a_pic("ALIVE_IMAGE")
     
     if pics is False:
       x = await apic.edit("You haven't set any pictures.")
@@ -38,28 +38,28 @@ async def myalivepics(apic):
         f"PIC {n} - [Link]({pics[i]})\n"
       )
       n += 1
-      if "ALIVE_PIC" in VARIABLE:
-        VARIABLE["ALIVE_PIC"] += links
+      if "ALIVE_IMAGE" in VARIABLES:
+        VARIABLES["ALIVE_IMAGE"] += links
       else:
-        VARIABLE["ALIVE_PIC"] = links
+        VARIABLES["ALIVE_IMAGE"] = links
         
-    mypics = VARIABLE["ALIVE_PIC"]
+    mypics = VARIABLES["ALIVE_IMAGE"]
     message = (
         "**My Alive Pics**\n\n"
         f"{mypics}"
     )
     await apic.edit(message)
-    del VARIABLE["ALIVE_PIC"]
+    del VARIABLES["ALIVE_IMAGE"]
 
 @register(outgoing=True, pattern="delapic$")
 @grp_exclude()
 async def deletemyalivepics(apic):
-    ALIVE_PIC = "ALIVE_PIC"
+    ALIVE_IMAGE = "ALIVE_IMAGE"
     
-    if del_a_pic(ALIVE_PIC) is False:
+    if del_a_pic(ALIVE_IMAGE) is False:
         x = await apic.edit("I am sorry but you haven't set any pictures yet.")
         return await delete_in(x, 5)
-    await del_a_pic(ALIVE_PIC)
+    await del_a_pic(ALIVE_IMAGE)
     x = await apic.edit("All pictures have been deleted.")
     return await delete_in(x, 5)
 
@@ -68,7 +68,7 @@ async def deletemyalivepics(apic):
 async def setmyalivepic(pmpic):
     PM_PERMIT_IMAGE = "PM_PERMIT_IMAGE"
     CMD_MSG = pmpic.text
-    PIC = str(CMD_MSG[9: ]).split(" ")
+    PIC = str(CMD_MSG[10: ]).split(" ")
     await set_a_pic(PIC, PM_PERMIT_IMAGE)
     x = await pmpic.edit("PMPermit pic has been set!!")
     return await delete_in(x, 5)
@@ -90,17 +90,17 @@ async def myalivepics(pmpic):
       )
       n += 1
       if "PM_PERMIT_IMAGE" in VARIABLE:
-        VARIABLE["PM_PERMIT_IMAGE"] += links
+        VARIABLES["PM_PERMIT_IMAGE"] += links
       else:
-        VARIABLE["PM_PERMIT_IMAGE"] = links
+        VARIABLES["PM_PERMIT_IMAGE"] = links
         
-    mypics = VARIABLE["PM_PERMIT_IMAGE"]
+    mypics = VARIABLES["PM_PERMIT_IMAGE"]
     message = (
         "**My PMPermit Pics**\n\n"
         f"{mypics}"
     )
     await pmpic.edit(message)
-    del VARIABLE["PM_PERMIT_IMAGE"]
+    del VARIABLES["PM_PERMIT_IMAGE"]
 
 @register(outgoing=True, pattern="delpmpic$")
 @grp_exclude()
