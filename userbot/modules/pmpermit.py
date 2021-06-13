@@ -24,6 +24,7 @@ from userbot import (
     LOGS,
     PM_AUTO_BAN,
     MAX_FLOOD_IN_PM,
+    PM_PASSWORD,
     is_mongo_alive,
     is_redis_alive,
     PM_PERMIT_MSG,
@@ -201,14 +202,15 @@ async def pm_password(event):
     if not is_mongo_alive() or not is_redis_alive():
         return
     if await approval(event.chat_id) is False:
-        async for password in event.client.iter_messages(
-            event.chat_id,
-            from_user=event.chat_id
-        ):
-            password = password.text
-            if password == PM_PASSWORD:
-                await approvepm(event.chat_id)
-                return
+        if PM_PASSWORD:
+            async for password in event.client.iter_messages(
+                event.chat_id,
+                from_user=event.chat_id
+            ):
+                password = password.text
+                if password == PM_PASSWORD:
+                    await approvepm(event.chat_id)
+                    return
 ##
  
     
