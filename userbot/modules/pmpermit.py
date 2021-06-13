@@ -208,7 +208,8 @@ async def pm_password(event):
             ):
                 password = password.text
                 if password == PM_PASSWORD:
-                    await approvepm(event.chat_id)
+                    await approve(event.chat_id)
+                    await event.reply("I will change this message later.")
                     return
 ##
  
