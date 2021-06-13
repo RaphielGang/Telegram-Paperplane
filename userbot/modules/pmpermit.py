@@ -63,7 +63,7 @@ UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
         
 MAX_MSG = MAX_FLOOD_IN_PM or 5
 
-PM_PERMIT_IMAGE = get_a_pic("PM_PERMIT_IMAGE")
+PM_PERMIT_IMAGE = get_a_pic("PM_PERMIT_IMAGE") or False
 # =================================================================
 
 async def delete_in(text, seconds):
@@ -78,7 +78,7 @@ async def iterate_delete(event, event_id, text):
         if clean_msg == text:
             await message.delete()
 
-
+            
             
 @register(incoming=True, disable_edited=True, disable_errors=True)
 @grp_exclude()
@@ -191,7 +191,26 @@ async def permitpm(event):
                             + " was spamming your PM and has been blocked.",
                         )
                     
-         
+
+
+## Some fun feature
+@register(incoming=True, disable_edited=True, disable_errors=True)
+@grp_exclude()
+async def pm_password(event):
+    """Will approve someone who enters the correct PM password"""
+    if not is_mongo_alive() or not is_redis_alive():
+        return
+    if await approval(event.chat_id) is False:
+        async for password in event.client.iter_messages(
+            event.chat_id,
+            from_user=event.chat_id
+        ):
+            password = password.text
+            if password == PM_PASSWORD:
+                await approvepm(event.chat_id)
+                return
+##
+ 
     
     
 @register(outgoing=True, pattern="(autoapprove|autoa)$")
@@ -372,7 +391,7 @@ async def dapprovepm(dapprvpm):
             x = await dapprvpm.edit("Excuse me..."
                                    "is that an anonymous admin?"
                                   )
-            await delete_in(x, 5)
+            return await delete_in(x, 5)
 
     else:
         x = await dapprvpm.edit("I can't see the user you want to disapprove😳")
@@ -446,7 +465,7 @@ async def blockpm(block):
             x = await block.edit("Excuse me..."
                                    "is that an anonymous admin?"
                                   )
-            await delete_in(x, 5)
+            return await delete_in(x, 5)
         
     else:
         x = await block.edit("Gimme the user to block!")
@@ -505,7 +524,7 @@ async def unblockpm(unblock):
             x = await unblock.edit("Excuse me..."
                                    "is that an anonymous admin?"
                                   )
-            await delete_in(x, 5)
+            return await delete_in(x, 5)
     
     else:
         x = await unblock.edit("I can't unblock '__NOBODY__'")
