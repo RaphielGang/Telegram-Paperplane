@@ -25,7 +25,6 @@ from userbot import (
     PM_AUTO_BAN,
     MAX_FLOOD_IN_PM,
     PM_PERMIT_MSG,
-    PM_PERMIT_IMAGE,
     PM_PASSWORD,
     is_mongo_alive,
     is_redis_alive,
@@ -64,6 +63,8 @@ UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
 )
         
 MAX_MSG = MAX_FLOOD_IN_PM or 5
+
+PM_PERMIT_IMAGE = await get_a_pic("PM_PERMIT_IMAGE")
 # =================================================================
 
 async def delete_in(text, seconds):
