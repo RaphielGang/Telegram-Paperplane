@@ -7,6 +7,7 @@
 
 import asyncio
 import time
+import random
 
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
@@ -92,6 +93,7 @@ async def permitpm(event):
                 if event.chat_id not in LASTMSG:
                     #----------------------------------------------------
                     PM_PERMIT_IMAGE = await get_a_pic("PM_PERMIT_IMAGE")
+                    PM_PERMIT_IMAGE = random.choice(PM_PERMIT_IMAGE)
                     #----------------------------------------------------
                     if PM_PERMIT_IMAGE:
                         if await notif_state() is True:
@@ -202,8 +204,8 @@ async def pm_password(event):
     """Will approve someone who enters the correct PM password"""
     if not is_mongo_alive() or not is_redis_alive():
         return
-    if await approval(event.chat_id) is False:
-        if PM_PASSWORD:
+    if event.is_private and PM_PASSWORD:
+        if await approval(event.chat_id) is False:
             async for password in event.client.iter_messages(
                 event.chat_id,
                 from_user=event.chat_id
