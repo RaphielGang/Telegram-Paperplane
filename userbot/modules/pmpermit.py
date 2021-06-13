@@ -24,10 +24,11 @@ from userbot import (
     LOGS,
     PM_AUTO_BAN,
     MAX_FLOOD_IN_PM,
+    PM_PERMIT_MSG,
+    PM_PERMIT_IMAGE,
     PM_PASSWORD,
     is_mongo_alive,
     is_redis_alive,
-    PM_PERMIT_MSG,
     
 )
 from userbot.events import register, grp_exclude
@@ -63,8 +64,6 @@ UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
 )
         
 MAX_MSG = MAX_FLOOD_IN_PM or 5
-
-PM_PERMIT_IMAGE = get_a_pic("PM_PERMIT_IMAGE") or False
 # =================================================================
 
 async def delete_in(text, seconds):
