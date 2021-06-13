@@ -69,7 +69,7 @@ async def livestatus(alive):
   
   if ALIVE_IMAGE:
     ALIVE_IMAGE = random.choice(ALIVE_IMAGE)
-    await alive.reply(caption, file=ALIVE_PIC, parse_mode="html")
+    await alive.reply(caption, file=ALIVE_IMAGE, parse_mode="html")
   else:
     await alive.reply(caption, parse_mode="html")
 
