@@ -93,13 +93,14 @@ async def permitpm(event):
                 if event.chat_id not in LASTMSG:
                     #----------------------------------------------------
                     PM_PERMIT_IMAGE = await get_a_pic("PM_PERMIT_IMAGE")
-                    PM_PERMIT_IMAGE = random.choice(PM_PERMIT_IMAGE)
                     #----------------------------------------------------
                     if PM_PERMIT_IMAGE:
                         if await notif_state() is True:
+                            PM_PERMIT_IMAGE = random.choice(PM_PERMIT_IMAGE)
                             await event.respond(UNAPPROVED_MSG_ON, file=PM_PERMIT_IMAGE)
                             LASTMSG.update({event.chat_id: event.text})
                         if await notif_state() is False:
+                            PM_PERMIT_IMAGE = random.choice(PM_PERMIT_IMAGE)
                             await event.respond(UNAPPROVED_MSG_OFF, file=PM_PERMIT_IMAGE)
                             LASTMSG.update({event.chat_id: event.text})
                     elif not PM_PERMIT_IMAGE:
