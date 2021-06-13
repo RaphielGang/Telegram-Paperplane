@@ -266,7 +266,7 @@ async def disapprove(userid):
     if await approval(userid) is False:
         return
     else:
-        MONGO.pmpermit.update_one({'userid': userid},
+        MONGO.pmpermit.update_one({'user_id': userid},
                                   {"$set": {
                                       'approval': False
                                   }})
