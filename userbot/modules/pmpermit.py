@@ -63,8 +63,6 @@ UNAPPROVED_MSG_OFF = PM_PERMIT_MSG or (
 )
         
 MAX_MSG = MAX_FLOOD_IN_PM or 5
-
-PM_PERMIT_IMAGE = await get_a_pic("PM_PERMIT_IMAGE")
 # =================================================================
 
 async def delete_in(text, seconds):
@@ -92,6 +90,9 @@ async def permitpm(event):
                 return
             if await approval(event.chat_id) is False:
                 if event.chat_id not in LASTMSG:
+                    #----------------------------------------------------
+                    PM_PERMIT_IMAGE = await get_a_pic("PM_PERMIT_IMAGE")
+                    #----------------------------------------------------
                     if PM_PERMIT_IMAGE:
                         if await notif_state() is True:
                             await event.respond(UNAPPROVED_MSG_ON, file=PM_PERMIT_IMAGE)
