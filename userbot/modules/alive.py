@@ -68,11 +68,11 @@ async def livestatus(alive):
              "<b>===========================================</b>\n"
       )
   
-  if ALIVE_PIC:
+  if ALIVE_PIC is False:
+    await alive.reply(caption, parse_mode="html")
+  else:
     ALIVE_PIC = random.choice(ALIVE_PIC)
     await alive.reply(caption, file=ALIVE_PIC, parse_mode="html")
-  else:
-    await alive.reply(caption, parse_mode="html")
 
     
 CMD_HELP.update(
