@@ -10,7 +10,7 @@ from userbot.events import register, grp_exclude
 async def delete_in(text, seconds):
     await asyncio.sleep(seconds)
     return await text.delete()
-#=============
+#=============XXXXXX===============
 
 @register(outgoing=True, pattern="setapic")
 @grp_exclude()
@@ -56,7 +56,7 @@ async def myalivepics(apic):
 async def deletemyalivepics(apic):
     ALIVE_IMAGE = "ALIVE_IMAGE"
     
-    if del_a_pic(ALIVE_IMAGE) is False:
+    if await del_a_pic(ALIVE_IMAGE) is False:
         x = await apic.edit("I am sorry but you haven't set any pictures yet.")
         return await delete_in(x, 5)
     await del_a_pic(ALIVE_IMAGE)
@@ -107,7 +107,7 @@ async def myalivepics(pmpic):
 async def deletemyalivepics(pmpic):
     PM_PERMIT_IMAGE = "PM_PERMIT_IMAGE"
     
-    if del_a_pic(PM_PERMIT_IMAGE) is False:
+    if await del_a_pic(PM_PERMIT_IMAGE) is False:
         x = await pmpic.edit("I am sorry but you haven't set any pictures yet.")
         return await delete_in(x, 5)
     await del_a_pic(PM_PERMIT_IMAGE)
