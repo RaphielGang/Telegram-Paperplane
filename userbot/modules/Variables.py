@@ -89,7 +89,7 @@ async def myalivepics(pmpic):
         f"PIC {n} - [Link]({pics[i]})\n"
       )
       n += 1
-      if "PM_PERMIT_IMAGE" in VARIABLE:
+      if "PM_PERMIT_IMAGE" in VARIABLES:
         VARIABLES["PM_PERMIT_IMAGE"] += links
       else:
         VARIABLES["PM_PERMIT_IMAGE"] = links
