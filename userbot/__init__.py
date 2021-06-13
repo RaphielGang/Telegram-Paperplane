@@ -175,6 +175,7 @@ COMMAND_TRIGGER = os.environ.get("COMMAND_TRIGGER") or None
 COUNT_MSG = 0
 MAX_FLOOD_IN_PM = os.environ.get("MAX_FLOOD_IN_PM") or None
 PM_PERMIT_MSG = os.environ.get("PM_PERMIT_TEXT") or None
+PM_PASSWORD = os.environ.get("PM_PERMIT_TEXT") or None
 VARIABLES = {}
 USERS = {}
 COUNT_PM = {}
