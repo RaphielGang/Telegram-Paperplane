@@ -212,8 +212,8 @@ async def pm_password(event):
                 if password == PM_PASSWORD:
                     await approve(event.chat_id)
                     await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
-                    password.delete()
                     await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
+                    await iterate_delete(event, event.chat_id, password)
                     await event.reply("Welcome, I am a bot!!\n" 
                                       "Very nice to meet you😊 "
                                       "I will ping my owner about you."
