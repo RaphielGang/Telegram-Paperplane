@@ -70,9 +70,9 @@ async def delete_in(text, seconds):
     await asyncio.sleep(seconds)
     return await text.delete()
 
-async def iterate_delete(event, event_id, text):
+async def iterate_delete(event, event_id, user, text):
     async for message in event.client.iter_messages(
-        event_id, from_user="me"
+        event_id, from_user=user
     ):
         clean_msg = message.text
         if clean_msg == text:
@@ -164,8 +164,8 @@ async def permitpm(event):
                 elif WARN == -1:
                     await event.respond("You were spamming the PM, inspite of my warnings.\n"
                                     "So now you are BLOCKED and REPORTED spam!!")
-                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
-                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
+                    await iterate_delete(event, event.chat_id, "me", UNAPPROVED_MSG_ON)
+                    await iterate_delete(event, event.chat_id, "me", UNAPPROVED_MSG_OFF)
                 
                 if WARN <= -1:
                     await event.client(BlockRequest(event.chat_id))
@@ -209,15 +209,18 @@ async def pm_password(event):
                 from_user=event.chat_id
             ):
                 password = password.text
+                
                 if password == PM_PASSWORD:
                     await approve(event.chat_id)
-                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
-                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
-                    await iterate_delete(event, event.chat_id, password)
+                    await iterate_delete(event, event.chat_id, "me", UNAPPROVED_MSG_ON)
+                    await iterate_delete(event, event.chat_id, "me", UNAPPROVED_MSG_OFF)
+                    await iterate_delete(event, event.chat_id, "me", password)
+                    
                     await event.reply("Welcome, I am a bot!!\n" 
                                       "Very nice to meet you😊 "
                                       "I will ping my owner about you."
                                      )
+                    
                     if await notif_state() is False:
                         await event.respond("Just say \"Hi\".")
                     
@@ -273,8 +276,8 @@ async def auto_accept(event):
         if event.is_private: 
             if not await approval(chat.id) and not chat.bot:
                 await approve(chat.id)
-                await iterate_delete(event, chat.id, UNAPPROVED_MSG_ON)
-                await iterate_delete(event, chat.id, UNAPPROVED_MSG_OFF)
+                await iterate_delete(event, chat.id, "me", UNAPPROVED_MSG_ON)
+                await iterate_delete(event, chat.id, "me", UNAPPROVED_MSG_OFF)
 
                 if BOTLOG:
                     await event.client.send_message(
@@ -362,8 +365,8 @@ async def approvepm(apprvpm):
     await approve(uid)
     await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
-    await iterate_delete(apprvpm, uid, UNAPPROVED_MSG_ON)
-    await iterate_delete(apprvpm, uid, UNAPPROVED_MSG_OFF)
+    await iterate_delete(apprvpm, uid, "me", UNAPPROVED_MSG_ON)
+    await iterate_delete(apprvpm, uid, "me", UNAPPROVED_MSG_OFF)
     
     if apprvpm.pattern_match.group(1):
         await apprvpm.edit(f"[{name0}](tg://user?id={uid}) can PM you now.")
@@ -438,6 +441,8 @@ async def dapprovepm(dapprvpm):
     await asyncio.sleep(1)
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
+    
+    await iterate_delete(event, event.chat_id, "me", password)
     
     if dapprvpm.pattern_match.group(1):
         await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
