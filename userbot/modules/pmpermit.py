@@ -207,13 +207,13 @@ async def pm_password(event):
         return
     if event.is_private and PM_PASSWORD:
         if await approval(event.chat_id) is False:
-            async for password in event.client.iter_messages(
-                event.chat_id,
-                from_user=event.chat_id
-            ):
-                password = password.text
-                if password == "123456":
-                    await approve(event.chat_id)
+            #async for password in event.client.iter_messages(
+                #event.chat_id,
+                #from_user=event.chat_id
+            #):
+               # password = password.text
+                #if password == "123456":
+                    #await approve(event.chat_id)
                     await event.reply("I will change this message later.")
                     return
 ##
