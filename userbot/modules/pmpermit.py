@@ -89,6 +89,7 @@ async def permitpm(event):
         if event.is_private and not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
                 return
+            await pm_password(event)
             if await approval(event.chat_id) is False:
                 if event.chat_id not in LASTMSG:
                     #----------------------------------------------------
@@ -198,25 +199,23 @@ async def permitpm(event):
                     
 
 
-## Some fun feature
-@register(incoming=True, disable_edited=True, disable_errors=True)
-@grp_exclude()
+# Some fun func
 async def pm_password(event):
     """Will approve someone who enters the correct PM password"""
     if not is_mongo_alive() or not is_redis_alive():
         return
     if event.is_private and PM_PASSWORD:
         if await approval(event.chat_id) is False:
-            #async for password in event.client.iter_messages(
-                #event.chat_id,
-                #from_user=event.chat_id
-            #):
-               # password = password.text
-                #if password == "123456":
-                    #await approve(event.chat_id)
+            async for password in event.client.iter_messages(
+                event.chat_id,
+                from_user=event.chat_id
+            ):
+                password = password.text
+                if password == "123456":
+                    await approve(event.chat_id)
                     await event.reply("I will change this message later.")
                     return
-##
+#
  
     
     
