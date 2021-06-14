@@ -214,7 +214,7 @@ async def pm_password(event):
                     await approve(event.chat_id)
                     await iterate_delete(event, event.chat_id, "me", UNAPPROVED_MSG_ON)
                     await iterate_delete(event, event.chat_id, "me", UNAPPROVED_MSG_OFF)
-                    await iterate_delete(event, event.chat_id, "me", password)
+                    await iterate_delete(event, event.chat_id, "me", PM_PASSWORD)
                     
                     await event.reply("Welcome, I am a bot!!\n" 
                                       "Very nice to meet you😊 "
@@ -442,7 +442,8 @@ async def dapprovepm(dapprvpm):
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
     
-    await iterate_delete(dapprvpm, dapprvpm.chat_id, "me", password)
+    if PM_PASSWORD:
+        await iterate_delete(dapprvpm, dapprvpm.chat_id, "me", PM_PASSWORD)
     
     if dapprvpm.pattern_match.group(1):
         await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
