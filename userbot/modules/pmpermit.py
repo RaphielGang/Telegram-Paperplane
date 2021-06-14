@@ -212,13 +212,20 @@ async def pm_password(event):
                 if password == PM_PASSWORD:
                     await approve(event.chat_id)
                     await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
+                    password.delete()
                     await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
                     await event.reply("Welcome, I am a bot!!\n" 
                                       "Very nice to meet you😊 "
                                       "I will ping my owner about you."
                                      )
-                    if notif_state() is False:
-                        await event.respond("Just say a \"Hi\".")
+                    if await notif_state() is False:
+                        await event.respond("Just say \"Hi\".")
+                    
+                    try:
+                        del COUNT_PM[event.chat_id]
+                        del LASTMSG[event.chat_id]
+                    except KeyError:
+                        pass
                     
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
