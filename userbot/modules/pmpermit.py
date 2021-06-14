@@ -442,7 +442,7 @@ async def dapprovepm(dapprvpm):
     await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
     
-    await iterate_delete(dapprvpm, event.chat_id, "me", password)
+    await iterate_delete(dapprvpm, dapprvpm.chat_id, "me", password)
     
     if dapprvpm.pattern_match.group(1):
         await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
