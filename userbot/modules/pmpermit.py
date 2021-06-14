@@ -206,7 +206,7 @@ async def pm_password(event):
         if await approval(event.chat_id) is False:
             async for password in event.client.iter_messages(
                 event.chat_id,
-                from_user=event.chat_id
+                from_user=event.chat_id,
                 limit=300, reverse=True
             ):
                 password = password.text
