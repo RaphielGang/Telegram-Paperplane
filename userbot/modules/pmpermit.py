@@ -223,7 +223,8 @@ async def pm_password(event):
                     if BOTLOG:
                         name = await event.client.get_entity(event.chat_id)
                         name0 = str(name.first_name)
-                        await event.client.send_message("#PM_UNLOCKED\n"
+                        await event.client.send_message(BOTLOG_CHATID,
+                                                        "#PM_UNLOCKED\n"
                                                        f"[{name0}](tg://user?id={event.chat_id}) "
                                                         "entered PM password and has been approved."
                                                        )
