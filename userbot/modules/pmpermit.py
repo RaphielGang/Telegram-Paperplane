@@ -221,9 +221,7 @@ async def pm_password(event):
                                       "Very nice to meet you😊 "
                                       "I will ping my owner about you."
                                      )
-                    
-                    if await notif_state() is False:
-                        await event.respond("Just say \"Hi\".")
+                    await event.respond("Just say a \"Hi\".")
                     
                     try:
                         del COUNT_PM[event.chat_id]
