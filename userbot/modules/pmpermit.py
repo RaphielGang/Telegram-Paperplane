@@ -199,11 +199,9 @@ async def permitpm(event):
                     
 
 
-# Some fun func
+# Some fun func:
 async def pm_password(event):
     """Will approve someone who enters the correct PM password"""
-    if not is_mongo_alive() or not is_redis_alive():
-        return
     if event.is_private and PM_PASSWORD:
         if await approval(event.chat_id) is False:
             async for password in event.client.iter_messages(
@@ -211,10 +209,26 @@ async def pm_password(event):
                 from_user=event.chat_id
             ):
                 password = password.text
-                if password == "123456":
+                if password == PM_PASSWORD:
                     await approve(event.chat_id)
-                    await event.reply("I will change this message later.")
+                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_ON)
+                    await iterate_delete(event, event.chat_id, UNAPPROVED_MSG_OFF)
+                    await event.reply("Welcome, I am a bot!!\n" 
+                                      "Very nice to meet you😊 "
+                                      "I will ping my owner about you."
+                                     )
+                    if notif_state() is False:
+                        await event.respond("Just say a \"Hi\".")
+                    
+                    if BOTLOG:
+                        name = await event.client.get_entity(event.chat_id)
+                        name0 = str(name.first_name)
+                        await event.client.send_message("#PM_UNLOCKED\n"
+                                                       f"[{name0}](tg://user?id={event.chat_id}) "
+                                                        "entered PM password and has been approved."
+                                                       )
                     return
+                    
 #
  
     
@@ -257,7 +271,7 @@ async def auto_accept(event):
                 if BOTLOG:
                     await event.client.send_message(
                     BOTLOG_CHATID,
-                    "#AUTO-APPROVED\n"
+                    "#AUTO_APPROVED\n"
                     + "User: "
                     + f"[{chat.first_name}](tg://user?id={chat.id})",
               )
