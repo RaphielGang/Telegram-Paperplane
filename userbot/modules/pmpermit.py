@@ -72,7 +72,7 @@ async def delete_in(text, seconds):
 
 async def iterate_delete(event, event_id, user, text):
     async for message in event.client.iter_messages(
-        event_id, from_user=user, limit=300, reverse=True
+        event_id, from_user=user, limit=300
     ):
         clean_msg = message.text
         if clean_msg == text:
@@ -207,7 +207,7 @@ async def pm_password(event):
             async for password in event.client.iter_messages(
                 event.chat_id,
                 from_user=event.chat_id,
-                limit=300, reverse=True
+                limit=300
             ):
                 password = password.text
                 
