@@ -570,6 +570,15 @@ async def get_a_pic(name):
     pic = MONGO.pictures.find_one({'Name': name})['apic']
     return pic
 
+async def this_pic(name):
+    pic = await get_a_pic(name)
+    if pic:
+        pic = random.choice(pic)
+        pic = str(pic).replace(" ", "")
+        return pic
+    else:
+        return False
+
 async def del_a_pic(name):
     if MONGO.pictures.find_one({'Name': name}) is None:
         return False
