@@ -230,7 +230,7 @@ async def pm_password(event):
                             message = await event.reply(
                                 "Great! Now you can be comfortable, I won't intuerrupt😉"
                             )
-                            if event.client.is_read(message):
+                            if message.is_read:
                                 await conv.delete()
                                 await wlcm_msg.delete()
                     
