@@ -230,7 +230,7 @@ async def pm_password(event):
                             message = await event.reply(
                                 "Great! Now you can be comfortable, I won't intuerrupt😉"
                             )
-                            await conv.cancel()
+                            conv.cancel()
                             if await event.is_read(message):
                                 await event.respond("Hey.")
                         await asyncio.sleep(2)
