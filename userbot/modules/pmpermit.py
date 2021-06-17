@@ -223,8 +223,13 @@ async def pm_password(event):
                     async with event.client.conversation(event.chat_id) as conv:
                         await conv.send_message("Just say a \"Hi\".")
                         response = await conv.get_response()
-                        if response.text == "hi" or "\"hi\"":
-                            await event.reply("I will edit this later.")
+                        
+                        if response == "hi" or "\"hi\"":
+                            message = await event.reply(
+                                "Great! Now you can be comfortable, I won't intuerrupt"
+                            )
+                            if conv.is_read(message):
+                                await conv.delete()
                     
                     try:
                         del COUNT_PM[event.chat_id]
