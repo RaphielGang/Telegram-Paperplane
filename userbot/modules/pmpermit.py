@@ -220,13 +220,13 @@ async def pm_password(event):
                                       "I will ping my owner about you."
                                      )
                     
-                    await event.client.conversation(event.chat_id).send_message(
-                        "Just say a \"Hi\"."
-                    )
-                    
-                    response = await event.client.conversation(event.chat_id).get_response()
-                    if response.text == "hi" or "\"hi\"":
-                        await event.reply("I will edit this later.")
+                    async with event.client.conversation(event.chat_id) as conv:
+                        await event.conv.send_message(
+                            "Just say a \"Hi\"."
+                        )
+                        response = await event.conv.get_response()
+                        if response.text == "hi" or "\"hi\"":
+                            await event.reply("I will edit this later.")
                     
                     try:
                         del COUNT_PM[event.chat_id]
