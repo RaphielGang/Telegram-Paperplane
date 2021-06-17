@@ -215,21 +215,24 @@ async def pm_password(event):
                     await iterate_delete(event, event.chat_id, "me", UNAPPROVED_MSG_OFF)
                     await iterate_delete(event, event.chat_id, event.chat_id, PM_PASSWORD)
                     
-                    await event.reply("Welcome, I am a bot!!\n" 
+                    wlcm_msg = (
+                        await event.reply("Welcome, I am a bot!!\n" 
                                       "Very nice to meet you😊 "
-                                      "I will ping my owner about you."
+                                      "I will ping my owner about you now."
                                      )
+                    )
                     
                     async with event.client.conversation(event.chat_id) as conv:
                         await conv.send_message("Just say a \"Hi\".")
                         response = await conv.get_response()
                         
-                        if response == "hi" or "\"hi\"":
+                        if response == "Hi" or "\"Hi\"":
                             message = await event.reply(
-                                "Great! Now you can be comfortable, I won't intuerrupt"
+                                "Great! Now you can be comfortable, I won't intuerrupt😉"
                             )
-                            if conv.is_read(message):
+                            if event.is_read(message):
                                 await conv.delete()
+                                await wlcm_msg.delete()
                     
                     try:
                         del COUNT_PM[event.chat_id]
