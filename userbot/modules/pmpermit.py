@@ -221,7 +221,7 @@ async def pm_password(event):
                                      )
                     await event.respond("Just say a \"Hi\".")
                     
-                    response = await event.client.get_response()
+                    response = await event.get_response()
                     if response.text == "hi" or "\"hi\"":
                         await event.reply("I will edit this later.")
                     
