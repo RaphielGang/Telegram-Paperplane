@@ -231,7 +231,7 @@ async def pm_password(event):
                                 "Great! Now you can be comfortable, I won't intuerrupt😉"
                             )
                         await asyncio.sleep(2)
-                        await conv.delete()
+                        await conv.delete_messages()
                         await wlcm_msg.delete()
                     
                     try:
