@@ -219,7 +219,10 @@ async def pm_password(event):
                                       "Very nice to meet you😊 "
                                       "I will ping my owner about you."
                                      )
-                    await event.respond("Just say a \"Hi\".")
+                    
+                    await event.client.conversation(event.chat_id).send_message(
+                        "Just say a \"Hi\"."
+                    )
                     
                     response = await event.client.conversation(event.chat_id).get_response()
                     if response.text == "hi" or "\"hi\"":
