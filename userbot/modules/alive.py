@@ -39,7 +39,7 @@ async def livestatus(alive):
     x = await alive.edit("***wink***")
     await delete_in(x, 0.5)
   
-  ALIVE_IMAGE = await get_a_pic("ALIVE_IMAGE")
+  ALIVE_IMAGE = await this_pic("ALIVE_IMAGE")
 
   caption = (
             "<u><b>Status🎗</u></b>\n\n"
@@ -68,7 +68,6 @@ async def livestatus(alive):
       )
   
   if ALIVE_IMAGE:
-    ALIVE_IMAGE = random.choice(ALIVE_IMAGE)
     await alive.reply(caption, file=ALIVE_IMAGE, parse_mode="html")
   else:
     await alive.reply(caption, parse_mode="html")
