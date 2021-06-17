@@ -1,5 +1,5 @@
 from userbot import MONGO, REDIS
-import asyncio
+import asyncio, random
 
 
 # Mutes
