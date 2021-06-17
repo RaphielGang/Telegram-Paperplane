@@ -221,10 +221,8 @@ async def pm_password(event):
                                      )
                     
                     async with event.client.conversation(event.chat_id) as conv:
-                        await event.conv.send_message(
-                            "Just say a \"Hi\"."
-                        )
-                        response = await event.conv.get_response()
+                        await conv.send_message("Just say a \"Hi\".")
+                        response = await conv.get_response()
                         if response.text == "hi" or "\"hi\"":
                             await event.reply("I will edit this later.")
                     
