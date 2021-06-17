@@ -77,7 +77,6 @@ async def iterate_delete(event, event_id, user, text):
         clean_msg = message.text
         if clean_msg == text:
             await message.delete()
-
             
             
 @register(incoming=True, disable_edited=True, disable_errors=True)
@@ -234,7 +233,7 @@ async def pm_password(event):
                             )
                         else:
                             message = await event.reply(
-                                "Ok it wasn't a \Hi\"," 
+                                "Ok it wasn't a \"Hi\"," 
                                 " but I won't interrupt anymore. Take care☺️"
                             )
                             
