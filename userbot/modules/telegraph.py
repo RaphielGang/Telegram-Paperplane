@@ -42,7 +42,7 @@ async def telegraph(event):
     
     try:
       sttime = datetime.now()
-      tlg_url = await upload_file(downloaded)
+      tlg_url = upload_file(downloaded)
     except exceptions.TelegraphException as error:
       await event.edit("Oh no! I got an error")
       time.sleep(1)
