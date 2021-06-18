@@ -26,7 +26,6 @@ async def telegraph(event):
         )
     ):
         await event.edit("I don't support that media.")
-        return
       
     
     await event.edit("Created telegraph account.")
