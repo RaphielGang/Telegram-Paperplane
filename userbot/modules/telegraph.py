@@ -38,10 +38,11 @@ async def telegraph(event):
             BOTLOG_CHATID,
             "#TELEGRAPH\n"
             "Created an account in telegraph: \n"
-            "[Account Link] 📗"
+            "[Account Link]"
             "("
             + auth_url
             + ")"
+            "📗"
         ) 
     
     
