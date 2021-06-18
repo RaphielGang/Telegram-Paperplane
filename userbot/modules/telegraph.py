@@ -1,5 +1,5 @@
 import time
-import datetime import datetime
+from datetime import datetime
 
 from telegraph import Telegraph, upload_file, exceptions
 
