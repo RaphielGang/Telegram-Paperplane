@@ -25,13 +25,13 @@ async def telegraph(media):
     account = telegraph.create_account(short_name="Paperplane")
     auth_url = account["auth_url"]
     
-    if Media.file.ext != (
-        (
-            ".jpg" or ".jpeg" or ".png" 
-        )
-    ):
-        await media.edit("I don't support this media.")
-        return 
+    #if Media.file.ext != (
+       # (
+        #    ".jpg" or ".jpeg" or ".png" 
+       # )
+   # ):
+       #await media.edit("I don't support this media.")
+        #return 
     
     await media.edit("Created telegraph account.")
     if BOTLOG:
