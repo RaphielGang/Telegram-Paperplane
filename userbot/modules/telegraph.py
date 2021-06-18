@@ -17,6 +17,7 @@ async def telegraph(media):
 
     Media = await media.get_reply_message()
     Downloaded = await media.client.download_media(Media)
+    Media_Extention = Media.file.ext
     
     await media.edit("Downloaded media.")
     time.sleep(0.5)
@@ -25,7 +26,7 @@ async def telegraph(media):
     account = telegraph.create_account(short_name="Paperplane")
     auth_url = account["auth_url"]
     
-    if Media.file.ext != (
+    if Media_Extention != (
         (
             ".jpg" or ".jpeg" or ".png" or ".mp4" or ".gif"
         )
@@ -61,7 +62,7 @@ async def telegraph(media):
     
     await media.edit("• Your telegraph link is here: "
                      "[link]"
-                     f"(https://telegra.ph{tlg_url[0]})"
+                    f"(https://telegra.ph{tlg_url[0]})"
                      "\n• Uploaded in "
                      f"{time_taken} secs."
                )
