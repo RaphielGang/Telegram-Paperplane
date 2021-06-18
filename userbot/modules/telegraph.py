@@ -4,6 +4,7 @@ import datetime
 from telegraph import Telegraph, upload_file, exceptions
 
 from userbot import BOTLOG, BOTLOG_CHATID
+from userbot.events import register, grp_exclude
 
 @register(pattern=r"telegraph media|tgm", outgoing=True)
 @grp_exclude()
