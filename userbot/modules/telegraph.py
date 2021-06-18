@@ -48,7 +48,7 @@ async def telegraph(event):
     except exceptions.TelegraphException as error:
       await event.edit("Oh no! I got an error")
       time.sleep(1)
-      await event.edit(error)
+      await event.edit(str(error))
       return
     
     entime = datetime.now()
