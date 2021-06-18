@@ -1,7 +1,7 @@
 import time
 from datetime import datetime
 
-from telegraph import Telegraph, upload_file, exception
+from telegraph import Telegraph, upload_file, exceptions
 
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
