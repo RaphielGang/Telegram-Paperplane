@@ -26,9 +26,9 @@ async def telegraph(media):
     auth_url = account["auth_url"]
     
     if Media.file.ext not in (
-        [
-            ".jpg", ".jpeg", ".png", ".gif", ".mp4"
-        ]
+        (
+           [".jpg", ".jpeg", ".png", ".gif", ".mp4"]
+        )
     ):
        await media.edit("I don't support this media.")
        return 
@@ -50,9 +50,9 @@ async def telegraph(media):
     try:
       tlg_url = upload_file(Downloaded)
     except exceptions.TelegraphException as error:
-      await media.edit("Oh no! I got an error")
+      await media.edit("Oh no! I got an error.")
       time.sleep(1)
-      await media.edit(str(error))
+      await media.edit(f"**{str(error)}**")
       return
     
     entime = datetime.now()
