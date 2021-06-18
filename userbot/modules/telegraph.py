@@ -35,7 +35,7 @@ async def telegraph(event):
             "[Link]"
             "("
             + auth_url
-            ")"
+            + ")"
         ) 
     
     
