@@ -227,7 +227,7 @@ async def pm_password(event):
                         )
                         response = await conv.get_response()
                         
-                        if response == "Hi" or "\"Hi\"":
+                        if response == ("Hi" or "\"Hi\""):
                             message = await event.reply(
                                 "Great! Now you can be comfortable, I won't intuerrupt😉"
                             )
