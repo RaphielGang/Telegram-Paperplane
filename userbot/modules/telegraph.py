@@ -6,7 +6,7 @@ from telegraph import Telegraph, upload_file, exceptions
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
 
-@register(pattern=r"(?:telegraph media)|(?:tgm)$", outgoing=True)
+@register(pattern="(?:telegraph media)|(?:tgm)$", outgoing=True)
 @grp_exclude()
 async def telegraph(media):
     """Gives telegraph link of a given media.
@@ -27,7 +27,7 @@ async def telegraph(media):
     
     if Media.file.ext != (
         (
-            ".jpg" or ".jpeg" or ".png" or ".gif" or ".mp4"
+            ".gif" or ".mp4" or ".jpg" or ".jpeg" or ".png" 
         )
     ):
         await media.edit("I don't support this media.")
