@@ -13,9 +13,12 @@ async def telegraph(event):
     """Gives telegraph link of a given media.
        No text."""
     
+    await event.edit("Starting...")
+    
     media = await event.get_reply_message()
     downloaded = await event.client.download_media(media)
-    await event.edit("Starting...")
+    
+    await event.edit("Downloaded media.")
     
     telegraph = Telegraph()
     account = telegraph.create_account(short_name="Paperplane")
