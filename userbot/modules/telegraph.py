@@ -21,7 +21,7 @@ async def telegraph(event):
     auth_url = account["author_url"]
     
     if not downloaded.endswith(
-        ".jpg", ".jpeg", ".png", ".gif" ".mp4"
+        ".jpg" or ".jpeg" or ".png" or ".gif" or ".mp4"
     ):
         await event.edit("I don't support that media.")
         return
