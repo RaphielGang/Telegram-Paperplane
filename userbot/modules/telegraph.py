@@ -21,7 +21,7 @@ async def telegraph(event):
     account = telegraph.create_account(short_name="Paperplane")
     auth_url = account["auth_url"]
     
-    if not downloaded.endswith(
+    if downloaded.file.ext != (
         (
             ".jpg" or ".jpeg" or ".png" or ".gif" or ".mp4"
         )
@@ -61,7 +61,6 @@ async def telegraph(event):
                      f"• Uploaded in "
                      f"{time_taken}"
                )
-    link = await telegraph.get_page(tlg_url[0])
-    await event.reply(link)
+    await event.reply(tlg_url[0])
     
     
