@@ -33,8 +33,9 @@ async def telegraph(event):
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
-            "Created an account in telegraph. "
-            "[Link]"
+            "#TELEGRAPH"
+            "Created an account in telegraph: "
+            "[Account Link]"
             "("
             + auth_url
             + ")"
@@ -56,7 +57,7 @@ async def telegraph(event):
     
     await event.edit("• Your telegraph link is here: "
                      "[link]"
-                     f"https://telegra.ph{tlg_url[0]}"
+                     f"(https://telegra.ph{tlg_url[0]})"
                      "• Uploaded in "
                      f"{time_taken} secs."
                )
