@@ -25,7 +25,7 @@ async def telegraph(media):
     account = telegraph.create_account(short_name="Paperplane")
     auth_url = account["auth_url"]
     
-    if str(Downloaded).endswith != (
+    if Media.file.name.endswith != (
         (
             ".jpg" or ".jpeg" or ".png" or ".mp4" or ".gif"
         )
