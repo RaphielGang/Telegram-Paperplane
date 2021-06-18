@@ -2,7 +2,6 @@ import time
 import datetime
 
 from telegraph import Telegraph, upload_file, exceptions
-from .exceptions import TelegraphException
 
 from userbot import BOTLOG, BOTLOG_CHATID
 
@@ -42,7 +41,7 @@ async def telegraph(event):
     try:
       sttime = datetime.now()
       tlg_url = await upload_file(downloaded)
-    except TelegraphException as error:
+    except exceptions.TelegraphException as error:
       await event.edit("Oh no! I got an error")
       time.sleep(1)
       await event.edit(error)
