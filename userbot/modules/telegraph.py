@@ -20,7 +20,7 @@ async def telegraph(event):
     account = telegraph.create_account(short_name="Paperplane")
     auth_url = account["author_url"]
     
-    if not downloaded.ends_with(
+    if not downloaded.endswith(
         ".jpg", ".jpeg", ".png", ".gif" ".mp4"
     ):
         await event.edit("I don't support that media.")
