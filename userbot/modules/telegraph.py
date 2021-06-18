@@ -54,10 +54,10 @@ async def telegraph(event):
     time_taken = time_passed.seconds
     
     await event.reply("• Your telegraph link is here: "
-                     f"[link](tlg_url)"
+                     f"[link]({tlg_url})"
                      "\n" 
                      f"• Uploaded in "
-                     + time_taken
+                     f"{time_taken}"
                )
     
     
