@@ -53,12 +53,13 @@ async def telegraph(event):
     time_passed = entime - sttime
     time_taken = time_passed.seconds
     
-    await event.reply("• Your telegraph link is here: "
+    await event.edit("• Your telegraph link is here: "
                      "[link]"
                      f"({tlg_url[0]})"
                      "\n" 
                      f"• Uploaded in "
                      f"{time_taken}"
                )
+    await event.reply(tlg_url)
     
     
