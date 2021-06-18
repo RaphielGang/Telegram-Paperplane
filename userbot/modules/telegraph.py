@@ -25,9 +25,9 @@ async def telegraph(media):
     account = telegraph.create_account(short_name="Paperplane")
     auth_url = account["auth_url"]
     
-    if Media.file.name.endswith != (
+    if Media.file.mime_type != (
         (
-            ".jpg" or ".jpeg" or ".png" or ".mp4" or ".gif"
+            "video/mp4" or "image/jpeg"
         )
     ):
        await media.edit("I don't support this media.")
