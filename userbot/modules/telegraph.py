@@ -36,9 +36,9 @@ async def telegraph(event):
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
-            "#TELEGRAPH"
-            "Created an account in telegraph: "
-            "[Account Link]"
+            "#TELEGRAPH\n"
+            "Created an account in telegraph: \n"
+            "[Account Link] 📗"
             "("
             + auth_url
             + ")"
