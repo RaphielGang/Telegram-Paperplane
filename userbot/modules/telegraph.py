@@ -56,11 +56,9 @@ async def telegraph(event):
     
     await event.edit("• Your telegraph link is here: "
                      "[link]"
-                     f"({tlg_url[0]})"
-                     "\n" 
-                     f"• Uploaded in "
-                     f"{time_taken}"
+                     f"https://telegra.ph{tlg_url[0]}"
+                     "• Uploaded in "
+                     f"{time_taken} secs."
                )
-    await event.reply(tlg_url[0])
     
     
