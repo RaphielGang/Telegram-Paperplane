@@ -60,6 +60,7 @@ async def telegraph(event):
                      f"• Uploaded in "
                      f"{time_taken}"
                )
-    await event.reply(tlg_url[0])
+    link = await telegraph.get_page(tlg_url[0])
+    await event.reply(link)
     
     
