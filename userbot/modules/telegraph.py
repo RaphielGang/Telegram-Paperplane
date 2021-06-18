@@ -26,12 +26,11 @@ async def telegraph(media):
     auth_url = account["auth_url"]
     
     if Media.file.ext != (
-        (
+        [
             ".jpg" or ".jpeg" or ".png" or ".gif" or ".mp4"
-        )
+        ]
     ):
         await media.edit("I don't support this media.")
-        await media.reply(Media.file.ext)
         return 
     
     await media.edit("Created telegraph account.")
