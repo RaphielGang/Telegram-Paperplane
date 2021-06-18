@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 
 from telegraph import Telegraph, upload_file
-from telegraph.execptions import TelegraphException
+from telegraph.upload.execptions import TelegraphException
 
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
