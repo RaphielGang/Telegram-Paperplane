@@ -1,40 +1,43 @@
 import time
 from datetime import datetime
 
-from telegraph import Telegraph, upload_file, exceptions
-from PIL import Image
+from telegraph import Telegraph, upload_file
+from telegraph.execptions import TelegraphException
 
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
 
-@register(pattern=r"telegraph media|tgm", outgoing=True)
+@register(pattern=r"(?:telegraph media$)|tgm$", outgoing=True)
 @grp_exclude()
-async def telegraph(event):
+async def telegraph(media):
     """Gives telegraph link of a given media.
        No text."""
     
-    await event.edit("Starting...")
+    await media.edit("Starting...")
+    sttime = datetime.now()    
+
+    Media = await media.get_reply_message()
+    Downloaded = await media.client.download_media(Media)
     
-    media = await event.get_reply_message()
-    downloaded = await event.client.download_media(media)
-    
-    await event.edit("Downloaded media.")
+    await media.edit("Downloaded media.")
+    time.sleep(0.5)
     
     telegraph = Telegraph()
     account = telegraph.create_account(short_name="Paperplane")
     auth_url = account["auth_url"]
     
-    if media.file.ext != (
+    if Media.file.ext != (
         (
             ".jpg" or ".jpeg" or ".png" or ".gif" or ".mp4"
         )
     ):
-        await event.edit("I don't support that media.")
-        return
+        await media.edit("I don't support this media.")
+        await media.reply(Media.file.ext)
+        return 
     
-    await event.edit("Created telegraph account.")
+    await media.edit("Created telegraph account.")
     if BOTLOG:
-        await event.client.send_message(
+        await media.client.send_message(
             BOTLOG_CHATID,
             "#TELEGRAPH\n"
             "Created an account in telegraph: \n"
@@ -47,23 +50,21 @@ async def telegraph(event):
     
     
     try:
-      sttime = datetime.now()
-      tlg_url = upload_file(downloaded)
-    except exceptions.TelegraphException as error:
-      await event.edit("Oh no! I got an error")
+      tlg_url = upload_file(Downloaded)
+    except TelegraphException as error:
+      await media.edit("Oh no! I got an error")
       time.sleep(1)
-      await event.edit(str(error))
+      await media.edit(str(error))
       return
     
     entime = datetime.now()
     time_passed = entime - sttime
     time_taken = time_passed.seconds
     
-    await event.edit("• Your telegraph link is here: "
+    await media.edit("• Your telegraph link is here: "
                      "[link]"
                      f"(https://telegra.ph{tlg_url[0]})"
                      "\n• Uploaded in "
                      f"{time_taken} secs."
                )
-    
     
