@@ -2,6 +2,7 @@ import time
 from datetime import datetime
 
 from telegraph import Telegraph, upload_file, exceptions
+from PIL import Image
 
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
