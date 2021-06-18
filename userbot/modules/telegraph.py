@@ -19,7 +19,7 @@ async def telegraph(event):
     
     telegraph = Telegraph()
     account = telegraph.create_account(short_name="Paperplane")
-    auth_url = account["author_url"]
+    auth_url = account["auth_url"]
     
     if not downloaded.endswith(
         (
