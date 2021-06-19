@@ -11,18 +11,18 @@ async def pokedex(dexter):
     pokedetails = str(pokemon)
     
   #================= POKEMON STATS ==================== #   
-    Name = pokedetails['name']                          #
-    Species = pokedetails['species']                    #
-    Type = pokedetails['types']                         #
-    Ability = pokedetails['abilities']                  #                   
-    EggGroup = pokedetails['eggGroups']['normal']       #
-    Stage = pokedetails['family']['evolutionStage']     #
-    Evolution = pokedetails['family']['evolutionLine']  #
-    Gender = pokedetails['gender']                      #
-    Height = pokedetails['height']                      #
-    Weight = pokedetails['weight']                      #
-    Sprite = pokedetails['sprite']                      #
-    Description = pokedetails['description']            #
+    Name = pokedetails[2]                               #
+    Species = pokedetails[3]                            #
+    Type = pokedetails[4]                               #
+    Ability = pokedetails[5][1]                         #                   
+    EggGroup = pokedetails[6]                           #
+    Stage = pokedetails[10][1]                          #
+    Evolution = pokedetails[10][2]                      #
+    Gender = pokedetails[7]                             #
+    Height = pokedetails[8]                             #
+    Weight = pokedetails[9]                             #
+    Sprite = pokedetails[18]                            #
+    Description = pokedetails[19]                       #
   #==================================================== #
   
     message = (
