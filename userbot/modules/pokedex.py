@@ -14,10 +14,10 @@ async def pokedex(dexter):
     Name = pokedetails[2]                               #
     Species = pokedetails[3]                            #
     Type = pokedetails[4]                               #
-    Ability = pokedetails[5][1]                         #                   
+    Ability = pokedetails[5]                            #                   
     EggGroup = pokedetails[6]                           #
-    Stage = pokedetails[10][1]                          #
-    Evolution = pokedetails[10][2]                      #
+    Stage = pokedetails[10]                             #
+    #Evolution = pokedetails[10]                         #
     Gender = pokedetails[7]                             #
     Height = pokedetails[8]                             #
     Weight = pokedetails[9]                             #
