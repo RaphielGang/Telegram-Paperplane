@@ -5,7 +5,7 @@ from userbot.events import register, grp_exclude
 @register(outgoing=True, pattern="pokedex")
 @grp_exclude()
 async def pokedex(dexter):
-    pokedex = dexter.Pokedex(version = 'v1')
+    pokedex = dex.Pokedex(version = 'v1')
     pokemon_name = str(pallet.text[9: ])
     pokemon = dexter.get_pokemon_by_name(pokemon_name)
-    await pallet.edit(str(pokemon))
+    await dexter.edit(str(pokemon))
