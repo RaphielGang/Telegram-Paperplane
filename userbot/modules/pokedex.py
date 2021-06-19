@@ -8,7 +8,7 @@ async def pokedex(dexter):
     pokemon_name = str(dexter.text[9: ])
     pokemon = dex.get(name=pokemon_name)
     pokemon_details = str(pokemon.pokemon)
-  """  
+    """  
   #================= POKEMON STATS ================= #   
     Name = pokedetails[2]                            #
     Species = pokedetails[3]                         #
