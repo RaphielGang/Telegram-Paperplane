@@ -50,7 +50,7 @@ async def livestatus(alive):
             f"    <b>|•| Python version:</b> <i>{python_version()}</i>\n"
              "         <b>——————————————————————</b>\n\n"
              "<b>===========================================</b>\n"
-             "<b>Mapleplane is ready to take off🍁</b>"
+             "<b>Mapleplane is ready to take a flight🍁</b>"
              "<b>===========================================</b>\n"
   )
   if not db:
