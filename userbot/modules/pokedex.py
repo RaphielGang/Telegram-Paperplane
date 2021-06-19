@@ -1,4 +1,4 @@
-from pokedex import pokedex
+from pokedex import pokedex as pokedex
 
 from userbot.events import register, grp_exclude
 
