@@ -1,6 +1,6 @@
 import pypokedex
 
-from userbot import register, grp_exclude
+from userbot.events import register, grp_exclude
 
 @register(outgoing=True, pattern="pokedex")
 @grp_exclude()
