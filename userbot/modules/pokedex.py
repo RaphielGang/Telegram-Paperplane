@@ -1,4 +1,4 @@
-import pypokedex
+frpm pypokedex import pypokedex
 
 from userbot import register, grp_exclude
 
