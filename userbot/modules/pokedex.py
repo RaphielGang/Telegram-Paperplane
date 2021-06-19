@@ -1,15 +1,14 @@
-from pokedex import pokedex as dex
+import pypokedex as dex
 
 from userbot.events import register, grp_exclude
 
 @register(outgoing=True, pattern="pokedex")
 @grp_exclude()
 async def pokedex(dexter):
-    pokedex = dex.Pokedex(version = 'v1')
     pokemon_name = str(dexter.text[9: ])
-    pokemon = pokedex.get_pokemon_by_name(pokemon_name)
-    pokedetails = str(pokemon)
-    
+    pokemon = dex.get(name=pokemon_name)
+    pokemon_details = str(pokemon.pokemon)
+  """  
   #================= POKEMON STATS ================= #   
     Name = pokedetails[2]                            #
     Species = pokedetails[3]                         #
@@ -17,7 +16,7 @@ async def pokedex(dexter):
     Ability = pokedetails[5]                         #                   
     EggGroup = pokedetails[6]                        #
     Stage = pokedetails[10]                          #
-    #Evolution = pokedetails[10]                      #
+    Evolution = pokedetails[10]                      #
     Gender = pokedetails[7]                          #
     Height = pokedetails[8]                          #
     Weight = pokedetails[9]                          #
@@ -37,5 +36,5 @@ async def pokedex(dexter):
         f"**EggGroup: **{EggGroup}"
         f"**Description: **__{Description}__"
     )
-    
-    await dexter.reply(message)
+    """
+    await dexter.edit(pokemon_details)
