@@ -1,5 +1,5 @@
 import asyncio
-from userbot.modules.dbhelper import get_a_pic
+from userbot.modules.dbhelper import this_pic
 from platform import python_version
 
 import random
