@@ -3,7 +3,7 @@ from datetime import datetime
 
 from telegraph import Telegraph, upload_file, exceptions
 
-from userbot import BOTLOG, BOTLOG_CHATID
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register, grp_exclude
 
 @register(pattern="tgm$|telegraph media$", outgoing=True)
