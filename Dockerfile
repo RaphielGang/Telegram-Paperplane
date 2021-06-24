@@ -1,4 +1,4 @@
-FROM ashdroid4/telegram-paperplane/docker:latest
+FROM ashdroid4/mapleplanedocker:latest
 
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
