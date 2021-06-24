@@ -97,7 +97,7 @@ async def telegraph(text):
     await text.edit("Starting...")
     sttime = datetime.now()
     
-    Reply_Msg = await text.get_reply_msg()
+    Reply_Msg = await text.get_reply_message()
     Text = Reply_Msg.text
     
     if Text == "":
