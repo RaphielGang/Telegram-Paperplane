@@ -1,4 +1,4 @@
-FROM ashdroid4/Telegram-Paperplane:latest
+FROM ashdroid4/telegram-paperplane:latest
 
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
