@@ -104,8 +104,7 @@ async def telegraph(text):
         message = await text.edit("Make sure there's some text.")
         time.sleep(3)
         return await message.delete()
-    else: 
-        Text += Text.decode("UTF-8")
+    else:
         Text = Text.replace("\n", "<br>")
     
     
