@@ -6,7 +6,7 @@ from telegraph import Telegraph, upload_file, exceptions
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
 
-@register(pattern="tgm", outgoing=True)
+@register(pattern="tgm$|telegraph media$", outgoing=True)
 @grp_exclude()
 async def telegraph(media):
     """Gives telegraph link of a given media.
@@ -83,7 +83,7 @@ async def telegraph(media):
                )
     
 
-@register(pattern="tgt$", outgoing=True)
+@register(pattern="tgt$|telegraph text$", outgoing=True)
 @grp_exclude()
 async def telegraph(text):
     """Gives the telegraph link of text.
@@ -142,3 +142,14 @@ async def telegraph(text):
                      f"{time_taken} secs."
                )    
     
+    
+CMD_HELP.update(
+    {
+        "telegraph": [
+            "Telegraph",
+            "- `.telegraph media||.tgm`: Gives telegraph link for the replied media.\n"
+            "    **Note:** Only [.jpg, .jpeg, .png, .gif, .mp4] file types are supported.\n"
+            "-`.telegraph text||.tgt`: Writes replied text in telegraph page and returns link." 
+        ]
+    }
+)
