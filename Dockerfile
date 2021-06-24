@@ -9,7 +9,6 @@ RUN git clone https://github.com/ashdroid4/Telegram-Paperplane.git -b master /ap
 # Copies session and config(if it exists)
 #
 COPY ./sample_config.env ./userbot.session* ./config.env* ./client_secrets.json* ./secret.json* /app/
-RUN pip3 install -U -r requirements.txt
 
 #
 # Finalization
