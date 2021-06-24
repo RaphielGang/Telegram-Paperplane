@@ -22,6 +22,7 @@ async def telegraph(media):
     sttime = datetime.now()    
 
     Media = await media.get_reply_message()
+    Downloaded = await media.client.download_media(Media)
     
     
     if not Media.media:
@@ -45,9 +46,10 @@ async def telegraph(media):
        await media.edit("I don't support this media.")
        return 
     
-    await media.edit("Created telegraph account.")
+    await media.edit("Downloaded media.")
     time.sleep(0.5)
     
+    await media.edit("Created telegraph account.")
     if BOTLOG:
         await media.client.send_message(
             BOTLOG_CHATID,
