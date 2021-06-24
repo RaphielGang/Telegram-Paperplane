@@ -100,7 +100,7 @@ async def telegraph(text):
     Reply_Msg = await text.get_reply_msg()
     Text = Reply_Msg.text
     
-    if Text = "":
+    if Text == "":
         message = await text.edit("Make sure there's some text.")
         time.sleep(3)
         return await message.delete()
