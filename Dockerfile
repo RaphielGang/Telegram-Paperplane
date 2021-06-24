@@ -1,4 +1,4 @@
-FROM ashdroid4/mapleplanedocker:latest
+FROM ashdroid4/mapleplane_docker:latest
 
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
