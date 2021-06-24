@@ -69,7 +69,7 @@ async def telegraph(media):
       await media.edit("Oh no! I got an error.")
       time.sleep(1)
       await media.edit(
-          "*REPORT**\n"
+          "**REPORT**\n"
           f"`{str(error)}`"
       )
       return
