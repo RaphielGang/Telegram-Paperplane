@@ -64,11 +64,14 @@ async def telegraph(media):
     
     
     try:
-      tlg_url = upload_file(Media)
+      tlg_url = upload_file(Downloaded)
     except exceptions.TelegraphException as error:
       await media.edit("Oh no! I got an error.")
       time.sleep(1)
-      await media.edit(f"**{str(error)}**")
+      await media.edit(
+          "*REPORT**\n"
+          f"`{str(error)}`"
+      )
       return
     
     entime = datetime.now()
