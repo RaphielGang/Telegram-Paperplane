@@ -6,7 +6,7 @@ from telegraph import Telegraph, upload_file, exceptions
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
 
-@register(pattern="t(?:elegraph|gm$) media$", outgoing=True)
+@register(pattern="tgm", outgoing=True)
 @grp_exclude()
 async def telegraph(media):
     """Gives telegraph link of a given media.
@@ -83,7 +83,7 @@ async def telegraph(media):
                )
     
 
-@register(pattern="t(?:elegraph|gt$) text$", outgoing=True)
+@register(pattern="tgt$", outgoing=True)
 @grp_exclude()
 async def telegraph(text):
     """Gives the telegraph link of text.
