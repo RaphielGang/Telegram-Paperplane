@@ -118,7 +118,7 @@ async def telegraph(text):
     
     
     if BOTLOG:
-        await media.client.send_message(
+        await text.client.send_message(
             BOTLOG_CHATID,
             "#TELEGRAPH\n"
             "Created an account in telegraph: \n"
