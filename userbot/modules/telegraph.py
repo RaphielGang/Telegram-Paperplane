@@ -6,17 +6,33 @@ from telegraph import Telegraph, upload_file, exceptions
 from userbot import BOTLOG, BOTLOG_CHATID
 from userbot.events import register, grp_exclude
 
-@register(pattern="t(?:elegraph|gm)$", outgoing=True)
+@register(pattern="t(?:elegraph|gm$) media$", outgoing=True)
 @grp_exclude()
 async def telegraph(media):
     """Gives telegraph link of a given media.
        No text."""
+    
+    if not media.reply_to_msg_id:
+        message = await media.edit("Reply to a media to get its telegraph link.")
+        time.sleep(3)
+        return await message.delete()
+    
     
     await media.edit("Starting...")
     sttime = datetime.now()    
 
     Media = await media.get_reply_message()
     Downloaded = await media.client.download_media(Media)
+    
+    
+    if not Media.media:
+        message = await media.edit(
+            "That doesn't look like "
+            "a **media** to me."
+        )
+        time.sleep(5)
+        return await message.delete()
+    
     
     await media.edit("Downloaded media.")
     time.sleep(0.5)
@@ -65,4 +81,65 @@ async def telegraph(media):
                      "\n• Uploaded in "
                      f"{time_taken} secs."
                )
+    
+
+@register(pattern="t(?:elegraph|gt$) text$", outgoing=True)
+@grp_exclude()
+async def telegraph(text):
+    """Gives the telegraph link of text.
+    No media."""
+    
+    if not text.reply_to_msg_id:
+        message = await text.edit("Reply to a message to get its telegraph link.")
+        time.sleep(3)
+        return await message.delete()
+    
+    await text.edit("Starting...")
+    sttime = datetime.now()
+    
+    Reply_Msg = await text.get_reply_msg()
+    Text = Reply_Msg.text
+    
+    if Text = "":
+        message = await text.edit("Make sure there's some text.")
+        time.sleep(3)
+        return await message.delete()
+    else: 
+        Text += Text.decode("UTF-8")
+        Text = Text.replace("\n", "<br>")
+    
+    
+    telegraph = Telegraph()
+    account = telegraph.create_account(short_name="Paperplane")
+    auth_url = account["auth_url"]
+    
+    
+    await text.edit("Created Telegraph account.")
+    time.sleep(0.5)
+    
+    
+    if BOTLOG:
+        await media.client.send_message(
+            BOTLOG_CHATID,
+            "#TELEGRAPH\n"
+            "Created an account in telegraph: \n"
+            "[Account Link]"
+            "("
+            + auth_url
+            + ")"
+            "📗"
+        ) 
+    
+    Page = telegraph.create_page("Paperplane", html_content=Text)
+    
+    entime = datetime.now()
+    time_passed = entime - sttime
+    time_taken = time_passed.seconds
+    
+    await media.edit("• Your telegraph link is here: "
+                     "[link]"
+                    f"(https://telegra.ph/{Page['path']})"
+                     "\n• Uploaded in "
+                     f"{time_taken} secs."
+               )    
     
