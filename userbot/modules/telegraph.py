@@ -22,7 +22,6 @@ async def telegraph(media):
     sttime = datetime.now()    
 
     Media = await media.get_reply_message()
-    Downloaded = await media.client.download_media(Media)
     
     
     if not Media.media:
@@ -33,9 +32,6 @@ async def telegraph(media):
         time.sleep(5)
         return await message.delete()
     
-    
-    await media.edit("Downloaded media.")
-    time.sleep(0.5)
     
     telegraph = Telegraph()
     account = telegraph.create_account(short_name="Paperplane")
@@ -50,6 +46,8 @@ async def telegraph(media):
        return 
     
     await media.edit("Created telegraph account.")
+    time.sleep(0.5)
+    
     if BOTLOG:
         await media.client.send_message(
             BOTLOG_CHATID,
@@ -64,7 +62,7 @@ async def telegraph(media):
     
     
     try:
-      tlg_url = upload_file(Downloaded)
+      tlg_url = upload_file(Media)
     except exceptions.TelegraphException as error:
       await media.edit("Oh no! I got an error.")
       time.sleep(1)
@@ -135,7 +133,7 @@ async def telegraph(text):
     time_passed = entime - sttime
     time_taken = time_passed.seconds
     
-    await media.edit("• Your telegraph link is here: "
+    await text.edit("• Your telegraph link is here: "
                      "[link]"
                     f"(https://telegra.ph/{Page['path']})"
                      "\n• Uploaded in "
