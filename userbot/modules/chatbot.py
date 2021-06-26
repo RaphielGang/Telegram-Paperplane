@@ -21,7 +21,7 @@ async def usersetter(ai):
 async def aiworker(ai):
     """Will give ai responses to users"""
     message = ai.message.text
-    message_sender = message.sender_id
+    message_sender = message.sender.id
 
     search = MONGO.ai.find_one({"user": message_sender, "chat": ai.chat_id})
 
