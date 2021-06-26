@@ -55,9 +55,9 @@ async def aiworker(ai):
     if search:
         client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY)
         response = client.get_ai_response(
-            message = message
-            master = "Lee"
-            bot = "Maple"
+            message = message,
+            master = "Lee",
+            bot = "Maple",
             )
 
         await ai.reply(f"{response}")
