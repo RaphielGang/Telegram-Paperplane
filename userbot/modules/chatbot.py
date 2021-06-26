@@ -73,7 +73,7 @@ async def picturesender(pic):
         await pic.edit(
             "Choose the correct image type from the following:\n"
             "`any`, `art`, `aww, `cat`, `dankmemes`, `dog`, `duck`, `facepalm`, `harrypottermemes`, `holup`, `memes`"
-            return
+        return
     else:
         client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
         pics = await client.get_image(type=argv)
@@ -90,7 +90,7 @@ async def picturesender(pic):
         await pic.edit(
             "Choose the correct type from the following:\n"
             "`bully`, `cuddle`, `megumin`, `neko`, `shinobu`, `waifu`"
-            return
+        return
     else:
         client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
         pics = await client.get_waifu(type=argv)
