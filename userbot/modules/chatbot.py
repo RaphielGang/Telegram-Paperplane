@@ -29,5 +29,5 @@ async def aiworker(ai):
         client = randomstuff.Client(api_key=RANDOMSTUFF_API_KEY)
         response = client.get_ai_response(message)
 
-        await ai.reply(response)
+        await ai.reply(f"{response}")
 
