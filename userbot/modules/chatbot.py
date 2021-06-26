@@ -32,7 +32,7 @@ async def usersetter(ai):
     
     search = MONGO.chatbot.find_one({"user": user_id, "chat": ai.chat_id})
 
-    if search:
+    if not search:
         x = await ai.edit("Nope, I don't know this user.")
         time.sleep(5)
         return await x.delete()
@@ -54,11 +54,7 @@ async def aiworker(ai):
 
     if search:
         client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY)
-        response = client.get_ai_response(
-            message = message,
-            master = "Lee",
-            bot = "Maple",
-            )
+        response = client.get_ai_response(message)
 
         await ai.reply(f"{response}")
 
