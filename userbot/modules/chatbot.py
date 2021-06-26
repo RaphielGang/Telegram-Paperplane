@@ -99,8 +99,8 @@ async def picturesender(pic):
         return
     elif argv == "any":
          argv = random.choice(args)
-         
+
     client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
-    pics = await client.get_waifu(type=argv, plan=ultra)
+    pics = await client.get_waifu(type=argv, plan="ultra")
 
     await pic.reply(file=pics)
