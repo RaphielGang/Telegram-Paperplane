@@ -72,12 +72,15 @@ async def picturesender(pic):
     if argv not in args:
         await pic.edit(
             "Choose the correct image type from the following:\n"
-            "`any`, `art`, `aww, `cat`, `dankmemes`, `dog`, `duck`, `facepalm`, `harrypottermemes`, `holup`, `memes`"
+            "`any`, `art`, `aww`, `cat`, `dankmemes`, `dog`, `duck`, `facepalm`, `harrypottermemes`, `holup`, `memes`"
         return
-    else:
-        client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
-        pics = await client.get_image(type=argv)
-        await pic.reply(file=pics)
+    elif argv == "any":
+        argv = None
+
+    client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
+    pics = await client.get_image(type=argv)
+    
+    await pic.reply(file=pics)
 
 @register(outgoing=True, pattern="waifu (.*)$")
 @grp_exclude()
@@ -93,6 +96,6 @@ async def picturesender(pic):
         return
     else:
         client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
-        pics = await client.get_waifu(type=argv)
+        pics = await client.get_waifu(type=argv, plan=ultra)
 
         await pic.reply(file=pics)
