@@ -72,11 +72,7 @@ async def picturesender(pic):
     if argv not in args:
         await pic.edit(
             "Choose the correct image type from the following:\n"
-<<<<<<< HEAD
             "`any`, `art`, `aww`, `cat`, `dankmemes`, `dog`, `duck`, `facepalm`, `harrypottermemes`, `holup`, `memes`"
-=======
-            "`any`, `art`, `aww, `cat`, `dankmemes`, `dog`, `duck`, `facepalm`, `harrypottermemes`, `holup`, `memes`"
->>>>>>> 220dc9ba8a72de100636ad36d1f198c6e4df919e
         )
         return
     elif argv == "any":
