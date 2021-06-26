@@ -100,6 +100,8 @@ GDRIVE_FOLDER = os.environ.get("GDRIVE_FOLDER") or None
 HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY") or None
 HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME") or None
 
+RANDOMSTUFF_API_KEY = os.environ.get("RANDOMSTUFF_API_KEY") or None
+
 WOLFRAM_ID = os.environ.get("WOLFRAM_ID") or None
 
 # pylint: disable=invalid-name
