@@ -57,7 +57,7 @@ async def aiworker(ai):
             message=message,
             master="Lee",
             bot="Maple"
-            )
+        )
 
         await ai.reply(f"{response}")
 
@@ -73,6 +73,7 @@ async def picturesender(pic):
         await pic.edit(
             "Choose the correct image type from the following:\n"
             "`any`, `art`, `aww`, `cat`, `dankmemes`, `dog`, `duck`, `facepalm`, `harrypottermemes`, `holup`, `memes`"
+        )
         return
     elif argv == "any":
         argv = None
@@ -93,6 +94,7 @@ async def picturesender(pic):
         await pic.edit(
             "Choose the correct type from the following:\n"
             "`bully`, `cuddle`, `megumin`, `neko`, `shinobu`, `waifu`"
+        )
         return
     else:
         client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
