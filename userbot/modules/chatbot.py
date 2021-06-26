@@ -1,4 +1,5 @@
 import randomstuff
+import random
 import time
 
 from userbot.events import register, grp_exclude
@@ -76,7 +77,7 @@ async def picturesender(pic):
         )
         return
     elif argv == "any":
-        argv = None
+         argv = random.choice(args)
 
     client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
     pics = await client.get_image(type=argv)
@@ -93,11 +94,13 @@ async def picturesender(pic):
     if argv not in args:
         await pic.edit(
             "Choose the correct type from the following:\n"
-            "`bully`, `cuddle`, `megumin`, `neko`, `shinobu`, `waifu`"
+            "`any`, `bully`, `cuddle`, `megumin`, `neko`, `shinobu`, `waifu`"
         )
         return
-    else:
-        client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
-        pics = await client.get_waifu(type=argv, plan=ultra)
+    elif argv == "any":
+         argv = random.choice(args)
+         
+    client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY, suppress_warnings=True)
+    pics = await client.get_waifu(type=argv, plan=ultra)
 
-        await pic.reply(file=pics)
+    await pic.reply(file=pics)
