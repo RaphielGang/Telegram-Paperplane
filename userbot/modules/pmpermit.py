@@ -385,7 +385,7 @@ async def approvepm(apprvpm):
     try:
         aname, uid = await user_getter(apprvpm)
     except:
-        return await user_getter(apprvpm)
+        return
     
     if await approval(uid) is True:
         x = await apprvpm.edit("I already know this user! You can chat!")
@@ -427,7 +427,7 @@ async def dapprovepm(dapprvpm):
     try:
         dname, uid = await user_getter(dapprvpm)
     except:
-        return await user_getter(dapprvpm)
+        return
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("The user is already a stranger for me.")
