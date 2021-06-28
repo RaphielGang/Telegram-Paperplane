@@ -349,13 +349,14 @@ async def user_getter(event):
     elif event.reply_to_msg_id:
         try:
             reply = await event.get_reply_message()
-            name = str(await event.client.get_entity(reply.sender.id).first_name)
+            name = str((await event.client.get_entity(reply.sender.id)).first_name)
             user_id = reply.sender.id
         except TypeError:
             return await exception_getter(event, 'reply')
     else:
-        message = await event.edit("I can't see the user you want to approve😳")
+        message = await event.edit("I can't see the user😳")
         return await delete_in(message, 5) 
+    
     return name, user_id
 
 
