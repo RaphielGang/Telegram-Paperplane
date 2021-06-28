@@ -385,7 +385,7 @@ async def approvepm(apprvpm):
     try:
         aname, uid = await user_getter(apprvpm)
     except:
-        return
+        pass
     
     if await approval(uid) is True:
         x = await apprvpm.edit("I already know this user! You can chat!")
@@ -427,7 +427,7 @@ async def dapprovepm(dapprvpm):
     try:
         dname, uid = await user_getter(dapprvpm)
     except:
-        return
+        pass
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("The user is already a stranger for me.")
@@ -457,9 +457,6 @@ async def dapprovepm(dapprvpm):
         await dapprvpm.client.send_message(
             BOTLOG_CHATID, "#DISAPPROVED\n" + "User: " + f"[{dname}](tg://user?id={uid})"
         )
-        
-   
-
 
         
 @register(outgoing=True, pattern="block(?: |$)(.*)$")
