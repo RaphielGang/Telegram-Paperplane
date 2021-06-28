@@ -82,8 +82,8 @@ async def iterate_delete(event, event_id, user, text):
 @register(incoming=True, disable_edited=True, disable_errors=True)
 @grp_exclude()
 async def permitpm(event):
-    """ Permits people from PMing you without approval. \
-        Will block retarded nibbas automatically. """
+    """ Permits people from PMing you without approval.
+           Will block retards automatically. """
     if PM_AUTO_BAN:
         if event.is_private and not (await event.get_sender()).bot:
             if not is_mongo_alive() or not is_redis_alive():
@@ -332,7 +332,47 @@ async def notifon(non_event):
         return await delete_in(y, 5)
     
     
+# Now here's the approve, disapprove, block and unblock command helper.
 
+async def user_getter(event):
+    if event.pattern_match.group(1):
+        try:
+            user = await event.client.get_entity(event.pattern_match.group(1))
+            name = str(user.first_name)
+            user_id = user.id
+        except ValueError:
+            return await exception_getter(event, 'username')
+    elif event.is_private:
+            user = await event.client.get_entity(event.chat_id)
+            name = str(user.first_name)
+            user_id = user.id
+    elif event.reply_to_msg_id:
+        try:
+            reply = await event.get_reply_message()
+            name = str(await event.client.get_entity(reply.sender.id).first_name)
+            user_id = reply.sender.id
+        except TypeError:
+            return await exception_getter(event, 'reply')
+    else:
+        message = await event.edit("I can't see the user you want to approve😳")
+        retrun await delete_in(message, 5) 
+    return name, user_id
+
+
+async def exception_getter(event, type):
+    if type == 'username':
+        message = await event.edit(
+            "I am sorry. I can't find that user😥. "
+             "Have you entered the correct username?"
+        )
+        return await delete_in(message, 5)
+    else:
+        message = await event.edit(
+            "Excuse me...Is that an anonymous admin?"
+        )
+        return await delete_in(message, 5)
+
+# Here it ends.
     
 @register(outgoing=True, pattern="(?:approve|a)(?: |$)(.*)$")
 @grp_exclude()
@@ -341,55 +381,26 @@ async def approvepm(apprvpm):
     if not is_mongo_alive() or not is_redis_alive():
         await apprvpm.edit("Database connections failing!")
         return
-         
-    if apprvpm.pattern_match.group(1):
-        try:
-            username = apprvpm.pattern_match.group(1)
-            aname = await apprvpm.client.get_entity(username)
-            name0 = str(aname.first_name)
-            uid = await apprvpm.client.get_peer_id(username)
-        except ValueError:
-            x = await apprvpm.edit("I am sorry. I can't find that user😥. "
-                               "Have you entered the correct username?"
-                                  )
-            return await delete_in(x, 5)
     
-    elif apprvpm.is_private:
-            aname = await apprvpm.client.get_entity(apprvpm.chat_id)
-            name0 = str(aname.first_name)
-            uid = apprvpm.chat_id
-        
-    elif apprvpm.reply_to_msg_id:
-        try:
-            reply = await apprvpm.get_reply_message()
-            replied_user = await apprvpm.client(GetFullUserRequest(reply.from_id))
-            aname = replied_user.user.id
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-        except TypeError:
-            x = await apprvpm.edit("Excuse me..."
-                                   "is that an anonymous admin?"
-                                  )
-            return await delete_in(x, 5)
-    
-    else:
-        x = await apprvpm.edit("I can't see the user you want to approve😳")
-        return await delete_in(x, 5)
+    try:
+        aname, uid = await user_getter(apprvpm)
+    except:
+        return await user_getter(apprvpm)
     
     if await approval(uid) is True:
         x = await apprvpm.edit("I already know this user! You can chat!")
         return await delete_in(x, 5)
     
     await approve(uid)
-    await apprvpm.edit(f"I will remember [{name0}](tg://user?id={uid}) as your __mutual__ contact😉")
+    await apprvpm.edit(f"I will remember [{aname}](tg://user?id={uid}) as your __mutual__ contact😉")
     await asyncio.sleep(3)
     await iterate_delete(apprvpm, uid, "me", UNAPPROVED_MSG_ON)
     await iterate_delete(apprvpm, uid, "me", UNAPPROVED_MSG_OFF)
     
     if apprvpm.pattern_match.group(1):
-        await apprvpm.edit(f"[{name0}](tg://user?id={uid}) can PM you now.")
+        await apprvpm.edit(f"[{aname}](tg://user?id={uid}) can PM you now.")
     elif apprvpm.reply_to_msg_id:
-        await apprvpm.edit(f"[{name0}](tg://user?id={uid}), you can PM without an issue😊")
+        await apprvpm.edit(f"[{aname}](tg://user?id={uid}), you can PM without an issue😊")
     elif apprvpm.is_private:
         await apprvpm.edit("Hey there! Nice to meet you😊 I am an obidient bot of my owner!")
         
@@ -400,7 +411,7 @@ async def approvepm(apprvpm):
 
     if BOTLOG:
         await apprvpm.client.send_message(
-            BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
+            BOTLOG_CHATID, "#APPROVED\n" + "User: " + f"[{aname}](tg://user?id={uid})"
         )
         
         
@@ -413,66 +424,38 @@ async def dapprovepm(dapprvpm):
         await dapprvpm.edit("Database connections failing!")
         return
     
-    if dapprvpm.pattern_match.group(1):
-        try:
-            username = dapprvpm.pattern_match.group(1)
-            daname = await dapprvpm.client.get_entity(username)
-            name0 = str(daname.first_name)
-            uid = await dapprvpm.client.get_peer_id(username)
-        except ValueError:
-            x = await dapprvpm.edit("I am sorry. I can't find that user😥. "
-                               "Have you entered the correct username?"
-                                  )
-            return await delete_in(x, 5)
-    
-    elif dapprvpm.is_private:
-            daname = await dapprvpm.client.get_entity(dapprvpm.chat_id)
-            name0 = str(daname.first_name)
-            uid = dapprvpm.chat_id
-         
-    elif dapprvpm.reply_to_msg_id:
-        try:
-            reply = await dapprvpm.get_reply_message()
-            replied_user = await dapprvpm.client(GetFullUserRequest(reply.from_id))
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-        except TypeError:
-            x = await dapprvpm.edit("Excuse me..."
-                                   "is that an anonymous admin?"
-                                  )
-            return await delete_in(x, 5)
-
-    else:
-        x = await dapprvpm.edit("I can't see the user you want to disapprove😳")
-        return await delete_in(x, 5)
+    try:
+        dname, uid = await user_getter(dapprvpm)
+    except:
+        return await user_getter(dapprvpm)
     
     if await approval(uid) is False:
         x = await dapprvpm.edit("The user is already a stranger for me.")
         return await delete_in(x, 5)
     
     await disapprove(uid)
-    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) .")
+    await dapprvpm.edit(f"Forgetting [{dname}](tg://user?id={uid}) .")
     await asyncio.sleep(1)
-    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ..")
+    await dapprvpm.edit(f"Forgetting [{dname}](tg://user?id={uid}) ..")
     await asyncio.sleep(1)
-    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ...")
+    await dapprvpm.edit(f"Forgetting [{dname}](tg://user?id={uid}) ...")
     await asyncio.sleep(1)
-    await dapprvpm.edit(f"Forgetting [{name0}](tg://user?id={uid}) ... Done!")
+    await dapprvpm.edit(f"Forgetting [{dname}](tg://user?id={uid}) ... Done!")
     await asyncio.sleep(1)
     
     if PM_PASSWORD:
         await iterate_delete(dapprvpm, uid, uid, PM_PASSWORD)
     
     if dapprvpm.pattern_match.group(1):
-        await dapprvpm.edit(f"I will guard your PM from [{name0}](tg://user?id={uid}).")
+        await dapprvpm.edit(f"I will guard your PM from [{dname}](tg://user?id={uid}).")
     elif dapprvpm.is_private:
         await dapprvpm.edit("I don't like strangers in the PM!! Get lost!")
     elif dapprvpm.reply_to_msg_id:
-        await dapprvpm.edit(f"[{name0}](tg://user?id={uid}), don't you dare PM!!")
+        await dapprvpm.edit(f"[{dname}](tg://user?id={uid}), don't you dare PM!!")
 
     if BOTLOG:
         await dapprvpm.client.send_message(
-            BOTLOG_CHATID, "#DISAPPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})"
+            BOTLOG_CHATID, "#DISAPPROVED\n" + "User: " + f"[{dname}](tg://user?id={uid})"
         )
         
    
