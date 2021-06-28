@@ -86,16 +86,16 @@ def register(**args):
                 if not disable_errors:
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
-                    text = "**Sorry, I encountered a error!**\n"
+                    text = "**Sorry, I encountered an error!**\n"
                     link = "[https://t.me/tgpaperplane](Userbot Support Chat)"
                     text += "If you wanna you can report it"
                     text += f"- just forward this message to {link}.\n"
-                    text += "I won't log anything except the fact of error and date\n"
+                    text += "I haven't logged anythong except a few lines of error and time.\n"
 
-                    ftext = "\nDisclaimer:\nThis file uploaded ONLY here, "
-                    ftext += "we logged only fact of error and date, "
-                    ftext += "we respect your privacy, "
-                    ftext += "you may not report this error if you've "
+                    ftext = "\nDisclaimer:\nThis file has been uploaded only in this chat, "
+                    ftext += "we logged only fact of error and date. "
+                    ftext += "**We respect your privacy.** "
+                    ftext += "You may not report this error if you've "
                     ftext += "any confidential data here, no one will see your data "
                     ftext += "if you choose not to do so.\n\n"
                     ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
@@ -123,24 +123,24 @@ def register(**args):
 
                     ftext += result
 
-                    file = open("error.log", "w+")
+                    file = open("Error.txt", "w+")
                     file.write(ftext)
                     file.close()
 
                     if BOTLOG:
                         await check.client.send_file(
                             BOTLOG_CHATID,
-                            "error.log",
+                            "Error.txt",
                             caption=text,
                         )
                     else:
                         await check.client.send_file(
                             check.chat_id,
-                            "error.log",
+                            "Error.txt",
                             caption=text,
                         )
 
-                    remove("error.log")
+                    remove("Error.txt")
             else:
                 pass
 
