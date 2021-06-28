@@ -355,7 +355,7 @@ async def user_getter(event):
             return await exception_getter(event, 'reply')
     else:
         message = await event.edit("I can't see the user you want to approve😳")
-        retrun await delete_in(message, 5) 
+        return await delete_in(message, 5) 
     return name, user_id
 
 
