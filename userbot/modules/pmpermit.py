@@ -261,7 +261,6 @@ async def pm_password(event):
 #
  
     
-    
 @register(outgoing=True, pattern="(autoapprove|autoa)$")
 @grp_exclude()
 async def auto_approve_switch(event):
@@ -303,9 +302,7 @@ async def auto_accept(event):
                     "#AUTO_APPROVED\n"
                     + "User: "
                     + f"[{chat.first_name}](tg://user?id={chat.id})",
-              )
-
-                    
+              )              
 
 @register(outgoing=True, pattern="notifoff$")
 @grp_exclude()
@@ -332,8 +329,11 @@ async def notifon(non_event):
         return await delete_in(y, 5)
     
     
+#=============================================== 
 # Now here's the approve, disapprove, block and unblock command helper.
+#===================================
 
+"""User Getter"""
 async def user_getter(event):
     if event.pattern_match.group(1):
         try:
@@ -341,7 +341,7 @@ async def user_getter(event):
             name = str(user.first_name)
             user_id = user.id
         except ValueError:
-            return await exception_getter(event, 'username')
+            return await exception_handler(event, 'username')
     elif event.is_private:
             user = await event.client.get_entity(event.chat_id)
             name = str(user.first_name)
@@ -352,15 +352,26 @@ async def user_getter(event):
             name = str((await event.client.get_entity(reply.sender.id)).first_name)
             user_id = reply.sender.id
         except TypeError:
-            return await exception_getter(event, 'reply')
+            return await exception_handler(event, 'reply')
     else:
-        message = await event.edit("I can't see the user😳")
-        return await delete_in(message, 5) 
-    
+         return await error_handler(event)
     return name, user_id
 
-
-async def exception_getter(event, type):
+"""Error Handler"""
+async def error_handler(event):
+    if f"{event}" == "apprvpm":
+        message = "I can't see the user you want to approve😳"
+    if f"{event}" == "dapprvpm":
+        message = "I can't see the user you want to approve😳"
+    if f"{event}" == "block":
+        message = "Gimme the user to **block**!!"
+    if f"{event}" == "unblock":
+        message = "Well, I can't unblock __nobody__"
+    await event.edit(message)
+    return await delete_in(message, 5)
+        
+"""Exeption Handler"""
+async def exception_handler(event, type):
     if type == 'username':
         message = await event.edit(
             "I am sorry. I can't find that user😥. "
@@ -372,8 +383,10 @@ async def exception_getter(event, type):
             "Excuse me...Is that an anonymous admin?"
         )
         return await delete_in(message, 5)
-
+#===================================
 # Here it ends.
+#=============================================== 
+
     
 @register(outgoing=True, pattern="(?:approve|a)(?: |$)(.*)$")
 @grp_exclude()
@@ -464,54 +477,21 @@ async def dapprovepm(dapprvpm):
 @grp_exclude()
 async def blockpm(block):
     """You can block some unwanted people."""
-    if not is_mongo_alive() or not is_redis_alive():
-        await block.reply("Databases are failing!")
+    
+    try:
+        uname, uid = await user_getter(block)
+    except:
         return
     
     if block.pattern_match.group(1):
-        try:
-            username = block.pattern_match.group(1)
-            bname = await block.client.get_entity(username)
-            name0 = str(bname.first_name)
-            uid = await block.client.get_peer_id(username)
-            await block.edit(f"[{name0}](tg://user?id={uid}) is gonna get blocked in 2 seconds.")
-        except ValueError:
-            x = await block.edit("I am sorry. I can't find that user😥. "
-                               "Have you entered the correct username?"
-                                  )
-            return await delete_in(x, 5)
-    
+        await block.edit(f"{uname} will be blocked right away!")
     elif block.is_private:
-            bname= await block.client.get_entity(block.chat_id)
-            name0 = str(bname.first_name)
-            uid = block.chat_id
-            await block.edit("I am blocking you now.")
-                
+        await block.edit("I am blocking you now.")
     elif block.reply_to_msg_id:
-        try:
-            reply = await block.get_reply_message()
-            replied_user = await block.client(GetFullUserRequest(reply.from_id))
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-            await block.edit("You are going to be blocked from PM-ing me now.")
-        except TypeError:
-            x = await block.edit("Excuse me..."
-                                   "is that an anonymous admin?"
-                                  )
-            return await delete_in(x, 5)
+        await block.edit("You won't look good in PM.")
         
-    else:
-        x = await block.edit("Gimme the user to block!")
-        return await delete_in(x, 5)
-    
-    if await is_blocked(uid) is True:
-        x = await block.edit("The user is already in your block list.")
-        return await delete_in(x, 5)
-    
     await block.client(BlockRequest(uid))
-    time.sleep(2)
-    await block_pm(uid)
-    await block.edit("***BLOCKED!!***")
+    await block.edit("***Blocked***")
     
     if BOTLOG:
         await block.client.send_message(
@@ -525,57 +505,29 @@ async def blockpm(block):
 async def unblockpm(unblock):
     """You can unblock the people 
             so that they can PM again."""
-    if not is_mongo_alive() or not is_redis_alive():
-        await unblock.reply("Databases are failing!")
+    
+    try:
+        uname, uid = await user_getter(unblock)
+    except:
         return
     
     if unblock.pattern_match.group(1):
-        try:
-            username = unblock.pattern_match.group(1)
-            ubname = await unblock.client.get_entity(username)
-            name0 = str(ubname.first_name)
-            uid = await unblock.client.get_peer_id(username)
-            await unblock.edit(f"I will unblock [{name0}](tg://user?id={uid}) in 2 seconds. Are you sure?")
-        except ValueError:
-            x = await unblock.edit("I am sorry. I can't find that user😥. "
-                               "Have you entered the correct username?"
-                                  )
-            return await delete_in(x, 5)
-    
+        await unblock.edit(f"I will unblock {uname} in three swconds but are you sure?")
     elif unblock.is_private:
-            x = await unblock.edit("You aren't serious, right?")
-            return await delete_in(x, 5)
-                   
+        x = await unblock.edit("You are kidding, right?")
+        return await delete_in(x, 5)
     elif unblock.reply_to_msg_id:
-        try:
-            reply = await unblock.get_reply_message()
-            replied_user = await unblock.client(GetFullUserRequest(reply.from_id))
-            name0 = str(replied_user.user.first_name)
-            uid = replied_user.user.id
-            await unblock.edit("You are gonna be unblocked now. Aren't you happy?")
-        except TypeError:
-            x = await unblock.edit("Excuse me..."
-                                   "is that an anonymous admin?"
-                                  )
-            return await delete_in(x, 5)
+        await unblock.edit("You are gonna get unblocked, aren't you happy?")
     
-    else:
-        x = await unblock.edit("I can't unblock '__NOBODY__'")
-        return await delete_in(x, 5)
-    
-    if await is_blocked(uid) is False:
-        x = await unblock.edit("The user isn't blocked...yet.")
-        return await delete_in(x, 5)
-    
-    await unblock.client(UnblockRequest(uid))
     time.sleep(2)
-    await unblock_pm(uid)
+    await unblock.client(UnblocRequest(uid))
+    time.sleep(1)
     await unblock.edit("Let's make peace.")
     
     if BOTLOG:
         await unblock.client.send_message(
             BOTLOG_CHATID,
-            f"#UNBLOCKED\n[{name0}](tg://user?id={uid}) was unblocked!.",
+            f"#UNBLOCKED\n[{uname}](tg://user?id={uid}) was unblocked!.",
         )
 
         
