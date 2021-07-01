@@ -225,7 +225,7 @@ async def pm_password(event):
                         rmd_msg = await conv.send_message(
                             "Just say a \"Hi\"."
                         )
-                        response = await conv.get_response()
+                        response = (await conv.get_response()).message
                         
                         if response == ("Hi" or "\"Hi\""):
                             message = await event.reply(
