@@ -1,6 +1,6 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for getting the date
@@ -13,7 +13,7 @@ from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
-from userbot.events import register
+from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import get_time, set_time
 
 # ===== CONSTANT =====
@@ -24,7 +24,7 @@ DB_FAILED = "`Database connections failed!`"
 
 # ===== CONSTANT =====
 async def get_tz(con):
-    """ Get time zone of the given country. """
+    """Get time zone of the given country."""
     if "(Uk)" in con:
         con = con.replace("Uk", "UK")
     if "(Us)" in con:
@@ -49,11 +49,12 @@ async def get_tz(con):
 
 
 @register(outgoing=True, pattern="^.time(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@grp_exclude()
 async def time_func(tdata):
-    """ For .time command, return the time of
-        1. The country passed as an argument,
-        2. The default userbot country(set it by using .settime),
-        3. The server where the userbot runs.
+    """For .time command, return the time of
+    1. The country passed as an argument,
+    2. The default userbot country(set it by using .settime),
+    3. The server where the userbot runs.
     """
     con = tdata.pattern_match.group(1).title()
     tz_num = tdata.pattern_match.group(2)
@@ -61,8 +62,8 @@ async def time_func(tdata):
     t_form = "%H:%M"
 
     saved_props = await get_time() if is_mongo_alive() else None
-    saved_country = saved_props['timec'] if saved_props else None
-    saved_tz_num = saved_props['timezone'] if saved_props else None
+    saved_country = saved_props["timec"] if saved_props else None
+    saved_tz_num = saved_props["timezone"] if saved_props else None
 
     if con:
         try:
@@ -109,20 +110,22 @@ async def time_func(tdata):
     dtnow = dt.now(tz(time_zone)).strftime(t_form)
 
     if not con and saved_country:
-        await tdata.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
-                         f"({time_zone} timezone).`")
+        await tdata.edit(
+            f"`It's`  **{dtnow}**  `here, in {saved_country}"
+            f"({time_zone} timezone).`"
+        )
         return
 
-    await tdata.edit(
-        f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
+    await tdata.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
 @register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@grp_exclude()
 async def date_func(dat):
-    """ For .date command, return the date of
-        1. The country passed as an argument,
-        2. The default userbot country(set it by using .settime),
-        3. The server where the userbot runs.
+    """For .date command, return the date of
+    1. The country passed as an argument,
+    2. The default userbot country(set it by using .settime),
+    3. The server where the userbot runs.
     """
     con = dat.pattern_match.group(1).title()
     tz_num = dat.pattern_match.group(2)
@@ -130,8 +133,8 @@ async def date_func(dat):
     d_form = "%d/%m/%y - %A"
 
     saved_props = await get_time() if is_mongo_alive() else None
-    saved_country = saved_props['timec'] if saved_props else None
-    saved_tz_num = saved_props['timezone'] if saved_props else None
+    saved_country = saved_props["timec"] if saved_props else None
+    saved_tz_num = saved_props["timezone"] if saved_props else None
 
     if con:
         try:
@@ -178,18 +181,20 @@ async def date_func(dat):
     dtnow = dt.now(tz(time_zone)).strftime(d_form)
 
     if not con and saved_country:
-        await dat.edit(f"`It's`  **{dtnow}**  `here, in {saved_country}"
-                       f"({time_zone} timezone).`")
+        await dat.edit(
+            f"`It's`  **{dtnow}**  `here, in {saved_country}"
+            f"({time_zone} timezone).`"
+        )
         return
 
-    await dat.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`"
-                   )
+    await dat.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
 @register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
+@grp_exclude()
 async def set_time_country(loc):
-    """ For .settime command, change the default userbot
-        country for date and time commands. """
+    """For .settime command, change the default userbot
+    country for date and time commands."""
     if not is_mongo_alive() or not is_redis_alive():
         await loc.edit(DB_FAILED)
         return
@@ -237,28 +242,24 @@ async def set_time_country(loc):
 
     await set_time(c_name, tz_num)
 
-    await loc.edit("`Default country for date and time set to "
-                   f"{c_name}({tz_name} timezone).`")
+    await loc.edit(
+        "`Default country for date and time set to " f"{c_name}({tz_name} timezone).`"
+    )
 
 
-CMD_HELP.update({
-    "time":
-    ".time <country name/code> <timezone number>\n"
-    "Usage: Get the time of a country. If a country has "
-    "multiple timezones, Paperplane will list all of them "
-    "and let you select one."
-})
-CMD_HELP.update({
-    "date":
-    ".date <country name/code> <timezone number>\n"
-    "Usage: Get the date of a country. If a country has "
-    "multiple timezones, Paperplane will list all of them "
-    "and let you select one."
-})
-CMD_HELP.update({
-    "settime":
-    ".settime <country name/code> <timezone number>\n"
-    "Usage: Set the default country for .time and .date "
-    "command. If a country has multiple timezones, Paperpl"
-    "ane will list all of them and let you select one."
-})
+CMD_HELP.update(
+    {
+        "date/time": [
+            "Date/Time",
+            " - `.time <country name/code> <timezone number>`: "
+            "Get the time of a country. If a country has multiple timezones, "
+            "Paperplane will list all of them and let you select one.\n"
+            " - `.date <country name/code> <timezone number>`: "
+            "Get the date of a country. If a country has multiple timezones, "
+            "Paperplane will list all of them and let you select one.\n"
+            " - `.settime <country name/code> <timezone number>`: "
+            "Set the default country for .time and .date command. If a country "
+            "has multiple timezones, Paperplane will list all of them and let you select one.",
+        ]
+    }
+)

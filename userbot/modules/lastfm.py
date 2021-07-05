@@ -1,3 +1,9 @@
+# Copyright (C) 2019-2021 The Authors
+#
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 from asyncio import sleep
 from os import environ
 from re import sub
@@ -9,15 +15,24 @@ from telethon.errors import AboutTooLongError
 from telethon.errors.rpcerrorlist import FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import User as Userbot
 
-from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
-                     LASTFM_USERNAME, bot, lastfm)
-from userbot.events import register
+from userbot import (
+    BIO_PREFIX,
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    DEFAULT_BIO,
+    LASTFM_USERNAME,
+    bot,
+    lastfm,
+)
+from userbot.events import register, grp_exclude
 
 # =================== CONSTANT ===================
 LFM_BIO_ENABLED = "```last.fm current music to bio is now enabled.```"
-LFM_BIO_DISABLED = "```last.fm current music to bio is now disabled. Bio reverted to default.```"
+LFM_BIO_DISABLED = (
+    "```last.fm current music to bio is now disabled. Bio reverted to default.```"
+)
 LFM_BIO_RUNNING = "```last.fm current music to bio is already running.```"
 LFM_BIO_ERR = "```No option specified.```"
 LFM_LOG_ENABLED = "```last.fm logging to bot log is now enabled.```"
@@ -41,23 +56,22 @@ LastLog = False
 
 
 @register(outgoing=True, pattern="^.lastfm$")
+@grp_exclude()
 async def last_fm(lastFM):
-    """ For .lastfm command, fetch scrobble data from last.fm. """
+    """For .lastfm command, fetch scrobble data from last.fm."""
     await lastFM.edit("Processing...")
     preview = None
     playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
     username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
     if playing is not None:
         try:
-            image = User(LASTFM_USERNAME,
-                         lastfm).get_now_playing().get_cover_image()
+            image = User(LASTFM_USERNAME, lastfm).get_now_playing().get_cover_image()
         except IndexError:
             image = None
             pass
         tags = gettags(isNowPlaying=True, playing=playing)
         rectrack = parse.quote_plus(f"{playing}")
-        rectrack = sub("^", "https://www.youtube.com/results?search_query=",
-                       rectrack)
+        rectrack = sub("^", "https://www.youtube.com/results?search_query=", rectrack)
         if image:
             output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
             preview = True
@@ -72,16 +86,16 @@ async def last_fm(lastFM):
             printable = artist_and_song(track)
             tags = gettags(track)
             rectrack = parse.quote_plus(str(printable))
-            rectrack = sub("^",
-                           "https://www.youtube.com/results?search_query=",
-                           rectrack)
+            rectrack = sub(
+                "^", "https://www.youtube.com/results?search_query=", rectrack
+            )
             output += f"• [{printable}]({rectrack})\n"
             if tags:
                 output += f"`{tags}`\n\n"
     if preview is not None:
-        await lastFM.edit(f"{output}", parse_mode='md', link_preview=True)
+        await lastFM.edit(f"{output}", parse_mode="md", link_preview=True)
     else:
-        await lastFM.edit(f"{output}", parse_mode='md')
+        await lastFM.edit(f"{output}", parse_mode="md")
 
 
 def gettags(track=None, isNowPlaying=None, playing=None):
@@ -135,8 +149,8 @@ async def get_curr_track(lfmbio):
                 try:
                     if BOTLOG and LastLog:
                         await bot.send_message(
-                            BOTLOG_CHATID,
-                            f"Attempted to change bio to\n{lfmbio}")
+                            BOTLOG_CHATID, f"Attempted to change bio to\n{lfmbio}"
+                        )
                     await bot(UpdateProfileRequest(about=lfmbio))
                 except AboutTooLongError:
                     short_bio = f"🎧: {SONG}"
@@ -147,7 +161,8 @@ async def get_curr_track(lfmbio):
                     await bot(UpdateProfileRequest(about=DEFAULT_BIO))
                     if BOTLOG and LastLog:
                         await bot.send_message(
-                            BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}")
+                            BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}"
+                        )
         except AttributeError:
             try:
                 if user_info.about != DEFAULT_BIO:
@@ -155,24 +170,23 @@ async def get_curr_track(lfmbio):
                     await bot(UpdateProfileRequest(about=DEFAULT_BIO))
                     if BOTLOG and LastLog:
                         await bot.send_message(
-                            BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}")
+                            BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}"
+                        )
             except FloodWaitError as err:
                 if BOTLOG and LastLog:
-                    await bot.send_message(BOTLOG_CHATID,
-                                           f"Error changing bio:\n{err}")
+                    await bot.send_message(BOTLOG_CHATID, f"Error changing bio:\n{err}")
         except FloodWaitError as err:
             if BOTLOG and LastLog:
-                await bot.send_message(BOTLOG_CHATID,
-                                       f"Error changing bio:\n{err}")
+                await bot.send_message(BOTLOG_CHATID, f"Error changing bio:\n{err}")
         except WSError as err:
             if BOTLOG and LastLog:
-                await bot.send_message(BOTLOG_CHATID,
-                                       f"Error changing bio:\n{err}")
+                await bot.send_message(BOTLOG_CHATID, f"Error changing bio:\n{err}")
         await sleep(2)
     RUNNING = False
 
 
 @register(outgoing=True, pattern=r"^.lastbio (\S*)")
+@grp_exclude()
 async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1)
     global LASTFMCHECK
@@ -197,6 +211,7 @@ async def lastbio(lfmbio):
 
 
 @register(outgoing=True, pattern=r"^.lastlog (\S*)")
+@grp_exclude()
 async def lastlog(lstlog):
     arg = lstlog.pattern_match.group(1)
     global LastLog
@@ -211,12 +226,13 @@ async def lastlog(lstlog):
         await lstlog.edit(LFM_LOG_ERR)
 
 
-CMD_HELP.update({
-    'lastfm':
-    ".lastfm"
-    "\nUsage: Shows currently scrobbling track or most recent scrobbles if nothing is playing."
-    "\n'lastbio': .lastbio <on/off>"
-    "\nUsage: Enable/Disable last.fm bio updating"
-    "\n'lastlog': .lastlog <on/off>"
-    "\nUsage: Enable/Disable last.fm bio logging"
-})
+CMD_HELP.update(
+    {
+        "lastfm": [
+            "LastFM",
+            " - `.lastfm`: Shows currently scrobbling track or most recent scrobbles if nothing is playing.\n"
+            " - `.lastbio <on/off>`: Enable/Disable last.fm bio updating.\n"
+            " - `.lastlog <on/off>`: Enable/Disable last.fm bio logging.\n",
+        ]
+    }
+)

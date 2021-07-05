@@ -1,3 +1,9 @@
+# Copyright (C) 2019-2021 The Authors
+#
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# you may not use this file except in compliance with the License.
+#
+
 from asyncio import sleep
 from json import loads
 from json.decoder import JSONDecodeError
@@ -9,9 +15,17 @@ from requests import get
 from telethon.errors import AboutTooLongError
 from telethon.tl.functions.account import UpdateProfileRequest
 
-from userbot import (BIO_PREFIX, BOTLOG, BOTLOG_CHATID, CMD_HELP, DEFAULT_BIO,
-                     SPOTIFY_PASS, SPOTIFY_USERNAME, bot)
-from userbot.events import register
+from userbot import (
+    BIO_PREFIX,
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    DEFAULT_BIO,
+    SPOTIFY_PASS,
+    SPOTIFY_USERNAME,
+    bot,
+)
+from userbot.events import register, grp_exclude
 
 # =================== CONSTANT ===================
 SPO_BIO_ENABLED = "`Spotify current music to bio is now enabled.`"
@@ -54,12 +68,12 @@ async def update_spotify_info():
         try:
             RUNNING = True
             spftoken = environ.get("spftoken", None)
-            hed = {'Authorization': 'Bearer ' + spftoken}
-            url = 'https://api.spotify.com/v1/me/player/currently-playing'
+            hed = {"Authorization": "Bearer " + spftoken}
+            url = "https://api.spotify.com/v1/me/player/currently-playing"
             response = get(url, headers=hed)
             data = loads(response.content)
-            artist = data['item']['album']['artists'][0]['name']
-            song = data['item']['name']
+            artist = data["item"]["album"]["artists"][0]["name"]
+            song = data["item"]["name"]
             OLDEXCEPT = False
             oldsong = environ.get("oldsong", None)
             if song != oldsong and artist != oldartist:
@@ -110,6 +124,7 @@ async def dirtyfix():
 
 
 @register(outgoing=True, pattern="^.enablespotify$")
+@grp_exclude()
 async def set_biostgraph(setstbio):
     setrecursionlimit(700000)
     if not SPOTIFYCHECK:
@@ -122,6 +137,7 @@ async def set_biostgraph(setstbio):
 
 
 @register(outgoing=True, pattern="^.disablespotify$")
+@grp_exclude()
 async def set_biodgraph(setdbio):
     global SPOTIFYCHECK
     global RUNNING
@@ -131,6 +147,12 @@ async def set_biodgraph(setdbio):
     await setdbio.edit(SPO_BIO_DISABLED)
 
 
-CMD_HELP.update({"enablespotify": "Usage: Enable Spotify bio updating."})
-
-CMD_HELP.update({"disablespotify": "Usage: Disable Spotify bio updating."})
+CMD_HELP.update(
+    {
+        "spotify": [
+            "Spotify",
+            " - `.enablespotify`: Enable Spotify bio updating.\n"
+            " - `.disablespotify`: Disable Spotify bio updating.\n",
+        ]
+    }
+)

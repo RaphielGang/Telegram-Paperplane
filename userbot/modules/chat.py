@@ -1,7 +1,8 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
+#
 """ Userbot module containing userid, chatid and log commands"""
 
 from time import sleep
@@ -9,12 +10,13 @@ from time import sleep
 from telethon.tl.functions.channels import LeaveChannelRequest
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern="^.userid$")
+@grp_exclude()
 async def useridgetter(target):
-    """ For .userid command, returns the ID of the target user. """
+    """For .userid command, returns the ID of the target user."""
     message = await target.get_reply_message()
     if message:
         if not message.forward:
@@ -30,20 +32,21 @@ async def useridgetter(target):
                 name = "@" + message.forward.sender.username
             else:
                 name = "*" + message.forward.sender.first_name + "*"
-        await target.edit("**Name:** {} \n**User ID:** `{}`".format(
-            name, user_id))
+        await target.edit("**Name:** {} \n**User ID:** `{}`".format(name, user_id))
 
 
 @register(outgoing=True, pattern="^.chatid$")
+@grp_exclude()
 async def chatidgetter(chat):
-    """ For .chatid, returns the ID of the chat you are in at that moment. """
+    """For .chatid, returns the ID of the chat you are in at that moment."""
     await chat.edit("Chat ID: `" + str(chat.chat_id) + "`")
 
 
 @register(outgoing=True, pattern=r"^.log(?: |$)([\s\S]*)")
+@grp_exclude()
 async def log(log_text):
-    """ For .log command, forwards a message
-     or the command argument to the bot logs group """
+    """For .log command, forwards a message
+    or the command argument to the bot logs group"""
     if BOTLOG:
         if log_text.reply_to_msg_id:
             reply_msg = await log_text.get_reply_message()
@@ -55,7 +58,7 @@ async def log(log_text):
         else:
             await log_text.edit("`What am I supposed to log?`")
             return
-        await log_text.edit("`Logged Successfully`")
+        await log_text.edit("`Logged!`")
     else:
         await log_text.edit("`This feature requires Logging to be enabled!`")
     sleep(2)
@@ -63,19 +66,21 @@ async def log(log_text):
 
 
 @register(outgoing=True, pattern="^.kickme$")
+@grp_exclude()
 async def kickme(leave):
-    """ Basically it's .kickme command """
+    """Basically it's .kickme command"""
     await leave.edit("`Nope, no, no, I go away`")
     await bot(LeaveChannelRequest(leave.chat_id))
 
 
-CMD_HELP.update({"chatid": "Fetch the current chat's ID"})
-CMD_HELP.update({
-    "userid":
-    "Fetch the ID of the user in reply or the "
-    "original author of a forwarded message."
-})
 CMD_HELP.update(
-    {"log": "Forward the message you've replied to to your "
-     "botlog group."})
-CMD_HELP.update({"kickme": "Leave from a targeted group."})
+    {
+        "chat": [
+            "Chat",
+            " - `.chatid`: Fetch the current chat's ID.\n"
+            " - `.userid`: Fetch the ID of the user in reply or the original author of a forwarded message.\n"
+            " - `.log`: Forward the message you've replied to to your botlog group.\n"
+            " - `.kickme`: Leave from a targeted group.\n",
+        ]
+    }
+)

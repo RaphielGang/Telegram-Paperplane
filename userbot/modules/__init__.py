@@ -1,6 +1,6 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Init file which loads all of the modules """
@@ -13,7 +13,8 @@ def __list_all_modules():
 
     mod_paths = glob.glob(dirname(__file__) + "/*.py")
     all_modules = [
-        basename(f)[:-3] for f in mod_paths
+        basename(f)[:-3]
+        for f in mod_paths
         if isfile(f) and f.endswith(".py") and not f.endswith("__init__.py")
     ]
     return all_modules

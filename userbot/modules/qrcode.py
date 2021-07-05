@@ -1,10 +1,11 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 # The entire source code is OSSRPL except 'makeqr and getqr' which is MPL
 # License: MPL and OSSRPL
+#
 """ Userbot module containing commands related to QR Codes. """
 
 import os
@@ -14,39 +15,46 @@ from datetime import datetime
 from requests import get, post
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 def progress(current, total):
-    """ Calculate and return the download progress with given arguments. """
-    print("Downloaded {} of {}\nCompleted {}".format(current, total,
-                                                     (current / total) * 100))
+    """Calculate and return the download progress with given arguments."""
+    print(
+        "Downloaded {} of {}\nCompleted {}".format(
+            current, total, (current / total) * 100
+        )
+    )
 
 
 @register(pattern=r"^.getqr$", outgoing=True)
+@grp_exclude()
 async def parseqr(qr_e):
-    """ For .getqr command, get QR Code content from the replied photo. """
+    """For .getqr command, get QR Code content from the replied photo."""
     if qr_e.fwd_from:
         return
     start = datetime.now()
     downloaded_file_name = await qr_e.client.download_media(
-        await qr_e.get_reply_message(), progress_callback=progress)
+        await qr_e.get_reply_message(), progress_callback=progress
+    )
     url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
-    file = open(downloaded_file_name, "rb")
-    files = {"file": file}
-    resp = post(url, files=files).json()
-    qr_contents = resp[0]["symbol"][0]["data"]
-    file.close()
+    with open(downloaded_file_name, "rb") as dl_file:
+        files = {"file": dl_file}
+        resp = post(url, files=files).json()
+        qr_contents = resp[0]["symbol"][0]["data"]
+
     os.remove(downloaded_file_name)
     end = datetime.now()
     duration = (end - start).seconds
-    await qr_e.edit("Obtained QRCode contents in {} seconds.\n{}".format(
-        duration, qr_contents))
+    await qr_e.edit(
+        "Obtained QRCode contents in {} seconds.\n{}".format(duration, qr_contents)
+    )
 
 
 @register(pattern=r"^.makeqr(?: |$)([\s\S]*)", outgoing=True)
+@grp_exclude()
 async def make_qr(qrcode):
-    """ For .makeqr command, make a QR Code containing the given content. """
+    """For .makeqr command, make a QR Code containing the given content."""
     if qrcode.fwd_from:
         return
     start = datetime.now()
@@ -60,7 +68,8 @@ async def make_qr(qrcode):
         reply_msg_id = previous_message.id
         if previous_message.media:
             downloaded_file_name = await qrcode.client.download_media(
-                previous_message, progress_callback=progress)
+                previous_message, progress_callback=progress
+            )
             m_list = None
             with open(downloaded_file_name, "rb") as file:
                 m_list = file.readlines()
@@ -94,15 +103,12 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     await qrcode.delete()
 
 
-CMD_HELP.update({
-    'getqr':
-    ".getqr\n"
-    "Usage: Get the QR Code content from the replied QR Code."
-})
-
-CMD_HELP.update({
-    'makeqr':
-    ".makeqr <content>\n"
-    "Usage: Make a QR Code from the given content.\n"
-    "Example: .makeqr www.google.com"
-})
+CMD_HELP.update(
+    {
+        "qr codes": [
+            "QR Codes",
+            " - `.getqr`: Get the QR Code content from the replied QR Code.\n"
+            " - `.makeqr <content>`: Make a QR Code from the given message (text, link, etc...).\n",
+        ]
+    }
+)

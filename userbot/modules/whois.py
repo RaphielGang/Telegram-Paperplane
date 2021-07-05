@@ -1,10 +1,11 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 # The entire source code is OSSRPL except 'whois' which is MPL
 # License: MPL and OSSRPL
+#
 """ Userbot module for getiing info
     about any user on Telegram(including you!). """
 
@@ -14,14 +15,15 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import MessageEntityMentionName
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 
 
 @register(pattern="^.whois(?: |$)(.*)", outgoing=True)
+@grp_exclude()
 async def who(event):
-    """ For .whois command, get info about a user. """
+    """For .whois command, get info about a user."""
     if event.fwd_from:
         return
 
@@ -41,11 +43,10 @@ async def who(event):
 
 
 async def get_user(event):
-    """ Get the user from argument or replied message. """
+    """Get the user from argument or replied message."""
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        replied_user = await event.client(
-            GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
     else:
         user = event.pattern_match.group(1)
 
@@ -59,15 +60,13 @@ async def get_user(event):
         if event.message.entities is not None:
             probable_user_mention_entity = event.message.entities[0]
 
-            if isinstance(probable_user_mention_entity,
-                          MessageEntityMentionName):
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
                 replied_user = await event.client(GetFullUserRequest(user_id))
                 return replied_user
         try:
             user_object = await event.client.get_entity(user)
-            replied_user = await event.client(
-                GetFullUserRequest(user_object.id))
+            replied_user = await event.client(GetFullUserRequest(user_object.id))
         except (TypeError, ValueError) as err:
             await event.edit(str(err))
             return None
@@ -76,7 +75,7 @@ async def get_user(event):
 
 
 async def fetch_info(replied_user, event):
-    """ Get details from the User object. """
+    """Get details from the User object."""
     user_id = replied_user.user.id
     first_name = replied_user.user.first_name
     last_name = replied_user.user.last_name
@@ -85,12 +84,15 @@ async def fetch_info(replied_user, event):
     is_bot = replied_user.user.bot
     restricted = replied_user.user.restricted
     verified = replied_user.user.verified
-    first_name = first_name.replace(
-        "\u2060", "") if first_name else ("This User has no First Name")
-    last_name = last_name.replace(
-        "\u2060", "") if last_name else ("This User has no Last Name")
-    username = "@{}".format(username) if username else (
-        "This User has no Username")
+    first_name = (
+        first_name.replace("\u2060", "")
+        if first_name
+        else ("This User has no First Name")
+    )
+    last_name = (
+        last_name.replace("\u2060", "") if last_name else ("This User has no Last Name")
+    )
+    username = "@{}".format(username) if username else ("This User has no Username")
     user_bio = "This User has no About" if not user_bio else user_bio
 
     if user_id != (await event.client.get_me()).id:
@@ -110,13 +112,16 @@ async def fetch_info(replied_user, event):
     caption += f"Bio: \n<code>{user_bio}</code> \n \n"
     caption += f"Common Chats with this user: {common_chat} \n"
     caption += f"Permanent Link To Profile: "
-    caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
+    caption += f'<a href="tg://user?id={user_id}">{first_name}</a>'
 
     return caption
 
 
-CMD_HELP.update({
-    "whois":
-    ".whois <username>(or reply to the target person's message)"
-    "\nUsage: Get info about a user."
-})
+CMD_HELP.update(
+    {
+        "whois": [
+            "Whois",
+            " - `.whois <username>`: Get info about the target (argument or reply) user.",
+        ]
+    }
+)

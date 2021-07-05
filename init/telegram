@@ -1,9 +1,9 @@
 #!/usr/bin/env dash
 # shellcheck source=/dev/null
 #
-# Copyright (C) 2018 Raphielscape LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.0 (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 # Telegram command container
@@ -11,72 +11,11 @@
 TELEGRAM=$SEMAPHORE_PROJECT_DIR/init/telegramapi
 export TELEGRAM
 # Caster configurations
-MAINGROUP_ID="-1001372533112"
-BUILDSCAPERER_ID="-1001192834712"
-DEBUG_ID="-1001200493978"
-
-# Graphics Interchange Format Assets
-Start_Asset="CAADBAADHwEAArznMw8iLJLuDeQskAI"
-Stop_Asset="https://i.imgur.com/Q6nllGX.gif"
-Jump_Asset="https://media.giphy.com/media/l41lI4bYmcsPJX9Go/giphy.gif"
-
-# GIF Stuff
-tg_build_sendsticker() {
-    curl -s -X POST "https://api.telegram.org/bot$BOT_API_KEY/SendSticker" \
-    -d sticker="${Start_Asset}" \
-    -d chat_id=${BUILDSCAPERER_ID} >> /dev/null
-}
-
-tg_buildmain_sendgif() {
-    curl -s -X POST "https://api.telegram.org/bot$BOT_API_KEY/SendAnimation" \
-    -d animation="${Jump_Asset}" \
-    -d chat_id=${MAINGROUP_ID} >> /dev/null
-}
-
-# Interruption Happen, report with GIF
-tg_intgif() {
-    curl -s -X POST "https://api.telegram.org/bot$BOT_API_KEY/SendAnimation" \
-    -d animation="${Stop_Asset}" \
-    -d chat_id=${BUILDSCAPERER_ID} >> /dev/null
-}
-
-tg_intgifmain() {
-    curl -s -X POST "https://api.telegram.org/bot$BOT_API_KEY/SendAnimation" \
-    -d animation="${Stop_Asset}" \
-    -d chat_id=${MAINGROUP_ID} >> /dev/ -t null
-}
-
-# Push to Channel
-push() {
-    "${TELEGRAM}" -f "Retarded-Nightly.zip" \
-    -c ${BUILDSCAPERER_ID} -t $BOT_API_KEY
-}
+MAINGROUP_ID="-1001318017044"
 
 # sendcast to group
 tg_sendinfo() {
     "${TELEGRAM}" -c ${MAINGROUP_ID} -H \
-    "$(
-		for POST in "${@}"; do
-			echo "${POST}"
-		done
-    )" \
-    -t $BOT_API_KEY
-}
-
-# sendcast to channel
-tg_channelcast() {
-    "${TELEGRAM}" -c ${BUILDSCAPERER_ID} -H \
-    "$(
-		for POST in "${@}"; do
-			echo "${POST}"
-		done
-    )" \
-    -t $BOT_API_KEY
-}
-
-# Debugcasting
-tg_debugcast() {
-    "${TELEGRAM}" -c ${DEBUG_ID} -H \
     "$(
 		for POST in "${@}"; do
 			echo "${POST}"
@@ -91,30 +30,16 @@ kickstart_pub() {
      "PR: <code>${PULL_REQUEST_NUMBER}</code>" \
      "Commit Point <code>${COMMIT_POINT}</code>" \
      " " \
-     "<b>Github Link: </b> https://github.com/MyPaperPlane/telegram-userbot/commit/${COMMIT_HASH}" \
+     "<b>Github Link: </b> https://github.com/RaphielGang/Telegram-Paperplane/commit/${COMMIT_HASH}" \
      " " \
-     "<b>CI Link: </b> https://semaphoreci.com/baalajimaestro/telegram-userbot"
+     "<b>CI Link: </b> https://semaphoreci.com/zakaryan2004/telegram-paperplane"
   else
     tg_sendinfo "I am starting build" \
     "Branch <code>${PARSE_BRANCH}</code>" \
     "Commit Point <code>${COMMIT_POINT}</code>" \
     " " \
-    "<b>Github Link: </b> https://github.com/MyPaperPlane/telegram-userbot/commit/${COMMIT_HASH}" \
+    "<b>Github Link: </b> https://github.com/RaphielGang/Telegram-Paperplane/commit/${COMMIT_HASH}" \
     " " \
-    "<b>CI Link: </b> https://semaphoreci.com/baalajimaestro/telegram-userbot"
+    "<b>CI Link: </b> https://semaphoreci.com/zakaryan2004/telegram-paperplane"
 fi
-}
-
-kickstart_priv() {
-    tg_buildmain_sendgif
-
-    tg_debugcast "Compiler <code>${COMPILER_USED}</code>" \
-    "Device <b>${DEVICE}</b>" \
-    "Branch <code>${PARSE_BRANCH}</code>" \
-    "Commit Point <code>${COMMIT_POINT}</code>" \
-    "Under <code>$(hostname)</code>" \
-    "Started on <code>$(whoami)</code>"
-
-    tg_debugcast "This ${COMPILER_USED} build will not producing any binaries" \
-                "This is internal build"
 }

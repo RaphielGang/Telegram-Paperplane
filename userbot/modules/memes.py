@@ -1,8 +1,7 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
-#
 #
 """ Userbot module for having some fun. """
 
@@ -13,8 +12,8 @@ import time
 
 from cowpy import cow
 
-from userbot import CMD_HELP, ZALG_LIST
-from userbot.events import register
+from userbot import CMD_HELP
+from userbot.events import register, grp_exclude
 
 # ================= CONSTANT =================
 METOOSTR = [
@@ -188,14 +187,129 @@ RUNSREACTS = [
     "I am just walking off, coz me is too fat.",
     "I Fugged off!",
 ]
-DISABLE_RUN = False
+ZALG_LIST = [
+    [
+        "̖",
+        " ̗",
+        " ̘",
+        " ̙",
+        " ̜",
+        " ̝",
+        " ̞",
+        " ̟",
+        " ̠",
+        " ̤",
+        " ̥",
+        " ̦",
+        " ̩",
+        " ̪",
+        " ̫",
+        " ̬",
+        " ̭",
+        " ̮",
+        " ̯",
+        " ̰",
+        " ̱",
+        " ̲",
+        " ̳",
+        " ̹",
+        " ̺",
+        " ̻",
+        " ̼",
+        " ͅ",
+        " ͇",
+        " ͈",
+        " ͉",
+        " ͍",
+        " ͎",
+        " ͓",
+        " ͔",
+        " ͕",
+        " ͖",
+        " ͙",
+        " ͚",
+        " ",
+    ],
+    [
+        " ̍",
+        " ̎",
+        " ̄",
+        " ̅",
+        " ̿",
+        " ̑",
+        " ̆",
+        " ̐",
+        " ͒",
+        " ͗",
+        " ͑",
+        " ̇",
+        " ̈",
+        " ̊",
+        " ͂",
+        " ̓",
+        " ̈́",
+        " ͊",
+        " ͋",
+        " ͌",
+        " ̃",
+        " ̂",
+        " ̌",
+        " ͐",
+        " ́",
+        " ̋",
+        " ̏",
+        " ̽",
+        " ̉",
+        " ͣ",
+        " ͤ",
+        " ͥ",
+        " ͦ",
+        " ͧ",
+        " ͨ",
+        " ͩ",
+        " ͪ",
+        " ͫ",
+        " ͬ",
+        " ͭ",
+        " ͮ",
+        " ͯ",
+        " ̾",
+        " ͛",
+        " ͆",
+        " ̚",
+    ],
+    [
+        " ̕",
+        " ̛",
+        " ̀",
+        " ́",
+        " ͘",
+        " ̡",
+        " ̢",
+        " ̧",
+        " ̨",
+        " ̴",
+        " ̵",
+        " ̶",
+        " ͜",
+        " ͝",
+        " ͞",
+        " ͟",
+        " ͠",
+        " ͢",
+        " ̸",
+        " ̷",
+        " ͡",
+    ],
+]
 
 # ===========================================
 
 
 @register(outgoing=True, pattern=r"^.(\w+)say (.*)")
+@grp_exclude()
 async def univsaye(cowmsg):
-    """ For .cowsay module, userbot wrapper for cow which says things. """
+    """For .cowsay module, userbot wrapper for cow which says things."""
     arg = cowmsg.pattern_match.group(1).lower()
     text = cowmsg.pattern_match.group(2)
 
@@ -210,8 +324,9 @@ async def univsaye(cowmsg):
 
 
 @register(outgoing=True, pattern="^:/$", ignore_unsafe=True)
+@grp_exclude()
 async def kek(keks):
-    """ Check yourself ;)"""
+    """Check yourself ;)"""
     uio = ["/", "\\"]
     for i in range(1, 15):
         time.sleep(0.3)
@@ -219,17 +334,19 @@ async def kek(keks):
 
 
 @register(outgoing=True, pattern="^-_-$", ignore_unsafe=True)
+@grp_exclude()
 async def lol(lel):
-    """ Ok... """
+    """Ok..."""
     okay = "-_-"
     for _ in range(10):
         okay = okay[:-1] + "_-"
-        await lel.edit(okay)
+        await lel.edit(okay, parse_mode="html")
 
 
 @register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+@grp_exclude()
 async def copypasta(cp_e):
-    """ Copypasta the famous meme """
+    """Copypasta the famous meme"""
     textx = await cp_e.get_reply_message()
     message = cp_e.pattern_match.group(1)
 
@@ -262,9 +379,10 @@ async def copypasta(cp_e):
 
 
 @register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
+@grp_exclude()
 async def vapor(vpr):
-    """ Vaporize everything! """
-    reply_text = list()
+    """Vaporize everything!"""
+    reply_text = []
     textx = await vpr.get_reply_message()
     message = vpr.pattern_match.group(1)
     if message:
@@ -287,8 +405,9 @@ async def vapor(vpr):
 
 
 @register(outgoing=True, pattern="^.str(?: |$)(.*)")
+@grp_exclude()
 async def stretch(stret):
-    """ Stretch it."""
+    """Stretch it."""
     textx = await stret.get_reply_message()
     message = stret.text
     message = stret.pattern_match.group(1)
@@ -301,15 +420,15 @@ async def stretch(stret):
         return
 
     count = random.randint(3, 10)
-    reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count),
-                        message)
+    reply_text = re.sub(r"([aeiouAEIOUａｅｉｏｕＡＥＩＯＵаеиоуюяыэё])", (r"\1" * count), message)
     await stret.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.zal(?: |$)(.*)")
+@grp_exclude()
 async def zal(zgfy):
-    """ Invoke the feeling of chaos. """
-    reply_text = list()
+    """Invoke the feeling of chaos."""
+    reply_text = []
     textx = await zgfy.get_reply_message()
     message = zgfy.pattern_match.group(1)
     if message:
@@ -331,30 +450,21 @@ async def zal(zgfy):
             randint = random.randint(0, 2)
 
             if randint == 0:
-                charac = charac.strip() + \
-                    random.choice(ZALG_LIST[0]).strip()
+                charac = charac.strip() + random.choice(ZALG_LIST[0]).strip()
             elif randint == 1:
-                charac = charac.strip() + \
-                    random.choice(ZALG_LIST[1]).strip()
+                charac = charac.strip() + random.choice(ZALG_LIST[1]).strip()
             else:
-                charac = charac.strip() + \
-                    random.choice(ZALG_LIST[2]).strip()
+                charac = charac.strip() + random.choice(ZALG_LIST[2]).strip()
 
         reply_text.append(charac)
 
     await zgfy.edit("".join(reply_text))
 
 
-@register(outgoing=True, pattern="^hi$", ignore_unsafe=True)
-async def hoi(hello):
-    """ Greet everyone! """
-    if False:
-        await hello.edit("Hoi!😄")
-
-
 @register(outgoing=True, pattern="^.owo(?: |$)(.*)")
+@grp_exclude()
 async def faces(owo):
-    """ UwU """
+    """UwU"""
     textx = await owo.get_reply_message()
     message = owo.pattern_match.group(1)
     if message:
@@ -376,55 +486,43 @@ async def faces(owo):
 
 
 @register(outgoing=True, pattern="^.react$")
+@grp_exclude()
 async def react_meme(react):
-    """ Make your userbot react to everything. """
+    """Make your userbot react to everything."""
     index = random.randint(0, len(FACEREACTS))
     reply_text = FACEREACTS[index]
     await react.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.shg$")
+@grp_exclude()
 async def shrugger(shg):
-    r""" ¯\_(ツ)_/¯ """
+    r"""¯\_(ツ)_/¯"""
     await shg.edit(r"¯\_(ツ)_/¯")
 
 
 @register(outgoing=True, pattern="^.runs$")
+@grp_exclude()
 async def runner_lol(run):
-    """ Run, run, RUNNN! """
-    if not DISABLE_RUN:
-        index = random.randint(0, len(RUNSREACTS) - 1)
-        reply_text = RUNSREACTS[index]
-        await run.edit(reply_text)
-
-
-@register(outgoing=True, pattern="^.disable runs$")
-async def disable_runs(norun):
-    """ Some people don't like running... """
-    global DISABLE_RUN
-    DISABLE_RUN = True
-    await norun.edit("```Done!```")
-
-
-@register(outgoing=True, pattern="^.enable runs$")
-async def enable_runs(run):
-    """ But some do! """
-    global DISABLE_RUN
-    DISABLE_RUN = False
-    await run.edit("```Done!```")
+    """Run, run, RUNNN!"""
+    index = random.randint(0, len(RUNSREACTS) - 1)
+    reply_text = RUNSREACTS[index]
+    await run.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.metoo$")
+@grp_exclude()
 async def metoo(hahayes):
-    """ Haha yes """
+    """Haha yes"""
     reply_text = random.choice(METOOSTR)
     await hahayes.edit(reply_text)
 
 
 @register(outgoing=True, pattern="^.mock(?: |$)(.*)")
+@grp_exclude()
 async def spongemocktext(mock):
-    """ Do it and find the real fun. """
-    reply_text = list()
+    """Do it and find the real fun."""
+    reply_text = []
     textx = await mock.get_reply_message()
     message = mock.pattern_match.group(1)
     if message:
@@ -446,8 +544,9 @@ async def spongemocktext(mock):
 
 
 @register(outgoing=True, pattern="^.clap(?: |$)(.*)")
+@grp_exclude()
 async def claptext(memereview):
-    """ Praise people! """
+    """Praise people!"""
     textx = await memereview.get_reply_message()
     message = memereview.pattern_match.group(1)
     if message:
@@ -464,17 +563,20 @@ async def claptext(memereview):
 
 
 @register(outgoing=True, pattern="^.bt$")
+@grp_exclude()
 async def bluetext(bt_e):
-    """ Believe me, you will find this useful. """
+    """Believe me, you will find this useful."""
     if await bt_e.get_reply_message():
         await bt_e.edit(
             "`BLUETEXT MUST CLICK.`\n"
-            "`Are you a stupid animal which is attracted to colours?`")
+            "`Are you a stupid animal which is attracted to colours?`"
+        )
 
 
-@register(outgoing=True, pattern='^.type(?: |$)(.*)')
+@register(outgoing=True, pattern="^.type(?: |$)(.*)")
+@grp_exclude()
 async def typewriter(typew):
-    """ Just a small command to make your keyboard become a typewriter! """
+    """Just a small command to make your keyboard become a typewriter!"""
     textx = await typew.get_reply_message()
     message = typew.pattern_match.group(1)
     if message:
@@ -486,7 +588,7 @@ async def typewriter(typew):
         return
     sleep_time = 0.03
     typing_symbol = "|"
-    old_text = ''
+    old_text = ""
     await typew.edit(typing_symbol)
     await asyncio.sleep(sleep_time)
     for character in message:
@@ -498,4 +600,4 @@ async def typewriter(typew):
         await asyncio.sleep(sleep_time)
 
 
-CMD_HELP.update({"memes": "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."})
+CMD_HELP.update({"memes": ["Memes", "Ask 🅱️ottom🅱️ext🅱️ot (@NotAMemeBot) for that."]})

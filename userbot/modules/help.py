@@ -1,28 +1,35 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
+# Copyright (C) 2019-2021 The Authors
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
-""" Userbot help command """
+""" Paperplane's help command """
 
 from userbot import CMD_HELP
-from userbot.events import register
+from userbot.events import register, grp_exclude
 
 
 @register(outgoing=True, pattern="^.help(?: |$)(.*)")
+@grp_exclude()
 async def help(event):
-    """ For .help command,"""
-    args = event.pattern_match.group(1)
+    """For .help command"""
+    args = event.pattern_match.group(1).lower()
+
     if args:
         if args in CMD_HELP:
-            await event.edit(str(CMD_HELP[args]))
+            await event.edit(
+                f"Here is some help for the **{CMD_HELP[args][0]}** module:\n\n"
+                + str(CMD_HELP[args][1])
+            )
         else:
-            await event.edit("Please specify a valid module name.")
+            await event.edit(
+                f"Help string for {args} not found! Type ```.help``` to see valid module names."
+            )
     else:
-        await event.edit("Please specify which module do you want help for!")
         string = ""
-        for i in CMD_HELP:
-            string += "`" + str(i)
-            string += "`, "
+        for i in CMD_HELP.values():
+            string += f"`{str(i[0])}`, "
         string = string[:-2]
-        await event.reply(string)
+        await event.edit(
+            "Please specify which module you want help for!\n\n" f"{string}"
+        )
