@@ -47,7 +47,7 @@ Please target your PRs to the staging branch and not master. Commits on `master`
 I would like to thank people who assisted me throughout this project:
 
 * [@YouTwitFace](https://github.com/YouTwitFace)
-* [@TheDevXen](https://github.com/TheDevXen)
+* [@xencodes](https://github.com/xencodes)
 * [@Skittles9823](https://github.com/Skittles9823)
 * [@deletescape](https://github.com/deletescape)
 * [@songotenks69](https://github.com/songotenks69)
