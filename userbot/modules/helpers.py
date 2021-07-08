@@ -7,6 +7,7 @@
 Helper functions to be used in modules
 """
 
+import struct
 from telethon.tl.types import MessageEntityMention, MessageEntityMentionName
 
 
@@ -39,14 +40,14 @@ async def get_user_from_event(event):
 
     try:
         user_obj = await event.client.get_entity(entity)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, struct.error, OverflowError):
         return False
 
     return user_obj
 
 
 async def get_user_and_reason_from_event(event):
-    user_obj = get_user_from_event()
+    user_obj = await get_user_from_event(event)
 
     if event.reply_to_msg_id:
         reason = event.pattern_match.group(1)
