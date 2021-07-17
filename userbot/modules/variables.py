@@ -1,5 +1,9 @@
+##
+""" Please don't look here, it's so messed up honestly. """
+##
+
 import time
-from userbot import VARIABLES
+from userbot import BOTLOG
 from userbot.modules.dbhelper import set_a_pic, get_a_pic, del_a_pic
 
 import asyncio
@@ -12,104 +16,69 @@ async def delete_in(text, seconds):
     return await text.delete()
 #=============XXXXXX===============
 
-@register(outgoing=True, pattern="setapic")
-@grp_exclude()
-async def setmyalivepic(apic):
-    ALIVE_IMAGE = "ALIVE_IMAGE"
-    CMD_MSG = apic.text
-    PIC = str(CMD_MSG[9: ]).split(" ")
-    await set_a_pic(PIC, ALIVE_IMAGE)
-    x = await apic.edit("Alive pic has been set!!")
-    return await delete_in(x, 5)
-  
-@register(outgoing=True, pattern="getapic$")
-@grp_exclude()
-async def myalivepics(apic):
-    pics = await get_a_pic("ALIVE_IMAGE")
+## No Comments ##
+ADD_ALIVE_IMAGE = "**Your {} Alive Image{} {} been set.**"
+DEL_ALIVE_IMAGE = "**I deleted all the Alive Images.**"
+NO_ALIVE
+ADD_PMPERMIT_PIC = "**Your {} PM-Permit Image{} {} been set.**""
+DEL_PMPERMIT_IMAGES = "**I deleted all the PM-Permit Images.**"
+
+## ........... ##
+
+async def whatpicamisetting(event, pic):
+    """Please ignore the name of the func and 2nd arg"""
+    if pic == "ALIVE_IMAGE":
+        return ADD_ALIVE_IMAGE
+    if pic == "PMPERMIT_IMAGE":
+        return ADD_PMPERMIT_IMAGE
     
-    if pics is False:
-      x = await apic.edit("You haven't set any pictures.")
-      return await delete_in(x, 5)
+async def iwillsetpic(event, pic, num):
+    """This is the function which will set the pictures."""
+    try:
+        LINKS = str(event.text[num: ]).split("|")
+    except:
+        if event.reply_to_msg_id:
+            MSG = (await event.get_reply_message()).text
+            if not MSG:
+                x = await event.edit("I am sorry, I really can't find any link whatsoever.")
+                return await delete_in(x, 5)
+            else:
+                LINKS = str(MSG).split("|")
+        else:
+            x = await event.edit("I am sorry, I really can't find any link whatsoever.")
+            return await delete_in(x, 5)
     
-    num_pics = len(pics)
-    n = 1
-    for i in range(num_pics):
-      links = (
-        f"PIC {n} - [Link]({pics[i]})\n"
-      )
-      n += 1
-      if "ALIVE_IMAGE" in VARIABLES:
-        VARIABLES["ALIVE_IMAGE"] += links
-      else:
-        VARIABLES["ALIVE_IMAGE"] = links
+    await set_a_pic(LINKS, f"{pic}")
+    
+    MSG = await whatpicamisetting(event, pic)
+    NUML = len(LINKS)
+    
+    if NUML == 1:
+        MSG = MSG.format("1", "", "has")
+    else:
+        MSG = MSG.format(f"{NUML}", "s", "have")
         
-    mypics = VARIABLES["ALIVE_IMAGE"]
-    message = (
-        "**My Alive Pics**\n\n"
-        f"{mypics}"
-    )
-    await apic.edit(message)
-    del VARIABLES["ALIVE_IMAGE"]
+    message = await event.edit(MSG)
+    return await delete_in(message, 5)
 
-@register(outgoing=True, pattern="delapic$")
-@grp_exclude()
-async def deletemyalivepics(apic):
-    ALIVE_IMAGE = "ALIVE_IMAGE"
+async def whatpicamideleting(event, pic):
+    if pic == "ALIVE_IMAGE":
+        return DEL_ALIVE_IMAGE
+    if pic == "PMPERMIT_IMAGE":
+        return DEL_PMPERMIT_IMAGE
     
-    if await del_a_pic(ALIVE_IMAGE) is False:
-        x = await apic.edit("I am sorry but you haven't set any pictures yet.")
-        return await delete_in(x, 5)
-    await del_a_pic(ALIVE_IMAGE)
-    x = await apic.edit("All pictures have been deleted.")
-    return await delete_in(x, 5)
+async def iwilldeletepic(event, pic):
+    """It will delete all the pictures you have set"""
+    await del_a_pic(f"{pic}")
+    MSG = whatpicamideleting(event, pic)
+    message = await event.edit(MSG)
+    return await delete_in(message, 5)
 
-@register(outgoing=True, pattern="setpmpic")
-@grp_exclude()
-async def setmyalivepic(pmpic):
-    PM_PERMIT_IMAGE = "PM_PERMIT_IMAGE"
-    CMD_MSG = pmpic.text
-    PIC = str(CMD_MSG[10: ]).split(" ")
-    await set_a_pic(PIC, PM_PERMIT_IMAGE)
-    x = await pmpic.edit("PMPermit pic has been set!!")
-    return await delete_in(x, 5)
-  
-@register(outgoing=True, pattern="getpmpic$")
-@grp_exclude()
-async def myalivepics(pmpic):
-    pics = await get_a_pic("PM_PERMIT_IMAGE")
+async def iwillgetpic(event, pic):
+    """It will print out all the pictures you have set."""
+    PICS = (await get_a_pic(f"{pic}")).split("|")
+    NUMP = len(PICS)
     
-    if pics is False:
-      x = await pmpic.edit("You haven't set any pictures.")
-      return await delete_in(x, 5)
+    if NUMP == 0:
+        await event.edit("**You haven't set any pics
     
-    num_pics = len(pics)
-    n = 1
-    for i in range(num_pics):
-      links = (
-        f"PIC {n} - [Link]({pics[i]})\n"
-      )
-      n += 1
-      if "PM_PERMIT_IMAGE" in VARIABLES:
-        VARIABLES["PM_PERMIT_IMAGE"] += links
-      else:
-        VARIABLES["PM_PERMIT_IMAGE"] = links
-        
-    mypics = VARIABLES["PM_PERMIT_IMAGE"]
-    message = (
-        "**My PMPermit Pics**\n\n"
-        f"{mypics}"
-    )
-    await pmpic.edit(message)
-    del VARIABLES["PM_PERMIT_IMAGE"]
-
-@register(outgoing=True, pattern="delpmpic$")
-@grp_exclude()
-async def deletemyalivepics(pmpic):
-    PM_PERMIT_IMAGE = "PM_PERMIT_IMAGE"
-    
-    if await del_a_pic(PM_PERMIT_IMAGE) is False:
-        x = await pmpic.edit("I am sorry but you haven't set any pictures yet.")
-        return await delete_in(x, 5)
-    await del_a_pic(PM_PERMIT_IMAGE)
-    x = await pmpic.edit("All pictures have been deleted.")
-    return await delete_in(x, 5)
