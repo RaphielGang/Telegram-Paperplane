@@ -101,14 +101,37 @@ async def telegraph(text):
     sttime = datetime.now()
     
     Reply_Msg = await text.get_reply_message()
+    Media = Reply_Msg.media
     Text = Reply_Msg.text
     
-    if Text == "":
-        message = await text.edit("Make sure there's some text.")
-        time.sleep(3)
-        return await message.delete()
-    else:
-        Text = Text.replace("\n", "<br>")
+    Extention = Reply_Msg.file.ext
+    if Extention in (
+           [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".webp"]
+        )
+    ):
+        Extention = False
+        
+    if Media:
+        if Extention:
+            message = await event.edit("Is it a file? I am downloading it...")
+            Downloaded = await text.client.download_media(Reply_Msg)
+            try:
+                Content = (open(Downloaded)).read()
+                Content = Content.replace("\n", "<br>")
+            except:
+                await event.edit("I couldn't make out any text in the file.")
+                time.sleep(1)
+                await event.edit("Lemme read the caption 🔍")
+                time.sleep(1)
+                Media = False
+                                 
+    elif not Media:
+        if Text == "":
+            message = await event.edit("I can't find any **text** around here.")
+            time.sleep(3)
+            return await message.delete()
+        else:
+            Content = Text.replace("\n", "<br>")
     
     
     telegraph = Telegraph()
@@ -132,7 +155,7 @@ async def telegraph(text):
             "📗"
         ) 
     
-    Page = telegraph.create_page("Paperplane", html_content=Text)
+    Page = telegraph.create_page("Paperplane", html_content=Content)
     
     entime = datetime.now()
     time_passed = entime - sttime
