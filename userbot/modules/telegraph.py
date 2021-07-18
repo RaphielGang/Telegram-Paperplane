@@ -128,6 +128,8 @@ async def telegraph(text):
                 await text.edit("Lemme read the caption 🔍")
                 time.sleep(1)
                 Media = False
+        else:
+            Media = False
                                  
     elif not Media:
         if Text == "":
