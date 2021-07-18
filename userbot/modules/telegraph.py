@@ -104,13 +104,16 @@ async def telegraph(text):
     Media = Reply_Msg.media
     Text = Reply_Msg.text
     
-    Extention = None or Reply_Msg.file.ext
-    if Extention in (
-        (
-           [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".webp"]
-        )
-    ):
-        Extention = False
+    try:
+        Extention = Reply_Msg.file.ext
+        if Extention in (
+            (
+               [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".webp"]
+            )
+        ):
+            Extention = False
+    except AttributeError:
+        pass
         
     if Media:
         if Extention:
