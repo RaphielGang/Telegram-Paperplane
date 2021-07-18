@@ -132,7 +132,7 @@ async def telegraph(text):
             Media = False
                                  
     elif not Media:
-        if Text == "":
+        if not Text:
             message = await text.edit("I can't find any **text** around here.")
             time.sleep(3)
             return await message.delete()
