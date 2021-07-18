@@ -20,7 +20,7 @@ async def delete_in(text, seconds):
 ADD_ALIVE_IMAGE = "**Your {} Alive Image{} {} been set.**"
 DEL_ALIVE_IMAGE = "**I deleted all the Alive Images.**"
 NO_ALIVE
-ADD_PMPERMIT_PIC = "**Your {} PM-Permit Image{} {} been set.**""
+ADD_PMPERMIT_PIC = "**Your {} PM-Permit Image{} {} been set.**"
 DEL_PMPERMIT_IMAGES = "**I deleted all the PM-Permit Images.**"
 
 ## ........... ##
