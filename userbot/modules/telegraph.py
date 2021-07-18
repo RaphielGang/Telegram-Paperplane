@@ -120,7 +120,7 @@ async def telegraph(text):
             message = await text.edit("Is it a file? I am downloading it...")
             Downloaded = await text.client.download_media(Reply_Msg)
             try:
-                Content = (open(Downloaded)).read()
+                Content = str((open(Downloaded)).read())
                 Content = Content.replace("\n", "<br>")
             except:
                 await text.edit("I couldn't make out any text in the file.")
