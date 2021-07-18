@@ -114,21 +114,21 @@ async def telegraph(text):
         
     if Media:
         if Extention:
-            message = await event.edit("Is it a file? I am downloading it...")
+            message = await text.edit("Is it a file? I am downloading it...")
             Downloaded = await text.client.download_media(Reply_Msg)
             try:
                 Content = (open(Downloaded)).read()
                 Content = Content.replace("\n", "<br>")
             except:
-                await event.edit("I couldn't make out any text in the file.")
+                await text.edit("I couldn't make out any text in the file.")
                 time.sleep(1)
-                await event.edit("Lemme read the caption 🔍")
+                await text.edit("Lemme read the caption 🔍")
                 time.sleep(1)
                 Media = False
                                  
     elif not Media:
         if Text == "":
-            message = await event.edit("I can't find any **text** around here.")
+            message = await text.edit("I can't find any **text** around here.")
             time.sleep(3)
             return await message.delete()
         else:
