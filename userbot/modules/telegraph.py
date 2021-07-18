@@ -102,7 +102,7 @@ async def telegraph(text):
     
     Reply_Msg = await text.get_reply_message()
     Media = Reply_Msg.media
-    Text = Reply_Msg.text
+    Text = Reply_Msg.message
     
     try:
         Extention = Reply_Msg.file.ext
@@ -132,13 +132,12 @@ async def telegraph(text):
             Media = False
                                  
     elif not Media:
-        if not Text:
-            message = await text.edit("I can't find any **text** around here.")
+        try:
+            Content = Text.replace("\n", "<br>")
+        except AttributeError:
+            message = await text.edit("I can't see any **text** around here.")
             time.sleep(3)
             return await message.delete()
-        else:
-            Content = Text.replace("\n", "<br>")
-    
     
     telegraph = Telegraph()
     account = telegraph.create_account(short_name="Paperplane")
