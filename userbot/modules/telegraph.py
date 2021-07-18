@@ -106,6 +106,7 @@ async def telegraph(text):
     
     Extention = Reply_Msg.file.ext
     if Extention in (
+        (
            [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".webp"]
         )
     ):
