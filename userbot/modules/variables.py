@@ -2,7 +2,7 @@
 """ Please don't look here, it's so messed up honestly. """
 ##
 
-import time
+'''import time
 from userbot import BOTLOG
 from userbot.modules.dbhelper import set_a_pic, get_a_pic, del_a_pic
 
@@ -77,7 +77,7 @@ async def iwilldeletepic(event, pic):
 async def iwillgetpic(event, pic):
     """It will print out all the pictures you have set."""
     PICS = (await get_a_pic(f"{pic}")).split("|")
-    NUMP = len(PICS)
+    NUMP = len(PICS)'''
     
     
     
