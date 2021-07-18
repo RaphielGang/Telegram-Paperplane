@@ -79,6 +79,5 @@ async def iwillgetpic(event, pic):
     PICS = (await get_a_pic(f"{pic}")).split("|")
     NUMP = len(PICS)
     
-    if NUMP == 0:
-        await event.edit("**You haven't set any pics
+    
     
