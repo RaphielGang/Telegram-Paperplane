@@ -132,14 +132,13 @@ async def telegraph(text):
             Media = False
                                  
     elif not Media:
-        if Text == "":
+        if not Text:
             message = await text.edit("I can't find any **text** around here.")
             time.sleep(3)
             return await message.delete()
         else:
             Content = Text.replace("\n", "<br>")
-    else:
-        await text.edit("My maker is trash")
+            
     
     telegraph = Telegraph()
     account = telegraph.create_account(short_name="Paperplane")
