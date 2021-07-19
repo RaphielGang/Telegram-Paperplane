@@ -138,6 +138,8 @@ async def telegraph(text):
             return await message.delete()
         else:
             Content = Text.replace("\n", "<br>")
+    else:
+        await text.edit("My maker is trash")
     
     telegraph = Telegraph()
     account = telegraph.create_account(short_name="Paperplane")
