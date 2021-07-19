@@ -129,6 +129,10 @@ async def telegraph(text):
                 time.sleep(1)
                 Media = False
         else:
+            await text.edit("It's a non-textual file.")
+            time.sleep(1)
+            await text.edit("Lemme read the caption🔍")
+            time.sleep(1)
             Media = False
                                  
     elif not Media:
