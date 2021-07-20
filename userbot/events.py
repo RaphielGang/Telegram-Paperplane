@@ -31,7 +31,7 @@ def register(**args):
     if pattern is not None and not pattern.startswith('(?i)'):
         if COMMAND_TRIGGER:
             if len(COMMAND_TRIGGER) == 1:
-                args['pattern'] = '(?i)^\\' + COMMAND_TRIGGER
+                args['pattern'] = '(?i)^\\' + COMMAND_TRIGGER + pattern
             else:
                 LOGS.info("Make sure to set only one command trigger.")
         else:
