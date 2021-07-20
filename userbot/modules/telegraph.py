@@ -82,7 +82,7 @@ async def telegraph(media):
                      "[link]"
                     f"(https://telegra.ph{tlg_url[0]})"
                      "\n• Uploaded in "
-                     f"{time_taken} secs."
+                    f"{time_taken} secs."
                )
     
 
@@ -108,7 +108,7 @@ async def telegraph(text):
         Extention = Reply_Msg.file.ext
         if Extention in (
             (
-               [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".webp"]
+               [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".webp", ".tgs"]
             )
         ):
             Extention = False
@@ -127,13 +127,13 @@ async def telegraph(text):
                 time.sleep(1)
                 await text.edit("Lemme read the caption 🔍")
                 time.sleep(1)
-                Media = False
+                Media = None
         else:
             await text.edit("It's a non-textual file.")
             time.sleep(1)
             await text.edit("Lemme read the caption🔍")
             time.sleep(1)
-            Media = False
+            Media = None
                                  
     elif not Media:
         if not Text:
@@ -175,7 +175,7 @@ async def telegraph(text):
                      "[link]"
                     f"(https://telegra.ph/{Page['path']})"
                      "\n• Uploaded in "
-                     f"{time_taken} secs."
+                    f"{time_taken} secs."
                )    
     
     
