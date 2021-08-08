@@ -42,7 +42,7 @@ async def userremover(ai):
         return await x.delete()
     else:
         MONGO.chatbot.delete_one({"user": user_id, "chat": ai.chat_id})
-        x = await ai.edit("__AI response stat:__ \n", "**DEACTIVATED**")
+        x = await ai.edit("__AI response stat:__ \n" "**DEACTIVATED**")
     time.sleep(5)
     await x.delete()
 
