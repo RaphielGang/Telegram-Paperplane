@@ -53,11 +53,11 @@ async def aiworker(ai):
     search = MONGO.chatbot.find_one({"user": message_sender, "chat": ai.chat_id})
 
     if search:
-        client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY)
-        response = await client.get_ai_response(
-            message=message,
-            master="Lee",
-            bot="Maple"
-        )
-        await client.close()
-        await ai.reply(f"{response}")
+        async with randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY) as client:
+            response = await client.get_ai_response(
+                message=message,
+                master="Lee",
+                bot="Maple"
+            )
+            await client.close()
+            await ai.reply(f"{response}")
