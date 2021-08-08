@@ -76,6 +76,6 @@ async def chat_action(worker, response):
     
     async with worker.client.action(worker.chat_id, 'typing'):
         await worker.client.action(worker.chat_id, 'cancel')
-        await time.sleep(wait)
+        time.sleep(wait)
         await worker.client.action(worker.chat_id, 'cancel')
 #   ......    #
