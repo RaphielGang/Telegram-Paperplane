@@ -69,13 +69,13 @@ async def chat_action(worker, response):
     """To make the AI more realistic"""
     text = response.message
     count_ltr = len(text)
-    time = count_ltr * 0.01
+    wait = count_ltr * 0.01
     
-    if time >= 15:
-        time = 15
+    if wait >= 15:
+        wait = 15
     
     async with worker.client.action(worker.chat_id, 'typing'):
         await worker.client.action(worker.chat_id, 'cancel')
-        await time.sleep(time)
+        await time.sleep(wait)
         await worker.client.action(worker.chat_id, 'cancel')
 #   ......    #
