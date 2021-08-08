@@ -13,6 +13,9 @@ async def usersetter(ai):
     replied_msg = await ai.get_reply_message()
     user_id = replied_msg.sender.id
     
+    if not RANDOMSTUFF_API_KEY:
+        return await ai.reply("Set RANDOMSTUFF_API_KEY variable with a correct value first.")
+    
     search = MONGO.chatbot.find_one({"user": user_id, "chat": ai.chat_id})
 
     if search:
@@ -39,7 +42,7 @@ async def userremover(ai):
         return await x.delete()
     else:
         MONGO.chatbot.delete_one({"user": user_id, "chat": ai.chat_id})
-        x = await ai.edit("I will stop responding to this user.")
+        x = await ai.edit("__AI response stat:__ \n", "**DEACTIVATED**")
     time.sleep(5)
     await x.delete()
 
@@ -49,6 +52,10 @@ async def aiworker(ai):
     """Will give ai responses to users"""
     message = ai.message.text
     message_sender = ai.sender.id
+    
+    if message == "WITH ALL MY MIGHT I WISH TO STOP THE AI":
+        await userremover(ai)
+        return
 
     search = MONGO.chatbot.find_one({"user": message_sender, "chat": ai.chat_id})
 
