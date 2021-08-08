@@ -74,8 +74,6 @@ async def chat_action(worker, response):
     if wait >= 15:
         wait = 15
     
-    await worker.client.action(worker.chat_id, 'cancel')
-    
     async with worker.client.action(worker.chat_id, 'typing'):
         time.sleep(wait)
 #   ......    #
