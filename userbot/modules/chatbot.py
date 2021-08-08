@@ -3,7 +3,7 @@ import random
 import time
 
 from userbot.events import register, grp_exclude
-from userbot import BRAIN_ID, BRAIN_API_KEY, MONGO
+from userbot import RANDOMSTUFF_API_KEY, MONGO
 
 
 @register(outgoing=True, pattern="addai$")
@@ -53,6 +53,29 @@ async def aiworker(ai):
     search = MONGO.chatbot.find_one({"user": message_sender, "chat": ai.chat_id})
 
     if search:
-        chatbotsetup(BRAIN_ID, BRAIN_API_KEY)
-        response = sendmsg(message)
-        await ai.reply(response)
+        client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY)
+        response = await client.get_ai_response(
+            message=message,
+            master="Lee",
+            bot="Maple"
+        )
+        await chat_action(ai, response)
+        await client.close()
+        await ai.reply(f"{response.message}")
+
+
+# CHAT ACTION #        
+async def chat_action(worker, response):
+    """To make the AI more realistic"""
+    text = response.message
+    count_ltr = len(text)
+    time = count_ltr * 0.01
+    
+    if time >= 15:
+        time = 15
+    
+    async with worker.client.action(worker.chat_id, 'typing'):
+        await worker.client.action(worker.chat_id, 'cancel')
+        await asyncio.sleep(time)
+        await worker.client.action(worker.chat_id, 'cancel')
+#   ......    #
