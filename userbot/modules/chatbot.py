@@ -29,7 +29,7 @@ async def usersetter(ai):
 
 @register(outgoing=True, pattern="rmai$")
 @grp_exclude()
-async def userremover(ai, called=None):
+async def userremover(ai, called):
     """Will assign the ai to a replied user"""
     if called:
         user_id = called
