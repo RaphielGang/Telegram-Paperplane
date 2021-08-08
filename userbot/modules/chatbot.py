@@ -29,13 +29,10 @@ async def usersetter(ai):
 
 @register(outgoing=True, pattern="rmai$")
 @grp_exclude()
-async def userremover(ai, called):
+async def userremover(ai):
     """Will assign the ai to a replied user"""
-    if called:
-        user_id = called
-    else:
-        replied_msg = await ai.get_reply_message()
-        user_id = replied_msg.sender.id
+    replied_msg = await ai.get_reply_message()
+    user_id = replied_msg.sender.id
     
     search = MONGO.chatbot.find_one({"user": user_id, "chat": ai.chat_id})
 
@@ -56,9 +53,9 @@ async def aiworker(ai):
     message = ai.message.text
     message_sender = ai.sender.id
     
-    if message == "WITH ALL MY MIGHT I WISH TO STOP THE AI":
-        await userremover(ai, message_sender)
-        return
+    if message == "WITH ALL MY MIGHT STOP THE AI":
+        MONGO.chatbot.delete_one({"user": message_sender, "chat": ai.chat_id})
+        return await ai.reply("You got me there! I am dead now LMAO *white flag hovers*")
 
     search = MONGO.chatbot.find_one({"user": message_sender, "chat": ai.chat_id})
 
