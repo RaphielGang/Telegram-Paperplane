@@ -1,4 +1,4 @@
-from BrainshopChatbotAPI.chatbasics import sendmsg, chatbotsetup  
+import randomstuff  
 import random
 import time
 
