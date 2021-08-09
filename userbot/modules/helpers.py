@@ -7,6 +7,7 @@
 Helper functions to be used in modules
 """
 
+import os
 import struct
 from telethon.tl.types import MessageEntityMention, MessageEntityMentionName
 
@@ -69,3 +70,15 @@ async def get_user_from_id(user, event):
         return None
 
     return user_obj
+
+
+async def send_message_as_file(event, text):
+    with open("output.txt", "w+") as output_file:
+            output_file.write(text)
+    await event.client.send_file(
+        event.chat_id,
+        "output.txt",
+        reply_to=event.id,
+        caption="`Output too large, sending as file`",
+    )
+    os.remove("output.txt")
