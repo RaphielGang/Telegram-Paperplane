@@ -10,8 +10,9 @@ import math
 import urllib.request
 from PIL import Image
 
-from telethon.tl.types import InputPeerNotifySettings
+from telethon.tl.types import InputPeerNotifySettings, InputStickerSetID
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
+from telethon.tl.functions.messages import GetStickerSetRequest
 
 from userbot import CMD_HELP, bot
 from userbot.events import register, grp_exclude
@@ -21,7 +22,7 @@ A pack can't have more than 120 stickers at the moment."
 PACK_DOESNT_EXIST = "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
 
 
-@register(outgoing=True, pattern="^.kang($| )?((?![0-9]).+?)? ?([0-9]*)?")
+@register(outgoing=True, pattern="^.kang($| )?(\W+?)? ?([0-9]*)?$")
 @grp_exclude()
 async def kang(event):
     """Function for .kang command, create a sticker pack and add stickers."""
@@ -191,6 +192,138 @@ async def kang(event):
     )
 
 
+@register(outgoing=True, pattern="^.kangpack($| )?([0-9]*)?$")
+@grp_exclude()
+async def kangpack(event):
+    await event.edit("`Kanging the whole pack...`")
+    user = await bot.get_me()
+    pack_username = ""
+    if not user.username:
+        try:
+            user.first_name.decode("ascii")
+            pack_username = user.first_name
+        except UnicodeDecodeError:  # User's first name isn't ASCII, use ID instead
+            pack_username = user.id
+    else:
+        pack_username = user.username
+
+    textx = await event.get_reply_message()
+
+    if not textx.sticker:
+        await event.edit(
+            "`You need to reply to a sticker to be able to kang the whole pack!`"
+        )
+        return
+
+    sticker_set = textx.file.sticker_set
+    stickers = await event.client(GetStickerSetRequest(
+        stickerset=InputStickerSetID(
+            id=sticker_set.id, access_hash=sticker_set.access_hash
+        )
+    ))
+    is_anim = textx.file.mime_type == "application/x-tgsticker"
+
+    number = event.pattern_match.group(2) or 1
+    new_pack = False
+    while not new_pack:
+        packname = f"a{user.id}_by_{pack_username}_{number}{'_anim' if is_anim else ''}" # False -> is_anim
+        packtitle = (
+            f"@{user.username or user.first_name}'s Paperplane Pack "
+            f"{number}{' animated' if is_anim else ''}" # False -> is_anim
+        )
+        response = urllib.request.urlopen(
+            urllib.request.Request(f"http://t.me/addstickers/{packname}")
+        )
+        htmlstr = response.read().decode("utf8").split("\n")
+        new_pack = PACK_DOESNT_EXIST in htmlstr
+        if not new_pack:
+            if event.pattern_match.group(2):
+                await event.edit(
+                    "`This pack doesn't exist! Specify another number or omit the argument to let "
+                    "Paperplane get the lowest available pack number automatically.`"
+                )
+                return
+            number += 1
+
+    # Mute Stickers bot to ensure user doesn't get notification spam
+    muted = await bot(
+        UpdateNotifySettingsRequest(
+            peer="t.me/Stickers",
+            settings=InputPeerNotifySettings(mute_until=2 ** 31 - 1),
+        )  # Mute forever
+    )
+    if not muted:  # Tell the user just in case, this may rarely happen
+        await event.edit(
+            "`Paperplane couldn't mute the Stickers bot, beware of notification spam.`"
+        )
+
+
+    async with bot.conversation("Stickers") as conv:
+        # Cancel any pending command
+        await conv.send_message("/cancel")
+        await conv.get_response()
+
+        # Send new pack command
+        if is_anim:
+            await conv.send_message("/newanimated")
+        else:
+            await conv.send_message("/newpack")
+        await conv.get_response()
+
+        # Give the pack a name
+        await conv.send_message(packtitle)
+        await conv.get_response()
+
+    for sticker in stickers.documents:
+        async with bot.conversation("Stickers") as conv2:
+            emoji = sticker.attributes[1].alt
+            # Upload sticker file
+            if is_anim:
+                sticker_dl = io.BytesIO()
+                await bot.download_media(sticker, sticker_dl)
+                sticker_dl.seek(0)
+                upload = await bot.upload_file(sticker_dl, file_name="AnimatedSticker.tgs")
+                await conv2.send_file(upload, force_document=True)
+            else:
+                await conv2.send_file(sticker, force_document=True)
+            await conv2.get_response()
+
+            # Send the emoji
+            await conv2.send_message(emoji)
+            await conv2.get_response()
+
+    async with bot.conversation("Stickers") as conv:
+        # Publish the pack
+        await conv.send_message("/publish")
+        if is_anim:
+            await conv.get_response()
+            await conv.send_message(f"<{packtitle}>")
+        await conv.get_response()
+
+        # Skip pack icon selection
+        await conv.send_message("/skip")
+        await conv.get_response()
+
+        # Send packname
+        await conv.send_message(packname)
+        await conv.get_response()
+
+    # Read all unread messages
+    await bot.send_read_acknowledge("t.me/Stickers")
+    # Unmute Stickers bot back
+    muted = await bot(
+        UpdateNotifySettingsRequest(
+            peer="t.me/Stickers", settings=InputPeerNotifySettings(mute_until=None)
+        )
+    )
+
+    await event.edit(
+        f"`Sticker pack {number}{' (animated)' if is_anim else ''} has been created!\n"
+        f"It can be found` [here](t.me/addstickers/{packname})`.`",
+        parse_mode="md",
+    )
+
+
 async def newpack(is_anim, sticker, emoji, packtitle, packname):
     async with bot.conversation("Stickers") as conv:
         # Cancel any pending command
@@ -267,9 +400,15 @@ CMD_HELP.update(
         "kang": [
             "Kang",
             " - `.kang <emoji> <number>`: Reply .kang to a sticker or an image to kang "
-            "it to your Paperplane pack.\n"
+            "it to your Paperplane pack. Animated stickers are also supported.\n"
             "If emojis are sent, they will be used as the emojis for the sticker.\n"
-            "If a number is sent, the emoji will be saved in the pack corresponding to that number.",
+            "If a number is sent, the emoji will be saved in the pack corresponding to that number. "
+            "Otherwise, Paperplane will use an available pack name with the lowest number.\n"
+            " - `.kangpack <number>`: Reply .kangpack to a sticker to kang the whole pack the sticker "
+            "is in as a new Paperplane pack. The new pack will have all of the stickers from the "
+            "kanged pack, with their corresponding emoji and order. Animated packs are also supported.\n"
+            "If a number is sent, the emoji will be saved in the pack corresponding to that number. "
+            "Otherwise, Paperplane will use an available pack name with the lowest number.\n",
         ]
     }
 )
