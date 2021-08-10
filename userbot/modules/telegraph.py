@@ -90,7 +90,7 @@ async def telegraph(media):
 @grp_exclude()
 async def telegraph(text):
     """Gives the telegraph link of text.
-    No media."""
+       No media."""
     
     if not text.reply_to_msg_id:
         message = await text.edit("Reply to a message to get its telegraph link.")
@@ -128,20 +128,18 @@ async def telegraph(text):
                 await text.edit("Lemme read the caption 🔍")
                 time.sleep(1)
                 Media = False
-        else:
-            await text.edit("It's a non-textual file.")
-            time.sleep(1)
-            await text.edit("Lemme read the caption 🔍")
-            time.sleep(1)
-            Media = False
+        await text.edit("It's a non-textual file.")
+        time.sleep(1)
+        await text.edit("Lemme read the caption 🔍")
+        time.sleep(1)
+        Media = False
                                  
     if not Media:
         if not Text:
             message = await text.edit("I can't find any **text** around here.")
             time.sleep(3)
             return await message.delete()
-        else:
-            Content = Text.replace("\n", "<br>")
+        Content = Text.replace("\n", "<br>")
             
     
     telegraph = Telegraph()
