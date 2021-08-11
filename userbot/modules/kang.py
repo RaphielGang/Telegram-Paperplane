@@ -324,6 +324,50 @@ async def kangpack(event):
     )
 
 
+@register(outgoing=True, pattern="^.getsticker$")
+@grp_exclude()
+async def getsticker(event):
+    await event.edit("`Getting the sticker as a file...`")
+    textx = await event.get_reply_message()
+
+    if not textx or not textx.sticker:
+        await event.edit(
+            "`You need to reply to a sticker to be able to get it as a file!`"
+        )
+        return
+
+    sticker = io.BytesIO()
+    await bot.download_media(textx, sticker)
+    sticker.seek(0)
+
+    if not sticker:
+        await event.edit(
+            "`Couldn't download the sticker! Make sure you reply to a proper sticker.`"
+        )
+        return
+
+    if textx.file.mime_type == "application/x-tgsticker":
+        upload = await event.client.upload_file(
+            sticker, file_name="AnimatedSticker.tgs_"
+        )
+        await event.reply(
+            file=upload,
+            force_document=True,
+            message=
+                "```Please rename the file manually to delete the _ from the extension "
+                "(rename AnimatedSticker.tgs_ to AnimatedSticker.tgs). "
+                "This is a Telegram limitation.```"
+        )
+    else:
+        img = Image.open(sticker)
+        sticker.name = "sticker.png"
+        img.save(sticker, "PNG")
+        sticker.seek(0)
+        await event.reply(file=sticker, force_document=True)
+
+    await event.edit("`Got the sticker as a file!`")
+
+
 async def newpack(is_anim, sticker, emoji, packtitle, packname):
     async with bot.conversation("Stickers") as conv:
         # Cancel any pending command
@@ -408,7 +452,11 @@ CMD_HELP.update(
             "is in as a new Paperplane pack. The new pack will have all of the stickers from the "
             "kanged pack, with their corresponding emoji and order. Animated packs are also supported.\n"
             "If a number is sent, the emoji will be saved in the pack corresponding to that number. "
-            "Otherwise, Paperplane will use an available pack name with the lowest number.\n",
+            "Otherwise, Paperplane will use an available pack name with the lowest number.\n"
+            " - `.getsticker`: Reply .getsticker to a sticker to get it as a file! Animated "
+            "sticker support is limited because of a Telegram limitation. Using the command with "
+            "animated stickers will require you to rename the file to remove _ from the end of its"
+            "extension.",
         ]
     }
 )
