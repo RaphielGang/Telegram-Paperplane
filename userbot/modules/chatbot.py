@@ -55,7 +55,12 @@ async def aiworker(ai):
     
     if message == "WITH ALL MY MIGHT STOP THE AI":
         MONGO.chatbot.delete_one({"user": message_sender, "chat": ai.chat_id})
-        return await ai.reply("You got me there! I am dead now LMAO *white flag hovers*")
+        x = await ai.reply(
+            "You got me there! I am rolling back for now, will meet ya later. " 
+            "***White Flag Hovers 🏳️***"
+        )
+        time.sleep(8)
+        return await x.delete
 
     search = MONGO.chatbot.find_one({"user": message_sender, "chat": ai.chat_id})
 
