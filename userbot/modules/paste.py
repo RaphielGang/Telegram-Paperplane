@@ -68,10 +68,15 @@ async def getpaste(paste_url):
     if textx:
         message = str(textx.message)
 
-    if message.startswith(f"https://{KATBIN_URL}"):
-        pasteid = message[len(f"https://{KATBIN_URL}") :]
-    elif message.startswith(KATBIN_URL):
-        pasteid = message[len(KATBIN_URL) :]
+    for startstr in [
+        f"https://{KATBIN_URL}v/",
+        f"{KATBIN_URL}v/",
+        f"https://{KATBIN_URL}",
+        KATBIN_URL
+    ]:
+        if message.startswith(startstr):
+            pasteid = message[len(startstr):]
+            break
     else:
         await paste_url.edit("`Are you sure you're using a valid Katbin URL?`")
         return
