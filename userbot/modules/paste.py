@@ -37,8 +37,8 @@ async def paste(pstl):
     await pstl.edit("`Pasting text...`")
     resp = post(
         KATBIN_API_URL,
-        headers={'content-type': 'application/json'},
-        data=json.dumps({"content": message})
+        headers={"content-type": "application/json"},
+        data=json.dumps({"content": message}),
     )
 
     if resp.status_code == 201:
@@ -72,10 +72,10 @@ async def getpaste(paste_url):
         f"https://{KATBIN_URL}v/",
         f"{KATBIN_URL}v/",
         f"https://{KATBIN_URL}",
-        KATBIN_URL
+        KATBIN_URL,
     ]:
         if message.startswith(startstr):
-            pasteid = message[len(startstr):]
+            pasteid = message[len(startstr) :]
             break
     else:
         await paste_url.edit("`Are you sure you're using a valid Katbin URL?`")
@@ -103,15 +103,13 @@ async def getpaste(paste_url):
 
     response = resp.json()
     reply_text = "`Fetched Katbin URL content "
-    reply_text += "successfully!`\n\n`Content:` " + response['content']
+    reply_text += "successfully!`\n\n`Content:` " + response["content"]
 
     await paste_url.edit(reply_text)
     if BOTLOG:
         await paste_url.client.send_message(
             BOTLOG_CHATID,
-            "Get Katbin content query for `"
-            + message
-            + "` was executed successfully",
+            "Get Katbin content query for `" + message + "` was executed successfully",
         )
 
 

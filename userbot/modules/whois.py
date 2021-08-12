@@ -132,9 +132,13 @@ def todict(obj, classkey=None):
     elif hasattr(obj, "__iter__") and not isinstance(obj, str):
         return [todict(v, classkey) for v in obj]
     elif hasattr(obj, "__dict__"):
-        data = dict([(key, todict(value, classkey))
-            for key, value in obj.__dict__.items()
-            if not callable(value) and not key.startswith('_')])
+        data = dict(
+            [
+                (key, todict(value, classkey))
+                for key, value in obj.__dict__.items()
+                if not callable(value) and not key.startswith("_")
+            ]
+        )
         if classkey is not None and hasattr(obj, "__class__"):
             data[classkey] = obj.__class__.__name__
         return data
@@ -145,24 +149,23 @@ def todict(obj, classkey=None):
 @register(pattern="^.raw(?: |$)(.*)", outgoing=True)
 @grp_exclude()
 async def msg_info(event):
-    arg = event.pattern_match.group(1) or 'yaml'
+    arg = event.pattern_match.group(1) or "yaml"
     reply = await event.get_reply_message()
 
-    if arg not in ['obj', 'json', 'yaml']:
+    if arg not in ["obj", "json", "yaml"]:
         event.edit("`Wrong argument! Supported arguments are: yaml, obj, json.`")
 
-    if arg == 'obj':
+    if arg == "obj":
         res_txt = f"{reply}"
-    elif arg == 'json':
+    elif arg == "json":
         res_txt = json.dumps(todict(reply), indent=4, default=str)
-    elif arg == 'yaml':
-        res_txt = yaml.dump(todict(reply), default_style='', sort_keys=False)
+    elif arg == "yaml":
+        res_txt = yaml.dump(todict(reply), default_style="", sort_keys=False)
 
     if len(res_txt) > 4096:
         return await send_message_as_file(event, res_txt)
 
     return await event.edit(f"<code>{escape(res_txt)}</code>", parse_mode="html")
-
 
 
 CMD_HELP.update(
@@ -171,7 +174,7 @@ CMD_HELP.update(
             "Whois",
             " - `.whois <username>`: Get info about the target (argument or reply) user.\n",
             " - `.raw <yaml|json|obj>: Get the raw Message object of the replied message. "
-            "If no argument is specified, the YAML format is used.\n"
+            "If no argument is specified, the YAML format is used.\n",
         ]
     }
 )

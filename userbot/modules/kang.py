@@ -216,20 +216,22 @@ async def kangpack(event):
         return
 
     sticker_set = textx.file.sticker_set
-    stickers = await event.client(GetStickerSetRequest(
-        stickerset=InputStickerSetID(
-            id=sticker_set.id, access_hash=sticker_set.access_hash
+    stickers = await event.client(
+        GetStickerSetRequest(
+            stickerset=InputStickerSetID(
+                id=sticker_set.id, access_hash=sticker_set.access_hash
+            )
         )
-    ))
+    )
     is_anim = textx.file.mime_type == "application/x-tgsticker"
 
     number = event.pattern_match.group(2) or 1
     new_pack = False
     while not new_pack:
-        packname = f"a{user.id}_by_{pack_username}_{number}{'_anim' if is_anim else ''}" # False -> is_anim
+        packname = f"a{user.id}_by_{pack_username}_{number}{'_anim' if is_anim else ''}"
         packtitle = (
             f"@{user.username or user.first_name}'s Paperplane Pack "
-            f"{number}{' animated' if is_anim else ''}" # False -> is_anim
+            f"{number}{' animated' if is_anim else ''}"
         )
         response = urllib.request.urlopen(
             urllib.request.Request(f"http://t.me/addstickers/{packname}")
@@ -257,7 +259,6 @@ async def kangpack(event):
             "`Paperplane couldn't mute the Stickers bot, beware of notification spam.`"
         )
 
-
     async with bot.conversation("Stickers") as conv:
         # Cancel any pending command
         await conv.send_message("/cancel")
@@ -282,7 +283,9 @@ async def kangpack(event):
                 sticker_dl = io.BytesIO()
                 await bot.download_media(sticker, sticker_dl)
                 sticker_dl.seek(0)
-                upload = await bot.upload_file(sticker_dl, file_name="AnimatedSticker.tgs")
+                upload = await bot.upload_file(
+                    sticker_dl, file_name="AnimatedSticker.tgs"
+                )
                 await conv2.send_file(upload, force_document=True)
             else:
                 await conv2.send_file(sticker, force_document=True)
@@ -353,10 +356,9 @@ async def getsticker(event):
         await event.reply(
             file=upload,
             force_document=True,
-            message=
-                "```Please rename the file manually to delete the _ from the extension "
-                "(rename AnimatedSticker.tgs_ to AnimatedSticker.tgs). "
-                "This is a Telegram limitation.```"
+            message="```Please rename the file manually to delete the _ from the extension "
+            "(rename AnimatedSticker.tgs_ to AnimatedSticker.tgs). "
+            "This is a Telegram limitation.```",
         )
     else:
         img = Image.open(sticker)
