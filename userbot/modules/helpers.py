@@ -74,7 +74,7 @@ async def get_user_from_id(user, event):
 
 async def send_message_as_file(event, text):
     with open("output.txt", "w+") as output_file:
-            output_file.write(text)
+        output_file.write(text)
     await event.client.send_file(
         event.chat_id,
         "output.txt",
