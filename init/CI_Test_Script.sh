@@ -48,9 +48,9 @@ tg_senderror() {
 }
 
 lint() {
-  RESULT=`black --check .`
+  black --check .
 
-  if $RESULT; then
+  if [ $? -eq 0 ]; then
     tg_sendinfo "<code>Code doesn't have any formatting issues. [black]</code>"
   else
     tg_sendinfo "<code>Code has formatting issues, but hasn't been formatted. [black]</code>"
