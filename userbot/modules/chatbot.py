@@ -1,4 +1,5 @@
 import randomstuff  
+import asyncio
 import random
 import time
 
@@ -84,8 +85,8 @@ async def chat_action(worker, response):
     wait = count_ltr * 0.01
     
     if wait >= 15:
-        wait = 15
+        wait == 15
     
     async with worker.client.action(worker.chat_id, 'typing'):
-        time.sleep(wait)
+        await asyncio.sleep(wait)
 #   ......    #
