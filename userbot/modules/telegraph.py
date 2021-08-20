@@ -1,7 +1,7 @@
 import time
 from datetime import datetime
 
-from telegraph import Telegraph, upload_file, exceptions
+from telegraph import Telegraph, upload, exceptions
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register, grp_exclude
@@ -64,7 +64,7 @@ async def telegraph(media):
     
     
     try:
-      tlg_url = upload_file(Downloaded)
+      tlg_url = upload.upload_file(Downloaded)
     except exceptions.TelegraphException as error:
       await media.edit("Oh no! I got an error.")
       time.sleep(1)
