@@ -11,7 +11,7 @@ from userbot.events import register, grp_exclude
 
 @register(outgoing=True, pattern=r"^.help(?: |$)(.*)")
 @grp_exclude()
-async def help(event):
+async def help_cmd(event):
     """For .help command"""
     args = event.pattern_match.group(1).lower()
 
