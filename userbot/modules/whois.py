@@ -132,13 +132,11 @@ def todict(obj, classkey=None):
     elif hasattr(obj, "__iter__") and not isinstance(obj, str):
         return [todict(v, classkey) for v in obj]
     elif hasattr(obj, "__dict__"):
-        data = dict(
-            [
-                (key, todict(value, classkey))
-                for key, value in obj.__dict__.items()
-                if not callable(value) and not key.startswith("_")
-            ]
-        )
+        data = {
+            key: todict(value, classkey)
+            for key, value in obj.__dict__.items()
+            if not callable(value) and not key.startswith("_")
+        }
         if classkey is not None and hasattr(obj, "__class__"):
             data[classkey] = obj.__class__.__name__
         return data
@@ -152,8 +150,11 @@ async def msg_info(event):
     arg = event.pattern_match.group(1) or "yaml"
     reply = await event.get_reply_message()
 
+    if not reply:
+        return await event.edit("`Reply message missing! Can't get raw data.`")
+
     if arg not in ["obj", "json", "yaml"]:
-        event.edit("`Wrong argument! Supported arguments are: yaml, obj, json.`")
+        await event.edit("`Wrong argument! Supported arguments are: yaml, obj, json.`")
 
     if arg == "obj":
         res_txt = f"{reply}"
