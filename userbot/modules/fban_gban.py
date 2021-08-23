@@ -20,7 +20,7 @@ from userbot.modules.dbhelper import (
 from userbot.modules import helpers
 
 
-@register(outgoing=True, pattern="^.gban(?: |$)([^\s]+)(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.gban(?: |$)([^\s]+)(?: |$)(.*)")
 @grp_exclude()
 async def gban_all(msg):
     if not is_mongo_alive() or not is_redis_alive():
@@ -58,7 +58,7 @@ async def gban_all(msg):
     await msg.edit(message)
 
 
-@register(outgoing=True, pattern="^.fban(?: |$)([^\s]+)(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.fban(?: |$)([^\s]+)(?: |$)(.*)")
 @grp_exclude()
 async def fedban_all(msg):
     if not is_mongo_alive() or not is_redis_alive():
@@ -98,7 +98,7 @@ async def fedban_all(msg):
     await msg.edit(message)
 
 
-@register(outgoing=True, pattern="^.addfban")
+@register(outgoing=True, pattern=r"^.addfban")
 @grp_exclude()
 async def add_to_fban(chat):
     if not is_mongo_alive() or not is_redis_alive():
@@ -114,7 +114,7 @@ async def add_to_fban(chat):
         )
 
 
-@register(outgoing=True, pattern="^.addgban")
+@register(outgoing=True, pattern=r"^.addgban")
 @grp_exclude()
 async def add_to_gban(chat):
     if not is_mongo_alive() or not is_redis_alive():
@@ -130,7 +130,7 @@ async def add_to_gban(chat):
         )
 
 
-@register(outgoing=True, pattern="^.removefban")
+@register(outgoing=True, pattern=r"^.removefban")
 @grp_exclude()
 async def remove_from_fban(chat):
     if not is_mongo_alive() or not is_redis_alive():
@@ -146,7 +146,7 @@ async def remove_from_fban(chat):
         )
 
 
-@register(outgoing=True, pattern="^.removegban")
+@register(outgoing=True, pattern=r"^.removegban")
 @grp_exclude()
 async def remove_from_gban(chat):
     if not is_mongo_alive() or not is_redis_alive():
@@ -162,7 +162,7 @@ async def remove_from_gban(chat):
         )
 
 
-@register(outgoing=True, pattern="^.listfban")
+@register(outgoing=True, pattern=r"^.listfban")
 @grp_exclude()
 async def list_fban(chat):
     if not is_mongo_alive() or not is_redis_alive():
@@ -182,7 +182,7 @@ async def list_fban(chat):
     await chat.edit(message)
 
 
-@register(outgoing=True, pattern="^.listgban")
+@register(outgoing=True, pattern=r"^.listgban")
 @grp_exclude()
 async def list_gban(chat):
     if not is_mongo_alive() or not is_redis_alive():

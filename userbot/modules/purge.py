@@ -13,7 +13,7 @@ from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.purge$")
+@register(outgoing=True, pattern=r"^.purge$")
 @grp_exclude()
 async def fastpurger(purg):
     """For .purge command, purge all messages starting from the reply."""
@@ -52,7 +52,7 @@ async def fastpurger(purg):
     await done.delete()
 
 
-@register(outgoing=True, pattern="^.purgeme")
+@register(outgoing=True, pattern=r"^.purgeme")
 @grp_exclude()
 async def purgeme(delme):
     """For .purgeme, delete x count of your latest message."""
@@ -82,7 +82,7 @@ async def purgeme(delme):
     await smsg.delete()
 
 
-@register(outgoing=True, pattern="^.del$")
+@register(outgoing=True, pattern=r"^.del$")
 @grp_exclude()
 async def delete_it(delme):
     """For .del command, delete the replied message."""
@@ -102,7 +102,7 @@ async def delete_it(delme):
                 )
 
 
-@register(outgoing=True, pattern="^.sd")
+@register(outgoing=True, pattern=r"^.sd")
 @grp_exclude()
 async def selfdestruct(destroy):
     """For .sd command, make self-destructable messages."""

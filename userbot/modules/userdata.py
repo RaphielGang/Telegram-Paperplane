@@ -35,7 +35,7 @@ USERNAME_TAKEN = "```This username is already taken.```"
 # ===============================================================
 
 
-@register(outgoing=True, pattern="^.name")
+@register(outgoing=True, pattern=r"^.name")
 @grp_exclude()
 async def update_name(name):
     """For .name command, change your name in Telegram."""
@@ -52,7 +52,7 @@ async def update_name(name):
     await name.edit(NAME_OK)
 
 
-@register(outgoing=True, pattern="^.profilepic$")
+@register(outgoing=True, pattern=r"^.profilepic$")
 @grp_exclude()
 async def set_profilepic(propic):
     """For .profilepic command, change your profile picture in Telegram."""
@@ -79,7 +79,7 @@ async def set_profilepic(propic):
             await propic.edit(INVALID_MEDIA)
 
 
-@register(outgoing=True, pattern="^.setbio (.*)")
+@register(outgoing=True, pattern=r"^.setbio (.*)")
 @grp_exclude()
 async def set_biograph(setbio):
     """For .setbio command, set a new bio for your profile in Telegram."""
@@ -88,7 +88,7 @@ async def set_biograph(setbio):
     await setbio.edit(BIO_SUCCESS)
 
 
-@register(outgoing=True, pattern="^.username (.*)")
+@register(outgoing=True, pattern=r"^.username (.*)")
 @grp_exclude()
 async def update_username(username):
     """For .username command, set a new username in Telegram."""

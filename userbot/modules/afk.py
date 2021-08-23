@@ -81,7 +81,7 @@ async def afk_on_pm(afk_pm):
                     COUNT_MSG = COUNT_MSG + 1
 
 
-@register(outgoing=True, disable_errors=True, pattern="^.afk")
+@register(outgoing=True, disable_errors=True, pattern=r"^.afk")
 @grp_exclude()
 async def set_afk(setafk):
     if not is_redis_alive():

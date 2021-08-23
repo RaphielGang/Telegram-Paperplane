@@ -48,7 +48,7 @@ async def get_tz(con):
         return
 
 
-@register(outgoing=True, pattern="^.time(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@register(outgoing=True, pattern=r"^.time(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
 @grp_exclude()
 async def time_func(tdata):
     """For .time command, return the time of
@@ -119,7 +119,7 @@ async def time_func(tdata):
     await tdata.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
-@register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
+@register(outgoing=True, pattern=r"^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
 @grp_exclude()
 async def date_func(dat):
     """For .date command, return the date of
@@ -190,7 +190,7 @@ async def date_func(dat):
     await dat.edit(f"`It's`  **{dtnow}**  `in {c_name}({time_zone} timezone).`")
 
 
-@register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
+@register(outgoing=True, pattern=r"^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
 @grp_exclude()
 async def set_time_country(loc):
     """For .settime command, change the default userbot

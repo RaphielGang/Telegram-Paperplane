@@ -323,7 +323,7 @@ async def univsaye(cowmsg):
     await cowmsg.edit(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
-@register(outgoing=True, pattern="^:/$", ignore_unsafe=True)
+@register(outgoing=True, pattern=r"^:/$", ignore_unsafe=True)
 @grp_exclude()
 async def kek(keks):
     """Check yourself ;)"""
@@ -333,7 +333,7 @@ async def kek(keks):
         await keks.edit(":" + uio[i % 2])
 
 
-@register(outgoing=True, pattern="^-_-$", ignore_unsafe=True)
+@register(outgoing=True, pattern=r"^-_-$", ignore_unsafe=True)
 @grp_exclude()
 async def lol(lel):
     """Ok..."""
@@ -343,7 +343,7 @@ async def lol(lel):
         await lel.edit(okay, parse_mode="html")
 
 
-@register(outgoing=True, pattern="^.cp(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.cp(?: |$)(.*)")
 @grp_exclude()
 async def copypasta(cp_e):
     """Copypasta the famous meme"""
@@ -378,7 +378,7 @@ async def copypasta(cp_e):
     await cp_e.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.vapor(?: |$)(.*)")
 @grp_exclude()
 async def vapor(vpr):
     """Vaporize everything!"""
@@ -404,7 +404,7 @@ async def vapor(vpr):
     await vpr.edit("".join(reply_text))
 
 
-@register(outgoing=True, pattern="^.str(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.str(?: |$)(.*)")
 @grp_exclude()
 async def stretch(stret):
     """Stretch it."""
@@ -424,7 +424,7 @@ async def stretch(stret):
     await stret.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.zal(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.zal(?: |$)(.*)")
 @grp_exclude()
 async def zal(zgfy):
     """Invoke the feeling of chaos."""
@@ -461,7 +461,7 @@ async def zal(zgfy):
     await zgfy.edit("".join(reply_text))
 
 
-@register(outgoing=True, pattern="^.owo(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.owo(?: |$)(.*)")
 @grp_exclude()
 async def faces(owo):
     """UwU"""
@@ -485,7 +485,7 @@ async def faces(owo):
     await owo.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.react$")
+@register(outgoing=True, pattern=r"^.react$")
 @grp_exclude()
 async def react_meme(react):
     """Make your userbot react to everything."""
@@ -494,14 +494,14 @@ async def react_meme(react):
     await react.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.shg$")
+@register(outgoing=True, pattern=r"^.shg$")
 @grp_exclude()
 async def shrugger(shg):
     r"""¯\_(ツ)_/¯"""
     await shg.edit(r"¯\_(ツ)_/¯")
 
 
-@register(outgoing=True, pattern="^.runs$")
+@register(outgoing=True, pattern=r"^.runs$")
 @grp_exclude()
 async def runner_lol(run):
     """Run, run, RUNNN!"""
@@ -510,7 +510,7 @@ async def runner_lol(run):
     await run.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.metoo$")
+@register(outgoing=True, pattern=r"^.metoo$")
 @grp_exclude()
 async def metoo(hahayes):
     """Haha yes"""
@@ -518,7 +518,7 @@ async def metoo(hahayes):
     await hahayes.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.mock(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.mock(?: |$)(.*)")
 @grp_exclude()
 async def spongemocktext(mock):
     """Do it and find the real fun."""
@@ -543,7 +543,7 @@ async def spongemocktext(mock):
     await mock.edit("".join(reply_text))
 
 
-@register(outgoing=True, pattern="^.clap(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.clap(?: |$)(.*)")
 @grp_exclude()
 async def claptext(memereview):
     """Praise people!"""
@@ -562,7 +562,7 @@ async def claptext(memereview):
     await memereview.edit(reply_text)
 
 
-@register(outgoing=True, pattern="^.bt$")
+@register(outgoing=True, pattern=r"^.bt$")
 @grp_exclude()
 async def bluetext(bt_e):
     """Believe me, you will find this useful."""
@@ -573,7 +573,7 @@ async def bluetext(bt_e):
         )
 
 
-@register(outgoing=True, pattern="^.type(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.type(?: |$)(.*)")
 @grp_exclude()
 async def typewriter(typew):
     """Just a small command to make your keyboard become a typewriter!"""

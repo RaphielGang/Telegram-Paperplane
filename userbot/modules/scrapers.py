@@ -28,7 +28,7 @@ from userbot.events import register, grp_exclude
 LANG = "en"
 
 
-@register(outgoing=True, pattern="^.img (.*)")
+@register(outgoing=True, pattern=r"^.img (.*)")
 @grp_exclude()
 async def img_sampler(event):
     """For .img command, search and return images matching the query."""
@@ -143,7 +143,7 @@ async def wiki(wiki_q):
         )
 
 
-@register(outgoing=True, pattern="^.ud (.*)")
+@register(outgoing=True, pattern=r"^.ud (.*)")
 @grp_exclude()
 async def urban_dict(ud_e):
     """For .ud command, fetch content from Urban Dictionary."""
@@ -280,7 +280,7 @@ async def translateme(trans):
         )
 
 
-@register(pattern="^.lang (.*)", outgoing=True)
+@register(pattern=r"^.lang (.*)", outgoing=True)
 @grp_exclude()
 async def lang(value):
     """For .lang command, change the default langauge of userbot scrapers."""

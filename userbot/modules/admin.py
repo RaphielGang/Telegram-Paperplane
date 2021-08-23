@@ -117,7 +117,7 @@ CHATUNLOCK_RIGHTS = ChatBannedRights(
 # ================================================
 
 
-@register(outgoing=True, group_only=True, pattern="^.setgrouppic$")
+@register(outgoing=True, group_only=True, pattern=r"^.setgrouppic$")
 @grp_exclude()
 async def set_group_photo(gpic):
     """For .setgrouppic command, changes the picture of a group"""
@@ -148,7 +148,7 @@ async def set_group_photo(gpic):
             await gpic.edit(PP_ERROR)
 
 
-@register(outgoing=True, group_only=True, pattern="^.promote(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.promote(?: |$)(.*)")
 @grp_exclude()
 async def promote(promt):
     """For .promote command, do promote targeted person"""
@@ -203,7 +203,7 @@ async def promote(promt):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.demote(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.demote(?: |$)(.*)")
 @grp_exclude()
 async def demote(dmod):
     """For .demote command, do demote targeted person"""
@@ -255,7 +255,7 @@ async def demote(dmod):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.ban(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.ban(?: |$)(.*)")
 @grp_exclude()
 async def ban(bon):
     """For .ban command, do a ban at targeted person"""
@@ -308,7 +308,7 @@ async def ban(bon):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.unban(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.unban(?: |$)(.*)")
 @grp_exclude()
 async def nothanos(unbon):
     """For .unban command, unban the target"""
@@ -346,7 +346,7 @@ async def nothanos(unbon):
         await unbon.edit("`Uh oh, my unban logic broke!`")
 
 
-@register(outgoing=True, group_only=True, pattern="^.mute(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.mute(?: |$)(.*)")
 @grp_exclude()
 async def spider(spdr):
     """
@@ -416,7 +416,7 @@ async def spider(spdr):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.unmute(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.unmute(?: |$)(.*)")
 @grp_exclude()
 async def unmoot(unmot):
     """For .unmute command, unmute the target"""
@@ -503,7 +503,7 @@ async def muter(moot):
             await moot.delete()
 
 
-@register(outgoing=True, group_only=True, pattern="^.ungmute(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.ungmute(?: |$)(.*)")
 @grp_exclude()
 async def ungmoot(un_gmute):
     """For .ungmute command, ungmutes the target in the userbot"""
@@ -537,7 +537,7 @@ async def ungmoot(un_gmute):
             )
 
 
-@register(outgoing=True, group_only=True, pattern="^.gmute(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.gmute(?: |$)(.*)")
 @grp_exclude()
 async def gspider(gspdr):
     """For .gmute command, gmutes the target in the userbot"""
@@ -569,7 +569,7 @@ async def gspider(gspdr):
             )
 
 
-@register(outgoing=True, group_only=True, pattern="^.delusers(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.delusers(?: |$)(.*)")
 @grp_exclude()
 async def rm_deletedacc(show):
     """For .delusers command, clean deleted accounts."""
@@ -629,7 +629,7 @@ async def rm_deletedacc(show):
     await show.edit(del_status)
 
 
-@register(outgoing=True, group_only=True, pattern="^.adminlist$")
+@register(outgoing=True, group_only=True, pattern=r"^.adminlist$")
 @grp_exclude()
 async def get_admin(show):
     """For .adminlist command, list all of the admins of the chat."""
@@ -652,7 +652,7 @@ async def get_admin(show):
     await show.edit(mentions, parse_mode="html")
 
 
-@register(outgoing=True, group_only=True, pattern="^.pin(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.pin(?: |$)(.*)")
 @grp_exclude()
 async def pin(msg):
     """.pin pins the replied to message at the top of the chat."""
@@ -698,7 +698,7 @@ async def pin(msg):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.kick(?: |$)(.*)")
+@register(outgoing=True, group_only=True, pattern=r"^.kick(?: |$)(.*)")
 @grp_exclude()
 async def kick(usr):
     """For .kick command, kick someone from the group using the userbot."""
@@ -742,7 +742,7 @@ async def kick(usr):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.lock$")
+@register(outgoing=True, group_only=True, pattern=r"^.lock$")
 async def emergency_lock(lock):
     """For emergency-locking a chat"""
     # Admin or creator check
@@ -771,7 +771,7 @@ async def emergency_lock(lock):
         )
 
 
-@register(outgoing=True, group_only=True, pattern="^.unlock$")
+@register(outgoing=True, group_only=True, pattern=r"^.unlock$")
 async def chat_unlock(unlock):
     """For unlocking a chat"""
     # Admin or creator check

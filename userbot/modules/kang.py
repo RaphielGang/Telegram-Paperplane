@@ -22,7 +22,7 @@ A pack can't have more than 120 stickers at the moment."
 PACK_DOESNT_EXIST = "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
 
 
-@register(outgoing=True, pattern="^.kang($| )?(\W+?)? ?([0-9]*)?$")
+@register(outgoing=True, pattern=r"^.kang($| )?(\W+?)? ?([0-9]*)?$")
 @grp_exclude()
 async def kang(event):
     """Function for .kang command, create a sticker pack and add stickers."""
@@ -192,7 +192,7 @@ async def kang(event):
     )
 
 
-@register(outgoing=True, pattern="^.kangpack($| )?([0-9]*)?$")
+@register(outgoing=True, pattern=r"^.kangpack($| )?([0-9]*)?$")
 @grp_exclude()
 async def kangpack(event):
     await event.edit("`Kanging the whole pack...`")
@@ -327,7 +327,7 @@ async def kangpack(event):
     )
 
 
-@register(outgoing=True, pattern="^.getsticker$")
+@register(outgoing=True, pattern=r"^.getsticker$")
 @grp_exclude()
 async def getsticker(event):
     await event.edit("`Getting the sticker as a file...`")

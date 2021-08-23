@@ -16,7 +16,7 @@ from userbot import (
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.unmutechat$")
+@register(outgoing=True, pattern=r"^.unmutechat$")
 @grp_exclude()
 async def unmute_chat(unm_e):
     """For .unmutechat command, unmute a muted chat."""
@@ -27,7 +27,7 @@ async def unmute_chat(unm_e):
     await unm_e.edit("```Unmuted this chat!```")
 
 
-@register(outgoing=True, pattern="^.mutechat$")
+@register(outgoing=True, pattern=r"^.mutechat$")
 @grp_exclude()
 async def mute_chat(mute_e):
     """For .mutechat command, mute any chat."""

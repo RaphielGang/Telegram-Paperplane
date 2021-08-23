@@ -123,7 +123,7 @@ async def dirtyfix():
     await update_spotify_info()
 
 
-@register(outgoing=True, pattern="^.enablespotify$")
+@register(outgoing=True, pattern=r"^.enablespotify$")
 @grp_exclude()
 async def set_biostgraph(setstbio):
     setrecursionlimit(700000)
@@ -136,7 +136,7 @@ async def set_biostgraph(setstbio):
         await setstbio.edit(SPO_BIO_RUNNING)
 
 
-@register(outgoing=True, pattern="^.disablespotify$")
+@register(outgoing=True, pattern=r"^.disablespotify$")
 @grp_exclude()
 async def set_biodgraph(setdbio):
     global SPOTIFYCHECK

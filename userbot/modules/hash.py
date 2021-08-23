@@ -14,7 +14,7 @@ from userbot import CMD_HELP
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.hash (.*)")
+@register(outgoing=True, pattern=r"^.hash (.*)")
 @grp_exclude()
 async def gethash(hash_q):
     """For .hash command, find the md5,
@@ -58,7 +58,7 @@ async def gethash(hash_q):
         await hash_q.reply(ans)
 
 
-@register(outgoing=True, pattern="^.base64 (en|de) (.*)")
+@register(outgoing=True, pattern=r"^.base64 (en|de) (.*)")
 @grp_exclude()
 async def endecrypt(query):
     """For .base64 command, find the base64 encoding of the given string."""

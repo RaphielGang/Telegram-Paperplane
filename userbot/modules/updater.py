@@ -35,7 +35,7 @@ async def is_off_br(br):
     return
 
 
-@register(outgoing=True, pattern="^.update(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.update(?: |$)(.*)")
 @grp_exclude()
 async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"

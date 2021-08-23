@@ -55,7 +55,7 @@ LastLog = False
 # ================================================
 
 
-@register(outgoing=True, pattern="^.lastfm$")
+@register(outgoing=True, pattern=r"^.lastfm$")
 @grp_exclude()
 async def last_fm(lastFM):
     """For .lastfm command, fetch scrobble data from last.fm."""

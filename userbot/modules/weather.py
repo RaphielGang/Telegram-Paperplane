@@ -41,7 +41,7 @@ async def get_tz(con):
         return
 
 
-@register(outgoing=True, pattern="^.weather(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.weather(?: |$)(.*)")
 @grp_exclude()
 async def fetch_weather(weather):
     """For .weather command, gets the current weather of a city."""
@@ -140,7 +140,7 @@ async def fetch_weather(weather):
     )
 
 
-@register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.setcity(?: |$)(.*)")
 @grp_exclude()
 async def set_default_city(city):
     """For .setcity command, change the default

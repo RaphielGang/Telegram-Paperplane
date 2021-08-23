@@ -141,7 +141,7 @@ async def auto_accept(event):
                         )
 
 
-@register(outgoing=True, pattern="^.notifoff$")
+@register(outgoing=True, pattern=r"^.notifoff$")
 @grp_exclude()
 async def notifoff(noff_event):
     """For .notifoff command, stop getting
@@ -152,7 +152,7 @@ async def notifoff(noff_event):
     return await noff_event.edit("`Notifications silenced!`")
 
 
-@register(outgoing=True, pattern="^.notifon$")
+@register(outgoing=True, pattern=r"^.notifon$")
 @grp_exclude()
 async def notifon(non_event):
     """For .notifoff command, get notifications from unapproved PMs."""
@@ -162,7 +162,7 @@ async def notifon(non_event):
     return await non_event.edit("`Notifications unmuted!`")
 
 
-@register(outgoing=True, pattern="^.approve$")
+@register(outgoing=True, pattern=r"^.approve$")
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
@@ -193,7 +193,7 @@ async def approvepm(apprvpm):
         )
 
 
-@register(outgoing=True, pattern="^.block$")
+@register(outgoing=True, pattern=r"^.block$")
 @grp_exclude()
 async def blockpm(block):
     """For .block command, block people from PMing you!"""
@@ -227,7 +227,7 @@ async def blockpm(block):
         )
 
 
-@register(outgoing=True, pattern="^.unblock$")
+@register(outgoing=True, pattern=r"^.unblock$")
 @grp_exclude()
 async def unblockpm(unblock):
     """For .unblock command, let people PMing you again!"""

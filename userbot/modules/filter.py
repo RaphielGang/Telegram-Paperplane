@@ -36,7 +36,7 @@ async def filter_incoming_handler(handler):
         pass
 
 
-@register(outgoing=True, pattern="^.filter\\s.*")
+@register(outgoing=True, pattern=r"^.filter\\s.*")
 @grp_exclude()
 async def add_new_filter(event):
     """Command for adding a new filter"""
@@ -60,7 +60,7 @@ async def add_new_filter(event):
         await event.edit(msg.format(keyword[1], "updated"))
 
 
-@register(outgoing=True, pattern="^.stop\\s.*")
+@register(outgoing=True, pattern=r"^.stop\\s.*")
 @grp_exclude()
 async def remove_filter(event):
     """Command for removing a filter"""
@@ -75,7 +75,7 @@ async def remove_filter(event):
         await event.edit("`Filter `**{}**` was deleted successfully`".format(filt))
 
 
-@register(outgoing=True, pattern="^.rmfilters (.*)")
+@register(outgoing=True, pattern=r"^.rmfilters (.*)")
 @grp_exclude()
 async def kick_marie_filter(event):
     """ For .rmfilters command, allows you to remove all \
@@ -102,7 +102,7 @@ async def kick_marie_filter(event):
         )
 
 
-@register(outgoing=True, pattern="^.filters$")
+@register(outgoing=True, pattern=r"^.filters$")
 @grp_exclude()
 async def filters_active(event):
     """For .filters command, lists all of the active filters in a chat."""

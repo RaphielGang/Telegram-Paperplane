@@ -28,7 +28,7 @@ LIST_HEADER = "[Paperplane-List] List **{}({})**\n\n"
 # =================================================
 
 
-@register(outgoing=True, pattern="^.lists$")
+@register(outgoing=True, pattern=r"^.lists$")
 @grp_exclude()
 async def lists_active(event):
     """For .lists command, list all of the lists saved in a chat."""

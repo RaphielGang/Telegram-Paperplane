@@ -24,7 +24,7 @@ from userbot.modules.helpers import send_message_as_file
 TMP_DOWNLOAD_DIRECTORY = "./"
 
 
-@register(pattern="^.whois(?: |$)(.*)", outgoing=True)
+@register(pattern=r"^.whois(?: |$)(.*)", outgoing=True)
 @grp_exclude()
 async def who(event):
     """For .whois command, get info about a user."""
@@ -146,7 +146,7 @@ def todict(obj, classkey=None):
         return obj
 
 
-@register(pattern="^.raw(?: |$)(.*)", outgoing=True)
+@register(pattern=r"^.raw(?: |$)(.*)", outgoing=True)
 @grp_exclude()
 async def msg_info(event):
     arg = event.pattern_match.group(1) or "yaml"

@@ -15,7 +15,7 @@ from userbot import CMD_HELP
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.speed$")
+@register(outgoing=True, pattern=r"^.speed$")
 @grp_exclude()
 async def speedtst(spd):
     """For .speed command, use SpeedTest to check server speeds."""
@@ -57,7 +57,7 @@ def speed_convert(size):
     return f"{round(size, 2)} {units[zero]}"
 
 
-@register(outgoing=True, pattern="^.nearestdc$")
+@register(outgoing=True, pattern=r"^.nearestdc$")
 @grp_exclude()
 async def neardc(event):
     """For .nearestdc command, get the nearest datacenter information."""
@@ -69,7 +69,7 @@ async def neardc(event):
     )
 
 
-@register(outgoing=True, pattern="^.pingme$")
+@register(outgoing=True, pattern=r"^.pingme$")
 @grp_exclude()
 async def pingme(pong):
     """FOr .pingme command, ping the userbot from any chat."""
