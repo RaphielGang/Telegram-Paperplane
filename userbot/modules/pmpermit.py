@@ -46,74 +46,73 @@ UNAPPROVED_MSG = (
 async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
-    if PM_AUTO_BAN:
-        if event.is_private and not (await event.get_sender()).bot:
-            if not is_mongo_alive() or not is_redis_alive():
-                return
-            apprv = await approval(event.chat_id)
+    if PM_AUTO_BAN and event.is_private and not (await event.get_sender()).bot:
+        if not is_mongo_alive() or not is_redis_alive():
+            return
+        apprv = await approval(event.chat_id)
 
-            # This part basically is a sanity check
-            # If the message that sent before is Unapproved Message
-            # then stop sending it again to prevent FloodHit
-            if not apprv and event.text != UNAPPROVED_MSG:
-                if event.chat_id in LASTMSG:
-                    prevmsg = LASTMSG[event.chat_id]
-                    # If the message doesn't same as previous one
-                    # Send the Unapproved Message again
-                    if event.text != prevmsg:
-                        # Searches for previously sent UNAPPROVED_MSGs
-                        async for message in event.client.iter_messages(
-                            event.chat_id, from_user="me", search=UNAPPROVED_MSG
-                        ):
-                            # ... and deletes them !!
-                            await message.delete()
-                        await event.reply(UNAPPROVED_MSG)
-                    LASTMSG.update({event.chat_id: event.text})
-                else:
+        # This part basically is a sanity check
+        # If the message that sent before is Unapproved Message
+        # then stop sending it again to prevent FloodHit
+        if not apprv and event.text != UNAPPROVED_MSG:
+            if event.chat_id in LASTMSG:
+                prevmsg = LASTMSG[event.chat_id]
+                # If the message doesn't same as previous one
+                # Send the Unapproved Message again
+                if event.text != prevmsg:
+                    # Searches for previously sent UNAPPROVED_MSGs
+                    async for message in event.client.iter_messages(
+                        event.chat_id, from_user="me", search=UNAPPROVED_MSG
+                    ):
+                        # ... and deletes them !!
+                        await message.delete()
                     await event.reply(UNAPPROVED_MSG)
-                    LASTMSG.update({event.chat_id: event.text})
+                LASTMSG.update({event.chat_id: event.text})
+            else:
+                await event.reply(UNAPPROVED_MSG)
+                LASTMSG.update({event.chat_id: event.text})
 
-                if await notif_state() is False:
-                    await event.client.send_read_acknowledge(event.chat_id)
-                if event.chat_id not in COUNT_PM:
-                    COUNT_PM.update({event.chat_id: 1})
-                else:
-                    COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
+            if await notif_state() is False:
+                await event.client.send_read_acknowledge(event.chat_id)
+            if event.chat_id not in COUNT_PM:
+                COUNT_PM.update({event.chat_id: 1})
+            else:
+                COUNT_PM[event.chat_id] = COUNT_PM[event.chat_id] + 1
 
-                if COUNT_PM[event.chat_id] > 4:
-                    await event.respond(
-                        "`You were spamming my owner's PM, "
-                        "which I don't like.`"
-                        " `Reporting you as spam.`"
-                    )
+            if COUNT_PM[event.chat_id] > 4:
+                await event.respond(
+                    "`You were spamming my owner's PM, "
+                    "which I don't like.`"
+                    " `Reporting you as spam.`"
+                )
 
-                    try:
-                        del COUNT_PM[event.chat_id]
-                        del LASTMSG[event.chat_id]
-                    except KeyError:
-                        if BOTLOG:
-                            await event.client.send_message(
-                                BOTLOG_CHATID,
-                                "PMPermit broke, please restart Paperplane.",
-                            )
-                        LOGS.info("PMPermit broke, please restart Paperplane.")
-                        return
-
-                    await event.client(BlockRequest(event.chat_id))
-                    await event.client(ReportSpamRequest(peer=event.chat_id))
-
+                try:
+                    del COUNT_PM[event.chat_id]
+                    del LASTMSG[event.chat_id]
+                except KeyError:
                     if BOTLOG:
-                        name = await event.client.get_entity(event.chat_id)
-                        name0 = str(name.first_name)
                         await event.client.send_message(
                             BOTLOG_CHATID,
-                            "["
-                            + name0
-                            + "](tg://user?id="
-                            + str(event.chat_id)
-                            + ")"
-                            + " was spamming your PM and has been blocked.",
+                            "PMPermit broke, please restart Paperplane.",
                         )
+                    LOGS.info("PMPermit broke, please restart Paperplane.")
+                    return
+
+                await event.client(BlockRequest(event.chat_id))
+                await event.client(ReportSpamRequest(peer=event.chat_id))
+
+                if BOTLOG:
+                    name = await event.client.get_entity(event.chat_id)
+                    name0 = str(name.first_name)
+                    await event.client.send_message(
+                        BOTLOG_CHATID,
+                        "["
+                        + name0
+                        + "](tg://user?id="
+                        + str(event.chat_id)
+                        + ")"
+                        + " was spamming your PM and has been blocked.",
+                    )
 
 
 @register(disable_edited=True, outgoing=True, disable_errors=True)

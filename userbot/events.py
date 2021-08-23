@@ -21,7 +21,7 @@ from userbot.modules.dbhelper import get_exclude
 
 def register(**args):
     """Register a new event."""
-    pattern = args.get("pattern", None)
+    pattern = args.get("pattern")
     disable_edited = args.get("disable_edited", False)
     ignore_unsafe = args.get("ignore_unsafe", False)
     unsafe_pattern = r"^[^/!#@\$A-Za-z]"
@@ -46,9 +46,8 @@ def register(**args):
     if "insecure" in args:
         del args["insecure"]
 
-    if pattern:
-        if not ignore_unsafe:
-            args["pattern"] = args["pattern"].replace(r"^.", unsafe_pattern, 1)
+    if pattern and not ignore_unsafe:
+        args["pattern"] = args["pattern"].replace(r"^.", unsafe_pattern, 1)
 
     def decorator(func):
         async def wrapper(check):

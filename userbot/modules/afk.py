@@ -25,28 +25,27 @@ async def mention_afk(mention):
     if not is_redis_alive():
         return
     IsAway = await is_afk()
-    if mention.message.mentioned and not (await mention.get_sender()).bot:
-        if IsAway is True:
-            if mention.sender_id not in USERS:
+    if mention.message.mentioned and not (await mention.get_sender()).bot and IsAway:
+        if mention.sender_id not in USERS:
+            await mention.reply(
+                "Sorry! My boss is AFK due to "
+                + await afk_reason()
+                + ". Would ping him to look into the message soon😉"
+            )
+            USERS.update({mention.sender_id: 1})
+            COUNT_MSG = COUNT_MSG + 1
+        elif mention.sender_id in USERS:
+            if USERS[mention.sender_id] % 5 == 0:
                 await mention.reply(
-                    "Sorry! My boss is AFK due to "
-                    + await afk_reason()
-                    + ". Would ping him to look into the message soon😉"
+                    "Sorry! But my boss is still not here. "
+                    "Try to ping him a little later. I am sorry😖."
+                    "He told me he was busy with ```" + await afk_reason() + "```"
                 )
-                USERS.update({mention.sender_id: 1})
+                USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                 COUNT_MSG = COUNT_MSG + 1
-            elif mention.sender_id in USERS:
-                if USERS[mention.sender_id] % 5 == 0:
-                    await mention.reply(
-                        "Sorry! But my boss is still not here. "
-                        "Try to ping him a little later. I am sorry😖."
-                        "He told me he was busy with ```" + await afk_reason() + "```"
-                    )
-                    USERS[mention.sender_id] = USERS[mention.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
-                else:
-                    USERS[mention.sender_id] = USERS[mention.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
+            else:
+                USERS[mention.sender_id] = USERS[mention.sender_id] + 1
+                COUNT_MSG = COUNT_MSG + 1
 
 
 @register(incoming=True, disable_errors=True)
@@ -57,28 +56,27 @@ async def afk_on_pm(afk_pm):
     if not is_redis_alive():
         return
     IsAway = await is_afk()
-    if afk_pm.is_private and not (await afk_pm.get_sender()).bot:
-        if IsAway is True:
-            if afk_pm.sender_id not in USERS:
+    if afk_pm.is_private and not (await afk_pm.get_sender()).bot and IsAway:
+        if afk_pm.sender_id not in USERS:
+            await afk_pm.reply(
+                "Sorry! My boss is AFK due to ```"
+                + await afk_reason()
+                + "``` I'll ping him to look into the message soon😉"
+            )
+            USERS.update({afk_pm.sender_id: 1})
+            COUNT_MSG = COUNT_MSG + 1
+        elif afk_pm.sender_id in USERS:
+            if USERS[afk_pm.sender_id] % 5 == 0:
                 await afk_pm.reply(
-                    "Sorry! My boss is AFK due to ```"
-                    + await afk_reason()
-                    + "``` I'll ping him to look into the message soon😉"
+                    "Sorry! But my boss is still not here. "
+                    "Try to ping him a little later. I am sorry😖."
+                    "He told me he was busy with ```" + await afk_reason() + "```"
                 )
-                USERS.update({afk_pm.sender_id: 1})
+                USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
                 COUNT_MSG = COUNT_MSG + 1
-            elif afk_pm.sender_id in USERS:
-                if USERS[afk_pm.sender_id] % 5 == 0:
-                    await afk_pm.reply(
-                        "Sorry! But my boss is still not here. "
-                        "Try to ping him a little later. I am sorry😖."
-                        "He told me he was busy with ```" + await afk_reason() + "```"
-                    )
-                    USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
-                else:
-                    USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
+            else:
+                USERS[afk_pm.sender_id] = USERS[afk_pm.sender_id] + 1
+                COUNT_MSG = COUNT_MSG + 1
 
 
 @register(outgoing=True, disable_errors=True, pattern=r"^.afk")

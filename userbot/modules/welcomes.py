@@ -79,17 +79,19 @@ async def welcome_mute(welcm):
                         spambot = True
                     elif "https://" in message.text:
                         spambot = True
-                    else:
-                        if user.first_name in (
+                    elif (
+                        user.first_name
+                        in (
                             "Bitmex",
                             "Promotion",
                             "Information",
                             "Dex",
                             "Announcements",
                             "Info",
-                        ):
-                            if user.last_name == "Bot":
-                                spambot = True
+                        )
+                        and user.last_name == "Bot"
+                    ):
+                        spambot = True
 
                     if spambot:
                         print(f"Potential Spam Message: {message.text}")
