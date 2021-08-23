@@ -108,10 +108,10 @@ async def add_to_fban(chat):
 
     if res:
         return await chat.edit("`Added this chat to the FBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't add this chat to the FBan list! Maybe it's already there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't add this chat to the FBan list! Maybe it's already there?`"
+    )
 
 
 @register(outgoing=True, pattern=r"^.addgban")
@@ -124,10 +124,10 @@ async def add_to_gban(chat):
 
     if res:
         return await chat.edit("`Added this bot to the GBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't add this bot to the GBan list! Maybe it's already there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't add this bot to the GBan list! Maybe it's already there?`"
+    )
 
 
 @register(outgoing=True, pattern=r"^.removefban")
@@ -140,10 +140,10 @@ async def remove_from_fban(chat):
 
     if res:
         return await chat.edit("`Removed this group from the FBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't remove this group from the FBan list! Maybe it's not there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't remove this group from the FBan list! Maybe it's not there?`"
+    )
 
 
 @register(outgoing=True, pattern=r"^.removegban")
@@ -156,10 +156,10 @@ async def remove_from_gban(chat):
 
     if res:
         return await chat.edit("`Removed this bot from the GBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't remove this bot from the GBan list! Maybe it's not there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't remove this bot from the GBan list! Maybe it's not there?`"
+    )
 
 
 @register(outgoing=True, pattern=r"^.listfban")
