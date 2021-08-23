@@ -38,6 +38,7 @@ from telethon.tl.types import (
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot, is_mongo_alive, is_redis_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import get_gmuted, get_muted, gmute, mute, ungmute, unmute
+from userbot.modules import helpers
 
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"
@@ -173,11 +174,11 @@ async def promote(promt):
 
     await promt.edit("`Promoting...`")
 
-    user = await get_user_from_event(promt)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(promt)
+    if not user:
+        await promt.edit(
+            "`Missing user to promote! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     # Try to promote if current user is admin or creator
     try:
@@ -218,11 +219,11 @@ async def demote(dmod):
     # If passing, declare that we're going to demote
     await dmod.edit("`Demoting...`")
 
-    user = await get_user_from_event(dmod)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(dmod)
+    if not user:
+        await dmod.edit(
+            "`Missing user to demote! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     # New rights after demotion
     newrights = ChatAdminRights(
@@ -268,11 +269,11 @@ async def ban(bon):
         await bon.edit(NO_ADMIN)
         return
 
-    user = await get_user_from_event(bon)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(bon)
+    if not user:
+        await bon.edit(
+            "`Missing user to ban! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     # Announce that we're going to whack the pest
     await bon.edit("`Banning...`")
@@ -324,11 +325,11 @@ async def nothanos(unbon):
     # If everything goes well...
     await unbon.edit("`Unbanning...`")
 
-    user = await get_user_from_event(unbon)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(unbon)
+    if not user:
+        await unbon.edit(
+            "`Missing user to unban! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     try:
         await unbon.client(EditBannedRequest(unbon.chat_id, user.id, UNBAN_RIGHTS))
@@ -366,11 +367,11 @@ async def spider(spdr):
         await spdr.edit(NO_ADMIN)
         return
 
-    user = await get_user_from_event(spdr)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(spdr)
+    if not user:
+        await spdr.edit(
+            "`Missing user to mute! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     self_user = await spdr.client.get_me()
 
@@ -435,11 +436,11 @@ async def unmoot(unmot):
         return
     # If admin or creator, inform the user and start unmuting
     await unmot.edit("```Unmuting...```")
-    user = await get_user_from_event(unmot)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(unmot)
+    if not user:
+        await unmoot.edit(
+            "`Missing user to unmute! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     if await unmute(unmot.chat_id, user.id) is False:
         return await unmot.edit("`Error! User is probably already unmuted.`")
@@ -512,11 +513,11 @@ async def ungmoot(un_gmute):
         await un_gmute.edit(NO_SQL)
         return
 
-    user = await get_user_from_event(un_gmute)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(un_gmute)
+    if not user:
+        await ungmoot.edit(
+            "`Missing user to ungmute! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     # If pass, inform and start ungmuting
     await un_gmute.edit("```Ungmuting...```")
@@ -545,11 +546,11 @@ async def gspider(gspdr):
     if not is_mongo_alive() or not is_redis_alive():
         await gspdr.edit(NO_SQL)
         return
-    user = await get_user_from_event(gspdr)
-    if user:
-        pass
-    else:
-        return
+    user = await helpers.get_user_from_event(gspdr)
+    if not user:
+        await gspdr.edit(
+            "`Missing user to gmute! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     # If pass, inform and start gmuting
     await gspdr.edit("`Gmuting...`")
@@ -685,7 +686,7 @@ async def pin(msg):
 
     await msg.edit("`Pinned!`")
 
-    user = await get_user_from_id(msg.from_id, msg)
+    user = await helpers.get_user_from_id(msg.from_id, msg)
 
     if BOTLOG:
         await msg.client.send_message(
@@ -711,10 +712,11 @@ async def kick(usr):
         await usr.edit(NO_ADMIN)
         return
 
-    user = await get_user_from_event(usr)
+    user = await helpers.get_user_from_event(usr)
     if not user:
-        await usr.edit("`Couldn't fetch user.`")
-        return
+        await usr.edit(
+            "`Missing user to kick! Either reply to message, mention the user or specify a valid ID!`"
+        )
 
     await usr.edit("`Kicking...`")
 
@@ -796,51 +798,6 @@ async def chat_unlock(unlock):
         await unlock.client.send_message(
             BOTLOG_CHATID, "#UNLOCK\n" f"CHAT: {unlock.chat.title}(`{unlock.chat_id}`)"
         )
-
-
-async def get_user_from_event(event):
-    """Get the user from argument or replied message."""
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        user_obj = await event.client.get_entity(previous_message.from_id)
-    else:
-        user = event.pattern_match.group(1)
-
-        if user.isnumeric():
-            user = int(user)
-
-        if not user:
-            await event.edit("`Pass the user's username, id or reply!`")
-            return
-
-        if event.message.entities is not None:
-            probable_user_mention_entity = event.message.entities[0]
-
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                user_obj = await event.client.get_entity(user_id)
-                return user_obj
-        try:
-            user_obj = await event.client.get_entity(user)
-        except (TypeError, ValueError) as err:
-            await event.edit(str(err))
-            return None
-
-    return user_obj
-
-
-async def get_user_from_id(user, event):
-    """Getting user from user ID"""
-    if isinstance(user, str):
-        user = int(user)
-
-    try:
-        user_obj = await event.client.get_entity(user)
-    except (TypeError, ValueError) as err:
-        await event.edit(str(err))
-        return None
-
-    return user_obj
 
 
 CMD_HELP.update(
