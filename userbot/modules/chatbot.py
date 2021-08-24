@@ -1,4 +1,5 @@
 """This is chatbot plugin to make users talk to an AI"""
+
 import randomstuff
 import random
 import time
@@ -83,6 +84,14 @@ async def aiworker(ai):
     wait = await chat_action(ai, response)
     await client.close()
     await ai.reply(f"{response.message}")
+
+
+@register(outgoing=True, pattern="listai")
+@grp_exclude()
+async def listai(event):
+    chat = event.chat_id
+    users = MONGO.chatbot.find_one({"user"})
+    await event.edit(users)
 
 
 # CHAT ACTION #
