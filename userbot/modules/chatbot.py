@@ -24,14 +24,14 @@ async def usersetter(ai):
     if not RANDOMSTUFF_API_KEY:
         return await ai.reply("Set `RANDOMSTUFF_API_KEY` variable with a correct value first.")
 
-    search = MONGO.chatbot.find_one({"user": user_id, "chat": ai.chat_id})
+    search = MONGO.chatbot.find_one({"Chatbot": True, "user": user_id, "chat": ai.chat_id})
 
     if search:
         await ai.edit("I am already responding to this user.")
         time.sleep(5)
         return await ai.delete()
 
-    MONGO.chatbot.insert_one({"user": user_id, "chat": ai.chat_id})
+    MONGO.chatbot.insert_one({"Chatbot": True, "user": user_id, "chat": ai.chat_id})
     await ai.edit("Hello!")
 
 @register(outgoing=True, pattern="rmai$")
@@ -43,15 +43,16 @@ async def userremover(ai):
         replied_msg = await ai.get_reply_message()
         user_id = replied_msg.sender.id
 
-    search = MONGO.chatbot.find_one({"user": user_id, "chat": ai.chat_id})
+    search = MONGO.chatbot.find_one({"Chatbot": True, "user": user_id, "chat": ai.chat_id})
 
     if not search:
         await ai.edit("Nope, I don't know this user.")
         time.sleep(5)
         return await ai.delete()
-    else:
-        MONGO.chatbot.delete_one({"user": user_id, "chat": ai.chat_id})
-        await ai.edit("__AI response stat:__ \n" "**DEACTIVATED**")
+
+    MONGO.chatbot.delete_one({"Chatbot": True, "user": user_id, "chat": ai.chat_id})
+    await ai.edit("__AI response stat:__ \n" "**DEACTIVATED**")
+
     time.sleep(5)
     await ai.delete()
 
@@ -62,6 +63,10 @@ async def aiworker(ai):
     message = ai.message.text
     message_sender = ai.sender.id
 
+    search = MONGO.chatbot.find_one({"Chatbot": True, "user": message_sender, "chat": ai.chat_id})
+
+    if not search: return
+
     if message == "WITH ALL MY MIGHT STOP THE AI":
         MONGO.chatbot.delete_one({"user": message_sender, "chat": ai.chat_id})
         await ai.reply(
@@ -70,10 +75,6 @@ async def aiworker(ai):
         )
         time.sleep(8)
         return await ai.delete()
-
-    search = MONGO.chatbot.find_one({"user": message_sender, "chat": ai.chat_id})
-
-    if not search: return
 
     client = randomstuff.AsyncClient(api_key=RANDOMSTUFF_API_KEY)
     response = await client.get_ai_response(
@@ -89,9 +90,17 @@ async def aiworker(ai):
 @register(outgoing=True, pattern="listai")
 @grp_exclude()
 async def listai(event):
-    chat = event.chat_id
-    users = MONGO.chatbot.find_one({"user"})
-    await event.edit(users)
+    search = MONGO.chatbot.find_one("Chatbot": True)
+    search_in = MONGO.chatbot.find_one("Chatbot": True, "chat": event.chat_id)
+    users = search["user"]
+    chats = search["chat"]
+    message = "Sl.No    First Name   User ID    Chat ID"
+
+    for n in len(chats):
+        user_name = (await event.client.get_entity(users)).first_name
+        message += f"{n}.   {user_name} {users} {chat}"
+    await event.edit(message)
+
 
 
 # CHAT ACTION #
