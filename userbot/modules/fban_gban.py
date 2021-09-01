@@ -170,7 +170,7 @@ async def list_fban(chat):
         return
     banlist = await get_fban()
     id_list = [row["chatid"] for row in banlist]
-    if len(id_list) < 1:
+    if not id_list:
         return await chat.edit(
             "`No groups in the FBan list! Add some with the` `.addfban` `command!`"
         )
@@ -190,7 +190,7 @@ async def list_gban(chat):
         return
     banlist = await get_fban()
     id_list = [row["chatid"] for row in banlist]
-    if len(id_list) < 1:
+    if not id_list:
         return await chat.edit(
             "`No bots in the GBan list! Add some with the` `.addgban` `command!`"
         )
