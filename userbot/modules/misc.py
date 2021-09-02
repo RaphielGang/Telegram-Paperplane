@@ -92,7 +92,7 @@ CMD_HELP.update(
         "misc": [
             "Misc",
             " - `.random <item1> <item2> ... <itemN>`: Get a random item from the list of items.\n"
-            " - `.sleep <secs>`: Paperpane gets tired too. Let yours snooze for a few seconds.\n"
+            " - `.sleep <secs>`: Paperplane gets tired too. Let yours snooze for a few seconds.\n"
             " - `.shutdown`: Sometimes you need to turn Paperplane off. Sometimes you just hope to"
             "hear Windows XP shutdown sound... but you don't.\n"
             " - `.support`: If you need more help, use this command.\n"
