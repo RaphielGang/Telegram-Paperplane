@@ -3,7 +3,7 @@ FROM zakaryan2004/userbot_docker:latest
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
 
-RUN git clone https://github.com/ashdroid4/Telegram-Paperplane.git -b master /app
+RUN git clone https://github.com/ashdroid4/Telegram-Paperplane/.git -b alpha /app
 RUN pip3 install -r requirements.txt
 
 #
