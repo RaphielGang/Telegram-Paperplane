@@ -8,6 +8,8 @@ from userbot.events import register, grp_exclude
 from userbot import RANDOMSTUFF_API_KEY, MONGO
 
 
+
+
 @register(outgoing=True, pattern="addai$")
 @grp_exclude()
 async def usersetter(ai):
@@ -90,16 +92,15 @@ async def aiworker(ai):
 @register(outgoing=True, pattern="listai")
 @grp_exclude()
 async def listai(event):
+    fake_ls = "List of Users and Chat Id\n"
     search = MONGO.chatbot.find_one("Chatbot": True)
     search_in = MONGO.chatbot.find_one("Chatbot": True, "chat": event.chat_id)
     users = search["user"]
     chats = search["chat"]
-    message = "Sl.No    First Name   User ID    Chat ID"
-
-    for n in len(chats):
-        user_name = (await event.client.get_entity(users)).first_name
-        message += f"{n}.   {user_name} {users} {chat}"
-    await event.edit(message)
+    users_in = search_in["user"]
+    if search_in:
+        ls = "List of users in the current chat are:\n"
+        for n in range(users):
 
 
 

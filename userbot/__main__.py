@@ -10,27 +10,37 @@ import os
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 
-from userbot import LOGS, bot
+from userbot import LOGS, maple_config, maple
 from userbot.modules import ALL_MODULES
 
-INVALID_PH = '\nERROR: The phone no. entered is incorrect' \
-             '\n  Tip: Use country code (eg +44) along with num.' \
-             '\n       Recheck your phone number'
+INVALID_PH = """
+You have entered wrong Phone Number.
+Use Correct Phone Number in International format like "+91"
+Have a Nice Day. Halting takeoff!!"""
 
+# MaplePlane starts
 try:
-    bot.start()
+    maple.start()
 except PhoneNumberInvalidError:
     print(INVALID_PH)
     exit(1)
 
-for module_name in ALL_MODULES:
-    imported_module = import_module("userbot.modules." + module_name)
+TRIGGER = maple_config.COMMAND_TRIGGER
 
-LOGS.info("Paperplane is alive! Test it by typing .alive on any chat."
-          " Should you need assistance, head to https://t.me/tgpaperplane")
+for module_name in ALL_MODULES:
+    try:
+        imported_module = import_module("userbot.modules." + module_name)
+    except Exception as error:
+        print(error)
+        pass
+
+LOGS.info(
+    f"MaplePlane has taken off!! Test it by typing {TRIGGER}alive on any chat."
+    " Should you need assistance, head to ")
 
 SEM_TEST = os.environ.get("SEMAPHORE", None)
+
 if SEM_TEST:
-    bot.disconnect()
+    maple.disconnect()
 else:
-    bot.run_until_disconnected()
+    maple.run_until_disconnected()
