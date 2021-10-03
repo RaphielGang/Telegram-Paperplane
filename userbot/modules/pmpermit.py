@@ -33,10 +33,7 @@ from userbot.modules.dbhelper import (
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
-    "`Bleep blop! This is a bot. Don't fret.\n\n`"
-    "`My owner hasn't approved you to PM. `"
-    "`Please wait for my owner to look in, they mostly approve PMs.\n\n`"
-    "`As far as I know, they don't usually approve retards though.\n\n`"
+    "`Bleep blop! This is a bot. Don't free`"
 )
 # =================================================================
 
