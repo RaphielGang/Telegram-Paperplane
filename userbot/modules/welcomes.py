@@ -112,7 +112,7 @@ async def welcome_mute(welcm):
                 else:
                     try:
                         await welcm.reply(
-                            "`Potential Spambot Detected! Kicking away! "
+                            "`Banning potential Spambot! "
                             "Will log the ID for further purposes!\n"
                             f"USER:` [{user.first_name}](tg://user?id={user.id})"
                         )
