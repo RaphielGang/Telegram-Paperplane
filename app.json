@@ -9,8 +9,8 @@
       "modular",
       "productivity"
     ],
-    "repository": "https://github.com/RaphielGang/Telegram-Paperplane",
-    "website": "https://github.com/RaphielGang/Telegram-Paperplane",
+    "repository": "https://github.com/evolos/Telegram-Paperplane",
+    "website": "https://github.com/evolos/Telegram-Paperplane",
     "success_url": "#TODO",
     "stack": "container",
     "env": {
