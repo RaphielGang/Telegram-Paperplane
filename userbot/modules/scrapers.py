@@ -6,10 +6,11 @@
 """ Userbot module containing various scrapers. """
 
 import os
-from re import findall
+from re import findall, sub
 from shutil import rmtree
-from urllib.error import HTTPError
+from urllib.parse import quote_plus
 
+import asyncurban
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
@@ -17,7 +18,6 @@ from gtts import gTTS, gTTSError
 from requests import get
 from search_engine_parser.core.engines.google import Search as GoogleSearch
 from search_engine_parser.core.exceptions import NoResultsOrTrafficError
-from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
@@ -142,61 +142,41 @@ async def wiki(wiki_q):
             BOTLOG_CHATID, f"Wiki query {match} was executed successfully"
         )
 
+def parse_ud_url(match):
+    group = match.group(1)
+
+    return f'[{group}](https://www.urbandictionary.com/define.php?term={quote_plus(group)})'
 
 @register(outgoing=True, pattern=r"^.ud (.*)")
 @grp_exclude()
 async def urban_dict(ud_e):
     """For .ud command, fetch content from Urban Dictionary."""
-    await ud_e.edit("Processing...")
+    await ud_e.edit("`Processing...`")
     query = ud_e.pattern_match.group(1)
-    try:
-        define(query)
-    except HTTPError:
-        await ud_e.edit(f"Sorry, couldn't find any results for: {query}.")
-        return
-    mean = define(query)
-    deflen = sum(len(i) for i in mean[0]["def"])
-    exalen = sum(len(i) for i in mean[0]["example"])
-    meanlen = deflen + exalen
-    if int(meanlen) >= 0:
-        if int(meanlen) >= 4096:
-            await ud_e.edit("`Output too large, sending as file.`")
-            with open("output.txt", "w+") as output_file:
-                output_file.write(
-                    "Text: "
-                    + query
-                    + "\n\nMeaning: "
-                    + mean[0]["def"]
-                    + "\n\n"
-                    + "Example: \n"
-                    + mean[0]["example"]
-                )
+    urban = asyncurban.UrbanDictionary()
 
-            await ud_e.client.send_file(
-                ud_e.chat_id,
-                "output.txt",
-                caption="`Output was too large, sent it as a file.`",
-            )
-            if os.path.exists("output.txt"):
-                os.remove("output.txt")
-            await ud_e.delete()
-            return
-        await ud_e.edit(
-            "Text: **"
-            + query
-            + "**\n\nMeaning: **"
-            + mean[0]["def"]
-            + "**\n\n"
-            + "Example: \n__"
-            + mean[0]["example"]
-            + "__"
+    try:
+        words = await urban.search(query)
+        await urban.close()
+    except asyncurban.WordNotFoundError:
+        await ud_e.edit(f"Sorry, couldn't find any results for `{query}`.")
+        return
+
+    result = ""
+    for i, word in enumerate(words):
+        definition = sub(r'\[([^\]]*)\]', parse_ud_url, word.definition)
+        result += (f"{i+1}. [{word.word}]({word.permalink}): {definition}\n")
+        if word.example:
+            example = sub(r'\[([^\]]*)\]', parse_ud_url, word.example)
+            result += f"`Example(s)`: {example}"
+        result += "\n"
+
+    await ud_e.edit(result)
+
+    if BOTLOG:
+        await ud_e.client.send_message(
+            BOTLOG_CHATID, "ud query " + query + " executed successfully."
         )
-        if BOTLOG:
-            await ud_e.client.send_message(
-                BOTLOG_CHATID, "ud query " + query + " executed successfully."
-            )
-    else:
-        await ud_e.edit("No result found for **" + query + "**")
 
 
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
