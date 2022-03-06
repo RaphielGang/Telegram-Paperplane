@@ -17,7 +17,8 @@ from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
 async def filter_incoming_handler(handler):
     """Checks if the incoming message contains handler of a filter"""
     try:
-        if not (await handler.get_sender()).bot:
+        sender = await handler.get_sender()
+        if sender or not isinstance(sender, channel) and not sender.bot:
             if not is_mongo_alive() or not is_redis_alive():
                 await handler.edit("`Database connections failing!`")
                 return
@@ -30,44 +31,83 @@ async def filter_incoming_handler(handler):
                     r"( |^|[^\w])" + re.escape(trigger["keyword"]) + r"( |$|[^\w])"
                 )
                 if re.search(pattern, handler.text, flags=re.IGNORECASE):
-                    await handler.reply(trigger["msg"])
-                    return
+                    if trigger.get('is_document', False):
+                        content_msg = await handler.client.get_messages(
+                            entity=BOTLOG_CHATID,
+                            ids=trigger['msg']
+                        )
+                        return await handler.client.send_file(
+                            entity=handler.chat_id,
+                            file=content_msg.media,
+                            caption=trigger['caption'],
+                            reply_to=handler.message.id
+                        )
+
+                    return await handler.reply(str(trigger["msg"]))
     except AttributeError:
         pass
 
 
-@register(outgoing=True, pattern=r"^.filter\\s.*")
+@register(outgoing=True, pattern=r'^.filter ([^"]*) ?("?(.*)")?')
 @grp_exclude()
 async def add_new_filter(event):
     """Command for adding a new filter"""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
+
+    if not BOTLOG or not BOTLOG_CHATID:
+        await event.edit("`A Botlog chat is needed to save filters!`")
+        return
+
     message = event.text
-    keyword = message.split()
-    string = ""
-    for i in range(2, len(keyword)):
-        string = string + " " + str(keyword[i])
+    keyword = event.pattern_match.group(1).strip()
+    content = event.pattern_match.group(3)
+    reply = await event.get_reply_message()
+    caption = ""
+    is_document = False
 
-    if event.reply_to_msg_id:
-        string = " " + (await event.get_reply_message()).text
+    if not keyword:
+        await event.edit("`No trigger found!`")
+        return
 
-    msg = "`Filter `**{}**` {} successfully`"
+    if not content and not reply:
+        await event.edit("`No content found!`")
+        return
 
-    if await add_filter(event.chat_id, keyword[1], string[1:]) is True:
-        await event.edit(msg.format(keyword[1], "added"))
+    if event.pattern_match.group(3):
+        content = event.pattern_match.group(3)
+        caption = event.pattern_match.group(3)
+    elif reply:
+        content = reply.text
+        caption = reply.text
+
+    if reply:
+        if reply.document or reply.photo:
+            is_document = True
+            content = (await reply.forward_to(BOTLOG_CHATID)).id
+        else:
+            await event.edit("`I can't extract a message from this!`")
+            return
     else:
-        await event.edit(msg.format(keyword[1], "updated"))
+        if event.document or event.photo:
+            is_document = True
+            content = (await event.forward_to(BOTLOG_CHATID)).id
+
+    if await add_filter(event.chat_id, keyword, content, caption, is_document):
+        await event.edit(f"`Filter `**{keyword}**` added successfully`")
+    else:
+        await event.edit(f"`Filter `**{keyword}**` updated successfully`")
 
 
-@register(outgoing=True, pattern=r"^.stop\\s.*")
+@register(outgoing=True, pattern=r"^.stop (.*)")
 @grp_exclude()
 async def remove_filter(event):
     """Command for removing a filter"""
     if not is_mongo_alive() or not is_redis_alive():
         await event.edit("`Database connections failing!`")
         return
-    filt = event.text[6:]
+    filt = event.pattern_match.group(1)
 
     if not await delete_filter(event.chat_id, filt):
         await event.edit("`Filter `**{}**` doesn't exist.`".format(filt))
@@ -87,6 +127,9 @@ async def kick_marie_filter(event):
     await event.edit("```Purging all bot filters...```")
     await sleep(3)
     resp = await event.get_reply_message()
+    if not resp:
+        await event.edit("`Reply to the Filters message sent by the bot.`")
+        return
     filters = resp.text.split("-")[1:]
     for i in filters:
         if bot_type == "marie":
@@ -114,9 +157,9 @@ async def filters_active(event):
     for filt in filters:
         if transact == "`There are no filters in this chat.`":
             transact = "Active filters in this chat:\n"
-            transact += " • **{}** - `{}`\n".format(filt["keyword"], filt["msg"])
+            transact += " • **{}**\n".format(filt["keyword"])
         else:
-            transact += " • **{}** - `{}`\n".format(filt["keyword"], filt["msg"])
+            transact += " • **{}**\n".format(filt["keyword"])
 
     await event.edit(transact)
 
@@ -126,9 +169,10 @@ CMD_HELP.update(
         "filters": [
             "Filters",
             " - `.filters`: List all active filters in this chat.\n"
-            " - `.filter <keyword> <reply message/media>`: Add a filter to this chat. "
+            " - `.filter <keyword> \"<reply message/media>\"`: Add a filter to this chat."
             "Paperplane will reply with <reply message> or <media> whenever <keyword> is mentioned. "
-            "NOTE: filters are case insensitive.\n"
+            "You can also reply to a message to get the filter content from it. "
+            "NOTE: Filters are case insensitive. Reply message must be in **double** quotes.\n"
             " - `.stop <filter>`: Removes the filter from this chat.\n",
         ]
     }
