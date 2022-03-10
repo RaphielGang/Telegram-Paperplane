@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021 The Authors
+# Copyright (C) 2019-2022 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
@@ -77,60 +77,7 @@ def register(**args):
             except KeyboardInterrupt:
                 pass
             except BaseException as e:
-                LOGS.exception(e)  # Log the error in console
-                # Check if we have to disable error logging message.
-                if not disable_errors:
-                    date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-
-                    text = "**Sorry, I encountered an error!**\n"
-                    link = "[https://t.me/tgpaperplane](Userbot Support Chat)"
-                    text += "If you want to report it, "
-                    text += f"just forward this message to {link}.\n"
-                    text += "I won't log anything except the fact of error and date.\n"
-
-                    ftext = "\nDisclaimer:\nThis file is uploaded ONLY here, "
-                    ftext += "we logged only fact of error and date, "
-                    ftext += "we respect your privacy. "
-                    ftext += "You may not report this error if you have "
-                    ftext += "any confidential data here. No one will see your data "
-                    ftext += "if you choose not to do so.\n\n"
-                    ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
-                    ftext += "\nDate: " + date
-                    ftext += "\nGroup ID: " + str(check.chat_id)
-                    ftext += "\nSender ID: " + str(check.sender_id)
-                    ftext += "\n\nEvent Trigger:\n"
-                    ftext += str(check.text)
-                    ftext += "\n\nTraceback info:\n"
-                    ftext += str(format_exc())
-                    ftext += "\n\nError text:\n"
-                    ftext += str(sys.exc_info()[1])
-                    ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
-
-                    command = 'git log --pretty=format:"%an: %s" -5'
-
-                    ftext += "\n\n\nLast 5 commits:\n"
-
-                    process = await asyncsubshell(
-                        command, stdout=asyncsub.PIPE, stderr=asyncsub.PIPE
-                    )
-                    stdout, stderr = await process.communicate()
-                    result = str(stdout.decode().strip()) + str(stderr.decode().strip())
-
-                    ftext += result
-
-                    with open("error.log", "w+") as output_file:
-                        output_file.write(ftext)
-
-                    if BOTLOG:
-                        await check.client.send_file(
-                            BOTLOG_CHATID, "error.log", caption=text
-                        )
-                    else:
-                        await check.client.send_file(
-                            check.chat_id, "error.log", caption=text
-                        )
-
-                    remove("error.log")
+                await log_error(error=e, event=check, disable_errors=disable_errors)
             else:
                 pass
 
@@ -168,3 +115,61 @@ def grp_exclude(force_exclude=False):
         return wrapper
 
     return decorator
+
+
+async def log_error(error, event, disable_errors=False):
+    LOGS.exception(error)  # Log the error in console
+    # Check if we have to disable error logging message.
+    if not disable_errors:
+        date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
+        text = "**Sorry, I encountered an error!**\n"
+        link = "[https://t.me/tgpaperplane](Userbot Support Chat)"
+        text += "If you want to report it, "
+        text += f"just forward this message to {link}.\n"
+        text += "I won't log anything except the fact of error and date.\n"
+
+        ftext = "\nDisclaimer:\nThis file is uploaded ONLY here, "
+        ftext += "we logged only fact of error and date, "
+        ftext += "we respect your privacy. "
+        ftext += "You may not report this error if you have "
+        ftext += "any confidential data here. No one will see your data "
+        ftext += "if you choose not to do so.\n\n"
+        ftext += "--------BEGIN USERBOT TRACEBACK LOG--------"
+        ftext += "\nDate: " + date
+        if event:
+            ftext += "\nGroup ID: " + str(event.chat_id)
+            ftext += "\nSender ID: " + str(event.sender_id)
+            ftext += "\n\nEvent Trigger:\n"
+            ftext += str(event.text)
+        ftext += "\n\nTraceback info:\n"
+        ftext += str(format_exc())
+        ftext += "\n\nError text:\n"
+        ftext += str(sys.exc_info()[1])
+        ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
+
+        command = 'git log --pretty=format:"%an: %s" -5'
+
+        ftext += "\n\n\nLast 5 commits:\n"
+
+        process = await asyncsubshell(
+            command, stdout=asyncsub.PIPE, stderr=asyncsub.PIPE
+        )
+        stdout, stderr = await process.communicate()
+        result = str(stdout.decode().strip()) + str(stderr.decode().strip())
+
+        ftext += result
+
+        with open("error.log", "w+") as output_file:
+            output_file.write(ftext)
+
+        if BOTLOG:
+            await bot.send_file(
+                BOTLOG_CHATID, "error.log", caption=text
+            )
+        elif event:
+            await bot.send_file(
+                event.chat_id, "error.log", caption=text
+            )
+
+        remove("error.log")
