@@ -7,6 +7,8 @@
 import re
 from asyncio import sleep
 
+from telethon.tl.types import Channel
+
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive, is_redis_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
@@ -18,7 +20,7 @@ async def filter_incoming_handler(handler):
     """Checks if the incoming message contains handler of a filter"""
     try:
         sender = await handler.get_sender()
-        if sender or not isinstance(sender, channel) and not sender.bot:
+        if sender or not isinstance(sender, Channel) and not sender.bot:
             if not is_mongo_alive() or not is_redis_alive():
                 await handler.edit("`Database connections failing!`")
                 return
