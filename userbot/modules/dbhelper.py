@@ -1,4 +1,4 @@
-# Copyright (C) 2019-2021 The Authors
+# Copyright (C) 2019-2022 The Authors
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
@@ -481,3 +481,32 @@ async def is_excluded(chatid):
         return False
 
     return True
+
+
+# Music Modules
+async def get_music_config():
+    return MONGO.misc.find_one({"name": "music_modules"})
+
+
+async def set_spotify_bio(state):
+    MONGO.misc.update_one(
+        {"name": "music_modules"}, {"$set": {"spotify_bio": state}}, upsert=True
+    )
+
+
+async def set_default_bio(defaultbio):
+    return MONGO.misc.update_one(
+        {"name": "music_modules"}, {"$set": {"default_bio": defaultbio}}, upsert=True
+    )
+
+
+async def set_bio_prefix(bioprefix):
+    return MONGO.misc.update_one(
+        {"name": "music_modules"}, {"$set": {"bio_prefix": bioprefix}}, upsert=True
+    )
+
+
+async def set_music_name_emoji(state):
+    return MONGO.misc.update_one(
+        {"name": "music_modules"}, {"$set": {"name_emoji": state}}, upsert=True
+    )

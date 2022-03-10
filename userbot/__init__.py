@@ -11,6 +11,7 @@ from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from sys import version_info
 
+import spotipy
 from dotenv import load_dotenv
 from pyDownload import Downloader
 from pylast import LastFMNetwork, md5
@@ -79,10 +80,9 @@ OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID") or None
 
 WELCOME_MUTE = os.environ.get("WELCOME_MUTE") == "True"
 
-SPOTIFY_USERNAME = os.environ.get("SPOTIFY_USERNAME") or None
-SPOTIFY_PASS = os.environ.get("SPOTIFY_PASS") or None
-BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
-DEFAULT_BIO = os.environ.get("DEFAULT_BIO") or None
+SPOTIFY_CLIENT_ID = os.environ.get("SPOTIPY_CLIENT_ID") or None
+SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIPY_CLIENT_SECRET") or None
+SPOTIFY_SESSION = os.environ.get("SPOTIPY_SESSION") or None
 
 LASTFM_API = os.environ.get("LASTFM_API") or None
 LASTFM_SECRET = os.environ.get("LASTFM_SECRET") or None
@@ -176,6 +176,43 @@ dl1 = Downloader(url=url1, filename="bin/cmrudl")
 
 os.chmod("bin/megadown", 0o755)
 os.chmod("bin/cmrudl", 0o755)
+
+
+# Init Spotify
+SPOTIPY_CLIENT = None
+if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
+    if not os.path.isfile("./spotify_session"):
+        if SPOTIFY_SESSION:
+            with open("./spotify_session", "w") as file:
+                file.write(SPOTIFY_SESSION)
+        else:
+            LOGS.error(
+                "Spotify Session not found! Create a session file, write the session to the "
+                "SPOTIFY_SESSION envvar, or remove SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET envvars. "
+                "Halting!"
+            )
+            sys.exit(1)
+
+    try:
+        SPOTIPY_CLIENT = spotipy.Spotify(
+            auth_manager=spotipy.oauth2.SpotifyOAuth(
+                client_id=SPOTIFY_CLIENT_ID,
+                client_secret=SPOTIFY_CLIENT_SECRET,
+                redirect_uri="https://google.com",
+                scope="user-read-playback-state",
+                open_browser=False,
+                cache_handler=spotipy.oauth2.CacheFileHandler(
+                    cache_path="./spotify_session"
+                ),
+            )
+        )
+    except Exception as e:
+        LOGS.error(e)
+        LOGS.error(
+            "Spotify login failed! Check to make sure that SPOTIFY_CLIENT_ID and "
+            "SPOTIFY_CLIENT_SECRET are correct and that the spotify_session file (or SPOTIFY_SESSION "
+            " envvar) exists. Spotify functionality will be disabled!")
+        SPOTIPY_CLIENT = None
 
 # Global Variables
 COUNT_MSG = 0

@@ -17,11 +17,9 @@ from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
 from userbot import (
-    BIO_PREFIX,
     BOTLOG,
     BOTLOG_CHATID,
     CMD_HELP,
-    DEFAULT_BIO,
     LASTFM_USERNAME,
     bot,
     lastfm,
@@ -44,10 +42,8 @@ ARTIST = 0
 SONG = 0
 USER_ID = 0
 
-if BIO_PREFIX:
-    BIOPREFIX = BIO_PREFIX
-else:
-    BIOPREFIX = None
+BIOPREFIX = None
+DEFAULT_BIO = None
 
 LASTFMCHECK = False
 RUNNING = False
