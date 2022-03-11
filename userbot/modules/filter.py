@@ -14,7 +14,7 @@ from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
 
 
-@register(incoming=True, disable_errors=True)
+@register(incoming=True, disable_errors=True, disable_edited=True)
 @grp_exclude()
 async def filter_incoming_handler(handler):
     """Checks if the incoming message contains handler of a filter"""
