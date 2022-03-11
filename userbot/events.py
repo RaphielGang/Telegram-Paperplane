@@ -24,7 +24,7 @@ def register(**args):
     pattern = args.get("pattern")
     disable_edited = args.get("disable_edited", False)
     ignore_unsafe = args.get("ignore_unsafe", False)
-    unsafe_pattern = r"^[^/!#@\$A-Za-z]"
+    unsafe_pattern = r"^[^/!#@\$A-Za-z'\"]"
     group_only = args.get("group_only", False)
     disable_errors = args.get("disable_errors", False)
     insecure = args.get("insecure", False)
@@ -61,19 +61,22 @@ def register(**args):
             if check.via_bot_id and not insecure and check.out:
                 # Ignore outgoing messages via inline bots for security reasons
                 return
+            if (check.message.text or '').startswith(('`', '*', '_', '~')):
+                # Ignore formatted messages (monospace, bold, italic, strikethrough)
+                return
 
             try:
                 await func(check)
             #
             # HACK HACK HACK
-            # Raise StopPropagation to Raise StopPropagation
-            # This needed for AFK to working properly
+            # Catch StopPropagation to Raise StopPropagation
+            # This is needed for AFK to work properly
             # TODO
-            # Rewrite events to not passing all exceptions
+            # Rewrite events to not pass all exceptions
             #
             except events.StopPropagation:
                 raise events.StopPropagation
-            # This is a gay exception and must be passed out. So that it doesnt spam chats
+            # No need to log KeyboardInterrupt as an error
             except KeyboardInterrupt:
                 pass
             except BaseException as e:
