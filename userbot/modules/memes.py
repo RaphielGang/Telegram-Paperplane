@@ -10,6 +10,7 @@ import random
 import re
 import time
 
+import owo
 from cowpy import cow
 
 from userbot import CMD_HELP
@@ -54,24 +55,6 @@ EMOJIS = [
     "👅",
     "😩",
     "🚰",
-]
-UWUS = [
-    "(・`ω´・)",
-    ";;w;;",
-    "owo",
-    "UwU",
-    ">w<",
-    "^w^",
-    r"\(^o\) (/o^)/",
-    "( ^ _ ^)∠☆",
-    "(ô_ô)",
-    "~:o",
-    ";-;",
-    "(*^*)",
-    "(>_",
-    "(♥_♥)",
-    "*(^O^)*",
-    "((+_+))",
 ]
 FACEREACTS = [
     "ʘ‿ʘ",
@@ -463,26 +446,19 @@ async def zal(zgfy):
 
 @register(outgoing=True, pattern=r"^.owo(?: |$)(.*)")
 @grp_exclude()
-async def faces(owo):
+async def faces(owoevent):
     """UwU"""
-    textx = await owo.get_reply_message()
-    message = owo.pattern_match.group(1)
+    textx = await owoevent.get_reply_message()
+    message = owoevent.pattern_match.group(1)
     if message:
         pass
     elif textx:
         message = textx.text
     else:
-        await owo.edit("` UwU no text given! `")
+        await owoevent.edit("`UwU no text given!`")
         return
 
-    reply_text = re.sub(r"(r|l)", "w", message)
-    reply_text = re.sub(r"(R|L)", "W", reply_text)
-    reply_text = re.sub(r"n([aeiou])", r"ny\1", reply_text)
-    reply_text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", reply_text)
-    reply_text = re.sub(r"\!+", " " + random.choice(UWUS), reply_text)
-    reply_text = reply_text.replace("ove", "uv")
-    reply_text += " " + random.choice(UWUS)
-    await owo.edit(reply_text)
+    await owoevent.edit(owo.owo(message))
 
 
 @register(outgoing=True, pattern=r"^.react$")
