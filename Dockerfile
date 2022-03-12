@@ -23,7 +23,7 @@ RUN pip install -r requirements.txt
 #
 # Copies session and config(if it exists)
 #
-COPY ./sample_config.env ./userbot.session* ./config.env* ./client_secrets.json* ./secret.json* ./
+COPY ./sample_config.env ./userbot.session* ./config.env* ./client_secrets.json* ./secret.json* ./spotify_session* ./
 
 #
 # Finalization

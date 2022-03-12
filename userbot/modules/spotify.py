@@ -4,8 +4,8 @@
 # you may not use this file except in compliance with the License.
 #
 
+import asyncio
 import re
-from asyncio import sleep
 from datetime import timedelta
 
 from telethon.tl.functions.account import UpdateProfileRequest
@@ -24,14 +24,10 @@ from userbot.modules.dbhelper import get_music_config, set_spotify_bio, set_defa
 
 
 # =================== CONSTANT ===================
-SPO_BIO_ENABLED = "`Spotify current music to bio is now enabled.`"
-SPO_BIO_DISABLED = "`Spotify current music to bio is now disabled. Bio reverted to default.`"
-SPO_BIO_RUNNING = "`Spotify current music to bio is already running.`"
+SPO_BIO_ENABLED = "`Spotify Current Music to Bio is now enabled.`"
+SPO_BIO_DISABLED = "`Spotify Current Music to Bio is now disabled. Bio reverted to default.`"
 SPO_DISABLED = "`Spotify module is disabled! Make sure you have set up the environment variables properly.`"
 # ================================================
-
-
-SPOTIFY_TASK = None
 
 
 async def update_spotify_info(trigger_one = False):
@@ -60,13 +56,13 @@ async def update_spotify_info(trigger_one = False):
                         last_name=default_name
                     ))
                     is_playing = False
-                await sleep(15)
+                await asyncio.sleep(15)
                 continue
 
             is_playing = data["is_playing"]
             if is_playing:
                 if data["currently_playing_type"] != "track":
-                    await sleep(15)
+                    await asyncio.sleep(15)
                     continue
 
                 artists = [artist for artist in data["item"]["artists"]]
@@ -93,15 +89,15 @@ async def update_spotify_info(trigger_one = False):
                 await bot(UpdateProfileRequest(about=newbio))
             if name_emoji_enabled and newname != currname:
                 await bot(UpdateProfileRequest(last_name=newname))
-            await sleep(15)
+            await asyncio.sleep(15)
         except Exception as e:
             await log_error(error=e, event=None)
-            await sleep(15)
+            await asyncio.sleep(15)
             continue
 
 
 if SPOTIPY_CLIENT:
-    SPOTIFY_TASK = bot.loop.create_task(update_spotify_info())
+    bot.loop.create_task(update_spotify_info(), name='spotify')
 
 
 @register(outgoing=True, pattern=r"^.spotifybio (on|off)$")
@@ -115,8 +111,8 @@ async def set_biostgraph(setstbio):
     await set_spotify_bio(newstate)
 
     if newstate:
-        if SPOTIFY_TASK not in bot.loop.all_tasks():
-            SPOTIFY_TASK = bot.loop.create_task(update_spotify_info())
+        if not [task for task in asyncio.all_tasks() if task.get_name() == 'spotify']:
+            bot.loop.create_task(update_spotify_info(), name='spotify')
     else:
         music_config = await get_music_config() or {}
         default_bio = music_config.get('default_bio', '')
@@ -305,7 +301,7 @@ CMD_HELP.update(
     {
         "spotify": [
             "Spotify",
-            " - `.spotifybio <on/off>`: Enable Spotify bio updating.\n"
+            " - `.spotifybio <on/off>`: Enable Spotify Current Music to Bio.\n"
             " - `.myspotify`: Show the song you are currently listening to.\n"
             " - `.spotifylink <link>`: Fetch song details from the URL/URI passed as an argument or "
             "replied to. You can also reply to the response of `.myspotify` to get details about the "
