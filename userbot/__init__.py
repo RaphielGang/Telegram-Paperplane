@@ -35,9 +35,9 @@ else:
     )
 LOGS = getLogger(__name__)
 
-if version_info[0] < 3 or version_info[1] < 6:
+if version_info < (3, 8):
     LOGS.error(
-        "You MUST have a python version of at least 3.6."
+        "You MUST have a Python version of at least 3.8."
         " Multiple features depend on this. Halting!"
     )
     sys.exit(1)
