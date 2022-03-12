@@ -24,10 +24,15 @@ def main():
         "which you will need to open for authenticating with Spotify. After authenticating, copy the whole "
         "link you are redirected to (including the long string after ?) and paste it in this window. "
         "A spotify_session file will be generated and it will also be printed for the SPOTIFY_SESSION "
-        "environment variable.")
+        "environment variable."
+    )
 
-    if not os.environ.get("SPOTIPY_CLIENT_ID") or not os.environ.get("SPOTIPY_CLIENT_SECRET"):
-        print("You need to set your SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET in config.env or envvars! Halting!")
+    if not os.environ.get("SPOTIPY_CLIENT_ID") or not os.environ.get(
+        "SPOTIPY_CLIENT_SECRET"
+    ):
+        print(
+            "You need to set your SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET in config.env or envvars! Halting!"
+        )
         sys.exit(1)
 
     client = spotipy.Spotify(
@@ -43,7 +48,7 @@ def main():
 
     client.current_user()
 
-    with open('../spotify_session', 'r') as file:
+    with open("../spotify_session", "r") as file:
         print(file.read())
 
 

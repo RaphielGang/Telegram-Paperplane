@@ -61,7 +61,7 @@ def register(**args):
             if check.via_bot_id and not insecure and check.out:
                 # Ignore outgoing messages via inline bots for security reasons
                 return
-            if (check.message.text or '').startswith(('`', '*', '_', '~')):
+            if (check.message.text or "").startswith(("`", "*", "_", "~")):
                 # Ignore formatted messages (monospace, bold, italic, strikethrough)
                 return
 
@@ -167,12 +167,8 @@ async def log_error(error, event, disable_errors=False):
             output_file.write(ftext)
 
         if BOTLOG:
-            await bot.send_file(
-                BOTLOG_CHATID, "error.log", caption=text
-            )
+            await bot.send_file(BOTLOG_CHATID, "error.log", caption=text)
         elif event:
-            await bot.send_file(
-                event.chat_id, "error.log", caption=text
-            )
+            await bot.send_file(event.chat_id, "error.log", caption=text)
 
         remove("error.log")

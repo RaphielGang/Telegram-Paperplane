@@ -20,41 +20,55 @@ from userbot import (
     bot,
 )
 from userbot.events import register, grp_exclude, log_error
-from userbot.modules.dbhelper import get_music_config, set_spotify_bio, set_default_bio, set_bio_prefix, set_music_name_emoji
+from userbot.modules.dbhelper import (
+    get_music_config,
+    set_spotify_bio,
+    set_default_bio,
+    set_bio_prefix,
+    set_music_name_emoji,
+)
 
 
 # =================== CONSTANT ===================
 SPO_BIO_ENABLED = "`Spotify Current Music to Bio is now enabled.`"
-SPO_BIO_DISABLED = "`Spotify Current Music to Bio is now disabled. Bio reverted to default.`"
+SPO_BIO_DISABLED = (
+    "`Spotify Current Music to Bio is now disabled. Bio reverted to default.`"
+)
 SPO_DISABLED = "`Spotify module is disabled! Make sure you have set up the environment variables properly.`"
 # ================================================
 
 
-async def update_spotify_info(trigger_one = False):
+async def update_spotify_info(trigger_one=False):
     if not SPOTIPY_CLIENT:
         return
 
     is_playing = False
     triggered = False
 
-    while not triggered and (music_config := await get_music_config() or {}).get('spotify_bio', False):
-        if trigger_one: triggered = True
+    while not triggered and (music_config := await get_music_config() or {}).get(
+        "spotify_bio", False
+    ):
+        if trigger_one:
+            triggered = True
         try:
-            default_bio = music_config.get('default_bio', '')
-            bio_prefix = music_config.get('bio_prefix', '')
-            name_emoji_enabled = music_config.get('name_emoji', False)
-            userfull = (await bot(GetFullUserRequest(InputUserSelf())))
+            default_bio = music_config.get("default_bio", "")
+            bio_prefix = music_config.get("bio_prefix", "")
+            name_emoji_enabled = music_config.get("name_emoji", False)
+            userfull = await bot(GetFullUserRequest(InputUserSelf()))
             user = userfull.user
-            default_name = re.sub(r'( 🎧)$', r'', user.last_name) if name_emoji_enabled else user.last_name
+            default_name = (
+                re.sub(r"( 🎧)$", r"", user.last_name)
+                if name_emoji_enabled
+                else user.last_name
+            )
 
             data = SPOTIPY_CLIENT.current_playback()
 
             if not data:
                 if is_playing:
-                    await bot(UpdateProfileRequest(
-                        about=default_bio,
-                        last_name=default_name
-                    ))
+                    await bot(
+                        UpdateProfileRequest(about=default_bio, last_name=default_name)
+                    )
                     is_playing = False
                 await asyncio.sleep(15)
                 continue
@@ -66,18 +80,24 @@ async def update_spotify_info(trigger_one = False):
                     continue
 
                 artists = [artist for artist in data["item"]["artists"]]
-                artists = ', '.join([artist["name"] for artist in artists])
+                artists = ", ".join([artist["name"] for artist in artists])
                 song = data["item"]["name"]
 
-                newname = f"{user.last_name} 🎧" if user.last_name[-2:] != " 🎧" else user.last_name
+                newname = (
+                    f"{user.last_name} 🎧"
+                    if user.last_name[-2:] != " 🎧"
+                    else user.last_name
+                )
                 newbio = f"{bio_prefix} 🎧 {artists} - {song}"
                 if len(newbio) > 70:
                     newbio = f"{bio_prefix} 🎧 {song}"
                     if len(newbio) > 70:
                         newbio = f"🎧 {song}"
                         if len(newbio) > 70:
-                            if len(newbio) > 72: newbio = default_bio
-                            else: newbio = song
+                            if len(newbio) > 72:
+                                newbio = default_bio
+                            else:
+                                newbio = song
             else:
                 newbio = default_bio
                 newname = default_name
@@ -97,7 +117,7 @@ async def update_spotify_info(trigger_one = False):
 
 
 if SPOTIPY_CLIENT:
-    bot.loop.create_task(update_spotify_info(), name='spotify')
+    bot.loop.create_task(update_spotify_info(), name="spotify")
 
 
 @register(outgoing=True, pattern=r"^.spotifybio (on|off)$")
@@ -107,20 +127,22 @@ async def set_biostgraph(setstbio):
         await setstbio.edit(SPO_DISABLED)
         return
 
-    newstate = True if setstbio.pattern_match.group(1) == 'on' else False
+    newstate = True if setstbio.pattern_match.group(1) == "on" else False
     await set_spotify_bio(newstate)
 
     if newstate:
-        if not [task for task in asyncio.all_tasks() if task.get_name() == 'spotify']:
-            bot.loop.create_task(update_spotify_info(), name='spotify')
+        if not [task for task in asyncio.all_tasks() if task.get_name() == "spotify"]:
+            bot.loop.create_task(update_spotify_info(), name="spotify")
     else:
         music_config = await get_music_config() or {}
-        default_bio = music_config.get('default_bio', '')
+        default_bio = music_config.get("default_bio", "")
         await bot(UpdateProfileRequest(about=default_bio))
 
     await setstbio.edit(SPO_BIO_ENABLED if newstate else SPO_BIO_DISABLED)
     if BOTLOG:
-        await setstbio.client.send_message(BOTLOG_CHATID, SPO_BIO_ENABLED if newstate else SPO_BIO_DISABLED)
+        await setstbio.client.send_message(
+            BOTLOG_CHATID, SPO_BIO_ENABLED if newstate else SPO_BIO_DISABLED
+        )
 
 
 @register(outgoing=True, pattern=r"^.myspotify$")
@@ -131,7 +153,7 @@ async def get_curr_song_spotify(getstbio):
         return
 
     music_config = await get_music_config() or {}
-    if not music_config.get('spotify_bio'):
+    if not music_config.get("spotify_bio"):
         await getstbio.edit(SPO_BIO_DISABLED)
         return
 
@@ -141,10 +163,15 @@ async def get_curr_song_spotify(getstbio):
         await getstbio.edit("`No music is playing right now on my Spotify.`")
         return
 
-    artists = ', '.join([f"<b><a href='{artist['external_urls']['spotify']}'>{artist['name']}</a></b>" for artist in data["item"]["artists"]])
+    artists = ", ".join(
+        [
+            f"<b><a href='{artist['external_urls']['spotify']}'>{artist['name']}</a></b>"
+            for artist in data["item"]["artists"]
+        ]
+    )
     song = f"<b><a href='{data['item']['external_urls']['spotify']}'>{data['item']['name']}</a></b>"
     album = f"<b><a href='{data['item']['album']['external_urls']['spotify']}'>{data['item']['album']['name']}</a></b>"
-    on_repeat = "<b> on repeat</b>" if data["repeat_state"] == 'track' else ""
+    on_repeat = "<b> on repeat</b>" if data["repeat_state"] == "track" else ""
     paused = "<b> (Paused)</b>" if not data["is_playing"] else ""
 
     message = (
@@ -168,17 +195,22 @@ async def spotify_search(stsearch):
     track = stsearch.pattern_match.group(1)
     reply = await stsearch.get_reply_message()
 
-    if track: pass
+    if track:
+        pass
     elif reply.text:
         match_url = re.search(r"open.spotify.com/track/(\w+)", reply.text)
         match_uri = re.search(r"spotify:track:(\w+)", reply.text)
-        if match_url: track = match_url.group(1)
-        elif match_uri: track = match_uri.group(1)
+        if match_url:
+            track = match_url.group(1)
+        elif match_uri:
+            track = match_uri.group(1)
         else:
             await stsearch.edit("`Invalid Spotify track link/URI!`")
             return
     else:
-        await stsearch.edit("`Either reply to a message containing a Spotify link or pass it as an argument!`")
+        await stsearch.edit(
+            "`Either reply to a message containing a Spotify link or pass it as an argument!`"
+        )
         return
 
     await stsearch.edit("`Fetching the song...`")
@@ -186,7 +218,12 @@ async def spotify_search(stsearch):
     try:
         trackdata = SPOTIPY_CLIENT.track(track)
 
-        artists = ', '.join([f"[{artist['name']}]({artist['external_urls']['spotify']})" for artist in trackdata["artists"]])
+        artists = ", ".join(
+            [
+                f"[{artist['name']}]({artist['external_urls']['spotify']})"
+                for artist in trackdata["artists"]
+            ]
+        )
         song = f"[{trackdata['name']}]({trackdata['external_urls']['spotify']})"
         album = f"[{trackdata['album']['name']}]({trackdata['album']['external_urls']['spotify']})"
         message = (
@@ -221,11 +258,15 @@ async def setdefaultbio(setbio):
     if await set_default_bio(newbio):
         await setbio.edit(f"`Default bio set to:`\n{newbio}")
         if BOTLOG:
-            await setbio.client.send_message(BOTLOG_CHATID, f"`Default bio set to:`\n{newbio}")
+            await setbio.client.send_message(
+                BOTLOG_CHATID, f"`Default bio set to:`\n{newbio}"
+            )
     else:
         await setbio.edit("`Failed to set default bio!`")
         if BOTLOG:
-            await setbio.client.send_message(BOTLOG_CHATID, "`Failed to set default bio!`")
+            await setbio.client.send_message(
+                BOTLOG_CHATID, "`Failed to set default bio!`"
+            )
 
 
 @register(outgoing=True, pattern=r"^.setbioprefix (.*)$")
@@ -244,11 +285,15 @@ async def setbioprefix(setbio):
     if await set_bio_prefix(newbioprefix):
         await setbio.edit(f"`Bio prefix set to:`\n{newbioprefix}")
         if BOTLOG:
-            await setbio.client.send_message(BOTLOG_CHATID, f"`Bio prefix set to:`\n{newbioprefix}")
+            await setbio.client.send_message(
+                BOTLOG_CHATID, f"`Bio prefix set to:`\n{newbioprefix}"
+            )
     else:
         await setbio.edit("`Failed to set bio prefix!`")
         if BOTLOG:
-            await setbio.client.send_message(BOTLOG_CHATID, "`Failed to set bio prefix!`")
+            await setbio.client.send_message(
+                BOTLOG_CHATID, "`Failed to set bio prefix!`"
+            )
 
 
 @register(outgoing=True, pattern=r"^.spotifysettings$")
@@ -276,25 +321,34 @@ async def musicname(musicnme):
         await musicnme.edit(SPO_DISABLED)
         return
 
-    newstate = True if musicnme.pattern_match.group(1) == 'on' else False
+    newstate = True if musicnme.pattern_match.group(1) == "on" else False
 
     currname = (await bot(GetFullUserRequest(InputUserSelf()))).user.last_name
 
     if len(currname) > 62 and newstate:
-        await musicnme.edit("`Your last name is too long! Make it shorter for the emoji to fit!`")
+        await musicnme.edit(
+            "`Your last name is too long! Make it shorter for the emoji to fit!`"
+        )
         return
 
     if not newstate:
-        await bot(UpdateProfileRequest(last_name=re.sub(r'( 🎧)$', r'', currname)))
+        await bot(UpdateProfileRequest(last_name=re.sub(r"( 🎧)$", r"", currname)))
 
     if await set_music_name_emoji(newstate):
-        await musicnme.edit(f"`Music Name Emoji set to {musicnme.pattern_match.group(1)}!`")
+        await musicnme.edit(
+            f"`Music Name Emoji set to {musicnme.pattern_match.group(1)}!`"
+        )
         if BOTLOG:
-            await musicnme.client.send_message(BOTLOG_CHATID, f"`Music Name Emoji set to {musicnme.pattern_match.group(1)}!`")
+            await musicnme.client.send_message(
+                BOTLOG_CHATID,
+                f"`Music Name Emoji set to {musicnme.pattern_match.group(1)}!`",
+            )
     else:
         await musicnme.edit("`Failed to toggle Music Name Emoji!`")
         if BOTLOG:
-            await musicnme.client.send_message(BOTLOG_CHATID, "`Failed to toggle Music Name Emoji!`")
+            await musicnme.client.send_message(
+                BOTLOG_CHATID, "`Failed to toggle Music Name Emoji!`"
+            )
 
 
 CMD_HELP.update(
@@ -309,7 +363,7 @@ CMD_HELP.update(
             " - `.setdefaultbio <bio>`: Set the default Spotify bio. Must be no more than 70 characters.\n"
             " - `.setbioprefix <prefix>`: Set the bio prefix. Must be no more than 50 characters.\n"
             " - `.musicnameemoji <on/off>`: Toggle Music Name Emoji. Last name must be no more than 62 characters.\n"
-            " - `.spotifysettings`: Show the current settings of the Spotify module.\n"
+            " - `.spotifysettings`: Show the current settings of the Spotify module.\n",
         ]
     }
 )

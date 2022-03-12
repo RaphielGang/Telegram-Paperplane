@@ -33,16 +33,15 @@ async def filter_incoming_handler(handler):
                     r"( |^|[^\w])" + re.escape(trigger["keyword"]) + r"( |$|[^\w])"
                 )
                 if re.search(pattern, handler.text, flags=re.IGNORECASE):
-                    if trigger.get('is_document', False):
+                    if trigger.get("is_document", False):
                         content_msg = await handler.client.get_messages(
-                            entity=BOTLOG_CHATID,
-                            ids=trigger['msg']
+                            entity=BOTLOG_CHATID, ids=trigger["msg"]
                         )
                         return await handler.client.send_file(
                             entity=handler.chat_id,
                             file=content_msg.media,
-                            caption=trigger['caption'],
-                            reply_to=handler.message.id
+                            caption=trigger["caption"],
+                            reply_to=handler.message.id,
                         )
 
                     return await handler.reply(str(trigger["msg"]))
@@ -171,7 +170,7 @@ CMD_HELP.update(
         "filters": [
             "Filters",
             " - `.filters`: List all active filters in this chat.\n"
-            " - `.filter <keyword> \"<reply message/media>\"`: Add a filter to this chat."
+            ' - `.filter <keyword> "<reply message/media>"`: Add a filter to this chat.'
             "Paperplane will reply with <reply message> or <media> whenever <keyword> is mentioned. "
             "You can also reply to a message to get the filter content from it. "
             "NOTE: Filters are case insensitive. Reply message must be in **double** quotes.\n"

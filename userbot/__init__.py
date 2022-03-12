@@ -211,7 +211,8 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
         LOGS.error(
             "Spotify login failed! Check to make sure that SPOTIFY_CLIENT_ID and "
             "SPOTIFY_CLIENT_SECRET are correct and that the spotify_session file (or SPOTIFY_SESSION "
-            " envvar) exists. Spotify functionality will be disabled!")
+            " envvar) exists. Spotify functionality will be disabled!"
+        )
         SPOTIPY_CLIENT = None
 
 # Global Variables

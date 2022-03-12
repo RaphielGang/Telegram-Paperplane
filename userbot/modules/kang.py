@@ -92,7 +92,7 @@ async def kang(event):
     muted = await bot(
         UpdateNotifySettingsRequest(
             peer="t.me/Stickers",
-            settings=InputPeerNotifySettings(mute_until=2 ** 31 - 1),
+            settings=InputPeerNotifySettings(mute_until=2**31 - 1),
         )  # Mute forever
     )
     if not muted:  # Tell the user just in case, this may rarely happen
@@ -251,7 +251,7 @@ async def kangpack(event):
     muted = await bot(
         UpdateNotifySettingsRequest(
             peer="t.me/Stickers",
-            settings=InputPeerNotifySettings(mute_until=2 ** 31 - 1),
+            settings=InputPeerNotifySettings(mute_until=2**31 - 1),
         )  # Mute forever
     )
     if not muted:  # Tell the user just in case, this may rarely happen

@@ -92,13 +92,15 @@ async def add_filter(chatid, keyword, content, caption, is_document):
     to_check = await get_filter(chatid, keyword)
 
     if not to_check:
-        MONGO.filters.insert_one({
-            "chat_id": chatid,
-            "keyword": keyword,
-            "msg": content,
-            "caption": caption,
-            "is_document": is_document,
-        })
+        MONGO.filters.insert_one(
+            {
+                "chat_id": chatid,
+                "keyword": keyword,
+                "msg": content,
+                "caption": caption,
+                "is_document": is_document,
+            }
+        )
         return True
 
     MONGO.filters.update_one(
@@ -107,11 +109,13 @@ async def add_filter(chatid, keyword, content, caption, is_document):
             "chat_id": to_check["chat_id"],
             "keyword": to_check["keyword"],
         },
-        {"$set": {
-            "msg": content,
-            "caption": caption,
-            "is_document": is_document,
-        }},
+        {
+            "$set": {
+                "msg": content,
+                "caption": caption,
+                "is_document": is_document,
+            }
+        },
     )
 
     return False

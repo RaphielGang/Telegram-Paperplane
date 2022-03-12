@@ -142,10 +142,12 @@ async def wiki(wiki_q):
             BOTLOG_CHATID, f"Wiki query {match} was executed successfully"
         )
 
+
 def parse_ud_url(match):
     group = match.group(1)
 
-    return f'[{group}](https://www.urbandictionary.com/define.php?term={quote_plus(group)})'
+    return f"[{group}](https://www.urbandictionary.com/define.php?term={quote_plus(group)})"
+
 
 @register(outgoing=True, pattern=r"^.ud (.*)")
 @grp_exclude()
@@ -164,10 +166,10 @@ async def urban_dict(ud_e):
 
     result = ""
     for i, word in enumerate(words):
-        definition = sub(r'\[([^\]]*)\]', parse_ud_url, word.definition)
-        result += (f"{i+1}. [{word.word}]({word.permalink}): {definition}\n")
+        definition = sub(r"\[([^\]]*)\]", parse_ud_url, word.definition)
+        result += f"{i+1}. [{word.word}]({word.permalink}): {definition}\n"
         if word.example:
-            example = sub(r'\[([^\]]*)\]', parse_ud_url, word.example)
+            example = sub(r"\[([^\]]*)\]", parse_ud_url, word.example)
             result += f"`Example(s)`: {example}"
         result += "\n"
 
