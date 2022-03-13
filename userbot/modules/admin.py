@@ -35,7 +35,7 @@ from telethon.tl.types import (
     MessageMediaPhoto,
 )
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot, is_mongo_alive, is_redis_alive
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot, is_mongo_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import get_gmuted, get_muted, gmute, mute, ungmute, unmute
 from userbot.modules import helpers
@@ -45,7 +45,7 @@ PP_TOO_SMOL = "`The image is too small`"
 PP_ERROR = "`Failure while processing image`"
 NO_ADMIN = "`You aren't an admin!`"
 NO_PERM = "`You don't have sufficient permissions!`"
-NO_SQL = "`Database connections failing!`"
+NO_DB = "`Database connections failing!`"
 
 CHAT_PP_CHANGED = "`Chat Picture Changed`"
 CHAT_PP_ERROR = (
@@ -352,9 +352,9 @@ async def spider(spdr):
     """
     This function is basically muting peeps
     """
-    # Check if the function running under SQL mode
-    if not is_mongo_alive() or not is_redis_alive():
-        await spdr.edit(NO_SQL)
+    # Check if MongoDB is alive
+    if not is_mongo_alive():
+        await spdr.edit(NO_DB)
         return
 
     # Admin or creator check
@@ -430,9 +430,9 @@ async def unmoot(unmot):
         await unmot.edit(NO_ADMIN)
         return
 
-    # Check if the function running under SQL mode
-    if not is_mongo_alive() or not is_redis_alive():
-        await unmot.edit(NO_SQL)
+    # Check if MongoDB is alive
+    if not is_mongo_alive():
+        await unmot.edit(NO_DB)
         return
     # If admin or creator, inform the user and start unmuting
     await unmot.edit("```Unmuting...```")
@@ -465,7 +465,7 @@ async def unmoot(unmot):
 @grp_exclude()
 async def muter(moot):
     """Used for deleting the messages of muted people"""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         return
     muted = await get_muted(moot.chat_id)
     gmuted = await get_gmuted()
@@ -508,9 +508,9 @@ async def muter(moot):
 async def ungmoot(un_gmute):
     """For .ungmute command, ungmutes the target in the userbot"""
 
-    # Check if the function running under SQL mode
-    if not is_mongo_alive() or not is_redis_alive():
-        await un_gmute.edit(NO_SQL)
+    # Check if MongoDB is alive
+    if not is_mongo_alive():
+        await un_gmute.edit(NO_DB)
         return
 
     user = await helpers.get_user_from_event(un_gmute)
@@ -542,9 +542,9 @@ async def ungmoot(un_gmute):
 async def gspider(gspdr):
     """For .gmute command, gmutes the target in the userbot"""
 
-    # Check if the function running under SQL mode
-    if not is_mongo_alive() or not is_redis_alive():
-        await gspdr.edit(NO_SQL)
+    # Check if MongoDB is alive
+    if not is_mongo_alive():
+        await gspdr.edit(NO_DB)
         return
     user = await helpers.get_user_from_event(gspdr)
     if not user:

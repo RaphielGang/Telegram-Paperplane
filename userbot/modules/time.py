@@ -12,7 +12,7 @@ from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
-from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot import CMD_HELP, is_mongo_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import get_time, set_time
 
@@ -195,7 +195,7 @@ async def date_func(dat):
 async def set_time_country(loc):
     """For .settime command, change the default userbot
     country for date and time commands."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await loc.edit(DB_FAILED)
         return
 

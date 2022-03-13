@@ -74,7 +74,7 @@ async def gsearch(q_event):
         query = textx.text
     else:
         await q_event.edit(
-            "`Pass a query as an argument or reply " "to a message for Google search!`"
+            "`Pass a query as an argument or reply to a message for Google search!`"
         )
         return
 
@@ -98,6 +98,7 @@ async def gsearch(q_event):
             link_preview=False,
         )
     except NoResultsOrTrafficError as error:
+        await q_event.edit("`There was either an error, or no results were found.`")
         if BOTLOG:
             await q_event.client.send_message(
                 BOTLOG_CHATID, f"`GoogleSearch error: {error}`"

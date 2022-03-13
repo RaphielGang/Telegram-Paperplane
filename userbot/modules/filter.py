@@ -9,7 +9,7 @@ from asyncio import sleep
 
 from telethon.tl.types import Channel
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
 
@@ -21,7 +21,7 @@ async def filter_incoming_handler(handler):
     try:
         sender = await handler.get_sender()
         if sender or not isinstance(sender, Channel) and not sender.bot:
-            if not is_mongo_alive() or not is_redis_alive():
+            if not is_mongo_alive():
                 await handler.edit("`Database connections failing!`")
                 return
 
@@ -53,7 +53,7 @@ async def filter_incoming_handler(handler):
 @grp_exclude()
 async def add_new_filter(event):
     """Command for adding a new filter"""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit("`Database connections failing!`")
         return
 
@@ -105,7 +105,7 @@ async def add_new_filter(event):
 @grp_exclude()
 async def remove_filter(event):
     """Command for removing a filter"""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit("`Database connections failing!`")
         return
     filt = event.pattern_match.group(1)
@@ -150,7 +150,7 @@ async def kick_marie_filter(event):
 @grp_exclude()
 async def filters_active(event):
     """For .filters command, lists all of the active filters in a chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit("`Database connections failing!`")
         return
     transact = "`There are no filters in this chat.`"

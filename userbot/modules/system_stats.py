@@ -115,9 +115,9 @@ async def pipcheck(pip):
 @grp_exclude()
 async def amireallyalive(alive):
     if not is_mongo_alive() and not is_redis_alive():
-        db = "Both Mongo and Redis Database seems to be failing!"
+        db = "Both MongoDB and Redis Cache seem to be failing!"
     elif not is_mongo_alive():
-        db = "Mongo DB seems to be failing!"
+        db = "MongoDB seems to be failing!"
     elif not is_redis_alive():
         db = "Redis Cache seems to be failing!"
     else:

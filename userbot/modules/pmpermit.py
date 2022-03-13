@@ -19,7 +19,6 @@ from userbot import (
     LOGS,
     PM_AUTO_BAN,
     is_mongo_alive,
-    is_redis_alive,
 )
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
@@ -47,7 +46,7 @@ async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
     if PM_AUTO_BAN and event.is_private and not (await event.get_sender()).bot:
-        if not is_mongo_alive() or not is_redis_alive():
+        if not is_mongo_alive():
             return
         apprv = await approval(event.chat_id)
 
@@ -121,7 +120,7 @@ async def auto_accept(event):
     """Will approve automatically if you texted them first."""
     if event.is_private:
         chat = await event.get_chat()
-        if not is_mongo_alive() or not is_redis_alive():
+        if not is_mongo_alive():
             return
         if isinstance(chat, User):
             if await approval(event.chat_id) or chat.bot:
@@ -165,7 +164,7 @@ async def notifon(non_event):
 @grp_exclude()
 async def approvepm(apprvpm):
     """For .approve command, give someone the permissions to PM you."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await apprvpm.edit("`Database connections failing!`")
         return
 
@@ -196,7 +195,7 @@ async def approvepm(apprvpm):
 @grp_exclude()
 async def blockpm(block):
     """For .block command, block people from PMing you!"""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await block.edit("`Database connections failing!`")
         return
 

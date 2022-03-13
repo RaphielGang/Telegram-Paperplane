@@ -7,7 +7,7 @@
 
 import re
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     add_list,
@@ -32,7 +32,7 @@ LIST_HEADER = "[Paperplane-List] List **{}({})**\n\n"
 @grp_exclude()
 async def lists_active(event):
     """For .lists command, list all of the lists saved in a chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit(DB_FAILED)
         return
 
@@ -53,7 +53,7 @@ async def lists_active(event):
 @grp_exclude()
 async def removelists(event):
     """For .dellist command, delete list with the given name."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit(DB_FAILED)
         return
 
@@ -88,7 +88,7 @@ async def removelists(event):
 @grp_exclude()
 async def addlist(event):
     """For .new(g)list command, saves lists in a chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit(DB_FAILED)
         return
 
@@ -117,7 +117,7 @@ async def addlist(event):
 @grp_exclude()
 async def add_list_items(event):
     """For .addlistitems command, add item(s) to a list."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit(DB_FAILED)
         return
 
@@ -169,7 +169,7 @@ async def add_list_items(event):
 @grp_exclude()
 async def edit_list_item(event):
     """For .editlistitem command, edit an individual item on a list."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit(DB_FAILED)
         return
 
@@ -213,7 +213,7 @@ async def edit_list_item(event):
 @grp_exclude()
 async def rmlistitems(event):
     """For .rmlistitem command, remove an item from the list."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit(DB_FAILED)
         return
 
@@ -275,7 +275,7 @@ Use` ${} `to get the list.`"
 @grp_exclude()
 async def setliststate(event):
     """For .setlist command, changes the state of a list."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit(DB_FAILED)
         return
 
@@ -325,7 +325,7 @@ async def lists_logic(event):
     """Lists logic."""
     try:
         if not (await event.get_sender()).bot:
-            if not is_mongo_alive() or not is_redis_alive():
+            if not is_mongo_alive():
                 return
 
             listname = event.text[1:]
@@ -357,7 +357,7 @@ async def lists_logic(event):
 async def getlist_logic(event):
     """For .getlist, get the list by the name."""
     if not (await event.get_sender()).bot:
-        if not is_mongo_alive() or not is_redis_alive():
+        if not is_mongo_alive():
             return
 
         textx = await event.get_reply_message()

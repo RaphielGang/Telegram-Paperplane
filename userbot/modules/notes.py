@@ -7,7 +7,7 @@
 
 from asyncio import sleep
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import add_note, delete_note, get_note, get_notes
 
@@ -16,7 +16,7 @@ from userbot.modules.dbhelper import add_note, delete_note, get_note, get_notes
 @grp_exclude()
 async def notes_active(event):
     """For .saved command, list all of the notes saved in a chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit("`Database connections failing!`")
         return
 
@@ -36,7 +36,7 @@ async def notes_active(event):
 @grp_exclude()
 async def remove_notes(event):
     """For .clear command, clear note with the given name."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit("`Database connections failing!`")
         return
     notename = event.pattern_match.group(1)
@@ -50,7 +50,7 @@ async def remove_notes(event):
 @grp_exclude()
 async def add_filter(event):
     """For .save command, saves notes in a chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit("`Database connections failing!`")
         return
 
@@ -71,7 +71,7 @@ async def add_filter(event):
 @grp_exclude()
 async def save_note(event):
     """For .save command, saves notes in a chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await event.edit("`Database connections failing!`")
         return
     note = event.text[6:]
@@ -88,7 +88,7 @@ async def note_check(event):
     """Notes logic."""
     try:
         if not (await event.get_sender()).bot:
-            if not is_mongo_alive() or not is_redis_alive():
+            if not is_mongo_alive():
                 return
 
             notename = event.text[1:]
