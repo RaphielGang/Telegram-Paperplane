@@ -1,6 +1,10 @@
 version = 1
 
 [[analyzers]]
+name = "shell"
+enabled = true
+
+[[analyzers]]
 name = "python"
 enabled = true
 
