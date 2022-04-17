@@ -14,7 +14,7 @@ from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.eval(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.eval(?: |$)(.*)")
 @grp_exclude()
 async def evaluate(query):
     """For .eval command, evaluates the given Python expression."""
@@ -137,7 +137,7 @@ execute. Use .help exec for an example.```"
         )
 
 
-@register(outgoing=True, pattern="^.term(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.term(?: |$)(.*)")
 @grp_exclude()
 async def terminal_runner(term):
     """For .term command, runs bash commands and scripts on your server."""

@@ -7,7 +7,7 @@
 
 import asyncio
 
-from userbot import CMD_HELP, bot, is_mongo_alive, is_redis_alive
+from userbot import CMD_HELP, bot, is_mongo_alive
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import (
     add_chat_fban,
@@ -20,10 +20,10 @@ from userbot.modules.dbhelper import (
 from userbot.modules import helpers
 
 
-@register(outgoing=True, pattern="^.gban(?: |$)([^\s]+)(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.gban(?: |$)([^\s]+)(?: |$)(.*)")
 @grp_exclude()
 async def gban_all(msg):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await msg.edit("`Database connections failing!`")
         return
     banreason = "[paperplane] "
@@ -58,10 +58,10 @@ async def gban_all(msg):
     await msg.edit(message)
 
 
-@register(outgoing=True, pattern="^.fban(?: |$)([^\s]+)(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.fban(?: |$)([^\s]+)(?: |$)(.*)")
 @grp_exclude()
 async def fedban_all(msg):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await msg.edit("`Database connections failing!`")
         return
 
@@ -98,74 +98,74 @@ async def fedban_all(msg):
     await msg.edit(message)
 
 
-@register(outgoing=True, pattern="^.addfban")
+@register(outgoing=True, pattern=r"^.addfban")
 @grp_exclude()
 async def add_to_fban(chat):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await chat.edit("`Database connections failing!`")
         return
     res = await add_chat_fban(chat.chat_id)
 
     if res:
         return await chat.edit("`Added this chat to the FBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't add this chat to the FBan list! Maybe it's already there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't add this chat to the FBan list! Maybe it's already there?`"
+    )
 
 
-@register(outgoing=True, pattern="^.addgban")
+@register(outgoing=True, pattern=r"^.addgban")
 @grp_exclude()
 async def add_to_gban(chat):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await chat.edit("`Database connections failing!`")
         return
     res = await add_chat_gban(chat.chat_id)
 
     if res:
         return await chat.edit("`Added this bot to the GBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't add this bot to the GBan list! Maybe it's already there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't add this bot to the GBan list! Maybe it's already there?`"
+    )
 
 
-@register(outgoing=True, pattern="^.removefban")
+@register(outgoing=True, pattern=r"^.removefban")
 @grp_exclude()
 async def remove_from_fban(chat):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await chat.edit("`Database connections failing!`")
         return
     res = await remove_chat_fban(chat.chat_id)
 
     if res:
         return await chat.edit("`Removed this group from the FBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't remove this group from the FBan list! Maybe it's not there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't remove this group from the FBan list! Maybe it's not there?`"
+    )
 
 
-@register(outgoing=True, pattern="^.removegban")
+@register(outgoing=True, pattern=r"^.removegban")
 @grp_exclude()
 async def remove_from_gban(chat):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await chat.edit("`Database connections failing!`")
         return
     res = await remove_chat_gban(chat.chat_id)
 
     if res:
         return await chat.edit("`Removed this bot from the GBan list!`")
-    else:
-        return await chat.edit(
-            "`Couldn't remove this bot from the GBan list! Maybe it's not there?`"
-        )
+
+    return await chat.edit(
+        "`Couldn't remove this bot from the GBan list! Maybe it's not there?`"
+    )
 
 
-@register(outgoing=True, pattern="^.listfban")
+@register(outgoing=True, pattern=r"^.listfban")
 @grp_exclude()
 async def list_fban(chat):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await chat.edit("`Database connections failing!`")
         return
     banlist = await get_fban()
@@ -182,10 +182,10 @@ async def list_fban(chat):
     await chat.edit(message)
 
 
-@register(outgoing=True, pattern="^.listgban")
+@register(outgoing=True, pattern=r"^.listgban")
 @grp_exclude()
 async def list_gban(chat):
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await chat.edit("`Database connections failing!`")
         return
     banlist = await get_fban()

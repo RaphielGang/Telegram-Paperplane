@@ -65,7 +65,7 @@ def separate_sed(sed_string):
     return None
 
 
-@register(outgoing=True, pattern="^sed", ignore_unsafe=True)
+@register(outgoing=True, pattern=r"^sed", ignore_unsafe=True)
 @grp_exclude()
 async def sed(command):
     """For sed command, use sed on Telegram."""

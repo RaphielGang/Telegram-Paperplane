@@ -56,7 +56,7 @@ async def paste(pstl):
         )
 
 
-@register(outgoing=True, pattern="^.getpaste(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.getpaste(?: |$)(.*)")
 @grp_exclude()
 async def getpaste(paste_url):
     """For .getpaste command,

@@ -1,6 +1,7 @@
 Pillow>=5.3.0
 PyDrive2
 aiohttp
+asyncurban
 cowpy
 dnspython
 emoji
@@ -27,8 +28,8 @@ redis
 requests>=2.18.4
 search-engine-parser
 speedtest-cli>=2.0.2
-spotify_token
+spotipy
 telegraph
 telethon>=1.10.1
-urbandict>=0.5
+text-to-owo
 wikipedia>=1.4.0

@@ -17,7 +17,7 @@ from userbot.events import register, grp_exclude
 GITHUB = "https://github.com"
 
 
-@register(outgoing=True, pattern="^.magisk$")
+@register(outgoing=True, pattern=r"^.magisk$")
 @grp_exclude()
 async def magisk(request):
     """magisk latest releases"""

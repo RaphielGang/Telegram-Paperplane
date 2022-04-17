@@ -36,11 +36,11 @@
         },
         "MONGO_DB_URI": {
             "description": "Your MongoDB Atlas URL.",
-            "required": true 
+            "required": true
         },
         "SCREENSHOT_ACCESS_LAYER_KEY": {
             "description": "Screenshot Layer API Key for .screenshot command. Get from https://screenshotlayer.com/. Please refer to README for getting the key.",
-            "required": false 
+            "required": false
         },
         "OPEN_WEATHER_MAP_APPID": {
             "description": "OpenWeather Map API Key for .weather command. Get from https://openweathermap.org/.",
@@ -49,29 +49,33 @@
         "BOTLOG": {
             "description": "In case you want to turn on logging, set this True.",
             "value": "False",
-            "required": false 
+            "required": false
         },
         "BOTLOG_CHATID": {
-            "description": "Chat ID for Botlog. Get it from group management bots such as Marie or her forks.",
+            "description": "Chat ID for Botlog. Get it from group management bots such as Rose, or using the .chatid Paperplane command.",
             "value": "0",
-            "required": false 
+            "required": false
         },
         "CONSOLE_LOGGER_VERBOSE": {
             "description": "If you want verbosity on the Logging.",
             "value": "False",
-            "required": false 
+            "required": false
         },
         "PM_AUTO_BAN": {
             "description": "PM Auto-Ban Feature Switch.",
             "value": "False",
-            "required": false  
-        },
-        "SPOTIFY_USERNAME": {
-            "description": "Spotify Current Listening Music to Bio.",
             "required": false
         },
-        "SPOTIFY_PASS": {
-            "description": "Spotify Current Listening Music to Bio.",
+        "SPOTIPY_CLIENT_ID": {
+            "description": "Spotify Client ID (API Key). Get from from https://developer.spotify.com/dashboard.",
+            "required": false
+        },
+        "SPOTIPY_CLIENT_SECRET": {
+            "description": "Spotify Client Secret (API Hash). Get from from https://developer.spotify.com/dashboard.",
+            "required": false
+        },
+        "SPOTIPY_SESSION": {
+            "description": "Spotify Session String. Get with scripts/generate_spotify_session.py script.",
             "required": false
         },
         "LASTFM_API": {
@@ -90,20 +94,16 @@
             "description": "Last.FM Password",
             "required": false
         },
-        "BIO_PREFIX": {
-            "description": "Bot will add before song name. For both last.fm and spotify bio modules.",
-            "required": false
-        },
-        "DEFAULT_BIO": {
-            "description": "Default bio message.",
-            "required": false
-        },
         "WELCOME_MUTE": {
             "description": "Detect and mute spambots which match the Paperplane algorithm after they join a group. Use at your own risk, the algorithm is in beta stage.",
             "required": false
         },
         "GDRIVE_FOLDER": {
             "description": "Google Drive upload folder.",
+            "required": false
+        },
+        "WOLFRAM_ID": {
+            "description": "Wolfram ID. Get an API KEY from products.wolframalpha.com/api/.",
             "required": false
         }
     }

@@ -35,7 +35,7 @@ async def is_off_br(br):
     return
 
 
-@register(outgoing=True, pattern="^.update(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.update(?: |$)(.*)")
 @grp_exclude()
 async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"
@@ -52,8 +52,7 @@ async def upstream(ups):
         return
     except InvalidGitRepositoryError as error:
         await ups.edit(
-            f"{txt}\n`directory {error} does \
-                        not seems to be a git repository`"
+            f"{txt}\n`directory {error} does not seems to be a git repository`"
         )
         return
     except GitCommandError as error:
@@ -122,8 +121,8 @@ async def upstream(ups):
             return
 
         await ups.edit(
-            "`Heroku configuration found! Updater will try to update and restart Paperplane"
-            "automatically if succeeded. Try checking if Paperplane is alive by using the"
+            "`Heroku configuration found! Updater will try to update and restart Paperplane "
+            "automatically if succeeded. Try checking if Paperplane is alive by using the "
             '".alive" command after a few minutes.`'
         )
         if not STRING_SESSION:

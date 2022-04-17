@@ -11,27 +11,26 @@ from userbot import (
     CMD_HELP,
     MONGO,
     is_mongo_alive,
-    is_redis_alive,
 )
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.unmutechat$")
+@register(outgoing=True, pattern=r"^.unmutechat$")
 @grp_exclude()
 async def unmute_chat(unm_e):
     """For .unmutechat command, unmute a muted chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await unm_e.edit("`Database connections failing!`")
         return
     MONGO.bot.mute_chats.delete_one({"chat_id": unm_e.chat_id})
     await unm_e.edit("```Unmuted this chat!```")
 
 
-@register(outgoing=True, pattern="^.mutechat$")
+@register(outgoing=True, pattern=r"^.mutechat$")
 @grp_exclude()
 async def mute_chat(mute_e):
     """For .mutechat command, mute any chat."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         await mute_e.edit("`Database connections failing!`")
         return
     await mute_e.edit(str(mute_e.chat_id))
@@ -47,7 +46,7 @@ async def mute_chat(mute_e):
 @grp_exclude()
 async def keep_read(message):
     """The mute logic."""
-    if not is_mongo_alive() or not is_redis_alive():
+    if not is_mongo_alive():
         return
     kread = MONGO.bot.mute_chats.find({"chat_id": message.chat_id})
     if kread:

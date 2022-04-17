@@ -14,7 +14,7 @@ from userbot.modules.dbhelper import (
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.exclude ?(-?[0-9]+)? ?(in|all)?")
+@register(outgoing=True, pattern=r"^.exclude ?(-?[0-9]+)? ?(in|all)?")
 async def exclude_grp(excl):
     if not is_mongo_alive():
         await excl.edit("`Database connections failing!`")
@@ -50,7 +50,7 @@ async def exclude_grp(excl):
     return
 
 
-@register(outgoing=True, pattern="^.unexclude ?(-?[0-9]+)?")
+@register(outgoing=True, pattern=r"^.unexclude ?(-?[0-9]+)?")
 async def unexclude_grp(excl):
     if not is_mongo_alive():
         await excl.edit("`Database connections failing!`")
@@ -75,7 +75,7 @@ async def unexclude_grp(excl):
     return
 
 
-@register(outgoing=True, pattern="^.listexclude")
+@register(outgoing=True, pattern=r"^.listexclude")
 @grp_exclude()
 async def listexclude_grp(excl):
     if not is_mongo_alive():

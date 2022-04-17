@@ -14,7 +14,7 @@ from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register, grp_exclude
 
 
-@register(outgoing=True, pattern="^.random")
+@register(outgoing=True, pattern=r"^.random")
 @grp_exclude()
 async def randomise(items):
     """For .random command, get a random item from the list of items."""
@@ -32,7 +32,7 @@ async def randomise(items):
     )
 
 
-@register(outgoing=True, pattern="^.sleep( [0-9]+)?$")
+@register(outgoing=True, pattern=r"^.sleep( [0-9]+)?$")
 @grp_exclude()
 async def sleepybot(time):
     """For .sleep command, let the userbot snooze for a few second."""
@@ -50,7 +50,7 @@ async def sleepybot(time):
         sleep(counter)
 
 
-@register(outgoing=True, pattern="^.shutdown$")
+@register(outgoing=True, pattern=r"^.shutdown$")
 @grp_exclude()
 async def killdabot(event):
     """For .shutdown command, shut the bot down."""
@@ -60,7 +60,7 @@ async def killdabot(event):
     await event.client.disconnect()
 
 
-@register(outgoing=True, pattern="^.restart$")
+@register(outgoing=True, pattern=r"^.restart$")
 @grp_exclude()
 async def knocksomesense(event):
     await event.edit("`Hold tight! I just need a second to be back up....`")
@@ -73,14 +73,14 @@ async def knocksomesense(event):
     sys.exit()
 
 
-@register(outgoing=True, pattern="^.support$")
+@register(outgoing=True, pattern=r"^.support$")
 @grp_exclude()
 async def bot_support(wannahelp):
     """For .support command, just returns the group link."""
     await wannahelp.edit("Group: @tgpaperplane")
 
 
-@register(outgoing=True, pattern="^.repo$")
+@register(outgoing=True, pattern=r"^.repo$")
 @grp_exclude()
 async def repo_is_here(wannasee):
     """For .repo command, just returns the repo URL."""
