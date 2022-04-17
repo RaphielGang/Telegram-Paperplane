@@ -57,9 +57,9 @@ async def update_spotify_info(trigger_one=False):
             userfull = await bot(GetFullUserRequest(InputUserSelf()))
             user = userfull.user
             default_name = (
-                re.sub(r"( 🎧)$", r"", user.last_name)
+                re.sub(r"🎧$", r"", user.last_name or '')
                 if name_emoji_enabled
-                else user.last_name
+                else user.last_name or ''
             )
 
             data = SPOTIPY_CLIENT.current_playback()
@@ -84,9 +84,9 @@ async def update_spotify_info(trigger_one=False):
                 song = data["item"]["name"]
 
                 newname = (
-                    f"{user.last_name} 🎧"
-                    if user.last_name[-2:] != " 🎧"
-                    else user.last_name
+                    f"{user.last_name or ''} 🎧"
+                    if (user.last_name or '')[-1:] != "🎧"
+                    else user.last_name or ''
                 )
                 newbio = f"{bio_prefix} 🎧 {artists} - {song}"
                 if len(newbio) > 70:
@@ -103,7 +103,7 @@ async def update_spotify_info(trigger_one=False):
                 newname = default_name
 
             currbio = userfull.about
-            currname = user.last_name
+            currname = user.last_name or ''
 
             if newbio != currbio:
                 await bot(UpdateProfileRequest(about=newbio))
@@ -323,7 +323,7 @@ async def musicname(musicnme):
 
     newstate = True if musicnme.pattern_match.group(1) == "on" else False
 
-    currname = (await bot(GetFullUserRequest(InputUserSelf()))).user.last_name
+    currname = (await bot(GetFullUserRequest(InputUserSelf()))).user.last_name or ''
 
     if len(currname) > 62 and newstate:
         await musicnme.edit(
@@ -332,7 +332,7 @@ async def musicname(musicnme):
         return
 
     if not newstate:
-        await bot(UpdateProfileRequest(last_name=re.sub(r"( 🎧)$", r"", currname)))
+        await bot(UpdateProfileRequest(last_name=re.sub(r"🎧$", r"", currname)))
 
     if await set_music_name_emoji(newstate):
         await musicnme.edit(
