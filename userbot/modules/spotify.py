@@ -54,8 +54,8 @@ async def update_spotify_info(trigger_one=False):
             default_bio = music_config.get("default_bio", "")
             bio_prefix = music_config.get("bio_prefix", "")
             name_emoji_enabled = music_config.get("name_emoji", False)
-            userfull = await bot(GetFullUserRequest(InputUserSelf()))
-            user = userfull.user
+            userfull = (await bot(GetFullUserRequest(InputUserSelf()))).full_user
+            user = await bot.get_me()
             default_name = (
                 re.sub(r"🎧$", r"", user.last_name or '')
                 if name_emoji_enabled
@@ -323,7 +323,7 @@ async def musicname(musicnme):
 
     newstate = True if musicnme.pattern_match.group(1) == "on" else False
 
-    currname = (await bot(GetFullUserRequest(InputUserSelf()))).user.last_name or ''
+    currname = (await bot.get_me()).last_name or ''
 
     if len(currname) > 62 and newstate:
         await musicnme.edit(
