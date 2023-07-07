@@ -6,12 +6,12 @@
 """ Userbot module containing various scrapers. """
 
 import os
-from re import findall, sub
+import re
 from shutil import rmtree
 from urllib.parse import quote_plus
 
 import asyncurban
-from emoji import get_emoji_regexp
+import emoji
 from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
@@ -34,7 +34,7 @@ async def img_sampler(event):
     """For .img command, search and return images matching the query."""
     await event.edit("Processing...")
     query = event.pattern_match.group(1)
-    lim = findall(r"lim=\d+", query)
+    lim = re.findall(r"lim=\d+", query)
     try:
         lim = lim[0]
         lim = lim.replace("lim=", "")
@@ -167,10 +167,10 @@ async def urban_dict(ud_e):
 
     result = ""
     for i, word in enumerate(words):
-        definition = sub(r"\[([^\]]*)\]", parse_ud_url, word.definition)
+        definition = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.definition)
         result += f"{i+1}. [{word.word}]({word.permalink}): {definition}\n"
         if word.example:
-            example = sub(r"\[([^\]]*)\]", parse_ud_url, word.example)
+            example = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.example)
             result += f"`Example(s)`: {example}"
         result += "\n"
 
@@ -276,9 +276,17 @@ async def lang(value):
         )
 
 
+def get_emoji_regexp():
+    # Sort emoji by length to make sure multi-character emojis are
+    # matched first
+    emojis = sorted(emoji.EMOJI_DATA, key=len, reverse=True)
+    pattern = '(' + '|'.join(re.escape(u) for u in emojis) + ')'
+    return re.compile(pattern)
+
+
 def deEmojify(inputString):
     """Remove emojis and other non-safe characters from string"""
-    return get_emoji_regexp().sub("", inputString)
+    return get_emoji_regexp().re.sub("", inputString)
 
 
 @register(outgoing=True, pattern=r"^.wolfram (.*)")
