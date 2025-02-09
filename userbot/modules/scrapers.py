@@ -10,7 +10,6 @@ import re
 from shutil import rmtree
 from urllib.parse import quote_plus
 
-import asyncurban
 import emoji
 from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
@@ -156,21 +155,24 @@ async def urban_dict(ud_e):
     """For .ud command, fetch content from Urban Dictionary."""
     await ud_e.edit("`Processing...`")
     query = ud_e.pattern_match.group(1)
-    urban = asyncurban.UrbanDictionary()
 
     try:
-        words = await urban.search(query)
-        await urban.close()
-    except asyncurban.WordNotFoundError:
+        response = get(f"https://api.urbandictionary.com/v0/define?term={query}")
+        json = response.json()
+        if not json["list"]:
+            raise Exception
+
+        words = json["list"]
+    except Exception as e:
         await ud_e.edit(f"Sorry, couldn't find any results for `{query}`.")
         return
 
     result = ""
-    for i, word in enumerate(words):
-        definition = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.definition)
-        result += f"{i+1}. [{word.word}]({word.permalink}): {definition}\n"
-        if word.example:
-            example = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.example)
+    for i, word in enumerate(words[:3]):
+        definition = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.get("definition"))
+        result += f"{i+1}. [{word.get('word')}]({word.get('permalink')}): {definition}\n"
+        if word.get("example"):
+            example = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.get("example"))
             result += f"`Example(s)`: {example}"
         result += "\n"
 
