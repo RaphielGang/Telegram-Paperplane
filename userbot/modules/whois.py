@@ -78,16 +78,41 @@ async def get_user(event):
     return replied_user
 
 
+async def get_user_id(event):
+    """Get the user ID from the event."""
+    if event.reply_to_msg_id:
+        previous_message = await event.get_reply_message()
+        user_id = previous_message.from_id
+    else:
+        user = event.pattern_match.group(1)
+
+        if user.isnumeric():
+            user = int(user)
+
+        if not user:
+            self_user = await event.client.get_me()
+            user = self_user.id
+
+        if event.message.entities is not None:
+            probable_user_mention_entity = event.message.entities[0]
+
+            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                return user_id
+
+    return user_id
+
+
 async def fetch_info(replied_user, event):
     """Get details from the User object."""
-    user_id = replied_user.user.id
-    first_name = replied_user.user.first_name
-    last_name = replied_user.user.last_name
-    username = replied_user.user.username
-    user_bio = replied_user.about
-    is_bot = replied_user.user.bot
-    restricted = replied_user.user.restricted
-    verified = replied_user.user.verified
+    user_id = replied_user.users[0].id
+    first_name = replied_user.users[0].first_name
+    last_name = replied_user.users[0].last_name
+    username = replied_user.users[0].username
+    user_bio = replied_user.full_user.about
+    is_bot = replied_user.users[0].bot
+    restricted = replied_user.users[0].restricted
+    verified = replied_user.users[0].verified
     first_name = (
         first_name.replace("\u2060", "")
         if first_name
@@ -97,10 +122,10 @@ async def fetch_info(replied_user, event):
         last_name.replace("\u2060", "") if last_name else ("This User has no Last Name")
     )
     username = "@{}".format(username) if username else ("This User has no Username")
-    user_bio = "This User has no About" if not user_bio else user_bio
+    user_bio = "This User has no Bio" if not user_bio else user_bio
 
     if user_id != (await event.client.get_me()).id:
-        common_chat = replied_user.common_chats_count
+        common_chat = replied_user.full_user.common_chats_count
     else:
         common_chat = "I've seen them in... Wow. Are they stalking me? "
         common_chat += "They're in all the same places I am... oh. It's me."
