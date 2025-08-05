@@ -1,29 +1,39 @@
-FROM python:3.8-slim
+FROM python:3.9-slim
 
 RUN apt-get update && apt-get install -y \
 	git \
 	curl \
 	sudo \
 	libwebp-dev \
-	redis \
+	redis-server \
+	redis-tools \
 	neofetch \
 	libssl-dev \
 	libjpeg-dev \
 	jq \
-	pv
+	pv \
+	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/usr/src/app/bin:$PATH"
 WORKDIR /usr/src/app
 
-RUN git clone https://github.com/RaphielGang/Telegram-UserBot.git -b master ./
+# Copy the current repository files
+COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 
-#
-# Copies session and config(if it exists)
-#
-COPY ./sample_config.env ./userbot.session* ./config.env* ./client_secrets.json* ./secret.json* ./spotify_session* ./
+# Create necessary directories
+RUN mkdir -p bin logs
+
+# Set proper permissions for start script
+RUN chmod +x init/start.sh
+
+# Create a non-root user for security
+RUN useradd -m -u 1000 paperplane && \
+    chown -R paperplane:paperplane /usr/src/app
+
+USER paperplane
 
 #
 # Finalization

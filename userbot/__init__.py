@@ -151,9 +151,13 @@ def is_mongo_alive():
 
 
 # Init Redis
-# Redis will be hosted inside the docker container that hosts the bot
-# We need redis for just caching, so we just leave it to non-persistent
-REDIS = StrictRedis(host="localhost", port=6379, db=0)
+# Redis can be hosted locally or in a separate container
+# Check for Docker Compose setup first, then fall back to localhost
+REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.environ.get("REDIS_PORT", "6379"))
+REDIS_DB = int(os.environ.get("REDIS_DB", "0"))
+
+REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 
 def is_redis_alive():
@@ -171,11 +175,15 @@ if not os.path.exists("bin"):
 url1 = "https://raw.githubusercontent.com/yshalsager/megadown/master/megadown"
 url2 = "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py"
 
-dl1 = Downloader(url=url1, filename="bin/megadown")
-dl1 = Downloader(url=url1, filename="bin/cmrudl")
-
-os.chmod("bin/megadown", 0o755)
-os.chmod("bin/cmrudl", 0o755)
+try:
+    dl1 = Downloader(url=url1, filename="bin/megadown")
+    dl2 = Downloader(url=url2, filename="bin/cmrudl")
+    
+    os.chmod("bin/megadown", 0o755)
+    os.chmod("bin/cmrudl", 0o755)
+except Exception as e:
+    LOGS.warning(f"Failed to download binary files: {e}")
+    LOGS.warning("Some features may not work properly.")
 
 
 # Init Spotify

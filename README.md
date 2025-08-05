@@ -26,11 +26,52 @@ Originally created by baalajimaestro, Paperplane started as a simple userbot, wi
 
 ## How do I use it?
 
-For configuring Paperplane, you can check out our [Wiki](https://wiki.raphielgang.org). Please, before asking us in our groups,
-make sure you have followed the Wiki and all the steps required. Before clicking the Deploy to Heroku button without thinking, please go ahead and read the wiki, which has a lot of important stuff you need to know about and things you should prepare for Paperplane.
+### Quick Setup
 
-Deploy Paperplane to Heroku:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/NotAnyoneMe/Paperplane.git
+   cd Paperplane
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configure the bot:**
+   ```bash
+   python setup.py
+   ```
+
+4. **Generate string session:**
+   ```bash
+   python generate_string_session.py
+   ```
+
+5. **Run locally:**
+   ```bash
+   python -m userbot
+   ```
+
+### Deployment Options
+
+#### Deploy to Render (Recommended)
+Render offers better reliability and Docker support compared to Heroku:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com)
+
+📖 **[Complete Render Deployment Guide](RENDER_DEPLOYMENT.md)**
+
+#### Deploy to Heroku (Legacy)
 <p align="left"><a href="https://heroku.com/deploy?template=https://github.com/RaphielGang/Telegram-Paperplane"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku" /></a></p>
+
+### Prerequisites
+
+- Python 3.9+
+- Telegram API credentials from https://my.telegram.org
+- MongoDB Atlas database (free tier available)
+- Generated string session
 
 ## Groups and support
 

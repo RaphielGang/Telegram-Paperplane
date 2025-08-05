@@ -1,0 +1,48 @@
+services:
+  - type: worker
+    name: paperplane-userbot
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: oregon
+    envVars:
+      - key: API_KEY
+        sync: false
+      - key: API_HASH
+        sync: false
+      - key: STRING_SESSION
+        sync: false
+      - key: MONGO_DB_URI
+        sync: false
+      - key: BOTLOG
+        value: "False"
+      - key: BOTLOG_CHATID
+        value: "0"
+      - key: CONSOLE_LOGGER_VERBOSE
+        value: "False"
+      - key: PM_AUTO_BAN
+        value: "False"
+      - key: WELCOME_MUTE
+        value: "False"
+      - key: SCREENSHOT_LAYER_ACCESS_KEY
+        sync: false
+      - key: OPEN_WEATHER_MAP_APPID
+        sync: false
+      - key: WOLFRAM_ID
+        sync: false
+      - key: SPOTIPY_CLIENT_ID
+        sync: false
+      - key: SPOTIPY_CLIENT_SECRET
+        sync: false
+      - key: SPOTIPY_SESSION
+        sync: false
+      - key: LASTFM_API
+        sync: false
+      - key: LASTFM_SECRET
+        sync: false
+      - key: LASTFM_USERNAME
+        sync: false
+      - key: LASTFM_PASSWORD
+        sync: false
+      - key: GDRIVE_FOLDER
+        sync: false

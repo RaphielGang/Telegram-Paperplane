@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  paperplane:
+    build: .
+    container_name: paperplane-userbot
+    restart: unless-stopped
+    env_file:
+      - config.env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./logs:/usr/src/app/logs
+    depends_on:
+      - redis
+    networks:
+      - paperplane-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: paperplane-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - paperplane-network
+
+volumes:
+  redis_data:
+
+networks:
+  paperplane-network:
+    driver: bridge
