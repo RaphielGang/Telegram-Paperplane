@@ -525,7 +525,6 @@ async def ungmoot(un_gmute):
     if await ungmute(user.id) is False:
         await un_gmute.edit("`Error! User is probably not gmuted.`")
     else:
-
         # Inform about success
         await un_gmute.edit("```Ungmuted!```")
         if BOTLOG:

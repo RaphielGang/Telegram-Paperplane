@@ -101,7 +101,6 @@ async def welcome_mute(welcm):
                     continue  # Check the next messsage
 
             if spambot:
-
                 chat = await welcm.get_chat()
                 admin = chat.admin_rights
                 creator = chat.creator

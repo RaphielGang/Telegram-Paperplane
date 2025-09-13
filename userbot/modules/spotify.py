@@ -30,9 +30,7 @@ from userbot.modules.dbhelper import (
 
 # =================== CONSTANT ===================
 SPO_BIO_ENABLED = "`Spotify Currently Listening in Profile is now enabled.`"
-SPO_BIO_DISABLED = (
-    "`Spotify Currently Listening in Profile is now disabled.`"
-)
+SPO_BIO_DISABLED = "`Spotify Currently Listening in Profile is now disabled.`"
 SPO_DISABLED = "`Spotify module is disabled! Make sure you have set up the environment variables properly.`"
 # ================================================
 
@@ -49,8 +47,9 @@ def reset_current_info():
         "artists": [],
         "song_url": "",
         "preview_url": None,
-        "music_sent_file": None
+        "music_sent_file": None,
     }
+
 
 reset_current_info()
 
@@ -73,7 +72,7 @@ async def save_music_to_profile(music_message, unsave=False):
 async def download_music_preview(preview_url, cover_art, song, artists):
     if not preview_url:
         return None
-    
+
     chat_id = BOTLOG_CHATID if BOTLOG and BOTLOG_CHATID else "me"
     if preview_url in CACHED_SONG_FILES:
         try:
@@ -85,7 +84,7 @@ async def download_music_preview(preview_url, cover_art, song, artists):
     audio_data = requests.get(preview_url).content
     with open("preview.mp3", "wb") as f:
         f.write(audio_data)
-    
+
     # Download cover art
     cover_data = requests.get(cover_art).content
     with open("cover.jpg", "wb") as f:
@@ -97,11 +96,9 @@ async def download_music_preview(preview_url, cover_art, song, artists):
         thumb="cover.jpg",
         attributes=[
             types.DocumentAttributeAudio(
-                duration=30,
-                title=f"[paperplane] {song}",
-                performer=artists
+                duration=30, title=f"[paperplane] {song}", performer=artists
             )
-        ]
+        ],
     )
 
     # Clean up
@@ -130,9 +127,9 @@ async def update_spotify_info(trigger_one=False):
             name_emoji_enabled = music_config.get("name_emoji", False)
             user = await bot.get_me()
             default_name = (
-                re.sub(r"🎧$", r"", user.last_name or '')
+                re.sub(r"🎧$", r"", user.last_name or "")
                 if name_emoji_enabled
-                else user.last_name or ''
+                else user.last_name or ""
             )
 
             data = SPOTIPY_CLIENT.current_playback()
@@ -143,8 +140,10 @@ async def update_spotify_info(trigger_one=False):
                     is_playing = False
 
                     # Unsave old music if exists and not keeping old music
-                    if music_config.get('keep_old_music', False) is False:
-                        await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=True)
+                    if music_config.get("keep_old_music", False) is False:
+                        await save_music_to_profile(
+                            CURRENT_INFO["music_sent_file"], unsave=True
+                        )
                     reset_current_info()
                 await asyncio.sleep(15)
                 continue
@@ -155,46 +154,54 @@ async def update_spotify_info(trigger_one=False):
                     await asyncio.sleep(15)
                     continue
 
-                if data['item']['external_urls']['spotify'] == CURRENT_INFO['song_url']:
+                if data["item"]["external_urls"]["spotify"] == CURRENT_INFO["song_url"]:
                     await asyncio.sleep(15)
                     continue
 
                 # Unsave old music if exists
-                if music_config.get('keep_old_music', False) is False:
-                    await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=True)
+                if music_config.get("keep_old_music", False) is False:
+                    await save_music_to_profile(
+                        CURRENT_INFO["music_sent_file"], unsave=True
+                    )
 
                 artists_array = [artist for artist in data["item"]["artists"]]
                 artists = ", ".join([artist["name"] for artist in artists_array])
                 song = data["item"]["name"]
-                cover_art = data['item']['album']['images'][0]['url']
+                cover_art = data["item"]["album"]["images"][0]["url"]
 
-                song_page = requests.get(data['item']['external_urls']['spotify']).text
-                preview_urls = re.findall(r'https://p\.scdn\.co/mp3-preview/[a-zA-Z0-9]+', song_page)
+                song_page = requests.get(data["item"]["external_urls"]["spotify"]).text
+                preview_urls = re.findall(
+                    r"https://p\.scdn\.co/mp3-preview/[a-zA-Z0-9]+", song_page
+                )
 
                 CURRENT_INFO = {
                     "playing": True,
                     "song": song,
                     "artists": artists_array,
-                    "song_url": data['item']['external_urls']['spotify'],
+                    "song_url": data["item"]["external_urls"]["spotify"],
                     "preview_url": preview_urls[0] if preview_urls else None,
-                    "music_sent_file": None
+                    "music_sent_file": None,
                 }
 
                 # Download preview URL and cover art and send as audio file if available
-                if CURRENT_INFO['preview_url']:
-                    CURRENT_INFO['music_sent_file'] = await download_music_preview(
-                        CURRENT_INFO['preview_url'], cover_art, song, artists
+                if CURRENT_INFO["preview_url"]:
+                    CURRENT_INFO["music_sent_file"] = await download_music_preview(
+                        CURRENT_INFO["preview_url"], cover_art, song, artists
                     )
 
-                    CURRENT_INFO['profile_music_id'] = await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=False)
+                    CURRENT_INFO["profile_music_id"] = await save_music_to_profile(
+                        CURRENT_INFO["music_sent_file"], unsave=False
+                    )
             else:
                 await bot(UpdateProfileRequest(last_name=default_name))
 
                 is_playing = False
 
                 # Unsave old music if exists
-                if music_config.get('keep_old_music', False) is False:
-                    await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=True)
+                if music_config.get("keep_old_music", False) is False:
+                    await save_music_to_profile(
+                        CURRENT_INFO["music_sent_file"], unsave=True
+                    )
                 reset_current_info()
             await asyncio.sleep(15)
         except Exception as e:
@@ -224,7 +231,7 @@ async def set_biostgraph(setstbio):
         music_config = await get_music_config() or {}
         if music_config.get("name_emoji", False):
             user = await bot.get_me()
-            default_name = re.sub(r"🎧$", r"", user.last_name or '')
+            default_name = re.sub(r"🎧$", r"", user.last_name or "")
             await bot(UpdateProfileRequest(last_name=default_name))
 
     await setstbio.edit(SPO_BIO_ENABLED if newstate else SPO_BIO_DISABLED)
@@ -264,8 +271,10 @@ async def get_curr_song_spotify(getstbio):
     album = f"<b><a href='{data['item']['album']['external_urls']['spotify']}'>{data['item']['album']['name']}</a></b>"
     on_repeat = "<b> on repeat</b>" if data["repeat_state"] == "track" else ""
     paused = "<b> (Paused)</b>" if not data["is_playing"] else ""
-    song_page = requests.get(data['item']['external_urls']['spotify']).text
-    preview_urls = re.findall(r'https://p\.scdn\.co/mp3-preview/[a-zA-Z0-9]+', song_page)
+    song_page = requests.get(data["item"]["external_urls"]["spotify"]).text
+    preview_urls = re.findall(
+        r"https://p\.scdn\.co/mp3-preview/[a-zA-Z0-9]+", song_page
+    )
 
     message = (
         f"<b>🎧 Spotify Current Track</b>\n\n"
@@ -320,8 +329,10 @@ async def spotify_search(stsearch):
         )
         song = f"[{trackdata['name']}]({trackdata['external_urls']['spotify']})"
         album = f"[{trackdata['album']['name']}]({trackdata['album']['external_urls']['spotify']})"
-        song_page = requests.get(trackdata['external_urls']['spotify']).text
-        preview_urls = re.findall(r'https://p\.scdn\.co/mp3-preview/[a-zA-Z0-9]+', song_page)
+        song_page = requests.get(trackdata["external_urls"]["spotify"]).text
+        preview_urls = re.findall(
+            r"https://p\.scdn\.co/mp3-preview/[a-zA-Z0-9]+", song_page
+        )
         message = (
             "**🎧 Spotify Song Details**\n\n"
             f"**Song:** {song}\n"
@@ -363,14 +374,14 @@ async def musicname(musicnme):
     if not SPOTIPY_CLIENT:
         await musicnme.edit(SPO_DISABLED)
         return
-    
+
     if musicnme.pattern_match.group(1) not in ["on", "off"]:
         await musicnme.edit("`Invalid argument! Use either 'on' or 'off'.`")
         return
 
     newstate = True if musicnme.pattern_match.group(1) == "on" else False
 
-    currname = (await bot.get_me()).last_name or ''
+    currname = (await bot.get_me()).last_name or ""
 
     if len(currname) > 62 and newstate:
         await musicnme.edit(
@@ -404,7 +415,7 @@ async def keepoldmusic(komusic):
     if not SPOTIPY_CLIENT:
         await komusic.edit(SPO_DISABLED)
         return
-    
+
     if komusic.pattern_match.group(1) not in ["on", "off"]:
         await komusic.edit("`Invalid argument! Use either 'on' or 'off'.`")
         return
@@ -412,7 +423,7 @@ async def keepoldmusic(komusic):
     newstate = True if komusic.pattern_match.group(1) == "on" else False
 
     music_config = await get_music_config() or {}
-    music_config['keep_old_music'] = newstate
+    music_config["keep_old_music"] = newstate
     await music_config.save()
 
     await komusic.edit(f"`Keep Old Music set to {komusic.pattern_match.group(1)}!`")

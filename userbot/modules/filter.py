@@ -42,7 +42,7 @@ async def filter_incoming_handler(handler):
                         entity=chat,
                         min_id=full_chat.read_inbox_max_id,
                         limit=1,
-                        reverse=True
+                        reverse=True,
                     )
 
                     if trigger.get("is_document", False):
@@ -64,7 +64,9 @@ async def filter_incoming_handler(handler):
                     )
 
                     if BOTLOG and last_read_message[0]:
-                        message_link = f"https://t.me/c/{chat.id}/{last_read_message[0].id}"
+                        message_link = (
+                            f"https://t.me/c/{chat.id}/{last_read_message[0].id}"
+                        )
                         log_message = f"Filter triggered in {chat.title}. Last read message: {message_link}"
                         await handler.client.send_message(BOTLOG_CHATID, log_message)
 
@@ -72,9 +74,15 @@ async def filter_incoming_handler(handler):
     except AttributeError:
         pass
 
+
 DOUBLE_QUOTES = r'(?:“|”|″|")'
 RAW_DOUBLE_QUOTES = r'“”″"'
-@register(outgoing=True, pattern=fr'^.filter ([^{RAW_DOUBLE_QUOTES}]*) ?({DOUBLE_QUOTES}(.*){DOUBLE_QUOTES})?')
+
+
+@register(
+    outgoing=True,
+    pattern=rf"^.filter ([^{RAW_DOUBLE_QUOTES}]*) ?({DOUBLE_QUOTES}(.*){DOUBLE_QUOTES})?",
+)
 @grp_exclude()
 async def add_new_filter(event):
     """Command for adding a new filter"""
