@@ -1,7 +1,6 @@
 Pillow>=5.3.0
 PyDrive2
 aiohttp
-asyncurban
 cowpy
 dnspython
 emoji

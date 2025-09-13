@@ -54,8 +54,8 @@ async def update_spotify_info(trigger_one=False):
             default_bio = music_config.get("default_bio", "")
             bio_prefix = music_config.get("bio_prefix", "")
             name_emoji_enabled = music_config.get("name_emoji", False)
-            userfull = await bot(GetFullUserRequest(InputUserSelf()))
-            user = userfull.user
+            userfull = (await bot(GetFullUserRequest(InputUserSelf()))).full_user
+            user = await bot.get_me()
             default_name = (
                 re.sub(r"🎧$", r"", user.last_name or '')
                 if name_emoji_enabled
@@ -79,8 +79,8 @@ async def update_spotify_info(trigger_one=False):
                     await asyncio.sleep(15)
                     continue
 
-                artists = [artist for artist in data["item"]["artists"]]
-                artists = ", ".join([artist["name"] for artist in artists])
+                artists_array = [artist for artist in data["item"]["artists"]]
+                artists = ", ".join([artist["name"] for artist in artists_array])
                 song = data["item"]["name"]
 
                 newname = (
@@ -88,16 +88,15 @@ async def update_spotify_info(trigger_one=False):
                     if (user.last_name or '')[-1:] != "🎧"
                     else user.last_name or ''
                 )
-                newbio = f"{bio_prefix} 🎧 {artists} - {song}"
-                if len(newbio) > 70:
-                    newbio = f"{bio_prefix} 🎧 {song}"
-                    if len(newbio) > 70:
-                        newbio = f"🎧 {song}"
-                        if len(newbio) > 70:
-                            if len(newbio) > 72:
-                                newbio = default_bio
-                            else:
-                                newbio = song
+                possible_bios = [
+                    f"{bio_prefix} 🎧 {artists} - {song}",
+                    f"{bio_prefix} 🎧 {artists_array[0]['name']} - {song}",
+                    f"{bio_prefix} 🎧 {song}",
+                    f"🎧 {song}",
+                    song
+                ]
+                longest_possible_bio = max([s for s in possible_bios if len(s) <= 70], key=len)
+                newbio = longest_possible_bio or default_bio
             else:
                 newbio = default_bio
                 newname = default_name
@@ -323,7 +322,7 @@ async def musicname(musicnme):
 
     newstate = True if musicnme.pattern_match.group(1) == "on" else False
 
-    currname = (await bot(GetFullUserRequest(InputUserSelf()))).user.last_name or ''
+    currname = (await bot.get_me()).last_name or ''
 
     if len(currname) > 62 and newstate:
         await musicnme.edit(

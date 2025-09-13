@@ -7,7 +7,6 @@
 
 import os
 import sys
-from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from sys import version_info
 
@@ -23,7 +22,7 @@ from telethon.sessions import StringSession
 load_dotenv("config.env")
 
 # Bot Logs setup:
-CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
+CONSOLE_LOGGER_VERBOSE = os.environ.get("CONSOLE_LOGGER_VERBOSE") == "True"
 
 if CONSOLE_LOGGER_VERBOSE:
     basicConfig(

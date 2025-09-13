@@ -6,12 +6,11 @@
 """ Userbot module containing various scrapers. """
 
 import os
-from re import findall, sub
+import re
 from shutil import rmtree
 from urllib.parse import quote_plus
 
-import asyncurban
-from emoji import get_emoji_regexp
+import emoji
 from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
@@ -34,7 +33,7 @@ async def img_sampler(event):
     """For .img command, search and return images matching the query."""
     await event.edit("Processing...")
     query = event.pattern_match.group(1)
-    lim = findall(r"lim=\d+", query)
+    lim = re.findall(r"lim=\d+", query)
     try:
         lim = lim[0]
         lim = lim.replace("lim=", "")
@@ -156,21 +155,24 @@ async def urban_dict(ud_e):
     """For .ud command, fetch content from Urban Dictionary."""
     await ud_e.edit("`Processing...`")
     query = ud_e.pattern_match.group(1)
-    urban = asyncurban.UrbanDictionary()
 
     try:
-        words = await urban.search(query)
-        await urban.close()
-    except asyncurban.WordNotFoundError:
+        response = get(f"https://api.urbandictionary.com/v0/define?term={query}")
+        json = response.json()
+        if not json["list"]:
+            raise Exception
+
+        words = json["list"]
+    except Exception as e:
         await ud_e.edit(f"Sorry, couldn't find any results for `{query}`.")
         return
 
     result = ""
-    for i, word in enumerate(words):
-        definition = sub(r"\[([^\]]*)\]", parse_ud_url, word.definition)
-        result += f"{i+1}. [{word.word}]({word.permalink}): {definition}\n"
-        if word.example:
-            example = sub(r"\[([^\]]*)\]", parse_ud_url, word.example)
+    for i, word in enumerate(words[:3]):
+        definition = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.get("definition"))
+        result += f"{i+1}. [{word.get('word')}]({word.get('permalink')}): {definition}\n"
+        if word.get("example"):
+            example = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.get("example"))
             result += f"`Example(s)`: {example}"
         result += "\n"
 
@@ -276,9 +278,17 @@ async def lang(value):
         )
 
 
+def get_emoji_regexp():
+    # Sort emoji by length to make sure multi-character emojis are
+    # matched first
+    emojis = sorted(emoji.EMOJI_DATA, key=len, reverse=True)
+    pattern = '(' + '|'.join(re.escape(u) for u in emojis) + ')'
+    return re.compile(pattern)
+
+
 def deEmojify(inputString):
     """Remove emojis and other non-safe characters from string"""
-    return get_emoji_regexp().sub("", inputString)
+    return get_emoji_regexp().re.sub("", inputString)
 
 
 @register(outgoing=True, pattern=r"^.wolfram (.*)")
