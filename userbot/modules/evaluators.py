@@ -83,12 +83,11 @@ async def run(run_q):
 
     if not code:
         await run_q.edit(
-            "```At least a variable is required to \
-execute. Use .help exec for an example.```"
+            "```There is nothing to execute! Use .help exec for an example.```"
         )
         return
 
-    if code in ("userbot.session", "config.env"):
+    if "userbot.session" in code or "config.env" in code:
         await run_q.edit("`That's a dangerous operation! Not Permitted!`")
         return
 

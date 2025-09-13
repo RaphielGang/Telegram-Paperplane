@@ -170,7 +170,9 @@ async def urban_dict(ud_e):
     result = ""
     for i, word in enumerate(words[:3]):
         definition = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.get("definition"))
-        result += f"{i+1}. [{word.get('word')}]({word.get('permalink')}): {definition}\n"
+        result += (
+            f"{i+1}. [{word.get('word')}]({word.get('permalink')}): {definition}\n"
+        )
         if word.get("example"):
             example = re.sub(r"\[([^\]]*)\]", parse_ud_url, word.get("example"))
             result += f"`Example(s)`: {example}"
@@ -282,7 +284,7 @@ def get_emoji_regexp():
     # Sort emoji by length to make sure multi-character emojis are
     # matched first
     emojis = sorted(emoji.EMOJI_DATA, key=len, reverse=True)
-    pattern = '(' + '|'.join(re.escape(u) for u in emojis) + ')'
+    pattern = "(" + "|".join(re.escape(u) for u in emojis) + ")"
     return re.compile(pattern)
 
 

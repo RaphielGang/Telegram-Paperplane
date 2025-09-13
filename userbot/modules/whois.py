@@ -124,7 +124,7 @@ async def fetch_info(replied_user, event):
 def todict(obj, classkey=None):
     if isinstance(obj, dict):
         data = {}
-        for (k, v) in obj.items():
+        for k, v in obj.items():
             data[k] = todict(v, classkey)
         return data
 

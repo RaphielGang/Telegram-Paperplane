@@ -29,6 +29,6 @@ search-engine-parser
 speedtest-cli>=2.0.2
 spotipy
 telegraph
-telethon>=1.10.1
+telethon>=1.41.2
 text-to-owo
 wikipedia>=1.4.0
