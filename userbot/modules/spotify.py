@@ -142,8 +142,9 @@ async def update_spotify_info(trigger_one=False):
                     await bot(UpdateProfileRequest(last_name=default_name))
                     is_playing = False
 
-                    # Unsave old music if exists
-                    await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=music_config.get('keep_old_music', False) is False)
+                    # Unsave old music if exists and not keeping old music
+                    if music_config.get('keep_old_music', False) is False:
+                        await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=True)
                     reset_current_info()
                 await asyncio.sleep(15)
                 continue
@@ -159,7 +160,8 @@ async def update_spotify_info(trigger_one=False):
                     continue
 
                 # Unsave old music if exists
-                await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=music_config.get('keep_old_music', False) is False)
+                if music_config.get('keep_old_music', False) is False:
+                    await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=True)
 
                 artists_array = [artist for artist in data["item"]["artists"]]
                 artists = ", ".join([artist["name"] for artist in artists_array])
@@ -191,7 +193,8 @@ async def update_spotify_info(trigger_one=False):
                 is_playing = False
 
                 # Unsave old music if exists
-                await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=music_config.get('keep_old_music', False) is False)
+                if music_config.get('keep_old_music', False) is False:
+                    await save_music_to_profile(CURRENT_INFO['music_sent_file'], unsave=True)
                 reset_current_info()
             await asyncio.sleep(15)
         except Exception as e:
