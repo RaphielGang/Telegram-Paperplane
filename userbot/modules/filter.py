@@ -7,9 +7,11 @@
 import re
 from asyncio import sleep
 
+from telethon.tl.functions.channels import GetFullChannelRequest
+from telethon.tl.functions.messages import MarkDialogUnreadRequest
 from telethon.tl.types import Channel
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive, bot
 from userbot.events import register, grp_exclude
 from userbot.modules.dbhelper import add_filter, delete_filter, get_filters
 
@@ -33,23 +35,46 @@ async def filter_incoming_handler(handler):
                     r"( |^|[^\w])" + re.escape(trigger["keyword"]) + r"( |$|[^\w])"
                 )
                 if re.search(pattern, handler.text, flags=re.IGNORECASE):
+                    chat = await handler.get_chat()
+                    full_chat = (await bot(GetFullChannelRequest(chat.id))).full_chat
+
+                    last_read_message = await handler.client.get_messages(
+                        entity=chat,
+                        min_id=full_chat.read_inbox_max_id,
+                        limit=1,
+                        reverse=True
+                    )
+
                     if trigger.get("is_document", False):
                         content_msg = await handler.client.get_messages(
                             entity=BOTLOG_CHATID, ids=trigger["msg"]
                         )
-                        return await handler.client.send_file(
+                        await handler.client.send_file(
                             entity=handler.chat_id,
                             file=content_msg.media,
                             caption=trigger["caption"],
                             reply_to=handler.message.id,
                         )
+                    else:
+                        await handler.reply(str(trigger["msg"]))
 
-                    return await handler.reply(str(trigger["msg"]))
+                    # Mark chat as unread after sending the response
+                    await handler.client(
+                        MarkDialogUnreadRequest(peer=handler.chat_id, unread=True)
+                    )
+
+                    if BOTLOG and last_read_message[0]:
+                        message_link = f"https://t.me/c/{chat.id}/{last_read_message[0].id}"
+                        log_message = f"Filter triggered in {chat.title}. Last read message: {message_link}"
+                        await handler.client.send_message(BOTLOG_CHATID, log_message)
+
+                    return
     except AttributeError:
         pass
 
-
-@register(outgoing=True, pattern=r'^.filter ([^"]*) ?("?(.*)")?')
+DOUBLE_QUOTES = r'(?:“|”|″|")'
+RAW_DOUBLE_QUOTES = r'“”″"'
+@register(outgoing=True, pattern=fr'^.filter ([^{RAW_DOUBLE_QUOTES}]*) ?({DOUBLE_QUOTES}(.*){DOUBLE_QUOTES})?')
 @grp_exclude()
 async def add_new_filter(event):
     """Command for adding a new filter"""
@@ -87,9 +112,6 @@ async def add_new_filter(event):
         if reply.document or reply.photo:
             is_document = True
             content = (await reply.forward_to(BOTLOG_CHATID)).id
-        else:
-            await event.edit("`I can't extract a message from this!`")
-            return
     else:
         if event.document or event.photo:
             is_document = True
