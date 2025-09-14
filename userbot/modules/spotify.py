@@ -25,6 +25,7 @@ from userbot.modules.dbhelper import (
     get_music_config,
     set_spotify_bio,
     set_music_name_emoji,
+    set_keep_old_music,
 )
 
 
@@ -115,7 +116,6 @@ async def update_spotify_info(trigger_one=False):
     if not SPOTIPY_CLIENT:
         return
 
-    is_playing = False
     triggered = False
 
     while not triggered and (music_config := await get_music_config() or {}).get(
@@ -135,9 +135,9 @@ async def update_spotify_info(trigger_one=False):
             data = SPOTIPY_CLIENT.current_playback()
 
             if not data:
-                if is_playing:
+                if CURRENT_INFO["playing"]:
                     await bot(UpdateProfileRequest(last_name=default_name))
-                    is_playing = False
+                    CURRENT_INFO["playing"] = False
 
                     # Unsave old music if exists and not keeping old music
                     if music_config.get("keep_old_music", False) is False:
@@ -148,8 +148,8 @@ async def update_spotify_info(trigger_one=False):
                 await asyncio.sleep(15)
                 continue
 
-            is_playing = data["is_playing"]
-            if is_playing:
+            CURRENT_INFO["playing"] = data["is_playing"]
+            if CURRENT_INFO["playing"]:
                 if data["currently_playing_type"] != "track":
                     await asyncio.sleep(15)
                     continue
@@ -157,12 +157,6 @@ async def update_spotify_info(trigger_one=False):
                 if data["item"]["external_urls"]["spotify"] == CURRENT_INFO["song_url"]:
                     await asyncio.sleep(15)
                     continue
-
-                # Unsave old music if exists
-                if music_config.get("keep_old_music", False) is False:
-                    await save_music_to_profile(
-                        CURRENT_INFO["music_sent_file"], unsave=True
-                    )
 
                 artists_array = [artist for artist in data["item"]["artists"]]
                 artists = ", ".join([artist["name"] for artist in artists_array])
@@ -183,19 +177,25 @@ async def update_spotify_info(trigger_one=False):
                     "music_sent_file": None,
                 }
 
+                old_music = CURRENT_INFO["music_sent_file"]
+
                 # Download preview URL and cover art and send as audio file if available
                 if CURRENT_INFO["preview_url"]:
                     CURRENT_INFO["music_sent_file"] = await download_music_preview(
                         CURRENT_INFO["preview_url"], cover_art, song, artists
                     )
 
-                    CURRENT_INFO["profile_music_id"] = await save_music_to_profile(
+                    await save_music_to_profile(
                         CURRENT_INFO["music_sent_file"], unsave=False
                     )
+
+                    # After saving the new one, unsave old music if exists
+                    if music_config.get("keep_old_music", False) is False:
+                        await save_music_to_profile(old_music, unsave=True)
             else:
                 await bot(UpdateProfileRequest(last_name=default_name))
 
-                is_playing = False
+                CURRENT_INFO["playing"] = False
 
                 # Unsave old music if exists
                 if music_config.get("keep_old_music", False) is False:
@@ -365,6 +365,7 @@ async def spotifysettings(settings):
         f"**Bio Prefix:** `{music_config.get('bio_prefix') or 'None'}`\n"
         f"**Default Bio:** `{music_config.get('default_bio') or 'None'}`\n"
         f"**Music Name Emoji:** `{music_config.get('name_emoji', False)}`\n"
+        f"**Keep Old Music:** `{music_config.get('keep_old_music', False)}`\n"
     )
 
 
@@ -422,9 +423,7 @@ async def keepoldmusic(komusic):
 
     newstate = True if komusic.pattern_match.group(1) == "on" else False
 
-    music_config = await get_music_config() or {}
-    music_config["keep_old_music"] = newstate
-    await music_config.save()
+    await set_keep_old_music(newstate)
 
     await komusic.edit(f"`Keep Old Music set to {komusic.pattern_match.group(1)}!`")
     if BOTLOG:

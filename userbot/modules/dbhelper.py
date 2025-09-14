@@ -514,3 +514,9 @@ async def set_music_name_emoji(state):
     return MONGO.misc.update_one(
         {"name": "music_modules"}, {"$set": {"name_emoji": state}}, upsert=True
     )
+
+
+async def set_keep_old_music(state):
+    return MONGO.misc.update_one(
+        {"name": "music_modules"}, {"$set": {"keep_old_music": state}}, upsert=True
+    )
