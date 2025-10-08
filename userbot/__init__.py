@@ -87,8 +87,8 @@ LASTFM_API = os.environ.get("LASTFM_API") or None
 LASTFM_SECRET = os.environ.get("LASTFM_SECRET") or None
 LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME") or None
 LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD") or None
-LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
-if not LASTFM_USERNAME == "None":
+if LASTFM_USERNAME and not LASTFM_USERNAME == "None":
+    LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
     lastfm = LastFMNetwork(
         api_key=LASTFM_API,
         api_secret=LASTFM_SECRET,
