@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
 	sudo \
 	libwebp-dev \
 	redis \
-	neofetch \
+	fastfetch \
 	libssl-dev \
 	libjpeg-dev \
 	jq \

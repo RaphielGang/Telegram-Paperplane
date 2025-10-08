@@ -24,11 +24,11 @@ DEFAULTUSER = uname().node
 @register(outgoing=True, pattern=r"^.sysd$")
 @grp_exclude()
 async def sysdetails(sysd):
-    """For .sysd command, get system info using neofetch."""
+    """For .sysd command, get system info using fastfetch."""
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
             fetch = await asyncrunapp(
-                "neofetch", "--stdout", stdout=asyncPIPE, stderr=asyncPIPE
+                "fastfetch", "--pipe", stdout=asyncPIPE, stderr=asyncPIPE
             )
 
             stdout, stderr = await fetch.communicate()
@@ -36,7 +36,7 @@ async def sysdetails(sysd):
 
             await sysd.edit("`" + result + "`")
         except FileNotFoundError:
-            await sysd.edit("`Install neofetch on the host first!`")
+            await sysd.edit("`Install fastfetch on the host first!`")
 
 
 @register(outgoing=True, pattern=r"^.botver$")
@@ -162,7 +162,7 @@ CMD_HELP.update(
     {
         "system stats": [
             "System Stats",
-            " - `.sysd`: Show system information using neofetch.\n"
+            " - `.sysd`: Show system information using fastfetch.\n"
             " - `.botver`: Show Paperplane version.\n"
             " - `.pip <module(s)>`: Search module(s) in PyPI.\n"
             " - `.alive`: Check if Paperplane is running. \n"
